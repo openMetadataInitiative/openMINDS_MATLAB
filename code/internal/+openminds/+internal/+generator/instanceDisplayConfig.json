@@ -1,0 +1,254 @@
+{
+  "accountInformation": {
+    "propertyName": "service",
+    "stringFormat": "sprintf('%s', service)"
+  },
+  "affiliation": {
+    "propertyName": "memberOf",
+    "stringFormat": "sprintf('%s', memberOf)"
+  },
+  "consortium": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "contactInformation": {
+    "propertyName": "email",
+    "stringFormat": "sprintf('%s', email)"
+  },
+  "contribution": {
+    "propertyName": "contributor",
+    "stringFormat": "sprintf('%s', email)"
+  },
+  "organization": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "person": {
+    "propertyName": ["givenName", "familyName"],
+    "stringFormat": "sprintf('%s, %s', familyName, givenName)"
+  },
+  "contentTypePattern": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "copyright": {
+    "propertyName": ["holder", "year"],
+    "stringFormat": "sprintf('%s (%s)', holder, year)"
+  },
+  "fileArchive": {
+    "propertyName": "IRI",
+    "stringFormat": "sprintf('%s', IRI)"
+  },
+  "fileBundle": {
+    "propertyName": ["name", "groupedBy"],
+    "stringFormat": "sprintf('%s (%s)', name, groupedBy)"
+  },
+  "filePathPattern": {
+    "propertyName": "regex",
+    "stringFormat": "sprintf('%s', regex)"
+  },
+  "fileRepository": {
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
+  },
+  "fileRepositoryStructure": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "hash": {
+    "propertyName": "algorithm",
+    "stringFormat": "sprintf('%s', algorithm)"
+  },
+  "license": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "serviceLink": {
+    "propertyName": "displayLabel",
+    "stringFormat": "sprintf('%s', displayLabel)"
+  },
+  "DOI": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "GRIDID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "HANDLE": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "ISBN": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "ISSN": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "IdentifiersDotOrgID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "ORCID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "RORID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "RRID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "SWHID": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "stockNumber": {
+    "propertyName": "identifier",
+    "stringFormat": "sprintf('%s', identifier)"
+  },
+  "comment": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "funding": {
+    "propertyName": ["funder", "awardNumber"],
+    "stringFormat": "sprintf('%s (%s)', funder, awardNumber)"
+  },
+  "quantitativeValue": {
+    "propertyName": ["value", "unit"],
+    "stringFormat": ["if value ~= 1", "    sprintf('%d %ss', value, unit)", "else", "    sprintf('%d %s', value, unit)", "end"]
+  },
+  "quantitativeValueArray": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "quantitativeValueRange": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "researchProductGroup": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "webResource": {
+    "propertyName": "IRI",
+    "stringFormat": "sprintf('%s', IRI)"
+  },
+  "dataset": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "datasetVersion": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "metaDataModel": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "metaDataModelVersion": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "model": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "modelVersion": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "project": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "software": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "softwareVersion": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "webService": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "webServiceVersion": {
+    "propertyName": "fullName",
+    "stringFormat": "sprintf('%s', fullName)"
+  },
+  "behavioralProtocol": {
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
+  },
+  "configuration": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "customPropertySet": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "numericalProperty": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "propertyValueList": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "protocol": {
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
+  },
+  "protocolExecution": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "strain": {
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
+  },
+  "stringProperty": {
+    "propertyName": "",
+    "stringFormat": ""
+  },
+  "subject": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "subjectGroup": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "subjectGroupState": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "subjectState": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "tissueSample": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "tissueSampleCollection": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "tissueSampleCollectionState": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "tissueSampleState": {
+    "propertyName": "lookupLabel",
+    "stringFormat": "sprintf('%s', lookupLabel)"
+  }
+}

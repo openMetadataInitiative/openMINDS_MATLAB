@@ -1,0 +1,3 @@
+classdef SchemaAlias < SchemaClassName
+
+end
