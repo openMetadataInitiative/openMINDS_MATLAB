@@ -113,6 +113,7 @@ def save_resource_files(version, schema_path_list):
             short_class_name = capitalize_first_letter( schema_meta["name"] )
             model_name = schema_meta["model"].lower()
             group_name = schema_meta["group"].lower()
+            group_name = re.sub(r'\W+', '', group_name) # Remove all non alphanumeric characters
             alias_def["NewName"] = ".".join(["openminds", model_name, group_name, short_class_name])
             alias_def["OldNames"] = ".".join(["openminds", model_name, short_class_name])
             alias_def["WarnOnOldName"] = False
