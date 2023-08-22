@@ -1,0 +1,497 @@
+[
+    {
+        "name": "DOI",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "GRIDID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "ISBN",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "ORCID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "RORID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "SWHID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "UBERONParcellation",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "URL",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "affiliation",
+        "model": "core",
+        "group": "actors"
+    },
+    {
+        "name": "ageCategory",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "anatomicalAxesOrientation",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "atlasAnnotation",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "behavioralTask",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "biologicalSex",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "brainAtlas",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "brainAtlasVersion",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "cellType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "commonCoordinateSpace",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "contactInformation",
+        "model": "core",
+        "group": "actors"
+    },
+    {
+        "name": "contentType",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "contribution",
+        "model": "core",
+        "group": "actors"
+    },
+    {
+        "name": "contributionType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "coordinatePoint",
+        "model": "SANDS",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "copyright",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "criteriaQualityType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "customAnatomicalEntity",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "customAnnotation",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "customCoordinateSpace",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "dataset",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "datasetVersion",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "disease",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "diseaseModel",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "electrode",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "electrodeArray",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "electrodeContact",
+        "model": "SANDS",
+        "group": "non-atlas"
+    },
+    {
+        "name": "ethicsAssessment",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "experimentalApproach",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "file",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "fileBundle",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "fileBundleGrouping",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "fileRepository",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "fileRepositoryType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "fileUsageRole",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "funding",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "handedness",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "hash",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "language",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "laterality",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "license",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "metaDataModel",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "metaDataModelType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "metaDataModelVersion",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "model",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "modelAbstractionLevel",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "modelScope",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "modelVersion",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "numericalParameter",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "operatingDevice",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "operatingSystem",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "organ",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "organization",
+        "model": "core",
+        "group": "actors"
+    },
+    {
+        "name": "parameterSet",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "parcellationEntity",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "parcellationTerminology",
+        "model": "SANDS",
+        "group": "atlas"
+    },
+    {
+        "name": "person",
+        "model": "core",
+        "group": "actors"
+    },
+    {
+        "name": "phenotype",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "preparationType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "productAccessibility",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "programmingLanguage",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "project",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "protocol",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "protocolExecution",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "qualitativeOverlap",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "qualitativeRelationAssessment",
+        "model": "SANDS",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "quantitativeRelationAssessment",
+        "model": "SANDS",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "quantitativeValue",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "quantitativeValueRange",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "semanticDataType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "software",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "softwareApplicationCategory",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "softwareFeature",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "softwareVersion",
+        "model": "core",
+        "group": "products"
+    },
+    {
+        "name": "species",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "strain",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "stringParameter",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "subject",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "subjectGroup",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "subjectGroupState",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "subjectState",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "technique",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "termSuggestion",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "terminology",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "tissueSample",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "tissueSampleCollection",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "tissueSampleCollectionState",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "tissueSampleState",
+        "model": "core",
+        "group": "research"
+    },
+    {
+        "name": "tissueSampleType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "typeOfUncertainty",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "unitOfMeasurement",
+        "model": "controlledTerms",
+        "group": null
+    }
+]

@@ -1,0 +1,6 @@
+classdef DigitalIdentifier < openminds.internal.abstract.LinkedCategory
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = "openminds.core.RRID"
+        IS_SCALAR = true
+    end
+end
