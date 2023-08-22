@@ -66,7 +66,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
         displayLabel = fragment;
     else
         url = generateDocumentationUrl(version, modelName, subgroupName, schemaName);
-        displayLabel = schemaName;
+        displayLabel = openminds.internal.utility.getSchemaName(schemaClassName);
     end
 
     str = createLink(url, displayLabel, browserOption);
