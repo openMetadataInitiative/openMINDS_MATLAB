@@ -85,7 +85,10 @@ class MATLABSchemaBuilder(object):
         if len(_relative_path_without_extension) == 3:
             self._schema_group_name = []
         else:
-            self._schema_group_name = _relative_path_without_extension[2]
+            schema_group_name = _relative_path_without_extension[2]
+            # Remove all non alphanumeric characters
+            self._schema_group_name = re.sub(r'\W+', '', schema_group_name)
+
         self._schema_file_name = _relative_path_without_extension[-1]
 
     def _create_target_file_path(self) -> str:
