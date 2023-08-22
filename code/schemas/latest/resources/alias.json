@@ -91,17 +91,17 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomAnatomicalEntity",
+      "NewName": "openminds.sands.nonatlas.CustomAnatomicalEntity",
       "OldNames": "openminds.sands.CustomAnatomicalEntity",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomAnnotation",
+      "NewName": "openminds.sands.nonatlas.CustomAnnotation",
       "OldNames": "openminds.sands.CustomAnnotation",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomCoordinateSpace",
+      "NewName": "openminds.sands.nonatlas.CustomCoordinateSpace",
       "OldNames": "openminds.sands.CustomCoordinateSpace",
       "WarnOnOldName": false
     },

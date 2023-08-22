@@ -46,32 +46,32 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomAnatomicalEntity",
+      "NewName": "openminds.sands.nonatlas.CustomAnatomicalEntity",
       "OldNames": "openminds.sands.CustomAnatomicalEntity",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomAnnotation",
+      "NewName": "openminds.sands.nonatlas.CustomAnnotation",
       "OldNames": "openminds.sands.CustomAnnotation",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.CustomCoordinateSpace",
+      "NewName": "openminds.sands.nonatlas.CustomCoordinateSpace",
       "OldNames": "openminds.sands.CustomCoordinateSpace",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.Electrode",
+      "NewName": "openminds.sands.nonatlas.Electrode",
       "OldNames": "openminds.sands.Electrode",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.ElectrodeArray",
+      "NewName": "openminds.sands.nonatlas.ElectrodeArray",
       "OldNames": "openminds.sands.ElectrodeArray",
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.non-atlas.ElectrodeContact",
+      "NewName": "openminds.sands.nonatlas.ElectrodeContact",
       "OldNames": "openminds.sands.ElectrodeContact",
       "WarnOnOldName": false
     },
