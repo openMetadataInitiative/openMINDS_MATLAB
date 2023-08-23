@@ -64,11 +64,13 @@ function selectOpenMindsVersion(version)
         versionNumber = str2double(version);
         versionAsString = sprintf('v%.1f', versionNumber);
     end
-
     
+    warning('off', 'MATLAB:rmpath:DirNotFound')
+    rmpath(genpath( fullfile(rootPath, "schemas") ))
+    rmpath(genpath( fullfile(rootPath, "mixedtypes") ))
+    warning('on', 'MATLAB:rmpath:DirNotFound')
+
     % Add the schema/mixedtypes subdirectory for the selected version
     addpath(genpath( fullfile(rootPath, "schemas", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
-    addpath(genpath( fullfile(rootPath, "instances", versionAsString) ))
-
 end
