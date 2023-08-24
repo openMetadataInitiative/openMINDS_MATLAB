@@ -39,7 +39,6 @@ function selectOpenMindsVersion(version)
 % Copyright 2023 Open Metadata Initiative
 % Licensed under MIT License
 
-
     arguments
         version (1,1) string = "latest"
     end
@@ -65,10 +64,13 @@ function selectOpenMindsVersion(version)
         versionAsString = sprintf('v%.1f', versionNumber);
     end
 
+    % Remove the schema/mixedtypes subdirectory for all versions
+    warning('off', 'MATLAB:rmpath:DirNotFound')
+    rmpath(genpath( fullfile(rootPath, "schemas") ))
+    rmpath(genpath( fullfile(rootPath, "mixedtypes") ))
+    warning('on', 'MATLAB:rmpath:DirNotFound')
     
     % Add the schema/mixedtypes subdirectory for the selected version
     addpath(genpath( fullfile(rootPath, "schemas", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
-    addpath(genpath( fullfile(rootPath, "instances", versionAsString) ))
-
 end
