@@ -3,9 +3,7 @@ function mustBeOneOf(value, allowedTypes)
     if ~iscell(value)
         value = {value};
     end
-
-    types = cellfun(@(c) class(c), value, 'UniformOutput', false);
-
+    
     isOneOf = false(size(value));
     for i = 1:numel(value)
         for j = 1:numel(allowedTypes)

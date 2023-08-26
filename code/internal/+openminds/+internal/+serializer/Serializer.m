@@ -6,9 +6,6 @@ classdef Serializer < handle
 
 %     TODO:
 %     -----
-%     - [ ] Adapt Serializer class to serve as mixin for the instance class
-%     - [ ] If linked type property can be non-scalar, the @id field must
-%           be a list, otherwise not. 
 %     - [ ] Handle non-scalar embedded instances
 %     - [ ] Handle openminds.internal.abstract.LinkedCategory instances
 
@@ -18,7 +15,7 @@ classdef Serializer < handle
 %       strategy pattern and have Serializer as a property of Instance in 
 %       order to flexibly change between different serialization techniques.
 %
-%     - Should the serializer work recursively, or should tat be managed
+%     - Should the serializer work recursively, or should that be managed
 %       somewhere else, i.e MetadataCollection
         
 
@@ -42,6 +39,10 @@ classdef Serializer < handle
         id % Todo: get from instance...
     end
 
+    properties (Access = private)
+        SchemaInspector
+    end
+
     methods % Constructor
 
         function obj = Serializer( instanceObject )
@@ -60,6 +61,7 @@ classdef Serializer < handle
             end
 
             obj.Instance = instanceObject;
+            obj.SchemaInspector = openminds.internal.SchemaInspector(instanceObject);
 
             obj.SchemaType = instanceObject.X_TYPE;
 
@@ -125,13 +127,6 @@ classdef Serializer < handle
             % Get public properties
             propertyNames = properties(instanceObject);
 
-            % Get names of linked & embedded properties from instance.
-            linkedPropertyNames = fieldnames(instanceObject.LINKED_PROPERTIES);
-            embeddedPropertyNames = fieldnames(instanceObject.EMBEDDED_PROPERTIES);
-            
-            isPropertyWithLinkedInstance = @(propName) any(strcmp(linkedPropertyNames, propName));
-            isPropertyWithEmbeddedInstance = @(propName) any(strcmp(embeddedPropertyNames, propName));
-
             % Serialize each of the properties and values.
             for i = 1:numel(propertyNames)
                 
@@ -145,10 +140,11 @@ classdef Serializer < handle
                 if isstring(iPropertyValue) && iPropertyValue==""; continue; end
 
                 % Handle linked, embedded and direct values.
-                if isPropertyWithLinkedInstance(iPropertyName)
-                    S.(iVocabPropertyName) = obj.convertLinkedInstanceToStruct(iPropertyValue);
+                if obj.SchemaInspector.isPropertyWithLinkedType(iPropertyName)
+                    toScalar = obj.SchemaInspector.isPropertyValueScalar(iPropertyName);
+                    S.(iVocabPropertyName) = obj.convertLinkedInstanceToStruct(iPropertyValue, 'ToScalar', toScalar);
 
-                elseif isPropertyWithEmbeddedInstance(iPropertyName)
+                elseif obj.SchemaInspector.isPropertyWithEmbeddedType(iPropertyName)
                     S.(iVocabPropertyName) = obj.convertEmbeddedInstanceToStruct(iPropertyValue);
                 else
                     S.(iVocabPropertyName) = iPropertyValue;
@@ -161,12 +157,29 @@ classdef Serializer < handle
             jsonStr = strrep(jsonStr, 'VOCAB_URI_', sprintf('%s/vocab/', obj.DEFAULT_VOCAB) );
         end
 
-        function S = convertLinkedInstanceToStruct(obj, linkedInstance)
-            S = struct('at_id', {});
+        function S = convertLinkedInstanceToStruct(obj, linkedInstance, options)
 
+            arguments
+                obj
+                linkedInstance
+                options.ToScalar = True
+            end
+
+            S = struct('at_id', {});
+            
             for i = 1:numel(linkedInstance)
-                iValue = linkedInstance(i);
+                if isa(linkedInstance(i), 'openminds.internal.abstract.LinkedCategory')
+                    % Todo: linkedInstance(i) should return the instance directly
+                    iValue = linkedInstance(i).Instance;
+                else
+                    iValue = linkedInstance(i);
+                end
                 S(i).at_id = obj.getIdentifier(iValue.id);
+            end
+
+            if ~options.ToScalar && numel(S) == 1
+                % Scalar ID should still be serialized as array
+                S = {S};
             end
         end
 
