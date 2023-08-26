@@ -113,6 +113,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     obj.(propNames{i}) = data.(propNames{i});
                 end
             end
+
+            obj.id = obj.at_id;
         end
     end
 

@@ -2,26 +2,27 @@ classdef Serializer < handle
 %openminds.internal.serializer.Serializer A json-ld serializer for openMINDS instances
 %
 %   This is a proposal for what a serializer class could look like. Some
-%   unresolved todos and questions remain.
-
+%   unresolved questions remain.
+%
 %     TODO:
 %     -----
-%     - [ ] Handle non-scalar embedded instances
-%     - [ ] Handle openminds.internal.abstract.LinkedCategory instances
-
+%     - Simplify recursiveness
+%
 %     QUESTIONS:
 %     ----------
 %     - Consider whether it is enough to have a mixin, or we should use the 
 %       strategy pattern and have Serializer as a property of Instance in 
 %       order to flexibly change between different serialization techniques.
-%
-%     - Should the serializer work recursively, or should that be managed
-%       somewhere else, i.e MetadataCollection
         
+% Note: recursion depth only applies to linked properties, not embedded.
 
     properties (Constant)
         DEFAULT_VOCAB = "https://openminds.ebrains.eu"
         LOCAL_IRI = "http://localhost"
+    end
+
+    properties 
+        Depth = 0
     end
 
     properties
@@ -45,7 +46,7 @@ classdef Serializer < handle
 
     methods % Constructor
 
-        function obj = Serializer( instanceObject )
+        function obj = Serializer( instanceObject, recursionDepth )
             
             if isa( instanceObject, 'openminds.internal.abstract.LinkedCategory' )
                 instanceObject = instanceObject.Instance;
@@ -58,6 +59,10 @@ classdef Serializer < handle
 
             if ~isa(instanceObject, 'openminds.abstract.Schema')
                 error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
+            end
+
+            if nargin > 1 && ~isempty(recursionDepth)
+                obj.Depth = recursionDepth;
             end
 
             obj.Instance = instanceObject;
@@ -93,11 +98,11 @@ classdef Serializer < handle
 
     methods 
 
-        function jsonStr = serialize(obj)
+        function S = serialize(obj)
         %serialize Serialize an openMINDS instance
             
             S = obj.convertInstanceToStruct();
-            jsonStr = obj.convertStructToJsonld(S);
+            S{1} = obj.convertStructToJsonld(S{1});
 
             % Todo: 
             %   [ ] Test cell arrays where a property can have links to
@@ -110,11 +115,13 @@ classdef Serializer < handle
 
     methods (Access = private) % Note: Make protected if subclasses are created
         
-        function S = convertInstanceToStruct(obj, instanceObject)
+        function C = convertInstanceToStruct(obj, instanceObject)
             
             if nargin < 2 || isempty(instanceObject)
                 instanceObject = obj.Instance;
             end
+
+            C = {};
             
             S = struct;
 
@@ -137,19 +144,27 @@ classdef Serializer < handle
 
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
-                if isstring(iPropertyValue) && iPropertyValue==""; continue; end
+                if isstring(iPropertyValue) && numel(iPropertyValue)==1 && iPropertyValue==""; continue; end
 
                 % Handle linked, embedded and direct values.
                 if obj.SchemaInspector.isPropertyWithLinkedType(iPropertyName)
-                    toScalar = obj.SchemaInspector.isPropertyValueScalar(iPropertyName);
-                    S.(iVocabPropertyName) = obj.convertLinkedInstanceToStruct(iPropertyValue, 'ToScalar', toScalar);
-
+                    [S.(iVocabPropertyName), L] = obj.convertLinkedInstanceToStruct(iPropertyValue);
+                    C = [C, L];
                 elseif obj.SchemaInspector.isPropertyWithEmbeddedType(iPropertyName)
-                    S.(iVocabPropertyName) = obj.convertEmbeddedInstanceToStruct(iPropertyValue);
+                    [S.(iVocabPropertyName), L] = obj.convertEmbeddedInstanceToStruct(iPropertyValue);
+                    C = [C, L];
                 else
                     S.(iVocabPropertyName) = iPropertyValue;
                 end
+
+                toScalar = obj.SchemaInspector.isPropertyValueScalar(iPropertyName);
+                if ~toScalar && numel(S.(iVocabPropertyName)) == 1
+                    % Scalar values should still be serialized as array
+                    S.(iVocabPropertyName) = {S.(iVocabPropertyName)};
+                end
             end
+
+            C = [{S}, C];
         end
 
         function jsonStr = convertStructToJsonld(obj, S)
@@ -157,36 +172,54 @@ classdef Serializer < handle
             jsonStr = strrep(jsonStr, 'VOCAB_URI_', sprintf('%s/vocab/', obj.DEFAULT_VOCAB) );
         end
 
-        function S = convertLinkedInstanceToStruct(obj, linkedInstance, options)
-
-            arguments
-                obj
-                linkedInstance
-                options.ToScalar = True
-            end
+        function [S, linkedInstances] = convertLinkedInstanceToStruct(obj, linkedInstance)
 
             S = struct('at_id', {});
+            linkedInstances = {};
             
             for i = 1:numel(linkedInstance)
-                if isa(linkedInstance(i), 'openminds.internal.abstract.LinkedCategory')
-                    % Todo: linkedInstance(i) should return the instance directly
-                    iValue = linkedInstance(i).Instance;
-                else
-                    iValue = linkedInstance(i);
-                end
+                iValue = obj.validateInstance(linkedInstance(i));
                 S(i).at_id = obj.getIdentifier(iValue.id);
-            end
-
-            if ~options.ToScalar && numel(S) == 1
-                % Scalar ID should still be serialized as array
-                S = {S};
+                
+                if obj.Depth > 0
+                    serializer = openminds.internal.serializer.Serializer(iValue, obj.Depth-1);
+                    S_ = serializer.serialize();
+                    linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
+                end
             end
         end
 
-        function S = convertEmbeddedInstanceToStruct(obj, embeddedInstance)
+        function [C, linkedInstances] = convertEmbeddedInstanceToStruct(obj, embeddedInstance)
             % Todo: Handle non-scalar
-            S = obj.convertInstanceToStruct(embeddedInstance);
-            S = rmfield(S, {'at_context', 'at_id'});
+            
+            C = cell(size(embeddedInstance));
+            linkedInstances = {};
+
+            for i = 1:numel(embeddedInstance)
+                iValue = obj.validateInstance(embeddedInstance(i));
+                serializer = openminds.internal.serializer.Serializer(iValue, obj.Depth-1);
+                S = serializer.convertInstanceToStruct;
+                S{1} = rmfield(S{1}, {'at_context', 'at_id'});
+                C{i} = S{1};
+                linkedInstances = [linkedInstances, S(2:end)]; %#ok<AGROW> 
+            end
+            
+            try
+                C = cat(1, C{:});
+            catch
+                % pass
+            end
+        end
+
+        function instanceObject = validateInstance(~, instanceObject)
+            if isa(instanceObject, 'openminds.internal.abstract.LinkedCategory')
+                % Todo: linkedInstance(i) should return the instance directly
+                instanceObject = instanceObject.Instance;
+            elseif isa(instanceObject, 'openminds.abstract.Schema')
+                % pass
+            else
+                error('Unknown instance type "s%"', class(instanceObject))
+            end
         end
 
     end
@@ -194,7 +227,11 @@ classdef Serializer < handle
     methods (Static)
 
         function id = getIdentifier(instanceID)
-            id = sprintf("%s/%s", openminds.internal.serializer.Serializer.LOCAL_IRI, instanceID);
+            if ~strncmp(instanceID, 'http', 4)
+                id = sprintf("%s/%s", openminds.internal.serializer.Serializer.LOCAL_IRI, instanceID);
+            else
+                id = instanceID;
+            end
         end
 
     end

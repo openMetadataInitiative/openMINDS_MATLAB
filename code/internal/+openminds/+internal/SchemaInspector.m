@@ -72,13 +72,20 @@ classdef SchemaInspector < handle
 
             mp = obj.getMetaProperty(propertyName);
             
-            if obj.isPropertyWithLinkedType(propertyName)
+            if obj.isPropertyWithLinkedType(propertyName) || ...
+                    obj.isPropertyWithEmbeddedType(propertyName)
                 validationFcn = mp.Validation.ValidatorFunctions;
                 
                 isScalar = @(str) contains(str, 'mustBeSpecifiedLength') && contains(str, '0,1)');
                 tf = any( cellfun(@(c) isScalar(func2str(c)), validationFcn) );
             else
-                error('Not implemented yet.') % Todo
+                if isa( mp.Validation.Size(2), 'meta.UnrestrictedDimension')
+                    tf = false;
+                elseif isa( mp.Validation.Size(2), 'meta.FixedDimension')
+                    tf = mp.Validation.Size(2).Length == 1;
+                else
+                    error('Not implemented.') % Is this ever going to happen?
+                end
             end
         end
 

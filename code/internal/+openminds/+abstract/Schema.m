@@ -5,7 +5,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
-%   [ ] Translate schema into a json?
 %   [ ] Do some classes have to inherit from a mixin.Heterogeneous class?
 %   [ ] Should controlled term instances be coded as enumeration classes?
 %   [ ] Distinguish embedded from linked types.
@@ -235,7 +234,16 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 % fprintf('set linked property of %s\n', class(obj))
             else
                 if ~isempty(obj)
-                    oldValue = builtin('subsref', obj, subs);
+                    try
+                        oldValue = builtin('subsref', obj, subs);
+                    catch MECause
+                        switch MECause.identifier
+                            case 'MATLAB:badsubscript'
+                                % Old value was not assigned, expanding
+                                % array
+                                obj = builtin('subsasgn', obj, subs, value);
+                        end
+                    end
                 else
                     oldValue = [];
                 end
