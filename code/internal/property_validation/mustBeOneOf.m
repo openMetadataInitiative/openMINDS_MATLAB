@@ -6,7 +6,17 @@ function mustBeOneOf(value, allowedTypes)
 
     types = cellfun(@(c) class(c), value, 'UniformOutput', false);
 
-    isValidType = iscell(value) && all(ismember(types, allowedTypes));
+    isOneOf = false(size(value));
+    for i = 1:numel(value)
+        for j = 1:numel(allowedTypes)
+            if isa(value{i}, allowedTypes{j})
+                isOneOf(i) = true;
+                continue
+            end
+         end
+    end
+
+    isValidType = all( isOneOf );
     validTypesStr = getValidTypesAsFormattedString(allowedTypes);
 
     if ~isValidType
