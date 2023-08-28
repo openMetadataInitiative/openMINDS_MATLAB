@@ -21,9 +21,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
                 instances = {instances};
             end
 
-            for i = 1:numel(instances)
-                instances{i} = obj.convertStructToJsonld(instances{i});
-            end
+            instances = obj.convertStructToJsonld(instances);
 
             if numel(instances) == 1
                 instances = instances{1};

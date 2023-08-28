@@ -7,6 +7,9 @@ function mustBeListOfUniqueItems(value)
         for instanceType = uniqueInstanceTypes
             isOfType = contains( instanceTypes, instanceType );
             valuesOfType = [value{isOfType}];
+            if ischar(valuesOfType)
+                valuesOfType = string(valuesOfType);
+            end
             assert( isequal(valuesOfType, unique(valuesOfType, 'stable')), 'Value must be an array unique items' );
         end
     else

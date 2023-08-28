@@ -70,8 +70,16 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                     end
                 end
 
-                mustBeOneOf(instance{i}, obj(i).ALLOWED_TYPES)
-                obj(i).Instance = instance{i};
+                if isstruct(instance{i}) && isfield(instance{i}, 'at_id')
+                    % Support initializing an Instance from a struct with 
+                    % an @id. This will be act as a placeholder for an 
+                    % unresolved linked instance, and the link needs to be 
+                    % resolved externally in order to put a real instance in place.
+                    obj.Instance = instance{i}.at_id;
+                else
+                    mustBeOneOf(instance{i}, obj(i).ALLOWED_TYPES)
+                    obj(i).Instance = instance{i};
+                end
             end
         end
 

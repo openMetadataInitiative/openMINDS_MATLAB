@@ -7,8 +7,12 @@ function s = decode(str)
     names = regexp(str, '\@\w*(?=\")', 'match' );
     oldNames = strrep(names, '@', 'x_');
     newNames = strrep(names, '@', 'at_');
-
-    s = fieldnamerep(s, oldNames, newNames);
+    
+    if iscell(s)
+        s = cellfun(@(c) fieldnamerep(c, oldNames, newNames), s, 'UniformOutput', 0);
+    else
+        s = fieldnamerep(s, oldNames, newNames);
+    end
 end
 
 function S = fieldnamerep(S, oldNames, newNames)
@@ -20,7 +24,9 @@ function S = fieldnamerep(S, oldNames, newNames)
     
     for i = iA
         if isfield(S, oldNames{i})
-            S.(newNames{i}) = S.(oldNames{i});
+            for j = 1:numel(S)
+                S(j).(newNames{i}) = S(j).(oldNames{i});
+            end
         end
     end
 
@@ -33,10 +39,12 @@ function S = fieldnamerep(S, oldNames, newNames)
     
     S = orderfields(S, allFieldNamesNew);
 
-    isStruct = structfun(@isstruct, S);
-    if iscolumn(isStruct); isStruct = transpose(isStruct); end
-    
-    for i = find(isStruct)
-        S.(allFieldNamesNew{i}) = fieldnamerep(S.(allFieldNamesNew{i}), oldNames, newNames);
+    for i = 1:numel(S)
+        isStruct = structfun(@isstruct, S(i));
+        if iscolumn(isStruct); isStruct = transpose(isStruct); end
+        
+        for j = find(isStruct)
+            S(i).(allFieldNamesNew{j}) = fieldnamerep(S(i).(allFieldNamesNew{j}), oldNames, newNames);
+        end
     end
 end

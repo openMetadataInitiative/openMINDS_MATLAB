@@ -64,17 +64,24 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
         end
 
         function obj = fromStruct(obj, S)
+        %Create instance/list of instances from a struct array
             
-            C = struct2cell(S);
+            numInstances = numel(S);
+            obj(numInstances) = feval(class(obj));
 
-            S.id = S.at_id; % Todo, handle this better 
+            allowedPropertyNames = [obj(1).PropertyNames];
 
-            allowedPropertyNames = ['id', obj(1).PropertyNames];
-            fieldNames = fieldnames(S);
+            for i = 1:numInstances
+                C = struct2cell(S(i));
+                fieldNames = fieldnames(S(i));
+                [fieldNames, iA] = intersect(fieldNames', allowedPropertyNames, 'stable');
+                set(obj(i), fieldNames', C(iA)');
+                
+                if isfield(S, 'at_id') % Not present for embedded values
+                    obj(i).assignInstanceId( S(i).at_id );
+                end
+            end
 
-            [fieldNames, iA, iC] = intersect(fieldNames', allowedPropertyNames);
-            
-            set(obj, fieldNames', C(iC)');
             if ~nargout
                 clear obj
             end
