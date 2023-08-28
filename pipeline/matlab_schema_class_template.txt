@@ -49,7 +49,7 @@ classdef {{ class_name }} < {{base_class}}
 
     methods
         function obj = {{ class_name }}(varargin)            
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
     

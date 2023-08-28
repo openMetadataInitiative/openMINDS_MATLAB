@@ -196,8 +196,8 @@
     "stringFormat": ""
   },
   "numericalProperty": {
-    "propertyName": "",
-    "stringFormat": ""
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
   },
   "propertyValueList": {
     "propertyName": "lookupLabel",
@@ -216,8 +216,8 @@
     "stringFormat": "sprintf('%s', name)"
   },
   "stringProperty": {
-    "propertyName": "",
-    "stringFormat": ""
+    "propertyName": "name",
+    "stringFormat": "sprintf('%s', name)"
   },
   "subject": {
     "propertyName": "lookupLabel",
