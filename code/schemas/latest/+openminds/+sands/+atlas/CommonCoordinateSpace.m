@@ -107,7 +107,7 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
 
     methods
         function obj = CommonCoordinateSpace(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

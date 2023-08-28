@@ -31,7 +31,7 @@ classdef IdentifiersDotOrgID < openminds.abstract.Schema
 
     methods
         function obj = IdentifiersDotOrgID(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

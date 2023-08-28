@@ -30,7 +30,7 @@ classdef URL < openminds.abstract.Schema
 
     methods
         function obj = URL(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

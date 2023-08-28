@@ -31,7 +31,7 @@ classdef SWHID < openminds.abstract.Schema
 
     methods
         function obj = SWHID(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

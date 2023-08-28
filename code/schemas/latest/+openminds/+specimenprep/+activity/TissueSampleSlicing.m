@@ -64,7 +64,7 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
 
     methods
         function obj = TissueSampleSlicing(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

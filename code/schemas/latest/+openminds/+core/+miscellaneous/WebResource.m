@@ -44,7 +44,7 @@ classdef WebResource < openminds.abstract.Schema
 
     methods
         function obj = WebResource(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

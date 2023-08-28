@@ -159,7 +159,7 @@ classdef GenericComputation < openminds.abstract.Schema
 
     methods
         function obj = GenericComputation(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

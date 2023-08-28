@@ -37,7 +37,7 @@ classdef NumericalParameter < openminds.abstract.Schema
 
     methods
         function obj = NumericalParameter(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

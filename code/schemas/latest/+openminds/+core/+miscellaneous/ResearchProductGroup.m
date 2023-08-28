@@ -38,7 +38,7 @@ classdef ResearchProductGroup < openminds.abstract.Schema
 
     methods
         function obj = ResearchProductGroup(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -215,7 +215,7 @@ classdef ModelVersion < openminds.abstract.Schema
 
     methods
         function obj = ModelVersion(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -42,7 +42,7 @@ classdef DigitalIdentifierSchema < openminds.abstract.Schema
 
     methods
         function obj = DigitalIdentifierSchema(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -46,7 +46,7 @@ classdef CustomAnatomicalEntity < openminds.abstract.Schema
 
     methods
         function obj = CustomAnatomicalEntity(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

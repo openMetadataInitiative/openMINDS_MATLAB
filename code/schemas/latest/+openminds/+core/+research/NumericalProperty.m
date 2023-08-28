@@ -37,13 +37,13 @@ classdef NumericalProperty < openminds.abstract.Schema
 
     methods
         function obj = NumericalProperty(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = sprintf('%s', obj.name);
         end
     end
 

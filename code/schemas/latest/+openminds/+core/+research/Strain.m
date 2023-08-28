@@ -126,7 +126,7 @@ classdef Strain < openminds.abstract.Schema
 
     methods
         function obj = Strain(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

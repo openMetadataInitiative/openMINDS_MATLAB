@@ -60,7 +60,7 @@ classdef Environment < openminds.abstract.Schema
 
     methods
         function obj = Environment(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

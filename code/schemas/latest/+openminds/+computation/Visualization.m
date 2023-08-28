@@ -159,7 +159,7 @@ classdef Visualization < openminds.abstract.Schema
 
     methods
         function obj = Visualization(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

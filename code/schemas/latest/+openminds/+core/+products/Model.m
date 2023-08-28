@@ -110,7 +110,7 @@ classdef Model < openminds.abstract.Schema
 
     methods
         function obj = Model(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -60,7 +60,7 @@ classdef ChemicalSubstance < openminds.abstract.Schema
 
     methods
         function obj = ChemicalSubstance(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

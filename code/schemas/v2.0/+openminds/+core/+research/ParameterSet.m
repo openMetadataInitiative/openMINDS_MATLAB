@@ -46,7 +46,7 @@ classdef ParameterSet < openminds.abstract.Schema
 
     methods
         function obj = ParameterSet(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -104,7 +104,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
 
     methods
         function obj = ParcellationEntityVersion(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

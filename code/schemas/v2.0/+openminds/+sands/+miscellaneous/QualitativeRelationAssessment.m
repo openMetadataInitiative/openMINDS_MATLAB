@@ -48,7 +48,7 @@ classdef QualitativeRelationAssessment < openminds.abstract.Schema
 
     methods
         function obj = QualitativeRelationAssessment(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

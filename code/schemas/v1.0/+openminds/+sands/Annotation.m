@@ -100,7 +100,7 @@ classdef Annotation < openminds.abstract.Schema
 
     methods
         function obj = Annotation(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

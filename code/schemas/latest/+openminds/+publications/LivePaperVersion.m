@@ -205,7 +205,7 @@ classdef LivePaperVersion < openminds.abstract.Schema
 
     methods
         function obj = LivePaperVersion(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

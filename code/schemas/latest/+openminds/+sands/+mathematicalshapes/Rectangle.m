@@ -40,7 +40,7 @@ classdef Rectangle < openminds.abstract.Schema
 
     methods
         function obj = Rectangle(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 
