@@ -137,6 +137,10 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
                 while rep.CharacterWidth > width
                     tempStringArray = stringArray(1:end-count);
+                    if isempty(tempStringArray)
+                        break
+                    end
+
                     tempStringArray(end) = tempStringArray(end) + "... " + sizeTypeStr;
                     rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', tempStringArray, 'Annotation', annotation);
                     count = count + 1;
