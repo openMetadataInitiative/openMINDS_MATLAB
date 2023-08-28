@@ -1,5 +1,5 @@
-classdef Serializer < handle
-%openminds.internal.serializer.Serializer A json-ld serializer for openMINDS instances
+classdef StructConverter < handle
+%openminds.internal.serializer.StructConverter A json-ld serializer for openMINDS instances
 %
 %   This is a proposal for what a serializer class could look like. Some
 %   unresolved questions remain.
@@ -46,7 +46,7 @@ classdef Serializer < handle
 
     methods % Constructor
 
-        function obj = Serializer( instanceObject, recursionDepth )
+        function obj = StructConverter( instanceObject, recursionDepth )
             
             if isa( instanceObject, 'openminds.internal.abstract.LinkedCategory' )
                 instanceObject = instanceObject.Instance;
@@ -77,7 +77,7 @@ classdef Serializer < handle
             end
 
             if ~nargout
-                obj.serialize()
+                obj.convert()
                 clear obj
             end
         end
@@ -98,11 +98,11 @@ classdef Serializer < handle
 
     methods 
 
-        function S = serialize(obj)
+        function S = convert(obj)
         %serialize Serialize an openMINDS instance
             
             S = obj.convertInstanceToStruct();
-            S{1} = obj.convertStructToJsonld(S{1});
+            %S{1} = obj.convertStructToJsonld(S{1});
 
             % Todo: 
             %   [ ] Test cell arrays where a property can have links to
@@ -182,8 +182,8 @@ classdef Serializer < handle
                 S(i).at_id = obj.getIdentifier(iValue.id);
                 
                 if obj.Depth > 0
-                    serializer = openminds.internal.serializer.Serializer(iValue, obj.Depth-1);
-                    S_ = serializer.serialize();
+                    serializer = openminds.internal.serializer.StructConverter(iValue, obj.Depth-1);
+                    S_ = serializer.convert();
                     linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
                 end
             end
@@ -197,7 +197,7 @@ classdef Serializer < handle
 
             for i = 1:numel(embeddedInstance)
                 iValue = obj.validateInstance(embeddedInstance(i));
-                serializer = openminds.internal.serializer.Serializer(iValue, obj.Depth-1);
+                serializer = openminds.internal.serializer.StructConverter(iValue, obj.Depth-1);
                 S = serializer.convertInstanceToStruct;
                 S{1} = rmfield(S{1}, {'at_context', 'at_id'});
                 C{i} = S{1};
@@ -228,7 +228,7 @@ classdef Serializer < handle
 
         function id = getIdentifier(instanceID)
             if ~strncmp(instanceID, 'http', 4)
-                id = sprintf("%s/%s", openminds.internal.serializer.Serializer.LOCAL_IRI, instanceID);
+                id = sprintf("%s/%s", openminds.internal.serializer.StructConverter.LOCAL_IRI, instanceID);
             else
                 id = instanceID;
             end
