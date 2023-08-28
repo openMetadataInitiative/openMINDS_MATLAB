@@ -46,7 +46,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             end
 
             if numel(varargin)==1 && isstruct(varargin{1})
-                obj.fromStruct(varargin{1})
+                obj = obj.fromStruct(varargin{1});
             elseif numel(varargin)==1
                 error('Not implemented yet.')
             else
@@ -289,8 +289,17 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % %             end
 
             if obj.isSubsForLinkedPropertyValue(subs) || obj.isSubsForEmbeddedPropertyValue(subs)
-                  
-                linkedTypeValues = builtin('subsref', obj, subs(1));
+                if numel(obj) > 1
+                    linkedTypeValues = cell(size(obj));
+                    for ii = 1:numel(obj)
+                        linkedTypeValues{ii} = builtin('subsref', obj(ii), subs(1));
+                    end
+                    try
+                        linkedTypeValues = [linkedTypeValues{:}];
+                    end
+                else
+                    linkedTypeValues = builtin('subsref', obj, subs(1));
+                end
 
                 if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
                     values = {linkedTypeValues.Instance};
@@ -325,8 +334,16 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % % %                         end
                         if isa(values, 'openminds.abstract.Schema')
                             % TODO: Does this work if values is an array.
-                            [varargout{:}] = values.subsref(subs(2:end));
+                            if numel(values) == numOutputs
+                                for i = 1:numel(values)
+                                    varargout{i} = values(i).subsref(subs(2:end));
+                                end
+                            else
+                                varargout = cell(1, numOutputs);
+                                [varargout{:}] = values.subsref(subs(2:end));
+                            end
                         else
+                            varargout = cell(1, numOutputs);
                             [varargout{:}] = builtin('subsref', values, subs(2:end));
                         end
                     else
@@ -340,13 +357,21 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     end
                 else
                     if numOutputs > 0
-                        [varargout{:}] = values;
+                        if numel(values) == numOutputs
+                            for i = 1:numel(values)
+                                varargout{i} = values(i);
+                            end
+                        else
+                            varargout = cell(1, numOutputs);
+                            [varargout{:}] = values;
+                        end
                     else
                         varargout = values;
                     end
                 end
             else
                 if numOutputs > 0
+                    varargout = cell(1, numOutputs);
                     [varargout{:}] = builtin('subsref', obj, subs);
                 else
                     builtin('subsref', obj, subs)
@@ -364,7 +389,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 if strcmp( s(2).type, '()' )
                     s(2).type = '{}';
                 end
-                n = builtin('numArgumentsFromSubscript', linkedTypeValues, s(2:end), indexingContext);
+                try
+                    n = builtin('numArgumentsFromSubscript', [linkedTypeValues{:}], s(2:end), indexingContext);
+                catch
+                    n = builtin('numArgumentsFromSubscript', linkedTypeValues, s(2:end), indexingContext);
+                end
             else
                 n = builtin('numArgumentsFromSubscript', obj, s, indexingContext);
             end
@@ -421,6 +450,12 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
         end
 
+    end
+
+    methods (Access = ?openminds.internal.mixin.StructAdapter)
+        function assignInstanceId(obj, id)
+            obj.id = id;
+        end
     end
 
     methods (Access = private) % Methods related to setting new values
