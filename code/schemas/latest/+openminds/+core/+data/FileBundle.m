@@ -84,7 +84,7 @@ classdef FileBundle < openminds.abstract.Schema
 
     methods
         function obj = FileBundle(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

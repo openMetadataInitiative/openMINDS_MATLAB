@@ -36,13 +36,13 @@ classdef StringProperty < openminds.abstract.Schema
 
     methods
         function obj = StringProperty(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = sprintf('%s', obj.name);
         end
     end
 

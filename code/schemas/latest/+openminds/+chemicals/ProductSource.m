@@ -60,7 +60,7 @@ classdef ProductSource < openminds.abstract.Schema
 
     methods
         function obj = ProductSource(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

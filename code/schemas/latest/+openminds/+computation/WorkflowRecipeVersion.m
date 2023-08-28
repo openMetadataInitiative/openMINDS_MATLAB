@@ -207,7 +207,7 @@ classdef WorkflowRecipeVersion < openminds.abstract.Schema
 
     methods
         function obj = WorkflowRecipeVersion(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

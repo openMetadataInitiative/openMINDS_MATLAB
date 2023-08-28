@@ -38,7 +38,7 @@ classdef Channel < openminds.abstract.Schema
 
     methods
         function obj = Channel(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

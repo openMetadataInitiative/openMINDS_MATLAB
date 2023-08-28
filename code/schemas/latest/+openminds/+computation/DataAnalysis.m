@@ -159,7 +159,7 @@ classdef DataAnalysis < openminds.abstract.Schema
 
     methods
         function obj = DataAnalysis(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

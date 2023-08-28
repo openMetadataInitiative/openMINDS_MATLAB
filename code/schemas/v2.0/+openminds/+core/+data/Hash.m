@@ -36,7 +36,7 @@ classdef Hash < openminds.abstract.Schema
 
     methods
         function obj = Hash(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -128,7 +128,7 @@ classdef ElectrodePlacement < openminds.abstract.Schema
 
     methods
         function obj = ElectrodePlacement(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

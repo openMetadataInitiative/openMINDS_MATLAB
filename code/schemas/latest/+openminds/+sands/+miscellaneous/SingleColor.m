@@ -31,7 +31,7 @@ classdef SingleColor < openminds.abstract.Schema
 
     methods
         function obj = SingleColor(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

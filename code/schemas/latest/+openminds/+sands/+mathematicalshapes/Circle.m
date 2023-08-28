@@ -32,7 +32,7 @@ classdef Circle < openminds.abstract.Schema
 
     methods
         function obj = Circle(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

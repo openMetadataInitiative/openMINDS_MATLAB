@@ -46,7 +46,7 @@ classdef FileArchive < openminds.abstract.Schema
 
     methods
         function obj = FileArchive(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

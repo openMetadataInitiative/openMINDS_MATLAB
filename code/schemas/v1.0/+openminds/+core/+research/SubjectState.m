@@ -70,7 +70,7 @@ classdef SubjectState < openminds.abstract.Schema
 
     methods
         function obj = SubjectState(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

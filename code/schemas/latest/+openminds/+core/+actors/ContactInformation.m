@@ -30,7 +30,7 @@ classdef ContactInformation < openminds.abstract.Schema
 
     methods
         function obj = ContactInformation(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

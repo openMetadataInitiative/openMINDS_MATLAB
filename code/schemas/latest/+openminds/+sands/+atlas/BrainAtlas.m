@@ -114,7 +114,7 @@ classdef BrainAtlas < openminds.abstract.Schema
 
     methods
         function obj = BrainAtlas(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

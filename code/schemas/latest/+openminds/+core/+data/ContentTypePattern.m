@@ -44,7 +44,7 @@ classdef ContentTypePattern < openminds.abstract.Schema
 
     methods
         function obj = ContentTypePattern(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -52,7 +52,7 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
 
     methods
         function obj = LivePaperResourceItem(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

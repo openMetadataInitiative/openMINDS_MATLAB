@@ -100,7 +100,7 @@ classdef CoordinateSpace < openminds.abstract.Schema
 
     methods
         function obj = CoordinateSpace(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

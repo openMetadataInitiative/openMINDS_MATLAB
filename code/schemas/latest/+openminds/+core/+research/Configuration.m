@@ -44,7 +44,7 @@ classdef Configuration < openminds.abstract.Schema
 
     methods
         function obj = Configuration(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

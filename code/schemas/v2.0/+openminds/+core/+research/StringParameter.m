@@ -36,7 +36,7 @@ classdef StringParameter < openminds.abstract.Schema
 
     methods
         function obj = StringParameter(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

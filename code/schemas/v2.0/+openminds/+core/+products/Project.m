@@ -66,7 +66,7 @@ classdef Project < openminds.abstract.Schema
 
     methods
         function obj = Project(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

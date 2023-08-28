@@ -46,7 +46,7 @@ classdef CustomPropertySet < openminds.abstract.Schema
 
     methods
         function obj = CustomPropertySet(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

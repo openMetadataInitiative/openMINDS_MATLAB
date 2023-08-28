@@ -50,7 +50,7 @@ classdef Consortium < openminds.abstract.Schema
 
     methods
         function obj = Consortium(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

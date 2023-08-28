@@ -39,7 +39,7 @@ classdef Copyright < openminds.abstract.Schema
 
     methods
         function obj = Copyright(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

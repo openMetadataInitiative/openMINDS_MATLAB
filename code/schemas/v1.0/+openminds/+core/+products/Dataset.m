@@ -66,7 +66,7 @@ classdef Dataset < openminds.abstract.Schema
 
     methods
         function obj = Dataset(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

@@ -31,7 +31,7 @@ classdef ORCID < openminds.abstract.Schema
 
     methods
         function obj = ORCID(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

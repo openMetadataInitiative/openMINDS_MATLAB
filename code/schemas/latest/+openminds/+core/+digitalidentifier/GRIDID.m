@@ -31,7 +31,7 @@ classdef GRIDID < openminds.abstract.Schema
 
     methods
         function obj = GRIDID(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

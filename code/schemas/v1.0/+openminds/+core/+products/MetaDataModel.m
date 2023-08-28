@@ -66,7 +66,7 @@ classdef MetaDataModel < openminds.abstract.Schema
 
     methods
         function obj = MetaDataModel(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

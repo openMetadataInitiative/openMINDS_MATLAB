@@ -40,7 +40,7 @@ classdef Ellipse < openminds.abstract.Schema
 
     methods
         function obj = Ellipse(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 

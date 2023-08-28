@@ -128,7 +128,7 @@ classdef StimulationActivity < openminds.abstract.Schema
 
     methods
         function obj = StimulationActivity(varargin)
-            obj.assignPVPairs(varargin{:})
+            obj@openminds.abstract.Schema(varargin{:})
         end
     end
 
