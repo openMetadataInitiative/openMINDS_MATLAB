@@ -39,10 +39,18 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
     methods % Constructor
         
-        function obj = Schema()
+        function obj = Schema(varargin)
             % Todo: Assign in subclass constructors?
             if ~isa(obj, 'openminds.abstract.ControlledTerm')
                 obj.id = obj.generateInstanceId();
+            end
+
+            if numel(varargin)==1 && isstruct(varargin{1})
+                obj.fromStruct(varargin{1})
+            elseif numel(varargin)==1
+                error('Not implemented yet.')
+            else
+                obj.assignPVPairs(varargin{:})
             end
         end
         

@@ -67,12 +67,14 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
             
             C = struct2cell(S);
 
-            allowedPropertyNames = obj(1).PropertyNames;
+            S.id = S.at_id; % Todo, handle this better 
+
+            allowedPropertyNames = ['id', obj(1).PropertyNames];
             fieldNames = fieldnames(S);
 
-            [fieldNames, iA] = intersect(fieldNames, allowedPropertyNames);
+            [fieldNames, iA, iC] = intersect(fieldNames', allowedPropertyNames);
             
-            set(obj, fieldNames', C(iA)');
+            set(obj, fieldNames', C(iC)');
             if ~nargout
                 clear obj
             end
