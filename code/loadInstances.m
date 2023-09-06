@@ -69,9 +69,11 @@ function resolveLinks(instance, instanceCollection)
                 end
 
                 isMatchedInstance = strcmp(instanceIds, instanceId);
-                resolvedInstances{j} = instanceCollection{isMatchedInstance};
-            
-                resolveLinks(resolvedInstances{j}, instanceCollection)
+
+                if any(isMatchedInstance)
+                    resolvedInstances{j} = instanceCollection{isMatchedInstance};
+                    resolveLinks(resolvedInstances{j}, instanceCollection)
+                end
             end
 
             try
