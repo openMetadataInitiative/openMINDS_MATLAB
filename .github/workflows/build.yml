@@ -38,7 +38,8 @@ jobs:
         rm -rf main/code/schemas/*
         rm -rf main/code/mixedtypes/*
         cp -R target/* main/code
-        cp -R main/code/internal/content_files/* main/code/
+        cp -R main/code/internal/resources/content_files/* main/code/
+        cp -R main/code/internal/resources/readme_files/* main/code/
         cd main
         
         git config --global user.email "openminds@ebrains.eu"
