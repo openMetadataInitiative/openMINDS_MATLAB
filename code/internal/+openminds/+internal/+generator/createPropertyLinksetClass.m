@@ -31,7 +31,7 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
     packageFolderNames = strcat("+", packageNames);
     
     % Define directory and file paths
-    templateDirectory = fullfile(openminds.internal.rootpath(), 'internal', 'templates');
+    templateDirectory = fullfile(openminds.internal.rootpath(), 'internal', 'resources', 'templates');
     rootTargetDirectory = fullfile(openminds.internal.rootpath(), 'mixedtypes', packageFolderNames{:});
     
     templateFilepath = fullfile(templateDirectory, 'MixedTypeTemplate.m');

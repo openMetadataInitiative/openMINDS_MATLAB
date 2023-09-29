@@ -229,7 +229,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             %fullClassName = obj.getFullClassName();
             fullClassNameSimple = obj.getFullClassName("simple");
 
-            folderPath = fullfile( openminds.internal.rootpath, 'internal', 'templates' );
+            folderPath = fullfile( openminds.internal.rootpath, 'internal', 'resources', 'templates' );
             str = fileread( fullfile(folderPath, 'SchemaAlias.m') );
             str = strrep(str, 'SchemaAlias', obj.SchemaName);
             str = strrep(str, 'SchemaClassName', fullClassNameSimple);
