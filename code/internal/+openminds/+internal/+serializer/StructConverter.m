@@ -140,8 +140,9 @@ classdef StructConverter < handle
                 iPropertyName = propertyNames{i};
                 iPropertyValue = instanceObject.(iPropertyName);
                 
-                iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
-
+                %iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
+                iVocabPropertyName = iPropertyName;
+                
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
                 if isstring(iPropertyValue) && numel(iPropertyValue)==1 && iPropertyValue==""; continue; end
