@@ -128,7 +128,7 @@ classdef StructConverter < handle
             S.at_context = struct();
             S.at_context.at_vocab = sprintf("%s/vocab", obj.Vocab);
 
-            S.at_type = {instanceObject.X_TYPE}; % Todo: Array or scalar?
+            S.at_type = instanceObject.X_TYPE;
             S.at_id = obj.getIdentifier(instanceObject.id);
             
             % Get public properties
