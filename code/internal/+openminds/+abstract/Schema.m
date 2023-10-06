@@ -57,6 +57,40 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
     end
 
     methods (Access = public, Hidden)
+        function linkedTypeList = getLinkedTypes(obj)
+            linkedTypeList = {};
+            linkedPropertyNames = fieldnames(obj.LINKED_PROPERTIES);
+            
+            for propName = string( row(linkedPropertyNames) )
+                propValue = obj.(propName);
+                if ~isempty( propValue )
+                    if isa(propValue, 'openminds.internal.abstract.LinkedCategory')
+                        linkedTypeList = [linkedTypeList, {propValue.Instance}]; %#ok<AGROW>
+                    elseif isa(propValue, 'openminds.abstract.Schema')
+                        linkedTypeList = [linkedTypeList, num2cell(propValue)]; %#ok<AGROW>
+                    end
+                end
+            end
+        end
+
+        function embeddedTypeList = getEmbeddedTypes(obj)
+            embeddedTypeList = {};
+            embeddedPropertyNames = fieldnames(obj.EMBEDDED_PROPERTIES);
+            
+            for propName = string( row(embeddedPropertyNames) )
+                propValue = obj.(propName);
+                if ~isempty( propValue )
+                    if isa(propValue, 'openminds.internal.abstract.LinkedCategory')
+                        embeddedTypeList = [embeddedTypeList, {propValue.Instance}]; %#ok<AGROW>
+                    elseif isa(propValue, 'openminds.abstract.Schema')
+                        embeddedTypeList = [embeddedTypeList, num2cell(propValue)]; %#ok<AGROW>
+                    end
+                end
+            end
+        end
+    end
+
+    methods (Access = public, Hidden)
         
         function tf = isPropertyWithLinkedType(obj, propertyName)
             % Return true if property value is a linked type.
@@ -108,7 +142,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
     end
 
-    methods (Hidden) % Overrides subsref & subsasgn
+    methods (Hidden) % Overrides subsref & subsasgn (seal?)
 
         function obj = subsasgn(obj, subs, value)
             
@@ -548,5 +582,12 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             end
         end
         
+    end
+end
+
+function x = row(x)
+    assert(isrow(x) || iscolumn(x), 'Input must be a vector')
+    if ~isrow(x)
+        x = transpose(x);
     end
 end

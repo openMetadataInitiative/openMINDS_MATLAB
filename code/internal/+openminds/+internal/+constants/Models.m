@@ -1,6 +1,7 @@
 classdef Models < handle
     
     properties (Constant)
+        VOCAB_IRI = "https://openminds.ebrains.eu/vocab/"
         VERSION_NUMBERS = [1, 2, 3];
     end
 

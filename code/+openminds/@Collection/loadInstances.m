@@ -1,18 +1,34 @@
-function instances = loadInstances(filePath, options)
-    
+function instances = loadInstances(filePath)%, options)
+%loadInstances Load metadata instances from file(s)
+
+% Todo: 
+%   - Add documentation
+%   - Test that this works in different cases. Single files, collection of
+%     files, 
+%   - Generalize to work for multiple file formats.
+
     arguments
-        filePath (1,1) string = ""
-        options.OutputFormat (1,1) string = "jsonld"
+        filePath (1,:) string = ""
         %options.RecursionDepth = 1
     end
 
     import openminds.internal.serializer.JsonLdSerializer
+    import openminds.internal.serializer.jsonld2struct
     
-    switch options.OutputFormat
-        case "jsonld"
+    [~, ~, serializationFormat] = fileparts(filePath(1));
 
-            str = fileread(filePath);
-            structInstances = openminds.internal.serializer.jsonld2struct(str);
+    switch serializationFormat
+        case ".jsonld"
+            
+            %str = fileread(filePath);
+            str = arrayfun(@fileread, filePath, 'UniformOutput', false);
+            
+            %structInstances = jsonld2struct(str);
+            if numel(str) == 1
+                structInstances = jsonld2struct(str);
+            else
+                structInstances = cellfun(@jsonld2struct, str, 'UniformOutput', false);
+            end
             
             instances = cell(size(structInstances));
 
@@ -21,7 +37,7 @@ function instances = loadInstances(filePath, options)
 
                 thisInstance = structInstances{i};
                 
-                openMindsType = thisInstance.at_type{1};
+                openMindsType = thisInstance.at_type;
                 className = openminds.internal.utility.string.type2class(openMindsType);
 
                 assert( isequal( eval(sprintf('%s.X_TYPE', className)), openMindsType), ...
@@ -45,7 +61,9 @@ function instances = loadInstances(filePath, options)
 end
 
 function resolveLinks(instance, instanceCollection)
-    
+%resolveLinks Resolve linked types, i.e replace an @id with the actual 
+% instance object.
+
     schemaInspector = openminds.internal.SchemaInspector(instance);
     
     instanceIds = cellfun(@(instance) instance.id, instanceCollection, 'UniformOutput', false);

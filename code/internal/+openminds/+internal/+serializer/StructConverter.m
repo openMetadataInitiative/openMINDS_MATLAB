@@ -3,7 +3,8 @@ classdef StructConverter < handle
 %
 %   This is a proposal for what a serializer class could look like. Some
 %   unresolved questions remain.
-%
+
+
 %     TODO:
 %     -----
 %     - Simplify recursiveness
@@ -16,17 +17,22 @@ classdef StructConverter < handle
         
 % Note: recursion depth only applies to linked properties, not embedded.
 
-    properties (Constant)
-        DEFAULT_VOCAB = "https://openminds.ebrains.eu"
-        LOCAL_IRI = "http://localhost"
+
+    properties % Options than can be set on object construction
+        % Specifies how many linked types to recursively convert to structs
+        RecursionDepth = 0 
+
+        % Whether to add the @context property to the output struct
+        WithContext (1,1) logical = true
+
+        % Whether to include empty properies in the output struct
+        IncludeEmptyProperties (1,1) logical = true
+
+        % Whether to embed linked types in the output struct
+        EmbedLinkedNodes (1,1) logical = false
     end
 
-    properties 
-        Depth = 0
-    end
-
-    properties
-        Vocab
+    properties (SetAccess = private)
         SchemaType string % i.e https://openminds.ebrains.eu/core/Person
         MetadataModel string % i.e core
     end
@@ -35,7 +41,7 @@ classdef StructConverter < handle
         SchemaName string % i.e Person
     end
 
-    properties 
+    properties (SetAccess = immutable)
         Instance % openminds.abstract.Schema
         id % Todo: get from instance...
     end
@@ -44,26 +50,47 @@ classdef StructConverter < handle
         SchemaInspector
     end
 
+    properties (Constant, Access = protected)
+        OPENMINDS_IRI = "https://openminds.ebrains.eu"
+        LOCAL_IRI = "http://localhost"
+    end
+
+    properties (Access = protected, Dependent)
+        VocabularyIRI
+    end
+
     methods % Constructor
 
-        function obj = StructConverter( instanceObject, recursionDepth )
+        function obj = StructConverter( instanceObject, options )
             
+            arguments
+                % An instance or array of instances
+                instanceObject
+
+                % Options for converter (public properties of class)
+                options.?openminds.internal.serializer.StructConverter
+            end
+
             if isa( instanceObject, 'openminds.internal.abstract.LinkedCategory' )
                 instanceObject = instanceObject.Instance;
                 warning('Please report if you see this warning!')
             end
 
+            nvOptions = namedargs2cell(options);
+
             if numel(instanceObject) > 1
-                error('Serialization of non-scalar objects is not supported yet')
+                className = class(obj);
+                nvOptions = namedargs2cell(options);
+                obj = cellfun(@(c) feval(className, c, nvOptions{:}), instanceObject);
+                return
+                %error('Serialization of non-scalar objects is not supported yet')
             end
 
             if ~isa(instanceObject, 'openminds.abstract.Schema')
                 error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
             end
 
-            if nargin > 1 && ~isempty(recursionDepth)
-                obj.Depth = recursionDepth;
-            end
+            obj.assignNameValueOptions(nvOptions)
 
             obj.Instance = instanceObject;
             obj.SchemaInspector = openminds.internal.SchemaInspector(instanceObject);
@@ -71,10 +98,6 @@ classdef StructConverter < handle
             obj.SchemaType = instanceObject.X_TYPE;
 
             obj.id = obj.Instance.id;
-
-            if isempty(obj.Vocab)
-                obj.Vocab = obj.DEFAULT_VOCAB;
-            end
 
             if ~nargout
                 obj.convert()
@@ -94,6 +117,10 @@ classdef StructConverter < handle
                 name = schemaTypeSplit{end};
             end
         end
+                
+        function vocabularyIRI = get.VocabularyIRI(obj)
+            vocabularyIRI = sprintf('%s/vocab/', obj.OPENMINDS_IRI);
+        end
     end
 
     methods 
@@ -101,7 +128,7 @@ classdef StructConverter < handle
         function S = convert(obj)
         %serialize Serialize an openMINDS instance
             
-            S = obj.convertInstanceToStruct();
+            S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
             %S{1} = obj.convertStructToJsonld(S{1});
 
             % Todo: 
@@ -115,6 +142,16 @@ classdef StructConverter < handle
 
     methods (Access = private) % Note: Make protected if subclasses are created
         
+        % Unpack name-value pairs and assign to properties. 
+        function assignNameValueOptions(obj, nvOptions)
+            optionNames = nvOptions(1:2:end);
+            optionValues = nvOptions(2:2:end);
+
+            for i = 1:numel(optionNames)
+                obj.(optionNames{i}) = optionValues{i};
+            end
+        end
+
         function C = convertInstanceToStruct(obj, instanceObject)
             
             if nargin < 2 || isempty(instanceObject)
@@ -125,8 +162,10 @@ classdef StructConverter < handle
             
             S = struct;
 
-            S.at_context = struct();
-            S.at_context.at_vocab = sprintf("%s/vocab", obj.Vocab);
+            if obj.WithContext
+                S.at_context = struct();
+                S.at_context.at_vocab = obj.VocabularyIRI;
+            end
 
             S.at_type = instanceObject.X_TYPE;
             S.at_id = obj.getIdentifier(instanceObject.id);
@@ -142,7 +181,7 @@ classdef StructConverter < handle
                 
                 %iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
                 iVocabPropertyName = iPropertyName;
-                
+
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
                 if isstring(iPropertyValue) && numel(iPropertyValue)==1 && iPropertyValue==""; continue; end
@@ -150,17 +189,18 @@ classdef StructConverter < handle
                 % Handle linked, embedded and direct values.
                 if obj.SchemaInspector.isPropertyWithLinkedType(iPropertyName)
                     [S.(iVocabPropertyName), L] = obj.convertLinkedInstanceToStruct(iPropertyValue);
-                    C = [C, L];
+                    C = [C, L]; %#ok<AGROW>
                 elseif obj.SchemaInspector.isPropertyWithEmbeddedType(iPropertyName)
                     [S.(iVocabPropertyName), L] = obj.convertEmbeddedInstanceToStruct(iPropertyValue);
-                    C = [C, L];
+                    C = [C, L]; %#ok<AGROW>
                 else
                     S.(iVocabPropertyName) = iPropertyValue;
                 end
 
                 toScalar = obj.SchemaInspector.isPropertyValueScalar(iPropertyName);
                 if ~toScalar && numel(S.(iVocabPropertyName)) == 1
-                    % Scalar values should still be serialized as array
+                    % Scalar values should still be serialized as array if
+                    % property allows lists
                     S.(iVocabPropertyName) = {S.(iVocabPropertyName)};
                 end
             end
@@ -170,7 +210,7 @@ classdef StructConverter < handle
 
         function jsonStr = convertStructToJsonld(obj, S)
             jsonStr = openminds.internal.utility.json.encode(S);
-            jsonStr = strrep(jsonStr, 'VOCAB_URI_', sprintf('%s/vocab/', obj.DEFAULT_VOCAB) );
+            jsonStr = strrep(jsonStr, 'VOCAB_URI_', sprintf('%s/vocab/', obj.OPENMINDS_IRI) );
         end
 
         function [S, linkedInstances] = convertLinkedInstanceToStruct(obj, linkedInstance)
@@ -182,8 +222,8 @@ classdef StructConverter < handle
                 iValue = obj.validateInstance(linkedInstance(i));
                 S(i).at_id = obj.getIdentifier(iValue.id);
                 
-                if obj.Depth > 0
-                    serializer = openminds.internal.serializer.StructConverter(iValue, obj.Depth-1);
+                if obj.RecursionDepth > 0
+                    serializer = openminds.internal.serializer.StructConverter(iValue, obj.RecursionDepth-1);
                     S_ = serializer.convert();
                     linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
                 end
@@ -198,7 +238,7 @@ classdef StructConverter < handle
 
             for i = 1:numel(embeddedInstance)
                 iValue = obj.validateInstance(embeddedInstance(i));
-                serializer = openminds.internal.serializer.StructConverter(iValue, obj.Depth-1);
+                serializer = openminds.internal.serializer.StructConverter(iValue, 'RecursionDepth', obj.RecursionDepth-1);
                 S = serializer.convertInstanceToStruct;
                 S{1} = rmfield(S{1}, {'at_context', 'at_id'});
                 C{i} = S{1};
