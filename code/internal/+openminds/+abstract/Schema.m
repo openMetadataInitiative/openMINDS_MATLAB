@@ -492,13 +492,13 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
     end
 
-    methods (Access = private) % Methods related to setting new values
+    methods (Access = protected) % Methods related to setting new values
         
         function instanceId = generateInstanceId(obj)
         %generateInstanceId Generate a unique instance id.
             schemaName = obj.getSchemaShortName( class(obj) );
             uuidStr = openminds.internal.utility.string.getuuid();
-            instanceId = sprintf('%s-%s', schemaName, uuidStr);
+            instanceId = sprintf('%s/%s', schemaName, uuidStr);
         end
 
         function assignLinkedInstance(obj)

@@ -48,7 +48,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 return
             end
 
-            if ischar(varargin{1})
+            if numel(varargin) == 1 && ischar(varargin{1})
                 varargin{1} = string(varargin{1});
             end
 
@@ -60,8 +60,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 % Deserialize from name of controlled instance
                 obj.deserializeFromName(varargin{1});
             else
-                % assignPVPairs
-                error('Not implemented yet.')
+                obj.assignPVPairs(varargin{:})
+                obj.id = obj.generateInstanceId();
             end
             
             % Todo: Add name as input, and deserialize controlled instance
