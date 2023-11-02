@@ -44,7 +44,13 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 return
             end
 
-            if ~iscell(instance); instance = {instance}; end
+            if ~iscell(instance)
+                if numel(instance) == 1
+                    instance = {instance};
+                else
+                    instance = arrayfun(@(i) i, instance, 'UniformOutput', false);
+                end
+            end
             
             % Preallocate object array
             obj(numel(instance)) = feval(class(obj));
