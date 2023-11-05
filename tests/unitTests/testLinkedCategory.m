@@ -1,10 +1,13 @@
 classdef testLinkedCategory < matlab.unittest.TestCase
     
-    % Todo: 
+    % Todo:
+    %  HETEROGENEOUS
+    %
     %  [ ] Test hetereogeneous linked types.
     %  [ ] Test multiple nested linked categories.
     %  [ ] Test assigning of properties to linked categories
-
+    %   
+    %  HOMOGENEOUS
     
     
     properties
@@ -52,7 +55,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             ds = testCase.DatasetWithOnePersonAuthor;
 
             author = ds.author;
-            expectedAuthorType = 'openminds.internal.mixedtype.dataset.Author';
+            expectedAuthorType = 'openminds.core.actors.Person';
             
             testCase.assertClass(author, expectedAuthorType)
         end
@@ -60,8 +63,10 @@ classdef testLinkedCategory < matlab.unittest.TestCase
         function testRetrieveNestedScalarHomogeneousType(testCase)
             % Get dataset for testing
             ds = testCase.DatasetWithOnePersonAuthor;
-
             organization = ds.author.affiliation.memberOf;
+            if ~isempty(organization)
+                testCase.assertClass(organization, 'openminds.core.actors.Organization')
+            end
         end
 
         function testRetrievePropertyOfNestedScalarHomogeneousType(testCase)
@@ -69,7 +74,27 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             ds = testCase.DatasetWithOnePersonAuthor;
 
             organizationName = ds.author.affiliation.memberOf.fullName;
-        end
+            testCase.assertClass(organizationName, "string")
+            
+            % Alternative: This does not work.
+            %thisAuthor = ds.author;
+            %thisOrganizationName = thisAuthor.affiliation.memberOf.fullName;
+        end 
+
+        function testRetrievePropertyOfNestedNonScalarHomogeneousType(testCase)
+            % Get dataset for testing
+            ds = testCase.DatasetWithTwoPersonAuthor;
+
+            affiliationList = [ds.author.affiliation];
+            organizationList = [affiliationList.memberOf];
+            organizationName = [organizationList.fullName];
+            
+            testCase.assertClass(organizationName, 'string')
+            
+            S = ds.author.affiliation; % Assert length of this is 3
+            S = {ds.author.affiliation}; % Assert length of this is two
+
+        end 
 
         function testRetrieveNonScalarHomogeneousType(testCase)
         % Test the retrieval of a linked type property which is a linked
@@ -79,7 +104,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
 
             % Check type of author property
             author = ds.author;
-            expectedAuthorType = 'openminds.internal.mixedtype.dataset.Author';
+            expectedAuthorType = 'openminds.core.actors.Person';
             testCase.assertClass(author, expectedAuthorType)
         end
 

@@ -50,10 +50,8 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         str = getDisplayLabel(obj)
         
         annotation = getAnnotation(obj)
-        
 
         %str = getInstanceType(obj)
-
     end
 
     methods (Hidden, Access = protected) % CustomDisplay - Method implementation
@@ -61,7 +59,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         function requiredProperties = getRequiredProperties(obj)
             requiredProperties = [];
         end
-
 
         function str = getHeader(obj)
             
@@ -126,6 +123,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             
             else
                 stringArray = obj.getStringArrayForSingleLine();
+
                 rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation);
                 
                 count = 1;
@@ -166,7 +164,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
             className = packageParts( class(obj) );
 
-
             if numObjects == 0
                 % str = 'None';
                 % Todo: Make plural labels.
@@ -193,6 +190,13 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         
         function stringArray = getStringArrayForSingleLine(obj)
             stringArray = arrayfun(@(o) o.DisplayString, obj, 'UniformOutput', false);
+            if iscell(stringArray)
+                stringArray = string(stringArray);
+            else
+                warning('A cell array was expected, but result was %s. Please report.', class(stringArray))
+            end
+            % Note: 2023-11-03: This was returning a cell array but should
+            % return a string array...
         end
 
     end

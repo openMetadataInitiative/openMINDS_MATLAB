@@ -340,10 +340,10 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     
                     instanceType = cellfun(@(c) class(c), values, 'uni', false);
                     if numel( unique(instanceType) ) == 1
-                        values = [values{:}];
+                        values = [values{:}];                        
                     end
 
-                    if numel(subs) == 1
+                    if numel(subs) == 1 && numel( unique(instanceType) ) > 1
                         values = linkedTypeValues;
                     end
                 else
