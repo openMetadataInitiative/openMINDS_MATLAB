@@ -20,9 +20,15 @@ function update(mode)
         mode (1,1) string = "default"
     end
 
+    import openminds.internal.utility.git.getCurrentCommitID
+    import openminds.internal.utility.git.loadPreviousCommitID
+
+
     % - Check commitID, and return if previous commit is is same as current
-    previousCommitID = openminds.internal.utility.git.loadPreviousCommitID();
-    currentCommitID = openminds.internal.utility.git.getCurrentCommitID('documentation');
+    previousCommitID = loadPreviousCommitID('RepositoryName', 'openMINDS', ...
+        'BranchName', 'documentation', 'Organization', 'HumanBrainProject');
+    [currentCommitID, details] = getCurrentCommitID('openMINDS', ...
+        'BranchName', 'documentation', 'Organization', 'HumanBrainProject');
 
     if isequal(previousCommitID, currentCommitID) && mode ~= "force"
         disp('Schemas are up to date.')
@@ -52,7 +58,7 @@ function update(mode)
         disp('Finished!')
     end
 
-    openminds.internal.utility.git.saveCurrentCommitID()
+    openminds.internal.utility.git.saveCurrentCommitID(details)
 
     % Check that the schemafolder in on path
     currentPathList = strsplit(path, pathsep);

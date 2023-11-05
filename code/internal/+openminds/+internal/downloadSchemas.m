@@ -5,6 +5,8 @@ function downloadSchemas(versionNumber)
 %
 %   downloadSchemas(versionNumber) downloads the source files for the
 %   specified version
+%
+%   Note: legacy version
 
     arguments
         versionNumber (1,1) string = "latest"

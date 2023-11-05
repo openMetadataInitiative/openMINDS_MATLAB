@@ -1,17 +1,18 @@
-function commitID = getCurrentCommitID(branchName, repositoryName)
+function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
 %getCurrentCommitID Get current commit id for a branch of the openminds repo
 %
 %   commitID = getCurrentCommitID(branchName) returns the commitID for the 
 %   specified branch as a character vector
 
     arguments
-        branchName = "documentation"
         repositoryName = "openMINDS"
+        options.BranchName = "main"
+        options.Organization = "openMetadataInitiative"
     end
 
-    API_BASE_URL = sprintf("https://api.github.com/repos/HumanBrainProject/%s", repositoryName);
+    API_BASE_URL = sprintf("https://api.github.com/repos/%s/%s", options.Organization, repositoryName);
     
-    apiURL = strjoin( [API_BASE_URL, "commits", branchName], '/');
+    apiURL = strjoin( [API_BASE_URL, "commits", options.BranchName], '/');
 
     % Get info about latest commit:
     %data = webread(apiURL);
@@ -24,8 +25,11 @@ function commitID = getCurrentCommitID(branchName, repositoryName)
     data = webread(apiURL, requestOpts);
     commitID = char(data');
 
-%     commitDetails = struct();
-%     commitDetails.repositoryName = repositoryName;
-%     commitDetails.branchName = branchName;
-%     commitDetails.commitID = commitID;
+    if nargout == 2
+        commitDetails = struct();
+        commitDetails.CommitID = commitID;
+        commitDetails.RepositoryName = repositoryName;
+        commitDetails.BranchName = options.BranchName;
+        commitDetails.Organization = options.Organization;
+    end
 end

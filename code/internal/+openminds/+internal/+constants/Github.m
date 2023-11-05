@@ -5,6 +5,7 @@ classdef Github < handle
         RawContentUrl = "https://raw.githubusercontent.com"
         Organization = "openMetadataInitiative"
         Instances = "openMINDS_instances"
+        Schemas = "openMINDS"
     end
 
     methods (Static)
