@@ -12,10 +12,10 @@ function commitID = loadPreviousCommitID(options)
     if isfile(filePath)
         S = jsondecode( fileread(filePath) );
 
-        fields = {'repositoryName', 'branchName', 'organization'};
+        fields = {'RepositoryName', 'BranchName', 'Organization'};
         isPresent = arrayfun(@(s) structcmp(s, options, fields), S.repositories);
         if any(isPresent)
-            commitID = S.repositories(isPresent).commitID;
+            commitID = S.repositories(isPresent).CommitID;
         else
             commitID = '';
         end

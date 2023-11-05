@@ -24,10 +24,10 @@ function schemaInfo = listInstances(schemaModule, options)
     % - Get path constant
     if options.RootDirectory == ""
         sourceSchemaFolder = openminds.internal.PathConstants.SourceSchemaFolder;
-        schemaFolderPath = fullfile( sourceSchemaFolder, versionAsString, options.SchemaType);
+        schemaFolderPath = fullfile( sourceSchemaFolder, versionAsString);
     else
         sourceSchemaFolder = options.RootDirectory;
-        schemaFolderPath = fullfile( sourceSchemaFolder, options.SchemaType);
+        schemaFolderPath = fullfile( sourceSchemaFolder);
     end
     
     filePaths = listSchemaFiles(schemaFolderPath, schemaModule, options.SchemaFileExtension);
@@ -36,7 +36,7 @@ function schemaInfo = listInstances(schemaModule, options)
         error("openMINDS:SourceFilesMissing", 'Could not find source files for openMINDS %s', versionAsString)
     end
 
-    S = collectInfoInStructArray(schemaFolderPath, filePaths, options.SchemaType);
+    S = collectInfoInStructArray(schemaFolderPath, filePaths);
 
     schemaInfo = convertStructToTable(S);
 end
@@ -52,8 +52,11 @@ function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExten
     end
 
     % - Look through subfolders for all json files of specified modules
-    [absPath, dirName] = listSubDir(schemaFolderPath, '', {}, 0);
-    
+    [absPath, dirName] = listSubDir(schemaFolderPath, '', {}, 2);
+    if isempty(absPath)
+        absPath = schemaFolderPath;
+    end
+
     if ~isempty(schemaModule) % Filter by given module(s), if any
         [~, keepIdx] = intersect(dirName, schemaModule);
         absPath = absPath(keepIdx);
@@ -62,7 +65,7 @@ function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExten
     [filePaths, ~] = listFiles(absPath, fileExtension);
 end
 
-function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
+function S = collectInfoInStructArray(schemaFolderPath, filePaths)
     
     FILE_EXT = '.schema.tpl';
     
@@ -71,13 +74,9 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
     [folderNames, fileNames] = fileparts(folderNames);
 
     % - Create struct array with information about all schemas
-    schemaNames = replace(fileNames, FILE_EXT, '');
+    instanceNames = replace(fileNames, FILE_EXT, '');
 
-    if format == "terminologies"
-        S = struct('InstanceName', schemaNames);
-    else
-        S = struct('SchemaName', schemaNames);
-    end
+    S = struct('InstanceName', instanceNames);
 
     for i = 1:numel(S)
 
@@ -86,12 +85,32 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
             thisFolderSplit(1) = [];
         end
 
-        S(i).ModuleName = "controlledTerms";
-        S(i).ModuleVersion = "N/A";
-        
-        S(i).SubModuleName = "";
-        S(i).SchemaName = thisFolderSplit{1};
-        
+        if numel(thisFolderSplit) == 2 && strcmp(thisFolderSplit{1}, 'terminologies')
+            S(i).SchemaName = thisFolderSplit{end};
+            S(i).ModelName = "controlledTerms";
+            S(i).ModelVersion = "N/A";
+            S(i).GroupName = "";
+
+        elseif numel(thisFolderSplit) == 3 && strcmp(thisFolderSplit{1}, 'graphStructures')
+            S(i).SchemaName = thisFolderSplit{end};
+            S(i).ModelName = "SANDS";
+            S(i).ModelVersion = "N/A";
+            S(i).GroupName = thisFolderSplit{end-1};
+
+        else
+            if strcmp( thisFolderSplit{end}, 'licenses')
+                S(i).SchemaName = 'License';
+            elseif strcmp( thisFolderSplit{end}, 'contentTypes')
+                S(i).SchemaName = 'ContentType';
+            else
+                warning('Unhandled instance ("%s")', thisFolderSplit{end})
+                S(i).SchemaName = 'Unresolved';
+            end
+            S(i).ModelName = "core";
+            S(i).ModelVersion = "N/A";
+            S(i).GroupName = "";        
+        end
+
         S(i).Filepath = filePaths{i};
     end
 end
