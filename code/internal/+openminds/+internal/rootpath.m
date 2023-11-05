@@ -1,4 +1,6 @@
 function rootPath = rootpath()
+% rootpath - Return rootpath for the openMINDS code folder.
+
     import openminds.internal.utility.pathparts
 
     FILE_DEPTH = 4; % Relative to root
