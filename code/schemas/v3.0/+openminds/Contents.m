@@ -1,4 +1,4 @@
-% openMINDS (model schemas - latest) 
+% openMINDS (model schemas - v3.0) 
 %   The schema folder contains MATLAB schemas for the following openMINDS models:
 % 
 %           chemicals - openminds.chemicals is a model.

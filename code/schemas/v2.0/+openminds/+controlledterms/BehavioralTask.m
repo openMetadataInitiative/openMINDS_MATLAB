@@ -1,5 +1,5 @@
 classdef BehavioralTask < openminds.abstract.ControlledTerm
-%BehavioralTask - Structured information on the behavioral task that had to be peformed by a subject.
+%BehavioralTask - Structured information on the behavioral task that had to be performed by a subject.
 %
 %   PROPERTIES:
 %
