@@ -90,12 +90,6 @@ end
 
 function str = getOnlineHtmlLink(version, modelName, subgroupName, schemaName, browserOption, fragment)
     
-    %filepath = sprintf( "https://openminds-documentation.readthedocs.io/en/%s/specifications/%s/%s/%s.html", ...
-    %    version, modelName, subgroupName, schemaName);
-
-    filepath = sprintf( "https://openminds-documentation.readthedocs.io/en/%s/specifications/%s/%s/%s", ...
-        version, modelName, subgroupName, schemaName);
-
     filepath = generateDocumentationUrl(version, modelName, subgroupName, schemaName, fragment);
 
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
@@ -112,9 +106,9 @@ function urlStr = generateDocumentationUrl(version, modelName, subgroupName, sch
     end
     
     import openminds.internal.utility.string.uriJoin
-    BASE_URL = "https://openminds-documentation.readthedocs.io/en";
+    BASE_URL = openminds.internal.constants.url.OpenMindsDocumentation;
 
-    urlStr = uriJoin(BASE_URL, version, 'specifications', modelName, subgroupName, schemaName);
+    urlStr = uriJoin(BASE_URL, version, 'schema_specifications', modelName, subgroupName, schemaName);
     urlStr = urlStr + ".html";
 
     if ~isempty(fragment)
