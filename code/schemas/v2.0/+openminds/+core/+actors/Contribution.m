@@ -46,7 +46,7 @@ classdef Contribution < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s (%s)', obj.contributor, type);
+            str = sprintf('%s (%s)', obj.contributor, obj.type);
         end
     end
 
