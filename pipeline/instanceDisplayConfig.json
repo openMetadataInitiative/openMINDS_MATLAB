@@ -17,7 +17,7 @@
   },
   "contribution": {
     "propertyName": "contributor",
-    "stringFormat": "sprintf('%s', email)"
+    "stringFormat": "sprintf('%s (%s)', contributor, type)"
   },
   "organization": {
     "propertyName": "fullName",
