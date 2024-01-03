@@ -157,7 +157,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 obj = eval(sprintf('%s.empty', class(value)));
             end
 
-            if obj.isSubsForLinkedPropertyValue(subs) || obj.isSubsForEmbeddedPropertyValue(subs)
+            if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
                 propName = subs(1).subs;
 
                 if numel(subs) == 1
@@ -182,7 +182,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 elseif numel(subs) > 1 
                     % Pass for now. 
                     % This case should be handled below? What if multiple
-                    % instances should be placed in the linkset wrapper?
+                    % instances should be placed in the mixedtype wrapper?
                 end
 
                 try
@@ -308,7 +308,8 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
 
         function varargout = subsref(obj, subs)
-            
+        % subsref - Overrides subsref for customized indexing on properties
+
             numOutputs = nargout;
             varargout = cell(1, numOutputs);
                             
@@ -322,7 +323,8 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % %                 end
 % %             end
 
-            if obj.isSubsForLinkedPropertyValue(subs) || obj.isSubsForEmbeddedPropertyValue(subs)
+            if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
+                
                 if numel(obj) > 1
                     linkedTypeValues = cell(size(obj));
                     for ii = 1:numel(obj)
@@ -336,21 +338,29 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 end
 
                 if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
-                    values = {linkedTypeValues.Instance};
-                    
-                    instanceType = cellfun(@(c) class(c), values, 'uni', false);
-                    if numel( unique(instanceType) ) == 1
-                        values = [values{:}];                        
-                    end
 
-                    if numel(subs) == 1 && numel( unique(instanceType) ) > 1
-                        values = linkedTypeValues;
+                    % linkedTypeValues is an array of mixed types. The
+                    % actual object(s) need to be retrieved from an 
+                    % "Instance" property.
+                    mixedTypeCellArray = {linkedTypeValues.Instance};
+                    instanceType = cellfun(@(c) class(c), mixedTypeCellArray, 'uni', false);
+
+                    if numel(subs) > 1 && numel( unique(instanceType) ) > 1
+                        % If nested indexing is performed, proceed with the
+                        % cell array of mixed types.
+                        values = mixedTypeCellArray;
+                    else
+                        % Otherwise, resolve "unmixed" or "mixed" type
+                        % output now.
+                        mixedTypeClassName = class(linkedTypeValues);
+                        values = obj.resolveMixedTypeOutput(mixedTypeCellArray, mixedTypeClassName);
                     end
                 else
                     values = linkedTypeValues;
                 end
                 
                 if numel(subs) > 1
+                    % Todo: Remove as this appears to be unused
                     if strcmp( subs(2).type, '()' ) && iscell(values)
                         %subs(2).type = '{}';
                     end
@@ -382,9 +392,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                         end
                     else
                         if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
+                            % Takes care of nested indexing into a property
+                            % with mixed types.
                             res = builtin('subsref', values, subs(2:end));
-                            className = class(linkedTypeValues);
-                            varargout = {feval(className, res)};
+                            outValue = obj.resolveMixedTypeOutput(res, class(linkedTypeValues));
+                            varargout = {outValue};
                         else
                             builtin('subsref', values, subs(2:end))
                         end
@@ -414,13 +426,13 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
 
         function n = numArgumentsFromSubscript(obj, s, indexingContext)
-            if (obj(1).isSubsForLinkedPropertyValue(s) || obj(1).isSubsForEmbeddedPropertyValue(s)) && numel(s) > 1
+            if (obj(1).isSubsForLinkedProperty(s) || obj(1).isSubsForEmbeddedProperty(s)) && numel(s) > 1
                 linkedTypeValues = builtin('subsref', obj, s(1));
-                if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
-                    linkedTypeValues = {linkedTypeValues.Instance};
-                end
+%                 if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
+%                     linkedTypeValues = {linkedTypeValues.Instance};
+%                 end
 
-                if strcmp( s(2).type, '()' )
+                if strcmp( s(2).type, '()' ) && iscell(linkedTypeValues)
                     s(2).type = '{}';
                 end
                 try
@@ -432,12 +444,15 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 n = builtin('numArgumentsFromSubscript', obj, s, indexingContext);
             end
         end
+    end
 
+    methods (Access = private) % Introspective utility methods
+        
         function tf = isSubsForProperty(obj, subs)
             tf = strcmp( subs(1).type, '.' ) && isprop(obj(1), subs(1).subs);
         end
 
-        function tf = isSubsForLinkedPropertyValue(obj, subs)
+        function tf = isSubsForLinkedProperty(obj, subs)
         % Return true if subs represent dot-indexing on a linked property
             
             if numel(obj)>=1
@@ -448,7 +463,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             end
         end
 
-        function tf = isSubsForEmbeddedPropertyValue(obj, subs)
+        function tf = isSubsForEmbeddedProperty(obj, subs)
         % Return true if subs represent dot-indexing on a linked property
             
             if numel(obj)>=1
@@ -489,6 +504,29 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
     methods (Access = ?openminds.internal.mixin.StructAdapter)
         function assignInstanceId(obj, id)
             obj.id = id;
+        end
+    end
+
+    methods (Access = private)
+                      
+        function outValues = resolveMixedTypeOutput(~, values, mixedTypeClassName)
+        % resolveMixedTypeOutput - Resolve how to output mixed type array
+        %   
+        %   Inputs:
+        %       values             : cell array of instances
+        %       mixedTypeClassName : name of the mixed type class for
+        %                            elements of values
+        %
+        %   If all instances have the same type, the output will be an
+        %   array of objects of that type, otherwise return instances as a
+        %   mixed type array
+
+            instanceType = cellfun(@(c) class(c), values, 'uni', false);
+            if numel( unique(instanceType) ) == 1
+                outValues = [values{:}];
+            else
+                outValues = feval(mixedTypeClassName, values);
+            end
         end
     end
 
