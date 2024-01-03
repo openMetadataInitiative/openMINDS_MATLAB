@@ -142,10 +142,13 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             % Todo: combine with superclass methods.
             import openminds.internal.utility.getSchemaDocLink
             docLinkStr = getSchemaDocLink(class(obj));
-            docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
             
-            semanticName = obj.getSemanticName();
-            str = sprintf('  %s array (%s):\n', docLinkStr, semanticName);
+            % Todo: Consider indicating that the array has mixed types, 
+            % i.e is heterogeneous-like...
+            %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
+
+            docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
+            str = sprintf('  %s array with elements:\n', docLinkStr);
         end
 
         function str = getFooter(~)
@@ -163,6 +166,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         function displayScalarObject(obj)
             % This should not happen...
             disp(obj.Instance)
+            warning('Displaying scalar mixed type object')
         end
 
         function displayNonScalarObject(obj)
