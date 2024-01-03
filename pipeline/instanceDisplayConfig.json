@@ -16,7 +16,7 @@
     "stringFormat": "sprintf('%s', email)"
   },
   "contribution": {
-    "propertyName": "contributor",
+    "propertyName": ["contributor", "type"],
     "stringFormat": "sprintf('%s (%s)', contributor, type)"
   },
   "organization": {
