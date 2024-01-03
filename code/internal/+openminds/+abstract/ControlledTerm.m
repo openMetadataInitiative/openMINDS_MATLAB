@@ -76,9 +76,10 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             str = sprintf('%s', obj.name);
         end
 
-        function annotation = getAnnotation(obj)
-            annotation = 'Controlled Instance';
-        end
+        % function annotation = getAnnotation(obj)
+        %     annotation = getAnnotation@openminds.abstract.Schema(obj);
+        %     annotation = sprintf('%s <ControlledTerm>', annotation);
+        % end
     end
 
     methods (Hidden)
