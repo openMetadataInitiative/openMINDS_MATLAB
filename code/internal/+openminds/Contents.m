@@ -6,3 +6,5 @@
 %        internal - openminds.internal is a pacakge containing functions and 
 %                   classes to support generation and usage of the openMINDS 
 %                   MATLAB schemas  
+%        utility  - Contains utility functions that might be useful for
+%                   external developers

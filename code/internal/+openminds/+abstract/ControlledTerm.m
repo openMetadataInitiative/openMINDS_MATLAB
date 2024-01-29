@@ -58,14 +58,13 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 obj.load( varargin{1} )
             elseif nargin == 1 && isstring( varargin{1} ) && ~isfile( varargin{1} )
                 % Deserialize from name of controlled instance
-                obj.deserializeFromName(varargin{1});
+                if ~ismissing(varargin{1})
+                    obj.deserializeFromName(varargin{1});
+                end
             else
                 obj.assignPVPairs(varargin{:})
                 obj.id = obj.generateInstanceId();
             end
-            
-            % Todo: Add name as input, and deserialize controlled instance
-            % with same name...
         end
     end
 
@@ -95,7 +94,11 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             import openminds.internal.utility.getSchemaName
             
             schemaName = getSchemaName(class(obj));
-            
+
+            if obj.isSemanticName(instanceName)
+                 [~, instanceName] = openminds.utility.parseAtID(instanceName);
+            end
+
             % Todo: Use a proper deserializer
             if any(strcmpi(obj.CONTROLLED_INSTANCES, instanceName))
                 try
@@ -127,6 +130,21 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
 
         function obj = load(filePath)
             error('Not implemented')
+        end
+
+        function tf = isSemanticName(name)
+
+            URI = matlab.net.URI(name);
+            
+            isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == ...
+                openminds.internal.constants.url.OpenMindsBaseURL;
+
+            URIPath = URI.Path;
+            URIPath(URIPath=="")=[];
+        
+            isInstanceUrl = URIPath(1) == "instances";
+
+            tf = isValidUrl && isInstanceUrl;
         end
     end
 

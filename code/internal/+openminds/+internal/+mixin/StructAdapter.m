@@ -75,7 +75,16 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
                 C = struct2cell(S(i));
                 fieldNames = fieldnames(S(i));
                 [fieldNames, iA] = intersect(fieldNames', allowedPropertyNames, 'stable');
-                set(obj(i), fieldNames', C(iA)');
+
+                propertyValues = C(iA);
+    
+                % If empty values are not of correct type, setting them
+                % will cause error. Therefore we skip setting empty values
+                keep = cellfun(@(c) ~isempty(c), propertyValues);
+                propertyNames = fieldNames(keep);
+                propertyValues = propertyValues(keep);
+               
+                set(obj(i), propertyNames', propertyValues');
                 
                 if isfield(S, 'at_id') % Not present for embedded values
                     obj(i).assignInstanceId( S(i).at_id );
