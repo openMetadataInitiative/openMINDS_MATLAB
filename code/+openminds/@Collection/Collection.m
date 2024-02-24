@@ -51,7 +51,7 @@ classdef Collection < handle
     end
     
     properties (SetAccess = private)
-        Nodes % containers.Map or Dictionary
+        Nodes (1,1) dictionary
     end
     
     methods % Constructor
@@ -93,27 +93,29 @@ classdef Collection < handle
                 options.Description (1,1) string = ""
             end
             
-            % Initialize containers.Map
-            obj.Nodes = containers.Map;
+            % Initialize nodes
+            obj.Nodes = dictionary;
             
-            isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
-            isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
-            isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
-            
-            % Initialize from file(s)
-            if all( cellfun(isFilePath, instance) )
-                obj.load(instance{:})
-
-            % Initialize from folder
-            elseif all( cellfun(isFolderPath, instance) )
-                obj.load(instance{:})
-
-            % Initialize from instance(s)
-            elseif all( cellfun(isMetadata, instance) )
-                obj.add(instance{:});
-
-            else
-                error('All given instances must be valid filepaths or openminds instances')
+            if ~isempty(instance)
+                isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
+                isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
+                isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
+                
+                % Initialize from file(s)
+                if all( cellfun(isFilePath, instance) )
+                    obj.load(instance{:})
+    
+                % Initialize from folder
+                elseif all( cellfun(isFolderPath, instance) )
+                    obj.load(instance{:})
+    
+                % Initialize from instance(s)
+                elseif all( cellfun(isMetadata, instance) )
+                    obj.add(instance{:});
+    
+                else
+                    error('All given instances must be valid filepaths or openminds instances')
+                end
             end
 
             obj.Name = options.Name;
@@ -123,7 +125,7 @@ classdef Collection < handle
 
     methods 
         function len = length(obj)
-            len = length(obj.Nodes);
+            len = numEntries(obj.Nodes);
         end
         
         function add(obj, instance)
@@ -150,6 +152,10 @@ classdef Collection < handle
             end
         end
         
+        function instance = get(obj, nodeKey)
+            instance = obj.Nodes{nodeKey};
+        end
+
         function updateLinks(obj)
             for instance = obj.Nodes.values
                 obj.addNode(instance{1}, ...
@@ -267,15 +273,17 @@ classdef Collection < handle
                 instance.id = obj.getBlankNodeIdentifier();
             end
 
-            if isKey(obj.Nodes, instance.id)
-                %warning('Node with id %s already exists in collection', instance.id)
-                if options.AbortIfNodeExists
-                    return
+            if isConfigured(obj.Nodes)
+                if isKey(obj.Nodes, instance.id)
+                    %warning('Node with id %s already exists in collection', instance.id)
+                    if options.AbortIfNodeExists
+                        return
+                    end
                 end
             end
             
             if ~options.AddSubNodesOnly
-                obj.Nodes(instance.id) = instance;
+                obj.Nodes(instance.id) = {instance};
             end
             
             obj.addSubNodes(instance)
@@ -298,7 +306,7 @@ classdef Collection < handle
 
         function identifier = getBlankNodeIdentifier(obj)
             fmt = '_:%06d';
-            identifier = length(obj.Nodes) + 1;
+            identifier = length(obj) + 1;
             identifier = sprintf(fmt, identifier);
         end
 
