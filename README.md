@@ -20,7 +20,7 @@ MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.
 
 ## Installation
 
-openMINDS for MATLAB can be installed from MATLAB's addon manager (recommended). It is also possible to download the MATLAB toolbox from FileExchange or from the Releases page of this repository and install it manually. 
+openMINDS for MATLAB can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from FileExchange or from the Releases page of this repository and install it manually. 
 
 
 ## Before you start
