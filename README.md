@@ -7,7 +7,7 @@
 </a>
 
 # openMINDS Metadata Models for MATLAB
-[![View openMINDS_MATLAB on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) [![View openMINDS_MATLAB on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
 
 
 MATLAB package for the openMINDS metadata framework for linked data in neuroscience. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods.
