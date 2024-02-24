@@ -18,19 +18,20 @@ crewMembers = readtable(filePath, "TextType", "String")
 |3|"Tricia Marie"|"McMillan"|"Trillian Astra"|"trillian-astra@hitchhikers-guide.galaxy"|"Heart of Gold Spacecraft Crew"|
 |4|"Zaphod"|"Beeblebrox"|<missing>|"zaphod-beeblebrox@hitchhikers-guide.galaxy"|"Heart of Gold Spacecraft Crew"|
 
+# Create instances
 
-Let us create a set of metadata instances from this table that represents the crew members. We assume that “<samp>memberOf</samp>” provides the full name of a consortium each person is affiliated to. Since members might be affiliated to the same consortium we assume further that the same full name means the same consortium. We can also assume that the “<samp>email</samp>” is unique for each person.
+Let us create a set of metadata instances from this table that represents the crew members. We assume that <samp>memberOf</samp> provides the full name of a consortium each person is affiliated to. Since members might be affiliated to the same consortium we assume further that the same full name means the same consortium. We can also assume that the <samp>email</samp> is unique for each person.
 
 
-With these assumptions we will create :
+With these assumptions we will create:
 
 -  a metadata <samp>Collection</samp> for storing metadata instances 
--  a unique set of “<samp>Consortium</samp>” instances based on the name given in the “<samp>memberOf</samp>” column 
--  a “<samp>ContactInformation</samp>” instance based on the “<samp>email</samp>” column 
--  a “<samp>Person</samp>” instance for each table row with: 
-    -  the “<samp>givenName</samp>”, “<samp>familyName</samp>”, and “<samp>alternateName</samp>” (if available) 
-    -  a link to the respective “<samp>ContactInformation</samp>” instance 
-    -  a person-specific embedded “<samp>Affiliation</samp>” instance that links to the respective “<samp>Consortium</samp>” instance 
+-  a unique set of <samp>Consortium</samp> instances based on the name given in the <samp>memberOf</samp> column 
+-  a <samp>ContactInformation</samp> instance based on the <samp>email</samp> column 
+-  a <samp>Person</samp> instance for each table row with: 
+-      the <samp>givenName</samp>, <samp>familyName</samp>, and <samp>alternateName</samp> (if available) 
+-      a link to the respective  <samp>ContactInformation</samp> instance 
+-      a person-specific embedded <samp>Affiliation</samp> instance that links to the respective <samp>Consortium</samp> instance 
 
 We start by creating an empty metadata collection for storing metadata instances.
 
@@ -60,10 +61,10 @@ createId = @(str) lower(sprintf('_:%s', replace(str, ' ', '-')));
 
 % Extract the unique "memberOf" names to create dictionary 
 % with unique "Consortium" instances
-uniqueConsortiaNames = unique(crewMembers.memberOf);
+uniqueConsortiumNames = unique(crewMembers.memberOf);
 
 consortia = dictionary;
-for consortiumName = uniqueConsortiaNames'    
+for consortiumName = uniqueConsortiumNames'    
     consortia(consortiumName) = openminds.core.Consortium(...
               'id', createId(consortiumName), ...
         'fullName', consortiumName );
@@ -77,7 +78,7 @@ disp(consortia)
     "Heart of Gold Spacecraft Crew" ⟼ [Heart of Gold Spacecraft Crew]  (Consortium)
 ```
 
-We have now created a dictionary that holds the C<samp>onsortia</samp> instances. Since all the persons in this example belongs to the same consortium, this dictionary only holds one instance.
+We have now created a dictionary that holds the <samp>Consortium</samp> instances. Since all the persons in this example belongs to the same consortium, this dictionary only holds one instance.
 
 
 We can also look at the <samp>Consortium</samp> instance in more detail:
@@ -159,6 +160,7 @@ for iRow = 1:height(crewMembers)
                'affiliation', openminds.core.Affiliation('memberOf', consortia(person.memberOf) )); %#ok<SAGROW>
 end
 ```
+# Add instances to collection and export collection
 
 Now that we have all the instances, we can add them to the <samp>collection</samp>. It is sufficient to add the <samp>Person</samp> instances because the collection will autmatically detect linked and embedded instances and add them automatically to the <samp>Nodes</samp> property.
 
