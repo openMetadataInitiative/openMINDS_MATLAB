@@ -30,7 +30,8 @@ classdef Comment < openminds.abstract.Schema
             {mustBeSpecifiedLength(commenter, 0, 1)}
 
         % Enter the date and time on which this comment was made, formatted as '2023-02-07T16:00:00+00:00'.
-        timestamp (1,1) datetime
+        timestamp (1,:) datetime ...
+            {mustBeSpecifiedLength(timestamp, 0, 1)}
     end
 
     properties (Access = protected)

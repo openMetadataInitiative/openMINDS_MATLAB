@@ -16,14 +16,16 @@ classdef Affiliation < openminds.abstract.Schema
 
     properties
         % Enter the end date of this affiliation, formatted as 'YYYY-MM-DD'. Leave blank if this affiliation is still current.
-        endDate (1,1) datetime
+        endDate (1,:) datetime ...
+            {mustBeSpecifiedLength(endDate, 0, 1), mustBeValidDate(endDate)}
 
         % Add the organization or consortium another party was or still is a member of.
         memberOf (1,:) openminds.internal.mixedtype.affiliation.MemberOf ...
             {mustBeSpecifiedLength(memberOf, 0, 1)}
 
         % Enter the start date of this affiliation, formatted as 'YYYY-MM-DD'.
-        startDate (1,1) datetime
+        startDate (1,:) datetime ...
+            {mustBeSpecifiedLength(startDate, 0, 1), mustBeValidDate(startDate)}
     end
 
     properties (Access = protected)

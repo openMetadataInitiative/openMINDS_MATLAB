@@ -68,7 +68,8 @@ classdef DataCopy < openminds.abstract.Schema
         description (1,1) string
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        endTime (1,1) datetime
+        endTime (1,:) datetime ...
+            {mustBeSpecifiedLength(endTime, 0, 1)}
 
         % Add the computational environment in which this computation was executed.
         environment (1,:) openminds.internal.mixedtype.datacopy.Environment ...
@@ -102,7 +103,8 @@ classdef DataCopy < openminds.abstract.Schema
             {mustBeListOfUniqueItems(resourceUsage)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        startTime (1,1) datetime
+        startTime (1,:) datetime ...
+            {mustBeSpecifiedLength(startTime, 0, 1)}
 
         % Add the agent that started this computation.
         startedBy (1,:) openminds.internal.mixedtype.datacopy.StartedBy ...

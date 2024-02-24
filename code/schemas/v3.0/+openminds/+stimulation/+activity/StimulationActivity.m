@@ -56,7 +56,8 @@ classdef StimulationActivity < openminds.abstract.Schema
         description (1,1) string
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        endTime (1,1) datetime
+        endTime (1,:) datetime ...
+            {mustBeSpecifiedLength(endTime, 0, 1)}
 
         % Add all states of the specimen(s) that are being stimulated during this activity.
         input (1,:) openminds.internal.mixedtype.stimulationactivity.Input ...
@@ -90,7 +91,8 @@ classdef StimulationActivity < openminds.abstract.Schema
             {mustBeSpecifiedLength(setup, 0, 1)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        startTime (1,1) datetime
+        startTime (1,:) datetime ...
+            {mustBeSpecifiedLength(startTime, 0, 1)}
 
         % Add all stimuli used during this activity.
         stimulus (1,:) openminds.internal.mixedtype.stimulationactivity.Stimulus ...

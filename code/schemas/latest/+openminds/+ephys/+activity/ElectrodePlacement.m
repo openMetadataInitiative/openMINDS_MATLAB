@@ -60,7 +60,8 @@ classdef ElectrodePlacement < openminds.abstract.Schema
             {mustBeListOfUniqueItems(device)}
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        endTime (1,1) datetime
+        endTime (1,:) datetime ...
+            {mustBeSpecifiedLength(endTime, 0, 1)}
 
         % Add the state of the specimen that the device is being placed in or on during this activity.
         input (1,:) openminds.internal.mixedtype.electrodeplacement.Input ...
@@ -90,7 +91,8 @@ classdef ElectrodePlacement < openminds.abstract.Schema
             {mustBeListOfUniqueItems(protocol)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
-        startTime (1,1) datetime
+        startTime (1,:) datetime ...
+            {mustBeSpecifiedLength(startTime, 0, 1)}
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.electrodeplacement.StudyTarget ...

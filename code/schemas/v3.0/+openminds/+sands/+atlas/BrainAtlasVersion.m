@@ -178,7 +178,8 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
             {mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
-        releaseDate (1,1) datetime
+        releaseDate (1,:) datetime ...
+            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.FileRepository ...

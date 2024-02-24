@@ -142,7 +142,8 @@ classdef LivePaperVersion < openminds.abstract.Schema
             {mustBeSpecifiedLength(license, 0, 1)}
 
         % Enter the date and time on which this live paper version was last modified, formatted as 'YYYY-MM-DDThh:mm:ssTZD' (e.g., '2023-02-07T16:00:00+00:00').
-        modificationDate (1,1) datetime
+        modificationDate (1,:) datetime ...
+            {mustBeSpecifiedLength(modificationDate, 0, 1)}
 
         % Add any other contributions to this research product version that are not covered under 'author'/'developer' or 'custodian'.
         otherContribution (1,:) openminds.core.Contribution ...
@@ -153,7 +154,8 @@ classdef LivePaperVersion < openminds.abstract.Schema
             {mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
-        releaseDate (1,1) datetime
+        releaseDate (1,:) datetime ...
+            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.FileRepository ...

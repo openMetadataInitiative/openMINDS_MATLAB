@@ -82,7 +82,8 @@ classdef Chapter < openminds.abstract.Schema
             {mustBeSpecifiedLength(copyright, 0, 1)}
 
         % Enter the date on which this creative work was created, formatted as '2023-02-07'.
-        creationDate (1,1) datetime
+        creationDate (1,:) datetime ...
+            {mustBeSpecifiedLength(creationDate, 0, 1), mustBeValidDate(creationDate)}
 
         % Add all parties that fulfill the role of a custodian for this creative work (e.g., a corresponding author). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the creative work.
         custodian (1,:) openminds.internal.mixedtype.chapter.Custodian ...
@@ -113,7 +114,8 @@ classdef Chapter < openminds.abstract.Schema
             {mustBeSpecifiedLength(license, 0, 1)}
 
         % Enter the date on which this creative work was last modfied, formatted as '2023-02-07'.
-        modificationDate (1,1) datetime
+        modificationDate (1,:) datetime ...
+            {mustBeSpecifiedLength(modificationDate, 0, 1), mustBeValidDate(modificationDate)}
 
         % Enter the name (or title) of this creative work.
         name (1,1) string
@@ -122,7 +124,8 @@ classdef Chapter < openminds.abstract.Schema
         pagination (1,1) string
 
         % Enter the date on which this creative work was published, formatted as '2023-02-07'.
-        publicationDate (1,1) datetime
+        publicationDate (1,:) datetime ...
+            {mustBeSpecifiedLength(publicationDate, 0, 1), mustBeValidDate(publicationDate)}
 
         % Add the party (private or commercial) that published this creative work.
         publisher (1,:) openminds.internal.mixedtype.chapter.Publisher ...

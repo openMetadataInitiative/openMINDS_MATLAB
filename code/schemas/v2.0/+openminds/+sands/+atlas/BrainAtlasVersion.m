@@ -79,7 +79,8 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
         ontologyIdentifier (1,1) string
 
         % Enter the date of first publication of this brain atlas version.
-        releaseDate (1,1) datetime
+        releaseDate (1,:) datetime ...
+            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
 
         % Enter a descriptive short name for this brain atlas version.
         shortName (1,1) string

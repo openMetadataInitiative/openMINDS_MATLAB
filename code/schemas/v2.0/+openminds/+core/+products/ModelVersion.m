@@ -163,7 +163,8 @@ classdef ModelVersion < openminds.abstract.Schema
             {mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) of the first broadcast/publication of this research product version.
-        releaseDate (1,1) datetime
+        releaseDate (1,:) datetime ...
+            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.FileRepository ...

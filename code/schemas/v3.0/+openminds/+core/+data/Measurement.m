@@ -33,7 +33,8 @@ classdef Measurement < openminds.abstract.Schema
             {mustBeSpecifiedLength(measuredWith, 0, 1)}
 
         % Enter the date and time on which this measurement was made, formatted as '2023-02-07T16:00:00+00:00'.
-        timestamp (1,1) datetime
+        timestamp (1,:) datetime ...
+            {mustBeSpecifiedLength(timestamp, 0, 1)}
 
         % Enter all values that were measured at the same time and are of the same measured quantity.
         value (1,:) openminds.internal.mixedtype.measurement.Value ...
