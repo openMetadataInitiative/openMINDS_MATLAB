@@ -2,6 +2,7 @@
 downloads/
 target/
 sources/
+sources_instances/
 
 # Autosave files
 *.asv

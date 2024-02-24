@@ -33,7 +33,7 @@ format_map = {
     "date": "datetime",
     "date-time": "datetime",
     "time": "datetime",
-    "email": "string",  # could maybe use Pydantic or something to be stricter about this
+    "email": "string",
     "ECMA262": "string"
 }
 
@@ -109,7 +109,7 @@ class MATLABSchemaBuilder(object):
 
         # Todo: Create method for getting name with right casing...
         schema_short_name = os.path.basename(schema[SCHEMA_PROPERTY_TYPE])
-
+        
         props = [] # List of template property attributes (shortened name to avoid very long lines)
 
         for full_name, property_info in sorted(schema["properties"].items(), key=_property_name_sort_key):
@@ -152,6 +152,11 @@ class MATLABSchemaBuilder(object):
             if property_info.get("type") == 'integer':
                 size_attribute = "(1,:)"
 
+            # ...ditto for date-time formats
+            if _is_datetime_format(property_info):
+                size_attribute = "(1,:)"
+
+            # ...and for linked/embedded types
             if has_linked_type or has_embedded_type:
                 size_attribute = "(1,:)"
                 possible_types_docstr = [_create_matlab_help_link(type_str) for type_str in possible_types]
@@ -343,6 +348,10 @@ def _property_name_sort_key(arg):
 def _strip_trailing_whitespace(s):
     return "\n".join([line.rstrip() for line in s.splitlines()])
 
+def _is_datetime_format(property_info):
+    return property_info.get("type") == 'string' \
+            and  property_info.get("_formats") \
+                and any(item in ["date",  "date-time", "time"] for item in property_info.get("_formats"))
 
 # # # LOCAL MATLAB SPECIFIC UTILITY FUNCTIONS # # #
 
@@ -423,9 +432,17 @@ def _create_property_validator_functions(name, property_info):
     has_embedded_type = SCHEMA_PROPERTY_EMBEDDED_TYPES in property_info
 
     validation_functions = []
-    property
+
     if property_info.get("type") == 'integer':
         validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
+
+    if _is_datetime_format(property_info):
+        validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
+
+        if "date" in property_info.get("_formats"):
+            validation_functions += [f"mustBeValidDate({property_name})"]
+        elif "time" in property_info.get("_formats") == "time":
+            validation_functions += [f"mustBeValidTime({property_name})"]
 
     if has_linked_type or has_embedded_type:
         if not allow_multiple:

@@ -32,5 +32,3 @@ for schema_version in schema_loader.get_schema_versions():
             print(f"Error while building schema {schema_file_path}: {e}")
 
     save_resource_files(schema_version, schemas_file_paths)
-
-
