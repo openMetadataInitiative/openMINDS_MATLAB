@@ -47,7 +47,8 @@ function selectOpenMindsVersion(version)
 
     addpath(rootPath)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
-    
+    addpath( genpath( fullfile(rootPath, 'livescripts') ) )
+
     import openminds.internal.constants.*
 
     % - Validate inputs

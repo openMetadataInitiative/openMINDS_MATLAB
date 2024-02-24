@@ -1,12 +1,25 @@
 
-## Configure MATLAB's path to use the latest model versions
-
-Note: Make sure **MATLAB_openMINDS** has been added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html). If you installed **MATLAB_openMINDS** using the AddonManager, this should already have been taken care of.
-
+## Before you start
 ```matlab
+% Verify that openMINDS_MATLAB is installed
+disp( openminds.toolboxversion )
+```
+
+```TextOutput
+Version 0.9.1
+```
+
+If you have installed **openMINDS_MATLAB** and the above command does not work, most likely **openMINDS_MATLAB** is <u>not</u> added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html).
+
+See also: [Crew Member Collection Tutorial](./crewMemberCollection.md)
+
+## Configure MATLAB's path to use the latest model versions
+```matlab
+% Schema classes for all the openMINDS model versions are available in this
+% toolbox. To ensure the latest version is used, run the following command:
 selectOpenMindsVersion("latest")
 ```
-## Import schemas from core model
+## Import schemas from the core model
 ```matlab
 import openminds.core.*
 ```
@@ -67,8 +80,10 @@ disp(subject1)
 ```
 
 ```matlab
+% Update the value of the lookup label
 subjectState.lookupLabel = "demo_subjectstate_pre_recording";
 
+% Create a new subject state
 subjectStatePost = openminds.core.SubjectState('lookupLabel', 'demo_subjectstate_post_recording')
 ```
 
@@ -90,22 +105,8 @@ subjectStatePost =
 ```
 
 ```matlab
-subject1.studiedState(end+1) = subjectStatePost
-```
-
-```TextOutput
-subject1 = 
-  Subject (https://openminds.ebrains.eu/core/Subject) with properties:
-         biologicalSex: male  (BiologicalSex)
-    internalIdentifier: ""
-              isPartOf: [None]  (SubjectGroup)
-           lookupLabel: "demo_subject1"
-               species: Mus musculus  (One of: Species, Strain)
-          studiedState: [demo_subjectstate_pre_recording    demo_subjectstate_post_recording]  (SubjectState)
-  Required Properties: species, studiedState
-```
-
-```matlab
+% Append the new subject state to the subject's studiedState property
+subject1.studiedState(end+1) = subjectStatePost;
 disp(subject1)
 ```
 
