@@ -15,7 +15,7 @@ MATLAB package for the openMINDS metadata framework for linked data in neuroscie
 To generally learn more about the openMINDS metadata framework please go to :arrow_right: [**ReadTheDocs**](https://openminds-documentation.readthedocs.io).  
 You can test and learn how to use openMINDS in MATLAB by going through a small :arrow_right: [**DEMO**](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) on MATLAB Online.  
 
-MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.com/products/matlab-online.html), but you need to register a [MathWorks Account](https://www.mathworks.com/mwaccount/register?uri=https%3A%2F%2Fwww.mathworks.com%2Fproducts%2Fmatlab.html).
+MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.com/products/matlab-online.html), but you need to register for a [MathWorks Account](https://www.mathworks.com/mwaccount/register?uri=https%3A%2F%2Fwww.mathworks.com%2Fproducts%2Fmatlab.html).
 
 
 ## Installation
@@ -38,7 +38,7 @@ If you have installed **openMINDS_MATLAB** and the above command does not work, 
 
 ## Getting Started
 
-See also: [Crew Member Collection Tutorial](./crewMemberCollection.md)
+See also: [Crew Member Collection Tutorial](./docs/tutorials/crewMemberCollection.md)
 
 ### Configure MATLAB's path to use the latest model versions
 ```matlab
