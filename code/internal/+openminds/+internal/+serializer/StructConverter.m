@@ -166,9 +166,9 @@ classdef StructConverter < handle
                 S.at_context = struct();
                 S.at_context.at_vocab = obj.VocabularyIRI;
             end
-
-            S.at_type = instanceObject.X_TYPE;
+            
             S.at_id = obj.getIdentifier(instanceObject.id);
+            S.at_type = instanceObject.X_TYPE;
             
             % Get public properties
             propertyNames = properties(instanceObject);
@@ -185,6 +185,7 @@ classdef StructConverter < handle
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
                 if isstring(iPropertyValue) && numel(iPropertyValue)==1 && iPropertyValue==""; continue; end
+                if isstring(iPropertyValue) && numel(iPropertyValue)==1 && ismissing(iPropertyValue); continue; end
 
                 % Handle linked, embedded and direct values.
                 if obj.SchemaInspector.isPropertyWithLinkedType(iPropertyName)
@@ -268,11 +269,14 @@ classdef StructConverter < handle
     methods (Static)
 
         function id = getIdentifier(instanceID)
-            if ~strncmp(instanceID, 'http', 4)
-                id = sprintf("%s/%s", openminds.internal.serializer.StructConverter.LOCAL_IRI, instanceID);
-            else
-                id = instanceID;
-            end
+            id = instanceID;
+
+            % % Deprecate the localhost id?
+            % % if ~strncmp(instanceID, 'http', 4)
+            % %     id = sprintf("%s/%s", openminds.internal.serializer.StructConverter.LOCAL_IRI, instanceID);
+            % % else
+            % %     id = instanceID;
+            % % end
         end
 
     end

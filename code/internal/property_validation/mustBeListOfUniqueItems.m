@@ -13,6 +13,6 @@ function mustBeListOfUniqueItems(value)
             assert( isequal(valuesOfType, unique(valuesOfType, 'stable')), 'Value must be an array unique items' );
         end
     else
-        assert( isequal( sort(value), unique(value)), 'Value must contain unique items' );
+        assert( isequaln( sort(value), unique(value)), 'Value must contain unique items' );
     end
 end
