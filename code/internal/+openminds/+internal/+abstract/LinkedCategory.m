@@ -44,6 +44,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 return
             end
 
+            if ischar(instance)
+                instance = string(instance);
+            end
+
             if ~iscell(instance)
                 if numel(instance) == 1
                     instance = {instance};
@@ -58,14 +62,14 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             % Process each instance value
             for i = 1:numel(instance)
                 
-                if ischar(instance{i})
-                    instanceName = string(instance{i});
+                if isstring(instance{i})
+                    instanceName = instance{i};
                     % Check if we can create a controlled instance from it
                     for type = obj(i).ALLOWED_TYPES
                         if contains(type, 'openminds.controlledterms')
                             %[e, m] = enumeration(type);
-                            m = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
-                            isMatch = strcmp(instanceName, m);
+                            allInstanceNames = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
+                            isMatch = strcmp(instanceName, allInstanceNames);
 
                             if any( isMatch )
                                 %instance{i} = e(strcmp(instance{i}, m));
