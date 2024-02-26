@@ -113,7 +113,7 @@ consortium =
   Required Properties: fullName
 ```
 
-When the instance is displayed, you will see all the properties are part of the instance type, and which of those are required (Note: at the moment of writing this guide, required properties are not enforced). The display should also give information about what types are expected for each of the property values. For example, the <samp>contactInformation</samp> property requires a <samp>ContactInformation</samp> instance (as indicated by the annotation in the brackets). If you want to learn more about the types as you explore the instances, you can always press the links in the instance display and they will take you to the openMINDS documentation page for that instance.
+When the instance is displayed, you will see all the properties that are part of the instance type, and which of those are required (Note: at the moment of writing this guide, required properties are not enforced). The display should also give information about what types are expected for each of the property values. For example, the <samp>contactInformation</samp> property requires a <samp>ContactInformation</samp> instance (as indicated by the annotation in the brackets). If you want to learn more about the types as you explore the instances, you can always press the links in the instance display and they will take you to the openMINDS documentation page for that instance.
 
 
 The consortium in this example does not have contact information, but we will move on and create <samp>ContactInformation</samp> types for each of the persons:
@@ -162,7 +162,7 @@ end
 ```
 # Add instances to collection and export collection
 
-Now that we have all the instances, we can add them to the <samp>collection</samp>. It is sufficient to add the <samp>Person</samp> instances because the collection will autmatically detect linked and embedded instances and add them automatically to the <samp>Nodes</samp> property.
+Now that we have all the instances, we can add them to the <samp>collection</samp>. It is sufficient to add the <samp>Person</samp> instances because the collection will automatically detect linked and embedded instances and add them automatically to the <samp>Nodes</samp> property.
 
 ```matlab
 collection.add(persons)

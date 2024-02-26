@@ -1,13 +1,13 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration build-checksum="3336601120" file="/Users/Eivind/Code/MATLAB/Github-Ehennestad/openMINDS_MATLAB/openMINDS_MATLAB.pkg.prj" location="/Users/Eivind/Code/MATLAB/Github-Ehennestad/openMINDS_MATLAB" name="openMINDS_MATLAB.pkg" target="target.toolbox" target-name="Package Toolbox">
+  <configuration build-checksum="3336601120" file="/Users/eivihe/Code/MATLAB/Repositories/openMINDS_MATLAB/openMINDS_MATLAB.pkg.prj" location="/Users/eivihe/Code/MATLAB/Repositories/openMINDS_MATLAB" name="openMINDS_MATLAB.pkg" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>openMINDS Metadata Models</param.appname>
     <param.authnamewatermark>Eivind Hennestad</param.authnamewatermark>
     <param.email>eivihe@uio.no</param.email>
     <param.company />
     <param.summary>A MATLAB toolbox to create metadata instances using the openMINDS metadata models</param.summary>
     <param.description>MATLAB package for the openMINDS metadata models. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods</param.description>
-    <param.screenshot>${PROJECT_ROOT}/img/light_openMINDS-MATLAB-logo.png</param.screenshot>
-    <param.version>0.9.0</param.version>
+    <param.screenshot>${PROJECT_ROOT}/img/light_openMINDS-MATLAB-logo_toolbox.png</param.screenshot>
+    <param.version>0.9.1.1</param.version>
     <param.output>${PROJECT_ROOT}/openMINDS Metadata Models.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -111,20 +111,22 @@
       <file>${PROJECT_ROOT}/code/Contents.m</file>
       <file>${PROJECT_ROOT}/code/gettingStarted.mlx</file>
       <file>${PROJECT_ROOT}/code/internal</file>
+      <file>${PROJECT_ROOT}/code/livescripts</file>
       <file>${PROJECT_ROOT}/code/mixedtypes</file>
       <file>${PROJECT_ROOT}/code/schemas</file>
       <file>${PROJECT_ROOT}/code/selectOpenMindsVersion.m</file>
       <file>${PROJECT_ROOT}/code/setup.m</file>
+      <file>${PROJECT_ROOT}/code/startup.m</file>
     </fileset.rootfiles>
     <fileset.depfun.included />
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="openMINDS Metadata Models.mltbx" optional="false">/Users/Eivind/Code/MATLAB/Github-Ehennestad/openMINDS_MATLAB/openMINDS Metadata Models.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="openMINDS Metadata Models.mltbx" optional="false">/Users/eivihe/Code/MATLAB/Repositories/openMINDS_MATLAB/openMINDS Metadata Models.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2022b.app</root>
+      <root>/Applications/MATLAB_R2023b.app</root>
       <toolboxes />
     </matlab>
     <platform>
@@ -136,9 +138,9 @@
       <vista>false</vista>
       <linux>false</linux>
       <solaris>false</solaris>
-      <osver>13.1</osver>
-      <os32>false</os32>
-      <os64>true</os64>
+      <osver>13.5</osver>
+      <os32>true</os32>
+      <os64>false</os64>
       <arch>maci64</arch>
       <matlab>true</matlab>
     </platform>
