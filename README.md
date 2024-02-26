@@ -20,7 +20,7 @@ MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.
 
 ## Installation
 
-openMINDS for MATLAB can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from FileExchange or from the Releases page of this repository and install it manually. 
+openMINDS for MATLAB can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from FileExchange or from the Releases page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](Detailed-Installation-Instructions)
 
 
 ## Before you start
@@ -147,3 +147,16 @@ disp(subject1)
           studiedState: [demo_subjectstate_pre_recording    demo_subjectstate_post_recording]  (SubjectState)
   Required Properties: species, studiedState
 ```
+
+## Detailed Installation Instructions
+The easiest way to install the openMINDS for MATLAB is to use the [**Add-on Explorer**](https://www.mathworks.com/products/matlab/add-on-explorer.html):
+1. Launch the Add-on Explorer from MATLAB's Home tab. Click Add-Ons -> Get Add-Ons<img width="860" alt="openminds_installation_step1" src="https://github.com/openMetadataInitiative/openMINDS_MATLAB/assets/17237719/71e7d8a3-1548-44e4-8ad2-84798773ce90">
+2. Search for "openminds"
+3. Select openMINDS Metadata Models for MATLAB<img width="860" alt="openminds_installation_step2" src="https://github.com/openMetadataInitiative/openMINDS_MATLAB/assets/17237719/f46eb742-b2c8-47a1-a46b-c96a3d4c0b35">
+4. Press the "Add" button.<img width="860" alt="openminds_installation_step4" src="https://github.com/openMetadataInitiative/openMINDS_MATLAB/assets/17237719/cc2edc9e-4a5d-43cd-a3fc-a94a52d8d84a">
+
+## Acknowledgements
+
+<div><img src="https://www.braincouncil.eu/wp-content/uploads/2018/11/wsi-imageoptim-EU-Logo.jpg" alt="EU Logo" height="23%" width="15%" align="right" style="margin-left: 10px"></div>
+
+This open source software code was developed in part or in whole in the Human Brain Project, funded from the European Union's Horizon 2020 Framework Programme for Research and Innovation under Specific Grant Agreements No. 945539 (Human Brain Project SGA3).
