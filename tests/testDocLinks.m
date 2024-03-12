@@ -2,10 +2,10 @@ function result = testDocLinks()
 
     parentDirectoryPath = fileparts( fileparts(mfilename('fullpath')) );
     
-    codeDirectoryPath = fullfile(parentDirectoryPath, 'code');
     testDirectoryPath = fullfile(parentDirectoryPath, 'tests');
 
-    addpath( codeDirectoryPath );
+    addpath( fullfile(parentDirectoryPath, 'code') );
+    addpath( fullfile(parentDirectoryPath, 'code', 'internal') );
     openminds.internal.startup()
     addpath(genpath( testDirectoryPath ));
 
