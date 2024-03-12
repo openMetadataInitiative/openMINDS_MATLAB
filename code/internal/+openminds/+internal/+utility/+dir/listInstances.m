@@ -68,6 +68,7 @@ end
 function S = collectInfoInStructArray(schemaFolderPath, filePaths)
     
     FILE_EXT = '.schema.tpl';
+    SANDS_INSTANCE_FOLDERS = openminds.internal.constants.SandsInstanceFolders();
     
     % - Get relevant parts of folder hierarchy for extracting information
     folderNames = replace(filePaths, schemaFolderPath, '');
@@ -85,19 +86,30 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths)
             thisFolderSplit(1) = [];
         end
 
-        if numel(thisFolderSplit) == 2 && strcmp(thisFolderSplit{1}, 'terminologies')
-            S(i).SchemaName = thisFolderSplit{end};
-            S(i).ModelName = "controlledTerms";
-            S(i).ModelVersion = "N/A";
-            S(i).GroupName = "";
+        if strcmp(thisFolderSplit{1}, 'terminologies')
+            if numel(thisFolderSplit) == 2
+                S(i).SchemaName = thisFolderSplit{end};
+                S(i).ModelName = "controlledTerms";
+                S(i).ModelVersion = "N/A";
+                S(i).GroupName = "";
+            else
+                error("Unexpected number of subfolders for terminologies. Please report!")
+            end
 
-        elseif numel(thisFolderSplit) == 3 && strcmp(thisFolderSplit{1}, 'graphStructures')
-            S(i).SchemaName = thisFolderSplit{end};
+        elseif any( strcmp(thisFolderSplit{1}, SANDS_INSTANCE_FOLDERS))
+
+            S(i).SchemaName = thisFolderSplit{1};
             S(i).ModelName = "SANDS";
             S(i).ModelVersion = "N/A";
-            S(i).GroupName = thisFolderSplit{end-1};
+            if numel(thisFolderSplit) == 1
+                S(i).GroupName = "";
+            elseif numel(thisFolderSplit) == 2
+                S(i).GroupName = string(thisFolderSplit{end});
+            else
+                error("Unexpected number of subfolders for SANDS instances. Please report!")
+            end
 
-        else
+        elseif any( strcmp(thisFolderSplit{1}, ["licenses", "contentTypes"]) )
             if strcmp( thisFolderSplit{end}, 'licenses')
                 S(i).SchemaName = 'License';
             elseif strcmp( thisFolderSplit{end}, 'contentTypes')
@@ -108,7 +120,9 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths)
             end
             S(i).ModelName = "core";
             S(i).ModelVersion = "N/A";
-            S(i).GroupName = "";        
+            S(i).GroupName = "";
+        else
+            error('The instance folder with name "%s" is not implemented. Please report', thisFolderSplit{1})
         end
 
         S(i).Filepath = filePaths{i};

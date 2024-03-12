@@ -55,6 +55,12 @@ function downloadRepository(repositoryName, options)
         mkdir(targetDirectory)
     end
 
+    % Get repository folder name
+    folderName = strtrim( ls(sourceDirectory) );
+    if isfolder( fullfile(targetDirectory, folderName) )
+        rmdir(fullfile(targetDirectory, folderName), "s")
+    end
+
     fprintf('Copying repository "%s" to local directory (%s)...\n', repositoryName, targetDirectory)
     copyfile(sourceDirectory, targetDirectory)
     fprintf('Done.\n')
