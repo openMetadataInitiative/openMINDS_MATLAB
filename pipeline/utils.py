@@ -102,7 +102,7 @@ def save_resource_files(version, schema_path_list):
         
         # Remove redundant path information
         schema_path = schema_path.replace(root_directory, "")
-        schema_path = schema_path.replace(f"/sources/schemas/{version}/", "")
+        schema_path = schema_path.replace(f"/_sources/openMINDS/schemas/{version}/", "")
         schema_path = schema_path.replace(".schema.omi.json", "")
         if schema_path[0] == "/":
             schema_path = schema_path[1:]
