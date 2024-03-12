@@ -5,7 +5,8 @@ function result = testDocLinks()
     codeDirectoryPath = fullfile(parentDirectoryPath, 'code');
     testDirectoryPath = fullfile(parentDirectoryPath, 'tests');
 
-    addpath(genpath( codeDirectoryPath ));
+    addpath( codeDirectoryPath );
+    openminds.internal.startup()
     addpath(genpath( testDirectoryPath ));
 
     testCase = testReadTheDocLinks();

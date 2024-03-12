@@ -26,6 +26,10 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
 
         case 'Default browser'
             str = getHtmlLink(schemaClass, '-browser');
+
+        case "Raw URL"
+            str = getHtmlLink(schemaClass, '-api');
+
     end
 end
 
@@ -55,7 +59,8 @@ function str = getHtmlLink(schemaClassName, browserOption)
     schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
 
     isMatch = strcmpi(schemaManifest.Name, string(schemaName));
-    version = "latest";
+    version = openminds.getSchemaVersion();
+
     modelName = schemaManifest{isMatch, "Model"};
     subgroupName = schemaManifest{isMatch, "Group"};
     schemaName = schemaManifest{isMatch, "Name"};
@@ -69,7 +74,11 @@ function str = getHtmlLink(schemaClassName, browserOption)
         displayLabel = openminds.internal.utility.getSchemaName(schemaClassName);
     end
 
-    str = createLink(url, displayLabel, browserOption);
+    if strcmp(browserOption, '-api')
+        str = url;
+    else
+        str = createLink(url, displayLabel, browserOption);
+    end
     
     return
 
