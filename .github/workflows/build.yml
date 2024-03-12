@@ -1,53 +1,61 @@
-# MIT licensed
-name: openMINDS_MATLAB-schema_build_pipeline
+name: Build schemas classes
 
 on:
   push:
-      branches:
-        - pipeline
-  workflow_dispatch: # This triggers the workflow when a webhook is received
-
+    branches:
+      - pipeline
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Checkout Repository
-      uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.11
+      - name: Run build
+        run: |
+          pip install -r requirements.txt
+          python build.py
 
-    - name: Run build
-      run: |
-        pip install -r requirements.txt
-        python build.py
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          path: main
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Checkout main branch
-      uses: actions/checkout@v3
-      with:
-        ref: main
-        path: main
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push to main
+        run: |
+          rm -rf main/code/schemas/*
+          rm -rf main/code/mixedtypes/*
+          cp -R target/* main/code
+          cp -R main/code/internal/resources/content_files/* main/code/
+          cp -R main/code/internal/resources/readme_files/* main/code/
+          cd main
 
-    - name: Push to main
-      run: |
-        rm -rf main/code/schemas/*
-        rm -rf main/code/mixedtypes/*
-        cp -R target/* main/code
-        cp -R main/code/internal/resources/content_files/* main/code/
-        cp -R main/code/internal/resources/readme_files/* main/code/
-        cd main
-        
-        git config --global user.email "openminds@ebrains.eu"
-        git config --global user.name "openMINDS pipeline"
-        if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
+          git config --global user.email "openminds@ebrains.eu"
+          git config --global user.name "openMINDS pipeline"
+
+          # Conditionally set commit message based on the event
+          if [ "${{ github.event_name }}" == "push" ]; then
+            commit_message="Build triggered by manual update to pipeline"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            commit_message="Build triggered by submodule ${{ inputs.repository }} version ${{ inputs.branch }}"
+          else
+            commit_message="Unknown event"
+          fi
+
+          # Only proceed with commit and push if changes are detected
+          if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
             git add .
-            git commit -m "build triggered by submodule ${{ inputs.repository }} version ${{ inputs.branch }}"
+            git commit -m "$commit_message"
             git push -f
-        else
+          else
             echo "Nothing to commit"
-        fi
+          fi
