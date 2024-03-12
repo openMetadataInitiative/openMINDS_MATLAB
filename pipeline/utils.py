@@ -9,21 +9,29 @@ from git import Repo, GitCommandError
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 
 def clone_sources():
-    # cloning central repo (for schemas)
-    if os.path.exists("sources"):
-        shutil.rmtree("sources")
-    Repo.clone_from("https://github.com/openMetadataInitiative/openMINDS.git", to_path="sources", depth=1)
 
+    if os.path.exists("_sources"):
+        shutil.rmtree("_sources")
+
+    # cloning central repo (for schemas)
+    Repo.clone_from(
+        "https://github.com/openMetadataInitiative/openMINDS.git",
+        to_path="_sources/openMINDS",
+        depth=1,
+    )
+        
     # cloning instances repo (for instances)
-    if os.path.exists("sources_instances"):
-        shutil.rmtree("sources_instances")
-    Repo.clone_from("https://github.com/openMetadataInitiative/openMINDS_instances.git", to_path="sources_instances", depth=1)
+    Repo.clone_from(
+        "https://github.com/openMetadataInitiative/openMINDS_instances.git",
+        to_path="_sources/openMINDS_instances",
+        depth=1,
+    )
 
 class SchemaLoader(object):
 
     def __init__(self):
         self._root_directory = os.path.realpath(".")
-        self.schemas_sources = os.path.join(self._root_directory, "sources", "schemas")
+        self.schemas_sources = os.path.join(self._root_directory, "_sources", "openMINDS", "schemas")
 
     def get_schema_versions(self) -> List[str]:
         return os.listdir(self.schemas_sources)
@@ -35,7 +43,7 @@ class InstanceLoader(object):
 
     def __init__(self):
         self._root_directory = os.path.realpath(".")
-        self.instances_sources = os.path.join(self._root_directory, "sources_instances", "instances")
+        self.instances_sources = os.path.join(self._root_directory, "_sources", "openMINDS_instances", "instances")
 
     def get_instance_versions(self) -> List[str]:
         return os.listdir(self.instances_sources)
@@ -47,6 +55,9 @@ class InstanceLoader(object):
         instance_list_complete = self.find_instances(version)
 
         if schema_name == schema_name.upper():
+            pass
+        elif schema_name == "UBERONParcellation":
+            # Todo: Need to find a general solution for this.
             pass
         else:
             schema_name = camel_case(schema_name)

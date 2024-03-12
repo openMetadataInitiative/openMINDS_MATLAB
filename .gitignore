@@ -1,8 +1,7 @@
 # Downloaded files / temporary folders
 downloads/
 target/
-sources/
-sources_instances/
+_sources/
 
 # Autosave files
 *.asv
