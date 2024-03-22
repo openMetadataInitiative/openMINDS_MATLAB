@@ -67,12 +67,16 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                     % Check if we can create a controlled instance from it
                     for type = obj(i).ALLOWED_TYPES
                         if contains(type, 'openminds.controlledterms')
-                            %[e, m] = enumeration(type);
                             allInstanceNames = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
+
+                            if openminds.utility.isSemanticName(instanceName)
+                                S = openminds.utility.parseAtID(instanceName);
+                                instanceName = S.Name;
+                            end
+                             
                             isMatch = strcmp(instanceName, allInstanceNames);
 
                             if any( isMatch )
-                                %instance{i} = e(strcmp(instance{i}, m));
                                 instance{i} = feval(type, instanceName);
                                 break
                             end
