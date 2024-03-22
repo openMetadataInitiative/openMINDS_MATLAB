@@ -48,25 +48,30 @@ class InstanceLoader(object):
     def get_instance_versions(self) -> List[str]:
         return os.listdir(self.instances_sources)
 
-    def find_instances(self, version:str) -> List[str]:
-        return glob.glob(os.path.join(self.instances_sources, version, f'**/*.jsonld'), recursive=True)
+    def find_instances(self, version:str, schema_name:str=None) -> List[str]:
+        if schema_name:
+            return glob.glob(os.path.join(self.instances_sources, version, f'**/{schema_name}/*.jsonld'), recursive=True)
+        else:
+            return glob.glob(os.path.join(self.instances_sources, version, f'**/*.jsonld'), recursive=True)
 
     def get_instance_collection(self, version:str, schema_name:str) -> List[str]:
-        instance_list_complete = self.find_instances(version)
 
+        # Make sure schema_name is correct casing (camel case) according to foldernames
         if schema_name == schema_name.upper():
             pass
         elif schema_name == "UBERONParcellation":
-            # Todo: Need to find a general solution for this.
+            # Todo: Need to find a general solution for these exceptions.
             pass
         else:
             schema_name = camel_case(schema_name)
 
+        # Get list of all instance jsonld files in the given version for the given schema
+        # This is a list of absolute pathnames
+        instance_list_complete = self.find_instances(version, schema_name)
+
         instance_list = [instance for instance in instance_list_complete if schema_name in instance]
         instance_list = [extract_filename_without_extension(path_str) for path_str in instance_list]
-        if schema_name in instance_list:
-            instance_list.remove(schema_name)
-
+        
         return instance_list
     
 def initialise_jinja_template_environment(autoescape:bool=None):
