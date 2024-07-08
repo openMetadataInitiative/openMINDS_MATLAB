@@ -156,6 +156,34 @@ classdef Collection < handle
             instance = obj.Nodes{nodeKey};
         end
 
+        function instances = list(obj, type, propertyName, propertyValue)
+            arguments
+                obj
+                type (1,1) string
+            end
+            arguments (Repeating)
+                propertyName (1,1) string
+                propertyValue
+            end
+            
+            keys = obj.Nodes.keys;
+            isMatch = startsWith(keys, type);
+            keys = keys(isMatch);
+
+            instances = obj.Nodes(keys);
+            instances = [instances{:}];
+
+            for i = 1:numel(propertyName)
+                thisName = propertyName{i};
+                thisValue = propertyValue{i};
+
+                instanceValues = {instances.(thisName)};
+
+                keep = cellfun(@(c) isequal(c, thisValue), instanceValues);
+                instances = instances(keep);
+            end
+        end
+
         function updateLinks(obj)
             for instance = obj.Nodes.values
                 obj.addNode(instance{1}, ...
@@ -240,6 +268,8 @@ classdef Collection < handle
             else
                 jsonldFilePaths = filePath;
             end
+
+            if isempty(jsonldFilePaths); return; end
 
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
