@@ -126,6 +126,26 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             end
         end
 
+        function cellArray = cellstr(obj)
+            cellArray = cell(1, numel(obj));
+            for i = 1:numel(cellArray)
+                cellArray{i} = char(obj(i));
+            end
+        end
+
+        function stringArray = string(obj)
+            stringArray = repmat("", 1, numel(obj));
+            for i = 1:numel(stringArray)
+                stringArray(i) = string(char(obj(i)));
+            end
+        end
+
+        function cellArrayOfStruct = toStruct(obj)
+            cellArrayOfStruct = cell(1, numel(obj));
+            for i = 1:numel(cellArrayOfStruct)
+                cellArrayOfStruct{i} = obj(i).Instance.toStruct();
+            end
+        end
     end
     
     methods (Access = protected)
@@ -157,7 +177,11 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
 
             docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
-            str = sprintf('  %s array with elements:\n', docLinkStr);
+            if isempty(obj)
+                str = sprintf('  %s array\n', docLinkStr);
+            else
+                str = sprintf('  %s array with elements:\n', docLinkStr);
+            end
         end
 
         function str = getFooter(~)
