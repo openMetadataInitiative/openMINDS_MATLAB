@@ -53,6 +53,10 @@ classdef Collection < handle
     properties (SetAccess = private)
         Nodes (1,1) dictionary
     end
+
+    properties (SetAccess = protected, Hidden)
+        TypeMap (1,1) dictionary
+    end
     
     methods % Constructor
         function obj = Collection(instance, options)
@@ -95,6 +99,7 @@ classdef Collection < handle
             
             % Initialize nodes
             obj.Nodes = dictionary;
+            obj.TypeMap = dictionary;
             
             if ~isempty(instance)
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
@@ -152,6 +157,10 @@ classdef Collection < handle
             end
         end
         
+        function remove(obj, instance)
+            error('not implemented')
+        end
+
         function instance = get(obj, nodeKey)
             instance = obj.Nodes{nodeKey};
         end
@@ -311,9 +320,19 @@ classdef Collection < handle
                     end
                 end
             end
+
+
             
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
+                
+                % Todo: Separate method
+                instanceType = class(instance);
+                if isConfigured(obj.TypeMap) && isKey(obj.TypeMap, instanceType)
+                    obj.TypeMap(instanceType) = {[obj.TypeMap{instanceType}, string(instance.id)]};
+                else
+                    obj.TypeMap(instanceType) = {string(instance.id)};
+                end
             end
             
             obj.addSubNodes(instance)
