@@ -44,6 +44,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 return
             end
 
+            % if isstruct(instance) && isfield(instance, 'at_id')
+            %     instance = {instance.at_id};
+            % end
+
             if ischar(instance)
                 instance = string(instance);
             end
@@ -89,8 +93,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                     % an @id. This will act as a placeholder for an 
                     % unresolved linked instance, and the link needs to be 
                     % resolved externally in order to put a real instance in place.
-                    obj.Instance = struct;
-                    obj.Instance.id = instance{i}.at_id;
+                    obj(i).Instance = struct;
+                    obj(i).Instance.id = instance{i}.at_id;
+                elseif isa(instance{i}, class(obj))
+                    obj(i) = instance{i};
                 else
                     mustBeOneOf(instance{i}, obj(i).ALLOWED_TYPES)
                     obj(i).Instance = instance{i};
@@ -203,15 +209,18 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         end
 
         function displayNonScalarObject(obj)
-                
-            repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-            %stringArray = cellfun(@(r) r.Representation, repArray);
-            %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+            if isstruct(obj(1).Instance)
+                stringArray = strjoin( arrayfun(@(o) o.Instance.id, obj, 'UniformOutput', false), newline);
+            else
+                repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+                %stringArray = cellfun(@(r) r.Representation, repArray);
+                %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+                stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
+                stringArray = strrep(stringArray, '[', '');
+                stringArray = strrep(stringArray, ']', '');
+            end
 
 
-            stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
-            stringArray = strrep(stringArray, '[', '');
-            stringArray = strrep(stringArray, ']', '');
             str = obj.getHeader;
             disp(str)
             fprintf( '%s\n\n', strjoin(stringArray, '    \n') );

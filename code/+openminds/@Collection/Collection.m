@@ -157,6 +157,15 @@ classdef Collection < handle
             end
         end
         
+        function tf = contains(obj, instance)
+            % Todo:work for arrays
+            if isKey(obj.Nodes, instance.id)
+                tf = true;
+            else
+                tf = false;
+            end
+        end
+        
         function remove(obj, instance)
             error('not implemented')
         end
