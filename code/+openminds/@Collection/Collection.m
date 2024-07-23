@@ -96,12 +96,13 @@ classdef Collection < handle
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
             end
+
             
             % Initialize nodes
             obj.Nodes = dictionary;
             obj.TypeMap = dictionary;
             
-            if ~isempty(instance)
+            if ~isempty(instance) && ~isempty(instance{1})
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
                 isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
                 isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
@@ -182,6 +183,12 @@ classdef Collection < handle
             arguments (Repeating)
                 propertyName (1,1) string
                 propertyValue
+            end
+
+            instances = [];
+
+            if ~isConfigured(obj.Nodes)
+                return
             end
             
             keys = obj.Nodes.keys;
