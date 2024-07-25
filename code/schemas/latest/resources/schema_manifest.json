@@ -30,6 +30,11 @@
         "group": "digitalIdentifier"
     },
     {
+        "name": "MRIPulseSequence",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "ORCID",
         "model": "core",
         "group": "digitalIdentifier"
