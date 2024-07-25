@@ -202,7 +202,7 @@ class MATLABSchemaBuilder(object):
         display_label_method_expression = _get_display_label_method_expression(class_name)
 
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
-        # Or; just remove this as its not needed when using separate templates.
+        # Or; just remove this as it's not needed when using separate templates.
         if self._schema_model_name == "controlledTerms":
             base_class = "openminds.abstract.ControlledTerm"
         else:

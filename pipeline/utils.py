@@ -59,7 +59,7 @@ class InstanceLoader(object):
         # Make sure schema_name is correct casing (camel case) according to foldernames
         if schema_name == schema_name.upper():
             pass
-        elif schema_name == "UBERONParcellation":
+        elif schema_name in ["UBERONParcellation", "MRIPulseSequence"]:
             # Todo: Need to find a general solution for these exceptions.
             pass
         else:
@@ -87,7 +87,9 @@ def camel_case(text_string: str):
     
 def extract_filename_without_extension(path):
     base_name = os.path.basename(path)  # Get the base name from the path
-    return base_name.split('.')[0]
+    if '.' in base_name:
+        return base_name.rsplit('.', 1)[0]
+    return base_name
 
 def save_resource_files(version, schema_path_list):
     """
