@@ -50,7 +50,7 @@ classdef Collection < handle
         Description (1,1) string
     end
     
-    properties (SetAccess = private)
+    properties (SetAccess = protected)
         Nodes (1,1) dictionary
     end
 
@@ -160,10 +160,12 @@ classdef Collection < handle
         
         function tf = contains(obj, instance)
             % Todo:work for arrays
-            if isKey(obj.Nodes, instance.id)
-                tf = true;
-            else
-                tf = false;
+            tf = false;
+
+            if isConfigured(obj.Nodes)
+                if isKey(obj.Nodes, instance.id)
+                    tf = true;
+                end
             end
         end
         
@@ -191,13 +193,22 @@ classdef Collection < handle
                 return
             end
             
-            keys = obj.Nodes.keys;
-            isMatch = startsWith(keys, type);
-            keys = keys(isMatch);
+            typeKeys = obj.TypeMap.keys;
+            isMatch = endsWith( typeKeys, "."+type);
+            if any(isMatch)
+                keys = obj.TypeMap{typeKeys(isMatch)};
+            else
+                return
+            end
+
+            % keys = obj.Nodes.keys;
+            % isMatch = startsWith(keys, type);
+            % keys = keys(isMatch);
 
             instances = obj.Nodes(keys);
             instances = [instances{:}];
 
+            % Filter by property values:
             for i = 1:numel(propertyName)
                 thisName = propertyName{i};
                 thisValue = propertyValue{i};
@@ -312,7 +323,7 @@ classdef Collection < handle
 
     end
 
-    methods (Access = private)
+    methods (Access = protected)
 
         %Add an instance to the Node container.
         function addNode(obj, instance, options)
@@ -337,8 +348,6 @@ classdef Collection < handle
                 end
             end
 
-
-            
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
                 
@@ -374,7 +383,6 @@ classdef Collection < handle
             identifier = length(obj) + 1;
             identifier = sprintf(fmt, identifier);
         end
-
     end
 
 end

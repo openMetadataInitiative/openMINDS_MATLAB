@@ -69,7 +69,6 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             end
         end
     end
-
     
     methods (Access = protected) % Implement method for the CustomInstanceDisplay mixin
 
@@ -101,16 +100,26 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                  [~, instanceName] = openminds.utility.parseAtID(instanceName);
             end
 
+            [instanceName, instanceNameOrig] = deal(instanceName);
+            if ~any(strcmp(obj.CONTROLLED_INSTANCES, instanceName))
+                % Try to make a valid name
+                instanceName = strrep(instanceName, ' ', '');
+                instanceName = matlab.lang.makeValidName(instanceName, 'ReplacementStyle', 'delete');
+            end
+
             % Todo: Use a proper deserializer
             if any(strcmpi(obj.CONTROLLED_INSTANCES, instanceName))
                 try
                     data = getControlledInstance(instanceName, schemaName, 'controlledTerms');
                 catch
-                    warning('Controlled instance "%s" is not available.', instanceName)
+                    s = warning('off', 'backtrace');
+                    warning('Controlled instance "%s" is not available.', instanceNameOrig)
+                    warning(s);
                     return
                 end
             else
-                error('Deserialization from user instance is not implemented yet')
+                error('No matching instances were found for name "%s"', instanceName)
+                %error('Deserialization from user instance is not implemented yet')
             end
             propNames = {'at_id', 'name', 'definition', 'description', 'interlexIdentifier', 'knowledgeSpaceLink', 'preferredOntologyIdentifier', 'synonym'};
 

@@ -86,18 +86,24 @@ classdef StructConverter < handle
                 %error('Serialization of non-scalar objects is not supported yet')
             end
 
-            if ~isa(instanceObject, 'openminds.abstract.Schema')
-                error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
+            if isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
+                obj.Instance = instanceObject;
+            else
+                if ~isa(instanceObject, 'openminds.abstract.Schema')
+                    error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
+                else
+                    obj.assignNameValueOptions(nvOptions)
+        
+                    obj.Instance = instanceObject;
+                    obj.SchemaInspector = openminds.internal.SchemaInspector(instanceObject);
+        
+                    obj.SchemaType = instanceObject.X_TYPE;
+        
+                    obj.id = obj.Instance.id;
+                end
             end
 
-            obj.assignNameValueOptions(nvOptions)
 
-            obj.Instance = instanceObject;
-            obj.SchemaInspector = openminds.internal.SchemaInspector(instanceObject);
-
-            obj.SchemaType = instanceObject.X_TYPE;
-
-            obj.id = obj.Instance.id;
 
             if ~nargout
                 obj.convert()
@@ -127,7 +133,7 @@ classdef StructConverter < handle
 
         function S = convert(obj)
         %serialize Serialize an openMINDS instance
-            
+
             S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
             %S{1} = obj.convertStructToJsonld(S{1});
 
@@ -165,6 +171,12 @@ classdef StructConverter < handle
             if obj.WithContext
                 S.at_context = struct();
                 S.at_context.at_vocab = obj.VocabularyIRI;
+            end
+
+            if isa(obj.Instance, 'struct')
+                S.at_id = obj.Instance.id;
+                C = {S};
+                return
             end
             
             S.at_id = obj.getIdentifier(instanceObject.id);
@@ -220,13 +232,17 @@ classdef StructConverter < handle
             linkedInstances = {};
             
             for i = 1:numel(linkedInstance)
-                iValue = obj.validateInstance(linkedInstance(i));
-                S(i).at_id = obj.getIdentifier(iValue.id);
-                
-                if obj.RecursionDepth > 0
-                    serializer = openminds.internal.serializer.StructConverter(iValue, obj.RecursionDepth-1);
-                    S_ = serializer.convert();
-                    linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
+                if isstruct(linkedInstance(i))
+                    S(i).at_id = linkedInstance(i).id;
+                else
+                    iValue = obj.validateInstance(linkedInstance(i));
+                    S(i).at_id = obj.getIdentifier(iValue.id);
+                    
+                    if obj.RecursionDepth > 0
+                        serializer = openminds.internal.serializer.StructConverter(iValue, obj.RecursionDepth-1);
+                        S_ = serializer.convert();
+                        linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
+                    end
                 end
             end
         end
@@ -259,8 +275,10 @@ classdef StructConverter < handle
                 instanceObject = instanceObject.Instance;
             elseif isa(instanceObject, 'openminds.abstract.Schema')
                 % pass
+            elseif isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
+                % pass
             else
-                error('Unknown instance type "s%"', class(instanceObject))
+                error('Unknown instance type "%s"', class(instanceObject))
             end
         end
 

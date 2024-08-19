@@ -156,7 +156,13 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
     
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.Instance.getDisplayLabel();
+            if isa(obj.Instance, 'struct')
+                str = '<unresolved link>';
+            elseif isa(obj.Instance, 'openminds.abstract.Schema')
+                str = obj.Instance.getDisplayLabel();
+            else
+                error('Unsupported type for instance')
+            end
         end
 
         function str = getSemanticName(obj)

@@ -40,12 +40,13 @@ end
 
 function tf = isSemanticName(fullSchemaName)
 %isSemanticName Check if name is a semantic name
-    tf = strncmp(fullSchemaName, "https://openminds.ebrains.eu", 28);
+    tf = startsWith(fullSchemaName, "https://openminds.ebrains.eu");
 end
 
 function tf = isFullClassName(fullSchemaName)
 %isSemanticName Check if name is MATLAB full class name
-    tf = contains(fullSchemaName, '.') && exist(fullSchemaName, 'class') == 8;
+    %tf = contains(fullSchemaName, '.') && exist(fullSchemaName, 'class') == 8;
+    tf = contains(fullSchemaName, '.') && ~isempty(meta.class.fromName(fullSchemaName));
 end
 
 function schemaName = getSchemaNameFromSemanticName(semanticName)

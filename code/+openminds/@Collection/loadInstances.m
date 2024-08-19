@@ -36,19 +36,31 @@ function instances = loadInstances(filePath)%, options)
             for i = 1:numel(structInstances)
 
                 thisInstance = structInstances{i};
-                
-                openMindsType = thisInstance.at_type;
-                className = openminds.internal.utility.string.type2class(openMindsType);
 
-                assert( isequal( eval(sprintf('%s.X_TYPE', className)), openMindsType), ...
-                    "Instance type does not match schema type. This is not supposed to happen, please report!")
-
-                instances{i} = feval(className, thisInstance);                
+                if ~isfield(thisInstance, 'at_type')
+                    %instances{i} = thisInstance;
+                    continue
+                    %instances{i} = struct('id', thisInstance.at_id);
+                else
+                    openMindsType = thisInstance.at_type;
+                    className = openminds.internal.utility.string.type2class(openMindsType);
+    
+                    assert( isequal( eval(sprintf('%s.X_TYPE', className)), openMindsType), ...
+                        "Instance type does not match schema type. This is not supposed to happen, please report!")
+    
+                    instances{i} = feval(className, thisInstance);   
+                end
             end
+
+            isEmpty = cellfun(@(c) isempty(c), instances);
+            instances(isEmpty) = [];
+
+            instanceIds = cellfun(@(instance) instance.id, instances, 'UniformOutput', false);
+            instanceIds = string(instanceIds);
             
             % Link instances / Resolve linked objects...
             for i = 1:numel(instances)
-                resolveLinks(instances{i}, instances)
+                resolveLinks(instances{i}, instanceIds, instances)
             end
 
         otherwise
@@ -60,13 +72,27 @@ function instances = loadInstances(filePath)%, options)
     end
 end
 
-function resolveLinks(instance, instanceCollection)
+function resolveLinks(instance, instanceIds, instanceCollection)
 %resolveLinks Resolve linked types, i.e replace an @id with the actual 
 % instance object.
 
-    schemaInspector = openminds.internal.SchemaInspector(instance);
-    
-    instanceIds = cellfun(@(instance) instance.id, instanceCollection, 'UniformOutput', false);
+    if isstruct(instance) % Instance is not resolvable (belongs to remote collection)
+        return
+    end
+
+    persistent schemaInspectorMap
+    if isempty(schemaInspectorMap)
+        schemaInspectorMap = dictionary;
+    end
+
+    instanceType = class(instance);
+    if ~isConfigured(schemaInspectorMap) || ~isKey(schemaInspectorMap, instanceType)
+        schemaInspectorMap(instanceType) = openminds.internal.SchemaInspector(instance);        
+    end
+
+    schemaInspector = schemaInspectorMap(instanceType);
+        
+    %instanceIds = cellfun(@(instance) instance.id, instanceCollection, 'UniformOutput', false);
 
     for i = 1:schemaInspector.NumProperties
         thisPropertyName = schemaInspector.PropertyNames{i};
@@ -86,11 +112,11 @@ function resolveLinks(instance, instanceCollection)
                     instanceId = linkedInstances(j).id;
                 end
 
-                isMatchedInstance = strcmp(instanceIds, instanceId);
+                isMatchedInstance = instanceIds == string(instanceId);
 
                 if any(isMatchedInstance)
                     resolvedInstances{j} = instanceCollection{isMatchedInstance};
-                    resolveLinks(resolvedInstances{j}, instanceCollection)
+                    resolveLinks(resolvedInstances{j}, instanceIds, instanceCollection)
                 end
             end
 
@@ -111,7 +137,7 @@ function resolveLinks(instance, instanceCollection)
                 else
                     embeddedInstance = embeddedInstances(j);
                 end
-                resolveLinks(embeddedInstance, instanceCollection)
+                resolveLinks(embeddedInstance, instanceIds, instanceCollection)
             end
         end
     end

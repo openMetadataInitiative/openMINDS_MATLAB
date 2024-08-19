@@ -14,8 +14,12 @@ classdef SchemaInspector < handle
         NumProperties
     end
 
-    methods 
+    properties (Access = private)
+        PropertyNamesAll (1,:) string
+    end
 
+    methods 
+        
         function obj = SchemaInspector(varargin)
             
             if isa(varargin{1}, 'char')
@@ -28,7 +32,8 @@ classdef SchemaInspector < handle
             
             %obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();
-
+            obj.PropertyNamesAll = string( {obj.metaClassObject.PropertyList.Name} );
+            
             if ~nargout
                 clear obj
             end
@@ -46,12 +51,11 @@ classdef SchemaInspector < handle
     methods (Access = private)
         
         function metaProperty = getMetaProperty(obj, propertyName)
-
-            propNames = {obj.metaClassObject.PropertyList.Name};
-            propertyIndex = strcmp(propNames, propertyName);
-
+            propertyIndex = obj.PropertyNamesAll == string(propertyName);
             metaProperty = obj.metaClassObject.PropertyList(propertyIndex);
         end
+
+        %function 
 
         function propertyNames = getPublicProperties(obj)
             propertyNames = {obj.metaClassObject.PropertyList.Name};
@@ -63,7 +67,6 @@ classdef SchemaInspector < handle
         end
         
     end
-
 
     methods (Access = public)
 
@@ -109,4 +112,12 @@ classdef SchemaInspector < handle
 
     end
 
+    methods (Static, Hidden)
+        function metaProperty = getMetaPropertyStatic(propertyList, propertyName)
+            propNames = {propertyList.Name};
+            propertyIndex = strcmp(propNames, propertyName);
+
+            metaProperty = propertyList(propertyIndex);
+        end
+    end
 end
