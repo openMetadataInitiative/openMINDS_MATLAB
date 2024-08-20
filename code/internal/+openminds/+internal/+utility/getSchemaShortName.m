@@ -10,6 +10,15 @@ function shortSchemaName = getSchemaShortName(fullSchemaName)
 % 
 %     'Subject'
 
+    if iscell(fullSchemaName) && numel(fullSchemaName) > 1
+        shortSchemaName = cellfun(@(c) openminds.internal.utility.getSchemaShortName(c), fullSchemaName);
+        return
+
+    elseif isstring(fullSchemaName) && numel(fullSchemaName) > 1
+        shortSchemaName = arrayfun(@(str) openminds.internal.utility.getSchemaShortName(str), fullSchemaName);
+        return
+    end
+
     expression = '(?<=\.)\w*$'; % Get every word after a . at the end of a string
     shortSchemaName = regexp(fullSchemaName, expression, 'match', 'once');
     if isempty(shortSchemaName)
