@@ -134,7 +134,7 @@ classdef Collection < handle
             len = numEntries(obj.Nodes);
         end
         
-        function add(obj, instance)
+        function add(obj, instance, options)
         %add Add single or multiple instances to a collection.
         %
         %   Example usage:
@@ -149,11 +149,14 @@ classdef Collection < handle
             arguments (Repeating)
                 instance % openminds.abstract.Schema 
             end
+            arguments
+                options.AddSubNodesOnly = false;
+            end
 
             for i = 1:numel(instance)
                 thisInstance = instance{i};
                 for j = 1:numel(thisInstance) % If thisInstance is an array
-                    obj.addNode(thisInstance(j));
+                    obj.addNode(thisInstance(j), "AddSubNodesOnly", options.AddSubNodesOnly);
                 end
             end
         end
@@ -170,7 +173,20 @@ classdef Collection < handle
         end
         
         function remove(obj, instance)
-            error('not implemented')
+            
+            if isstring(instance)
+                instanceId = instance;
+            elseif isa(instance, openminds.abstract.Schema)
+                instanceId = instance.id;
+            else
+                error('Unexpected type "%s" for instance argument', class(instance))
+            end
+
+            if isConfigured(obj.Nodes) && isKey(obj.Nodes, instanceId)
+                obj.Nodes(instanceId) = [];
+            else
+                error('Instance with id %s is not found in collection')
+            end
         end
 
         function instance = get(obj, nodeKey)

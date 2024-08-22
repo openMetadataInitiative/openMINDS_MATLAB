@@ -152,6 +152,11 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 cellArrayOfStruct{i} = obj(i).Instance.toStruct();
             end
         end
+    
+        function tf = isequal(obj, instance)
+            tf = builtin('isequal', obj, instance) || ...
+                    builtin('isequal', obj.Instance, instance);
+        end
     end
     
     methods (Access = protected)
