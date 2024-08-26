@@ -26,6 +26,7 @@ function instances = loadInstances(filePath)%, options)
             %structInstances = jsonld2struct(str);
             if numel(str) == 1
                 structInstances = jsonld2struct(str);
+                if ~iscell(structInstances); structInstances={structInstances};end
             else
                 structInstances = cellfun(@jsonld2struct, str, 'UniformOutput', false);
             end
@@ -48,7 +49,11 @@ function instances = loadInstances(filePath)%, options)
                     assert( isequal( eval(sprintf('%s.X_TYPE', className)), openMindsType), ...
                         "Instance type does not match schema type. This is not supposed to happen, please report!")
     
-                    instances{i} = feval(className, thisInstance);   
+                    try
+                        instances{i} = feval(className, thisInstance);   
+                    catch ME
+                        warning(ME.message)
+                    end
                 end
             end
 
@@ -117,6 +122,11 @@ function resolveLinks(instance, instanceIds, instanceCollection)
                 if any(isMatchedInstance)
                     resolvedInstances{j} = instanceCollection{isMatchedInstance};
                     resolveLinks(resolvedInstances{j}, instanceIds, instanceCollection)
+                else
+                    % Check if instance is a controlled instance
+                    if startsWith(instanceId, "https://openminds.ebrains.eu/instances/")
+                        resolvedInstances{j} = om.instance.getControlledInstance(instanceId);
+                    end
                 end
             end
 

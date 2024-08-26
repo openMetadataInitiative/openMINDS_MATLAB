@@ -78,7 +78,7 @@ classdef StructConverter < handle
 
             nvOptions = namedargs2cell(options);
 
-            if numel(instanceObject) > 1
+            if numel(instanceObject) > 1 || iscell(instanceObject)
                 className = class(obj);
                 nvOptions = namedargs2cell(options);
                 obj = cellfun(@(c) feval(className, c, nvOptions{:}), instanceObject);
@@ -102,8 +102,6 @@ classdef StructConverter < handle
                     obj.id = obj.Instance.id;
                 end
             end
-
-
 
             if ~nargout
                 obj.convert()

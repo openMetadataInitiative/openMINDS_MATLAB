@@ -174,9 +174,9 @@ classdef Collection < handle
         
         function remove(obj, instance)
             
-            if isstring(instance)
+            if isstring(instance) || ischar(instance)
                 instanceId = instance;
-            elseif isa(instance, openminds.abstract.Schema)
+            elseif isa(instance, 'openminds.abstract.Schema')
                 instanceId = instance.id;
             else
                 error('Unexpected type "%s" for instance argument', class(instance))
@@ -325,7 +325,11 @@ classdef Collection < handle
 
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
-                obj.addNode(instances{i})
+                if isa(instances{i}, 'openminds.abstract.Schema')
+                    obj.addNode(instances{i})
+                else
+                    warning('todo')
+                end
             end
         end
 
@@ -353,6 +357,11 @@ classdef Collection < handle
             
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
+            end
+
+            % Do not add openminds controlled term instances
+            if startsWith(instance.id, "https://openminds.ebrains.eu/instances/")
+                return
             end
 
             if isConfigured(obj.Nodes)
@@ -384,7 +393,9 @@ classdef Collection < handle
             % Add links.
             linkedTypes = instance.getLinkedTypes();
             for i = 1:numel(linkedTypes)
-                obj.addNode(linkedTypes{i});
+                if isa(linkedTypes{i}, 'openminds.abstract.Schema')
+                    obj.addNode(linkedTypes{i});
+                end
             end
 
             % Add embeddings.
