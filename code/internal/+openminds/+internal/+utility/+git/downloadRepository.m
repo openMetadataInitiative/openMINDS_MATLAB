@@ -56,7 +56,9 @@ function downloadRepository(repositoryName, options)
     end
 
     % Get repository folder name
-    folderName = strtrim( ls(sourceDirectory) );
+    L = dir(sourceDirectory); L(startsWith({L.name}, '.')) = [];
+    assert(numel(L) == 1, "Expected temporary folder to contain one downloaded item")
+    folderName = strtrim( L.name );
     if isfolder( fullfile(targetDirectory, folderName) )
         rmdir(fullfile(targetDirectory, folderName), "s")
     end
