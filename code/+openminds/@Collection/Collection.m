@@ -372,14 +372,19 @@ classdef Collection < handle
                     end
                 end
             end
-
+            
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
                 
                 % Todo: Separate method
                 instanceType = class(instance);
                 if isConfigured(obj.TypeMap) && isKey(obj.TypeMap, instanceType)
-                    obj.TypeMap(instanceType) = {[obj.TypeMap{instanceType}, string(instance.id)]};
+                    if isMATLABReleaseOlderThan("R2023b")
+                        existingInstances = obj.TypeMap(instanceType);
+                        obj.TypeMap(instanceType) = {[existingInstances{:}, string(instance.id)]};
+                    else
+                        obj.TypeMap(instanceType) = {[obj.TypeMap{instanceType}, string(instance.id)]};
+                    end
                 else
                     obj.TypeMap(instanceType) = {string(instance.id)};
                 end

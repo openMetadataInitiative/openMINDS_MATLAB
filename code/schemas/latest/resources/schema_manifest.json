@@ -35,6 +35,11 @@
         "group": null
     },
     {
+        "name": "MRIWeighting",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "ORCID",
         "model": "core",
         "group": "digitalIdentifier"
