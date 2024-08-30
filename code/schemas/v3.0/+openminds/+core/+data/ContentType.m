@@ -82,7 +82,7 @@ classdef ContentType < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.name;
         end
     end
 

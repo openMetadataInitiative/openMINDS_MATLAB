@@ -82,7 +82,7 @@ classdef ElectrodeContact < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.lookupLabel;
         end
     end
 
