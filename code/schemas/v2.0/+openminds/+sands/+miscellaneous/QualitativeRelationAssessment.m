@@ -54,7 +54,7 @@ classdef QualitativeRelationAssessment < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>'
+            str = '<missing name>';
         end
     end
 
