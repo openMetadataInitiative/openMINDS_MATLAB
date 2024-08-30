@@ -212,7 +212,11 @@ classdef Collection < handle
             typeKeys = obj.TypeMap.keys;
             isMatch = endsWith( typeKeys, "."+type);
             if any(isMatch)
-                keys = obj.TypeMap{typeKeys(isMatch)};
+                if isMATLABReleaseOlderThan("R2023b")
+                    keys = string( obj.TypeMap(typeKeys(isMatch)) );
+                else
+                    keys = obj.TypeMap{typeKeys(isMatch)};
+                end
             else
                 return
             end
