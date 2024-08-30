@@ -2,7 +2,7 @@ import os.path
 import shutil
 
 from pipeline.translator import MATLABSchemaBuilder
-from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_template_environment, save_resource_files
+from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_template_environment, save_resource_files, save_enumeration_classes
 
 print("***************************************")
 print(f"Triggering the generation of MATLAB-Classes for openMINDS")
@@ -32,3 +32,6 @@ for schema_version in schema_loader.get_schema_versions():
             print(f"Error while building schema {schema_file_path}: {e}")
 
     save_resource_files(schema_version, schemas_file_paths)
+    
+    save_enumeration_classes("Types", schema_version, schema_loader, jinja_template_environment)
+    save_enumeration_classes("Models", schema_version, schema_loader, jinja_template_environment)

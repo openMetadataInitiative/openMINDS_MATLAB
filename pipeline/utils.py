@@ -156,5 +156,88 @@ def save_resource_files(version, schema_path_list):
     with open(os.path.join(target_directory, "alias.json"), "w") as f:
         json.dump(alias_json, f, indent=2)
 
+def save_enumeration_classes(enum_type, version, schema_loader, jinja_template_environment):
+
+    # Load templates
+    template_file_name = os.path.join("templates", enum_type.lower()+"_enumeration_template.txt")
+    enumeration_template = jinja_template_environment.get_template(template_file_name)
+    
+    # Create target file directory
+    target_file_path = _create_enum_target_file_path(version, enum_type)
+    os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
+
+    # Extract all schema files
+    root_path = schema_loader.schemas_sources
+    schema_files = schema_loader.find_schemas(version)
+    schema_files.sort()
+
+    template_variables = _get_template_variables(enum_type, schema_files, root_path)
+    enum_classdef_str = enumeration_template.render(template_variables)
+
+    with open(target_file_path, "w", encoding="utf-8") as target_file:
+        target_file.write(enum_classdef_str)
+
+
 def capitalize_first_letter(text_string: str):
     return text_string[0].upper() + text_string[1:]
+
+
+# Local functions
+def _create_enum_target_file_path(version, enum_type) -> str:
+        target_root_path = os.path.join("target", "enumerations", version, '+openminds', '+enum', f"{enum_type}.m")
+        return target_root_path
+
+def _parse_source_file_path(schema_file_path:str, root_path:str):
+    _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
+    
+    schema_info = {}
+
+    schema_info["version"] = _relative_path_without_extension[0]
+    schema_info["model_name"] = _relative_path_without_extension[1]
+    if len(_relative_path_without_extension) == 3:
+        schema_info["group_name"] = None
+    else:
+        group_name = _relative_path_without_extension[2]
+        # Remove all non alphanumeric characters
+        schema_info["group_name"] = re.sub(r'\W+', '', group_name)
+
+    schema_info["type_name"] = _relative_path_without_extension[-1]
+    # Ensure first letter is capitalized
+    schema_info["type_name"] = capitalize_first_letter(schema_info["type_name"])
+
+    return schema_info
+
+def _get_matlab_class_name(schema_info):
+
+    # Combine the schema_info to get the full namespace name
+    if schema_info["group_name"]:
+        matlab_namespace_name = f"openminds.{schema_info['model_name']}.{schema_info['group_name']}"
+    else:
+        matlab_namespace_name = f"openminds.{schema_info['model_name']}"
+
+    matlab_namespace_name = matlab_namespace_name.lower()
+
+    return f"{matlab_namespace_name}.{schema_info['type_name']}"
+
+
+def _get_template_variables(enum_type, schema_files, root_path):
+    """ Extracts all type names and full class names from the schema files"""
+
+    # Build a list for all the enumeration members
+    template_variable_list = []
+
+    for schema_file in schema_files:
+        schema_info = _parse_source_file_path(schema_file, root_path)
+
+        if enum_type == "Models":
+            template_variable_list.append(schema_info['model_name'])
+
+        elif enum_type == "Types":
+            matlab_class_name = _get_matlab_class_name(schema_info)
+            template_variable_list.append({'name': schema_info['type_name'], 'class_name': matlab_class_name})
+        
+    if enum_type == "Types":
+        return {'types': template_variable_list }
+    
+    elif enum_type == "Models":
+        return {'models': set(template_variable_list) }

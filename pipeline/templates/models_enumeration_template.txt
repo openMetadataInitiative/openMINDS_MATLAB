@@ -1,0 +1,7 @@
+classdef Models
+    enumeration
+        {%- for model in models %}
+        {{model}}
+        {%- endfor %}
+    end
+end
