@@ -199,7 +199,7 @@ class MATLABSchemaBuilder(object):
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
 
         class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE]).split(".")[-1]
-        display_label_method_expression = _get_display_label_method_expression(class_name)
+        display_label_method_expression = _get_display_label_method_expression(class_name, schema["properties"].keys())
 
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
         # Or; just remove this as it's not needed when using separate templates.
@@ -373,7 +373,7 @@ def _list_to_string_array(list_of_strings, do_sort=False):
     string_array = "[{}]".format(", ".join(list_of_strings))
     return string_array
 
-def _get_display_label_method_expression(schema_short_name):
+def _get_display_label_method_expression(schema_short_name, property_names):
     """
         Create the display label expression to be added as a getDisplayLabel 
         method in the schema class
@@ -403,7 +403,7 @@ def _get_display_label_method_expression(schema_short_name):
         str_formatter = this_config['stringFormat']
 
         if not prop_names:
-            return ""
+            return "str = '<missing name>'"
 
         if not isinstance(prop_names, list):
             prop_names = [prop_names]
@@ -422,7 +422,19 @@ def _get_display_label_method_expression(schema_short_name):
         # Join the lines with newline 
         return '\n            '.join(str_formatter)
     else:
-        return ""
+        property_names = [_create_matlab_name(name) for name in property_names]
+
+        if "lookupLabel" in property_names:
+            return "str = obj.lookupLabel;"
+        elif "fullName" in property_names:
+            return "str = obj.fullName;"
+        elif "identifier" in property_names:
+            return "str = obj.identifier;"
+        elif "name" in property_names:
+            return "str = obj.name;"        
+        else:
+            warnings.warn(f"No display label method found for {schema_short_name}.")
+            return "str = '<missing name>'"
 
 def _create_property_validator_functions(name, property_info):
 
