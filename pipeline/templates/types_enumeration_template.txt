@@ -3,7 +3,7 @@ classdef Types < openminds.abstract.TypesEnumeration
     enumeration
         None('None')
         {%- for type in types %}
-        {{type.name}}({{type.class_name}})
+        {{type.name}}("{{type.class_name}}")
         {%- endfor %}
     end
     
