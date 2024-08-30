@@ -219,14 +219,5 @@ classdef Types < openminds.abstract.TypesEnumeration
         StimulationActivity(openminds.stimulation.activity.StimulationActivity)
         EphysStimulus(openminds.stimulation.stimulus.EphysStimulus)
     end
-
-    properties (SetAccess=immutable)
-        ClassName (1,1) string
-    end
-
-    methods
-        function obj = Types(name)
-            obj.ClassName = name;
-        end
-    end
+    
 end
