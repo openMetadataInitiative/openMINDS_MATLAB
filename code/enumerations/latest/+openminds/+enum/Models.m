@@ -1,13 +1,13 @@
 classdef Models
     enumeration
-        computation
-        specimenPrep
-        controlledTerms
-        core
-        publications
         chemicals
+        specimenPrep
+        computation
+        core
         stimulation
-        SANDS
         ephys
+        publications
+        SANDS
+        controlledTerms
     end
 end
