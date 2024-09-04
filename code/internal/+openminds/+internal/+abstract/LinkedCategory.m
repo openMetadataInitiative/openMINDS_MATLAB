@@ -154,8 +154,18 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         end
     
         function tf = isequal(obj, instance)
-            tf = builtin('isequal', obj, instance) || ...
-                    builtin('isequal', obj.Instance, instance);
+            if isempty(obj) && isempty(instance)
+                if strcmp( class(obj), class(instance) )
+                    tf = true;
+                else
+                    tf = false;
+                end
+            elseif isempty(obj) || isempty(instance)
+                tf = false;
+            else
+                tf = builtin('isequal', obj, instance) || ...
+                        builtin('isequal', obj.Instance, instance);
+            end
         end
     end
     
