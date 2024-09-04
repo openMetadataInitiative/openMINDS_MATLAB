@@ -15,7 +15,11 @@ end
 function D = buildFullClassNameMap()
     % Todo: Use / or create openminds method for listing all schemas based
     % on selected version...
-    schemaPath = fullfile( openminds.internal.rootpath, "schemas", "latest", "+openminds");
+
+    % Get currently active version
+    version = openminds.getSchemaVersion();
+
+    schemaPath = fullfile( openminds.internal.rootpath, "schemas", version, "+openminds");
     
     relativeFilePaths = recursiveDir(schemaPath, ...
         'FileType', 'm', ...
