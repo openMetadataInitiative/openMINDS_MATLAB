@@ -3,6 +3,7 @@ classdef VocabType < handle
     enumeration
         TYPES("types")
         PROPERTIES("properties")
+        CATEGORIES("categories")
     end
 
     properties (SetAccess = immutable)

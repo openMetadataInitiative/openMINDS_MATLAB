@@ -10,11 +10,12 @@ function setup(options)
         options.Version (1,1) string = "latest"
     end
     
+    % Add the code folder to the search path
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
     
     % Running startup will properly add openMINDS_MATLAB to the search path
-    run( fullfile(codeFolder, 'startup.m') )
+    openminds.startup(options.Version)
     
     % Save the current search path if this is specified
     if options.UpdatePathDef

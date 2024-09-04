@@ -15,9 +15,9 @@ function schemaName = getSchemaName(fullSchemaName, stringCase)
         stringCase (1,1) string = "same"
     end
 
-    if isSemanticName(fullSchemaName)
+    if openminds.utility.isSemanticSchemaName(fullSchemaName)
         schemaName = getSchemaNameFromSemanticName(fullSchemaName);
-    elseif isFullClassName(fullSchemaName)
+    elseif openminds.utility.isSchemaClassName(fullSchemaName) || contains(fullSchemaName, 'mixedtype')
         schemaName = getSchemaNameFromFullMatlabClassName(fullSchemaName);
     else
         schemaName = fullSchemaName;
@@ -38,17 +38,7 @@ function schemaName = getSchemaName(fullSchemaName, stringCase)
     end
 end
 
-function tf = isSemanticName(fullSchemaName)
-%isSemanticName Check if name is a semantic name
-    tf = startsWith(fullSchemaName, "https://openminds.ebrains.eu");
-end
-
-function tf = isFullClassName(fullSchemaName)
-%isSemanticName Check if name is MATLAB full class name
-    %tf = contains(fullSchemaName, '.') && exist(fullSchemaName, 'class') == 8;
-    tf = contains(fullSchemaName, '.') && ~isempty(meta.class.fromName(fullSchemaName));
-end
-
+% TODO:Utility methods:
 function schemaName = getSchemaNameFromSemanticName(semanticName)
     [~, schemaName] = fileparts(semanticName);
 end
