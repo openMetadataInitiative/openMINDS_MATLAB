@@ -43,8 +43,8 @@ function selectOpenMindsVersion(version)
         version (1,1) string = "latest"
     end
 
-    rootPath = fileparts( mfilename('fullpath') );
-
+    rootPath = openminds.internal.rootpath();
+    
     addpath(rootPath)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
@@ -76,3 +76,4 @@ function selectOpenMindsVersion(version)
     addpath(genpath( fullfile(rootPath, "schemas", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+end
