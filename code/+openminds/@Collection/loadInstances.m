@@ -20,7 +20,7 @@ function instances = loadInstances(filePath)%, options)
     switch serializationFormat
         case ".jsonld"
             
-            % Read on or more files
+            % Read one or more files
             str = arrayfun(@fileread, filePath, 'UniformOutput', false);
             
             % Produce a cell array of instances represented as structs
