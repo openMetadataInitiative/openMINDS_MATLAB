@@ -40,7 +40,7 @@ function instances = loadInstances(filePath)%, options)
 
                 if ~isfield(thisInstance, 'at_type')
                     %instances{i} = thisInstance;
-                    continue
+                    continue % Todo: Why skip?
                     %instances{i} = struct('id', thisInstance.at_id);
                 else
                     openMindsType = thisInstance.at_type;
@@ -107,7 +107,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
             resolvedInstances = cell(size(linkedInstances));
 
             for j = 1:numel(linkedInstances)
-                if isa(linkedInstances(j), 'openminds.internal.abstract.LinkedCategory')
+                if openminds.utility.isMixedInstance(linkedInstances(j))
                     try
                         instanceId = linkedInstances(j).Instance.id;
                     catch
@@ -142,7 +142,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
             embeddedInstances = instance.(thisPropertyName);
 
             for j = 1:numel(embeddedInstances)
-                if isa(embeddedInstances(j), 'openminds.internal.abstract.LinkedCategory')
+                if openminds.utility.isMixedInstance(embeddedInstances(j))
                     embeddedInstance = embeddedInstances(j).Instance;
                 else
                     embeddedInstance = embeddedInstances(j);

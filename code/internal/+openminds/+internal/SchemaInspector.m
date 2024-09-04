@@ -25,7 +25,7 @@ classdef SchemaInspector < handle
             if isa(varargin{1}, 'char')
                 obj.metaClassObject = meta.class.fromName(varargin{1});
                 obj.SchemaClassName = varargin{1};
-            elseif isa(varargin{1}, 'openminds.abstract.Schema')
+            elseif openminds.utility.isInstance(varargin{1})
                 obj.metaClassObject = metaclass(varargin{1});
                 obj.SchemaClassName = class(varargin{1});
             end
@@ -45,7 +45,6 @@ classdef SchemaInspector < handle
         function n = get.NumProperties(obj)
             n = numel(obj.PropertyNames);
         end
-
     end
 
     methods (Access = private)
@@ -54,9 +53,7 @@ classdef SchemaInspector < handle
             propertyIndex = obj.PropertyNamesAll == string(propertyName);
             metaProperty = obj.metaClassObject.PropertyList(propertyIndex);
         end
-
-        %function 
-
+        
         function propertyNames = getPublicProperties(obj)
             propertyNames = {obj.metaClassObject.PropertyList.Name};
             propSetAccess = {obj.metaClassObject.PropertyList.SetAccess};

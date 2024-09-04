@@ -74,9 +74,10 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             for propName = string( row(linkedPropertyNames) )
                 propValue = obj.(propName);
                 if ~isempty( propValue )
-                    if isa(propValue, 'openminds.internal.abstract.LinkedCategory')
+                    % Concatenate instances in a cell array
+                    if openminds.utility.isMixedInstance(propValue)
                         linkedTypeList = [linkedTypeList, {propValue.Instance}]; %#ok<AGROW>
-                    elseif isa(propValue, 'openminds.abstract.Schema')
+                    elseif openminds.utility.isInstance(propValue)
                         linkedTypeList = [linkedTypeList, num2cell(propValue)]; %#ok<AGROW>
                     end
                 end
@@ -90,9 +91,9 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             for propName = string( row(embeddedPropertyNames) )
                 propValue = obj.(propName);
                 if ~isempty( propValue )
-                    if isa(propValue, 'openminds.internal.abstract.LinkedCategory')
+                    if openminds.utility.isMixedInstance(propValue)
                         embeddedTypeList = [embeddedTypeList, {propValue.Instance}]; %#ok<AGROW>
-                    elseif isa(propValue, 'openminds.abstract.Schema')
+                    elseif openminds.utility.isInstance(propValue)
                         embeddedTypeList = [embeddedTypeList, num2cell(propValue)]; %#ok<AGROW>
                     end
                 end
@@ -347,7 +348,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     linkedTypeValues = builtin('subsref', obj, subs(1));
                 end
 
-                if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
+                if openminds.utility.isMixedInstance(linkedTypeValues)
 
                     % linkedTypeValues is an array of mixed types. The
                     % actual object(s) need to be retrieved from an 
@@ -386,7 +387,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % % %                         else
 
 % % %                         end
-                        if isa(values, 'openminds.abstract.Schema')
+                        if openminds.utility.isInstance(values)
                             % TODO: Does this work if values is an array.
                             if numel(values) == numOutputs
                                 for i = 1:numel(values)
@@ -401,7 +402,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                             [varargout{:}] = builtin('subsref', values, subs(2:end));
                         end
                     else
-                        if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
+                        if openminds.utility.isMixedInstance(linkedTypeValues)
                             % Takes care of nested indexing into a property
                             % with mixed types.
                             res = builtin('subsref', values, subs(2:end));
@@ -438,7 +439,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         function n = numArgumentsFromSubscript(obj, s, indexingContext)
             if (obj(1).isSubsForLinkedProperty(s) || obj(1).isSubsForEmbeddedProperty(s)) && numel(s) > 1
                 linkedTypeValues = builtin('subsref', obj, s(1));
-%                 if isa(linkedTypeValues, 'openminds.internal.abstract.LinkedCategory')
+%                 if openminds.utility.isMixedInstance(linkedTypeValues)
 %                     linkedTypeValues = {linkedTypeValues.Instance};
 %                 end
 

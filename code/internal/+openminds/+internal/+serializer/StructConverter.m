@@ -71,7 +71,7 @@ classdef StructConverter < handle
                 options.?openminds.internal.serializer.StructConverter
             end
 
-            if isa( instanceObject, 'openminds.internal.abstract.LinkedCategory' )
+            if openminds.utility.isMixedInstance(instanceObject)
                 instanceObject = instanceObject.Instance;
                 warning('Please report if you see this warning!')
             end
@@ -89,7 +89,7 @@ classdef StructConverter < handle
             if isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
                 obj.Instance = instanceObject;
             else
-                if ~isa(instanceObject, 'openminds.abstract.Schema')
+                if ~openminds.utility.isInstance( instanceObject ) 
                     error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
                 else
                     obj.assignNameValueOptions(nvOptions)
@@ -268,10 +268,10 @@ classdef StructConverter < handle
         end
 
         function instanceObject = validateInstance(~, instanceObject)
-            if isa(instanceObject, 'openminds.internal.abstract.LinkedCategory')
+            if openminds.utility.isMixedInstance(instanceObject)
                 % Todo: linkedInstance(i) should return the instance directly
                 instanceObject = instanceObject.Instance;
-            elseif isa(instanceObject, 'openminds.abstract.Schema')
+            elseif openminds.utility.isInstance(instanceObject)
                 % pass
             elseif isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
                 % pass

@@ -105,7 +105,7 @@ classdef Collection < handle
             if ~isempty(instance) && ~isempty(instance{1})
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
                 isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
-                isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
+                isMetadata = @(x) openminds.utility.isInstance(x);
                 
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
@@ -176,7 +176,7 @@ classdef Collection < handle
             
             if isstring(instance) || ischar(instance)
                 instanceId = instance;
-            elseif isa(instance, 'openminds.abstract.Schema')
+            elseif openminds.utility.isInstance(instance)
                 instanceId = instance.id;
             else
                 error('Unexpected type "%s" for instance argument', class(instance))
@@ -210,7 +210,7 @@ classdef Collection < handle
             end
             
             typeKeys = obj.TypeMap.keys;
-            isMatch = endsWith( typeKeys, "."+type);
+            isMatch = endsWith(typeKeys, "."+type); %i.e ".Person"
             if any(isMatch)
                 if isMATLABReleaseOlderThan("R2023b")
                     keys = string( obj.TypeMap(typeKeys(isMatch)) );
@@ -329,7 +329,7 @@ classdef Collection < handle
 
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
-                if isa(instances{i}, 'openminds.abstract.Schema')
+                if openminds.utility.isInstance(instances{i})
                     obj.addNode(instances{i})
                 else
                     warning('todo')
@@ -402,7 +402,7 @@ classdef Collection < handle
             % Add links.
             linkedTypes = instance.getLinkedTypes();
             for i = 1:numel(linkedTypes)
-                if isa(linkedTypes{i}, 'openminds.abstract.Schema')
+                if openminds.utility.isInstance(linkedTypes{i})
                     obj.addNode(linkedTypes{i});
                 end
             end
