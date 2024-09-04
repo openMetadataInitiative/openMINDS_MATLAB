@@ -1,0 +1,8 @@
+classdef Types < openminds.abstract.TypesEnumeration
+
+    enumeration
+        None('None')
+        
+    end
+
+end
