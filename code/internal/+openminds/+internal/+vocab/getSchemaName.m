@@ -1,5 +1,8 @@
 function schemaName = getSchemaName(nameAlias)
-    
+% getSchemaName - Get name (or type) for a schema given a name alias.
+%
+%   Todo: Describe what nameAlias is
+
     persistent typesVocab
 
     if isempty(typesVocab)
@@ -26,11 +29,11 @@ end
 
 function throwEmptySchemaNameException(schemaAlias)
 % THROWEMPTYSCHEMANAMEEXCEPTION Throws an exception for empty schemaName.
-    error('OPENMINDS_UI:SchemaNameNotFound', 'No schema name matching "%s" was found.', schemaAlias);
+    error('OPENMINDS:SchemaNameNotFound', 'No schema name matching "%s" was found.', schemaAlias);
 end
 
 function throwMultipleSchemaNamesException(schemaAlias)
     % THROWMULTIPLESCHEMANAMESEXCEPTION Throws an exception for multiple schemaNames.
-    error('OPENMINDS_UI:MultipleSchemaNamesFound', 'Multiple schema names matched "%s".', schemaAlias)
+    error('OPENMINDS:MultipleSchemaNamesFound', 'Multiple schema names matched "%s".', schemaAlias)
 end
 

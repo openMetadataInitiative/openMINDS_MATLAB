@@ -22,8 +22,9 @@ function schemaLabel = getSchemaLabelFromName(schemaName)
     if numel(schemaName) == 1
         return
     elseif isempty(schemaName)
-        throwNoMatchingSchemaException(schemaName);
+        throwNoMatchingSchemaException(schemaName); % Todo
     else
-        throwMultipleMatchingSchemasException(schemaName);
+        throwMultipleMatchingSchemasException(schemaName); % Todo
     end
 end
+
