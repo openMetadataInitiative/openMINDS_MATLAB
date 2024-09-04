@@ -5,17 +5,17 @@ function S = loadVocabJson(name)
 %   list meta-information about categories, properties and types for all
 %   the openMINDS metadata models and versions.
 %
-%   See also:   om.internal.vocab.enum.VocabType        <-- Available-types
-%               om.internal.vocab.downloadVocabFiles    <-- Download-vocab-files
+%   See also:   openminds.internal.vocab.enum.VocabType        <-- Available-types
+%               openminds.internal.vocab.downloadVocabFiles    <-- Download-vocab-files
 
     arguments
-        name (1,1) om.internal.vocab.enum.VocabType = "types"
+        name (1,1) openminds.internal.vocab.enum.VocabType = "types"
     end
 
-    if ~isfile(om.internal.vocab.constants.VocabFilepath(name))
-        om.internal.vocab.downloadVocabFiles()
+    if ~isfile(openminds.internal.vocab.constants.VocabFilepath(name))
+        openminds.internal.vocab.downloadVocabFiles()
     end
 
-    jsonStr = fileread( om.internal.vocab.constants.VocabFilepath(name) );
+    jsonStr = fileread( openminds.internal.vocab.constants.VocabFilepath(name) );
     S = jsondecode(jsonStr);
 end

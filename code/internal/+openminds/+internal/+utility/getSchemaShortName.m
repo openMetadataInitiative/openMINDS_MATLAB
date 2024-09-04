@@ -5,7 +5,7 @@ function shortSchemaName = getSchemaShortName(fullSchemaName)
 %
 %   Example:
 %   fullSchemaName = 'openminds.core.research.Subject';
-%   shortSchemaName = om.MetadataSet.getSchemaShortName(fullSchemaName)
+%   shortSchemaName = openminds.internal.utility.getSchemaShortName(fullSchemaName)
 %   shortSchemaName =
 % 
 %     'Subject'

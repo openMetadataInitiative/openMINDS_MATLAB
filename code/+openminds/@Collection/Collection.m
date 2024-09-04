@@ -220,11 +220,7 @@ classdef Collection < handle
             else
                 return
             end
-
-            % keys = obj.Nodes.keys;
-            % isMatch = startsWith(keys, type);
-            % keys = keys(isMatch);
-
+            
             instances = obj.Nodes(keys);
             instances = [instances{:}];
 
