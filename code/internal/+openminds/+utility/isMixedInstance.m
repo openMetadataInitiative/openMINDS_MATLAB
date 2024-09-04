@@ -4,5 +4,5 @@ function tf = isMixedInstance(value)
 %   tf = openminds.utility.isMixedInstance(value)
 
     % Todo: Should it work for arrays and cell arrays?
-    tf = isa(value, 'openminds.abstract.internal.LinkedCategory');
+    tf = isa(value, 'openminds.internal.abstract.LinkedCategory');
 end
