@@ -20,10 +20,10 @@ function instances = loadInstances(filePath)%, options)
     switch serializationFormat
         case ".jsonld"
             
-            %str = fileread(filePath);
+            % Read on or more files
             str = arrayfun(@fileread, filePath, 'UniformOutput', false);
             
-            %structInstances = jsonld2struct(str);
+            % Produce a cell array of instances represented as structs
             if numel(str) == 1
                 structInstances = jsonld2struct(str);
                 if ~iscell(structInstances); structInstances={structInstances};end
@@ -31,15 +31,13 @@ function instances = loadInstances(filePath)%, options)
                 structInstances = cellfun(@jsonld2struct, str, 'UniformOutput', false);
             end
             
+            % Create instance objects
             instances = cell(size(structInstances));
-
-            % Create instances...
             for i = 1:numel(structInstances)
 
                 thisInstance = structInstances{i};
 
                 if ~isfield(thisInstance, 'at_type')
-                    %instances{i} = thisInstance;
                     continue % Todo: Why skip?
                     %instances{i} = struct('id', thisInstance.at_id);
                 else
@@ -81,7 +79,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
 %resolveLinks Resolve linked types, i.e replace an @id with the actual 
 % instance object.
 
-    if isstruct(instance) % Instance is not resolvable (belongs to remote collection)
+    if isstruct(instance) % Instance is not resolvable (E.g belongs to remote collection)
         return
     end
 
@@ -96,9 +94,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
     end
 
     schemaInspector = schemaInspectorMap(instanceType);
-        
-    %instanceIds = cellfun(@(instance) instance.id, instanceCollection, 'UniformOutput', false);
-
+    
     for i = 1:schemaInspector.NumProperties
         thisPropertyName = schemaInspector.PropertyNames{i};
         if schemaInspector.isPropertyWithLinkedType(thisPropertyName)
@@ -132,6 +128,8 @@ function resolveLinks(instance, instanceIds, instanceCollection)
 
             try
                 resolvedInstances = [resolvedInstances{:}];
+            catch
+                % pass. Todo, should there be error handling here?
             end
 
             if ~isempty(resolvedInstances)
@@ -152,4 +150,3 @@ function resolveLinks(instance, instanceIds, instanceCollection)
         end
     end
 end
-

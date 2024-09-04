@@ -46,9 +46,9 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 obj.id = obj.generateInstanceId();
             end
 
-            if numel(varargin)==1 && isstruct(varargin{1})
+            if numel(varargin)==1 && isstruct(varargin{1}) % Create scalar
                 obj = obj.fromStruct(varargin{1});
-            elseif numel(varargin)==1 && iscell(varargin{1})
+            elseif numel(varargin)==1 && iscell(varargin{1}) % Create non-scalar
                 for i = 1:numel( varargin{1} )
                     obj(i) = feval( class(obj) ); %#ok<AGROW>
                     obj(i) = obj(i).fromStruct(varargin{1}{i}); %#ok<AGROW>
@@ -310,7 +310,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                         %fprintf('Set unlinked property of %s\n', class(obj))
                     end
                 end
-
             end
 
             if ~nargout
@@ -385,7 +384,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % % %                                 [varargout{:}] = builtin('subsref', values, subs(2:end));
 % % %                             end
 % % %                         else
-
+% % % 
 % % %                         end
                         if openminds.utility.isInstance(values)
                             % TODO: Does this work if values is an array.
@@ -551,13 +550,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
 
         function assignLinkedInstance(obj)
-
-
+            % Placeholder
         end
 
-        function assignUnlinkedInstance(obj)
-
-
+        function assignValue(obj)
+            % Placeholder. Todo: needed?
         end
     end
 
