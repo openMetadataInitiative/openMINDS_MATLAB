@@ -50,7 +50,7 @@ classdef Collection < handle
         Description (1,1) string
     end
     
-    properties (SetAccess = private)
+    properties (SetAccess = protected)
         Nodes (1,1) dictionary
     end
 
@@ -105,7 +105,7 @@ classdef Collection < handle
             if ~isempty(instance) && ~isempty(instance{1})
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
                 isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
-                isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
+                isMetadata = @(x) openminds.utility.isInstance(x);
                 
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
@@ -134,7 +134,7 @@ classdef Collection < handle
             len = numEntries(obj.Nodes);
         end
         
-        function add(obj, instance)
+        function add(obj, instance, options)
         %add Add single or multiple instances to a collection.
         %
         %   Example usage:
@@ -149,26 +149,44 @@ classdef Collection < handle
             arguments (Repeating)
                 instance % openminds.abstract.Schema 
             end
+            arguments
+                options.AddSubNodesOnly = false;
+            end
 
             for i = 1:numel(instance)
                 thisInstance = instance{i};
                 for j = 1:numel(thisInstance) % If thisInstance is an array
-                    obj.addNode(thisInstance(j));
+                    obj.addNode(thisInstance(j), "AddSubNodesOnly", options.AddSubNodesOnly);
                 end
             end
         end
         
         function tf = contains(obj, instance)
             % Todo:work for arrays
-            if isKey(obj.Nodes, instance.id)
-                tf = true;
-            else
-                tf = false;
+            tf = false;
+
+            if isConfigured(obj.Nodes)
+                if isKey(obj.Nodes, instance.id)
+                    tf = true;
+                end
             end
         end
         
         function remove(obj, instance)
-            error('not implemented')
+            
+            if isstring(instance) || ischar(instance)
+                instanceId = instance;
+            elseif openminds.utility.isInstance(instance)
+                instanceId = instance.id;
+            else
+                error('Unexpected type "%s" for instance argument', class(instance))
+            end
+
+            if isConfigured(obj.Nodes) && isKey(obj.Nodes, instanceId)
+                obj.Nodes(instanceId) = [];
+            else
+                error('Instance with id %s is not found in collection')
+            end
         end
 
         function instance = get(obj, nodeKey)
@@ -191,13 +209,22 @@ classdef Collection < handle
                 return
             end
             
-            keys = obj.Nodes.keys;
-            isMatch = startsWith(keys, type);
-            keys = keys(isMatch);
-
+            typeKeys = obj.TypeMap.keys;
+            isMatch = endsWith(typeKeys, "."+type); %i.e ".Person"
+            if any(isMatch)
+                if isMATLABReleaseOlderThan("R2023b")
+                    keys = string( obj.TypeMap(typeKeys(isMatch)) );
+                else
+                    keys = obj.TypeMap{typeKeys(isMatch)};
+                end
+            else
+                return
+            end
+            
             instances = obj.Nodes(keys);
             instances = [instances{:}];
 
+            % Filter by property values:
             for i = 1:numel(propertyName)
                 thisName = propertyName{i};
                 thisValue = propertyValue{i};
@@ -298,7 +325,11 @@ classdef Collection < handle
 
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
-                obj.addNode(instances{i})
+                if openminds.utility.isInstance(instances{i})
+                    obj.addNode(instances{i})
+                else
+                    warning('todo')
+                end
             end
         end
 
@@ -312,7 +343,7 @@ classdef Collection < handle
 
     end
 
-    methods (Access = private)
+    methods (Access = protected)
 
         %Add an instance to the Node container.
         function addNode(obj, instance, options)
@@ -326,6 +357,11 @@ classdef Collection < handle
             
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
+            end
+
+            % Do not add openminds controlled term instances
+            if startsWith(instance.id, "https://openminds.ebrains.eu/instances/")
+                return
             end
 
             if isConfigured(obj.Nodes)
@@ -362,7 +398,9 @@ classdef Collection < handle
             % Add links.
             linkedTypes = instance.getLinkedTypes();
             for i = 1:numel(linkedTypes)
-                obj.addNode(linkedTypes{i});
+                if openminds.utility.isInstance(linkedTypes{i})
+                    obj.addNode(linkedTypes{i});
+                end
             end
 
             % Add embeddings.
@@ -377,7 +415,6 @@ classdef Collection < handle
             identifier = length(obj) + 1;
             identifier = sprintf(fmt, identifier);
         end
-
     end
 
 end

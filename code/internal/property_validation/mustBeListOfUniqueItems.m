@@ -1,6 +1,6 @@
 function mustBeListOfUniqueItems(value)
     % Handle case where value might be an array of mixed types.
-    if isa(value, 'openminds.internal.abstract.LinkedCategory')
+    if openminds.utility.isMixedInstance(value)
         value = arrayfun(@(v) v.Instance, value, 'uni', 0);
         instanceTypes = cellfun(@(v) class(v), value, 'UniformOutput', 0);
         uniqueInstanceTypes = unique(instanceTypes);

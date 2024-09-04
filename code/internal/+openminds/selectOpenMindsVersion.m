@@ -39,12 +39,16 @@ function selectOpenMindsVersion(version)
 % Copyright 2023 Open Metadata Initiative
 % Licensed under MIT License
 
+
+% Todo: Need to debug situation where one version is already on path, but
+% another is requested.
+
     arguments
         version (1,1) string = "latest"
     end
 
-    rootPath = fileparts( mfilename('fullpath') );
-
+    rootPath = openminds.internal.rootpath();
+    
     addpath(rootPath)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
@@ -76,3 +80,4 @@ function selectOpenMindsVersion(version)
     addpath(genpath( fullfile(rootPath, "schemas", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+end
