@@ -60,7 +60,7 @@ classdef ViewerSpecification < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = '<missing name>';
         end
     end
 
