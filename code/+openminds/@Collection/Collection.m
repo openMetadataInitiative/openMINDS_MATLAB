@@ -37,7 +37,7 @@ classdef Collection < handle
 %   For more details on how to create a new Collection:
 %   See also openminds.Collection/Collection
 
-% Todo: Validation.
+%   Todo: Validation.
 %   - Linked subject states should have same subject
 
 
@@ -51,10 +51,14 @@ classdef Collection < handle
     end
     
     properties (SetAccess = protected)
+        % Nodes - Dictionary storing instances as values with identifiers
+        % as keys
         Nodes (1,1) dictionary
     end
 
     properties (SetAccess = protected, Hidden)
+        % TypeMap - Keeps a map/dictionary of types and instance ids to
+        % efficiently extract instances of a specific type.
         TypeMap (1,1) dictionary
     end
     
@@ -97,7 +101,6 @@ classdef Collection < handle
                 options.Description (1,1) string = ""
             end
 
-            
             % Initialize nodes
             obj.Nodes = dictionary;
             obj.TypeMap = dictionary;
@@ -183,20 +186,50 @@ classdef Collection < handle
             end
 
             if isConfigured(obj.Nodes) && isKey(obj.Nodes, instanceId)
+                try 
+                    instanceType = class( obj.Nodes{instanceId} );
+                catch % < R2023a
+                    instance = obj.Nodes(instanceId);
+                    instanceType = class( instance{1} );
+                end
                 obj.Nodes(instanceId) = [];
+
+                allIds = obj.TypeMap(instanceType);
+                obj.TypeMap(instanceType) = { setdiff( allIds{1}, instanceId ) };
             else
                 error('Instance with id %s is not found in collection')
             end
         end
 
         function instance = get(obj, nodeKey)
-            instance = obj.Nodes{nodeKey};
+            if isMATLABReleaseOlderThan("R2023b")
+                instance = obj.Nodes(nodeKey);
+                instance = instance{1};
+            else
+                instance = obj.Nodes{nodeKey};
+            end
+        end
+
+        function tf = hasType(obj, type)
+            arguments
+                obj
+                type (1,1) string
+            end
+
+            tf = false;
+            
+            if ~isConfigured(obj.Nodes)
+                return
+            end
+            
+            typeKeys = obj.TypeMap.keys;
+            tf = any( endsWith(typeKeys, "."+type) ); %i.e ".Person"
         end
 
         function instances = list(obj, type, propertyName, propertyValue)
             arguments
                 obj
-                type (1,1) string
+                type (1,1) openminds.enum.Types
             end
             arguments (Repeating)
                 propertyName (1,1) string
@@ -209,20 +242,9 @@ classdef Collection < handle
                 return
             end
             
-            typeKeys = obj.TypeMap.keys;
-            isMatch = endsWith(typeKeys, "."+type); %i.e ".Person"
-            if any(isMatch)
-                if isMATLABReleaseOlderThan("R2023b")
-                    keys = string( obj.TypeMap(typeKeys(isMatch)) );
-                else
-                    keys = obj.TypeMap{typeKeys(isMatch)};
-                end
-            else
-                return
-            end
-            
-            instances = obj.Nodes(keys);
-            instances = [instances{:}];
+            instanceKeys = obj.getInstanceKeysForType(type);
+            instances = obj.Nodes(instanceKeys);
+            instances = [instances{:}]; % Create non-cell array
 
             % Filter by property values:
             for i = 1:numel(propertyName)
@@ -332,7 +354,6 @@ classdef Collection < handle
                 end
             end
         end
-
     end
 
     methods (Static) % Methods in separate files
@@ -340,13 +361,12 @@ classdef Collection < handle
         outputPaths = saveInstances(instance, filePath, options)
         
         instances = loadInstances(filePath)
-
     end
 
     methods (Access = protected)
-
+        
         %Add an instance to the Node container.
-        function addNode(obj, instance, options)
+        function wasAdded = addNode(obj, instance, options)
     
             arguments
                 obj (1,1) openminds.Collection
@@ -354,6 +374,8 @@ classdef Collection < handle
                 options.AddSubNodesOnly = false
                 options.AbortIfNodeExists = true;
             end
+
+            wasAdded = false;
             
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
@@ -375,8 +397,9 @@ classdef Collection < handle
             
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
-                
-                % Todo: Separate method
+                wasAdded = true;
+
+                % Add to TypeMap: Todo: Separate method
                 instanceType = class(instance);
                 if isConfigured(obj.TypeMap) && isKey(obj.TypeMap, instanceType)
                     if isMATLABReleaseOlderThan("R2023b")
@@ -409,7 +432,7 @@ classdef Collection < handle
                 obj.addNode(embeddedTypes{i}, 'AddSubNodesOnly', true);
             end
         end
-
+        
         function identifier = getBlankNodeIdentifier(obj)
             fmt = '_:%06d';
             identifier = length(obj) + 1;
@@ -417,4 +440,39 @@ classdef Collection < handle
         end
     end
 
+    methods (Access = private)
+        function instanceKeys = getInstanceKeysForType(obj, instanceType)
+        % getInstanceKeysForType Get all ids for instances of a given type
+
+            typeKeys = obj.TypeMap.keys;
+
+            isMatch = strcmp(typeKeys, instanceType.ClassName);
+            if any(isMatch)
+                if isMATLABReleaseOlderThan("R2023b")
+                    instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+                else
+                    instanceKeys = obj.TypeMap{typeKeys(isMatch)};
+                end
+            else
+                instanceKeys = {};
+                return
+            end
+            
+            existingKeys = obj.Nodes.keys();
+            
+            % Sanity check, make sure all keys exist in Nodes dictionary
+            assert( all( ismember( instanceKeys, existingKeys ) ), ...
+                'TypeMap has too many keys' )
+        end
+
+        function refreshTypeKeys(obj, instanceType)
+        % Utility method during development. This should ultimately not be needed.
+
+            allIds = obj.TypeMap(instanceType.ClassName);
+            existingKeys = obj.Nodes.keys();
+
+            allIds = intersect( existingKeys, allIds{1} );
+            obj.TypeMap(instanceType.ClassName) = {allIds};
+        end
+    end
 end
