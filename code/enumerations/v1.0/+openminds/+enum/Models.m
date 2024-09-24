@@ -1,7 +1,7 @@
 classdef Models
     enumeration
-        controlledTerms
         SANDS
+        controlledTerms
         core
     end
 end
