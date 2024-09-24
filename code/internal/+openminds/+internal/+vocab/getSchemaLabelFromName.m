@@ -14,17 +14,29 @@ function schemaLabel = getSchemaLabelFromName(schemaName)
 
     allNames = {S.name};
     isMatch = strcmpi(allNames, schemaName);
-
-    allLabels = {S.label};
-
-    schemaLabel = string( allLabels(isMatch) );
-
-    if numel(schemaName) == 1
-        return
-    elseif isempty(schemaName)
-        throwNoMatchingSchemaException(schemaName); % Todo
-    else
-        throwMultipleMatchingSchemasException(schemaName); % Todo
+    
+    if ~any(isMatch)
+        throwNoMatchingSchemaException(schemaName);
     end
+
+    S = S(isMatch);
+    schemaLabel = string( S(1).label );
+
+    if numel(S) == 1
+        return
+    else
+        if getpref('openminds_ui', 'dev', false)
+            displayMultipleMatchingSchemasWarning(schemaName); % Todo
+        end
+    end
+end
+
+function throwNoMatchingSchemaException(schemaAlias)
+% throwNoMatchingSchemaException Throws an exception for non-matching schemaName.
+    error('OPENMINDS:SchemaNameNotFound', 'No schema name matching "%s" was found.', schemaAlias);
+end
+
+function displayMultipleMatchingSchemasWarning(schemaName)
+    warning('Multiple vocab type elements matched schema with name "%s"', schemaName)
 end
 
