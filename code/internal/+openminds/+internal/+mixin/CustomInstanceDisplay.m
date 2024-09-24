@@ -33,7 +33,11 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
 
         function str = string(obj)
-            str = string( obj.DisplayString );
+            if numel(obj) > 1
+                str = strjoin( arrayfun(@(x) string(x.DisplayString), obj ), '; ');
+            else
+                str = string( obj.DisplayString );
+            end
         end
 
         function displayLabel = get.DisplayString(obj)
