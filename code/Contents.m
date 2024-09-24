@@ -1,5 +1,5 @@
 % openMINDS Metadata Models
-% Version 0.9.1.1 26-02-2024
+% Version 0.9.2 (R2022b) 04-09-2024
 %
-% Copyright (c) 2023, openMetadataInitiative
+% Copyright (c) 2024, openMetadataInitiative
 % ------------------------------------------
