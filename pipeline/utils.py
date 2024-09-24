@@ -240,4 +240,4 @@ def _get_template_variables(enum_type, schema_files, root_path):
         return {'types': template_variable_list }
     
     elif enum_type == "Models":
-        return {'models': set(template_variable_list) }
+        return {'models': sorted(set(template_variable_list)) }
