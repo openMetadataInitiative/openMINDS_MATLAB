@@ -14,6 +14,7 @@ import warnings
 from jinja2 import Environment
 
 from pipeline.constants import (
+    OPENMINDS_BASE_URI,
     OPENMINDS_VOCAB_URI,
     SCHEMA_PROPERTY_TYPE,
     SCHEMA_PROPERTY_LINKED_TYPES,
@@ -80,6 +81,7 @@ class MATLABSchemaBuilder(object):
 
     def _parse_source_file_path(self, schema_file_path:str, root_path:str):
         _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
+        
         self.version = _relative_path_without_extension[0]
         self._schema_model_name = _relative_path_without_extension[1]
         if len(_relative_path_without_extension) == 3:
@@ -107,9 +109,8 @@ class MATLABSchemaBuilder(object):
 
         schema = self._schema_payload
 
-        # Todo: Create method for getting name with right casing...
-        schema_short_name = os.path.basename(schema[SCHEMA_PROPERTY_TYPE])
-        
+        schema_short_name = _parse_schema_type( schema[SCHEMA_PROPERTY_TYPE] )
+
         props = [] # List of template property attributes (shortened name to avoid very long lines)
 
         for full_name, property_info in sorted(schema["properties"].items(), key=_property_name_sort_key):
@@ -218,7 +219,7 @@ class MATLABSchemaBuilder(object):
         self._template_variables = {
             "class_name": class_name,
             "base_class": base_class,
-            "openminds_type": schema[SCHEMA_PROPERTY_TYPE],
+            "openminds_type": _expand_type_namespace( schema[SCHEMA_PROPERTY_TYPE] ),
             "docstring": schema.get("description", "No description available."),
             "props": props,
             "max_property_name_length": max_property_name_length,
@@ -284,10 +285,15 @@ def _generate_class_name(iri):
     Generate a class name from an IRI. 
     E.g https://openminds.ebrains.eu/core/Subject -> openminds.core.Subject
     """
-    parts = iri.split("/")[-2:]
+    if iri.startswith("https://"): # v3 and lower
+        parts = iri.split("/")[-2:]
+    else: # v4 and higher
+        parts = iri.split(':')
+    
     for i in range(len(parts) - 1):
         parts[i] = parts[i].lower()
-    return "openminds." + ".".join(parts)
+        return "openminds." + ".".join(parts)
+
 
 def _to_label(class_name_list):
     # split on . and keep last
@@ -362,6 +368,7 @@ def _create_matlab_help_link(schema_class_name):
 
     return schema_help_link
 
+
 def _list_to_string_array(list_of_strings, do_sort=False):
 
     # Add quotes to strings in list to make them strings when added to template
@@ -372,6 +379,7 @@ def _list_to_string_array(list_of_strings, do_sort=False):
 
     string_array = "[{}]".format(", ".join(list_of_strings))
     return string_array
+
 
 def _get_display_label_method_expression(schema_short_name, property_names):
     """
@@ -435,6 +443,7 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         else:
             warnings.warn(f"No display label method found for {schema_short_name}.")
             return "str = '<missing name>';"
+
 
 def _create_property_validator_functions(name, property_info):
 
@@ -503,6 +512,24 @@ def _create_property_validator_functions(name, property_info):
             validation_functions += [f"mustBeGreaterThanOrEqual({name}, {min_value})"]
 
     return validation_functions
+
+
+def _expand_type_namespace( type_specifier ):
+    if type_specifier.startswith('https://'):
+        return type_specifier
+    else:
+        schema_type_name = type_specifier.split(':')[-1]
+        return f"{OPENMINDS_BASE_URI['latest']}/types/{schema_type_name}"
+
+
+def _parse_schema_type(type_specifier):
+
+    if type_specifier.startswith('https://'):
+        # Example type_specifier: https://openminds.ebrains.eu/chemicals/AmountOfChemical
+        return os.path.basename(type_specifier)
+    else:
+        # Example type_specifier: chemicals:AmountOfChemical
+        return type_specifier.split(":")[-1]
 
 
 if __name__ == "__main__":
