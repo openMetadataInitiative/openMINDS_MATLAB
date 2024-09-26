@@ -3,7 +3,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
 
 % Note: Might not be necessary to use a class for this
 
-    methods 
+    methods
 
         function instances = convert(obj, outputMode)
         %serialize Serialize an openMINDS instance
@@ -41,7 +41,6 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
             % json to struct
             % struct to openminds instances
         end
-
     end
 
     methods (Access = private)
@@ -56,7 +55,5 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
             jsonInstance = strrep(jsonInstance, obj.VocabularyIRI, '');
             structInstance = openminds.internal.utility.json.decode(jsonInstance);
         end
-
     end
-
 end

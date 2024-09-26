@@ -16,7 +16,6 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
 %   className = createPropertyLinksetClass('MySchema', 'MyProperty', ["Type1", "Type2"])
 %
 % See also: openminds.abstract.LinkedCategory
-
     
     import openminds.internal.generator.utility.cellArrayToTextStringArray
     

@@ -33,7 +33,6 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
     end
 end
 
-
 function str = getSimpleHelpLink(schemaClassName)
     schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
     str = sprintf('<a href="matlab:help %s" style="font-weight:bold">%s</a>', schemaClassName, schemaName);

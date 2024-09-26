@@ -8,13 +8,13 @@ function generateSchemaClasses(action, options)
     % options
     %   SchemaType : Only supports schema.tpl.json ...
 
-    % Todo: 
+    % Todo:
     %   - [ ] Create switch block for different actions.
     %   - [ ] Should separate generator for schemas and instances.
 
     arguments
         action (1,1) string ...
-            {mustBeMember(action, ["create", "update", "reset"])} = "create" 
+            {mustBeMember(action, ["create", "update", "reset"])} = "create"
 
         options.SchemaType (1,1) string ...
             {mustBeMember(options.SchemaType, "schema.tpl.json")} = "schema.tpl.json"

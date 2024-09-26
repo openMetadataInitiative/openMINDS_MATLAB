@@ -53,7 +53,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             end
 
             if nargin < 1
-                % Make a "null" instance 
+                % Make a "null" instance
             elseif nargin == 1 && isstring( varargin{1} ) && isfile( varargin{1} )
                 obj.load( varargin{1} )
             elseif nargin == 1 && isstring( varargin{1} ) && ~isfile( varargin{1} )
@@ -158,5 +158,4 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             tf = isValidUrl && isInstanceUrl;
         end
     end
-
 end

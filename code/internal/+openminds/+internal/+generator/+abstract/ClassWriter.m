@@ -7,11 +7,9 @@ classdef ClassWriter < handle
 %   Subclasses can use these methods in order to translate a collection of
 %   schemas or templates into matlab class definitions.
 
-
-%   Todo: 
+%   Todo:
 %   [ ] Highlight properties and methods that should be set and used by
 %       subclasses in the class documentation.
- 
 
     properties
         ClassName string       % Name of class
@@ -58,13 +56,13 @@ classdef ClassWriter < handle
             if strcmp(firstLetter, lower(firstLetter))
                 newNameLowercase = newName;
                 newName{1}(1) = upper(firstLetter);
-                warning('Classname should start with a capital letter. Changed name from "%s" to "%s"', newNameLowercase, newName) %#ok<PFCEL> 
+                warning('Classname should start with a capital letter. Changed name from "%s" to "%s"', newNameLowercase, newName) %#ok<PFCEL>
             end
             obj.ClassName = newName;
         end
     end
 
-    methods 
+    methods
         function show(obj)
             fprintf(obj.ClassDefText)
         end
@@ -93,13 +91,12 @@ classdef ClassWriter < handle
             
         function writeMethodBlocks(obj)
         end
-
     end
     
     methods (Access = protected, Sealed)
         
         function addSuperclass(obj, varargin)
-        %addSuperclass Add superclass(es)     
+        %addSuperclass Add superclass(es)
             for i = 1:numel(varargin)
                 obj.SuperclassList(end+1) = varargin(i);
             end
@@ -163,7 +160,6 @@ classdef ClassWriter < handle
             newStr{1}(1) = "%";
             obj.ClassDefText = obj.ClassDefText + newStr + newline;
         end
-    
     end
 
     % % Methods for starting and ending different code blocks
@@ -323,14 +319,13 @@ classdef ClassWriter < handle
         function endFunctionBlock(obj)
             numIndent = 2;
             obj.appendLine(numIndent, "end");
-            %obj.appendLine(numIndent, ""); % Add empty line 
+            %obj.appendLine(numIndent, ""); % Add empty line
             obj.CurrentStep = "methods";
         end
-        
     end
     
     % Set/get for private properties
-    methods 
+    methods
         function set.CurrentStep(obj, newValue)
             currentStep = obj.CurrentStep;
             obj.CurrentStep = newValue;
@@ -360,7 +355,7 @@ classdef ClassWriter < handle
         function endClassMemberBlock(obj)
             numIndent = 1;
             obj.appendLine(numIndent, "end");
-            obj.appendLine(numIndent, ""); % Add empty line 
+            obj.appendLine(numIndent, ""); % Add empty line
             obj.CurrentStep = "classdef";
         end
 

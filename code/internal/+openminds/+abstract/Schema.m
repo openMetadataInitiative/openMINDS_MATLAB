@@ -1,7 +1,6 @@
 classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & ...
-                  openminds.internal.mixin.CustomInstanceDisplay & openminds.internal.mixin.StructAdapter 
+                  openminds.internal.mixin.CustomInstanceDisplay & openminds.internal.mixin.StructAdapter
 %Schema Abstract base class shared by all concrete Schema classes
-
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
@@ -9,7 +8,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 %   [ ] Should controlled term instances be coded as enumeration classes?
 %   [ ] Distinguish embedded from linked types.
 %   [ ] Implement ismember and other methods doing "logic" on sets?
-
 
     properties (Constant, Hidden) % Move to instance/serializer
         VOCAB = "https://openminds.ebrains.eu/vocab/"
@@ -63,7 +61,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 obj.assignPVPairs(varargin{:})
             end
         end
-        
     end
 
     methods (Access = public, Hidden)
@@ -144,7 +141,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             % Get property name which can be linked to given type
             propertyName = obj.linkedTypeOfPropertyStatic(type, obj.LINKED_PROPERTIES);
         end
-        
     end
 
     methods (Hidden) % Todo: remove?
@@ -190,8 +186,8 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                             error(errorStruct)
                         end
                     end
-                elseif numel(subs) > 1 
-                    % Pass for now. 
+                elseif numel(subs) > 1
+                    % Pass for now.
                     % This case should be handled below? What if multiple
                     % instances should be placed in the mixedtype wrapper?
                 end
@@ -258,7 +254,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                                         error(errorStruct)
                                     end
 
-
                                     %obj.subsasgn(subs, value);
                                 otherwise
                                     ME = MException('OPENMINDS_MATLAB:UnhandledIndexAssignment', ...
@@ -323,7 +318,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             numOutputs = nargout;
             varargout = cell(1, numOutputs);
                             
-% %             if numel(obj) > 1 
+% %             if numel(obj) > 1
 % %                 if obj.isSubsForProperty(subs)
 % %                     varargout = cell(numel(obj), 1);
 % %                     for i = 1:numel(obj)
@@ -350,7 +345,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 if openminds.utility.isMixedInstance(linkedTypeValues)
 
                     % linkedTypeValues is an array of mixed types. The
-                    % actual object(s) need to be retrieved from an 
+                    % actual object(s) need to be retrieved from an
                     % "Instance" property.
                     mixedTypeCellArray = {linkedTypeValues.Instance};
                     instanceType = cellfun(@(c) class(c), mixedTypeCellArray, 'uni', false);
@@ -384,7 +379,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 % % %                                 [varargout{:}] = builtin('subsref', values, subs(2:end));
 % % %                             end
 % % %                         else
-% % % 
+% % %
 % % %                         end
                         if openminds.utility.isInstance(values)
                             % TODO: Does this work if values is an array.
@@ -508,7 +503,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         function getLinkedPropertyInstance(obj, subs)
 
         end
-
     end
 
     methods (Access = ?openminds.internal.mixin.StructAdapter)
@@ -521,7 +515,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                       
         function outValues = resolveMixedTypeOutput(~, values, mixedTypeClassName)
         % resolveMixedTypeOutput - Resolve how to output mixed type array
-        %   
+        %
         %   Inputs:
         %       values             : cell array of instances
         %       mixedTypeClassName : name of the mixed type class for
@@ -585,14 +579,14 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         
         function shortSchemaName = getSchemaShortName(fullSchemaName)
         %getSchemaShortName Get short schema name from full schema name
-        % 
+        %
         %   shortSchemaName = getSchemaShortName(fullSchemaName)
         %
         %   Example:
         %   fullSchemaName = 'openminds.core.research.Subject';
         %   shortSchemaName = openminds.abstract.Schema.getSchemaShortName(fullSchemaName)
         %   shortSchemaName =
-        % 
+        %
         %     'Subject'
 
             import openminds.internal.utility.getSchemaName
@@ -627,7 +621,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 end
             end
         end
-        
     end
 end
 

@@ -31,14 +31,12 @@ function selectOpenMindsVersion(version)
 %
 % See also: addpath, rmpath
 
-
 % Author: Eivind Hennestad
 % Created: 2023-08-08
 % Last Modified: 2023-08-08
 %
 % Copyright 2023 Open Metadata Initiative
 % Licensed under MIT License
-
 
 % Todo: Need to debug situation where one version is already on path, but
 % another is requested.

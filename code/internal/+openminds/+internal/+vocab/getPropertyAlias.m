@@ -54,4 +54,3 @@ end
 function throwMultiplePropertyNamesException(propertyNameAlias)
     error('OPENMINDS:MultiplePropertyNamesFound', 'Multiple property names matched "%s".', propertyNameAlias)
 end
-

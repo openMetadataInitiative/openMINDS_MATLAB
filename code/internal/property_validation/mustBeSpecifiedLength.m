@@ -10,4 +10,3 @@ function mustBeSpecifiedLength(value, minLength, maxLength)
         error('Must be an array of maximum %d items', maxLength)
     end
 end
-

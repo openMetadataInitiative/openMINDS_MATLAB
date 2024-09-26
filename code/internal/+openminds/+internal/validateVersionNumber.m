@@ -2,7 +2,7 @@ function versionNumber = validateVersionNumber(versionNumber)
 %validateVersionNumber Check that version number is a valid openMINDS version
     
     arguments
-        versionNumber (1,1) string 
+        versionNumber (1,1) string
     end
 
     % - Validate inputs

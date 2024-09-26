@@ -6,5 +6,4 @@ classdef PathConstants < handle
         LocalInstanceFolder = fullfile(userpath, "openMINDS_MATLAB", "Repositories", "openMINDS_instances-main", "instances")
         UserPath = fullfile(userpath, "openMINDS_MATLAB")
     end
-
 end
