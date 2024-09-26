@@ -24,7 +24,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
         % Enter the internationalized resource identifier (IRI) pointing to the preferred ontological term.
         preferredOntologyIdentifier (1,1) string
 
-        % Enter one or several synonyms (inlcuding abbreviations) for this controlled term.
+        % Enter one or several synonyms (including abbreviations) for this controlled term.
         synonym (1,:) string {mustBeListOfUniqueItems(synonym)}
     end
 

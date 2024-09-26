@@ -173,7 +173,7 @@ classdef ClassWriter < handle
         function initClassDef(obj)
         %writeClassDef Writes the class definition header for a class
             assert(obj.ClassDefText == "", ...
-                "Can not initialize class, because class definiton is not empty")
+                "Can not initialize class, because class definition is not empty")
             
             newStr = "classdef " + obj.ClassName;
             
@@ -376,7 +376,7 @@ classdef ClassWriter < handle
         end
 
         function str = indentLine(str, numIndents)
-        %indentLine Add intentation to a str representing a line of code
+        %indentLine Add indentation to a str representing a line of code
             indentationStr = openminds.internal.generator.abstract.ClassWriter.LineIndenter(numIndents);
             str = sprintf("%s%s", indentationStr, str);
         end

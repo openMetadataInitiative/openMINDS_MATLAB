@@ -25,7 +25,7 @@ classdef StructConverter < handle
         % Whether to add the @context property to the output struct
         WithContext (1,1) logical = true
 
-        % Whether to include empty properies in the output struct
+        % Whether to include empty properties in the output struct
         IncludeEmptyProperties (1,1) logical = true
 
         % Whether to embed linked types in the output struct

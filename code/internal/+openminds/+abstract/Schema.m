@@ -218,7 +218,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                                 % are of different types.
                                 error('Can not use indexing assignment for instances of different types')
                             else
-                                error('Unexpected error occured, please report')
+                                error('Unexpected error occurred, please report')
                             end
                         end
                         oldValue = linkedObj.subsref(subs(2:end));
