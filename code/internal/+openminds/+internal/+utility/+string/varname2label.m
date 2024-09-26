@@ -93,5 +93,5 @@ function isSnakeCase = issnakecase(varname)
 end
 
 function isCapitalized = iscapitalized(varname)
-    isCapitalized = strcmp(varname, upper(varname)); %#ok<STCI>
+    isCapitalized = strcmp(varname, upper(varname));
 end

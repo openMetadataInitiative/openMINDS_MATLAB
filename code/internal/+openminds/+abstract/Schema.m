@@ -226,7 +226,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
                     elseif numel(subs) > 1 && strcmp(subs(2).type, '()')
                         try
-                            linkedObj = obj.subsref(subs(1:2));
+                            %linkedObj = obj.subsref(subs(1:2));
                             obj = builtin('subsasgn', obj, subs, value);
 
                         catch MECause
@@ -337,6 +337,8 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     end
                     try
                         linkedTypeValues = [linkedTypeValues{:}];
+                    catch ME
+                        % pass, keep as cell array
                     end
                 else
                     linkedTypeValues = builtin('subsref', obj, subs(1));
@@ -501,7 +503,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
 
         function getLinkedPropertyInstance(obj, subs)
-
+            
         end
     end
 

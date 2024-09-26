@@ -51,7 +51,6 @@ function str = getHtmlLink(schemaClassName, browserOption)
             schemaManifest = openminds.internal.loadSchemaManifest("latest");
         catch
             error('Not implemented yet')
-            schemaManifest = openminds.internal.buildSchemaManifestFromSourceFiles("latest")
         end
     end
 
@@ -96,7 +95,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
 end
 
-function str = getOnlineHtmlLink(version, modelName, subgroupName, schemaName, browserOption, fragment)
+function str = getOnlineHtmlLink(version, modelName, subgroupName, schemaName, browserOption, fragment) %#ok<DEFNU>
     
     filepath = generateDocumentationUrl(version, modelName, subgroupName, schemaName, fragment);
 
