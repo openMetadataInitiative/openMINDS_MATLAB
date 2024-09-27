@@ -19,11 +19,14 @@ function testToolbox(options)
     rootDir = string( fileparts(fileparts(mfilename('fullpath'))) );
     testFolder = fullfile(rootDir, "dev", "tests");
     codeFolder = fullfile(rootDir, "code");
-    oldpath  = addpath(genpath(testFolder), genpath(codeFolder) );
+    oldpath  = addpath(genpath(testFolder), codeFolder );
     finalize = onCleanup(@()(path(oldpath)));
+    
+    % Use the openMINDS_MATLAB startup function to correctly configure the path
+    run( fullfile(codeFolder, 'startup.m') )
 
     outputDirectory = fullfile("docs", "reports", options.ReportSubdirectory);
-    if isfolder(outputDirectory)
+    if ~isfolder(outputDirectory)
         mkdir(outputDirectory)
     end
     
@@ -32,14 +35,15 @@ function testToolbox(options)
     runner = TestRunner.withTextOutput('OutputDetail', Verbosity.Detailed);
 
     codecoverageFileName = fullfile(outputDirectory, "codecoverage.xml");
+    codecoverageFileList = getCodeCoverageFileList(codeFolder); % local function
     
     if options.HtmlReports
         htmlReport = CoverageReport(outputDirectory, 'MainFile', "codecoverage.html");
-        p = CodeCoveragePlugin.forFolder(codeFolder, "Producing", htmlReport);
+        p = CodeCoveragePlugin.forFile(codecoverageFileList, "Producing", htmlReport);
         runner.addPlugin(p)
     else
         runner.addPlugin(XMLPlugin.producingJUnitFormat(fullfile(outputDirectory,'test-results.xml')));
-        runner.addPlugin(CodeCoveragePlugin.forFolder(codeFolder, 'IncludingSubfolders', true, 'Producing', CoberturaFormat(codecoverageFileName)));
+        runner.addPlugin(CodeCoveragePlugin.forFile(codecoverageFileList, 'Producing', CoberturaFormat(codecoverageFileName)));
     end
     
     results = runner.run(suite);
@@ -67,4 +71,13 @@ function testToolbox(options)
     utility.writeBadgeJSONFile("tests", message, color)
     
     results.assertSuccess()
+end
+
+function fileList = getCodeCoverageFileList(codeFolder)
+    L = cat(1, ...
+        dir( fullfile(codeFolder, '+openminds', '**', '*.m') ), ...
+        dir( fullfile(codeFolder, 'internal', '**', '*.m') ), ...
+        dir( fullfile(codeFolder, 'schemas', 'latest', '**', '*.m') ));
+
+    fileList = fullfile(string({L.folder}'),string({L.name}'));
 end
