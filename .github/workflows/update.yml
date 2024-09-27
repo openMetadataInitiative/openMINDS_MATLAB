@@ -30,8 +30,7 @@ jobs:
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
 
-          
-       Check for MATLAB code issues in the project.
+      # Check for MATLAB code issues in the project.
       - name: Check for MATLAB code issues
         uses: matlab-actions/run-command@v2
         if: always()
@@ -50,7 +49,7 @@ jobs:
           # git push returns error code 1 if there's nothing to push (which there often isn't in this case)
           git push || true
           
-       Runs all tests in the project.
+      # Runs all tests in the project.
       - name: Run tests
         uses: matlab-actions/run-command@v2
         if: always()
