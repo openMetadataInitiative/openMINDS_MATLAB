@@ -96,6 +96,9 @@ function resolveLinks(instance, instanceCollection)
 
             try
                 resolvedInstances = [resolvedInstances{:}];
+            catch
+                assert(isa(resolvedInstances, 'cell'), ...
+                    'Expected resolved instances to be a cell array')
             end
 
             if ~isempty(resolvedInstances)
