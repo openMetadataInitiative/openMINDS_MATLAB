@@ -35,7 +35,7 @@ function update(mode)
     
     elseif isempty(previousCommitID)
         disp('Downloading openMINDS schemas.')
-        openminds.internal.downloadSchemas()
+        openminds.internal.generator.downloadSchemas()
 
         disp('Generating openMINDS schemas.')
         openminds.internal.generateSchemaClasses()

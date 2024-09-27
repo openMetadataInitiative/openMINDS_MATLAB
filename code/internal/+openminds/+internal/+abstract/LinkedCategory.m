@@ -152,11 +152,32 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 cellArrayOfStruct{i} = obj(i).Instance.toStruct();
             end
         end
+    
+        function tf = isequal(obj, instance)
+            if isempty(obj) && isempty(instance)
+                if strcmp( class(obj), class(instance) )
+                    tf = true;
+                else
+                    tf = false;
+                end
+            elseif isempty(obj) || isempty(instance)
+                tf = false;
+            else
+                tf = builtin('isequal', obj, instance) || ...
+                        builtin('isequal', obj.Instance, instance);
+            end
+        end
     end
     
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.Instance.getDisplayLabel();
+            if isa(obj.Instance, 'struct')
+                str = '<unresolved link>';
+            elseif openminds.utility.isInstance(obj.Instance)
+                str = obj.Instance.getDisplayLabel();
+            else
+                error('Unsupported type for instance')
+            end
         end
 
         function str = getSemanticName(obj)

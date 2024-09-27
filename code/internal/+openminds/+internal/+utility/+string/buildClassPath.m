@@ -13,7 +13,6 @@ function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule
     schemaCategory = strrep( schemaCategory, 'schemas', ''); % Todo ??
     schemaCategory = lower( schemaCategory );
     schemaModule = lower(schemaModule);
-    %rootPath = om.getPreferences('MSchemaDirectory');
     rootPath = openminds.internal.PathConstants.MatlabSchemaFolder;
     folderPath = fullfile( rootPath, '+openminds', ['+', schemaModule] );
 

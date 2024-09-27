@@ -48,7 +48,7 @@ See also: [Crew Member Collection Tutorial](./docs/tutorials/crewMemberCollectio
 ```matlab
 % Schema classes for all the openMINDS model versions are available in this
 % toolbox. To ensure the latest version is used, run the following command:
-selectOpenMindsVersion("latest")
+openminds.startup("latest")
 ```
 ### Import schemas from the core model
 ```matlab

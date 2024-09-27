@@ -49,12 +49,12 @@ classdef TypesEnumeration
 
             if numel(className) > 1
                 if iscell(className); className = string(className); end
-                typeEnum = arrayfun(@(str) om.enum.Types.fromClassName(str), className);
+                typeEnum = arrayfun(@(str) openminds.enum.Types.fromClassName(str), className);
                 return
             end
 
             splitName = strsplit(className, '.');
-            typeEnum = om.enum.Types(splitName{end});
+            typeEnum = openminds.enum.Types(splitName{end});
         end
     end
 end

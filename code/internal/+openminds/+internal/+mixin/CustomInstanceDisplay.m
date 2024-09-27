@@ -39,7 +39,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         function displayLabel = get.DisplayString(obj)
             displayLabel = obj.getDisplayLabel();
             if isempty(displayLabel)
-                displayLabel = '<Unlabeled>';
+                displayLabel = '<not named>';
             end
         end
 
