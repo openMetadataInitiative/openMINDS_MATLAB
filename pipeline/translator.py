@@ -91,6 +91,10 @@ class MATLABSchemaBuilder(object):
 
         self._schema_file_name = _relative_path_without_extension[-1]
 
+        # Create classname. Change file name, making sure first letter is uppercase
+        self._schema_class_name = self._schema_file_name[0].upper() + self._schema_file_name[1:]
+
+
     def _create_target_file_path(self) -> str:
         target_root_path = os.path.join("target", "schemas", self.version)
         if self._schema_group_name:
@@ -198,7 +202,10 @@ class MATLABSchemaBuilder(object):
         linked_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_linked"] ]
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
 
-        class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE]).split(".")[-1]
+        # Some schemas had the wrong type in older model versions, so this is unreliable
+        #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE]).split(".")[-1]
+        class_name = self._schema_class_name
+
         display_label_method_expression = _get_display_label_method_expression(class_name, schema["properties"].keys())
 
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
