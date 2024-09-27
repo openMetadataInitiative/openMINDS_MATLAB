@@ -4,7 +4,7 @@ function color = getSchemaColor(schemaName)
 
     if isempty(typesVocab)
         typesVocab = openminds.internal.vocab.loadVocabJson("types");
-    end    
+    end
     
     C = struct2cell(typesVocab);
     S = [C{:}];

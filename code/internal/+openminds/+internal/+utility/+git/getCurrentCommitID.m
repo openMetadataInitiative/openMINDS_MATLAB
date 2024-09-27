@@ -1,7 +1,7 @@
 function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
 %getCurrentCommitID Get current commit id for a branch of the openminds repo
 %
-%   commitID = getCurrentCommitID(branchName) returns the commitID for the 
+%   commitID = getCurrentCommitID(branchName) returns the commitID for the
 %   specified branch as a character vector
 
     arguments

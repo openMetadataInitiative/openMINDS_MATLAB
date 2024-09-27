@@ -27,4 +27,3 @@ function schemaLabel = getSchemaLabelFromName(schemaName)
         throwMultipleMatchingSchemasException(schemaName); % Todo
     end
 end
-

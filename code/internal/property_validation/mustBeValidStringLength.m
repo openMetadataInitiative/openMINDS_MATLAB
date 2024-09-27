@@ -12,4 +12,3 @@ function mustBeValidStringLength(value, minLength, maxLength)
     
     assert(strlength(value) >= minLength && strlength(value) <= minLength, msg)
 end
-

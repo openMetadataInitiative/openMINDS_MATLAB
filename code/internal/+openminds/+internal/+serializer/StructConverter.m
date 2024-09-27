@@ -4,28 +4,26 @@ classdef StructConverter < handle
 %   This is a proposal for what a serializer class could look like. Some
 %   unresolved questions remain.
 
-
 %     TODO:
 %     -----
 %     - Simplify recursiveness
 %
 %     QUESTIONS:
 %     ----------
-%     - Consider whether it is enough to have a mixin, or we should use the 
-%       strategy pattern and have Serializer as a property of Instance in 
+%     - Consider whether it is enough to have a mixin, or we should use the
+%       strategy pattern and have Serializer as a property of Instance in
 %       order to flexibly change between different serialization techniques.
         
 % Note: recursion depth only applies to linked properties, not embedded.
 
-
     properties % Options than can be set on object construction
         % Specifies how many linked types to recursively convert to structs
-        RecursionDepth = 0 
+        RecursionDepth = 0
 
         % Whether to add the @context property to the output struct
         WithContext (1,1) logical = true
 
-        % Whether to include empty properies in the output struct
+        % Whether to include empty properties in the output struct
         IncludeEmptyProperties (1,1) logical = true
 
         % Whether to embed linked types in the output struct
@@ -89,7 +87,7 @@ classdef StructConverter < handle
             if isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
                 obj.Instance = instanceObject;
             else
-                if ~openminds.utility.isInstance( instanceObject ) 
+                if ~openminds.utility.isInstance( instanceObject )
                     error('Serializer input must be an openMINDS instance. The provided instance is of type "%s"', class(instanceObject))
                 else
                     obj.assignNameValueOptions(nvOptions)
@@ -108,10 +106,9 @@ classdef StructConverter < handle
                 clear obj
             end
         end
-        
     end
 
-    methods 
+    methods
         function name = get.SchemaName(obj)
 
             if isempty(obj.SchemaType)
@@ -127,7 +124,7 @@ classdef StructConverter < handle
         end
     end
 
-    methods 
+    methods
 
         function S = convert(obj)
         %serialize Serialize an openMINDS instance
@@ -135,18 +132,17 @@ classdef StructConverter < handle
             S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
             %S{1} = obj.convertStructToJsonld(S{1});
 
-            % Todo: 
+            % Todo:
             %   [ ] Test cell arrays where a property can have links to
             %       multiple different schema instances.
             %   [ ] Test arrays
             %   [ ] Test scalars
         end
-
     end
 
     methods (Access = private) % Note: Make protected if subclasses are created
         
-        % Unpack name-value pairs and assign to properties. 
+        % Unpack name-value pairs and assign to properties.
         function assignNameValueOptions(obj, nvOptions)
             optionNames = nvOptions(1:2:end);
             optionValues = nvOptions(2:2:end);
@@ -239,7 +235,7 @@ classdef StructConverter < handle
                     if obj.RecursionDepth > 0
                         serializer = openminds.internal.serializer.StructConverter(iValue, obj.RecursionDepth-1);
                         S_ = serializer.convert();
-                        linkedInstances = [linkedInstances, S_]; %#ok<AGROW> 
+                        linkedInstances = [linkedInstances, S_]; %#ok<AGROW>
                     end
                 end
             end
@@ -257,7 +253,7 @@ classdef StructConverter < handle
                 S = serializer.convertInstanceToStruct;
                 S{1} = rmfield(S{1}, {'at_context', 'at_id'});
                 C{i} = S{1};
-                linkedInstances = [linkedInstances, S(2:end)]; %#ok<AGROW> 
+                linkedInstances = [linkedInstances, S(2:end)]; %#ok<AGROW>
             end
             
             try
@@ -279,7 +275,6 @@ classdef StructConverter < handle
                 error('Unknown instance type "%s"', class(instanceObject))
             end
         end
-
     end
 
     methods (Static)
@@ -294,7 +289,5 @@ classdef StructConverter < handle
             % %     id = instanceID;
             % % end
         end
-
     end
-
 end

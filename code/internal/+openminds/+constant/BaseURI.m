@@ -16,5 +16,4 @@ function baseURI = BaseURI(version)
     elseif versionNumber >= 4
         baseURI = "https://openminds.om-i.org";
     end
-    
 end

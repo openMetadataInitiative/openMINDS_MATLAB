@@ -2,8 +2,8 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                                    matlab.mixin.CustomCompactDisplayProvider
 %CustomInstanceDisplay Abstract base class providing customized instance display
 %
-%   
-%   Known subclasses: 
+%
+%   Known subclasses:
 %       - openminds.abstract.Schema
 %       - openmidns.internal.abstract.LinkedCategory
 
@@ -13,7 +13,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 %  [ ] Add displayEmptyObject, displayScalarObject, displayNonScalarObject
 %  [ ] Distinguish between arrays and scalars...
 %  [ ] getFooter is different from instance/schema and mixedInstance...
-
 
     % Dependencies that should be handled better:
     %  - X_TYPE
@@ -42,7 +41,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                 displayLabel = '<not named>';
             end
         end
-
     end
 
     methods (Abstract, Access = protected) % Subclasses must implement.
@@ -169,7 +167,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                 % Todo: Make plural labels.
                 str = sprintf('No %s available', className{end});
                 rep = matlab.display.PlainTextRepresentation(obj, repmat({str}, numRows, 1), displayConfiguration);
-            elseif numObjects >= 1 
+            elseif numObjects >= 1
                 %str = obj.DisplayString;
                 rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', arrayfun(@(i) obj(i).DisplayString, [1:numRows]', 'uni', 0) );
 
@@ -182,7 +180,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             % the array dimensions and class name
             % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', str );
         end
-
     end
 
     % Utility methods for CustomCompactDisplayProvider methods
@@ -198,7 +195,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             % Note: 2023-11-03: This was returning a cell array but should
             % return a string array...
         end
-
     end
 
     methods (Access = protected)
@@ -219,6 +215,5 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                 semanticName = eval( [fullClassName '.X_TYPE'] );
             end
         end
-
     end
 end

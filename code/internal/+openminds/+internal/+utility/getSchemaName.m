@@ -1,13 +1,13 @@
 function schemaName = getSchemaName(fullSchemaName, stringCase)
 %getSchemaName Get schema name from full schema class name or semantic name
-% 
+%
 %   schemaName = openminds.internal.utility.getSchemaName(fullSchemaName)
 %
 %   Example:
 %   fullSchemaName = 'openminds.core.research.Subject';
 %   schemaName = openminds.internal.utility.getSchemaName(fullSchemaName)
 %   schemaName =
-% 
+%
 %     'Subject'
 
     arguments

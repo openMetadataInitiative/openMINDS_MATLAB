@@ -1,7 +1,7 @@
 function outputPaths = saveInstances(instance, filePath, options)
 %saveInstances Save metadata instance(s) to file(s)
 
-    % TODO:    
+    % TODO:
     %   - Test that it works when passing instance with recursiveness turned on
     %   - Test that it works for list of instances in same situation, when
     %       a) saving to individual files
@@ -27,7 +27,7 @@ function outputPaths = saveInstances(instance, filePath, options)
                 outputMode = "multiple";
             end
             
-            if options.SaveToSingleFile   
+            if options.SaveToSingleFile
                 structs = StructConverter(instance, 'WithContext', false).convert();
                 jsonInstance = openminds.internal.serializer.struct2jsonld(structs);
                 
@@ -38,7 +38,7 @@ function outputPaths = saveInstances(instance, filePath, options)
                 end
                 outputPaths = filePath;
             else
-                str = JsonLdSerializer(instance, 'RecursionDepth', options.RecursionDepth).convert(outputMode);                
+                str = JsonLdSerializer(instance, 'RecursionDepth', options.RecursionDepth).convert(outputMode);
                 if ~iscell(str); str = {str}; end
 
                 outputPaths = cell(size(str));

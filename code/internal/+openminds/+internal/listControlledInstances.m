@@ -8,11 +8,11 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
 %   Syntax:
 %       instances = listControlledInstances() list all available controlled
 %           instances
-%   
-%       instances = listControlledInstances(schemaName) list all available 
+%
+%       instances = listControlledInstances(schemaName) list all available
 %           controlled instances for given schema name
-%   
-%       instances = listControlledInstances(schemaName, modelName) list all 
+%
+%       instances = listControlledInstances(schemaName, modelName) list all
 %           available controlled instances for given schema name
 %
 %   Input Arguments:
@@ -55,7 +55,7 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
             downloadRepository('openMINDS_instances')
         end
 
-        instanceDirectory = fullfile(instanceRootDirectory, 'latest'); 
+        instanceDirectory = fullfile(instanceRootDirectory, 'latest');
 
         allInstancesTable = openminds.internal.utility.dir.listInstances(...
             'SchemaFileExtension', '.jsonld', ...

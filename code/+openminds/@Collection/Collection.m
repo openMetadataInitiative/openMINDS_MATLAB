@@ -1,9 +1,9 @@
 classdef Collection < handle
-%Collection A collection of openMINDS instances that can be saved to and 
+%Collection A collection of openMINDS instances that can be saved to and
 % loaded from disk.
-%  
+%
 %   USAGE:
-%   - - - - 
+%   - - - -
 %   collection = openminds.Collection() creates a new empty collection
 %
 %   collection = openminds.Collection(instanceA, instanceB, ...) creates a
@@ -12,20 +12,20 @@ classdef Collection < handle
 %   openMINDS metadata (jsonlds)
 %
 %   METHODS:
-%   - - - - - 
+%   - - - - -
 %       openminds.Collection/add         Add instances to collection
 %       openminds.Collection/updateLinks Update collection
 %       openminds.Collection/save        Save instances of collection to file
 %       openminds.Collection/load        Load instances from file and add to collection
 %
 %   METHODS USAGE:
-%   - - - - - - - - 
+%   - - - - - - - -
 %
 %   collection.add(instanceC, instanceD) adds more instances to the
 %   collection.
 %
-%   collection.updateLinks() updates the collection by checking if any of 
-%   the instances in the collection has linked types that are not added to 
+%   collection.updateLinks() updates the collection by checking if any of
+%   the instances in the collection has linked types that are not added to
 %   the collection yet.
 %
 %   collection.save(filePath) saves a collection to a jsonld file. Please
@@ -39,8 +39,6 @@ classdef Collection < handle
 
 % Todo: Validation.
 %   - Linked subject states should have same subject
-
-
 
     properties
         % Name of the metadata collection
@@ -69,7 +67,7 @@ classdef Collection < handle
         %
         %   collection = openminds.Collection(instanceA, instanceB, ...)
         %   creates a collection and populates it with the provided
-        %   instances. Note: Linked types of the provided instances will be 
+        %   instances. Note: Linked types of the provided instances will be
         %   added automatically.
         %
         %   collection = openminds.Collection(filepathA, filePathB, ...)
@@ -77,10 +75,10 @@ classdef Collection < handle
         %   Currently supports metadata instances saved as jsonld files.
         %
         %   collection = openminds.Collection(rootFolderPath)
-        %   creates a collection and loads instances from files in a root 
+        %   creates a collection and loads instances from files in a root
         %   folder.
         
-        %   TODO: This needs to be saved somehow. 
+        %   TODO: This needs to be saved somehow.
         %   collection = openminds.Collection(..., NameA, ValueA, ... )
         %   also specifies optional name value pairs when creating the
         %   collection.
@@ -90,13 +88,12 @@ classdef Collection < handle
         %       - Description : A description of the collection
             
             arguments (Repeating)
-                instance % openminds.abstract.Schema 
+                instance % openminds.abstract.Schema
             end
             arguments
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
             end
-
             
             % Initialize nodes
             obj.Nodes = dictionary;
@@ -129,7 +126,7 @@ classdef Collection < handle
         end
     end
 
-    methods 
+    methods
         function len = length(obj)
             len = numEntries(obj.Nodes);
         end
@@ -143,11 +140,11 @@ classdef Collection < handle
         %
         %       myCollection.add(personInstanceA, personInstanceB, ...)
 
-            arguments 
+            arguments
                 obj openminds.Collection % Object of this class
             end
             arguments (Repeating)
-                instance % openminds.abstract.Schema 
+                instance % openminds.abstract.Schema
             end
             arguments
                 options.AddSubNodesOnly = false;
@@ -246,7 +243,7 @@ classdef Collection < handle
 
         function outputPaths = save(obj, savePath, options)
         %save Save the instance collection to disk in JSON-LD format.
-        %     
+        %
         %   collection.save(filePath) saves a collection to a jsonld file.
         %
         %   collection.save(folderPath, "SaveToSingleFile", false) saves a
@@ -254,7 +251,7 @@ classdef Collection < handle
         %
         %     INPUT
         %     -----
-        %     
+        %
         %     savePath (str):
         %         either a file or a directory into which the metadata will be written.
         %
@@ -265,10 +262,10 @@ classdef Collection < handle
         %         if true (default), save the entire collection into a single file.
         %         if false, savePath must be a directory, and each node is saved into a
         %         separate file within that directory.
-        %     
+        %
         %     OUTPUT
         %     ------
-        %     
+        %
         %     outputPaths (cell): A list of the file paths created.
         
             arguments
@@ -286,7 +283,7 @@ classdef Collection < handle
             outputPaths = obj.saveInstances(instances, savePath, ...
                 'SaveToSingleFile', options.SaveToSingleFile, ...
                 'RecursionDepth', 0);
-            % Note: For collections, recursion depth should be 0. 
+            % Note: For collections, recursion depth should be 0.
             
             if ~nargout
                 clear outputPaths
@@ -295,14 +292,14 @@ classdef Collection < handle
     
         function load(obj, filePath)%, options)
         %load Load instances from JSON-LD files on disk into the collection
-        %     
+        %
         %   collection.load(filePath) loads metadata from a jsonld file.
         %
         %   collection.load(folderPath) loads metadata from a folder.
         %
         %     INPUT
         %     -----
-        %     
+        %
         %     filePath (str):
         %         either a file or a directory from which the metadata will be read.
 
@@ -332,7 +329,6 @@ classdef Collection < handle
                 end
             end
         end
-
     end
 
     methods (Static) % Methods in separate files
@@ -416,5 +412,4 @@ classdef Collection < handle
             identifier = sprintf(fmt, identifier);
         end
     end
-
 end

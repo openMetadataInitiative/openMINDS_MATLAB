@@ -24,7 +24,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
         % Enter the internationalized resource identifier (IRI) pointing to the preferred ontological term.
         preferredOntologyIdentifier (1,1) string
 
-        % Enter one or several synonyms (inlcuding abbreviations) for this controlled term.
+        % Enter one or several synonyms (including abbreviations) for this controlled term.
         synonym (1,:) string {mustBeListOfUniqueItems(synonym)}
     end
 
@@ -53,7 +53,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             end
 
             if nargin < 1
-                % Make a "null" instance 
+                % Make a "null" instance
             elseif nargin == 1 && isstring( varargin{1} ) && isfile( varargin{1} )
                 obj.load( varargin{1} )
             elseif nargin == 1 && isstring( varargin{1} ) && ~isfile( varargin{1} )
@@ -158,5 +158,4 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             tf = isValidUrl && isInstanceUrl;
         end
     end
-
 end
