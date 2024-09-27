@@ -5,7 +5,8 @@ function startup(version)
 %   are on MATLAB's search path.
     
     arguments
-        version (1,1) string = "latest"
+        version (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(version)} = "latest"
     end
 
     disp('Initializing openMINDS_MATLAB...')
@@ -16,5 +17,5 @@ function startup(version)
     
     % Run internal function that correctly configures the search path
     openminds.selectOpenMindsVersion(version)
-    disp('Added schemas from the "latest" version to path')
+    fprintf('Added schemas for version "%s" to path\n', string(version))
 end

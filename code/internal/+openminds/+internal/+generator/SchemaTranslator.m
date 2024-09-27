@@ -165,7 +165,8 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 thisPropertySpecification = obj.Schema.properties.(thisPropertyName);
 
                 if isfield(thisPropertySpecification, linkType)
-                    linkedPropertyInfo{end+1} = struct(thisPropertyName, {thisPropertySpecification.(linkType)});
+                    linkedPropertyInfo{end+1} = struct(thisPropertyName, ...
+                        {thisPropertySpecification.(linkType)}); %#ok<AGROW>
                 end
             end
         end
@@ -273,36 +274,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             if obj.IsControlledTerm
                 obj.writeControlledInstancesPropertyBlock()
             end
-        end
-    
-        function writeEnumerationBlock(obj)
-        %writeEnumerationBlock Enumeration block is only written for
-        %controlled term schemas
-            
-            if obj.IsControlledTerm && false % Deprecate
-
-                instanceTable = obj.getInstancesForSchema(obj.SchemaName, 'controlledTerms');
-                numInstances = size(instanceTable, 1);
-                
-                if numInstances > 0
-                    % Write enumeration block
-                    obj.startEnumerationBlock()
-
-                    % Add null as an enumeration
-                    obj.addEnumValue('null')
-
-                    for i = 1:numInstances
-                        name = instanceTable.SchemaName(i);
-                        name = obj.fixInvalidMatlabNames(name, obj.SchemaName);
-                        
-                        obj.addEnumValue(name)
-                    end
-                    obj.endEnumerationBlock()
-                end
-            end
-        end
-    
-        function writeEventBlocks(obj)
         end
             
         function writeMethodBlocks(obj)
@@ -707,7 +678,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                                 disp(['title: ', str])
                             end
                         case 'description'
-                            str = propertyAttributes.description;
+                            % str = propertyAttributes.description;
                             %disp(['description: ', str])
                         otherwise
                             disp(['additional attributenames: ', attributeNames])
@@ -758,15 +729,9 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function startConstructor(obj)
 
-            if obj.IsControlledTerm
-                %obj.appendLine(2, sprintf('function obj = %s(name)', obj.SchemaClassName))
-                obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
-            else
-                obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
-            end
+            obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
 
             if obj.IsControlledTerm
-                %obj.writeEnumSwitchBlock()
                 obj.appendLine(3, sprintf('obj@openminds.abstract.ControlledTerm(varargin{:})'))
             else
                 obj.appendLine(3, sprintf('obj.assignPVPairs(varargin{:})'))
@@ -914,8 +879,8 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
     
     methods (Access = private)
         
-        function str = getValidationFunction(obj, name, attr)
-            
+        function str = getValidationFunction(~, name, attr)
+            % todo: static method?
             str = string.empty;
 
             if isfield(attr, 'maxItems')

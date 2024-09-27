@@ -31,7 +31,8 @@
 
 function startup(version)
     arguments
-        version (1,1) string = "latest"
+        version (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(version)} = "latest"
     end
 
     codeFolder = fileparts( mfilename('fullpath') );

@@ -337,8 +337,9 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     end
                     try
                         linkedTypeValues = [linkedTypeValues{:}];
-                    catch ME
-                        % pass, keep as cell array
+                    catch
+                        assert(isa(resolvedInstances, 'cell'), ...
+                            'Expected linked instances to be a cell array')
                     end
                 else
                     linkedTypeValues = builtin('subsref', obj, subs(1));
@@ -502,8 +503,12 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             end
         end
 
-        function getLinkedPropertyInstance(obj, subs)
-            
+        function getLinkedPropertyInstance(obj, subs) %#ok<INUSD>
+            % Todo
+        end
+
+        function assignLinkedInstance(obj) %#ok<MANU>
+            % Todo: Use this from subsasgn
         end
     end
 
@@ -537,20 +542,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
     end
 
     methods (Access = protected) % Methods related to setting new values
-        
         function instanceId = generateInstanceId(obj)
         %generateInstanceId Generate a unique instance id.
             schemaName = obj.getSchemaShortName( class(obj) );
             uuidStr = openminds.internal.utility.string.getuuid();
             instanceId = sprintf('%s/%s', schemaName, uuidStr);
-        end
-
-        function assignLinkedInstance(obj)
-            % Placeholder
-        end
-
-        function assignValue(obj)
-            % Placeholder. Todo: needed?
         end
     end
 

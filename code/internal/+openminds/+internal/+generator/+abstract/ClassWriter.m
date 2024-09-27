@@ -69,7 +69,7 @@ classdef ClassWriter < handle
     end
 
     methods (Access = protected)
-        function isAbstract = isClassAbstract(obj)
+        function isAbstract = isClassAbstract(~)
         %isClassAbstract Whether class is abstract. Subclasses can override
             isAbstract = false;
         end
@@ -77,19 +77,19 @@ classdef ClassWriter < handle
 
     methods (Access = protected) % Methods which subclasses should implement
 
-        function writeDocString(obj)
+        function writeDocString(~)
         end
 
-        function writePropertyBlocks(obj)
+        function writePropertyBlocks(~)
         end
     
-        function writeEnumerationBlock(obj)
+        function writeEnumerationBlock(~)
         end
     
-        function writeEventBlocks(obj)
+        function writeEventBlocks(~)
         end
             
-        function writeMethodBlocks(obj)
+        function writeMethodBlocks(~)
         end
     end
     
@@ -290,7 +290,7 @@ classdef ClassWriter < handle
     
             enumValue = string(enumValue);
             if enumValue.strlength > 63
-                warning("Skip %s of %s because name is too long for MATLAB", enumValue, obj.SchemaClassName)
+                warning("Skip %s of %s because name is too long for MATLAB", enumValue, obj.ClassName)
                 return
             end
 
@@ -307,9 +307,9 @@ classdef ClassWriter < handle
         % Adding methods
         function startFunctionBlock(obj, functionName, options)
             arguments
-                obj (1,1) openminds.internal.generator.abstract.ClassWriter
-                functionName (1,1) string
-                options.Inputs (1,:) cell = {}
+                obj (1,1) openminds.internal.generator.abstract.ClassWriter %#ok<INUSA>
+                functionName (1,1) string %#ok<INUSA>
+                options.Inputs (1,:) cell = {} %#ok<INUSA>
                 options.Outputs (1,:) cell = {}
             end
             % Todo

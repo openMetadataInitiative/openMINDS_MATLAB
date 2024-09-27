@@ -13,10 +13,6 @@ function S = listSchemasWithNonGenericLabel()
     %disp(tempsavepath)
     cleanupObj = onCleanup(@(filepath)delete(tempsavepath));
 
-    numTestsFailed = 0;
-    numTestsTotal = 0;
-
-    C = cell(0, 4);
     count = 0;
     S = struct;
 
@@ -65,8 +61,9 @@ function S = listSchemasWithNonGenericLabel()
             end
 
         catch ME
+            fprintf('Could not create schema %s due to error:\n%s\n', ...
+                iSchemaName, ME.message)
 
-            fprintf('Could not create schema %s\n', iSchemaName)
         end
     end
 
