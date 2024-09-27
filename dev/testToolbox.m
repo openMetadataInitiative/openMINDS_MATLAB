@@ -25,7 +25,7 @@ function testToolbox(options)
     % Use the openMINDS_MATLAB startup function to correctly configure the path
     run( fullfile(codeFolder, 'startup.m') )
 
-    outputDirectory = fullfile("docs", "reports", options.ReportSubdirectory);
+    outputDirectory = fullfile(rootDir, "docs", "reports", options.ReportSubdirectory);
     if ~isfolder(outputDirectory)
         mkdir(outputDirectory)
     end
