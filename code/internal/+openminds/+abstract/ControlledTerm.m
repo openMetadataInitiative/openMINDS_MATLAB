@@ -71,15 +71,9 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
     end
     
     methods (Access = protected) % Implement method for the CustomInstanceDisplay mixin
-
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
         end
-
-        % function annotation = getAnnotation(obj)
-        %     annotation = getAnnotation@openminds.abstract.Schema(obj);
-        %     annotation = sprintf('%s <ControlledTerm>', annotation);
-        % end
     end
 
     methods (Hidden)
@@ -134,16 +128,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
     end
 
     methods (Static)
-        function members = getMembers()
-            className = mfilename('class');
-            [~, members] = enumeration(className);
-        end
-
-        function obj = load(filePath)
-            error('Not implemented')
-        end
-
         function tf = isSemanticName(name)
+            % Todo: Move to utility package
 
             URI = matlab.net.URI(name);
             
