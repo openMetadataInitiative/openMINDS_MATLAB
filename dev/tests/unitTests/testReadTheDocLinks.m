@@ -1,5 +1,9 @@
 classdef testReadTheDocLinks < matlab.unittest.TestCase
 
+    properties (TestParameter)
+        modelVersion = num2cell(openminds.internal.constants.Models.VERSION_NUMBERS)
+    end
+
     properties
         % BaseUrl - Base URL for the openMINDS oneline documentation
         BaseUrl = openminds.internal.constants.url.OpenMindsDocumentation
@@ -8,17 +12,23 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
     methods (Test)
 
         function testDocumentationUrl(testCase)
-            webread(testCase.BaseUrl);
+            try
+                webread(testCase.BaseUrl);
+            catch ME
+                errorMessage = sprintf([...
+                    'Failed to read main page of documentation with error:\n', ...
+                    '%s'], ME.message);
+                testCase.verifyFail(errorMessage)
+            end
         end
 
-        function testSchemaDocLink(testCase)
-            import openminds.internal.utility.getSchemaDocLink
+        function testInvalidDocumentationUrl(testCase)
+               
+            url = testCase.BaseUrl;
+            invalidUrl = replace(url, 'openminds', 'oppenminds');
             
-            url = getSchemaDocLink(...
-                "openminds.core.Subject", ...
-                "Raw URL");
-
-            webread(url);
+            testCase.verifyError(@(url)webread(invalidUrl), ...
+                'MATLAB:webservices:HTTP404StatusCodeError')
         end
 
         function testSchemaDocLinkUBERONParcellation(testCase)
@@ -28,7 +38,14 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
                 "openminds.controlledterms.UBERONParcellation", ...
                 "Raw URL");
 
-            webread(url);
+            try
+                webread(url);
+            catch ME
+                errorMessage = sprintf([...
+                    'Failed to read documentation for UBERONParcellation with error:\n', ...
+                    '%s'], ME.message);
+                testCase.verifyFail(errorMessage)
+            end
         end
 
         function testPropertyDoclink(testCase)
@@ -38,22 +55,46 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
                 "openminds.internal.mixedtype.datasetversion.Author", ...
                 "Raw URL");
             
-            webread(url);
+            try
+                webread(url);
+            catch ME
+                errorMessage = sprintf([...
+                    'Failed to read documentation for author property with error:\n', ...
+                    '%s'], ME.message);
+                testCase.verifyFail(errorMessage)
+            end
         end
 
-        function testEarlierVersions(testCase)
+        function testInvalidSchemaDocUrl(testCase)
+            import openminds.internal.utility.getSchemaDocLink
+            
+            url = getSchemaDocLink(...
+                "openminds.core.Subject", ...
+                "Raw URL");
+
+            invalidUrl = replace(url, 'subject', 'subbject');
+            
+            testCase.verifyError(@(url)webread(invalidUrl), ...
+                'MATLAB:webservices:HTTP404StatusCodeError')
+        end
+
+        function testSchemaDocLink(testCase, modelVersion)
             import openminds.internal.utility.getSchemaDocLink
 
-            versionNumbers = openminds.internal.constants.Models.VERSION_NUMBERS;
-            
-            for i = versionNumbers
-                selectOpenMindsVersion(i)
+            selectOpenMindsVersion(modelVersion)
+            cleanupObj = onCleanup(@(v) selectOpenMindsVersion("latest"));
 
-                url = getSchemaDocLink(...
-                    "openminds.core.Subject", ...
-                    "Raw URL");
+            url = getSchemaDocLink(...
+                "openminds.core.Subject", ...
+                "Raw URL");
 
+            try
                 webread(url);
+            catch ME
+                errorMessage = sprintf([...
+                    'Failed to read documentation for Subject type with error:\n', ...
+                    '%s'], ME.message);
+                testCase.verifyFail(errorMessage)
             end
         end
     end

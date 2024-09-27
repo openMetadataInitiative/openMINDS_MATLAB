@@ -28,7 +28,8 @@ classdef testInstanceSaveLoad < matlab.unittest.TestCase
             end
 
             % Attempt to create an object of the schema class
-            schemaFcn();
+            instance = schemaFcn();
+            testCase.assertInstanceOf(instance, 'openminds.abstract.Schema')
         end
 
         function testSaveLoadForSchema(testCase, SchemaType)
