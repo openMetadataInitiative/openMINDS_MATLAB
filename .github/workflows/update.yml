@@ -74,5 +74,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: docs/reports
+          name: reports
           path: docs/reports

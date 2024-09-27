@@ -19,7 +19,7 @@ function testToolbox(options)
     rootDir = string( fileparts(fileparts(mfilename('fullpath'))) );
     testFolder = fullfile(rootDir, "dev", "tests");
     codeFolder = fullfile(rootDir, "code");
-    oldpath  = addpath(testFolder, genpath(codeFolder) );
+    oldpath  = addpath(genpath(testFolder), genpath(codeFolder) );
     finalize = onCleanup(@()(path(oldpath)));
 
     outputDirectory = fullfile("docs", "reports", options.ReportSubdirectory);
