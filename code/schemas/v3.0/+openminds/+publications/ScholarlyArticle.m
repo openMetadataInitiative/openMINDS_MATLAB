@@ -43,7 +43,7 @@ classdef ScholarlyArticle < openminds.abstract.Schema
 %                       Add the license of this creative work.
 %
 %   modificationDate  : (1,1) datetime
-%                       Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
+%                       Enter the date on which this creative work was last modfied, formatted as '2023-02-07'.
 %
 %   name              : (1,1) string
 %                       Enter the name (or title) of this creative work.
@@ -113,7 +113,7 @@ classdef ScholarlyArticle < openminds.abstract.Schema
         license (1,:) openminds.core.License ...
             {mustBeSpecifiedLength(license, 0, 1)}
 
-        % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
+        % Enter the date on which this creative work was last modfied, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
             {mustBeSpecifiedLength(modificationDate, 0, 1), mustBeValidDate(modificationDate)}
 
@@ -169,7 +169,7 @@ classdef ScholarlyArticle < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.name;
         end
     end
 

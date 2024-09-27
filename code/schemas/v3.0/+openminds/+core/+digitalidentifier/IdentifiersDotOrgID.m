@@ -37,7 +37,7 @@ classdef IdentifiersDotOrgID < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.identifier;
         end
     end
 

@@ -22,7 +22,7 @@ classdef ContentType < openminds.abstract.Schema
 %                      Enter the internationalized resource identifier (IRI) to the official registered media type (e.g., provided on IANA.org) matching this content type.
 %
 %   specification    : (1,1) string
-%                      Enter the internationalized resource identifier (IRI) to the official specification of this content type. If no official and public specification is available, leave blank and enter the specification under 'description'.
+%                      Enter the internationalized resource identifier (IRI) to the offical specification of this content type. If no offical and public specification is available, leave blank and enter the specification under 'description'.
 %
 %   synonym          : (1,:) string
 %                      Enter any synonyms of this content type.
@@ -50,7 +50,7 @@ classdef ContentType < openminds.abstract.Schema
         % Enter the internationalized resource identifier (IRI) to the official registered media type (e.g., provided on IANA.org) matching this content type.
         relatedMediaType (1,1) string
 
-        % Enter the internationalized resource identifier (IRI) to the official specification of this content type. If no official and public specification is available, leave blank and enter the specification under 'description'.
+        % Enter the internationalized resource identifier (IRI) to the offical specification of this content type. If no offical and public specification is available, leave blank and enter the specification under 'description'.
         specification (1,1) string
 
         % Enter any synonyms of this content type.
@@ -82,7 +82,7 @@ classdef ContentType < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.name;
         end
     end
 

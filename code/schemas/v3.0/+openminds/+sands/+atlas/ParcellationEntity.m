@@ -13,7 +13,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
 %                        Enter the definition for this parcellation entity.
 %
 %   hasParent          : (1,:) <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
-%                        Add all anatomical parent structures for this parcellation entity as defined within the corresponding brain atlas.
+%                        Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
 %
 %   hasVersion         : (1,:) <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                        Add all versions of this parcellation entity.
@@ -43,7 +43,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
         % Enter the definition for this parcellation entity.
         definition (1,1) string
 
-        % Add all anatomical parent structures for this parcellation entity as defined within the corresponding brain atlas.
+        % Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
         hasParent (1,:) openminds.sands.ParcellationEntity ...
             {mustBeListOfUniqueItems(hasParent)}
 
@@ -92,7 +92,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-
+            str = obj.lookupLabel;
         end
     end
 

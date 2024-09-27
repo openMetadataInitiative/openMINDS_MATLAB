@@ -44,6 +44,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 return
             end
 
+            % if isstruct(instance) && isfield(instance, 'at_id')
+            %     instance = {instance.at_id};
+            % end
+
             if ischar(instance)
                 instance = string(instance);
             end
@@ -89,8 +93,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                     % an @id. This will act as a placeholder for an 
                     % unresolved linked instance, and the link needs to be 
                     % resolved externally in order to put a real instance in place.
-                    obj.Instance = struct;
-                    obj.Instance.id = instance{i}.at_id;
+                    obj(i).Instance = struct;
+                    obj(i).Instance.id = instance{i}.at_id;
+                elseif isa(instance{i}, class(obj))
+                    obj(i) = instance{i};
                 else
                     mustBeOneOf(instance{i}, obj(i).ALLOWED_TYPES)
                     obj(i).Instance = instance{i};
@@ -126,6 +132,26 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             end
         end
 
+        function cellArray = cellstr(obj)
+            cellArray = cell(1, numel(obj));
+            for i = 1:numel(cellArray)
+                cellArray{i} = char(obj(i));
+            end
+        end
+
+        function stringArray = string(obj)
+            stringArray = repmat("", 1, numel(obj));
+            for i = 1:numel(stringArray)
+                stringArray(i) = string(char(obj(i)));
+            end
+        end
+
+        function cellArrayOfStruct = toStruct(obj)
+            cellArrayOfStruct = cell(1, numel(obj));
+            for i = 1:numel(cellArrayOfStruct)
+                cellArrayOfStruct{i} = obj(i).Instance.toStruct();
+            end
+        end
     end
     
     methods (Access = protected)
@@ -157,7 +183,11 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
 
             docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
-            str = sprintf('  %s array with elements:\n', docLinkStr);
+            if isempty(obj)
+                str = sprintf('  %s array\n', docLinkStr);
+            else
+                str = sprintf('  %s array with elements:\n', docLinkStr);
+            end
         end
 
         function str = getFooter(~)
@@ -179,15 +209,18 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         end
 
         function displayNonScalarObject(obj)
-                
-            repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-            %stringArray = cellfun(@(r) r.Representation, repArray);
-            %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+            if isstruct(obj(1).Instance)
+                stringArray = strjoin( arrayfun(@(o) o.Instance.id, obj, 'UniformOutput', false), newline);
+            else
+                repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+                %stringArray = cellfun(@(r) r.Representation, repArray);
+                %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+                stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
+                stringArray = strrep(stringArray, '[', '');
+                stringArray = strrep(stringArray, ']', '');
+            end
 
 
-            stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
-            stringArray = strrep(stringArray, '[', '');
-            stringArray = strrep(stringArray, ']', '');
             str = obj.getHeader;
             disp(str)
             fprintf( '%s\n\n', strjoin(stringArray, '    \n') );

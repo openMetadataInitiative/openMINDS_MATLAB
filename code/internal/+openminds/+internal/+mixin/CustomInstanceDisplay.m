@@ -167,7 +167,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             if numObjects == 0
                 % str = 'None';
                 % Todo: Make plural labels.
-                str = sprintf('No %s available', className);
+                str = sprintf('No %s available', className{end});
                 rep = matlab.display.PlainTextRepresentation(obj, repmat({str}, numRows, 1), displayConfiguration);
             elseif numObjects >= 1 
                 %str = obj.DisplayString;

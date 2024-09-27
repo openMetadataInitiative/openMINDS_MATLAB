@@ -61,6 +61,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 if ~ismissing(varargin{1})
                     obj.deserializeFromName(varargin{1});
                 end
+            elseif nargin == 1 && isstruct( varargin{1} ) && isfield(varargin{1}, 'at_id')
+                obj.deserializeFromName(varargin{1}.at_id);
             else
                 obj.assignPVPairs(varargin{:})
                 obj.id = obj.generateInstanceId();

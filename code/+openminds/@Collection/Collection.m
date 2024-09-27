@@ -53,6 +53,10 @@ classdef Collection < handle
     properties (SetAccess = private)
         Nodes (1,1) dictionary
     end
+
+    properties (SetAccess = protected, Hidden)
+        TypeMap (1,1) dictionary
+    end
     
     methods % Constructor
         function obj = Collection(instance, options)
@@ -92,11 +96,13 @@ classdef Collection < handle
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
             end
+
             
             % Initialize nodes
             obj.Nodes = dictionary;
+            obj.TypeMap = dictionary;
             
-            if ~isempty(instance)
+            if ~isempty(instance) && ~isempty(instance{1})
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
                 isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
                 isMetadata = @(x) isa(x, 'openminds.abstract.Schema');
@@ -152,8 +158,55 @@ classdef Collection < handle
             end
         end
         
+        function tf = contains(obj, instance)
+            % Todo:work for arrays
+            if isKey(obj.Nodes, instance.id)
+                tf = true;
+            else
+                tf = false;
+            end
+        end
+        
+        function remove(obj, instance)
+            error('not implemented')
+        end
+
         function instance = get(obj, nodeKey)
             instance = obj.Nodes{nodeKey};
+        end
+
+        function instances = list(obj, type, propertyName, propertyValue)
+            arguments
+                obj
+                type (1,1) string
+            end
+            arguments (Repeating)
+                propertyName (1,1) string
+                propertyValue
+            end
+
+            instances = [];
+
+            if ~isConfigured(obj.Nodes)
+                return
+            end
+            
+            keys = obj.Nodes.keys;
+            isMatch = startsWith(keys, type);
+            keys = keys(isMatch);
+
+            instances = obj.Nodes(keys);
+            instances = [instances{:}];
+
+            for i = 1:numel(propertyName)
+                thisName = propertyName{i};
+                thisValue = propertyValue{i};
+
+                instanceValues = {instances.(thisName)};
+
+                keep = cellfun(@(c) isequal(c, thisValue), instanceValues);
+                instances = instances(keep);
+            end
         end
 
         function updateLinks(obj)
@@ -241,6 +294,8 @@ classdef Collection < handle
                 jsonldFilePaths = filePath;
             end
 
+            if isempty(jsonldFilePaths); return; end
+
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
                 obj.addNode(instances{i})
@@ -284,6 +339,19 @@ classdef Collection < handle
             
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
+                
+                % Todo: Separate method
+                instanceType = class(instance);
+                if isConfigured(obj.TypeMap) && isKey(obj.TypeMap, instanceType)
+                    if isMATLABReleaseOlderThan("R2023b")
+                        existingInstances = obj.TypeMap(instanceType);
+                        obj.TypeMap(instanceType) = {[existingInstances{:}, string(instance.id)]};
+                    else
+                        obj.TypeMap(instanceType) = {[obj.TypeMap{instanceType}, string(instance.id)]};
+                    end
+                else
+                    obj.TypeMap(instanceType) = {string(instance.id)};
+                end
             end
             
             obj.addSubNodes(instance)
