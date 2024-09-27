@@ -31,12 +31,12 @@
 
 function startup(version)
     arguments
-        version (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(version)} = "latest"
+        version = "latest"
     end
 
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
+    addpath(fullfile(codeFolder, 'internal'))
 
     openminds.startup(version)
 end
