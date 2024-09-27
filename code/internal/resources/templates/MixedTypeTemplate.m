@@ -1,4 +1,4 @@
-classdef Template < openminds.internal.abstract.LinkedCategory
+classdef MixedTypeTemplate < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
         ALLOWED_TYPES = []
         IS_SCALAR = true
