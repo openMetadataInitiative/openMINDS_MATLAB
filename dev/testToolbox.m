@@ -61,7 +61,7 @@ function testToolbox(options)
     if numFailedTests == 0
         color = "green";
         message = sprintf("%d passed", numPassedTests);
-    elseif numFailedTests/numTests > 0.05
+    elseif numFailedTests/numTests < 0.05
         color = "yellow";
         message = sprintf("%d/%d passed", numPassedTests, numTests);
     else

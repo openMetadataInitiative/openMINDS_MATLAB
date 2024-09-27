@@ -1,7 +1,7 @@
 classdef testReadTheDocLinks < matlab.unittest.TestCase
 
     properties (TestParameter)
-        modelVersion = num2cell(openminds.internal.constants.Models.VERSION_NUMBERS)
+        modelVersion = openminds.internal.listValidVersions()
     end
 
     properties
