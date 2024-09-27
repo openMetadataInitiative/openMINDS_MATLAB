@@ -39,7 +39,7 @@ function testToolbox(options)
         runner.addPlugin(p)
     else
         runner.addPlugin(XMLPlugin.producingJUnitFormat(fullfile(outputDirectory,'test-results.xml')));
-        runner.addPlugin(CodeCoveragePlugin.forFolder(codeFolder, 'IncludingSubfolders', false, 'Producing', CoberturaFormat(codecoverageFileName)));
+        runner.addPlugin(CodeCoveragePlugin.forFolder(codeFolder, 'IncludingSubfolders', true, 'Producing', CoberturaFormat(codecoverageFileName)));
     end
     
     results = runner.run(suite);
@@ -48,6 +48,23 @@ function testToolbox(options)
         % This report is only available in R2022a and later.  isMATLABReleaseOlderThan wasn't added until MATLAB 2020b / version 9.9
         results.generateHTMLReport(outputDirectory,'MainFile',"testreport.html");
     end
+
+    numTests = numel(results);
+    numPassedTests = sum([results.Passed]);
+    numFailedTests = sum([results.Failed]);
+
+    % Generate the JSON files for the shields in the readme.md
+    if numFailedTests == 0
+        color = "green";
+        message = sprintf("%d passed", numPassedTests);
+    elseif numFailedTests/numTests > 0.05
+        color = "yellow";
+        message = sprintf("%d/%d passed", numPassedTests, numTests);
+    else
+        color = "red";
+        message = sprintf("%d/%d passed", numPassedTests, numTests);
+    end
+    utility.writeBadgeJSONFile("tests", message, color)
     
     results.assertSuccess()
 end
