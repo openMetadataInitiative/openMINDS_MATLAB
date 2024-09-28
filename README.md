@@ -7,6 +7,7 @@
 </a>
 
 # openMINDS Metadata Models for MATLAB
+[![Version Number](https://img.shields.io/github/v/release/openMetadataInitiative/openMINDS_MATLAB?label=version)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest)
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) 
 [![View openMINDS_MATLAB on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
 [![codecov](https://codecov.io/gh/ehennestad/openMINDS_MATLAB/graph/badge.svg?token=FTD5FHZSFA)](https://codecov.io/gh/ehennestad/openMINDS_MATLAB)
