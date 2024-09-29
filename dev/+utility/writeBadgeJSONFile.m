@@ -1,4 +1,4 @@
-function writeBadgeJSONFile(label, message, color)
+function writeBadgeJSONFile(label, message, color, options)
 % writeBadgeJSONFile Create and save a JSON file representing a badge/shield.
 %
 %   writeBadgeJSONFile(label, message, color) creates a JSON file in the 
@@ -18,6 +18,11 @@ function writeBadgeJSONFile(label, message, color)
 %                         "red", "green", "blue", "orange", or "yellow". This 
 %                         string is included in the JSON data under the "color" 
 %                         field.
+%   
+%   Optional name/value arguments:
+%       OutputFolder - Path for folder to save badge
+%
+%       FileName - Name of file excluding extension
 %
 %   Example:
 %
@@ -35,20 +40,27 @@ function writeBadgeJSONFile(label, message, color)
         label (1,1) string
         message (1,1) string
         color (1,1) string {mustBeMember(color, ["red","green","blue","orange","yellow"])}
+        options.OutputFolder (1,1) string = fullfile(ommtools.getProjectRootDir(), "docs", "reports", "badge");
+        options.FileName (1,1) string = missing
     end
-    outputDirectory = fullfile("docs", "reports", "badge");
-    if ~isfolder(outputDirectory)
-        mkdir(outputDirectory)
+
+    if ~isfolder(options.OutputFolder)
+        mkdir(options.OutputFolder)
     end
+
     badgeInfo = struct;
     badgeInfo.schemaVersion = 1;
     badgeInfo.label = label;
     badgeInfo.message = message;
     badgeInfo.color = color;
     badgeJSON = jsonencode(badgeInfo);
-
-    name = strrep(label, " ", "_");
-    fid = fopen(fullfile(outputDirectory, name + ".json"), "w");
+    
+    if ismissing(options.FileName)
+        name = strrep(label, " ", "_");
+    else
+        name = options.FileName;
+    end
+    fid = fopen(fullfile(options.OutputFolder, name + ".json"), "w");
     try
         fwrite(fid, badgeJSON);
     catch e
