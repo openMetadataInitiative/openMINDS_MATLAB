@@ -142,5 +142,5 @@ jobs:
           draft: true        
           artifacts: "releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx"
           generateReleaseNotes: true
-          body: "![MATLAB Versions Tested](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FopenMetadataInitiative%2FopenMINDS_MATLAB%2Fmain%2F.github%2Fbadges%2F${{  github.ref_name }}%2Ftested_with.json)
+          body: "![MATLAB Versions Tested](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FopenMetadataInitiative%2FopenMINDS_MATLAB%2Fmain%2F.github%2Fbadges%2F${{  github.ref_name }}%2Ftested_with.json)"
 
