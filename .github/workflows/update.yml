@@ -35,14 +35,14 @@ jobs:
         uses: matlab-actions/run-command@v2
         if: always()
         with:
-          command: addpath("dev"),codecheckToolbox()     
+          command: addpath(genpath("dev")),codecheckToolbox()     
           
       # Runs all tests in the project.
       - name: Run tests
         uses: matlab-actions/run-command@v2
         if: always()
         with:
-          command: addpath("dev"), testToolbox()
+          command: addpath(genpath("dev")), testToolbox()
 
       # Commit the JSON for the badge for the issues and tests
       - name: commit code issues badge JSON
