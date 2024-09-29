@@ -1,12 +1,12 @@
 function result = testDocLinks()
+% testDocLinks - Run test for openMINDS Read The Docs links
+    projectDirectory = ommtools.getProjectRootDir();    
 
-    parentDirectoryPath = fileparts( fileparts(mfilename('fullpath')) );
-    
-    testDirectoryPath = fullfile(parentDirectoryPath, 'tests');
+    addpath( fullfile(projectDirectory, 'code') );
+    addpath( fullfile(projectDirectory, 'code', 'internal') );
+    openminds.startup()
 
-    addpath( fullfile(parentDirectoryPath, 'code') );
-    addpath( fullfile(parentDirectoryPath, 'code', 'internal') );
-    openminds.internal.startup()
+    testDirectoryPath = fullfile(projectDirectory, 'dev', 'tests');
     addpath(genpath( testDirectoryPath ));
 
     testCase = testReadTheDocLinks();
