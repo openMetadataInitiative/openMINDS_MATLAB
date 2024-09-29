@@ -12,7 +12,7 @@ function createTestedWithBadgeforToolbox(versionNumber, rootDir)
     releasesTestedWith = "";
     releasesFailed = 0;
     % Go through the R2* directories and extract the failed test info
-    releaseDirectoryInfo = dir(fullfile(rootDir, "reports"));
+    releaseDirectoryInfo = dir(fullfile(rootDir, "docs", "reports"));
     % Select only folders
     releaseDirectoryInfo = releaseDirectoryInfo([releaseDirectoryInfo.isdir]);
     % with a name like R2*

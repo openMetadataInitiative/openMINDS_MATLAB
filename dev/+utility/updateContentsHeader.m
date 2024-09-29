@@ -16,4 +16,7 @@ function updateContentsHeader(toolboxFolder, contentsHeader)
     fid = fopen(contentsFilePath, 'w');
     fwrite(fid, strjoin(contentsStrLines, newline));
     fclose(fid);
+
+    fprintf('Updated %s\n', contentsFilePath)
+    disp(strjoin(contentsStrLines, newline))
 end

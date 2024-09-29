@@ -45,12 +45,12 @@ jobs:
           files: docs/reports/codecoverage.xml
           env_vars: ${{ matrix.MATLABVersion }}
 
-      # Save the contents of the report directory from each release into a single artifact.  Since each release makes their own directory, they all update the same artifact.
+      # Save the contents of the report directory from each release into an artifact.
       - name: Save Report Directory
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: reports
+          name: reports-${{ matrix.MATLABVersion }}
           path: docs/reports
           
   # Report on what releases tested successfully.
@@ -70,10 +70,11 @@ jobs:
         uses: matlab-actions/setup-matlab@v2
 
       # Copy all the reports down into the container
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: reports
+          name: reports-*
           path: docs/reports
+          merge-multiple: true
 
       # Generate the JSON for the releases tested badge
       - name: Generate tested with badge
