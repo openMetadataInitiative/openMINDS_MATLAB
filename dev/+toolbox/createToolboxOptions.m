@@ -10,19 +10,18 @@ function toolboxOptions = createToolboxOptions(versionNumber)
 
     MLTBX_NAME = "openMINDS_MATLAB";
     
+    % Read the toolbox info from MLToolboxInfo.json
+    [toolboxInfo, identifier] = toolbox.readToolboxInfo;
+    
+    % Initialize the ToolboxOptions from the code folder and initial metadata
     projectRootDir = ommtools.getProjectRootDir();
-    toolboxInfoFilePath = fullfile(projectRootDir, "dev", "toolbox_info.json");
-    toolboxInfo = jsondecode(fileread(toolboxInfoFilePath));
-
-    % Get toolbox identifier
-    identifier = toolboxInfo.Identifier; 
-    toolboxInfo = rmfield(toolboxInfo, 'Identifier');
-
     toolboxFolder = fullfile(projectRootDir, "code");
     opts = matlab.addons.toolbox.ToolboxOptions(toolboxFolder, identifier, toolboxInfo);
     
+    % Set the toolbox version
     opts.ToolboxVersion = versionNumber;
 
+    % Ignore some file
     toIgnore = contains(opts.ToolboxFiles, '_dev');
     opts.ToolboxFiles = opts.ToolboxFiles(~toIgnore);
 
@@ -48,6 +47,7 @@ function toolboxOptions = createToolboxOptions(versionNumber)
     
     % Todo: populate required addons from requirements file
 
+    % Specify name for output .mltbx file.
     versionNumber = strrep(opts.ToolboxVersion, '.', '_');
     outputFileName = sprintf('%s_v%s.mltbx', MLTBX_NAME, versionNumber);
     opts.OutputFile = fullfile(projectRootDir, "releases", outputFileName);
