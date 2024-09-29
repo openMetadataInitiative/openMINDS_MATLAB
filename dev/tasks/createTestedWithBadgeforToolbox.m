@@ -29,7 +29,9 @@ function createTestedWithBadgeforToolbox(versionNumber, rootDir)
         % Read the test results file
         testResults = readstruct(testresultsFilename);
         % If no tests failed, errors, or were skipped, then add it to the list
-        if testResults.testsuite.errorsAttribute == 0 && testResults.testsuite.failuresAttribute == 0 && testResults.testsuite.skippedAttribute == 0
+        if sum([testResults.testsuite.errorsAttribute]) == 0 ...
+           && sum([testResults.testsuite.failuresAttribute]) == 0 ...
+           && sum([testResults.testsuite.skippedAttribute]) == 0
             if releasesTestedWith ~= ""
                 % Insert the seperator between released after the first one
                 releasesTestedWith = releasesTestedWith + " | ";
