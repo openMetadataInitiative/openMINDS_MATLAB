@@ -67,5 +67,6 @@ function writeBadgeJSONFile(label, message, color, options)
         fclose(fid);
         rethrow e
     end
-    fclose(fid);  
+    fclose(fid);
+    fprintf('Saved badge to %s\n', fullfile(options.OutputFolder, name + ".json"))
 end

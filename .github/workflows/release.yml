@@ -47,7 +47,7 @@ jobs:
 
       # Save the contents of the report directory from each release into a single artifact.  Since each release makes their own directory, they all update the same artifact.
       - name: Save Report Directory
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: reports
@@ -104,10 +104,10 @@ jobs:
 
       # Save the MLTBX.
       - name: Save Packaged Toolbox
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
-          path: release/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
+          path: releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
 
       # Commit the JSON for the MATLAB releases badge and ToolboxPackaging.prj
       - name: commit changed files
@@ -115,7 +115,8 @@ jobs:
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
           git config user.email "<>"
-          git add code/Contents.m 
+          git status
+          git add code/Contents.m
           git add .github/badges/${{  github.ref_name }}/tested_with.json
           git commit -m "Final checkins for release ${{  github.ref_name }}"
           git fetch
@@ -138,5 +139,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           draft: true        
-          artifacts: "release/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx"
+          artifacts: "releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx"
           generateReleaseNotes: true
