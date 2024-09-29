@@ -13,18 +13,17 @@ jobs:
   # This workflow contains:
   # 1. a matrixed test job run across a bunch of releases of MATLAB
   # 2. a reporting job that summarizes the tests, and updates release badge
-  # Added support for R2023b
   test:
     strategy:
       fail-fast: false
       matrix:
-        MATLABVersion: [R2020a, R2020b, R2021a, R2021b, R2022a, R2022b, R2023a, R2023b, R2024a]
+        MATLABVersion: [R2021b, R2022a, R2022b, R2023a, R2023b, R2024a]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -52,7 +51,7 @@ jobs:
         if: always()
         with:
           name: reports
-          path: reports
+          path: docs/reports
           
   # Report on what releases tested successfully.
   # Generate a draft release based on the tag
@@ -63,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
             ref: refs/heads/main
     
@@ -74,7 +73,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: reports
-          path: reports
+          path: docs/reports
 
       # Generate the JSON for the releases tested badge
       - name: Generate tested with badge
@@ -87,7 +86,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          junit_files: "reports/*/test-results.xml"
+          junit_files: "docs/reports/*/test-results.xml"
 
       # Package the MLTBX
       - name: Package Toolbox
