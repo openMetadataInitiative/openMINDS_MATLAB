@@ -47,7 +47,7 @@ jobs:
 
       # Save the contents of the report directory from each release into a single artifact.  Since each release makes their own directory, they all update the same artifact.
       - name: Save Report Directory
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: reports
