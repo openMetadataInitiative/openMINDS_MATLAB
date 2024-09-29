@@ -8,5 +8,4 @@ classdef Constants < handle
         LogoDarkURL  = openminds.internal.Constants.GithubURL + "/raw/main/img/dark_openMINDS-logo.png";
         SchemaFolder = fullfile(openminds.internal.rootpath(), 'schemas')
     end
-
 end

@@ -1,6 +1,6 @@
 function schemaInfo = listInstances(schemaModule, options)
-%listSourceSchemas List information about all available schemas.   
-%   
+%listSourceSchemas List information about all available schemas.
+%
 %   schemaInfo = listSourceSchemas() returns a table with information
 %   about all the available schemas.
 
@@ -14,7 +14,7 @@ function schemaInfo = listInstances(schemaModule, options)
         schemaModule = {}
         options.SchemaType (1,1) string = "terminology";
         options.SchemaFileExtension = '.jsonld';
-        options.VersionNumber (1,1) string = "latest" 
+        options.VersionNumber (1,1) string = "latest"
         options.RootDirectory (1,1) string = ""
     end
 
@@ -45,7 +45,7 @@ function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExten
 %listSchemaFiles List schema files given a root directory
 
     import openminds.internal.utility.dir.listSubDir
-    import openminds.internal.utility.dir.listFiles 
+    import openminds.internal.utility.dir.listFiles
 
     if nargin < 3 || isempty(fileExtension)
         fileExtension = '.json';

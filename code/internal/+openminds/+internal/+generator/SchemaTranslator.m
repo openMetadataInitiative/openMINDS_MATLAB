@@ -1,5 +1,5 @@
 classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
-%SchemaTranslator Translate openMINDS schemas to matlab classes    
+%SchemaTranslator Translate openMINDS schemas to matlab classes
 
 % Todo: More clearly separate the parsing of the schema and the writing of
 % the new class.
@@ -17,7 +17,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         SchemaName = ''             % i.e subjectGroup
         SchemaCategory = ''         % i.e research / data  % todo: rename to submodule???
         MetadataModel = ''          % i.e core / SANDS
-    end 
+    end
 
     properties (Dependent)
         IsOfCategory
@@ -25,10 +25,9 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
     end
 
     properties (Access = private)
-        SchemaClassFilePath % File path to the openMINDS source schema 
+        SchemaClassFilePath % File path to the openMINDS source schema
         IsControlledTerm = false
     end
-
 
     methods
         function obj = SchemaTranslator(schemaFilepath, action, versionNumber)
@@ -61,7 +60,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 clear obj
             end
         end
-
     end
 
     methods
@@ -148,13 +146,13 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         end
         
         function linkedPropertyInfo = detectLinkedPropertyInformation(obj, linkType)
-        %detectLinkedPropertyInformation Detect information about linked properties    
+        %detectLinkedPropertyInformation Detect information about linked properties
             % INPUTS:
             %   obj
             %   linkType : 'x_linkedTypes' | 'x_embeddedTypes'
 
             if nargin < 2
-                linkType = 'x_linkedTypes'; 
+                linkType = 'x_linkedTypes';
             end
 
             propertyNames = fieldnames(obj.Schema.properties);
@@ -167,7 +165,8 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 thisPropertySpecification = obj.Schema.properties.(thisPropertyName);
 
                 if isfield(thisPropertySpecification, linkType)
-                    linkedPropertyInfo{end+1} = struct(thisPropertyName, {thisPropertySpecification.(linkType)});
+                    linkedPropertyInfo{end+1} = struct(thisPropertyName, ...
+                        {thisPropertySpecification.(linkType)}); %#ok<AGROW>
                 end
             end
         end
@@ -276,36 +275,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 obj.writeControlledInstancesPropertyBlock()
             end
         end
-    
-        function writeEnumerationBlock(obj)
-        %writeEnumerationBlock Enumeration block is only written for
-        %controlled term schemas
-            
-            if obj.IsControlledTerm && false % Deprecate
-
-                instanceTable = obj.getInstancesForSchema(obj.SchemaName, 'controlledTerms');
-                numInstances = size(instanceTable, 1);
-                
-                if numInstances > 0
-                    % Write enumeration block
-                    obj.startEnumerationBlock()
-
-                    % Add null as an enumeration
-                    obj.addEnumValue('null')
-
-                    for i = 1:numInstances
-                        name = instanceTable.SchemaName(i);
-                        name = obj.fixInvalidMatlabNames(name, obj.SchemaName);
-                        
-                        obj.addEnumValue(name)
-                    end
-                    obj.endEnumerationBlock()
-                end
-            end
-        end
-    
-        function writeEventBlocks(obj)
-        end
             
         function writeMethodBlocks(obj)
             obj.startMethodsBlock()
@@ -332,7 +301,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 end
             end
         end
-
     end
 
     methods (Access = private) % Specific methods for writing class member blocks
@@ -567,7 +535,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 sizeAttribute = '(1,1)';
             end
 
-
             % Get data type
             if isfield(propertyAttributes, 'x_linkedTypes') || isfield(propertyAttributes, 'x_embeddedTypes')
                 if isfield(propertyAttributes, 'x_linkedTypes')
@@ -614,7 +581,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                     %dataType = clsNames{1};
                     %warning('Multiple schemas allowed for property %s of schema %s', propertyName, obj.SchemaName)
                 end
-
             
             elseif isfield(propertyAttributes, 'x_linkedCategories')
                 clsNames = cellfun(@(str) openminds.internal.utility.string.buildClassName(str, '', 'category'), propertyAttributes.x_linkedCategories, 'UniformOutput', false);
@@ -712,7 +678,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                                 disp(['title: ', str])
                             end
                         case 'description'
-                            str = propertyAttributes.description;
+                            % str = propertyAttributes.description;
                             %disp(['description: ', str])
                         otherwise
                             disp(['additional attributenames: ', attributeNames])
@@ -737,12 +703,11 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             %obj.appendLine(newStr)
             %obj.appendLine('')
         end
-
     end
 
     methods
         function schemaClassName = get.SchemaClassName(obj)
-            schemaClassName = obj.SchemaName; 
+            schemaClassName = obj.SchemaName;
             schemaClassName(1) = upper(schemaClassName(1));
         end
 
@@ -764,15 +729,9 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function startConstructor(obj)
 
-            if obj.IsControlledTerm
-                %obj.appendLine(2, sprintf('function obj = %s(name)', obj.SchemaClassName))
-                obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
-            else
-                obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
-            end
+            obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
 
             if obj.IsControlledTerm
-                %obj.writeEnumSwitchBlock()
                 obj.appendLine(3, sprintf('obj@openminds.abstract.ControlledTerm(varargin{:})'))
             else
                 obj.appendLine(3, sprintf('obj.assignPVPairs(varargin{:})'))
@@ -835,8 +794,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
                 obj.endFunctionBlock()
             end
-
-            
         end
 
         function writeEnumSwitchBlock(obj)
@@ -916,15 +873,14 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 end
 
                 staticMethodNames(i) = validMatlabName;
-            end                
+            end
         end
-    
     end
     
     methods (Access = private)
         
-        function str = getValidationFunction(obj, name, attr)
-            
+        function str = getValidationFunction(~, name, attr)
+            % todo: static method?
             str = string.empty;
 
             if isfield(attr, 'maxItems')
@@ -1027,7 +983,5 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             
             instances = allInstancesTable(isRequested, :);
         end
-
     end
-
 end

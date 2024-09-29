@@ -1,10 +1,10 @@
 function instances = loadInstances(filePath)%, options)
 %loadInstances Load metadata instances from file(s)
 
-% Todo: 
+% Todo:
 %   - Add documentation
 %   - Test that this works in different cases. Single files, collection of
-%     files, 
+%     files,
 %   - Generalize to work for multiple file formats.
 
     arguments
@@ -48,7 +48,7 @@ function instances = loadInstances(filePath)%, options)
                         "Instance type does not match schema type. This is not supposed to happen, please report!")
     
                     try
-                        instances{i} = feval(className, thisInstance);   
+                        instances{i} = feval(className, thisInstance);
                     catch ME
                         warning(ME.message)
                     end
@@ -76,7 +76,7 @@ function instances = loadInstances(filePath)%, options)
 end
 
 function resolveLinks(instance, instanceIds, instanceCollection)
-%resolveLinks Resolve linked types, i.e replace an @id with the actual 
+%resolveLinks Resolve linked types, i.e replace an @id with the actual
 % instance object.
 
     if isstruct(instance) % Instance is not resolvable (E.g belongs to remote collection)
@@ -90,7 +90,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
 
     instanceType = class(instance);
     if ~isConfigured(schemaInspectorMap) || ~isKey(schemaInspectorMap, instanceType)
-        schemaInspectorMap(instanceType) = openminds.internal.SchemaInspector(instance);        
+        schemaInspectorMap(instanceType) = openminds.internal.SchemaInspector(instance);
     end
 
     schemaInspector = schemaInspectorMap(instanceType);
@@ -129,7 +129,8 @@ function resolveLinks(instance, instanceIds, instanceCollection)
             try
                 resolvedInstances = [resolvedInstances{:}];
             catch
-                % pass. Todo, should there be error handling here?
+                assert(isa(resolvedInstances, 'cell'), ...
+                    'Expected resolved instances to be a cell array')
             end
 
             if ~isempty(resolvedInstances)

@@ -15,6 +15,6 @@ function pvl = propertyValueListWithNestedEmbeddings()
     numberValue = openminds.core.research.NumericalProperty('name', 'AgeParameter', 'value', qvA);
     
     pvl = openminds.core.research.PropertyValueList('propertyValuePair', {stringValue, numberValue});
-    pvl
-
+    
+    disp(pvl)
 end

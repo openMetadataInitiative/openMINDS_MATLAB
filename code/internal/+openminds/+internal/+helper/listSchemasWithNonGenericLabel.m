@@ -13,10 +13,6 @@ function S = listSchemasWithNonGenericLabel()
     %disp(tempsavepath)
     cleanupObj = onCleanup(@(filepath)delete(tempsavepath));
 
-    numTestsFailed = 0;
-    numTestsTotal = 0;
-
-    C = cell(0, 4);
     count = 0;
     S = struct;
 
@@ -25,7 +21,6 @@ function S = listSchemasWithNonGenericLabel()
         iSchemaName = schemaTable{i, "SchemaName"};
         iModelName = schemaTable{i, "ModuleName"};
         iSubmoduleName = schemaTable{i, "SubModuleName"};
-
         
         schemaClassFunctionName = openminds.internal.utility.string.buildClassName(iSchemaName, iSubmoduleName, iModelName);
         schemaFcn = str2func(schemaClassFunctionName);
@@ -46,7 +41,6 @@ function S = listSchemasWithNonGenericLabel()
                 S.(iSchemaName).propertyName = 'fullName';
                 S.(iSchemaName).stringFormat = "sprintf('%s', fullName)";
 
-
                 %pass
             elseif isprop(itemPreSave, 'identifier')
                 S.(iSchemaName).propertyName = 'identifier';
@@ -57,7 +51,6 @@ function S = listSchemasWithNonGenericLabel()
                 S.(iSchemaName).propertyName = 'name';
                 S.(iSchemaName).stringFormat = "sprintf('%s', name)";
 
-
                 %pass
             else
 
@@ -67,13 +60,11 @@ function S = listSchemasWithNonGenericLabel()
                 fprintf('%s\n', iSchemaName)
             end
 
-
         catch ME
+            fprintf('Could not create schema %s due to error:\n%s\n', ...
+                iSchemaName, ME.message)
 
-            fprintf('Could not create schema %s\n', iSchemaName)
         end
-
-        
     end
 
     %T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});

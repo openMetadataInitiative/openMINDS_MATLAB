@@ -92,8 +92,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             testCase.assertClass(organizationName, 'string')
             
             S = ds.author.affiliation; % Assert length of this is 3
-            S = {ds.author.affiliation}; % Assert length of this is two
-
+            testCase.assertLength(S, 3)
         end 
 
         function testRetrieveNonScalarHomogeneousType(testCase)

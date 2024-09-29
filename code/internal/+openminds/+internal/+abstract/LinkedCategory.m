@@ -1,14 +1,14 @@
 classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handle
 %LinkedTypeSet Abstract class representing a set of linked types
 
-% This class behaves as a container for holding an instance that can be mixed 
+% This class behaves as a container for holding an instance that can be mixed
 % with other instances. This is similar to the matlab.mixin.Heterogeneous,
 % but this class is context specific. I.e in general, a Person instance
 % should not be mixed with any other schema, but a subclass allows a Person
 % instance to be mixed with a specified set of other instances.
 %
-% This class is internal and should not be exposed to users. Subclasses will be 
-% used for schema property definitions if properties support linked/embedded 
+% This class is internal and should not be exposed to users. Subclasses will be
+% used for schema property definitions if properties support linked/embedded
 % types of different types.
 
 % Rename to MixedTypeSet or MixableType
@@ -33,7 +33,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         Instance
     end
 
-    methods 
+    methods
         function obj = LinkedCategory(instance)
             
             if nargin == 0; return; end
@@ -89,9 +89,9 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 end
 
                 if isstruct(instance{i}) && isfield(instance{i}, 'at_id')
-                    % Support initializing an Instance from a struct with 
-                    % an @id. This will act as a placeholder for an 
-                    % unresolved linked instance, and the link needs to be 
+                    % Support initializing an Instance from a struct with
+                    % an @id. This will act as a placeholder for an
+                    % unresolved linked instance, and the link needs to be
                     % resolved externally in order to put a real instance in place.
                     obj(i).Instance = struct;
                     obj(i).Instance.id = instance{i}.at_id;
@@ -199,7 +199,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             import openminds.internal.utility.getSchemaDocLink
             docLinkStr = getSchemaDocLink(class(obj));
             
-            % Todo: Consider indicating that the array has mixed types, 
+            % Todo: Consider indicating that the array has mixed types,
             % i.e is heterogeneous-like...
             %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
 
@@ -241,12 +241,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 stringArray = strrep(stringArray, ']', '');
             end
 
-
             str = obj.getHeader;
             disp(str)
             fprintf( '%s\n\n', strjoin(stringArray, '    \n') );
         end
-
     end
 
     % Utility methods for CustomCompactDisplayProvider methods
@@ -261,7 +259,6 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             stringArray = strrep(stringArray, '[', '');
             stringArray = strrep(stringArray, ']', '');
         end
-
     end
 
     methods (Access = protected)
@@ -286,26 +283,23 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 annotation = sprintf('%s: %s', prefix, annotation);
             end
         end
-
     end
 
     methods (Static, Access = protected, Hidden)
         
         function shortSchemaName = getSchemaShortName(fullSchemaName)
         %getSchemaShortName Get short schema name from full schema name
-        % 
+        %
         %   shortSchemaName = getSchemaShortName(fullSchemaName)
         %
         %   Example:
         %   fullSchemaName = 'openminds.core.research.Subject';
         %   shortSchemaName = obj.getSchemaShortName(fullSchemaName)
-        % 
+        %
         %     'Subject'
 
             import openminds.internal.utility.getSchemaName
             shortSchemaName = getSchemaName(fullSchemaName);
         end
-    
     end
-    
 end

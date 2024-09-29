@@ -1,4 +1,4 @@
-function filewrite(filePath, textStr)             
+function filewrite(filePath, textStr)
    
     folderPath = char(fileparts(filePath));
     

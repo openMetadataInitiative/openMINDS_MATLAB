@@ -2,7 +2,7 @@ function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule
 %BUILDCLASSPATH Summary of this function goes here
 %   Detailed explanation goes here
     
-    arguments 
+    arguments
         schemaClassName
         schemaCategory
         schemaModule
@@ -22,4 +22,3 @@ function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule
     
     filePath = fullfile(folderPath, [schemaClassName, '.m']);
 end
-

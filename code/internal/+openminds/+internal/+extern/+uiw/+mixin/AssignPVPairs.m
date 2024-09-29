@@ -77,7 +77,6 @@ classdef (Abstract) AssignPVPairs < handle & matlab.mixin.SetGet
         
     end %methods
         
-        
     %% Static, Sealed Methods
     methods (Static, Sealed)
         
@@ -101,7 +100,6 @@ classdef (Abstract) AssignPVPairs < handle & matlab.mixin.SetGet
             end
             
         end %function
-        
         
         function [remaningArgs,removedArgValue] = removeArg(argname, varargin )
             % Remove specified argument from the rest of P-V pairs
@@ -127,7 +125,6 @@ classdef (Abstract) AssignPVPairs < handle & matlab.mixin.SetGet
         end %function
         
     end %methods
-    
     
     %% Private methods
     methods (Access=private)
@@ -177,6 +174,5 @@ classdef (Abstract) AssignPVPairs < handle & matlab.mixin.SetGet
         end %function
         
     end %methods
-        
     
 end %classdef

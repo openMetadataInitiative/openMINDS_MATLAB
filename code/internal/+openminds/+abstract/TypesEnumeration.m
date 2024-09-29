@@ -26,7 +26,7 @@ classdef TypesEnumeration
         function aliasClassName = createAliasClassName(obj)
         % createAliasClassName - Creates the alias class name for a type
         %
-        % The alias class name does not contain the subgroup name for a 
+        % The alias class name does not contain the subgroup name for a
         % metadata type. This name is present in some of the openminds
         % metadata models and not in others, so the AliasClassName may be
         % equal to the ClassName

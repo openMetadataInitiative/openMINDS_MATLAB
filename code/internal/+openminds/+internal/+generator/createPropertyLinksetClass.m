@@ -16,7 +16,6 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
 %   className = createPropertyLinksetClass('MySchema', 'MyProperty', ["Type1", "Type2"])
 %
 % See also: openminds.abstract.LinkedCategory
-
     
     import openminds.internal.generator.utility.cellArrayToTextStringArray
     
@@ -41,7 +40,7 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
     str = fileread(templateFilepath);
 
     % Modify the template based on inputs
-    str = strrep(str, 'Template', propertyName);
+    str = strrep(str, 'MixedTypeTemplate', propertyName);
     str = strrep(str, '[]', linkedTypes);
     if allowMultiple
         str = strrep(str, 'true', 'false');

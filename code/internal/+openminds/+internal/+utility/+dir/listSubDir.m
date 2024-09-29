@@ -56,9 +56,6 @@ function [absPath, dirName] = listSubDir(rootPath, expression, ignoreList, nRecu
                 absPath = cat(2, absPath, absPathRec);
                 dirName = cat(2, dirName, dirNameRec);
             end
-
         end
-
     end
-
 end

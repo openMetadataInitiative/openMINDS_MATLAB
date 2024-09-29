@@ -1,4 +1,4 @@
-function selectOpenMindsVersion(version)
+function selectOpenMindsVersion(versionNumber)
 % selectOpenMindsVersion - Select and "import" a specific version of openMINDS library.
 %
 % This function allows you to select a specific version of the openMINDS
@@ -31,7 +31,6 @@ function selectOpenMindsVersion(version)
 %
 % See also: addpath, rmpath
 
-
 % Author: Eivind Hennestad
 % Created: 2023-08-08
 % Last Modified: 2023-08-08
@@ -39,12 +38,9 @@ function selectOpenMindsVersion(version)
 % Copyright 2023 Open Metadata Initiative
 % Licensed under MIT License
 
-
-% Todo: Need to debug situation where one version is already on path, but
-% another is requested.
-
     arguments
-        version (1,1) string = "latest"
+        versionNumber (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(versionNumber)} = "latest"
     end
 
     rootPath = openminds.internal.rootpath();
@@ -53,20 +49,11 @@ function selectOpenMindsVersion(version)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
 
-    import openminds.internal.constants.*
-
-    % - Validate inputs
-    version = openminds.internal.validateVersionNumber(version);
-    
-    if str2double(version) == Models.getLatestVersionNumber()
-        version = "latest";
-    end
-
-    if version == "latest"
-        versionAsString = version;
+    % Get version number as string matching version numbers of version folders
+    if versionNumber == "latest"
+        versionAsString = 'latest';
     else
-        versionNumber = str2double(version);
-        versionAsString = sprintf('v%.1f', versionNumber);
+        versionAsString = string(versionNumber);
     end
 
     % Remove the schema/mixedtypes subdirectory for all versions

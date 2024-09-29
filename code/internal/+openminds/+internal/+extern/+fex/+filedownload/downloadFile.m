@@ -5,7 +5,7 @@ function strLocalFilename = downloadFile(strLocalFilename, strURLFilename, optio
 %   specified by the url strURLFilename to the local path specified by
 %   strLocalFile
 %
-%   strLocalFilename = downloadFile(localFilename, strURLFilename) 
+%   strLocalFilename = downloadFile(localFilename, strURLFilename)
 %   downloads the file and returns the absolute path of the downloaded file
 %
 %   Options for the progress display:
@@ -14,10 +14,9 @@ function strLocalFilename = downloadFile(strLocalFilename, strURLFilename, optio
 %       ShowFilename    : Whether to show name of downloaded file. Default = false.
 %       IndentSize      : Size of indentation if displaying progress in command window.
 
-
 %   Written by Eivind Hennestad | v1.0.5
 
-    arguments 
+    arguments
         strLocalFilename       char         {mustBeNonempty}
         strURLFilename         char         {mustBeValidUrl}
         options.DisplayMode    char         {mustBeValidDisplay} = 'Dialog Box'
@@ -61,9 +60,7 @@ function strLocalFilename = downloadFile(strLocalFilename, strURLFilename, optio
     if nargout < 1
         clear strLocalFilename
     end
-    
 end
-
 
 %% Custom validation functions
 
