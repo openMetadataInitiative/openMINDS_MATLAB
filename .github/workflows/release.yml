@@ -72,7 +72,7 @@ jobs:
       # Copy all the reports down into the container
       - uses: actions/download-artifact@v4
         with:
-          name: reports-*
+          pattern: reports-*
           path: docs/reports
           merge-multiple: true
 
