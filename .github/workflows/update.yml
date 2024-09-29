@@ -58,7 +58,7 @@ jobs:
           # git push returns error code 1 if there's nothing to push (which there often isn't in this case)
           git push || true
 
-      - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/ehennestad/openMINDS_MATLAB)
+      - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
         uses: codecov/codecov-action@v4
         if: always()
         with:

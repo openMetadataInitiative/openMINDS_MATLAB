@@ -37,7 +37,7 @@ jobs:
           command: addpath(genpath("dev")), testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}")     
 
       # Upload code coverage information to Codecov
-      - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/ehennestad/openMINDS_MATLAB)
+      - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
         uses: codecov/codecov-action@v4
         if: always()
         with:
