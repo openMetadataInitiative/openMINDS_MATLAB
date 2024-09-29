@@ -9,7 +9,8 @@
 # openMINDS_MATLAB - For Developers
 
 This folder contains developer's tools for checking and testing code as well as 
-packaging the toolbox as an mltbx file.
+packaging the toolbox as an mltbx file. The tools are integrated with GitHub actions but can also be run locally.
 
 The tools in this folder is inspired by and adapted from the 
 [Climate Data Store Toolbox for MATLAB](https://github.com/mathworks/climatedatastore)
+
