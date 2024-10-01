@@ -21,10 +21,11 @@ function D = buildFullClassNameMap()
 
     schemaPath = fullfile( openminds.internal.rootpath, "schemas", version, "+openminds");
     
-    relativeFilePaths = recursiveDir(schemaPath, ...
-        'FileType', 'm', ...
-        "IgnoreList", "Contents", ...
-        "OutputType", "RelativeFilePath");
+    % List all schema class files for the current version
+    fileInfo = dir( fullfile(schemaPath, '**', '*.m'));
+    fileInfo( strcmp({fileInfo.name}, 'Contents.m') ) = []; % Ignore Contents.m
+    filePaths = string( fullfile( {fileInfo.folder}, {fileInfo.name} ) )';
+    relativeFilePaths = strrep(filePaths, schemaPath, '');
 
     [parentDir, schemaNames] = fileparts(relativeFilePaths);
     
