@@ -33,7 +33,7 @@ function createTestedWithBadgeforToolbox(versionNumber, rootDir)
            && sum([testResults.testsuite.failuresAttribute]) == 0 ...
            && sum([testResults.testsuite.skippedAttribute]) == 0
             if releasesTestedWith ~= ""
-                % Insert the seperator between released after the first one
+                % Insert the separator between released after the first one
                 releasesTestedWith = releasesTestedWith + " | ";
             end
             releasesTestedWith = releasesTestedWith + releaseName;

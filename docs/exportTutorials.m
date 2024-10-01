@@ -6,6 +6,7 @@ function exportTutorials()
     openmindsDocsPath = strrep(openmindsCodePath, 'code', 'docs');
 
     L = dir(fullfile(openmindsCodePath, 'livescripts', '*.mlx'));
+    L = cat(1, L, dir(fullfile(openmindsCodePath, 'gettingStarted.mlx')));
     
     for i = 1:numel(L)
         sourcePath = fullfile(L(i).folder, L(i).name);

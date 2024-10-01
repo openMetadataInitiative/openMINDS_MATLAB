@@ -6,18 +6,37 @@ disp( openminds.toolboxversion )
 ```
 
 ```TextOutput
-Version 0.9.1
+Version 0.9.3
 ```
 
 If you have installed **openMINDS_MATLAB** and the above command does not work, most likely **openMINDS_MATLAB** is <u>not</u> added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html).
 
-See also: [Crew Member Collection Tutorial](./crewMemberCollection.md)
 
-## Configure MATLAB's path to use the latest model versions
+If you opened this file in MATLAB Online from the GitHub Demo link, the following steps should add **openMINDS_MATLAB** to the search path:
+
+
+1) Open the <samp>code</samp> folder from the <samp>Files</samp> panel on the left sidebar.
+
+
+2) Open and run the <samp>startup.m</samp> file. Select "Add to Path" if prompted from a popup dialog.
+
+
+See also: [Crew Member Collection Tutorial](./livescripts/crewMemberCollection.mlx)
+
+## Configure MATLAB's search path to use the latest model versions
+
+Note: The following is only relevant if you have cloned or downloaded openMINDS_MATLAB from GitHub. If you installed the Matlab toolbox, you can skip this part.
+
+
+The openMINDS_MATLAB toolbox comes packaged with schema classes for all versions of the openMINDS models. Therefore is important to use the [<samp>openminds.startup</samp>](+openminds/startup.m) function to ensure that the search path only contains schema classes for a specific openMINDS version. Provide the version number as an input, i.e "latest", or "v2.0"
+
 ```matlab
-% Schema classes for all the openMINDS model versions are available in this
-% toolbox. To ensure the latest version is used, run the following command:
-selectOpenMindsVersion("latest")
+openminds.startup("latest") % Add schema classes for the latest version to the search path
+```
+
+```TextOutput
+Initializing openMINDS_MATLAB...
+Added schemas for version "latest" to path
 ```
 ## Import schemas from the core model
 ```matlab

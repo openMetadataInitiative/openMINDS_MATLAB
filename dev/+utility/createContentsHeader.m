@@ -43,4 +43,3 @@ function contentsStr = createContentsHeader(options)
         copyRightLine, ...
         separatorLine}, newline);
 end
-
