@@ -194,10 +194,15 @@ disp(collection.Nodes)
     "_:zaphod-beeblebrox@hitchhikers-guide.galaxy" ⟼ {[zaphod-beeblebrox@hitchhikers-guide.galaxy]  (ContactInformation)}
 ```
 
-A note here: Since the collection holds a mix of different types, each type is inside a cell (as indicated by the curly brackets). In order to get an instance from the <samp>Nodes</samp>, we need to use curly bracket indexing:
+A note here: Since the collection holds a mix of different types, each type is inside a cell (as indicated by the curly brackets). In order to get an instance from the <samp>Nodes</samp>, we need to index into a cell object:
 
 ```matlab
-person = collection.Nodes{"_:arthur-dent"}
+if isMATLABReleaseOlderThan("R2023a")
+    cellValue = collection.Nodes("_:arthur-dent");
+    person = cellValue{1}
+else
+    person = collection.Nodes{"_:arthur-dent"} % Curly brace syntax introduced in R2023a
+end
 ```
 
 ```TextOutput
