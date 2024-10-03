@@ -39,8 +39,8 @@ format_map = {
 }
 
 OUTPUT_FILE_FORMAT = "m"
-TEMPLATE_FILE_NAME = "matlab_schema_class_template.txt"
-TEMPLATE_FILE_NAME_CT = "matlab_controlledterm_class_template.txt"
+TEMPLATE_FILE_NAME = os.path.join("templates", "schema_class_template.txt")
+TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template.txt")
 
 
 class MATLABSchemaBuilder(object):
