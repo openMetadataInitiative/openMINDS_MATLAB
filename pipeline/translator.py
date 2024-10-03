@@ -418,7 +418,7 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         str_formatter = this_config['stringFormat']
 
         if not prop_names:
-            return "str = '<missing name>';"
+            return "str = obj.createLabelForMissingLabelDefinition();"
 
         if not isinstance(prop_names, list):
             prop_names = [prop_names]
@@ -449,7 +449,7 @@ def _get_display_label_method_expression(schema_short_name, property_names):
             return "str = obj.name;"        
         else:
             warnings.warn(f"No display label method found for {schema_short_name}.")
-            return "str = '<missing name>';"
+            return "str = obj.createLabelForMissingLabelDefinition();"
 
 
 def _create_property_validator_functions(name, property_info):

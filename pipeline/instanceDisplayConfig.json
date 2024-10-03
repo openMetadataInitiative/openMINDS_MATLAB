@@ -111,10 +111,6 @@
     "propertyName": "identifier",
     "stringFormat": "sprintf('%s', identifier)"
   },
-  "comment": {
-    "propertyName": "",
-    "stringFormat": ""
-  },
   "funding": {
     "propertyName": ["funder", "awardNumber"],
     "stringFormat": "sprintf('%s (%s)', funder, awardNumber)"
@@ -250,5 +246,37 @@
   "tissueSampleState": {
     "propertyName": "lookupLabel",
     "stringFormat": "sprintf('%s', lookupLabel)"
+  },
+  "rectangle": {
+    "propertyName": ["length", "width"],
+    "stringFormat": "sprintf('rectangle(L=%s, W=%s)', length, width)"
+  },
+  "circle": {
+    "propertyName": "radius",
+    "stringFormat": "sprintf('circle(r=%s)', radius)"
+  },
+  "ellipse": {
+    "propertyName": ["semiMajorAxis", "semiMinorAxis"],
+    "stringFormat": "sprintf('ellipse(r1=%s, r2=%s)', semiMajorAxis, semiMinorAxis)"
+  },
+  "singleColor": {
+    "propertyName": ["value"],
+    "stringFormat": "sprintf('%s', value)"
+  },
+  "publicationIssue": {
+    "propertyName": ["isPartOf", "issueNumber"],
+    "stringFormat": "sprintf('%s: %s', isPartOf, issueNumber)"
+  },
+  "comment": {
+    "propertyName": ["comment"],
+    "stringFormat": "sprintf('%s', comment)"
+  },
+  "amountOfChemical": {
+    "propertyName": ["amount", "chemicalProduct"],
+    "stringFormat": "sprintf('%s [%s]', amount, chemicalProduct)"
+  },
+  "URL": {
+    "propertyName": ["URL"],
+    "stringFormat": "sprintf('%s', URL)"
   }
 }
