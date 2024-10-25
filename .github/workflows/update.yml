@@ -59,11 +59,14 @@ jobs:
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
           git config user.email "<>"
-          git add .github/badges/code_issues.json .github/badges/tests.json
-          git commit -m "Update code issues and tests badges"
-          git fetch
-          # git push returns error code 1 if there's nothing to push (which there often isn't in this case)
-          git push || true
+          
+          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
+            git add .github/badges/*
+            git commit -m "Update code issues and tests badges"
+            git push -f
+          else
+            echo "Nothing to commit"
+          fi
 
       - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
         uses: codecov/codecov-action@v4
@@ -106,7 +109,7 @@ jobs:
           # Only proceed with commit and push if changes are detected
           if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
             git add .github/badges/*
-          git commit -m "Update code issues and tests badges"
+            git commit -m "Update code issues and tests badges"
             git push -f
           else
             echo "Nothing to commit"
