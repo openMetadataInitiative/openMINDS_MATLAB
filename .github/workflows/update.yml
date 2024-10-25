@@ -36,7 +36,14 @@ jobs:
         uses: matlab-actions/run-command@v2
         if: always()
         with:
-          command: addpath(genpath("dev")),codecheckToolbox()     
+          command: addpath(genpath("dev")),codecheckToolbox()
+    
+      # Upload code issues report
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: docs/reports/code_issues.sarif
           
       # Runs all tests in the project.
       - name: Run tests
