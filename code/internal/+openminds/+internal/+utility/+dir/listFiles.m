@@ -12,19 +12,16 @@ function [filePath, filename] = listFiles(filePathCellArray, filetype)
         filePathCellArray = {filePathCellArray};
     end
 
-    L = [];
+    L = cell(1, numel(filePathCellArray));
     
     for i = 1:numel(filePathCellArray)
         
         thisL = dir(filePathCellArray{i});
         thisL = thisL(~[thisL.isdir]);
 
-        if isempty(L)
-            L = thisL;
-        else
-            L = [L; thisL];
-        end
+        L{i} = thisL;
     end
+    L = cat(1, L{:});
 
     if isempty(L)
         return
