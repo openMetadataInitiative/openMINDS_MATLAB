@@ -1,5 +1,6 @@
-classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handle
-%LinkedTypeSet Abstract class representing a set of linked types
+classdef LinkedCategory < handle & matlab.mixin.indexing.RedefinesParen & ...
+        openminds.internal.mixin.CustomInstanceDisplay
+% LinkedTypeSet Abstract class representing a set of linked types
 
 % This class behaves as a container for holding an instance that can be mixed
 % with other instances. This is similar to the matlab.mixin.Heterogeneous,
@@ -13,9 +14,13 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
 
 % Rename to MixedTypeSet or MixableType
 
+% Developer note: This refactor should allow removing custom subsref and 
+% subsasgn from the openminds.abstract.Schema class and simplify that class
+% a lot
+
 %   TODO:
 %       [ ] Implement subsref in order to get instances out.
-%       [ ] If all requested instances are the same, return a an object array
+%       [ ] If all requested instances are the same, return an object array
 %       [ ] Consider if we need to define intersect, union etc.
 %       [ ] Any other builtins needed???
 
@@ -152,7 +157,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 cellArrayOfStruct{i} = obj(i).Instance.toStruct();
             end
         end
-    
+
         function tf = isequal(obj, instance)
             if isempty(obj) && isempty(instance)
                 if strcmp( class(obj), class(instance) )
@@ -185,7 +190,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             shortName = openminds.internal.utility.string.camelCase(shortName);
             str = sprintf('https://openminds.ebrains.eu/vocab/%s', shortName);
         end
-        
+
         function str = getShortName(obj)
             import openminds.internal.utility.string.packageParts
             [~, str] = packageParts(class(obj));
@@ -201,7 +206,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             
             % Todo: Consider indicating that the array has mixed types,
             % i.e is heterogeneous-like...
-            %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
+            % docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
 
             docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
             if isempty(obj)
@@ -234,8 +239,8 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 stringArray = strjoin( arrayfun(@(o) o.Instance.id, obj, 'UniformOutput', false), newline);
             else
                 repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-                %stringArray = cellfun(@(r) r.Representation, repArray);
-                %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+                % stringArray = cellfun(@(r) r.Representation, repArray);
+                % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
                 stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
                 stringArray = strrep(stringArray, '[', '');
                 stringArray = strrep(stringArray, ']', '');
@@ -252,12 +257,70 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         
         function stringArray = getStringArrayForSingleLine(obj)
             repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-            %stringArray = cellfun(@(r) r.Representation, repArray);
-            %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+            % stringArray = cellfun(@(r) r.Representation, repArray);
+            % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
 
             stringArray = cellfun(@(r) r.PaddedDisplayOutput, repArray);
             stringArray = strrep(stringArray, '[', '');
             stringArray = strrep(stringArray, ']', '');
+        end
+    end
+
+    % Implement abstract methods for matlab.mixin.indexing.RedefinesParen
+    methods (Access = protected)
+        function varargout = parenReference(obj, indexOp)
+
+            instances = { obj.(indexOp(1)) };
+
+            % obj.ContainedArray = obj.ContainedArray.(indexOp(1));
+            if isscalar(indexOp)
+                varargout{1} = obj;
+                return;
+            end
+            [varargout{1:nargout}] = obj.(indexOp(2:end));
+        end
+
+        function obj = parenAssign(obj, indexOp, varargin)
+            error('Not implemented yet')
+        end
+
+        function n = parenListLength(obj,indexOp,ctx)
+            %Stupid workaround for not being able to use builtin
+            % parenListLength/listLength directly on obj...
+            S = struct('Instance', {});
+            instances = {obj.Instance};
+            for i = 1:numel(instances)
+                S(i).Instance = instances{i};
+            end
+            n = listLength(S, indexOp, ctx);
+        end
+
+        function obj = parenDelete(obj,indexOp)
+            obj.(indexOp) = [];
+        end
+    end
+
+        methods (Access=public)
+        function out = value(obj)
+            out = obj;
+        end
+        
+        function out = sum(obj)
+            error('Not implemented');
+        end
+        
+        function out = cat(dim,varargin)
+            out = builtin('cat', dim, varargin{:});
+        end
+
+        function varargout = size(obj,varargin)
+            [varargout{1:nargout}] = builtin('size', obj, varargin{:});
+        end
+    end
+
+    methods (Static, Access=public)
+        function obj = empty()
+            obj = openminds.internal.abstract.LinkedCategory();
         end
     end
 
@@ -266,7 +329,9 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         function annotation = getAnnotation(obj)
             import openminds.internal.utility.getSchemaDocLink
 
-            if ~isempty(obj) && isa(obj(1).Instance, 'openminds.controlledterms.ControlledTerm')
+            % if ~isempty(obj) && isa(obj(1).Instance, 'openminds.controlledterms.ControlledTerm')
+            if ~isempty(obj) && isa(obj(1), 'openminds.controlledterms.ControlledTerm')
+
                 % Todo: Use obj.Instance.getAnnotation (but: can't access method if protected...)
                 annotation = 'Controlled Instance';
             else
