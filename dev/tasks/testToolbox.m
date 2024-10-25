@@ -2,7 +2,7 @@ function testToolbox(varargin)
 % testToolbox - Run tests for openMINDS_MATLAB toolbox
 
     % Prepare
-    installMatBox("commit")
+    ommtools.installMatBox("commit")
     projectRootDirectory = ommtools.projectdir();
     % matbox.installRequirements(projectRootDirectory) % No requirements...
 

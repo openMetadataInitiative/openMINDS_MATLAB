@@ -2,7 +2,7 @@ function createTestedWithBadgeforToolbox(versionNumber)
     arguments
         versionNumber (1,1) string
     end
-    installMatBox()
+    ommtools.installMatBox()
     projectRootDirectory = ommtools.projectdir();
     matbox.tasks.createTestedWithBadgeforToolbox(versionNumber, projectRootDirectory)
 end
