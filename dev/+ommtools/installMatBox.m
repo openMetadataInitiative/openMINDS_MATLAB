@@ -52,7 +52,8 @@ function installFromCommit()
 
     % Move to installation location
     [~, repoFolderName] = fileparts(unzippedFolder);
-    targetFolder = fullfile(userpath, "Add-Ons");
+    %targetFolder = fullfile(userpath, "Add-Ons");
+    targetFolder = fullfile(matlab.internal.addons.util.retrieveAddOnsInstallationFolder(), 'Toolboxes', 'Additional Software');
     targetFolder = fullfile(targetFolder, repoFolderName);
     if isfolder(targetFolder); rmdir(targetFolder, "s"); end
     movefile(unzippedFolder, targetFolder);
