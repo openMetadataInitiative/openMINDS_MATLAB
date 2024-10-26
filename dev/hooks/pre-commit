@@ -1,0 +1,4 @@
+#!/bin/bash
+# Run MATLAB script before committing
+
+matlab -batch "try; run('dev/hooks/pre_commit.m'); catch e; disp(getReport(e)); exit(1); end; exit(0);"
