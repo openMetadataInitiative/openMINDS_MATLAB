@@ -25,22 +25,22 @@ jobs:
           pip install -r requirements.txt
           python build.py
 
-      - name: Checkout main branch
+      - name: Checkout staging branch
         uses: actions/checkout@v3
         with:
-          ref: main
-          path: main
+          ref: staging
+          path: staging
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push to main
+      - name: Push to staging
         run: |
-          rm -rf main/code/schemas/*
-          rm -rf main/code/mixedtypes/*
-          rm -rf main/code/enumerations/*
-          cp -R target/* main/code
-          cp -R main/code/internal/resources/content_files/* main/code/
-          cp -R main/code/internal/resources/readme_files/* main/code/
-          cd main
+          rm -rf staging/code/schemas/*
+          rm -rf staging/code/mixedtypes/*
+          rm -rf staging/code/enumerations/*
+          cp -R target/* staging/code
+          cp -R staging/code/internal/resources/content_files/* staging/code/
+          cp -R staging/code/internal/resources/readme_files/* staging/code/
+          cd staging
 
           git config --global user.email "openminds@ebrains.eu"
           git config --global user.name "openMINDS pipeline"
