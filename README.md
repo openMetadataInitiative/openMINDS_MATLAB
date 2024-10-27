@@ -34,11 +34,13 @@ MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.
 <p align="right">
 
 ## Requirements and Installation
-[\<Back to top\>](#openminds-metadata-models-for-matlab)
+[(Back to top)](#openminds-metadata-models-for-matlab)
 
 openMINDS for MATLAB requires **MATLAB R2022b** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
 
 ## Before you start
+[(Back to top)](#openminds-metadata-models-for-matlab)
+
 ```matlab
 % Verify that openMINDS_MATLAB is installed
 disp( openminds.toolboxversion )
@@ -52,7 +54,7 @@ If you have installed **openMINDS_MATLAB** and the above command does not work, 
 
 
 ## Getting Started
-[\<Back to top\>](#openminds-metadata-models-for-matlab)
+[(Back to top)](#openminds-metadata-models-for-matlab)
 
 See also: [Crew Member Collection Tutorial](./docs/tutorials/crewMemberCollection.md)
 
@@ -165,7 +167,7 @@ disp(subject1)
 ```
 
 ## Detailed Installation Instructions
-[\<Back to top\>](#openminds-metadata-models-for-matlab)
+[(Back to top)](#openminds-metadata-models-for-matlab)
 
 The easiest way to install the openMINDS for MATLAB is to use the [**Add-on Explorer**](https://www.mathworks.com/products/matlab/add-on-explorer.html):
 1. Launch the Add-on Explorer from MATLAB's Home tab. Click Add-Ons -> Get Add-Ons<img width="860" alt="openminds_installation_step1" src="https://github.com/openMetadataInitiative/openMINDS_MATLAB/assets/17237719/71e7d8a3-1548-44e4-8ad2-84798773ce90">
@@ -174,7 +176,7 @@ The easiest way to install the openMINDS for MATLAB is to use the [**Add-on Expl
 4. Press the "Add" button.<img width="860" alt="openminds_installation_step4" src="https://github.com/openMetadataInitiative/openMINDS_MATLAB/assets/17237719/cc2edc9e-4a5d-43cd-a3fc-a94a52d8d84a">
 
 ## Acknowledgements
-[\<Back to top\>](#openminds-metadata-models-for-matlab)
+[(Back to top)](#openminds-metadata-models-for-matlab)
 
 <div><img src="https://www.braincouncil.eu/wp-content/uploads/2018/11/wsi-imageoptim-EU-Logo.jpg" alt="EU Logo" height="23%" width="15%" align="right" style="margin-left: 10px"></div>
 
