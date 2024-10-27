@@ -22,17 +22,19 @@
   <a href="#acknowledgements">Acknowledgements</a>
 </p>
 
+---
+
+  
 MATLAB package for the openMINDS metadata framework for linked data in neuroscience. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods.
 
 To generally learn more about the openMINDS metadata framework please go to :arrow_right: [**ReadTheDocs**](https://openminds-documentation.readthedocs.io).  
 You can test and learn how to use openMINDS in MATLAB by going through a small :arrow_right: [**DEMO**](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) on MATLAB Online.  
 
 MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.com/products/matlab-online.html), but you need to register for a [MathWorks Account](https://www.mathworks.com/mwaccount/register?uri=https%3A%2F%2Fwww.mathworks.com%2Fproducts%2Fmatlab.html).
-
+<p align="right">
 
 ## Requirements and Installation
 openMINDS for MATLAB requires **MATLAB R2022b** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
-
 
 ## Before you start
 ```matlab
