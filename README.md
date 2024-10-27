@@ -15,6 +15,13 @@
 [![MATLAB Code Issues](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FopenMetadataInitiative%2FopenMINDS_MATLAB%2Fgh-badges%2F.github%2Fbadges%2Fcode_issues.json)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/security/code-scanning?query=is%3Aopen+branch%3Achange%2Fuse-matbox)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://gitHub.com/openMetadataInitiative/openMINDS_MATLAB/graphs/commit-activity)
 
+<p align="center">
+  <a href="#requirements-and-installation">Requirements and Installation</a> •
+  <a href="#before-you-start">Before you start</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#acknowledgements">Acknowledgements</a>
+</p>
+
 MATLAB package for the openMINDS metadata framework for linked data in neuroscience. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods.
 
 To generally learn more about the openMINDS metadata framework please go to :arrow_right: [**ReadTheDocs**](https://openminds-documentation.readthedocs.io).  
