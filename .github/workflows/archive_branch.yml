@@ -1,0 +1,40 @@
+name: Archive Branch on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  archive_branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rename Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORIGINAL_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          # Replace 'x/' with 'z/merged/' in the branch name
+          if [[ "$ORIGINAL_BRANCH" == x/* ]]; then
+            ARCHIVED_BRANCH="${ORIGINAL_BRANCH/x\//z\/merged/}"
+          else
+            ARCHIVED_BRANCH="z/archived/${ORIGINAL_BRANCH}"
+          fi
+
+          # Rename the branch using the GitHub API
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${ORIGINAL_BRANCH}/rename \
+               -d "{\"new_name\": \"${ARCHIVED_BRANCH}\"}"
+
+      - name: Comment on PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          ARCHIVED_BRANCH: ${{ steps.rename.outputs.ARCHIVED_BRANCH }}
+        run: |
+          # Add a comment on the PR with the new branch name
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
+               -d "{\"body\": \"Branch archived as ${ARCHIVED_BRANCH}\"}"
