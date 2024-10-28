@@ -9,6 +9,8 @@
         "Summary": "A MATLAB toolbox to create metadata instances using the openMINDS metadata models",
         "Description": "MATLAB package for the openMINDS metadata models. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods",
         "MinimumMatlabRelease": "R2022b",
-        "MaximumMatlabRelease": ""
+        "MaximumMatlabRelease": "",
+        "ToolboxImageFile": "img/light_openMINDS-MATLAB-logo_toolbox.png",
+        "ToolboxGettingStartedGuide": "code/gettingStarted.mlx"
     }
 }
