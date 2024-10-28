@@ -2,7 +2,13 @@ function baseURI = BaseURI(version)
     
     arguments
         version (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(version)} = "3.0" % Todo: change to latest
+            {openminds.mustBeValidVersion(version)} = missing
+    end
+
+    if ismissing(version)
+        version = openminds.internal.utility.VersionNumber( ...
+            openminds.getSchemaVersion() ...
+            );
     end
 
     if version <= 3
