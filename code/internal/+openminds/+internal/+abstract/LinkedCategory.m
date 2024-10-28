@@ -73,7 +73,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                         if contains(type, 'openminds.controlledterms')
                             allInstanceNames = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
 
-                            if openminds.utility.isSemanticName(instanceName)
+                            if openminds.utility.isSemanticInstanceName(instanceName)
                                 S = openminds.utility.parseAtID(instanceName);
                                 instanceName = S.Name;
                             end

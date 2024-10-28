@@ -1,4 +1,11 @@
-function versionStr = getSchemaVersion()
+function versionNum = getSchemaVersion(outputType)
+    
+    arguments
+        % outputType - char or VersionNumber. char is default to keep
+        % backwards compatibility. Todo: Deprecate char option
+        outputType (1,1) string ...
+            {mustBeMember(outputType, ["char", "VersionNumber"])} = "char"
+    end
 
     schemaFolder = fullfile(openminds.internal.rootpath, 'schemas/');
     pathSplit = strsplit(path, pathsep);
@@ -9,5 +16,10 @@ function versionStr = getSchemaVersion()
         warning('Multiple schema versions are on path');
     end
 
-    versionStr = strrep(pathSplit{matchedIdx(1)}, schemaFolder, '');
+    versionNum = strrep(pathSplit{matchedIdx(1)}, schemaFolder, '');
+
+    if outputType == "VersionNumber"
+        versionNum = openminds.internal.utility.VersionNumber(versionNum);
+        versionNum.Format = "vX.Y";
+    end
 end
