@@ -34,7 +34,7 @@ jobs:
       - name: Run tests
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("dev")), testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}")     
+          command: addpath(genpath("tools")), testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}")     
 
       # Upload code coverage information to Codecov
       - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
@@ -80,7 +80,7 @@ jobs:
       - name: Generate tested with badge
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("dev")), createTestedWithBadgeforToolbox("${{  github.ref_name }}")     
+          command: addpath(genpath("tools")), createTestedWithBadgeforToolbox("${{  github.ref_name }}")     
           
       # Publish test results from all the releases
       - name: Publish Test Results
@@ -93,7 +93,7 @@ jobs:
       - name: Package Toolbox
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("dev")), packageToolbox("specific","${{  github.ref_name }}")     
+          command: addpath(genpath("tools")), packageToolbox("specific","${{  github.ref_name }}")     
 
       # Define the versionNumber using underscores, as this is used in the MLTBX
       - name: Set version number

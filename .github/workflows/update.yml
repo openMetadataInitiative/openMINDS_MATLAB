@@ -35,7 +35,7 @@ jobs:
         uses: matlab-actions/run-command@v2
         if: always()
         with:
-          command: addpath(genpath("dev")),codecheckToolbox()
+          command: addpath(genpath("tools")),codecheckToolbox()
     
       # Upload code issues report
       - name: Upload SARIF file
@@ -49,7 +49,7 @@ jobs:
         uses: matlab-actions/run-command@v2
         if: always()
         with:
-          command: addpath(genpath("dev")), testToolbox()
+          command: addpath(genpath("tools")), testToolbox()
 
       # Commit the JSON for the badge for the issues and tests
       - name: commit code issues badge JSON
