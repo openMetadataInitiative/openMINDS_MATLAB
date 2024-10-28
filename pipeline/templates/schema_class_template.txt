@@ -58,5 +58,4 @@ classdef {{ class_name }} < {{base_class}}
             {{display_label_method_expression}}
         end
     end
-    
 end
