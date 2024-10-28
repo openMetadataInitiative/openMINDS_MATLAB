@@ -10,7 +10,7 @@ catch
 end
 
 try
-    %ommtools.stylecheckToolbox %todo...
+    % ommtools.stylecheckToolbox %todo...
 catch %#ok<UNRCH>
     failed = [failed, "stylecheck"];
 end

@@ -3,7 +3,7 @@ classdef testInstanceSaveLoad < matlab.unittest.TestCase
 
     % Automatically generate a test case for each schema type
     properties (TestParameter)
-        SchemaType = cellstr( enumeration('openminds.enum.Types') ); 
+        SchemaType = cellstr( enumeration('openminds.enum.Types') );
     end
 
     properties

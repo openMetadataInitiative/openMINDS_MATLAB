@@ -18,7 +18,6 @@ classdef ControlledInstanceTest < matlab.unittest.TestCase
             
             expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseURI(versionNumber));
             testCase.assertTrue(contains(jsonStr.at_id, expectedIdUriPrefix));
-
         end
 
         function testGetControlledInstanceRemote(testCase, instanceSpecification, versionNumber)
@@ -26,7 +25,7 @@ classdef ControlledInstanceTest < matlab.unittest.TestCase
                 instanceSpecification{:}, versionNumber, "FileSource", "github");
             
             expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseURI(versionNumber));
-            testCase.assertTrue(contains(jsonStr.at_id, expectedIdUriPrefix));       
+            testCase.assertTrue(contains(jsonStr.at_id, expectedIdUriPrefix));
         end
     end
 end

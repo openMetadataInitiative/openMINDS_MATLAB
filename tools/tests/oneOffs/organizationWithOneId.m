@@ -1,10 +1,10 @@
 function org = organizationWithOneId()
 % organizationWithOneId - test creation of a organization with one digital ID
-% 
-%  = organizationWithOneId()
 %
-% Creates an example Organization object. If the procedure fails, an error is
-% generated.
+%   o = organizationWithOneId()
+%
+%   Creates an example Organization object. If the procedure fails, an error is
+%   generated.
 %
 
     ror = openminds.core.RORID('identifier','https://ror.org/01xtthb56');

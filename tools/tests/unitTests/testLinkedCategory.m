@@ -5,10 +5,9 @@ classdef testLinkedCategory < matlab.unittest.TestCase
     %
     %  [ ] Test hetereogeneous linked types.
     %  [ ] Test multiple nested linked categories.
-    %  [ ] Test assigning of properties to linked categories
+    %  [ ] Test assigning of properties to linked categories
     %   
     %  HOMOGENEOUS
-    
     
     properties
         % DatasetWithOnePersonAuthor - A dataset instance with a single
@@ -19,7 +18,6 @@ classdef testLinkedCategory < matlab.unittest.TestCase
         % authors which is of type Person
         DatasetWithTwoPersonAuthor
     end
-
 
     methods(TestClassSetup)
         % Shared setup for the entire test class
@@ -77,9 +75,9 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             testCase.assertClass(organizationName, "string")
             
             % Alternative: This does not work.
-            %thisAuthor = ds.author;
-            %thisOrganizationName = thisAuthor.affiliation.memberOf.fullName;
-        end 
+            % thisAuthor = ds.author;
+            % thisOrganizationName = thisAuthor.affiliation.memberOf.fullName;
+        end
 
         function testRetrievePropertyOfNestedNonScalarHomogeneousType(testCase)
             % Get dataset for testing
@@ -93,7 +91,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             
             S = ds.author.affiliation; % Assert length of this is 3
             testCase.assertLength(S, 3)
-        end 
+        end
 
         function testRetrieveNonScalarHomogeneousType(testCase)
         % Test the retrieval of a linked type property which is a linked
@@ -155,7 +153,5 @@ classdef testLinkedCategory < matlab.unittest.TestCase
                     'Failed to retrieve property from author')
             end
         end
-
     end
-    
 end

@@ -8,7 +8,7 @@ function packageToolbox(releaseType, versionString)
 
     projectRootDirectory = ommtools.projectdir();
     % Not sure if this is needed:
-    run(fullfile(projectRootDirectory, 'code', 'startup.m')) 
+    run(fullfile(projectRootDirectory, 'code', 'startup.m'))
 
     % Specify toolbox path folders
     toolboxPathFolders = [...

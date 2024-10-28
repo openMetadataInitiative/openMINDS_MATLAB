@@ -6,7 +6,6 @@ function pvl = propertyValueListWithNestedEmbeddings()
 
     % Create a QuantitativeValue
     
-    
     stringValue = openminds.core.research.StringProperty('name', 'MyParameter', 'value', 'A');
 
     ageUnit = openminds.controlledterms.UnitOfMeasurement('day');

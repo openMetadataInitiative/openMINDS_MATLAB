@@ -1,6 +1,6 @@
 function p = personWithTwoAffiliations()
 % personWithTwoAffiliations - test creation of a person object in openMINDS
-% 
+%
 % p = personWithTwoAffiliations()
 %
 % Creates an example Person object. If the procedure fails, an error is
@@ -28,6 +28,3 @@ contact = openminds.core.ContactInformation('email',...
 p = openminds.core.Person('familyName','Smith','givenName','John D.',...
     'affiliation',af,'digitalIdentifier',orcid,...
     'contactInformation',contact);
-
-
-

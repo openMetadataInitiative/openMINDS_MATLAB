@@ -3,7 +3,6 @@ function persons = personArray()
     filePath = fullfile(openminds.internal.rootpath, "livescripts", "data", "spacecraft_crew_members.csv");
     crewMembers = readtable(filePath, "TextType", "String");
 
-
     contacts = dictionary;
     
     for email = crewMembers.email'
