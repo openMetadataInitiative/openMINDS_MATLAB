@@ -7,6 +7,7 @@ from typing import List
 
 from git import Repo, GitCommandError
 from jinja2 import Environment, select_autoescape, FileSystemLoader
+from jinja2 import Template
 
 def clone_sources():
 
@@ -74,11 +75,66 @@ class InstanceLoader(object):
         
         return instance_list
     
-def initialise_jinja_template_environment(autoescape:bool=None):
-    return Environment(
-        loader=FileSystemLoader(os.path.dirname(os.path.realpath(__file__))),
+def initialise_jinja_templates(autoescape:bool=None):
+    """
+    Initializes a Jinja2 environment and preloads templates into a dictionary for reuse.
+
+    This function sets up a Jinja2 `Environment` for loading templates from the `templates` 
+    subdirectory within the current script's directory. It then preloads a set of named templates 
+    into a dictionary, making them accessible by key for efficient repeated rendering. This 
+    approach avoids repeated environment initialization and template loading, optimizing 
+    performance when rendering templates multiple times.
+
+    Parameters:
+    -----------
+    autoescape : bool, optional
+        Configures the autoescaping behavior for templates:
+        - `True` enables autoescaping for all templates.
+        - `False` disables autoescaping.
+        - `None` (default) uses Jinja2's `select_autoescape()` function to enable autoescaping for 
+          specific file types (e.g., `.html`, `.xml`).
+
+    Returns:
+    --------
+    dict
+        A dictionary of preloaded Jinja2 template objects keyed by descriptive names, allowing 
+        access to specific templates. The available templates are:
+        - `"schema_class"`: Template for schema class generation.
+        - `"controlledterm_class"`: Template for controlled term class generation.
+        - `"mixedtype_class"`: Template for mixed type class generation.
+        - `"models_enumeration"`: Template for models enumeration generation.
+        - `"types_enumeration"`: Template for types enumeration generation.
+
+    Notes:
+    ------
+    - The function uses `os.path.dirname(os.path.realpath(__file__))` to locate the directory of 
+      the current script, ensuring templates are loaded from the `templates` subdirectory.
+    - Autoescaping is configured to help prevent injection attacks for templates handling HTML or XML.
+
+    Example Usage:
+    --------------
+    templates = initialise_jinja_templates(autoescape=True)
+    rendered_schema = templates["schema_class"].render(data=schema_data)
+    """
+
+    module_directory = os.path.dirname(os.path.realpath(__file__))
+    template_directory = os.path.join(module_directory, "templates")
+    
+    jinja_environment = Environment(
+        loader=FileSystemLoader(template_directory),
         autoescape=select_autoescape(autoescape) if autoescape is not None else select_autoescape()
     )
+
+    jinja_templates = {
+        "schema_class": jinja_environment.get_template("schema_class_template.txt"),
+        "controlledterm_class": jinja_environment.get_template("controlledterm_class_template.txt"),
+        "mixedtype_class": jinja_environment.get_template("mixedtype_class_template.txt"),
+        "models_enumeration": jinja_environment.get_template("models_enumeration_template.txt"),
+        "types_enumeration": jinja_environment.get_template("types_enumeration_template.txt"),
+    }
+
+    return jinja_templates
+
 
 def camel_case(text_string: str):
     return text_string[0].lower() + text_string[1:]
@@ -156,12 +212,8 @@ def save_resource_files(version, schema_path_list):
     with open(os.path.join(target_directory, "alias.json"), "w") as f:
         json.dump(alias_json, f, indent=2)
 
-def save_enumeration_classes(enum_type, version, schema_loader, jinja_template_environment):
+def save_enumeration_classes(enum_type, version, schema_loader, enumeration_template:Template):
 
-    # Load templates
-    template_file_name = os.path.join("templates", enum_type.lower()+"_enumeration_template.txt")
-    enumeration_template = jinja_template_environment.get_template(template_file_name)
-    
     # Create target file directory
     target_file_path = _create_enum_target_file_path(version, enum_type)
     os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
