@@ -3,10 +3,9 @@ name: Update openMINDS_MATLAB
 on:
   # Triggers the workflow on push or pull request events for the "main" branch
   push:
-    branches: [ "main" ]
+    branches-ignore: ["pipeline"]
     paths-ignore:
-      - 'README.md'
-      - 'dev/README.md'
+      - '*README.md'
       - '.github/workflows/**'
       - 'docs/reports/**'
   pull_request:

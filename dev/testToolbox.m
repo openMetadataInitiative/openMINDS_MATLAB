@@ -23,7 +23,7 @@ function testToolbox(options)
     finalize = onCleanup(@()(path(oldpath)));
     
     % Use the openMINDS_MATLAB startup function to correctly configure the path
-    run( fullfile(codeFolder, 'startup.m') )
+    run( fullfile(codeFolder, 'setup.m') )
 
     outputDirectory = fullfile(rootDir, "docs", "reports", options.ReportSubdirectory);
     if ~isfolder(outputDirectory)

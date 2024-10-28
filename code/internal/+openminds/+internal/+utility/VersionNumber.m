@@ -139,7 +139,14 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
                 end
             end
         end
-
+        
+        function c = char(obj)
+            if numel(obj) == 1
+                c = char( string(obj) );
+            else
+                c = cellstr( string(obj) );
+            end
+        end
         % 
         function verNum = double(obj)
             verNum = [obj.Major, obj.Minor, obj.Patch, obj.Build];
