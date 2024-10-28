@@ -13,7 +13,8 @@ function setup(options)
     % Add the code folder to the search path
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
-    
+    addpath(fullfile(codeFolder, 'internal'))
+
     % Running startup will properly add openMINDS_MATLAB to the search path
     openminds.startup(options.Version)
     
