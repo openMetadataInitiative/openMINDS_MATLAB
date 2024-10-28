@@ -52,7 +52,7 @@ classdef {{ class_name }} < {{base_class}}
             obj@openminds.abstract.Schema(varargin{:})
         end
     end
-    
+
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             {{display_label_method_expression}}
