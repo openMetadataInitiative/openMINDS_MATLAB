@@ -13,6 +13,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
 
     properties (SetAccess = protected, Hidden)
         IsLatest (1,1) logical = false
+        IsMissing (1,1) logical = false
     end
 
     properties (Access = private, Dependent)
@@ -56,6 +57,9 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
 
                 elseif isnumeric(iVersion)
                     obj(i).setVersion(iVersion);
+
+                elseif ismissing(iVersion)
+                    obj(i).IsMissing = true; %#ok<AGROW>
                 end
             end
 
@@ -128,6 +132,8 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
                 verNums = obj(i).getNumbersForFormat();
                 if obj(i).IsLatest
                     str(i) = "latest";
+                elseif obj(i).IsMissing
+                    str(i) = "missing";
                 else
                     str(i) = string( sprintf(obj(i).FormatPattern, verNums{:}) );
                 end
@@ -137,6 +143,10 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
         % 
         function verNum = double(obj)
             verNum = [obj.Major, obj.Minor, obj.Patch, obj.Build];
+        end
+        
+        function tf = ismissing(obj)
+            tf = obj.IsMissing;
         end
 
         % Bumping version methods
