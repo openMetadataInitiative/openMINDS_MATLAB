@@ -29,11 +29,10 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
         {%- endfor %}
         ]
     end
-    
+
     methods
         function obj = {{ class_name }}(varargin)            
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
-    
 end
