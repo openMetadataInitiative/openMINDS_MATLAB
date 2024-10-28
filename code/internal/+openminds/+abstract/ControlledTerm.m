@@ -90,7 +90,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             
             schemaName = getSchemaName(class(obj));
 
-            if obj.isSemanticName(instanceName)
+            if openminds.utility.isSemanticInstanceName(instanceName)
                  [~, instanceName] = openminds.utility.parseAtID(instanceName);
             end
 
@@ -124,24 +124,6 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             end
 
             obj.id = obj.at_id;
-        end
-    end
-
-    methods (Static)
-        function tf = isSemanticName(name)
-            % Todo: Move to utility package
-
-            URI = matlab.net.URI(name);
-            
-            isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == ...
-                openminds.internal.constants.url.OpenMindsBaseURL;
-
-            URIPath = URI.Path;
-            URIPath(URIPath=="")=[];
-        
-            isInstanceUrl = URIPath(1) == "instances";
-
-            tf = isValidUrl && isInstanceUrl;
         end
     end
 end
