@@ -7,11 +7,11 @@ import json
 import math
 import os
 import re
-from typing import List
+from typing import List, Dict
 from collections import defaultdict
 import warnings
 
-from jinja2 import Environment
+from jinja2 import Template
 
 from pipeline.constants import (
     OPENMINDS_BASE_URI,
@@ -46,7 +46,7 @@ TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template
 class MATLABSchemaBuilder(object):
     """ Class for building MATLAB schema classes """
 
-    def __init__(self, schema_file_path:str, root_path:str, jinja_template_environment:Environment):
+    def __init__(self, schema_file_path:str, root_path:str, jinja_templates:Dict[str, Template]):
         
         self._parse_source_file_path(schema_file_path, root_path)
 
@@ -54,11 +54,11 @@ class MATLABSchemaBuilder(object):
             self._schema_payload = json.load(schema_file)
         
         if self._schema_model_name == "controlledTerms":
-            template_file_name = TEMPLATE_FILE_NAME_CT
+            self.class_template = jinja_templates["controlledterm_class"]
         else:
-            template_file_name = TEMPLATE_FILE_NAME
+            self.class_template = jinja_templates["schema_class"]
 
-        self.schema_template = jinja_template_environment.get_template(template_file_name)
+        self.mixedtype_class_template = jinja_templates["mixedtype_class"]
 
     def build(self):
         """Build and save the MATLAB schema class file"""
@@ -171,6 +171,8 @@ class MATLABSchemaBuilder(object):
             # Resolve property validators in matlab
             validators = _create_property_validator_functions(property_name, property_info)
 
+            mixed_types_list = sorted(possible_types)
+
             if len(possible_types) == 1:
                 possible_types = possible_types[0]
                 possible_types_str = f'"{possible_types}"'
@@ -187,6 +189,7 @@ class MATLABSchemaBuilder(object):
                 "type": possible_types,
                 "type_doc": possible_types_docstr,
                 "type_list": possible_types_str,
+                "mixed_type_list": mixed_types_list,
                 "size": size_attribute,
                 "size_doc": size_attribute_doc,
                 "validators": "{{{}}}".format(', '.join(validators)) if validators else "",
@@ -241,7 +244,7 @@ class MATLABSchemaBuilder(object):
         # print(f"Expanding template for {self._schema_file_name}")
 
         template_variables = self._template_variables
-        result = self.schema_template.render(template_variables)
+        result = self.class_template.render(template_variables)
         return _strip_trailing_whitespace(result)
 
     def _generate_additional_files(self):
@@ -271,14 +274,16 @@ class MATLABSchemaBuilder(object):
         file_name = property_name + ".m"
         file_path = os.path.join(*path_parts, file_name)
 
-        # Write file content # Todo: use a template
-        with open(file_path, "w") as fp:
-            fp.write(f"classdef {property_name} < openminds.internal.abstract.LinkedCategory\n")
-            fp.write(f"    properties (Constant, Hidden)\n")
-            fp.write(f"        ALLOWED_TYPES = {prop['type_list']}\n")
-            fp.write(f"        IS_SCALAR = {str(not(prop['allow_multiple'])).lower()}\n")
-            fp.write(f"    end\n")
-            fp.write(f"end\n")
+        template_variables = {
+            "class_name": property_name,
+            "allowed_types_list": prop['mixed_type_list'],
+            "is_scalar": str(not(prop['allow_multiple'])).lower(),
+        }
+
+        mixedtype_classdef_str = self.mixedtype_class_template.render(template_variables)
+
+        with open(file_path, "w", encoding="utf-8") as target_file:
+            target_file.write(mixedtype_classdef_str)
 
 
 # # # LOCAL UTILITY FUNCTIONS # # #

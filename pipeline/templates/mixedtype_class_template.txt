@@ -1,0 +1,15 @@
+classdef {{ class_name }} < openminds.internal.abstract.LinkedCategory
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+        {%- for full_type_name in allowed_types_list %}
+        {%- if not loop.last%}
+            "{{full_type_name}}", ...
+        {%- else%}
+            "{{full_type_name}}" ...
+        {%- endif -%}
+            
+        {%- endfor %}
+        ]
+        IS_SCALAR = {{is_scalar}}
+    end
+end
