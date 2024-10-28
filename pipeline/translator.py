@@ -255,7 +255,7 @@ class MATLABSchemaBuilder(object):
         # Create mixedtype class 
         for prop in self._template_variables["props"]:
             if prop["is_linked"] or prop["is_embedded"]:
-                if len(prop["type_list"]) > 1:
+                if len(prop["mixed_type_list"]) > 1:
                     self._build_mixed_type_class(self._template_variables, prop)
 
     def _build_mixed_type_class(self, schema, prop):
