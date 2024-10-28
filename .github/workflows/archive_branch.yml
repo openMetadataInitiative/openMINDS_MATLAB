@@ -9,31 +9,55 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Rename Branch
+      - name: Set up variables
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORIGINAL_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
           # Replace 'x/' with 'z/merged/' in the branch name
           if [[ "$ORIGINAL_BRANCH" == x/* ]]; then
-            ARCHIVED_BRANCH="${ORIGINAL_BRANCH/x\//z\/merged/}"
+            echo "ARCHIVED_BRANCH=${ORIGINAL_BRANCH/x\//z\/merged/}" >> $GITHUB_ENV
           else
-            ARCHIVED_BRANCH="z/archived/${ORIGINAL_BRANCH}"
+            echo "ARCHIVED_BRANCH=z/archived/${ORIGINAL_BRANCH}" >> $GITHUB_ENV
           fi
 
-          # Rename the branch using the GitHub API
+      - name: Get latest commit SHA of the original branch
+        id: get_sha
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ORIGINAL_BRANCH=$ORIGINAL_BRANCH
+          SHA=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/git/ref/heads/$ORIGINAL_BRANCH \
+              | jq -r '.object.sha')
+          echo "SHA=$SHA" >> $GITHUB_ENV
+
+      - name: Create new branch with archived prefix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARCHIVED_BRANCH: ${{ env.ARCHIVED_BRANCH }}
+          SHA: ${{ env.SHA }}
+        run: |
           curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                -H "Accept: application/vnd.github+json" \
-               https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${ORIGINAL_BRANCH}/rename \
-               -d "{\"new_name\": \"${ARCHIVED_BRANCH}\"}"
+               https://api.github.com/repos/${{ github.repository }}/git/refs \
+               -d "{\"ref\": \"refs/heads/${ARCHIVED_BRANCH}\", \"sha\": \"${SHA}\"}"
+
+      - name: Delete the original branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORIGINAL_BRANCH: ${{ env.ORIGINAL_BRANCH }}
+        run: |
+          curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github+json" \
+               https://api.github.com/repos/${{ github.repository }}/git/refs/heads/${ORIGINAL_BRANCH}
 
       - name: Comment on PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          ARCHIVED_BRANCH: ${{ steps.rename.outputs.ARCHIVED_BRANCH }}
+          ARCHIVED_BRANCH: ${{ env.ARCHIVED_BRANCH }}
         run: |
-          # Add a comment on the PR with the new branch name
           curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                -H "Accept: application/vnd.github+json" \
                https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
