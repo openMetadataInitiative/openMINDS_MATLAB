@@ -32,7 +32,10 @@ classdef testInstanceSaveLoad < matlab.unittest.TestCase
             testCase.assertInstanceOf(instance, 'openminds.abstract.Schema')
 
             testCase.verifyWarningFree( @(i)dispNoOutput(instance) )
-            
+
+            strRep = string(instance);
+            testCase.verifyClass(strRep, 'string')
+
             function dispNoOutput(instance) %#ok<INUSD>
                 c = evalc('disp(instance)'); %#ok<NASGU>
             end
