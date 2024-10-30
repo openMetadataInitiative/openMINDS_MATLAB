@@ -24,7 +24,7 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
 %
 %   Note: The information about instances is retrieved from a local copy of
 %   the instances repository. The table will be persistent and stay in
-%   memory, and wil be updated if new commit(s) are available on the
+%   memory, and will be updated if new commit(s) are available on the
 %   instances repository.
 
     import openminds.internal.utility.git.isLatest

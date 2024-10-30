@@ -12,19 +12,16 @@ function [filePath, filename] = listFiles(filePathCellArray, filetype)
         filePathCellArray = {filePathCellArray};
     end
 
-    L = [];
+    L = cell(1, numel(filePathCellArray));
     
     for i = 1:numel(filePathCellArray)
         
         thisL = dir(filePathCellArray{i});
         thisL = thisL(~[thisL.isdir]);
 
-        if isempty(L)
-            L = thisL;
-        else
-            L = [L; thisL];
-        end
+        L{i} = thisL;
     end
+    L = cat(1, L{:});
 
     if isempty(L)
         return
@@ -33,7 +30,7 @@ function [filePath, filename] = listFiles(filePathCellArray, filetype)
     keep = ~ strncmp({L.name}, '.', 1);
     L = L(keep);
     
-    if ~strncmp(filetype, '.', 1)
+    if ~isempty(filetype) && ~strncmp(filetype, '.', 1)
         filetype = strcat('.', filetype);
     end
 
@@ -50,23 +47,3 @@ function [filePath, filename] = listFiles(filePathCellArray, filetype)
         filename = {L.name};
     end
 end
-
-% % function [folders, names, ext] = fileparts(varargin)
-% %
-% %     [folders, names, ext] = deal(cell(1, numel(varargin)));
-% %
-% %     for i = 1:numel(varargin)
-% %         [folders{i}, names{i}, ext{i}] = builtin('fileparts', varargin{i});
-% %     end
-% %
-% %     if nargin == 1
-% %         folders = folders{1}; names = names{1}; ext = ext{1};
-% %     end
-% %
-% %     if nargout == 1
-% %         clear names ext
-% %     elseif nargout == 2
-% %         clear ext
-% %     end
-% %
-% % end

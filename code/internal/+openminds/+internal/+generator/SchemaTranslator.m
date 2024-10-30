@@ -507,7 +507,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 allowMultiple = false;
             end
 
-            % Initialize poperty attribute variables.
+            % Initialize property attribute variables.
             validationFcnStr = string.empty;
 
             if isfield(propertyAttributes, 'x_instruction')
