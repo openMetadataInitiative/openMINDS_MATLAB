@@ -9,10 +9,9 @@ on:
     paths-ignore:
       - '*README.md'
       - '*md'
-      - '.github/workflows/**'
+      - '.github/**'
   pull_request:
     branches: [ "main" ]
-
   # Allows for manually running this workflow from the Actions tab
   workflow_dispatch:
 
