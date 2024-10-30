@@ -1,5 +1,5 @@
-classdef testInstanceSaveLoad < matlab.unittest.TestCase
-% testInstanceSaveLoad Unit test for save and load operations on OpenMINDS types
+classdef InstanceTest < matlab.unittest.TestCase
+% InstanceTest - Unit test for creation and save/load of OpenMINDS instances
 
     % Automatically generate a test case for each schema type
     properties (TestParameter)
