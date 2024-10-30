@@ -30,6 +30,12 @@ classdef testInstanceSaveLoad < matlab.unittest.TestCase
             % Attempt to create an object of the schema class
             instance = schemaFcn();
             testCase.assertInstanceOf(instance, 'openminds.abstract.Schema')
+
+            testCase.verifyWarningFree( @(i)dispNoOutput(instance) )
+            
+            function dispNoOutput(instance) %#ok<INUSD>
+                c = evalc('disp(instance)'); %#ok<NASGU>
+            end
         end
 
         function testSaveLoadForSchema(testCase, SchemaType)
