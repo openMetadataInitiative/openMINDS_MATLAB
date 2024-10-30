@@ -1,11 +1,11 @@
-name: Update openMINDS_MATLAB
+name: Run tests
 
 on:
   # Triggers the workflow on push to any branch other than main or PR to main
   # This way tests will run on any push to a feature branch and when feature 
   # branches are merged to main, but not repeated when PRs are actually merged. 
   push:
-    branches-ignore: ["main", "pipeline", "gh-badges"]
+    branches-ignore: ["pipeline", "gh-badges"]
     paths-ignore:
       - '*README.md'
       - '*md'
