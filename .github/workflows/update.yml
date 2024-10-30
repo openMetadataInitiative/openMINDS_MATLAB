@@ -100,8 +100,8 @@ jobs:
 
       - name: Push to gh-badges
         run: |
-          cp .github/badges/code_issues.json gh-badges/.github/badges/code_issues.json
-          cp .github/badges/tests.json gh-badges/.github/badges/tests.json
+          cp .github/badges/code_issues.svg gh-badges/.github/badges/code_issues.svg
+          cp .github/badges/tests.svg gh-badges/.github/badges/tests.svg
           cd gh-badges
 
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
