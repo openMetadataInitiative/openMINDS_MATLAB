@@ -1,7 +1,7 @@
 # Test openMINDS MATLAB Toolbox across all supported releases of MATLAB, package toolbox, create release
 # Adapted from: https://github.com/mathworks/climatedatastore/blob/main/.github/workflows/release.yml
 
-name: MATLAB Release
+name: Create new release
 
 # Run workflow when a tag is created
 on:
@@ -23,7 +23,8 @@ jobs:
 
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -34,7 +35,9 @@ jobs:
       - name: Run tests
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("tools")), testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}")     
+          command: |
+            addpath(genpath("tools"));
+            testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}", 'CreateBadge', false)     
 
       # Upload code coverage information to Codecov
       - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
@@ -46,7 +49,7 @@ jobs:
           env_vars: ${{ matrix.MATLABVersion }}
 
       # Save the contents of the report directory from each release into an artifact.
-      - name: Save Report Directory
+      - name: Save report directory
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -62,10 +65,13 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      # Use deploy key to push back to protected branch
+      - name: Checkout repository using deploy key
+        uses: actions/checkout@v4
         with:
-            ref: refs/heads/main
-    
+          ref: refs/heads/main
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
 
@@ -81,16 +87,16 @@ jobs:
         uses: matlab-actions/run-command@v2
         with:
           command: addpath(genpath("tools")), createTestedWithBadgeforToolbox("${{  github.ref_name }}")     
-          
+
       # Publish test results from all the releases
-      - name: Publish Test Results
+      - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           junit_files: "docs/reports/*/test-results.xml"
 
       # Package the MLTBX
-      - name: Package Toolbox
+      - name: Package toolbox
         uses: matlab-actions/run-command@v2
         with:
           command: addpath(genpath("tools")), packageToolbox("specific","${{  github.ref_name }}")     
@@ -102,45 +108,74 @@ jobs:
           versionNumber=$(echo "${{ github.ref_name }}" | sed 's/\./_/g')
           echo "versionNumber=$versionNumber" >> $GITHUB_ENV
 
-
       # Save the MLTBX.
-      - name: Save Packaged Toolbox
+      - name: Save packaged toolbox
         uses: actions/upload-artifact@v4
         with:
           name: openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
           path: releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
 
-      # Commit the JSON for the MATLAB releases badge and ToolboxPackaging.prj
-      - name: commit changed files
+      # Commit the updated Contents.m
+      - name: Commit updated Contents.m file
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
           git config user.email "<>"
           git status
           git add code/Contents.m
-          git add .github/badges/${{  github.ref_name }}/tested_with.json
           git commit -m "Final checkins for release ${{  github.ref_name }}"
           git fetch
           git push
 
+      # Commit the JSON for the MATLAB releases test badge to gh-badges branch
+      - name: Checkout gh-badges branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-badges
+          path: gh-badges
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to gh-badges
+        run: |
+          mkdir -p gh-badges/.github/badges/${{  github.ref_name }}
+          cp .github/badges/${{  github.ref_name }}/tested_with.json gh-badges/.github/badges/${{  github.ref_name }}/tested_with.json
+          cd gh-badges
+
+          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
+          git config user.email "<>"
+
+          # Only proceed with commit and push if changes are detected
+          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
+            git add .github/badges/*
+            git commit -m "Update tested with badge for release"
+            git push -f
+          else
+            echo "Nothing to commit"
+          fi
+
       # Retag the repo so that the updated files are included in the release tag
-      - name: update tag
+      - name: Update tag
         if: always()
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
           git config user.email "<>"
-          git tag -d "${{  github.ref_name }}" 
-          git push --delete origin ${{  github.ref_name }}
-          git tag -m "Release ${{  github.ref_name }}" ${{  github.ref_name }}
-          git push --tag
+
+          # Delete the existing tag locally and remotely
+          git tag -d "${{ github.ref_name }}" 
+          git push origin --delete "${{ github.ref_name }}"
+
+          # Recreate the tag with a message, including [skip ci] to prevent CI workflows
+          git tag -a "${{ github.ref_name }}" -m "Release ${{ github.ref_name }} [skip ci]" 
+
+          # Push the new tag to the remote repository
+          git push origin "${{ github.ref_name }}"
 
       # Create the release
-      - name: Create GitHub Release
+      - name: Create GitHub release
         uses: ncipollo/release-action@v1
         with:
           draft: true        
           artifacts: "releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx"
           generateReleaseNotes: true
-          body: "![MATLAB Versions Tested](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FopenMetadataInitiative%2FopenMINDS_MATLAB%2Fmain%2F.github%2Fbadges%2F${{  github.ref_name }}%2Ftested_with.json)"
-
+          body: "![MATLAB Versions Tested](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FopenMetadataInitiative%2FopenMINDS_MATLAB%2Fgh-badges%2F.github%2Fbadges%2F${{  github.ref_name }}%2Ftested_with.json)"
