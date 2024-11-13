@@ -34,8 +34,9 @@ classdef TutorialTest <  matlab.unittest.TestCase
     end
     
     methods (Test)
-        function testTutorial(testCase, tutorialFile)
-            run(tutorialFile)
+        function testTutorial(testCase, tutorialFile) %#ok<INUSD>
+            C = evalc( "run(tutorialFile)" );
+            testCase.verifyClass(C, 'char')
         end
     end
 end
