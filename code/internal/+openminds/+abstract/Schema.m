@@ -560,6 +560,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             displayLabel = sprintf("%s", str);
         end
 
+        function str = createLabelForMissingLabelDefinition(obj)
+            classNames = split( class(obj), '.');
+            str = sprintf('<Unlabeled %s>', classNames{end});
+        end
+
         function annotation = getAnnotation(obj)
 
             import openminds.internal.utility.getSchemaDocLink
