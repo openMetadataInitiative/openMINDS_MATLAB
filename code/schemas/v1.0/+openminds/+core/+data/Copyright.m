@@ -3,7 +3,7 @@ classdef Copyright < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   holder : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   holder : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %            Add one or several persons or organisations that hold the copyright.
 %
 %   year   : (1,1) string
@@ -31,7 +31,7 @@ classdef Copyright < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'holder', ["openminds.core.Organization", "openminds.core.Person"] ...
+            'holder', ["openminds.core.actors.Organization", "openminds.core.actors.Person"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -48,5 +48,4 @@ classdef Copyright < openminds.abstract.Schema
             str = sprintf('%s (%s)', obj.holder, obj.year);
         end
     end
-
 end

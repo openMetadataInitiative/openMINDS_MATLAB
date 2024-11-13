@@ -1,5 +1,5 @@
 classdef BrainAtlasVersion < openminds.abstract.Schema
-%BrainAtlasVersion - Structured information on a brain atlas (version level).
+%BrainAtlasVersion - No description available.
 %
 %   PROPERTIES:
 %
@@ -9,7 +9,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
 %   coordinateSpace       : (1,1) <a href="matlab:help openminds.sands.CoordinateSpace" style="font-weight:bold">CoordinateSpace</a>
 %                           Add the coordinate space in which this brain atlas version exists in.
 %
-%   digitalIdentifier     : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier     : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add the globally unique and persistent digital identifier of this brain atlas version.
 %
 %   fullName              : (1,1) string
@@ -54,7 +54,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
             {mustBeSpecifiedLength(coordinateSpace, 0, 1)}
 
         % Add the globally unique and persistent digital identifier of this brain atlas version.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name for this brain atlas version.
@@ -103,7 +103,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'annotationSet', "openminds.sands.Annotation", ...
             'coordinateSpace', "openminds.sands.CoordinateSpace", ...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier", ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
             'hasAlternativeVersion', "openminds.sands.BrainAtlasVersion", ...
             'isNewVersionOf', "openminds.sands.BrainAtlasVersion", ...
             'terminology', "openminds.sands.AtlasTerminology" ...
@@ -123,5 +123,4 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

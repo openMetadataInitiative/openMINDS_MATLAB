@@ -1,15 +1,15 @@
 classdef Organization < openminds.abstract.Schema
-%Organization - Structured information on an organization.
+%Organization - An entity comprised of one or more natural persons with a particular purpose. [adapted from Wikipedia](https://en.wikipedia.org/wiki/Organization)
 %
 %   PROPERTIES:
 %
-%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                       Add one or several globally unique and persistent digital identifier for this organization.
 %
 %   fullName          : (1,1) string
 %                       Enter the full name of the organization.
 %
-%   hasParent         : (1,1) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>
+%   hasParent         : (1,1) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
 %                       Add a parent organization to this organization.
 %
 %   homepage          : (1,1) string
@@ -22,14 +22,14 @@ classdef Organization < openminds.abstract.Schema
 
     properties
         % Add one or several globally unique and persistent digital identifier for this organization.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the full name of the organization.
         fullName (1,1) string
 
         % Add a parent organization to this organization.
-        hasParent (1,:) openminds.core.Organization ...
+        hasParent (1,:) openminds.core.actors.Organization ...
             {mustBeSpecifiedLength(hasParent, 0, 1)}
 
         % Enter a internationalized resource identifier (IRI) to the homepage of this organization.
@@ -49,8 +49,8 @@ classdef Organization < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier", ...
-            'hasParent', "openminds.core.Organization" ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'hasParent', "openminds.core.actors.Organization" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -67,5 +67,4 @@ classdef Organization < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

@@ -3,13 +3,13 @@ classdef ParcellationEntity < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   hasAnnotation      : (1,1) <a href="matlab:help openminds.sands.AtlasAnnotation" style="font-weight:bold">AtlasAnnotation</a>
+%   hasAnnotation      : (1,1) <a href="matlab:help openminds.sands.atlas.AtlasAnnotation" style="font-weight:bold">AtlasAnnotation</a>
 %                        Add the atlas annotation which this parcellation entity defines.
 %
-%   hasParent          : (1,1) <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
+%   hasParent          : (1,1) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
 %                        Add for this parcellation entity the defined anatomical parent structure.
 %
-%   isPartOf           : (1,:) <a href="matlab:help openminds.sands.ParcellationTerminology" style="font-weight:bold">ParcellationTerminology</a>
+%   isPartOf           : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationTerminology" style="font-weight:bold">ParcellationTerminology</a>
 %                        Add one or several parcellation terminologies to which this parcellation entity belongs.
 %
 %   name               : (1,1) string
@@ -21,7 +21,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
 %   relatedUBERONTerm  : (1,1) <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>
 %                        Add the related UBERON parcellation term.
 %
-%   relationAssessment : (1,:) <a href="matlab:help openminds.sands.QualitativeRelationAssessment" style="font-weight:bold">QualitativeRelationAssessment</a>, <a href="matlab:help openminds.sands.QuantitativeRelationAssessment" style="font-weight:bold">QuantitativeRelationAssessment</a>
+%   relationAssessment : (1,:) <a href="matlab:help openminds.sands.miscellaneous.QualitativeRelationAssessment" style="font-weight:bold">QualitativeRelationAssessment</a>, <a href="matlab:help openminds.sands.miscellaneous.QuantitativeRelationAssessment" style="font-weight:bold">QuantitativeRelationAssessment</a>
 %                        Add one or several relations of this parcellation entity to parcellation entities of other parcellation terminologies.
 %
 %   versionIdentifier  : (1,1) string
@@ -34,15 +34,15 @@ classdef ParcellationEntity < openminds.abstract.Schema
 
     properties
         % Add the atlas annotation which this parcellation entity defines.
-        hasAnnotation (1,:) openminds.sands.AtlasAnnotation ...
+        hasAnnotation (1,:) openminds.sands.atlas.AtlasAnnotation ...
             {mustBeSpecifiedLength(hasAnnotation, 0, 1)}
 
         % Add for this parcellation entity the defined anatomical parent structure.
-        hasParent (1,:) openminds.sands.ParcellationEntity ...
+        hasParent (1,:) openminds.sands.atlas.ParcellationEntity ...
             {mustBeSpecifiedLength(hasParent, 0, 1)}
 
         % Add one or several parcellation terminologies to which this parcellation entity belongs.
-        isPartOf (1,:) openminds.sands.ParcellationTerminology ...
+        isPartOf (1,:) openminds.sands.atlas.ParcellationTerminology ...
             {mustBeListOfUniqueItems(isPartOf)}
 
         % Enter the name for this parcellation entity.
@@ -76,13 +76,13 @@ classdef ParcellationEntity < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'hasAnnotation', "openminds.sands.AtlasAnnotation", ...
-            'hasParent', "openminds.sands.ParcellationEntity", ...
-            'isPartOf', "openminds.sands.ParcellationTerminology", ...
+            'hasAnnotation', "openminds.sands.atlas.AtlasAnnotation", ...
+            'hasParent', "openminds.sands.atlas.ParcellationEntity", ...
+            'isPartOf', "openminds.sands.atlas.ParcellationTerminology", ...
             'relatedUBERONTerm', "openminds.controlledterms.UBERONParcellation" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'relationAssessment', ["openminds.sands.QualitativeRelationAssessment", "openminds.sands.QuantitativeRelationAssessment"] ...
+            'relationAssessment', ["openminds.sands.miscellaneous.QualitativeRelationAssessment", "openminds.sands.miscellaneous.QuantitativeRelationAssessment"] ...
         )
     end
 
@@ -97,5 +97,4 @@ classdef ParcellationEntity < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

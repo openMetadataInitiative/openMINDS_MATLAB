@@ -6,16 +6,16 @@ classdef ElectrodeContact < openminds.abstract.Schema
 %   coordinatePoint    : (1,1) <a href="matlab:help openminds.sands.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
 %                        Add the central coordinate of this electrode contact.
 %
-%   definedIn          : (1,:) <a href="matlab:help openminds.core.FileInstance" style="font-weight:bold">FileInstance</a>
+%   definedIn          : (1,:) <a href="matlab:help openminds.core.data.FileInstance" style="font-weight:bold">FileInstance</a>
 %                        Add one or several files in which the electrode contact is defined in.
 %
 %   internalIdentifier : (1,1) string
 %                        Enter the identifier used for this electrode contact within the file it is stored in.
 %
-%   relatedRecording   : (1,:) <a href="matlab:help openminds.core.FileInstance" style="font-weight:bold">FileInstance</a>
+%   relatedRecording   : (1,:) <a href="matlab:help openminds.core.data.FileInstance" style="font-weight:bold">FileInstance</a>
 %                        Add one or several files in which the recordings from this electrode contact were stored.
 %
-%   relatedStimulation : (1,:) <a href="matlab:help openminds.core.FileInstance" style="font-weight:bold">FileInstance</a>
+%   relatedStimulation : (1,:) <a href="matlab:help openminds.core.data.FileInstance" style="font-weight:bold">FileInstance</a>
 %                        Add one or several files in which the stimulations applied via this electrode contact were stored.
 %
 %   visualizedIn       : (1,:) <a href="matlab:help openminds.sands.Image" style="font-weight:bold">Image</a>
@@ -29,18 +29,18 @@ classdef ElectrodeContact < openminds.abstract.Schema
             {mustBeSpecifiedLength(coordinatePoint, 0, 1)}
 
         % Add one or several files in which the electrode contact is defined in.
-        definedIn (1,:) openminds.core.FileInstance ...
+        definedIn (1,:) openminds.core.data.FileInstance ...
             {mustBeListOfUniqueItems(definedIn)}
 
         % Enter the identifier used for this electrode contact within the file it is stored in.
         internalIdentifier (1,1) string
 
         % Add one or several files in which the recordings from this electrode contact were stored.
-        relatedRecording (1,:) openminds.core.FileInstance ...
+        relatedRecording (1,:) openminds.core.data.FileInstance ...
             {mustBeListOfUniqueItems(relatedRecording)}
 
         % Add one or several files in which the stimulations applied via this electrode contact were stored.
-        relatedStimulation (1,:) openminds.core.FileInstance ...
+        relatedStimulation (1,:) openminds.core.data.FileInstance ...
             {mustBeListOfUniqueItems(relatedStimulation)}
 
         % Add one or several images in which the electrode contact is visualized in.
@@ -59,9 +59,9 @@ classdef ElectrodeContact < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'coordinatePoint', "openminds.sands.CoordinatePoint", ...
-            'definedIn', "openminds.core.FileInstance", ...
-            'relatedRecording', "openminds.core.FileInstance", ...
-            'relatedStimulation', "openminds.core.FileInstance", ...
+            'definedIn', "openminds.core.data.FileInstance", ...
+            'relatedRecording', "openminds.core.data.FileInstance", ...
+            'relatedStimulation', "openminds.core.data.FileInstance", ...
             'visualizedIn', "openminds.sands.Image" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -76,8 +76,7 @@ classdef ElectrodeContact < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

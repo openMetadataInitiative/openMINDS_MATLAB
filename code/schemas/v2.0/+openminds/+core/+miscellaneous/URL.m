@@ -36,8 +36,7 @@ classdef URL < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = sprintf('%s', obj.URL);
         end
     end
-
 end

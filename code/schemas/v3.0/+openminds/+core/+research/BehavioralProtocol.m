@@ -3,7 +3,7 @@ classdef BehavioralProtocol < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   describedIn        : (1,:) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.WebResource" style="font-weight:bold">WebResource</a>
+%   describedIn        : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.miscellaneous.WebResource" style="font-weight:bold">WebResource</a>
 %                        Add all sources in which this behavioral protocol is described in detail.
 %
 %   description        : (1,1) string
@@ -56,7 +56,7 @@ classdef BehavioralProtocol < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'describedIn', ["openminds.core.DOI", "openminds.core.File", "openminds.core.WebResource"], ...
+            'describedIn', ["openminds.core.data.File", "openminds.core.digitalidentifier.DOI", "openminds.core.miscellaneous.WebResource"], ...
             'stimulation', ["openminds.controlledterms.StimulationApproach", "openminds.controlledterms.StimulationTechnique"], ...
             'stimulusType', ["openminds.controlledterms.AuditoryStimulusType", "openminds.controlledterms.ElectricalStimulusType", "openminds.controlledterms.GustatoryStimulusType", "openminds.controlledterms.OlfactoryStimulusType", "openminds.controlledterms.OpticalStimulusType", "openminds.controlledterms.TactileStimulusType", "openminds.controlledterms.VisualStimulusType"] ...
         )
@@ -75,5 +75,4 @@ classdef BehavioralProtocol < openminds.abstract.Schema
             str = sprintf('%s', obj.name);
         end
     end
-
 end

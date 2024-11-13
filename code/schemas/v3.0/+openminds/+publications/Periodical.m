@@ -6,7 +6,7 @@ classdef Periodical < openminds.abstract.Schema
 %   abbreviation      : (1,1) string
 %                       Enter the official (or most commonly used) abbreviation of the periodical (e.g., J. Physiol).
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.ISSN" style="font-weight:bold">ISSN</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.digitalidentifier.ISSN" style="font-weight:bold">ISSN</a>
 %                       Add the globally unique and persistent digital identifier of this periodical.
 %
 %   name              : (1,1) string
@@ -19,7 +19,7 @@ classdef Periodical < openminds.abstract.Schema
         abbreviation (1,1) string
 
         % Add the globally unique and persistent digital identifier of this periodical.
-        digitalIdentifier (1,:) openminds.core.ISSN ...
+        digitalIdentifier (1,:) openminds.core.digitalidentifier.ISSN ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter the name (or title) of this periodical (e.g., Journal of Physiology).
@@ -36,7 +36,7 @@ classdef Periodical < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.ISSN" ...
+            'digitalIdentifier', "openminds.core.digitalidentifier.ISSN" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,5 +53,4 @@ classdef Periodical < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

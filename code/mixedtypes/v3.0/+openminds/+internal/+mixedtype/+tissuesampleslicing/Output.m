@@ -1,6 +1,9 @@
 classdef Output < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.TissueSampleCollectionState", "openminds.core.TissueSampleState"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.research.TissueSampleCollectionState", ...
+            "openminds.core.research.TissueSampleState" ...
+        ]
         IS_SCALAR = false
     end
 end

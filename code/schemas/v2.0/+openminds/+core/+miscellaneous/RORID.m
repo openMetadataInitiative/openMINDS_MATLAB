@@ -40,5 +40,4 @@ classdef RORID < openminds.abstract.Schema
             str = sprintf('%s', obj.identifier);
         end
     end
-
 end

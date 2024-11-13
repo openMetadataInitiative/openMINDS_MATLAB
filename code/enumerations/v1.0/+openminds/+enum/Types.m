@@ -1,5 +1,4 @@
 classdef Types < openminds.abstract.TypesEnumeration
-
     enumeration
         None('None')
         AnatomicalEntity("openminds.sands.AnatomicalEntity")
@@ -88,5 +87,4 @@ classdef Types < openminds.abstract.TypesEnumeration
         TissueSampleCollectionState("openminds.core.research.TissueSampleCollectionState")
         TissueSampleState("openminds.core.research.TissueSampleState")
     end
-    
 end

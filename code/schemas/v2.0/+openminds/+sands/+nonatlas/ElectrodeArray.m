@@ -3,7 +3,7 @@ classdef ElectrodeArray < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   electrodes         : (1,:) <a href="matlab:help openminds.sands.Electrode" style="font-weight:bold">Electrode</a>
+%   electrodes         : (1,:) <a href="matlab:help openminds.sands.nonatlas.Electrode" style="font-weight:bold">Electrode</a>
 %                        Add two or more electrodes which build this array.
 %
 %   internalIdentifier : (1,1) string
@@ -16,7 +16,7 @@ classdef ElectrodeArray < openminds.abstract.Schema
 
     properties
         % Add two or more electrodes which build this array.
-        electrodes (1,:) openminds.sands.Electrode ...
+        electrodes (1,:) openminds.sands.nonatlas.Electrode ...
             {mustBeListOfUniqueItems(electrodes)}
 
         % Enter the identifier used for this electrode array within the file it is stored in.
@@ -36,7 +36,7 @@ classdef ElectrodeArray < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'electrodes', "openminds.sands.Electrode" ...
+            'electrodes', "openminds.sands.nonatlas.Electrode" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,5 +53,4 @@ classdef ElectrodeArray < openminds.abstract.Schema
             str = obj.lookupLabel;
         end
     end
-
 end

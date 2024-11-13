@@ -3,7 +3,7 @@ classdef Person < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                       Add one or several globally unique and persistent digital identifier for this person.
 %
 %   email             : (1,1) string
@@ -19,7 +19,7 @@ classdef Person < openminds.abstract.Schema
 
     properties
         % Add one or several globally unique and persistent digital identifier for this person.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the email address of this person.
@@ -42,7 +42,7 @@ classdef Person < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier" ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -59,5 +59,4 @@ classdef Person < openminds.abstract.Schema
             str = sprintf('%s, %s', obj.familyName, obj.givenName);
         end
     end
-
 end

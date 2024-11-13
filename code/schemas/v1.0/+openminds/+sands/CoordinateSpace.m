@@ -6,13 +6,13 @@ classdef CoordinateSpace < openminds.abstract.Schema
 %   anatomicalAxesOrientation : (1,1) <a href="matlab:help openminds.controlledterms.AnatomicalAxesOrientation" style="font-weight:bold">AnatomicalAxesOrientation</a>
 %                               Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ).
 %
-%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
+%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
 %                               Enter the origin of the coordinate system (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
 %
 %   defaultImage              : (1,:) <a href="matlab:help openminds.sands.Image" style="font-weight:bold">Image</a>
 %                               Add one or several images used as visual representation of this coordinate space.
 %
-%   digitalIdentifier         : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier         : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                               Add the globally unique and persistent digital identifier of this coordinate space.
 %
 %   fullName                  : (1,1) string
@@ -44,7 +44,7 @@ classdef CoordinateSpace < openminds.abstract.Schema
             {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
 
         % Enter the origin of the coordinate system (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
-        axesOrigin (1,:) openminds.core.QuantitativeValue ...
+        axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
             {mustBeSpecifiedLength(axesOrigin, 2, 3)}
 
         % Add one or several images used as visual representation of this coordinate space.
@@ -52,7 +52,7 @@ classdef CoordinateSpace < openminds.abstract.Schema
             {mustBeListOfUniqueItems(defaultImage)}
 
         % Add the globally unique and persistent digital identifier of this coordinate space.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name for this coordinate space.
@@ -89,9 +89,9 @@ classdef CoordinateSpace < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'anatomicalAxesOrientation', "openminds.controlledterms.AnatomicalAxesOrientation", ...
-            'axesOrigin', "openminds.core.QuantitativeValue", ...
+            'axesOrigin', "openminds.core.miscellaneous.QuantitativeValue", ...
             'defaultImage', "openminds.sands.Image", ...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier", ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
             'nativeUnit', "openminds.controlledterms.UnitOfMeasurement" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -109,5 +109,4 @@ classdef CoordinateSpace < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

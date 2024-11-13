@@ -9,7 +9,7 @@ classdef TissueSample < openminds.abstract.Schema
 %   internalIdentifier : (1,1) string
 %                        Enter the identifier of this specimen that is used within the corresponding data.
 %
-%   isPartOf           : (1,:) <a href="matlab:help openminds.core.TissueSampleCollection" style="font-weight:bold">TissueSampleCollection</a>
+%   isPartOf           : (1,:) <a href="matlab:help openminds.core.research.TissueSampleCollection" style="font-weight:bold">TissueSampleCollection</a>
 %                        Add all tissue sample collections of which this tissue sample is part of.
 %
 %   laterality         : (1,:) <a href="matlab:help openminds.controlledterms.Laterality" style="font-weight:bold">Laterality</a>
@@ -30,7 +30,7 @@ classdef TissueSample < openminds.abstract.Schema
 %   strain             : (1,1) <a href="matlab:help openminds.controlledterms.Strain" style="font-weight:bold">Strain</a>
 %                        Add the strain of this specimen.
 %
-%   studiedState       : (1,:) <a href="matlab:help openminds.core.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
+%   studiedState       : (1,:) <a href="matlab:help openminds.core.research.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
 %                        Add all states in which this tissue sample was studied.
 %
 %   type               : (1,1) <a href="matlab:help openminds.controlledterms.TissueSampleType" style="font-weight:bold">TissueSampleType</a>
@@ -47,7 +47,7 @@ classdef TissueSample < openminds.abstract.Schema
         internalIdentifier (1,1) string
 
         % Add all tissue sample collections of which this tissue sample is part of.
-        isPartOf (1,:) openminds.core.TissueSampleCollection ...
+        isPartOf (1,:) openminds.core.research.TissueSampleCollection ...
             {mustBeListOfUniqueItems(isPartOf)}
 
         % Add one or both hemisphere sides from which this tissue sample originates from.
@@ -74,7 +74,7 @@ classdef TissueSample < openminds.abstract.Schema
             {mustBeSpecifiedLength(strain, 0, 1)}
 
         % Add all states in which this tissue sample was studied.
-        studiedState (1,:) openminds.core.TissueSampleState ...
+        studiedState (1,:) openminds.core.research.TissueSampleState ...
             {mustBeListOfUniqueItems(studiedState)}
 
         % Add the type of this tissue sample.
@@ -93,13 +93,13 @@ classdef TissueSample < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'biologicalSex', "openminds.controlledterms.BiologicalSex", ...
-            'isPartOf', "openminds.core.TissueSampleCollection", ...
+            'isPartOf', "openminds.core.research.TissueSampleCollection", ...
             'laterality', "openminds.controlledterms.Laterality", ...
             'origin', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ"], ...
             'phenotype', "openminds.controlledterms.Phenotype", ...
             'species', "openminds.controlledterms.Species", ...
             'strain', "openminds.controlledterms.Strain", ...
-            'studiedState', "openminds.core.TissueSampleState", ...
+            'studiedState', "openminds.core.research.TissueSampleState", ...
             'type', "openminds.controlledterms.TissueSampleType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -117,5 +117,4 @@ classdef TissueSample < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

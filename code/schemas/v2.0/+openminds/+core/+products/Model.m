@@ -6,25 +6,25 @@ classdef Model < openminds.abstract.Schema
 %   abstractionLevel  : (1,1) <a href="matlab:help openminds.controlledterms.ModelAbstractionLevel" style="font-weight:bold">ModelAbstractionLevel</a>
 %                       Add the abstraction level of this model version.
 %
-%   custodian         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
 %
 %   description       : (1,1) string
 %                       Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
 %
-%   developer         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   developer         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several developers (person or organization) that contributed to the code implementation of this model.
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.SWHID" style="font-weight:bold">SWHID</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.miscellaneous.SWHID" style="font-weight:bold">SWHID</a>
 %                       Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>
 %                       Add one or several versions of this computational model.
 %
-%   homepage          : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                       Add the uniform resource locator (URL) to the homepage of this research product.
 %
 %   howToCite         : (1,1) string
@@ -36,7 +36,7 @@ classdef Model < openminds.abstract.Schema
 %   shortName         : (1,1) string
 %                       Enter a short name (alias) for this research product (max. 30 characters; no space).
 %
-%   studyTarget       : (1,:) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>, <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.DiseaseModel" style="font-weight:bold">DiseaseModel</a>, <a href="matlab:help openminds.controlledterms.Handedness" style="font-weight:bold">Handedness</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.Phenotype" style="font-weight:bold">Phenotype</a>, <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.controlledterms.Strain" style="font-weight:bold">Strain</a>, <a href="matlab:help openminds.controlledterms.TermSuggestion" style="font-weight:bold">TermSuggestion</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
+%   studyTarget       : (1,:) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>, <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.DiseaseModel" style="font-weight:bold">DiseaseModel</a>, <a href="matlab:help openminds.controlledterms.Handedness" style="font-weight:bold">Handedness</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.Phenotype" style="font-weight:bold">Phenotype</a>, <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.controlledterms.Strain" style="font-weight:bold">Strain</a>, <a href="matlab:help openminds.controlledterms.TermSuggestion" style="font-weight:bold">TermSuggestion</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                       Add all study targets of this model version.
 
 %   This class was auto-generated by the openMINDS pipeline
@@ -66,11 +66,11 @@ classdef Model < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add one or several versions of this computational model.
-        hasVersion (1,:) openminds.core.ModelVersion ...
+        hasVersion (1,:) openminds.core.products.ModelVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
@@ -100,13 +100,13 @@ classdef Model < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'abstractionLevel', "openminds.controlledterms.ModelAbstractionLevel", ...
-            'custodian', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'developer', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', ["openminds.core.DOI", "openminds.core.SWHID"], ...
-            'hasVersion', "openminds.core.ModelVersion", ...
-            'homepage', "openminds.core.URL", ...
+            'custodian', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'developer', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', ["openminds.core.miscellaneous.DOI", "openminds.core.miscellaneous.SWHID"], ...
+            'hasVersion', "openminds.core.products.ModelVersion", ...
+            'homepage', "openminds.core.miscellaneous.URL", ...
             'scope', "openminds.controlledterms.ModelScope", ...
-            'studyTarget', ["openminds.controlledterms.BiologicalSex", "openminds.controlledterms.CellType", "openminds.controlledterms.Disease", "openminds.controlledterms.DiseaseModel", "openminds.controlledterms.Handedness", "openminds.controlledterms.Organ", "openminds.controlledterms.Phenotype", "openminds.controlledterms.Species", "openminds.controlledterms.Strain", "openminds.controlledterms.TermSuggestion", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity"] ...
+            'studyTarget', ["openminds.controlledterms.BiologicalSex", "openminds.controlledterms.CellType", "openminds.controlledterms.Disease", "openminds.controlledterms.DiseaseModel", "openminds.controlledterms.Handedness", "openminds.controlledterms.Organ", "openminds.controlledterms.Phenotype", "openminds.controlledterms.Species", "openminds.controlledterms.Strain", "openminds.controlledterms.TermSuggestion", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.nonatlas.CustomAnatomicalEntity"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -123,5 +123,4 @@ classdef Model < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

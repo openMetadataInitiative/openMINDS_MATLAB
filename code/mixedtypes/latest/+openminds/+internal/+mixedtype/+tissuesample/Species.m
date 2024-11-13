@@ -1,6 +1,9 @@
 classdef Species < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.controlledterms.Species", "openminds.core.Strain"]
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.Species", ...
+            "openminds.core.research.Strain" ...
+        ]
         IS_SCALAR = true
     end
 end

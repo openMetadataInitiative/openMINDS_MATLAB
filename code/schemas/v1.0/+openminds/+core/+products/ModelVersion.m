@@ -9,70 +9,70 @@ classdef ModelVersion < openminds.abstract.Schema
 %   accessibility         : (1,1) <a href="matlab:help openminds.controlledterms.ProductAccessibility" style="font-weight:bold">ProductAccessibility</a>
 %                           Add the accessibility of the data for this research product version.
 %
-%   author                : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   author                : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                           Add one or several authors (person or organization) that contributed to the production and publication of this research product version.
 %
-%   copyright             : (1,1) <a href="matlab:help openminds.core.Copyright" style="font-weight:bold">Copyright</a>
+%   copyright             : (1,1) <a href="matlab:help openminds.core.data.Copyright" style="font-weight:bold">Copyright</a>
 %                           Add the copyright information of this research product version.
 %
-%   custodian             : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian             : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                           Add one or several custodians (person or organization) that are responsible for this research product version.
 %
 %   description           : (1,1) string
 %                           Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references).
 %
-%   developer             : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   developer             : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                           Add one or several developers (person or organization) that contributed to the code implementation of this research product version.
 %
-%   digitalIdentifier     : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier     : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add the globally unique and persistent digital identifier of this research product version.
 %
-%   format                : (1,1) <a href="matlab:help openminds.core.ContentType" style="font-weight:bold">ContentType</a>
+%   format                : (1,1) <a href="matlab:help openminds.core.data.ContentType" style="font-weight:bold">ContentType</a>
 %                           Add the used content type of this model version.
 %
-%   fullDocumentation     : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   fullDocumentation     : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add the globally unique and persistent digital identifier of a full documentation of this research product version.
 %
 %   fullName              : (1,1) string
 %                           Enter a descriptive full name (title) for this research product version.
 %
-%   funding               : (1,:) <a href="matlab:help openminds.core.Funding" style="font-weight:bold">Funding</a>
+%   funding               : (1,:) <a href="matlab:help openminds.core.miscellaneous.Funding" style="font-weight:bold">Funding</a>
 %                           Add all funding information of this research product version.
 %
-%   hasAlternativeVersion : (1,:) <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>
+%   hasAlternativeVersion : (1,:) <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>
 %                           Add all model versions that can be used alternatively to this model version.
 %
-%   hasSupplementVersion  : (1,:) <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>
+%   hasSupplementVersion  : (1,:) <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>
 %                           Add all model versions that supplement this model version.
 %
 %   homepage              : (1,1) string
 %                           Enter the internationalized resource identifier (IRI) to the homepage of this research product version.
 %
-%   inputData             : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   inputData             : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add the data that was used as input for this model version.
 %
-%   isNewVersionOf        : (1,1) <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>
+%   isNewVersionOf        : (1,1) <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>
 %                           Add the model version preceding this model version.
 %
 %   keyword               : (1,:) string
 %                           Enter custom keywords to this research product version.
 %
-%   license               : (1,1) <a href="matlab:help openminds.core.License" style="font-weight:bold">License</a>
+%   license               : (1,1) <a href="matlab:help openminds.core.data.License" style="font-weight:bold">License</a>
 %                           Add the license of this research product version.
 %
-%   otherContribution     : (1,:) <a href="matlab:help openminds.core.Contribution" style="font-weight:bold">Contribution</a>
+%   otherContribution     : (1,:) <a href="matlab:help openminds.core.actors.Contribution" style="font-weight:bold">Contribution</a>
 %                           Add the contributions for each involved person or organization going beyond being an author, custodian or developer of this research product version.
 %
-%   outputData            : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   outputData            : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add the data that was generated as output of this model version.
 %
-%   relatedPublication    : (1,:) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   relatedPublication    : (1,:) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                           Add further publications besides the documentation (e.g. an original research article) providing the original context for the production of this research product version.
 %
 %   releaseDate           : (1,1) string
 %                           Enter the date (actual or intended) of the first broadcast/publication of this research product version.
 %
-%   repository            : (1,1) <a href="matlab:help openminds.core.FileRepository" style="font-weight:bold">FileRepository</a>
+%   repository            : (1,1) <a href="matlab:help openminds.core.data.FileRepository" style="font-weight:bold">FileRepository</a>
 %                           Add the file repository of this research product version.
 %
 %   scope                 : (1,1) <a href="matlab:help openminds.controlledterms.ModelScope" style="font-weight:bold">ModelScope</a>
@@ -106,7 +106,7 @@ classdef ModelVersion < openminds.abstract.Schema
             {mustBeListOfUniqueItems(author)}
 
         % Add the copyright information of this research product version.
-        copyright (1,:) openminds.core.Copyright ...
+        copyright (1,:) openminds.core.data.Copyright ...
             {mustBeSpecifiedLength(copyright, 0, 1)}
 
         % Add one or several custodians (person or organization) that are responsible for this research product version.
@@ -122,41 +122,41 @@ classdef ModelVersion < openminds.abstract.Schema
             {mustBeListOfUniqueItems(developer)}
 
         % Add the globally unique and persistent digital identifier of this research product version.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Add the used content type of this model version.
-        format (1,:) openminds.core.ContentType ...
+        format (1,:) openminds.core.data.ContentType ...
             {mustBeSpecifiedLength(format, 0, 1)}
 
         % Add the globally unique and persistent digital identifier of a full documentation of this research product version.
-        fullDocumentation (1,:) openminds.core.DigitalIdentifier ...
+        fullDocumentation (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(fullDocumentation, 0, 1)}
 
         % Enter a descriptive full name (title) for this research product version.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
-        funding (1,:) openminds.core.Funding ...
+        funding (1,:) openminds.core.miscellaneous.Funding ...
             {mustBeListOfUniqueItems(funding)}
 
         % Add all model versions that can be used alternatively to this model version.
-        hasAlternativeVersion (1,:) openminds.core.ModelVersion ...
+        hasAlternativeVersion (1,:) openminds.core.products.ModelVersion ...
             {mustBeListOfUniqueItems(hasAlternativeVersion)}
 
         % Add all model versions that supplement this model version.
-        hasSupplementVersion (1,:) openminds.core.ModelVersion ...
+        hasSupplementVersion (1,:) openminds.core.products.ModelVersion ...
             {mustBeListOfUniqueItems(hasSupplementVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version.
         homepage (1,1) string
 
         % Add the data that was used as input for this model version.
-        inputData (1,:) openminds.core.DigitalIdentifier ...
+        inputData (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(inputData, 0, 1)}
 
         % Add the model version preceding this model version.
-        isNewVersionOf (1,:) openminds.core.ModelVersion ...
+        isNewVersionOf (1,:) openminds.core.products.ModelVersion ...
             {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
 
         % Enter custom keywords to this research product version.
@@ -164,26 +164,26 @@ classdef ModelVersion < openminds.abstract.Schema
             {mustBeSpecifiedLength(keyword, 1, 5)}
 
         % Add the license of this research product version.
-        license (1,:) openminds.core.License ...
+        license (1,:) openminds.core.data.License ...
             {mustBeSpecifiedLength(license, 0, 1)}
 
         % Add the contributions for each involved person or organization going beyond being an author, custodian or developer of this research product version.
-        otherContribution (1,:) openminds.core.Contribution ...
+        otherContribution (1,:) openminds.core.actors.Contribution ...
             {mustBeListOfUniqueItems(otherContribution)}
 
         % Add the data that was generated as output of this model version.
-        outputData (1,:) openminds.core.DigitalIdentifier ...
+        outputData (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(outputData, 0, 1)}
 
         % Add further publications besides the documentation (e.g. an original research article) providing the original context for the production of this research product version.
-        relatedPublication (1,:) openminds.core.DigitalIdentifier ...
+        relatedPublication (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) of the first broadcast/publication of this research product version.
         releaseDate (1,1) string
 
         % Add the file repository of this research product version.
-        repository (1,:) openminds.core.FileRepository ...
+        repository (1,:) openminds.core.data.FileRepository ...
             {mustBeSpecifiedLength(repository, 0, 1)}
 
         % Add the scope of this model version.
@@ -217,27 +217,27 @@ classdef ModelVersion < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'abstractionLevel', "openminds.controlledterms.ModelAbstractionLevel", ...
             'accessibility', "openminds.controlledterms.ProductAccessibility", ...
-            'author', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'custodian', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'developer', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier", ...
-            'format', "openminds.core.ContentType", ...
-            'fullDocumentation', "openminds.core.DigitalIdentifier", ...
-            'funding', "openminds.core.Funding", ...
-            'hasAlternativeVersion', "openminds.core.ModelVersion", ...
-            'hasSupplementVersion', "openminds.core.ModelVersion", ...
-            'inputData', "openminds.core.DigitalIdentifier", ...
-            'isNewVersionOf', "openminds.core.ModelVersion", ...
-            'license', "openminds.core.License", ...
-            'otherContribution', "openminds.core.Contribution", ...
-            'outputData', "openminds.core.DigitalIdentifier", ...
-            'relatedPublication', "openminds.core.DigitalIdentifier", ...
-            'repository', "openminds.core.FileRepository", ...
+            'author', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'custodian', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'developer', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'format', "openminds.core.data.ContentType", ...
+            'fullDocumentation', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'funding', "openminds.core.miscellaneous.Funding", ...
+            'hasAlternativeVersion', "openminds.core.products.ModelVersion", ...
+            'hasSupplementVersion', "openminds.core.products.ModelVersion", ...
+            'inputData', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'isNewVersionOf', "openminds.core.products.ModelVersion", ...
+            'license', "openminds.core.data.License", ...
+            'otherContribution', "openminds.core.actors.Contribution", ...
+            'outputData', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'relatedPublication', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'repository', "openminds.core.data.FileRepository", ...
             'scope', "openminds.controlledterms.ModelScope", ...
             'studyTarget', ["openminds.controlledterms.BiologicalSex", "openminds.controlledterms.Disease", "openminds.controlledterms.Genotype", "openminds.controlledterms.Phenotype", "openminds.controlledterms.Species", "openminds.controlledterms.TermSuggestion", "openminds.sands.AnatomicalEntity"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'copyright', "openminds.core.Copyright" ...
+            'copyright', "openminds.core.data.Copyright" ...
         )
     end
 
@@ -252,5 +252,4 @@ classdef ModelVersion < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

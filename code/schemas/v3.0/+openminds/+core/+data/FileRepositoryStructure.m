@@ -3,7 +3,7 @@ classdef FileRepositoryStructure < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   filePathPattern : (1,:) <a href="matlab:help openminds.core.FilePathPattern" style="font-weight:bold">FilePathPattern</a>
+%   filePathPattern : (1,:) <a href="matlab:help openminds.core.data.FilePathPattern" style="font-weight:bold">FilePathPattern</a>
 %                     Add all file path patterns that define this file repository structure.
 %
 %   lookupLabel     : (1,1) string
@@ -13,7 +13,7 @@ classdef FileRepositoryStructure < openminds.abstract.Schema
 
     properties
         % Add all file path patterns that define this file repository structure.
-        filePathPattern (1,:) openminds.core.FilePathPattern ...
+        filePathPattern (1,:) openminds.core.data.FilePathPattern ...
             {mustBeListOfUniqueItems(filePathPattern)}
 
         % Enter a lookup label for this file repository structure that may help you to find this instance more easily.
@@ -32,7 +32,7 @@ classdef FileRepositoryStructure < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'filePathPattern', "openminds.core.FilePathPattern" ...
+            'filePathPattern', "openminds.core.data.FilePathPattern" ...
         )
     end
 
@@ -47,5 +47,4 @@ classdef FileRepositoryStructure < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

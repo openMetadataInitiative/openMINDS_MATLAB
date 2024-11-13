@@ -3,10 +3,10 @@ classdef ParcellationTerminologyVersion < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   dataLocation       : (1,:) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>
+%   dataLocation       : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                        Add the location of all files in which this parcellation terminology version is stored.
 %
-%   hasEntity          : (1,:) <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   hasEntity          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                        Add all parcellation entity versions which belong to this parcellation terminology version.
 %
 %   ontologyIdentifier : (1,:) string
@@ -16,11 +16,11 @@ classdef ParcellationTerminologyVersion < openminds.abstract.Schema
 
     properties
         % Add the location of all files in which this parcellation terminology version is stored.
-        dataLocation (1,:) openminds.core.File ...
+        dataLocation (1,:) openminds.core.data.File ...
             {mustBeListOfUniqueItems(dataLocation)}
 
         % Add all parcellation entity versions which belong to this parcellation terminology version.
-        hasEntity (1,:) openminds.sands.ParcellationEntityVersion ...
+        hasEntity (1,:) openminds.sands.atlas.ParcellationEntityVersion ...
             {mustBeListOfUniqueItems(hasEntity)}
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation terminology version.
@@ -38,8 +38,8 @@ classdef ParcellationTerminologyVersion < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'dataLocation', "openminds.core.File", ...
-            'hasEntity', "openminds.sands.ParcellationEntityVersion" ...
+            'dataLocation', "openminds.core.data.File", ...
+            'hasEntity', "openminds.sands.atlas.ParcellationEntityVersion" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,8 +53,7 @@ classdef ParcellationTerminologyVersion < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

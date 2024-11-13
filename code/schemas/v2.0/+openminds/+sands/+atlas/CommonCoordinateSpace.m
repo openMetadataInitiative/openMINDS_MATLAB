@@ -6,19 +6,19 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
 %   anatomicalAxesOrientation : (1,1) <a href="matlab:help openminds.controlledterms.AnatomicalAxesOrientation" style="font-weight:bold">AnatomicalAxesOrientation</a>
 %                               Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for this common coordinate space.
 %
-%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
+%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
 %                               Enter the origin of this common coordinate space (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
 %
-%   defaultImage              : (1,:) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>
+%   defaultImage              : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                               Add one or several image files used as visual representation of this common coordinate space.
 %
-%   digitalIdentifier         : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>
+%   digitalIdentifier         : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>
 %                               Add the globally unique and persistent digital identifier of this common coordinate space.
 %
 %   fullName                  : (1,1) string
 %                               Enter a descriptive full name for this common coordinate space.
 %
-%   homepage                  : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage                  : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                               Add the uniform resource locator (URL) to the homepage of this common coordinate space.
 %
 %   howToCite                 : (1,1) string
@@ -47,22 +47,22 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
             {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
 
         % Enter the origin of this common coordinate space (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
-        axesOrigin (1,:) openminds.core.QuantitativeValue ...
+        axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
             {mustBeSpecifiedLength(axesOrigin, 2, 3)}
 
         % Add one or several image files used as visual representation of this common coordinate space.
-        defaultImage (1,:) openminds.core.File ...
+        defaultImage (1,:) openminds.core.data.File ...
             {mustBeListOfUniqueItems(defaultImage)}
 
         % Add the globally unique and persistent digital identifier of this common coordinate space.
-        digitalIdentifier (1,:) openminds.core.DOI ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name for this common coordinate space.
         fullName (1,1) string
 
         % Add the uniform resource locator (URL) to the homepage of this common coordinate space.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this common coordinate space. Leave blank if citation text can be extracted from the assigned digital identifier.
@@ -97,13 +97,13 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'anatomicalAxesOrientation', "openminds.controlledterms.AnatomicalAxesOrientation", ...
-            'defaultImage', "openminds.core.File", ...
-            'digitalIdentifier', "openminds.core.DOI", ...
-            'homepage', "openminds.core.URL", ...
+            'defaultImage', "openminds.core.data.File", ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DOI", ...
+            'homepage', "openminds.core.miscellaneous.URL", ...
             'nativeUnit', "openminds.controlledterms.UnitOfMeasurement" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'axesOrigin', "openminds.core.QuantitativeValue" ...
+            'axesOrigin', "openminds.core.miscellaneous.QuantitativeValue" ...
         )
     end
 
@@ -118,5 +118,4 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

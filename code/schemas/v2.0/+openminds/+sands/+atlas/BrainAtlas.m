@@ -1,21 +1,21 @@
 classdef BrainAtlas < openminds.abstract.Schema
-%BrainAtlas - Structured information on a brain atlas (concept level).
+%BrainAtlas - No description available.
 %
 %   PROPERTIES:
 %
 %   description       : (1,1) string
 %                       Enter a short description for this brain atlas.
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>
 %                       Add the globally unique and persistent digital identifier of this brain atlas.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name for this brain atlas.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.sands.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.sands.atlas.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
 %                       Add one or several brain atlas versions that belong to this brain atlas.
 %
-%   homepage          : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                       Add the uniform resource locator (URL) to the homepage of this brain atlas.
 %
 %   howToCite         : (1,1) string
@@ -31,18 +31,18 @@ classdef BrainAtlas < openminds.abstract.Schema
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this brain atlas.
-        digitalIdentifier (1,:) openminds.core.DOI ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name for this brain atlas.
         fullName (1,1) string
 
         % Add one or several brain atlas versions that belong to this brain atlas.
-        hasVersion (1,:) openminds.sands.BrainAtlasVersion ...
+        hasVersion (1,:) openminds.sands.atlas.BrainAtlasVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this brain atlas.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this brain atlas. Leave blank if citation text can be extracted from the assigned digital identifier.
@@ -62,9 +62,9 @@ classdef BrainAtlas < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.DOI", ...
-            'hasVersion', "openminds.sands.BrainAtlasVersion", ...
-            'homepage', "openminds.core.URL" ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DOI", ...
+            'hasVersion', "openminds.sands.atlas.BrainAtlasVersion", ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -81,5 +81,4 @@ classdef BrainAtlas < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

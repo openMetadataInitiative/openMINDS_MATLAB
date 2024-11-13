@@ -45,5 +45,4 @@ classdef StringParameter < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

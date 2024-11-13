@@ -1,5 +1,5 @@
-classdef StudyTargetType < openminds.abstract.ControlledTerm
-%StudyTargetType - Structured information on the general type of the study target.
+classdef Terminology < openminds.abstract.ControlledTerm
+%Terminology - Structured information on the general type of the study target.
 %
 %   PROPERTIES:
 %
@@ -27,9 +27,8 @@ classdef StudyTargetType < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = StudyTargetType(varargin)
+        function obj = Terminology(varargin)
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
-
 end

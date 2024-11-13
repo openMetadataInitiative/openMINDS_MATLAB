@@ -6,22 +6,22 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
 %   abbreviation       : (1,1) string
 %                        Enter the official abbreviation of this common coordinate space.
 %
-%   author             : (1,:) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   author             : (1,:) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                        Add all parties that contributed to this common coordinate space as authors.
 %
-%   custodian          : (1,:) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian          : (1,:) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                        Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
 %
 %   description        : (1,1) string
 %                        Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
 %
-%   digitalIdentifier  : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.RRID" style="font-weight:bold">RRID</a>
+%   digitalIdentifier  : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
 %                        Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
 %
 %   fullName           : (1,1) string
 %                        Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.CommonCoordinateSpaceVersion" style="font-weight:bold">CommonCoordinateSpaceVersion</a>
+%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.atlas.CommonCoordinateSpaceVersion" style="font-weight:bold">CommonCoordinateSpaceVersion</a>
 %                        Add all versions of this common coordinate space.
 %
 %   homepage           : (1,1) string
@@ -64,7 +64,7 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add all versions of this common coordinate space.
-        hasVersion (1,:) openminds.sands.CommonCoordinateSpaceVersion ...
+        hasVersion (1,:) openminds.sands.atlas.CommonCoordinateSpaceVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
@@ -95,10 +95,10 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'author', ["openminds.core.Consortium", "openminds.core.Organization", "openminds.core.Person"], ...
-            'custodian', ["openminds.core.Consortium", "openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', ["openminds.core.DOI", "openminds.core.ISBN", "openminds.core.RRID"], ...
-            'hasVersion', "openminds.sands.CommonCoordinateSpaceVersion", ...
+            'author', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
+            'hasVersion', "openminds.sands.atlas.CommonCoordinateSpaceVersion", ...
             'usedSpecies', "openminds.controlledterms.Species" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -116,5 +116,4 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

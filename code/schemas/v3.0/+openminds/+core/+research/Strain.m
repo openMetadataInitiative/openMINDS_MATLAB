@@ -6,7 +6,7 @@ classdef Strain < openminds.abstract.Schema
 %   alternateIdentifier : (1,:) string
 %                         Enter all identifiers for this strain, excluding its ontological identifers or RRID (e.g., identifiers from the Mouse Genome Informatics (MGI) database or Rat Genome Database (RGD)).
 %
-%   backgroundStrain    : (1,:) <a href="matlab:help openminds.core.Strain" style="font-weight:bold">Strain</a>
+%   backgroundStrain    : (1,:) <a href="matlab:help openminds.core.research.Strain" style="font-weight:bold">Strain</a>
 %                         Add the background strain that explains the majority of the genetic background and/or causes the majority of the prominent traits. If two strains contributed equally, state both.
 %
 %   breedingType        : (1,1) <a href="matlab:help openminds.controlledterms.BreedingType" style="font-weight:bold">BreedingType</a>
@@ -15,7 +15,7 @@ classdef Strain < openminds.abstract.Schema
 %   description         : (1,1) string
 %                         Enter a short text describing this strain.
 %
-%   digitalIdentifier   : (1,1) <a href="matlab:help openminds.core.RRID" style="font-weight:bold">RRID</a>
+%   digitalIdentifier   : (1,1) <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
 %                         Add the 'Research Resource Identifier' (RRID) of this strain.
 %
 %   diseaseModel        : (1,:) <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.DiseaseModel" style="font-weight:bold">DiseaseModel</a>
@@ -39,7 +39,7 @@ classdef Strain < openminds.abstract.Schema
 %   species             : (1,1) <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>
 %                         Add the species of this strain.
 %
-%   stockNumber         : (1,1) <a href="matlab:help openminds.core.StockNumber" style="font-weight:bold">StockNumber</a>
+%   stockNumber         : (1,1) <a href="matlab:help openminds.core.digitalidentifier.StockNumber" style="font-weight:bold">StockNumber</a>
 %                         Add the stock number from the vendor the strain was supplied from/is in stock at.
 %
 %   synonym             : (1,:) string
@@ -53,7 +53,7 @@ classdef Strain < openminds.abstract.Schema
             {mustBeListOfUniqueItems(alternateIdentifier)}
 
         % Add the background strain that explains the majority of the genetic background and/or causes the majority of the prominent traits. If two strains contributed equally, state both.
-        backgroundStrain (1,:) openminds.core.Strain ...
+        backgroundStrain (1,:) openminds.core.research.Strain ...
             {mustBeSpecifiedLength(backgroundStrain, 1, 2)}
 
         % Add the breeding type for this strain.
@@ -64,7 +64,7 @@ classdef Strain < openminds.abstract.Schema
         description (1,1) string
 
         % Add the 'Research Resource Identifier' (RRID) of this strain.
-        digitalIdentifier (1,:) openminds.core.RRID ...
+        digitalIdentifier (1,:) openminds.core.digitalidentifier.RRID ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Add all (human) diseases and/or conditions that this strain is a model for.
@@ -94,7 +94,7 @@ classdef Strain < openminds.abstract.Schema
             {mustBeSpecifiedLength(species, 0, 1)}
 
         % Add the stock number from the vendor the strain was supplied from/is in stock at.
-        stockNumber (1,:) openminds.core.StockNumber ...
+        stockNumber (1,:) openminds.core.digitalidentifier.StockNumber ...
             {mustBeSpecifiedLength(stockNumber, 0, 1)}
 
         % Enter any synonyms (inlcuding abbreviations) of this strain.
@@ -112,15 +112,15 @@ classdef Strain < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'backgroundStrain', "openminds.core.Strain", ...
+            'backgroundStrain', "openminds.core.research.Strain", ...
             'breedingType', "openminds.controlledterms.BreedingType", ...
-            'digitalIdentifier', "openminds.core.RRID", ...
+            'digitalIdentifier', "openminds.core.digitalidentifier.RRID", ...
             'diseaseModel', ["openminds.controlledterms.Disease", "openminds.controlledterms.DiseaseModel"], ...
             'geneticStrainType', "openminds.controlledterms.GeneticStrainType", ...
             'species', "openminds.controlledterms.Species" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'stockNumber', "openminds.core.StockNumber" ...
+            'stockNumber', "openminds.core.digitalidentifier.StockNumber" ...
         )
     end
 
@@ -135,5 +135,4 @@ classdef Strain < openminds.abstract.Schema
             str = sprintf('%s', obj.name);
         end
     end
-
 end

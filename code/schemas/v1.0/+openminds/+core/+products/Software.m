@@ -6,13 +6,13 @@ classdef Software < openminds.abstract.Schema
 %   description       : (1,1) string
 %                       Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references).
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
 %                       Add the globally unique and persistent digital identifier of this research product.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (title) for this research product.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
 %                       Add one or several versions of this software tool.
 %
 %   homepage          : (1,1) string
@@ -29,14 +29,14 @@ classdef Software < openminds.abstract.Schema
             {mustBeValidStringLength(description, 0, 2000)}
 
         % Add the globally unique and persistent digital identifier of this research product.
-        digitalIdentifier (1,:) openminds.core.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name (title) for this research product.
         fullName (1,1) string
 
         % Add one or several versions of this software tool.
-        hasVersion (1,:) openminds.core.SoftwareVersion ...
+        hasVersion (1,:) openminds.core.products.SoftwareVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
@@ -57,8 +57,8 @@ classdef Software < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.DigitalIdentifier", ...
-            'hasVersion', "openminds.core.SoftwareVersion" ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
+            'hasVersion', "openminds.core.products.SoftwareVersion" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -75,5 +75,4 @@ classdef Software < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

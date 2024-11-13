@@ -9,7 +9,7 @@ classdef LaunchConfiguration < openminds.abstract.Schema
 %   description         : (1,1) string
 %                         Enter a short text describing this launch configuration.
 %
-%   environmentVariable : (1,1) <a href="matlab:help openminds.core.PropertyValueList" style="font-weight:bold">PropertyValueList</a>
+%   environmentVariable : (1,1) <a href="matlab:help openminds.core.research.PropertyValueList" style="font-weight:bold">PropertyValueList</a>
 %                         Add any environment variables defined by this launch configuration.
 %
 %   executable          : (1,1) string
@@ -28,7 +28,7 @@ classdef LaunchConfiguration < openminds.abstract.Schema
         description (1,1) string
 
         % Add any environment variables defined by this launch configuration.
-        environmentVariable (1,:) openminds.core.PropertyValueList ...
+        environmentVariable (1,:) openminds.core.research.PropertyValueList ...
             {mustBeSpecifiedLength(environmentVariable, 0, 1)}
 
         % Enter the path to the command-line executable.
@@ -48,7 +48,7 @@ classdef LaunchConfiguration < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'environmentVariable', "openminds.core.PropertyValueList" ...
+            'environmentVariable', "openminds.core.research.PropertyValueList" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -65,5 +65,4 @@ classdef LaunchConfiguration < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

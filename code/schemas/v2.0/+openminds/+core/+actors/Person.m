@@ -3,13 +3,13 @@ classdef Person < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   affiliation        : (1,:) <a href="matlab:help openminds.core.Affiliation" style="font-weight:bold">Affiliation</a>
+%   affiliation        : (1,:) <a href="matlab:help openminds.core.actors.Affiliation" style="font-weight:bold">Affiliation</a>
 %                        Add the current and, if necessary, past affiliations of this person
 %
-%   contactInformation : (1,1) <a href="matlab:help openminds.core.ContactInformation" style="font-weight:bold">ContactInformation</a>
+%   contactInformation : (1,1) <a href="matlab:help openminds.core.actors.ContactInformation" style="font-weight:bold">ContactInformation</a>
 %                        Add the contact information of this person.
 %
-%   digitalIdentifier  : (1,:) <a href="matlab:help openminds.core.ORCID" style="font-weight:bold">ORCID</a>
+%   digitalIdentifier  : (1,:) <a href="matlab:help openminds.core.miscellaneous.ORCID" style="font-weight:bold">ORCID</a>
 %                        Add one or several globally unique and persistent digital identifier for this person.
 %
 %   familyName         : (1,1) string
@@ -22,15 +22,15 @@ classdef Person < openminds.abstract.Schema
 
     properties
         % Add the current and, if necessary, past affiliations of this person
-        affiliation (1,:) openminds.core.Affiliation ...
+        affiliation (1,:) openminds.core.actors.Affiliation ...
             {mustBeListOfUniqueItems(affiliation)}
 
         % Add the contact information of this person.
-        contactInformation (1,:) openminds.core.ContactInformation ...
+        contactInformation (1,:) openminds.core.actors.ContactInformation ...
             {mustBeSpecifiedLength(contactInformation, 0, 1)}
 
         % Add one or several globally unique and persistent digital identifier for this person.
-        digitalIdentifier (1,:) openminds.core.ORCID ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.ORCID ...
             {mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the family name of this person.
@@ -50,11 +50,11 @@ classdef Person < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'contactInformation', "openminds.core.ContactInformation", ...
-            'digitalIdentifier', "openminds.core.ORCID" ...
+            'contactInformation', "openminds.core.actors.ContactInformation", ...
+            'digitalIdentifier', "openminds.core.miscellaneous.ORCID" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'affiliation', "openminds.core.Affiliation" ...
+            'affiliation', "openminds.core.actors.Affiliation" ...
         )
     end
 
@@ -69,5 +69,4 @@ classdef Person < openminds.abstract.Schema
             str = sprintf('%s, %s', obj.familyName, obj.givenName);
         end
     end
-
 end

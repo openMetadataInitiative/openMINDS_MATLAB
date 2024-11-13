@@ -45,5 +45,4 @@ classdef Hash < openminds.abstract.Schema
             str = sprintf('%s', obj.algorithm);
         end
     end
-
 end

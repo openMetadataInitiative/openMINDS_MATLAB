@@ -40,5 +40,4 @@ classdef IdentifiersDotOrgID < openminds.abstract.Schema
             str = obj.identifier;
         end
     end
-
 end

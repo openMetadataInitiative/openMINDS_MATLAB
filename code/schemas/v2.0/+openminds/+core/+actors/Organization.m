@@ -1,18 +1,18 @@
 classdef Organization < openminds.abstract.Schema
-%Organization - Structured information on an organization.
+%Organization - An entity comprised of one or more natural persons with a particular purpose. [adapted from Wikipedia](https://en.wikipedia.org/wiki/Organization)
 %
 %   PROPERTIES:
 %
-%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.GRIDID" style="font-weight:bold">GRIDID</a>, <a href="matlab:help openminds.core.RORID" style="font-weight:bold">RORID</a>
+%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.miscellaneous.GRIDID" style="font-weight:bold">GRIDID</a>, <a href="matlab:help openminds.core.miscellaneous.RORID" style="font-weight:bold">RORID</a>
 %                       Add one or several globally unique and persistent digital identifier for this organization.
 %
 %   fullName          : (1,1) string
 %                       Enter the full name of the organization.
 %
-%   hasParent         : (1,1) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>
+%   hasParent         : (1,1) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
 %                       Add a parent organization to this organization.
 %
-%   homepage          : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                       Add the uniform resource locator (URL) to the homepage of this organization.
 %
 %   shortName         : (1,1) string
@@ -29,11 +29,11 @@ classdef Organization < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add a parent organization to this organization.
-        hasParent (1,:) openminds.core.Organization ...
+        hasParent (1,:) openminds.core.actors.Organization ...
             {mustBeSpecifiedLength(hasParent, 0, 1)}
 
         % Add the uniform resource locator (URL) to the homepage of this organization.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the short name of this organization.
@@ -50,9 +50,9 @@ classdef Organization < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', ["openminds.core.GRIDID", "openminds.core.RORID"], ...
-            'hasParent', "openminds.core.Organization", ...
-            'homepage', "openminds.core.URL" ...
+            'digitalIdentifier', ["openminds.core.miscellaneous.GRIDID", "openminds.core.miscellaneous.RORID"], ...
+            'hasParent', "openminds.core.actors.Organization", ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -69,5 +69,4 @@ classdef Organization < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

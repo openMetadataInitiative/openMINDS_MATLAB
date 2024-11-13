@@ -3,7 +3,7 @@ classdef TissueSample < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   anatomicalLocation : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   anatomicalLocation : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                        Add all anatomical entities that describe the anatomical location of this tissue sample.
 %
 %   biologicalSex      : (1,1) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>
@@ -12,7 +12,7 @@ classdef TissueSample < openminds.abstract.Schema
 %   internalIdentifier : (1,1) string
 %                        Enter the identifier (or label) of this specimen that is used within the corresponding data files to identify this specimen.
 %
-%   isPartOf           : (1,:) <a href="matlab:help openminds.core.TissueSampleCollection" style="font-weight:bold">TissueSampleCollection</a>
+%   isPartOf           : (1,:) <a href="matlab:help openminds.core.research.TissueSampleCollection" style="font-weight:bold">TissueSampleCollection</a>
 %                        Add all tissue sample collections this tissue sample is part of.
 %
 %   laterality         : (1,:) <a href="matlab:help openminds.controlledterms.Laterality" style="font-weight:bold">Laterality</a>
@@ -24,10 +24,10 @@ classdef TissueSample < openminds.abstract.Schema
 %   origin             : (1,1) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>
 %                        Add the biogical origin of this tissue sample.
 %
-%   species            : (1,1) <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.core.Strain" style="font-weight:bold">Strain</a>
+%   species            : (1,1) <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.core.research.Strain" style="font-weight:bold">Strain</a>
 %                        Add the species or strain (a sub-type of a genetic variant of species) of this specimen.
 %
-%   studiedState       : (1,:) <a href="matlab:help openminds.core.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
+%   studiedState       : (1,:) <a href="matlab:help openminds.core.research.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
 %                        Add all states in which this tissue sample was studied.
 %
 %   type               : (1,1) <a href="matlab:help openminds.controlledterms.TissueSampleType" style="font-weight:bold">TissueSampleType</a>
@@ -48,7 +48,7 @@ classdef TissueSample < openminds.abstract.Schema
         internalIdentifier (1,1) string
 
         % Add all tissue sample collections this tissue sample is part of.
-        isPartOf (1,:) openminds.core.TissueSampleCollection ...
+        isPartOf (1,:) openminds.core.research.TissueSampleCollection ...
             {mustBeListOfUniqueItems(isPartOf)}
 
         % Add one or both sides of the body, bilateral organ or bilateral organ part that this tissue sample originates from.
@@ -67,7 +67,7 @@ classdef TissueSample < openminds.abstract.Schema
             {mustBeSpecifiedLength(species, 0, 1)}
 
         % Add all states in which this tissue sample was studied.
-        studiedState (1,:) openminds.core.TissueSampleState ...
+        studiedState (1,:) openminds.core.research.TissueSampleState ...
             {mustBeListOfUniqueItems(studiedState)}
 
         % Add the type of this tissue sample.
@@ -85,13 +85,13 @@ classdef TissueSample < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'anatomicalLocation', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"], ...
+            'anatomicalLocation', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"], ...
             'biologicalSex', "openminds.controlledterms.BiologicalSex", ...
-            'isPartOf', "openminds.core.TissueSampleCollection", ...
+            'isPartOf', "openminds.core.research.TissueSampleCollection", ...
             'laterality', "openminds.controlledterms.Laterality", ...
             'origin', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance"], ...
-            'species', ["openminds.controlledterms.Species", "openminds.core.Strain"], ...
-            'studiedState', "openminds.core.TissueSampleState", ...
+            'species', ["openminds.controlledterms.Species", "openminds.core.research.Strain"], ...
+            'studiedState', "openminds.core.research.TissueSampleState", ...
             'type', "openminds.controlledterms.TissueSampleType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -109,5 +109,4 @@ classdef TissueSample < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

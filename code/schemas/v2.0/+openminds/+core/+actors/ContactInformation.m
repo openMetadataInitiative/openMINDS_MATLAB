@@ -39,5 +39,4 @@ classdef ContactInformation < openminds.abstract.Schema
             str = sprintf('%s', obj.email);
         end
     end
-
 end

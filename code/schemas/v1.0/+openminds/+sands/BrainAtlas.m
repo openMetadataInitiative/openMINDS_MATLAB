@@ -1,5 +1,5 @@
 classdef BrainAtlas < openminds.abstract.Schema
-%BrainAtlas - Structured information on a brain atlas (concept level).
+%BrainAtlas - No description available.
 %
 %   PROPERTIES:
 %
@@ -65,5 +65,4 @@ classdef BrainAtlas < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end
