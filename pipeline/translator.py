@@ -290,7 +290,7 @@ class MATLABSchemaBuilder(object):
 
 def _create_matlab_name(json_name):
     """Remove the openMINDS prefix from a name"""
-    return json_name.replace(OPENMINDS_VOCAB_URI, '')
+    return json_name.split('/')[-1]
 
 def _generate_class_name(iri):
     """
@@ -528,6 +528,7 @@ def _create_property_validator_functions(name, property_info):
 
 def _expand_type_namespace( type_specifier ):
     if type_specifier.startswith('https://'):
+        # For versions 3 and below, the type specifier is already fully expanded in the schema
         return type_specifier
     else:
         schema_type_name = type_specifier.split(':')[-1]

@@ -3,6 +3,8 @@ downloads/
 target/
 _sources/
 
+docs/reports/
+
 # Autosave files
 *.asv
 *.m~
