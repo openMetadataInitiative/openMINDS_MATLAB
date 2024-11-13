@@ -147,8 +147,6 @@ class MATLABSchemaBuilder(object):
             else:
                 possible_types = [type_name_map[property_info["type"]]]
 
-
-
             # Resolve property dimension in matlab
             if allow_multiple:
                 size_attribute = "(1,:)"
@@ -179,10 +177,16 @@ class MATLABSchemaBuilder(object):
             mixed_types_list = sorted(possible_types)
 
             if len(possible_types) == 0:
-                # Exception: ParameterSetting from v1. Uses validator instead of type restriction
                 possible_types = ''
-                possible_types_str = ''
-                possible_types_docstr = ", ".join(property_info.get("type"))
+
+                # Exception: ParameterSetting from v1. Uses validator instead of type restriction
+                if schema_short_name == "ParameterSetting":
+                    possible_types_str = ''
+                    possible_types_docstr = ", ".join(property_info.get("type"))
+                else:
+                    possible_types_str = _list_to_string_array(possible_types, do_sort=True)
+                    possible_types_docstr = ", ".join(sorted(possible_types_docstr))
+            
             elif len(possible_types) == 1:
                 possible_types = possible_types[0]
                 possible_types_str = f'"{possible_types}"'
