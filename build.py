@@ -2,7 +2,7 @@ import os.path
 import shutil
 
 from pipeline.translator import MATLABSchemaBuilder
-from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_templates, save_resource_files, save_enumeration_classes
+from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_templates, save_resource_files, save_enumeration_classes, get_class_name_map
 
 print("***************************************")
 print(f"Triggering the generation of MATLAB-Classes for openMINDS")
@@ -23,11 +23,14 @@ for schema_version in schema_loader.get_schema_versions():
     schemas_file_paths = schema_loader.find_schemas(schema_version)
     # schemas_file_paths = [path for path in schemas_file_paths if "person" in path] # testing
 
+    class_name_map = get_class_name_map(schema_loader, schema_version)
+
     for schema_file_path in schemas_file_paths:
         # Step 4 - translate and build each openMINDS schema as MATLAB class
         schema_root_path = schema_loader.schemas_sources
+
         try:
-            MATLABSchemaBuilder(schema_file_path, schema_root_path, jinja_templates).build()
+            MATLABSchemaBuilder(schema_file_path, schema_root_path, class_name_map, jinja_templates).build()
         except Exception as e:
             print(f"Error while building schema {schema_file_path}: {e}")
 

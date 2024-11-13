@@ -136,6 +136,27 @@ def initialise_jinja_templates(autoescape:bool=None):
     return jinja_templates
 
 
+def get_class_name_map(schema_loader, version):
+    # Extract all schema files
+    root_path = schema_loader.schemas_sources
+    schema_files = schema_loader.find_schemas(version)
+    schema_files.sort()
+
+    # Build a list for all the enumeration members
+    class_name_map = {}
+
+    for schema_file in schema_files:
+        schema_info = _parse_source_file_path(schema_file, root_path)
+        class_name_map[schema_info['type_name']] = _get_matlab_class_name(schema_info)
+
+    # Add some exceptions
+    if version == "v2.0":
+        print(class_name_map["CustomAnatomicalEntity"])
+        class_name_map["AnatomicalEntity"] = class_name_map["CustomAnatomicalEntity"]
+
+
+    return class_name_map
+
 def camel_case(text_string: str):
     return text_string[0].lower() + text_string[1:]
 

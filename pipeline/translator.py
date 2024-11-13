@@ -46,9 +46,10 @@ TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template
 class MATLABSchemaBuilder(object):
     """ Class for building MATLAB schema classes """
 
-    def __init__(self, schema_file_path:str, root_path:str, jinja_templates:Dict[str, Template]):
+    def __init__(self, schema_file_path:str, root_path:str, class_name_map:Dict[str, str], jinja_templates:Dict[str, Template]):
         
         self._parse_source_file_path(schema_file_path, root_path)
+        self._class_name_map = class_name_map
 
         with open(schema_file_path, "r") as schema_file:
             self._schema_payload = json.load(schema_file)
@@ -128,12 +129,12 @@ class MATLABSchemaBuilder(object):
             # Resolve property class name in matlab
             if has_linked_type:
                 possible_types = [
-                    f'{_generate_class_name(iri)}'
+                    f'{_generate_class_name(iri, self._class_name_map)}'
                     for iri in property_info[SCHEMA_PROPERTY_LINKED_TYPES]
                 ]
             elif has_embedded_type:
                 possible_types = [
-                    f'{_generate_class_name(iri)}'
+                    f'{_generate_class_name(iri, self._class_name_map)}'
                     for iri in property_info[SCHEMA_PROPERTY_EMBEDDED_TYPES]
                 ]  # todo: handle minItems maxItems, e.g. for axesOrigin
             elif "_formats" in property_info:
@@ -141,8 +142,12 @@ class MATLABSchemaBuilder(object):
                 possible_types = sorted(set([format_map[item] for item in property_info["_formats"]]))
             elif property_info.get("type") == "array":
                 possible_types = [type_name_map[property_info["items"]["type"]]]
+            elif isinstance( property_info.get("type"), list ):
+                possible_types = []
             else:
                 possible_types = [type_name_map[property_info["type"]]]
+
+
 
             # Resolve property dimension in matlab
             if allow_multiple:
@@ -173,7 +178,12 @@ class MATLABSchemaBuilder(object):
 
             mixed_types_list = sorted(possible_types)
 
-            if len(possible_types) == 1:
+            if len(possible_types) == 0:
+                # Exception: ParameterSetting from v1. Uses validator instead of type restriction
+                possible_types = ''
+                possible_types_str = ''
+                possible_types_docstr = ", ".join(property_info.get("type"))
+            elif len(possible_types) == 1:
                 possible_types = possible_types[0]
                 possible_types_str = f'"{possible_types}"'
                 possible_types_docstr = possible_types_docstr[0]
@@ -181,7 +191,7 @@ class MATLABSchemaBuilder(object):
                 possible_types_str = _list_to_string_array(possible_types, do_sort=True)
                 possible_types_docstr = ", ".join(sorted(possible_types_docstr))
  
-                class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE]).split(".")[-1]
+                class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map).split(".")[-1]
                 possible_types = _create_mixedtype_full_class_name(class_name, property_name)
 
             template_property_attributes = {
@@ -207,7 +217,7 @@ class MATLABSchemaBuilder(object):
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
 
         # Some schemas had the wrong type in older model versions, so this is unreliable
-        #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE]).split(".")[-1]
+        #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map).split(".")[-1]
         class_name = self._schema_class_name
 
         display_label_method_expression = _get_display_label_method_expression(class_name, schema["properties"].keys())
@@ -292,7 +302,7 @@ def _create_matlab_name(json_name):
     """Remove the openMINDS prefix from a name"""
     return json_name.split('/')[-1]
 
-def _generate_class_name(iri):
+def _generate_class_name(iri, class_name_map):
     """
     Generate a class name from an IRI. 
     E.g https://openminds.ebrains.eu/core/Subject -> openminds.core.Subject
@@ -302,9 +312,16 @@ def _generate_class_name(iri):
     else: # v4 and higher
         parts = iri.split(':')
     
-    for i in range(len(parts) - 1):
-        parts[i] = parts[i].lower()
-        return "openminds." + ".".join(parts)
+    type_name = parts[-1]
+
+    # Ensure first letter of type_name is capitalized
+    type_name = type_name[0].upper() + type_name[1:]
+
+    return class_name_map[type_name]
+
+    #for i in range(len(parts) - 1):
+    #    parts[i] = parts[i].lower()
+    #    return "openminds." + ".".join(parts)
 
 
 def _to_label(class_name_list):
@@ -477,6 +494,9 @@ def _create_property_validator_functions(name, property_info):
         elif "time" in property_info.get("_formats") == "time":
             validation_functions += [f"mustBeValidTime({property_name})"]
 
+    if isinstance( property_info.get("type"), list ):
+        validation_functions += [f'mustBeA({property_name}, ["numeric", "string"])']
+
     if has_linked_type or has_embedded_type:
         if not allow_multiple:
             validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
@@ -546,4 +566,4 @@ def _parse_schema_type(type_specifier):
 
 
 if __name__ == "__main__":
-    error('Not implemented yet')
+    raise NotImplementedError
