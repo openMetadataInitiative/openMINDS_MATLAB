@@ -3,7 +3,7 @@ classdef AccountInformation < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   service  : (1,1) <a href="matlab:help openminds.core.WebService" style="font-weight:bold">WebService</a>
+%   service  : (1,1) <a href="matlab:help openminds.core.products.WebService" style="font-weight:bold">WebService</a>
 %              Add the web service of this account.
 %
 %   userName : (1,1) string
@@ -13,7 +13,7 @@ classdef AccountInformation < openminds.abstract.Schema
 
     properties
         % Add the web service of this account.
-        service (1,:) openminds.core.WebService ...
+        service (1,:) openminds.core.products.WebService ...
             {mustBeSpecifiedLength(service, 0, 1)}
 
         % Enter the user name for this account.
@@ -30,7 +30,7 @@ classdef AccountInformation < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'service', "openminds.core.WebService" ...
+            'service', "openminds.core.products.WebService" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -47,5 +47,4 @@ classdef AccountInformation < openminds.abstract.Schema
             str = sprintf('%s', obj.service);
         end
     end
-
 end

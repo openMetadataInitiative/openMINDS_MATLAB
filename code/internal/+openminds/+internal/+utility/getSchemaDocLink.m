@@ -1,7 +1,7 @@
 function str = getSchemaDocLink(schemaClass, preferredDocumentation)
     
     if nargin < 2
-        %preferences.PreferredDocumentation = 'Command window help';
+        % preferences.PreferredDocumentation = 'Command window help';
         preferences.PreferredDocumentation = 'Default browser';
         preferredDocumentation = preferences.PreferredDocumentation;
     end
@@ -29,7 +29,6 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
 
         case "Raw URL"
             str = getHtmlLink(schemaClass, '-api');
-
     end
 end
 
@@ -91,7 +90,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
     isMatch = lower(htmlFileTable.SchemaName) == lower(schemaName);
     filepath = htmlFileTable.Filepath(isMatch);
     
-    %commandStr = sprintf('web(''%s'', ''%s'')', filepath, browserOption);
+    % commandStr = sprintf('web(''%s'', ''%s'')', filepath, browserOption);
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
 end
 

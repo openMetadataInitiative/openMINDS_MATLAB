@@ -1,6 +1,9 @@
 classdef CoordinateSpace < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.sands.CommonCoordinateSpace", "openminds.sands.CustomCoordinateSpace"]
+        ALLOWED_TYPES = [ ...
+            "openminds.sands.atlas.CommonCoordinateSpace", ...
+            "openminds.sands.nonatlas.CustomCoordinateSpace" ...
+        ]
         IS_SCALAR = true
     end
 end

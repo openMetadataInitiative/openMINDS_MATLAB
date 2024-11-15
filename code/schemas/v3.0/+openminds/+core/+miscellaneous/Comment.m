@@ -3,13 +3,13 @@ classdef Comment < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   about     : (1,1) <a href="matlab:help openminds.computation.ValidationTest" style="font-weight:bold">ValidationTest</a>, <a href="matlab:help openminds.computation.ValidationTestVersion" style="font-weight:bold">ValidationTestVersion</a>, <a href="matlab:help openminds.computation.WorkflowRecipe" style="font-weight:bold">WorkflowRecipe</a>, <a href="matlab:help openminds.computation.WorkflowRecipeVersion" style="font-weight:bold">WorkflowRecipeVersion</a>, <a href="matlab:help openminds.core.Dataset" style="font-weight:bold">Dataset</a>, <a href="matlab:help openminds.core.DatasetVersion" style="font-weight:bold">DatasetVersion</a>, <a href="matlab:help openminds.core.MetaDataModel" style="font-weight:bold">MetaDataModel</a>, <a href="matlab:help openminds.core.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>, <a href="matlab:help openminds.core.Model" style="font-weight:bold">Model</a>, <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.core.Software" style="font-weight:bold">Software</a>, <a href="matlab:help openminds.core.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>, <a href="matlab:help openminds.core.WebService" style="font-weight:bold">WebService</a>, <a href="matlab:help openminds.core.WebServiceVersion" style="font-weight:bold">WebServiceVersion</a>, <a href="matlab:help openminds.publications.LivePaper" style="font-weight:bold">LivePaper</a>, <a href="matlab:help openminds.publications.LivePaperVersion" style="font-weight:bold">LivePaperVersion</a>, <a href="matlab:help openminds.sands.BrainAtlas" style="font-weight:bold">BrainAtlas</a>, <a href="matlab:help openminds.sands.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>, <a href="matlab:help openminds.sands.CommonCoordinateSpace" style="font-weight:bold">CommonCoordinateSpace</a>, <a href="matlab:help openminds.sands.CommonCoordinateSpaceVersion" style="font-weight:bold">CommonCoordinateSpaceVersion</a>
+%   about     : (1,1) <a href="matlab:help openminds.computation.ValidationTest" style="font-weight:bold">ValidationTest</a>, <a href="matlab:help openminds.computation.ValidationTestVersion" style="font-weight:bold">ValidationTestVersion</a>, <a href="matlab:help openminds.computation.WorkflowRecipe" style="font-weight:bold">WorkflowRecipe</a>, <a href="matlab:help openminds.computation.WorkflowRecipeVersion" style="font-weight:bold">WorkflowRecipeVersion</a>, <a href="matlab:help openminds.core.products.Dataset" style="font-weight:bold">Dataset</a>, <a href="matlab:help openminds.core.products.DatasetVersion" style="font-weight:bold">DatasetVersion</a>, <a href="matlab:help openminds.core.products.MetaDataModel" style="font-weight:bold">MetaDataModel</a>, <a href="matlab:help openminds.core.products.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>, <a href="matlab:help openminds.core.products.Model" style="font-weight:bold">Model</a>, <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.core.products.Software" style="font-weight:bold">Software</a>, <a href="matlab:help openminds.core.products.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>, <a href="matlab:help openminds.core.products.WebService" style="font-weight:bold">WebService</a>, <a href="matlab:help openminds.core.products.WebServiceVersion" style="font-weight:bold">WebServiceVersion</a>, <a href="matlab:help openminds.publications.LivePaper" style="font-weight:bold">LivePaper</a>, <a href="matlab:help openminds.publications.LivePaperVersion" style="font-weight:bold">LivePaperVersion</a>, <a href="matlab:help openminds.sands.atlas.BrainAtlas" style="font-weight:bold">BrainAtlas</a>, <a href="matlab:help openminds.sands.atlas.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>, <a href="matlab:help openminds.sands.atlas.CommonCoordinateSpace" style="font-weight:bold">CommonCoordinateSpace</a>, <a href="matlab:help openminds.sands.atlas.CommonCoordinateSpaceVersion" style="font-weight:bold">CommonCoordinateSpaceVersion</a>
 %               Add the research product (version) that this comment is about.
 %
 %   comment   : (1,1) string
 %               Enter the comment about the research product (version) stated under 'about'.
 %
-%   commenter : (1,1) <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   commenter : (1,1) <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %               Add the person that created this comment.
 %
 %   timestamp : (1,1) datetime
@@ -26,7 +26,7 @@ classdef Comment < openminds.abstract.Schema
         comment (1,1) string
 
         % Add the person that created this comment.
-        commenter (1,:) openminds.core.Person ...
+        commenter (1,:) openminds.core.actors.Person ...
             {mustBeSpecifiedLength(commenter, 0, 1)}
 
         % Enter the date and time on which this comment was made, formatted as '2023-02-07T16:00:00+00:00'.
@@ -44,8 +44,8 @@ classdef Comment < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'about', ["openminds.computation.ValidationTest", "openminds.computation.ValidationTestVersion", "openminds.computation.WorkflowRecipe", "openminds.computation.WorkflowRecipeVersion", "openminds.core.Dataset", "openminds.core.DatasetVersion", "openminds.core.MetaDataModel", "openminds.core.MetaDataModelVersion", "openminds.core.Model", "openminds.core.ModelVersion", "openminds.core.Software", "openminds.core.SoftwareVersion", "openminds.core.WebService", "openminds.core.WebServiceVersion", "openminds.publications.LivePaper", "openminds.publications.LivePaperVersion", "openminds.sands.BrainAtlas", "openminds.sands.BrainAtlasVersion", "openminds.sands.CommonCoordinateSpace", "openminds.sands.CommonCoordinateSpaceVersion"], ...
-            'commenter', "openminds.core.Person" ...
+            'about', ["openminds.computation.ValidationTest", "openminds.computation.ValidationTestVersion", "openminds.computation.WorkflowRecipe", "openminds.computation.WorkflowRecipeVersion", "openminds.core.products.Dataset", "openminds.core.products.DatasetVersion", "openminds.core.products.MetaDataModel", "openminds.core.products.MetaDataModelVersion", "openminds.core.products.Model", "openminds.core.products.ModelVersion", "openminds.core.products.Software", "openminds.core.products.SoftwareVersion", "openminds.core.products.WebService", "openminds.core.products.WebServiceVersion", "openminds.publications.LivePaper", "openminds.publications.LivePaperVersion", "openminds.sands.atlas.BrainAtlas", "openminds.sands.atlas.BrainAtlasVersion", "openminds.sands.atlas.CommonCoordinateSpace", "openminds.sands.atlas.CommonCoordinateSpaceVersion"], ...
+            'commenter', "openminds.core.actors.Person" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -59,8 +59,7 @@ classdef Comment < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = sprintf('%s', obj.comment);
         end
     end
-
 end

@@ -3,7 +3,7 @@ classdef Electrode < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   electrodeContact   : (1,:) <a href="matlab:help openminds.sands.ElectrodeContact" style="font-weight:bold">ElectrodeContact</a>
+%   electrodeContact   : (1,:) <a href="matlab:help openminds.sands.nonatlas.ElectrodeContact" style="font-weight:bold">ElectrodeContact</a>
 %                        Add one or several electrical contacts of this electrode.
 %
 %   internalIdentifier : (1,1) string
@@ -16,7 +16,7 @@ classdef Electrode < openminds.abstract.Schema
 
     properties
         % Add one or several electrical contacts of this electrode.
-        electrodeContact (1,:) openminds.sands.ElectrodeContact ...
+        electrodeContact (1,:) openminds.sands.nonatlas.ElectrodeContact ...
             {mustBeListOfUniqueItems(electrodeContact)}
 
         % Enter the identifier used for this electrode within the file it is stored in.
@@ -36,7 +36,7 @@ classdef Electrode < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'electrodeContact', "openminds.sands.ElectrodeContact" ...
+            'electrodeContact', "openminds.sands.nonatlas.ElectrodeContact" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,5 +53,4 @@ classdef Electrode < openminds.abstract.Schema
             str = obj.lookupLabel;
         end
     end
-
 end

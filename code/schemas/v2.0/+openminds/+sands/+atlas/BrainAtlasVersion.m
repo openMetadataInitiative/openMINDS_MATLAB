@@ -1,30 +1,30 @@
 classdef BrainAtlasVersion < openminds.abstract.Schema
-%BrainAtlasVersion - Structured information on a brain atlas (version level).
+%BrainAtlasVersion - No description available.
 %
 %   PROPERTIES:
 %
-%   coordinateSpace        : (1,1) <a href="matlab:help openminds.sands.CommonCoordinateSpace" style="font-weight:bold">CommonCoordinateSpace</a>
+%   coordinateSpace        : (1,1) <a href="matlab:help openminds.sands.atlas.CommonCoordinateSpace" style="font-weight:bold">CommonCoordinateSpace</a>
 %                            Add the common coordinate space in which this brain atlas version exists in.
 %
-%   digitalIdentifier      : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>
+%   digitalIdentifier      : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>
 %                            Add the globally unique and persistent digital identifier of this brain atlas version.
 %
 %   fullName               : (1,1) string
 %                            Enter a descriptive full name for this brain atlas version.
 %
-%   hasTerminology         : (1,1) <a href="matlab:help openminds.sands.parcellationTerminology" style="font-weight:bold">parcellationTerminology</a>
+%   hasTerminology         : (1,1) <a href="matlab:help openminds.sands.atlas.ParcellationTerminology" style="font-weight:bold">ParcellationTerminology</a>
 %                            Add the parcellation terminology for this brain atlas version.
 %
-%   homepage               : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage               : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                            Add the uniform resource locator (URL) to the homepage of this brain atlas version.
 %
 %   howToCite              : (1,1) string
 %                            Enter the preferred citation text for this brain atlas version. Leave blank if citation text can be extracted from the assigned digital identifier.
 %
-%   isAlternativeVersionOf : (1,:) <a href="matlab:help openminds.sands.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
+%   isAlternativeVersionOf : (1,:) <a href="matlab:help openminds.sands.atlas.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
 %                            Add one or several alternative versions to this brain atlas version.
 %
-%   isNewVersionOf         : (1,1) <a href="matlab:help openminds.sands.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
+%   isNewVersionOf         : (1,1) <a href="matlab:help openminds.sands.atlas.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
 %                            Add the earlier version of this brain atlas version.
 %
 %   ontologyIdentifier     : (1,1) string
@@ -46,33 +46,33 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
 
     properties
         % Add the common coordinate space in which this brain atlas version exists in.
-        coordinateSpace (1,:) openminds.sands.CommonCoordinateSpace ...
+        coordinateSpace (1,:) openminds.sands.atlas.CommonCoordinateSpace ...
             {mustBeSpecifiedLength(coordinateSpace, 0, 1)}
 
         % Add the globally unique and persistent digital identifier of this brain atlas version.
-        digitalIdentifier (1,:) openminds.core.DOI ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name for this brain atlas version.
         fullName (1,1) string
 
         % Add the parcellation terminology for this brain atlas version.
-        hasTerminology (1,:) openminds.sands.parcellationTerminology ...
+        hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminology ...
             {mustBeSpecifiedLength(hasTerminology, 0, 1)}
 
         % Add the uniform resource locator (URL) to the homepage of this brain atlas version.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this brain atlas version. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string
 
         % Add one or several alternative versions to this brain atlas version.
-        isAlternativeVersionOf (1,:) openminds.sands.BrainAtlasVersion ...
+        isAlternativeVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
             {mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the earlier version of this brain atlas version.
-        isNewVersionOf (1,:) openminds.sands.BrainAtlasVersion ...
+        isNewVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
             {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
 
         % Enter the identifier (IRI) of the related ontological term matching this brain atlas version.
@@ -102,12 +102,12 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'coordinateSpace', "openminds.sands.CommonCoordinateSpace", ...
-            'digitalIdentifier', "openminds.core.DOI", ...
-            'hasTerminology', "openminds.sands.parcellationTerminology", ...
-            'homepage', "openminds.core.URL", ...
-            'isAlternativeVersionOf', "openminds.sands.BrainAtlasVersion", ...
-            'isNewVersionOf', "openminds.sands.BrainAtlasVersion" ...
+            'coordinateSpace', "openminds.sands.atlas.CommonCoordinateSpace", ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DOI", ...
+            'hasTerminology', "openminds.sands.atlas.ParcellationTerminology", ...
+            'homepage', "openminds.core.miscellaneous.URL", ...
+            'isAlternativeVersionOf', "openminds.sands.atlas.BrainAtlasVersion", ...
+            'isNewVersionOf', "openminds.sands.atlas.BrainAtlasVersion" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -124,5 +124,4 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

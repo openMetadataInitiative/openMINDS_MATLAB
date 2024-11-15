@@ -44,8 +44,7 @@ classdef PublicationIssue < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = sprintf('%s: %s', obj.isPartOf, obj.issueNumber);
         end
     end
-
 end

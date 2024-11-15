@@ -6,7 +6,7 @@ classdef Annotation < openminds.abstract.Schema
 %   bestViewPoint       : (1,1) <a href="matlab:help openminds.sands.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
 %                         Add the coordinate point identifying the best view of this annotation in space.
 %
-%   criteria            : (1,1) <a href="matlab:help openminds.core.ProtocolExecution" style="font-weight:bold">ProtocolExecution</a>
+%   criteria            : (1,1) <a href="matlab:help openminds.core.research.ProtocolExecution" style="font-weight:bold">ProtocolExecution</a>
 %                         Add the protocol execution defining the criteria that were applied to produce this annotation.
 %
 %   criteriaQualityType : (1,1) <a href="matlab:help openminds.controlledterms.CriteriaQualityType" style="font-weight:bold">CriteriaQualityType</a>
@@ -41,7 +41,7 @@ classdef Annotation < openminds.abstract.Schema
             {mustBeSpecifiedLength(bestViewPoint, 0, 1)}
 
         % Add the protocol execution defining the criteria that were applied to produce this annotation.
-        criteria (1,:) openminds.core.ProtocolExecution ...
+        criteria (1,:) openminds.core.research.ProtocolExecution ...
             {mustBeSpecifiedLength(criteria, 0, 1)}
 
         % Add the quality type of the stated criteria used to define this annotation.
@@ -86,7 +86,7 @@ classdef Annotation < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'bestViewPoint', "openminds.sands.CoordinatePoint", ...
-            'criteria', "openminds.core.ProtocolExecution", ...
+            'criteria', "openminds.core.research.ProtocolExecution", ...
             'criteriaQualityType', "openminds.controlledterms.CriteriaQualityType", ...
             'inspiredBy', "openminds.sands.Image", ...
             'laterality', "openminds.controlledterms.Laterality", ...
@@ -106,8 +106,7 @@ classdef Annotation < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

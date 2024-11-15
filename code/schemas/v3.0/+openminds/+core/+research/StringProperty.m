@@ -45,5 +45,4 @@ classdef StringProperty < openminds.abstract.Schema
             str = sprintf('%s', obj.name);
         end
     end
-
 end

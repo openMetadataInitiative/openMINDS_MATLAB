@@ -31,5 +31,4 @@ classdef ModelScope < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
-
 end

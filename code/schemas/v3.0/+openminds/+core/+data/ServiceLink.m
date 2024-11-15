@@ -3,7 +3,7 @@ classdef ServiceLink < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   dataLocation : (1,1) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.FileArchive" style="font-weight:bold">FileArchive</a>, <a href="matlab:help openminds.core.FileBundle" style="font-weight:bold">FileBundle</a>, <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.publications.LivePaperResourceItem" style="font-weight:bold">LivePaperResourceItem</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   dataLocation : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.data.FileArchive" style="font-weight:bold">FileArchive</a>, <a href="matlab:help openminds.core.data.FileBundle" style="font-weight:bold">FileBundle</a>, <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.publications.LivePaperResourceItem" style="font-weight:bold">LivePaperResourceItem</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                  Add the location of the data that are linked to this specific service (e.g., stored as file (bundles) or registered as other entities such as atlas annotations).
 %
 %   displayLabel : (1,1) string
@@ -12,7 +12,7 @@ classdef ServiceLink < openminds.abstract.Schema
 %   openDataIn   : (1,1) string
 %                  Enter the internationalized resource identifier (IRI) to the linked data in the specified service.
 %
-%   previewImage : (1,1) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>
+%   previewImage : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                  Add an image file to this service link that acts as a preview of its content or could function as an icon.
 %
 %   service      : (1,1) <a href="matlab:help openminds.controlledterms.Service" style="font-weight:bold">Service</a>
@@ -32,7 +32,7 @@ classdef ServiceLink < openminds.abstract.Schema
         openDataIn (1,1) string
 
         % Add an image file to this service link that acts as a preview of its content or could function as an icon.
-        previewImage (1,:) openminds.core.File ...
+        previewImage (1,:) openminds.core.data.File ...
             {mustBeSpecifiedLength(previewImage, 0, 1)}
 
         % Add the service in which the specified data can be opened.
@@ -50,8 +50,8 @@ classdef ServiceLink < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'dataLocation', ["openminds.core.File", "openminds.core.FileArchive", "openminds.core.FileBundle", "openminds.core.ModelVersion", "openminds.publications.LivePaperResourceItem", "openminds.sands.ParcellationEntityVersion"], ...
-            'previewImage', "openminds.core.File", ...
+            'dataLocation', ["openminds.core.data.File", "openminds.core.data.FileArchive", "openminds.core.data.FileBundle", "openminds.core.products.ModelVersion", "openminds.publications.LivePaperResourceItem", "openminds.sands.atlas.ParcellationEntityVersion"], ...
+            'previewImage', "openminds.core.data.File", ...
             'service', "openminds.controlledterms.Service" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -69,5 +69,4 @@ classdef ServiceLink < openminds.abstract.Schema
             str = sprintf('%s', obj.displayLabel);
         end
     end
-
 end

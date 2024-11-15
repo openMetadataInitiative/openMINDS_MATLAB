@@ -6,7 +6,7 @@ classdef Configuration < openminds.abstract.Schema
 %   configuration : (1,1) string
 %                   Enter the configuration in a simple text based format (e.g., JSON or YAML).
 %
-%   format        : (1,1) <a href="matlab:help openminds.core.ContentType" style="font-weight:bold">ContentType</a>
+%   format        : (1,1) <a href="matlab:help openminds.core.data.ContentType" style="font-weight:bold">ContentType</a>
 %                   Add the content type of this configuration.
 %
 %   lookupLabel   : (1,1) string
@@ -19,7 +19,7 @@ classdef Configuration < openminds.abstract.Schema
         configuration (1,1) string
 
         % Add the content type of this configuration.
-        format (1,:) openminds.core.ContentType ...
+        format (1,:) openminds.core.data.ContentType ...
             {mustBeSpecifiedLength(format, 0, 1)}
 
         % Enter a lookup label for this configuration that may help you to find this instance more easily.
@@ -36,7 +36,7 @@ classdef Configuration < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'format', "openminds.core.ContentType" ...
+            'format', "openminds.core.data.ContentType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,5 +53,4 @@ classdef Configuration < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

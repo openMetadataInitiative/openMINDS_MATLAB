@@ -3,10 +3,10 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   dataLocation       : (1,:) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>
+%   dataLocation       : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                        Add the location of all files in which this parcellation terminology is stored.
 %
-%   hasEntity          : (1,:) <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
+%   hasEntity          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
 %                        Add all parcellation entities which belong to this parcellation terminology.
 %
 %   ontologyIdentifier : (1,:) string
@@ -16,11 +16,11 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 
     properties
         % Add the location of all files in which this parcellation terminology is stored.
-        dataLocation (1,:) openminds.core.File ...
+        dataLocation (1,:) openminds.core.data.File ...
             {mustBeListOfUniqueItems(dataLocation)}
 
         % Add all parcellation entities which belong to this parcellation terminology.
-        hasEntity (1,:) openminds.sands.ParcellationEntity ...
+        hasEntity (1,:) openminds.sands.atlas.ParcellationEntity ...
             {mustBeListOfUniqueItems(hasEntity)}
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation terminology.
@@ -38,8 +38,8 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'dataLocation', "openminds.core.File", ...
-            'hasEntity', "openminds.sands.ParcellationEntity" ...
+            'dataLocation', "openminds.core.data.File", ...
+            'hasEntity', "openminds.sands.atlas.ParcellationEntity" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -53,8 +53,7 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

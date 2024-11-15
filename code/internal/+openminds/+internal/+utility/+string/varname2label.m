@@ -75,7 +75,6 @@ else
 end
 
 label = strtrim(label);
-
 end
 
 function isCamelCase = iscamelcase(varname)

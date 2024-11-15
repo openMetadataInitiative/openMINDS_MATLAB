@@ -6,7 +6,7 @@ classdef ParameterSet < openminds.abstract.Schema
 %   context     : (1,1) string
 %                 Enter the common context for the parameters grouped in this set.
 %
-%   parameter   : (1,:) <a href="matlab:help openminds.core.NumericalParameter" style="font-weight:bold">NumericalParameter</a>, <a href="matlab:help openminds.core.StringParameter" style="font-weight:bold">StringParameter</a>
+%   parameter   : (1,:) <a href="matlab:help openminds.core.research.NumericalParameter" style="font-weight:bold">NumericalParameter</a>, <a href="matlab:help openminds.core.research.StringParameter" style="font-weight:bold">StringParameter</a>
 %                 Add all numerical and string parameters that belong to this parameter set.
 %
 %   relevantFor : (1,1) <a href="matlab:help openminds.controlledterms.BehavioralTask" style="font-weight:bold">BehavioralTask</a>, <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>
@@ -40,7 +40,7 @@ classdef ParameterSet < openminds.abstract.Schema
             'relevantFor', ["openminds.controlledterms.BehavioralTask", "openminds.controlledterms.Technique"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'parameter', ["openminds.core.NumericalParameter", "openminds.core.StringParameter"] ...
+            'parameter', ["openminds.core.research.NumericalParameter", "openminds.core.research.StringParameter"] ...
         )
     end
 
@@ -52,8 +52,7 @@ classdef ParameterSet < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

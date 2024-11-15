@@ -10,7 +10,7 @@ function S = listSchemasWithNonGenericLabel()
     tempsavepath = tempname;
     tempsavepath = [tempsavepath, '.mat'];
     
-    %disp(tempsavepath)
+    % disp(tempsavepath)
     cleanupObj = onCleanup(@(filepath)delete(tempsavepath));
 
     count = 0;
@@ -36,22 +36,22 @@ function S = listSchemasWithNonGenericLabel()
                 S.(iSchemaName).propertyName = "lookupLabel";
                 S.(iSchemaName).stringFormat = "sprintf('%s', lookupLabel)";
 
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'fullName')
                 S.(iSchemaName).propertyName = 'fullName';
                 S.(iSchemaName).stringFormat = "sprintf('%s', fullName)";
 
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'identifier')
                 S.(iSchemaName).propertyName = 'identifier';
                 S.(iSchemaName).stringFormat = "sprintf('%s', identifier)";
                 
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'name')
                 S.(iSchemaName).propertyName = 'name';
                 S.(iSchemaName).stringFormat = "sprintf('%s', name)";
 
-                %pass
+                % pass
             else
 
                 S.(iSchemaName).propertyName = '';
@@ -63,10 +63,9 @@ function S = listSchemasWithNonGenericLabel()
         catch ME
             fprintf('Could not create schema %s due to error:\n%s\n', ...
                 iSchemaName, ME.message)
-
         end
     end
 
-    %T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});
-    %fprintf('Number of tests that failed: %d/%d\n', numTestsFailed, numTestsTotal)
+    % T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});
+    % fprintf('Number of tests that failed: %d/%d\n', numTestsFailed, numTestsTotal)
 end

@@ -26,5 +26,4 @@ function packageName = pathstr2packagename(pathStr)
     packageFolderNames = strrep(packageFolderNames, '+', '');
     
     packageName = strjoin(packageFolderNames, '.');
-
 end

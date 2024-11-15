@@ -201,7 +201,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
             
             % Todo: Consider indicating that the array has mixed types,
             % i.e is heterogeneous-like...
-            %docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
+            % docLinkStr = sprintf('1x%d heterogeneous %s', numel(obj), docLinkStr);
 
             docLinkStr = sprintf('1x%d %s', numel(obj), docLinkStr);
             if isempty(obj)
@@ -234,8 +234,8 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 stringArray = strjoin( arrayfun(@(o) o.Instance.id, obj, 'UniformOutput', false), newline);
             else
                 repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-                %stringArray = cellfun(@(r) r.Representation, repArray);
-                %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+                % stringArray = cellfun(@(r) r.Representation, repArray);
+                % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
                 stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
                 stringArray = strrep(stringArray, '[', '');
                 stringArray = strrep(stringArray, ']', '');
@@ -252,8 +252,8 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         
         function stringArray = getStringArrayForSingleLine(obj)
             repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-            %stringArray = cellfun(@(r) r.Representation, repArray);
-            %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
+            % stringArray = cellfun(@(r) r.Representation, repArray);
+            % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
 
             stringArray = cellfun(@(r) r.PaddedDisplayOutput, repArray);
             stringArray = strrep(stringArray, '[', '');

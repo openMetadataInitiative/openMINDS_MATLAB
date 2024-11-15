@@ -1,18 +1,18 @@
 classdef Organization < openminds.abstract.Schema
-%Organization - Structured information on an organization.
+%Organization - An entity comprised of one or more natural persons with a particular purpose. [adapted from Wikipedia](https://en.wikipedia.org/wiki/Organization)
 %
 %   PROPERTIES:
 %
-%   affiliation       : (1,:) <a href="matlab:help openminds.core.Affiliation" style="font-weight:bold">Affiliation</a>
+%   affiliation       : (1,:) <a href="matlab:help openminds.core.actors.Affiliation" style="font-weight:bold">Affiliation</a>
 %                       Enter all current and, if necessary, past affiliations of this organization.
 %
-%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.GRIDID" style="font-weight:bold">GRIDID</a>, <a href="matlab:help openminds.core.RORID" style="font-weight:bold">RORID</a>, <a href="matlab:help openminds.core.RRID" style="font-weight:bold">RRID</a>
+%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.digitalidentifier.GRIDID" style="font-weight:bold">GRIDID</a>, <a href="matlab:help openminds.core.digitalidentifier.RORID" style="font-weight:bold">RORID</a>, <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
 %                       Add all globally unique and persistent digital identifier of this organization.
 %
 %   fullName          : (1,1) string
 %                       Enter the full name of this organization.
 %
-%   hasParent         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>
+%   hasParent         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
 %                       Add all parent organizations of this organization.
 %
 %   homepage          : (1,1) string
@@ -25,7 +25,7 @@ classdef Organization < openminds.abstract.Schema
 
     properties
         % Enter all current and, if necessary, past affiliations of this organization.
-        affiliation (1,:) openminds.core.Affiliation ...
+        affiliation (1,:) openminds.core.actors.Affiliation ...
             {mustBeListOfUniqueItems(affiliation)}
 
         % Add all globally unique and persistent digital identifier of this organization.
@@ -36,7 +36,7 @@ classdef Organization < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add all parent organizations of this organization.
-        hasParent (1,:) openminds.core.Organization ...
+        hasParent (1,:) openminds.core.actors.Organization ...
             {mustBeListOfUniqueItems(hasParent)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this organization.
@@ -56,11 +56,11 @@ classdef Organization < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', ["openminds.core.GRIDID", "openminds.core.RORID", "openminds.core.RRID"], ...
-            'hasParent', "openminds.core.Organization" ...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.GRIDID", "openminds.core.digitalidentifier.RORID", "openminds.core.digitalidentifier.RRID"], ...
+            'hasParent', "openminds.core.actors.Organization" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'affiliation', "openminds.core.Affiliation" ...
+            'affiliation', "openminds.core.actors.Affiliation" ...
         )
     end
 
@@ -75,5 +75,4 @@ classdef Organization < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

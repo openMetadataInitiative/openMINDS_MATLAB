@@ -20,7 +20,7 @@ function mustBeOneOf(value, allowedTypes)
     if ~isValidType
         error('Value must be one of the following types:' + validTypesStr)
     end
-    %assert(isValidType, 'Value must be one of the following types:' + validTypesStr)
+    % assert(isValidType, 'Value must be one of the following types:' + validTypesStr)
 end
 
 function str = getValidTypesAsFormattedString(allowedTypes)

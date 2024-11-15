@@ -44,7 +44,7 @@ function update(mode)
         openminds.internal.downloadSchemas()
         
         disp('Updating openMINDS schemas.')
-        %openminds.internal.updateSchemas()
+        % openminds.internal.updateSchemas()
 
         % Temporary (openminds.internal.updateSchemas is not implemented yet)
         schemaFolderPath = fullfile(openminds.internal.Constants.SchemaFolder, 'matlab', '+openminds');

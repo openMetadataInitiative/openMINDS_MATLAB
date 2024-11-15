@@ -12,7 +12,7 @@ classdef Protocol < openminds.abstract.Schema
 %   name           : (1,1) string
 %                    Enter a descriptive name for this protocol.
 %
-%   studyTarget    : (1,:) <a href="matlab:help openminds.controlledterm.BiologicalSex" style="font-weight:bold">BiologicalSex</a>, <a href="matlab:help openminds.controlledterm.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterm.Genotype" style="font-weight:bold">Genotype</a>, <a href="matlab:help openminds.controlledterm.Phenotype" style="font-weight:bold">Phenotype</a>, <a href="matlab:help openminds.controlledterm.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.controlledterm.TermSuggestion" style="font-weight:bold">TermSuggestion</a>, <a href="matlab:help openminds.sands.AnatomicalEntity" style="font-weight:bold">AnatomicalEntity</a>
+%   studyTarget    : (1,:) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>, <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.Genotype" style="font-weight:bold">Genotype</a>, <a href="matlab:help openminds.controlledterms.Phenotype" style="font-weight:bold">Phenotype</a>, <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.controlledterms.TermSuggestion" style="font-weight:bold">TermSuggestion</a>, <a href="matlab:help openminds.sands.AnatomicalEntity" style="font-weight:bold">AnatomicalEntity</a>
 %                    Add all study targets of this model version.
 %
 %   technique      : (1,:) <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>
@@ -51,7 +51,7 @@ classdef Protocol < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'behavioralTask', "openminds.controlledterms.BehavioralTask", ...
-            'studyTarget', ["openminds.controlledterm.BiologicalSex", "openminds.controlledterm.Disease", "openminds.controlledterm.Genotype", "openminds.controlledterm.Phenotype", "openminds.controlledterm.Species", "openminds.controlledterm.TermSuggestion", "openminds.sands.AnatomicalEntity"], ...
+            'studyTarget', ["openminds.controlledterms.BiologicalSex", "openminds.controlledterms.Disease", "openminds.controlledterms.Genotype", "openminds.controlledterms.Phenotype", "openminds.controlledterms.Species", "openminds.controlledterms.TermSuggestion", "openminds.sands.AnatomicalEntity"], ...
             'technique', "openminds.controlledterms.Technique" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -69,5 +69,4 @@ classdef Protocol < openminds.abstract.Schema
             str = sprintf('%s', obj.name);
         end
     end
-
 end

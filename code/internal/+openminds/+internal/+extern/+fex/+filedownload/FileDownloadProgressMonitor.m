@@ -77,7 +77,7 @@ classdef FileDownloadProgressMonitor < matlab.net.http.ProgressMonitor
         
         function set.Direction(obj, dir)
             obj.Direction = dir;
-            %fprintf('Direction set: %s\n', obj.Direction)
+            % fprintf('Direction set: %s\n', obj.Direction)
         end
         
         function set.Value(obj, value)

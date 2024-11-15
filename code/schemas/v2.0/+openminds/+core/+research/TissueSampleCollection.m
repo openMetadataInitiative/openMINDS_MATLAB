@@ -33,7 +33,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
 %   strain             : (1,:) <a href="matlab:help openminds.controlledterms.Strain" style="font-weight:bold">Strain</a>
 %                        Add the strain of all specimen in this set.
 %
-%   studiedState       : (1,:) <a href="matlab:help openminds.core.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>
+%   studiedState       : (1,:) <a href="matlab:help openminds.core.research.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>
 %                        Add all states in which this tissue sample collection was studied.
 %
 %   type               : (1,:) <a href="matlab:help openminds.controlledterms.TissueSampleType" style="font-weight:bold">TissueSampleType</a>
@@ -80,7 +80,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
             {mustBeListOfUniqueItems(strain)}
 
         % Add all states in which this tissue sample collection was studied.
-        studiedState (1,:) openminds.core.TissueSampleCollectionState ...
+        studiedState (1,:) openminds.core.research.TissueSampleCollectionState ...
             {mustBeListOfUniqueItems(studiedState)}
 
         % Add the type of all tissue samples in this collection.
@@ -104,7 +104,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
             'phenotype', "openminds.controlledterms.Phenotype", ...
             'species', "openminds.controlledterms.Species", ...
             'strain', "openminds.controlledterms.Strain", ...
-            'studiedState', "openminds.core.TissueSampleCollectionState", ...
+            'studiedState', "openminds.core.research.TissueSampleCollectionState", ...
             'type', "openminds.controlledterms.TissueSampleType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -122,5 +122,4 @@ classdef TissueSampleCollection < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

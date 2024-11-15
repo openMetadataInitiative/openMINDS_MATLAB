@@ -6,7 +6,7 @@ classdef CustomPropertySet < openminds.abstract.Schema
 %   context      : (1,1) string
 %                  Enter the common context for this custom property set.
 %
-%   dataLocation : (1,1) <a href="matlab:help openminds.core.Configuration" style="font-weight:bold">Configuration</a>, <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.PropertyValueList" style="font-weight:bold">PropertyValueList</a>
+%   dataLocation : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.research.Configuration" style="font-weight:bold">Configuration</a>, <a href="matlab:help openminds.core.research.PropertyValueList" style="font-weight:bold">PropertyValueList</a>
 %                  Add the location of the data that define the custom property set for the given context (e.g., stored as file or other entities such as property-value lists).
 %
 %   relevantFor  : (1,1) <a href="matlab:help openminds.controlledterms.AnalysisTechnique" style="font-weight:bold">AnalysisTechnique</a>, <a href="matlab:help openminds.controlledterms.StimulationApproach" style="font-weight:bold">StimulationApproach</a>, <a href="matlab:help openminds.controlledterms.StimulationTechnique" style="font-weight:bold">StimulationTechnique</a>, <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>
@@ -37,7 +37,7 @@ classdef CustomPropertySet < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'dataLocation', ["openminds.core.Configuration", "openminds.core.File", "openminds.core.PropertyValueList"], ...
+            'dataLocation', ["openminds.core.data.File", "openminds.core.research.Configuration", "openminds.core.research.PropertyValueList"], ...
             'relevantFor', ["openminds.controlledterms.AnalysisTechnique", "openminds.controlledterms.StimulationApproach", "openminds.controlledterms.StimulationTechnique", "openminds.controlledterms.Technique"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -52,8 +52,7 @@ classdef CustomPropertySet < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

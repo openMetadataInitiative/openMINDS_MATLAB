@@ -6,7 +6,7 @@ classdef AtlasTerminology < openminds.abstract.Schema
 %   anatomicalEntity   : (1,:) <a href="matlab:help openminds.sands.AnatomicalEntity" style="font-weight:bold">AnatomicalEntity</a>
 %                        Add all anatomical entities that belong to this atlas terminology.
 %
-%   definedIn          : (1,:) <a href="matlab:help openminds.core.FileInstance" style="font-weight:bold">FileInstance</a>
+%   definedIn          : (1,:) <a href="matlab:help openminds.core.data.FileInstance" style="font-weight:bold">FileInstance</a>
 %                        Add one or several files in which this atlas terminology is stored in.
 %
 %   fullName           : (1,1) string
@@ -26,7 +26,7 @@ classdef AtlasTerminology < openminds.abstract.Schema
             {mustBeListOfUniqueItems(anatomicalEntity)}
 
         % Add one or several files in which this atlas terminology is stored in.
-        definedIn (1,:) openminds.core.FileInstance ...
+        definedIn (1,:) openminds.core.data.FileInstance ...
             {mustBeListOfUniqueItems(definedIn)}
 
         % Enter a descriptive full name for this atlas terminology.
@@ -50,7 +50,7 @@ classdef AtlasTerminology < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'anatomicalEntity', "openminds.sands.AnatomicalEntity", ...
-            'definedIn', "openminds.core.FileInstance" ...
+            'definedIn', "openminds.core.data.FileInstance" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -67,5 +67,4 @@ classdef AtlasTerminology < openminds.abstract.Schema
             str = obj.fullName;
         end
     end
-
 end

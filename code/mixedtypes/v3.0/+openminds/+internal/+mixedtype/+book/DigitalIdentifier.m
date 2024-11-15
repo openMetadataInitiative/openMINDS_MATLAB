@@ -1,6 +1,9 @@
 classdef DigitalIdentifier < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.DOI", "openminds.core.ISBN"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.digitalidentifier.DOI", ...
+            "openminds.core.digitalidentifier.ISBN" ...
+        ]
         IS_SCALAR = true
     end
 end

@@ -58,5 +58,4 @@ classdef QuantitativeValue < openminds.abstract.Schema
             end
         end
     end
-
 end

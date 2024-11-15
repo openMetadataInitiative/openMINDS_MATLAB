@@ -57,5 +57,4 @@ classdef License < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end
