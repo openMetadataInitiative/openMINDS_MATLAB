@@ -385,7 +385,7 @@ def _property_name_sort_key(arg):
     return priorities.get(name, name)
 
 def _strip_trailing_whitespace(s):
-    return "\n".join([line.rstrip() for line in s.splitlines()])
+    return "\n".join([line.rstrip() for line in s.splitlines()]) + "\n" # Also add single newline at the end
 
 def _is_datetime_format(property_info):
     return property_info.get("type") == 'string' \
