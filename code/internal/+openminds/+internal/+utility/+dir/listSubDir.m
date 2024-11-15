@@ -14,7 +14,7 @@ function [absPath, dirName] = listSubDir(rootPath, expression, ignoreList, nRecu
     if nargin < 2; expression = ''; end
     if nargin < 3; ignoreList = {}; end
     if nargin < 4; nRecurse = 0; end
-    %if nRecurse ~= 0; error('Not implemented yet'); end
+    % if nRecurse ~= 0; error('Not implemented yet'); end
 
     [absPath, dirName] = deal(cell(1, 0));
 
@@ -28,7 +28,7 @@ function [absPath, dirName] = listSubDir(rootPath, expression, ignoreList, nRecu
         % Find folders in raw data path
         listing = dir(fullfile(rootPath));
 
-        %keep = cellfun(@(pstr) ~strncmp(pstr, '.', 1), {listing.name});
+        % keep = cellfun(@(pstr) ~strncmp(pstr, '.', 1), {listing.name});
         keep = ~strncmp({listing.name}, '.', 1) & [listing.isdir];
         
         % Find only foldernames that matches expression

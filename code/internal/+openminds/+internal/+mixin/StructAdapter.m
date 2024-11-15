@@ -196,7 +196,6 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
             end
 
             obj.PropertyNames_ = propertyNames(keep);
-
         end
     end
     

@@ -45,12 +45,12 @@ end
 
 function data = getOfflineInstance(instanceName, schemaName, modelName, versionNumber)
 
-    %import openminds.internal.listControlledInstances
+    % import openminds.internal.listControlledInstances
     
-    %instanceTable = listControlledInstances(schemaName, modelName, instanceName);
+    % instanceTable = listControlledInstances(schemaName, modelName, instanceName);
 
-    %assert(size(instanceTable, 1) == 1, 'Expected a single match for instance "%s", but %d was found.', instanceName, size(instanceTable, 1))
-    %jsonStr = fileread(instanceTable.Filepath);
+    % assert(size(instanceTable, 1) == 1, 'Expected a single match for instance "%s", but %d was found.', instanceName, size(instanceTable, 1))
+    % jsonStr = fileread(instanceTable.Filepath);
 
     filePath = getOfflineFilepath(instanceName, schemaName, modelName, versionNumber);
 

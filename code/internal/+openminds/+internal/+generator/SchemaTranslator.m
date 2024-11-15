@@ -54,7 +54,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             
             obj.saveClassdef()
 
-            %obj.saveAlias()
+            % obj.saveAlias()
             
             if ~nargout
                 clear obj
@@ -225,7 +225,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         function saveAlias(obj)
             filePath = obj.getAliasFilePath();
             
-            %fullClassName = obj.getFullClassName();
+            % fullClassName = obj.getFullClassName();
             fullClassNameSimple = obj.getFullClassName("simple");
 
             folderPath = fullfile( openminds.internal.rootpath, 'internal', 'resources', 'templates' );
@@ -240,7 +240,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             fid = fopen(filePath, 'w');
             fwrite(fid, str);
             fclose(fid);
-            
         end
     end
 
@@ -447,11 +446,10 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                     obj.appendLine(3, sprintf("'%s', {%s}%s", keyName, linkedTypesStr, lineBreak))
                 end
                 obj.appendLine(2, ')')
-
             end
 
             obj.endPropertyBlock()
-            %obj.writeLinkedPropertyBlo
+            % obj.writeLinkedPropertyBlo
         end
 
         function writeSchemaProperties(obj)
@@ -468,7 +466,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 end
                 obj.endPropertyBlock()
             else
-                
             end
         end
 
@@ -573,18 +570,18 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 elseif numel(clsNames) == 1
                     dataType = clsNames{1};
                 else
-                    %dataType = 'cell';
-                    %validationFcnStr(end+1) = obj.getMultiTypeValidationFunctionString(propertyName, clsNames);
+                    % dataType = 'cell';
+                    % validationFcnStr(end+1) = obj.getMultiTypeValidationFunctionString(propertyName, clsNames);
 
                     dataType = createPropertyLinksetClass(obj.SchemaName, propertyName, clsNames, allowMultiple);
                     
-                    %dataType = clsNames{1};
-                    %warning('Multiple schemas allowed for property %s of schema %s', propertyName, obj.SchemaName)
+                    % dataType = clsNames{1};
+                    % warning('Multiple schemas allowed for property %s of schema %s', propertyName, obj.SchemaName)
                 end
             
             elseif isfield(propertyAttributes, 'x_linkedCategories')
                 clsNames = cellfun(@(str) openminds.internal.utility.string.buildClassName(str, '', 'category'), propertyAttributes.x_linkedCategories, 'UniformOutput', false);
-                %dataType = sprintf('{%s}', strjoin(clsNames, ', '));
+                % dataType = sprintf('{%s}', strjoin(clsNames, ', '));
                 attributeNames = setdiff(attributeNames, 'x_linkedCategories');
                 dataType = clsNames{1};
                 if numel(clsNames) > 1
@@ -600,7 +597,6 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                             dataType = itemDef.type;
                             itemFields = setdiff(itemFields, 'type');
                         else
-                            
                         end
                         % Todo: note: item is a nested attribute field....
                         if ~isempty(itemFields)
@@ -679,7 +675,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                             end
                         case 'description'
                             % str = propertyAttributes.description;
-                            %disp(['description: ', str])
+                            % disp(['description: ', str])
                         otherwise
                             disp(['additional attributenames: ', attributeNames])
                     end
@@ -689,19 +685,19 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             if isempty(validationFcnStr)
                 obj.addProperty(propertyName, 'Size', sizeAttribute, ...
                     'Type', dataType)
-                %newStr = sprintf('%s %s %s', propertyName, sizeAttribute, dataType);
+                % newStr = sprintf('%s %s %s', propertyName, sizeAttribute, dataType);
             else
 
                 validationFcnStr = sprintf("{%s}", strjoin(validationFcnStr, ", "));
 
                 obj.addProperty(propertyName, 'Size', sizeAttribute, ...
                     'Type', dataType, 'Validator', validationFcnStr)
-                %newStr = sprintf('%s %s %s %s', propertyName, sizeAttribute, dataType, validationFcnStr);
+                % newStr = sprintf('%s %s %s %s', propertyName, sizeAttribute, dataType, validationFcnStr);
             end
             
-            %newStr = obj.indentLine(newStr, 2);
-            %obj.appendLine(newStr)
-            %obj.appendLine('')
+            % newStr = obj.indentLine(newStr, 2);
+            % obj.appendLine(newStr)
+            % obj.appendLine('')
         end
     end
 
@@ -841,7 +837,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                 end
 
                 obj.appendLine(4, "")
-                %obj.writeEmptyLine()
+                % obj.writeEmptyLine()
             end
             obj.appendLine(3, 'end')
 

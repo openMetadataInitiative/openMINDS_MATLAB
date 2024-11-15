@@ -9,7 +9,7 @@ function instances = loadInstances(filePath)%, options)
 
     arguments
         filePath (1,:) string = ""
-        %options.RecursionDepth = 1
+        % options.RecursionDepth = 1
     end
 
     import openminds.internal.serializer.JsonLdSerializer
@@ -39,7 +39,7 @@ function instances = loadInstances(filePath)%, options)
 
                 if ~isfield(thisInstance, 'at_type')
                     continue % Todo: Why skip?
-                    %instances{i} = struct('id', thisInstance.at_id);
+                    % instances{i} = struct('id', thisInstance.at_id);
                 else
                     openMindsType = thisInstance.at_type;
                     className = openminds.internal.utility.string.type2class(openMindsType);

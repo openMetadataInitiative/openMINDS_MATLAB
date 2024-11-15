@@ -147,7 +147,7 @@ classdef ClassWriter < handle
             fwrite(fid, obj.ClassDefText);
             fclose(fid);
 
-            %fprintf('Saved class definition for %s to:\n"%s"\n', obj.ClassName, filePath)
+            % fprintf('Saved class definition for %s to:\n"%s"\n', obj.ClassName, filePath)
         end
 
         function appendLine(obj, numIndent, str)
@@ -319,7 +319,7 @@ classdef ClassWriter < handle
         function endFunctionBlock(obj)
             numIndent = 2;
             obj.appendLine(numIndent, "end");
-            %obj.appendLine(numIndent, ""); % Add empty line
+            % obj.appendLine(numIndent, ""); % Add empty line
             obj.CurrentStep = "methods";
         end
     end

@@ -34,7 +34,6 @@ function generateSchemaClasses(action, options)
             switch schemaTable.ModuleName(i)
                 case {'SANDS', 'computation', 'core', 'publications', 'controlledTerms'}
                     openminds.internal.generator.SchemaTranslator( schemaTable.Filepath(i), action, versionNumber )
-            
             end
         catch ME
             fprintf('Failed to create schema for %s\n', schemaTable.SchemaName(i))
@@ -43,5 +42,4 @@ function generateSchemaClasses(action, options)
     end
 
     warning('on', 'backtrace')
-
 end

@@ -30,7 +30,7 @@ classdef SchemaInspector < handle
                 obj.SchemaClassName = class(varargin{1});
             end
             
-            %obj.countProperties()
+            % obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();
             obj.PropertyNamesAll = string( {obj.metaClassObject.PropertyList.Name} );
             

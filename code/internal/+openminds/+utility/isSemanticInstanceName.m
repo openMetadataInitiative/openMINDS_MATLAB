@@ -1,9 +1,9 @@
 function tf = isSemanticInstanceName(name)
 % isSemanticInstanceName Check if a name represents a semantic instance URI
 %
-%   tf = openminds.utility.isSemanticInstanceName(name) returns true if the 
-%   input `name` is a valid semantic instance URI, and false otherwise. This 
-%   function verifies if `name` meets the conditions to be identified as a 
+%   tf = openminds.utility.isSemanticInstanceName(name) returns true if the
+%   input `name` is a valid semantic instance URI, and false otherwise. This
+%   function verifies if `name` meets the conditions to be identified as a
 %   semantic instance by:
 %
 %       1. Parsing the URI scheme and host, then checking if they match
@@ -24,7 +24,6 @@ function tf = isSemanticInstanceName(name)
 %       tf = openminds.utility.isSemanticInstanceName(instanceURI);
 %
 %   See also: matlab.net.URI, openminds.constant.BaseURI
-
 
     URI = matlab.net.URI(name);
     
