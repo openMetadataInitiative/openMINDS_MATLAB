@@ -47,7 +47,8 @@ function str = getHtmlLink(schemaClassName, browserOption)
     persistent schemaManifest
     if isempty(schemaManifest)
         try
-            schemaManifest = openminds.internal.loadSchemaManifest("latest");
+            schemaVersion = openminds.getSchemaVersion();
+            schemaManifest = openminds.internal.loadSchemaManifest(schemaVersion);
         catch
             error('Not implemented yet')
         end
