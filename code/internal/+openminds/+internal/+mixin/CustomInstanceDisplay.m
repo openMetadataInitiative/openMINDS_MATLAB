@@ -112,7 +112,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             end
 
             numObjects = numel(obj);
-                       
+
             annotation = obj.getAnnotation();
 
             if numObjects == 0

@@ -244,7 +244,11 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
 
             str = obj.getHeader;
             disp(str)
-            fprintf( '%s\n\n', strjoin(stringArray, '    \n') );
+            if iscell(stringArray) || isstring(stringArray)
+                fprintf( '%s\n\n', strjoin(stringArray, '    \n') );
+            else
+                fprintf( '%s\n\n', stringArray)
+            end
         end
 
     end
@@ -253,7 +257,11 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
     methods (Access = protected)
         
         function stringArray = getStringArrayForSingleLine(obj)
-            repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+            try
+                repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+            catch
+                repArray = arrayfun(@(o) o.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+            end
             %stringArray = cellfun(@(r) r.Representation, repArray);
             %rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
 
