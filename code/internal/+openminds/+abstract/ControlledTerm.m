@@ -118,7 +118,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     return
                 end
             else
-                error('No matching instances were found for name "%s"', instanceName)
+                error('OpenMINDS:ControlledTerm:NoMatchingInstance', ...
+                    'No matching instances were found for name "%s"', instanceName)
                 %error('Deserialization from user instance is not implemented yet')
             end
             propNames = {'at_id', 'name', 'definition', 'description', 'interlexIdentifier', 'knowledgeSpaceLink', 'preferredOntologyIdentifier', 'synonym'};
