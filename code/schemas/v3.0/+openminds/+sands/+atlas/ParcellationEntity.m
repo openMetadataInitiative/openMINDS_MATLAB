@@ -12,10 +12,10 @@ classdef ParcellationEntity < openminds.abstract.Schema
 %   definition         : (1,1) string
 %                        Enter the definition for this parcellation entity.
 %
-%   hasParent          : (1,:) <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
+%   hasParent          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
 %                        Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
 %
-%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                        Add all versions of this parcellation entity.
 %
 %   lookupLabel        : (1,1) string
@@ -44,11 +44,11 @@ classdef ParcellationEntity < openminds.abstract.Schema
         definition (1,1) string
 
         % Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
-        hasParent (1,:) openminds.sands.ParcellationEntity ...
+        hasParent (1,:) openminds.sands.atlas.ParcellationEntity ...
             {mustBeListOfUniqueItems(hasParent)}
 
         % Add all versions of this parcellation entity.
-        hasVersion (1,:) openminds.sands.ParcellationEntityVersion ...
+        hasVersion (1,:) openminds.sands.atlas.ParcellationEntityVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Enter a lookup label for this parcellation entity that may help you to find this instance more easily.
@@ -76,8 +76,8 @@ classdef ParcellationEntity < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'hasParent', "openminds.sands.ParcellationEntity", ...
-            'hasVersion', "openminds.sands.ParcellationEntityVersion", ...
+            'hasParent', "openminds.sands.atlas.ParcellationEntity", ...
+            'hasVersion', "openminds.sands.atlas.ParcellationEntityVersion", ...
             'relatedUBERONTerm', ["openminds.controlledterms.Organ", "openminds.controlledterms.UBERONParcellation"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -95,5 +95,4 @@ classdef ParcellationEntity < openminds.abstract.Schema
             str = obj.lookupLabel;
         end
     end
-
 end

@@ -3,25 +3,25 @@ classdef Dataset < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   author            : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   author            : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several authors (person or organization) that contributed to the production and publication of this dataset.
 %
-%   custodian         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
 %
 %   description       : (1,1) string
 %                       Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>
 %                       Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.DatasetVersion" style="font-weight:bold">DatasetVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.DatasetVersion" style="font-weight:bold">DatasetVersion</a>
 %                       Add one or several versions of this dataset.
 %
-%   homepage          : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                       Add the uniform resource locator (URL) to the homepage of this research product.
 %
 %   howToCite         : (1,1) string
@@ -46,18 +46,18 @@ classdef Dataset < openminds.abstract.Schema
             {mustBeValidStringLength(description, 0, 2000)}
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
-        digitalIdentifier (1,:) openminds.core.DOI ...
+        digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
         fullName (1,1) string
 
         % Add one or several versions of this dataset.
-        hasVersion (1,:) openminds.core.DatasetVersion ...
+        hasVersion (1,:) openminds.core.products.DatasetVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
@@ -78,11 +78,11 @@ classdef Dataset < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'author', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'custodian', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', "openminds.core.DOI", ...
-            'hasVersion', "openminds.core.DatasetVersion", ...
-            'homepage', "openminds.core.URL" ...
+            'author', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'custodian', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', "openminds.core.miscellaneous.DOI", ...
+            'hasVersion', "openminds.core.products.DatasetVersion", ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -99,5 +99,4 @@ classdef Dataset < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

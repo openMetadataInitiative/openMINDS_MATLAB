@@ -1,6 +1,9 @@
 classdef PropertyValuePair < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.NumericalProperty", "openminds.core.StringProperty"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.research.NumericalProperty", ...
+            "openminds.core.research.StringProperty" ...
+        ]
         IS_SCALAR = false
     end
 end

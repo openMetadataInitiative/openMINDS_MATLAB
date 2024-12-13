@@ -1,7 +1,6 @@
 function mustBeValidStringLength(value, minLength, maxLength)
     
     if numel(value) > 1
-        
     end
     
     if minLength > 0

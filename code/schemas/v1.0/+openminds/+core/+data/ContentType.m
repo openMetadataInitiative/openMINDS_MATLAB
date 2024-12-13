@@ -65,5 +65,4 @@ classdef ContentType < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

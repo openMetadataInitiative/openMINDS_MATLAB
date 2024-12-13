@@ -3,16 +3,16 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   device             : (1,1) <a href="matlab:help openminds.specimenprep.SlicingDeviceUsage" style="font-weight:bold">SlicingDeviceUsage</a>
+%   device             : (1,1) <a href="matlab:help openminds.specimenprep.device.SlicingDeviceUsage" style="font-weight:bold">SlicingDeviceUsage</a>
 %                        Add the device used to slice the tissue sample.
 %
-%   input              : (1,1) <a href="matlab:help openminds.core.SubjectState" style="font-weight:bold">SubjectState</a>, <a href="matlab:help openminds.core.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>, <a href="matlab:help openminds.core.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
+%   input              : (1,1) <a href="matlab:help openminds.core.research.SubjectState" style="font-weight:bold">SubjectState</a>, <a href="matlab:help openminds.core.research.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>, <a href="matlab:help openminds.core.research.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
 %                        Add the state of the specimen that was sliced during this activity.
 %
-%   output             : (1,:) <a href="matlab:help openminds.core.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>, <a href="matlab:help openminds.core.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
+%   output             : (1,:) <a href="matlab:help openminds.core.research.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>, <a href="matlab:help openminds.core.research.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
 %                        Add the state of the tissue sample slice or collection of slices that resulted from this activity.
 %
-%   temperature        : (1,1) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>, <a href="matlab:help openminds.core.QuantitativeValueRange" style="font-weight:bold">QuantitativeValueRange</a>
+%   temperature        : (1,1) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>, <a href="matlab:help openminds.core.miscellaneous.QuantitativeValueRange" style="font-weight:bold">QuantitativeValueRange</a>
 %                        Enter the temperature at which the tissue sample was sliced during the activity.
 %
 %   tissueBathSolution : (1,1) <a href="matlab:help openminds.chemicals.ChemicalMixture" style="font-weight:bold">ChemicalMixture</a>
@@ -22,7 +22,7 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
 
     properties
         % Add the device used to slice the tissue sample.
-        device (1,:) openminds.specimenprep.SlicingDeviceUsage ...
+        device (1,:) openminds.specimenprep.device.SlicingDeviceUsage ...
             {mustBeSpecifiedLength(device, 0, 1)}
 
         % Add the state of the specimen that was sliced during this activity.
@@ -52,13 +52,13 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'device', "openminds.specimenprep.SlicingDeviceUsage", ...
-            'input', ["openminds.core.SubjectState", "openminds.core.TissueSampleCollectionState", "openminds.core.TissueSampleState"], ...
-            'output', ["openminds.core.TissueSampleCollectionState", "openminds.core.TissueSampleState"], ...
+            'device', "openminds.specimenprep.device.SlicingDeviceUsage", ...
+            'input', ["openminds.core.research.SubjectState", "openminds.core.research.TissueSampleCollectionState", "openminds.core.research.TissueSampleState"], ...
+            'output', ["openminds.core.research.TissueSampleCollectionState", "openminds.core.research.TissueSampleState"], ...
             'tissueBathSolution', "openminds.chemicals.ChemicalMixture" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'temperature', ["openminds.core.QuantitativeValue", "openminds.core.QuantitativeValueRange"] ...
+            'temperature', ["openminds.core.miscellaneous.QuantitativeValue", "openminds.core.miscellaneous.QuantitativeValueRange"] ...
         )
     end
 
@@ -70,8 +70,7 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

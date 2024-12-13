@@ -3,25 +3,25 @@ classdef Software < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   custodian         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
 %
 %   description       : (1,1) string
 %                       Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
 %
-%   developer         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   developer         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add one or several developers (person or organization) that contributed to the code implementation of this software.
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.SWHID" style="font-weight:bold">SWHID</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.miscellaneous.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.miscellaneous.SWHID" style="font-weight:bold">SWHID</a>
 %                       Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
 %                       Add one or several versions of this software tool.
 %
-%   homepage          : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                       Add the uniform resource locator (URL) to the homepage of this research product.
 %
 %   howToCite         : (1,1) string
@@ -53,11 +53,11 @@ classdef Software < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add one or several versions of this software tool.
-        hasVersion (1,:) openminds.core.SoftwareVersion ...
+        hasVersion (1,:) openminds.core.products.SoftwareVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
@@ -78,11 +78,11 @@ classdef Software < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'custodian', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'developer', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', ["openminds.core.DOI", "openminds.core.SWHID"], ...
-            'hasVersion', "openminds.core.SoftwareVersion", ...
-            'homepage', "openminds.core.URL" ...
+            'custodian', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'developer', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', ["openminds.core.miscellaneous.DOI", "openminds.core.miscellaneous.SWHID"], ...
+            'hasVersion', "openminds.core.products.SoftwareVersion", ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -99,5 +99,4 @@ classdef Software < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

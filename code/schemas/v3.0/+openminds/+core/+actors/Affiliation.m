@@ -6,7 +6,7 @@ classdef Affiliation < openminds.abstract.Schema
 %   endDate   : (1,1) datetime
 %               Enter the end date of this affiliation, formatted as 'YYYY-MM-DD'. Leave blank if this affiliation is still current.
 %
-%   memberOf  : (1,1) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>
+%   memberOf  : (1,1) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
 %               Add the organization or consortium another party was or still is a member of.
 %
 %   startDate : (1,1) datetime
@@ -38,7 +38,7 @@ classdef Affiliation < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'memberOf', ["openminds.core.Consortium", "openminds.core.Organization"] ...
+            'memberOf', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -55,5 +55,4 @@ classdef Affiliation < openminds.abstract.Schema
             str = sprintf('%s', obj.memberOf);
         end
     end
-
 end

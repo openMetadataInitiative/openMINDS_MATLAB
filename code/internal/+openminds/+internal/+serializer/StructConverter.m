@@ -81,7 +81,7 @@ classdef StructConverter < handle
                 nvOptions = namedargs2cell(options);
                 obj = cellfun(@(c) feval(className, c, nvOptions{:}), instanceObject);
                 return
-                %error('Serialization of non-scalar objects is not supported yet')
+                % error('Serialization of non-scalar objects is not supported yet')
             end
 
             if isa(instanceObject, 'struct') && isfield(instanceObject, 'id')
@@ -130,7 +130,7 @@ classdef StructConverter < handle
         %serialize Serialize an openMINDS instance
 
             S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
-            %S{1} = obj.convertStructToJsonld(S{1});
+            % S{1} = obj.convertStructToJsonld(S{1});
 
             % Todo:
             %   [ ] Test cell arrays where a property can have links to
@@ -185,7 +185,7 @@ classdef StructConverter < handle
                 iPropertyName = propertyNames{i};
                 iPropertyValue = instanceObject.(iPropertyName);
                 
-                %iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
+                % iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
                 iVocabPropertyName = iPropertyName;
 
                 % Skip properties where value is not set.

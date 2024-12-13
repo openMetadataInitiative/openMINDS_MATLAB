@@ -86,7 +86,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
                 elseif i == 3
                     obj.Patch = versionAsArray(i);
                 elseif i == 4
-                    obj.Build = versionAsArray(i);                    
+                    obj.Build = versionAsArray(i);
                 end
             end
         end
@@ -147,7 +147,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
                 c = cellstr( string(obj) );
             end
         end
-        % 
+        %
         function verNum = double(obj)
             verNum = [obj.Major, obj.Minor, obj.Patch, obj.Build];
         end
@@ -277,10 +277,10 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
     methods (Access = protected)
         % Override CustomDisplay to control display behavior
 
-        %function displayNonScalarObject(obj)
-            %verAsStr = arrayfun(@(o) string(o), obj, 'UniformOutput', true);
-            %disp(verAsStr);
-        %end
+        % function displayNonScalarObject(obj)
+            % verAsStr = arrayfun(@(o) string(o), obj, 'UniformOutput', true);
+            % disp(verAsStr);
+        % end
 
         function displayScalarObject(obj)
             fprintf('  %s \n\n', string(obj));
@@ -297,7 +297,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
     methods (Access = private)
         function verNums = getNumbersForFormat(obj)
             assert(numel(obj)==1, 'Function only accepts scalar object')
-            verNums = {obj.Major, obj.Minor, obj.Patch, obj.Build};        
+            verNums = {obj.Major, obj.Minor, obj.Patch, obj.Build};
 
             numParts = numel( strsplit(obj.Format, '.') );
             verNums = verNums(1:numParts);

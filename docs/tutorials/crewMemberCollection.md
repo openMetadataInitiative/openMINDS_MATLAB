@@ -24,13 +24,13 @@ Let us create a set of metadata instances from this table that represents the cr
 
 With these assumptions we will create:
 
--  a metadata <samp>Collection</samp> for storing metadata instances 
--  a unique set of <samp>Consortium</samp> instances based on the name given in the <samp>memberOf</samp> column 
--  a <samp>ContactInformation</samp> instance based on the <samp>email</samp> column 
--  a <samp>Person</samp> instance for each table row with: 
--      the <samp>givenName</samp>, <samp>familyName</samp>, and <samp>alternateName</samp> (if available) 
--      a link to the respective  <samp>ContactInformation</samp> instance 
--      a person-specific embedded <samp>Affiliation</samp> instance that links to the respective <samp>Consortium</samp> instance 
+- a metadata <samp>Collection</samp> for storing metadata instances 
+- a unique set of <samp>Consortium</samp> instances based on the name given in the <samp>memberOf</samp> column 
+- a <samp>ContactInformation</samp> instance based on the <samp>email</samp> column
+- a <samp>Person</samp> instance for each table row with: 
+  - the <samp>givenName</samp>, <samp>familyName</samp>, and <samp>alternateName</samp> (if available) 
+  - a link to the respective  <samp>ContactInformation</samp> instance
+  - a person-specific embedded <samp>Affiliation</samp> instance that links to the respective <samp>Consortium</samp> instance 
 
 We start by creating an empty metadata collection for storing metadata instances.
 

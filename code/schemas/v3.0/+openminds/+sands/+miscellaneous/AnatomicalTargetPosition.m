@@ -6,10 +6,10 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
 %   additionalRemarks        : (1,1) string
 %                              Enter any additional remarks concering this anatomical target position.
 %
-%   anatomicalTarget         : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   anatomicalTarget         : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                              Add all anatomical entities that describe the target position(s).
 %
-%   spatialLocation          : (1,:) <a href="matlab:help openminds.sands.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
+%   spatialLocation          : (1,:) <a href="matlab:help openminds.sands.miscellaneous.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
 %                              Add all coordinate points that describe the spatial location of the anatomical target structure(s).
 %
 %   targetIdentificationType : (1,1) <a href="matlab:help openminds.controlledterms.AnatomicalIdentificationType" style="font-weight:bold">AnatomicalIdentificationType</a>
@@ -26,7 +26,7 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
             {mustBeListOfUniqueItems(anatomicalTarget)}
 
         % Add all coordinate points that describe the spatial location of the anatomical target structure(s).
-        spatialLocation (1,:) openminds.sands.CoordinatePoint ...
+        spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
             {mustBeListOfUniqueItems(spatialLocation)}
 
         % Add the target identification type that best describes how the this anatomical target position was identified.
@@ -44,11 +44,11 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'anatomicalTarget', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"], ...
+            'anatomicalTarget', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"], ...
             'targetIdentificationType', "openminds.controlledterms.AnatomicalIdentificationType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'spatialLocation', "openminds.sands.CoordinatePoint" ...
+            'spatialLocation', "openminds.sands.miscellaneous.CoordinatePoint" ...
         )
     end
 
@@ -60,8 +60,7 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
-
 end

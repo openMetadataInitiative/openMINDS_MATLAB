@@ -3,7 +3,7 @@ classdef Project < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   coordinator         : (1,:) <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   coordinator         : (1,:) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                         Add one or several project coordinators (person or organization).
 %
 %   description         : (1,1) string
@@ -12,10 +12,10 @@ classdef Project < openminds.abstract.Schema
 %   fullName            : (1,1) string
 %                         Enter a descriptive full name (title) for this project.
 %
-%   hasResearchProducts : (1,:) <a href="matlab:help openminds.core.Dataset" style="font-weight:bold">Dataset</a>, <a href="matlab:help openminds.core.DatasetVersion" style="font-weight:bold">DatasetVersion</a>, <a href="matlab:help openminds.core.MetaDataModel" style="font-weight:bold">MetaDataModel</a>, <a href="matlab:help openminds.core.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>, <a href="matlab:help openminds.core.Model" style="font-weight:bold">Model</a>, <a href="matlab:help openminds.core.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.core.Software" style="font-weight:bold">Software</a>, <a href="matlab:help openminds.core.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
+%   hasResearchProducts : (1,:) <a href="matlab:help openminds.core.products.Dataset" style="font-weight:bold">Dataset</a>, <a href="matlab:help openminds.core.products.DatasetVersion" style="font-weight:bold">DatasetVersion</a>, <a href="matlab:help openminds.core.products.MetaDataModel" style="font-weight:bold">MetaDataModel</a>, <a href="matlab:help openminds.core.products.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>, <a href="matlab:help openminds.core.products.Model" style="font-weight:bold">Model</a>, <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>, <a href="matlab:help openminds.core.products.Software" style="font-weight:bold">Software</a>, <a href="matlab:help openminds.core.products.SoftwareVersion" style="font-weight:bold">SoftwareVersion</a>
 %                         Add all research products or research product versions that are part of this project.
 %
-%   homepage            : (1,1) <a href="matlab:help openminds.core.URL" style="font-weight:bold">URL</a>
+%   homepage            : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
 %                         Add the uniform resource locator (URL) to the homepage of this project.
 %
 %   shortName           : (1,1) string
@@ -39,7 +39,7 @@ classdef Project < openminds.abstract.Schema
             {mustBeListOfUniqueItems(hasResearchProducts)}
 
         % Add the uniform resource locator (URL) to the homepage of this project.
-        homepage (1,:) openminds.core.URL ...
+        homepage (1,:) openminds.core.miscellaneous.URL ...
             {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter a short name (alias) for this project.
@@ -56,9 +56,9 @@ classdef Project < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'coordinator', ["openminds.core.Organization", "openminds.core.Person"], ...
-            'hasResearchProducts', ["openminds.core.Dataset", "openminds.core.DatasetVersion", "openminds.core.MetaDataModel", "openminds.core.MetaDataModelVersion", "openminds.core.Model", "openminds.core.ModelVersion", "openminds.core.Software", "openminds.core.SoftwareVersion"], ...
-            'homepage', "openminds.core.URL" ...
+            'coordinator', ["openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'hasResearchProducts', ["openminds.core.products.Dataset", "openminds.core.products.DatasetVersion", "openminds.core.products.MetaDataModel", "openminds.core.products.MetaDataModelVersion", "openminds.core.products.Model", "openminds.core.products.ModelVersion", "openminds.core.products.Software", "openminds.core.products.SoftwareVersion"], ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -75,5 +75,4 @@ classdef Project < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

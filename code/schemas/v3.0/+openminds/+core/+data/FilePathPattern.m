@@ -47,5 +47,4 @@ classdef FilePathPattern < openminds.abstract.Schema
             str = sprintf('%s', obj.regex);
         end
     end
-
 end

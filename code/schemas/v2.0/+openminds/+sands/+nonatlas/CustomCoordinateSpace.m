@@ -6,10 +6,10 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
 %   anatomicalAxesOrientation : (1,1) <a href="matlab:help openminds.controlledterms.AnatomicalAxesOrientation" style="font-weight:bold">AnatomicalAxesOrientation</a>
 %                               Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for this custom coordinate space.
 %
-%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
+%   axesOrigin                : (1,:) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
 %                               Enter the origin of this custom coordinate space (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
 %
-%   defaultImage              : (1,:) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>
+%   defaultImage              : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                               Add one or several image files used as visual representation of this custom coordinate space.
 %
 %   name                      : (1,1) string
@@ -26,11 +26,11 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
             {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
 
         % Enter the origin of this custom coordinate space (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
-        axesOrigin (1,:) openminds.core.QuantitativeValue ...
+        axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
             {mustBeSpecifiedLength(axesOrigin, 2, 3)}
 
         % Add one or several image files used as visual representation of this custom coordinate space.
-        defaultImage (1,:) openminds.core.File ...
+        defaultImage (1,:) openminds.core.data.File ...
             {mustBeListOfUniqueItems(defaultImage)}
 
         % Enter a descriptive name for this custom coordinate space.
@@ -52,11 +52,11 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'anatomicalAxesOrientation', "openminds.controlledterms.AnatomicalAxesOrientation", ...
-            'defaultImage', "openminds.core.File", ...
+            'defaultImage', "openminds.core.data.File", ...
             'nativeUnit', "openminds.controlledterms.UnitOfMeasurement" ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'axesOrigin', "openminds.core.QuantitativeValue" ...
+            'axesOrigin', "openminds.core.miscellaneous.QuantitativeValue" ...
         )
     end
 
@@ -71,5 +71,4 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
             str = obj.name;
         end
     end
-
 end

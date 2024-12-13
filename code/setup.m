@@ -1,8 +1,8 @@
 function setup(options)
 
     arguments
-        % UpdatePathDef - Add openMINDS_MATLAB to the search path and update 
-        % the pathdef file, making sure this toolbox stays on path when 
+        % UpdatePathDef - Add openMINDS_MATLAB to the search path and update
+        % the pathdef file, making sure this toolbox stays on path when
         % restarting MATLAB
         options.UpdatePathDef (1,1) logical = true
         

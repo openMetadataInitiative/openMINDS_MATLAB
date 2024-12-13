@@ -6,7 +6,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
 %   additionalRemarks     : (1,1) string
 %                           Enter any additional remarks concering this specimen set.
 %
-%   anatomicalLocation    : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   anatomicalLocation    : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                           Add all anatomical entities that describe the anatomical location of this tissue sample collection.
 %
 %   biologicalSex         : (1,:) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>
@@ -27,10 +27,10 @@ classdef TissueSampleCollection < openminds.abstract.Schema
 %   origin                : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>
 %                           Add the biogical origin of all tissue samples in this collection.
 %
-%   species               : (1,:) <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.core.Strain" style="font-weight:bold">Strain</a>
+%   species               : (1,:) <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.core.research.Strain" style="font-weight:bold">Strain</a>
 %                           Add the species and/or strain (a sub-type of a genetic variant of species) of all specimen in this set.
 %
-%   studiedState          : (1,:) <a href="matlab:help openminds.core.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>
+%   studiedState          : (1,:) <a href="matlab:help openminds.core.research.TissueSampleCollectionState" style="font-weight:bold">TissueSampleCollectionState</a>
 %                           Add all states in which this tissue sample collection was studied.
 %
 %   type                  : (1,:) <a href="matlab:help openminds.controlledterms.TissueSampleType" style="font-weight:bold">TissueSampleType</a>
@@ -73,7 +73,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
             {mustBeListOfUniqueItems(species)}
 
         % Add all states in which this tissue sample collection was studied.
-        studiedState (1,:) openminds.core.TissueSampleCollectionState ...
+        studiedState (1,:) openminds.core.research.TissueSampleCollectionState ...
             {mustBeListOfUniqueItems(studiedState)}
 
         % Add the type of all tissue samples in this collection.
@@ -91,12 +91,12 @@ classdef TissueSampleCollection < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'anatomicalLocation', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"], ...
+            'anatomicalLocation', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"], ...
             'biologicalSex', "openminds.controlledterms.BiologicalSex", ...
             'laterality', "openminds.controlledterms.Laterality", ...
             'origin', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance"], ...
-            'species', ["openminds.controlledterms.Species", "openminds.core.Strain"], ...
-            'studiedState', "openminds.core.TissueSampleCollectionState", ...
+            'species', ["openminds.controlledterms.Species", "openminds.core.research.Strain"], ...
+            'studiedState', "openminds.core.research.TissueSampleCollectionState", ...
             'type', "openminds.controlledterms.TissueSampleType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -114,5 +114,4 @@ classdef TissueSampleCollection < openminds.abstract.Schema
             str = sprintf('%s', obj.lookupLabel);
         end
     end
-
 end

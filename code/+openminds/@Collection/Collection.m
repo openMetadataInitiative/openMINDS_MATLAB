@@ -272,7 +272,7 @@ classdef Collection < handle
                 obj openminds.Collection
                 savePath (1,1) string
                 options.SaveToSingleFile (1,1) logical = true
-                %options.IncludeEmptyProperties (1,1) logical = false
+                % options.IncludeEmptyProperties (1,1) logical = false
             end
             
             % Update links before saving
@@ -336,12 +336,11 @@ classdef Collection < handle
         outputPaths = saveInstances(instance, filePath, options)
         
         instances = loadInstances(filePath)
-
     end
 
     methods (Access = protected)
 
-        %Add an instance to the Node container.
+        % Add an instance to the Node container.
         function addNode(obj, instance, options)
     
             arguments
@@ -362,7 +361,7 @@ classdef Collection < handle
 
             if isConfigured(obj.Nodes)
                 if isKey(obj.Nodes, instance.id)
-                    %warning('Node with id %s already exists in collection', instance.id)
+                    % warning('Node with id %s already exists in collection', instance.id)
                     if options.AbortIfNodeExists
                         return
                     end
@@ -389,7 +388,7 @@ classdef Collection < handle
             obj.addSubNodes(instance)
         end
         
-        %Add sub node instances (linked types) to the Node container.
+        % Add sub node instances (linked types) to the Node container.
         function addSubNodes(obj, instance)
             % Add links.
             linkedTypes = instance.getLinkedTypes();

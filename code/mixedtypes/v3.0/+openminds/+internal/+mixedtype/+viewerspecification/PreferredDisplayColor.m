@@ -1,6 +1,9 @@
 classdef PreferredDisplayColor < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.controlledterms.Colormap", "openminds.sands.SingleColor"]
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.Colormap", ...
+            "openminds.sands.miscellaneous.SingleColor" ...
+        ]
         IS_SCALAR = true
     end
 end

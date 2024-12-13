@@ -3,7 +3,7 @@ classdef Contribution < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   contributor : (1,1) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   contributor : (1,1) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                 Add all types of contribution made by the stated 'contributor'.
 %
 %   type        : (1,:) <a href="matlab:help openminds.controlledterms.ContributionType" style="font-weight:bold">ContributionType</a>
@@ -31,7 +31,7 @@ classdef Contribution < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'contributor', ["openminds.core.Consortium", "openminds.core.Organization", "openminds.core.Person"], ...
+            'contributor', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'type', "openminds.controlledterms.ContributionType" ...
         )
         EMBEDDED_PROPERTIES = struct(...
@@ -49,5 +49,4 @@ classdef Contribution < openminds.abstract.Schema
             str = sprintf('%s (%s)', obj.contributor, obj.type);
         end
     end
-
 end

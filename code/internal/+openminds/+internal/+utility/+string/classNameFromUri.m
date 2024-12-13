@@ -20,7 +20,7 @@ function schemaClassName = classNameFromUri(schemaUri)
         warning('OPENMINDS:SchemaNotFound', 'Schema %s.%s was not found', schemaModule, schemaName)
     else
         t = schemaList(isMatch, :);
-        %schemaClassName = openminds.internal.utility.string.buildClassName(t.SchemaName, t.SubModuleName, t.ModuleName);
+        % schemaClassName = openminds.internal.utility.string.buildClassName(t.SchemaName, t.SubModuleName, t.ModuleName);
         schemaClassName = openminds.internal.utility.string.buildClassName(t.SchemaName, '', t.ModuleName);
     end
 end

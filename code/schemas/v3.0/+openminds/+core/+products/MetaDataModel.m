@@ -3,22 +3,22 @@ classdef MetaDataModel < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   custodian         : (1,:) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   custodian         : (1,:) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
 %
 %   description       : (1,1) string
 %                       Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
 %
-%   developer         : (1,:) <a href="matlab:help openminds.core.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.Person" style="font-weight:bold">Person</a>
+%   developer         : (1,:) <a href="matlab:help openminds.core.actors.Consortium" style="font-weight:bold">Consortium</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.actors.Person" style="font-weight:bold">Person</a>
 %                       Add all parties that developed this (meta)data model.
 %
-%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.SWHID" style="font-weight:bold">SWHID</a>
+%   digitalIdentifier : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.SWHID" style="font-weight:bold">SWHID</a>
 %                       Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
 %
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>
+%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.MetaDataModelVersion" style="font-weight:bold">MetaDataModelVersion</a>
 %                       Add all versions of this (meta)data model.
 %
 %   homepage          : (1,1) string
@@ -52,7 +52,7 @@ classdef MetaDataModel < openminds.abstract.Schema
         fullName (1,1) string
 
         % Add all versions of this (meta)data model.
-        hasVersion (1,:) openminds.core.MetaDataModelVersion ...
+        hasVersion (1,:) openminds.core.products.MetaDataModelVersion ...
             {mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
@@ -75,10 +75,10 @@ classdef MetaDataModel < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'custodian', ["openminds.core.Consortium", "openminds.core.Organization", "openminds.core.Person"], ...
-            'developer', ["openminds.core.Consortium", "openminds.core.Organization", "openminds.core.Person"], ...
-            'digitalIdentifier', ["openminds.core.DOI", "openminds.core.SWHID"], ...
-            'hasVersion', "openminds.core.MetaDataModelVersion" ...
+            'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.SWHID"], ...
+            'hasVersion', "openminds.core.products.MetaDataModelVersion" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
@@ -95,5 +95,4 @@ classdef MetaDataModel < openminds.abstract.Schema
             str = sprintf('%s', obj.fullName);
         end
     end
-
 end

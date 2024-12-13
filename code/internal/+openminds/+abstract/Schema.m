@@ -1,6 +1,6 @@
 classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & ...
                   openminds.internal.mixin.CustomInstanceDisplay & openminds.internal.mixin.StructAdapter
-%Schema Abstract base class shared by all concrete Schema classes
+% Schema Abstract base class shared by all concrete Schema classes
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
@@ -226,7 +226,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
                     elseif numel(subs) > 1 && strcmp(subs(2).type, '()')
                         try
-                            %linkedObj = obj.subsref(subs(1:2));
+                            % linkedObj = obj.subsref(subs(1:2));
                             obj = builtin('subsasgn', obj, subs, value);
 
                         catch MECause
@@ -254,7 +254,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                                         error(errorStruct)
                                     end
 
-                                    %obj.subsasgn(subs, value);
+                                    % obj.subsasgn(subs, value);
                                 otherwise
                                     ME = MException('OPENMINDS_MATLAB:UnhandledIndexAssignment', ...
                                         'Unhandled index assignment, please report');
@@ -302,7 +302,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     if obj.isSubsForPublicPropertyValue(subs)
                         evtData = PropertyValueChangedEventData(value, oldValue, false); % false for unlinked prop
                         obj.notify('InstanceChanged', evtData)
-                        %fprintf('Set unlinked property of %s\n', class(obj))
+                        % fprintf('Set unlinked property of %s\n', class(obj))
                     end
                 end
             end
@@ -370,7 +370,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 if numel(subs) > 1
                     % Todo: Remove as this appears to be unused
                     if strcmp( subs(2).type, '()' ) && iscell(values)
-                        %subs(2).type = '{}';
+                        % subs(2).type = '{}';
                     end
 
                     if numOutputs > 0
@@ -560,11 +560,16 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             displayLabel = sprintf("%s", str);
         end
 
+        function str = createLabelForMissingLabelDefinition(obj)
+            classNames = split( class(obj), '.');
+            str = sprintf('<Unlabeled %s>', classNames{end});
+        end
+
         function annotation = getAnnotation(obj)
 
             import openminds.internal.utility.getSchemaDocLink
 
-            %annotation = obj.getSchemaShortName(class(obj));
+            % annotation = obj.getSchemaShortName(class(obj));
             annotation = getSchemaDocLink( class(obj) );
         end
 

@@ -1,5 +1,5 @@
-classdef productAccessibility < openminds.abstract.ControlledTerm
-%productAccessibility - No description available.
+classdef ProductAccessibility < openminds.abstract.ControlledTerm
+%ProductAccessibility - No description available.
 %
 %   PROPERTIES:
 %
@@ -27,9 +27,8 @@ classdef productAccessibility < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = productAccessibility(varargin)
+        function obj = ProductAccessibility(varargin)
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
-
 end

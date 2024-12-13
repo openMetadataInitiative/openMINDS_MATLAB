@@ -3,7 +3,7 @@ classdef AmountOfChemical < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   amount          : (1,1) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
+%   amount          : (1,1) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>
 %                     When used in a mixture, enter the amount of the substance within the mixture (e.g., as concentration or as ratio). When used in its pure state, enter the used amount of the substance.
 %
 %   chemicalProduct : (1,1) <a href="matlab:help openminds.chemicals.ChemicalMixture" style="font-weight:bold">ChemicalMixture</a>, <a href="matlab:help openminds.chemicals.ChemicalSubstance" style="font-weight:bold">ChemicalSubstance</a>, <a href="matlab:help openminds.controlledterms.MolecularEntity" style="font-weight:bold">MolecularEntity</a>
@@ -13,7 +13,7 @@ classdef AmountOfChemical < openminds.abstract.Schema
 
     properties
         % When used in a mixture, enter the amount of the substance within the mixture (e.g., as concentration or as ratio). When used in its pure state, enter the used amount of the substance.
-        amount (1,:) openminds.core.QuantitativeValue ...
+        amount (1,:) openminds.core.miscellaneous.QuantitativeValue ...
             {mustBeSpecifiedLength(amount, 0, 1)}
 
         % Add the chemical product that was used.
@@ -34,7 +34,7 @@ classdef AmountOfChemical < openminds.abstract.Schema
             'chemicalProduct', ["openminds.chemicals.ChemicalMixture", "openminds.chemicals.ChemicalSubstance", "openminds.controlledterms.MolecularEntity"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'amount', "openminds.core.QuantitativeValue" ...
+            'amount', "openminds.core.miscellaneous.QuantitativeValue" ...
         )
     end
 
@@ -46,8 +46,7 @@ classdef AmountOfChemical < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = '<missing name>';
+            str = sprintf('%s [%s]', obj.amount, obj.chemicalProduct);
         end
     end
-
 end

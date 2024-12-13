@@ -15,10 +15,10 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
 %   correctedName      : (1,1) string
 %                        Enter the refined or corrected name of this parcellation entity version.
 %
-%   hasAnnotation      : (1,:) <a href="matlab:help openminds.sands.AtlasAnnotation" style="font-weight:bold">AtlasAnnotation</a>
+%   hasAnnotation      : (1,:) <a href="matlab:help openminds.sands.atlas.AtlasAnnotation" style="font-weight:bold">AtlasAnnotation</a>
 %                        Add all atlas annotations which define this parcellation entity version.
 %
-%   hasParent          : (1,:) <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   hasParent          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                        Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding brain atlas version.
 %
 %   lookupLabel        : (1,1) string
@@ -30,7 +30,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
 %   ontologyIdentifier : (1,:) string
 %                        Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation entity version.
 %
-%   relationAssessment : (1,:) <a href="matlab:help openminds.sands.QualitativeRelationAssessment" style="font-weight:bold">QualitativeRelationAssessment</a>, <a href="matlab:help openminds.sands.QuantitativeRelationAssessment" style="font-weight:bold">QuantitativeRelationAssessment</a>
+%   relationAssessment : (1,:) <a href="matlab:help openminds.sands.miscellaneous.QualitativeRelationAssessment" style="font-weight:bold">QualitativeRelationAssessment</a>, <a href="matlab:help openminds.sands.miscellaneous.QuantitativeRelationAssessment" style="font-weight:bold">QuantitativeRelationAssessment</a>
 %                        Add all relations (qualitative or quantitative) of this parcellation entity version to other anatomical entities.
 %
 %   versionIdentifier  : (1,1) string
@@ -56,7 +56,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
         correctedName (1,1) string
 
         % Add all atlas annotations which define this parcellation entity version.
-        hasAnnotation (1,:) openminds.sands.AtlasAnnotation ...
+        hasAnnotation (1,:) openminds.sands.atlas.AtlasAnnotation ...
             {mustBeListOfUniqueItems(hasAnnotation)}
 
         % Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding brain atlas version.
@@ -94,11 +94,11 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'hasParent', ["openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"] ...
+            'hasParent', ["openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'hasAnnotation', "openminds.sands.AtlasAnnotation", ...
-            'relationAssessment', ["openminds.sands.QualitativeRelationAssessment", "openminds.sands.QuantitativeRelationAssessment"] ...
+            'hasAnnotation', "openminds.sands.atlas.AtlasAnnotation", ...
+            'relationAssessment', ["openminds.sands.miscellaneous.QualitativeRelationAssessment", "openminds.sands.miscellaneous.QuantitativeRelationAssessment"] ...
         )
     end
 
@@ -113,5 +113,4 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
             str = obj.lookupLabel;
         end
     end
-
 end

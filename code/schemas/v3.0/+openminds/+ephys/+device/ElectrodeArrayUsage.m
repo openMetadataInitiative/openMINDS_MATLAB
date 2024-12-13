@@ -3,31 +3,31 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   anatomicalLocationOfArray      : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   anatomicalLocationOfArray      : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                                    Add all anatomical entities that semantically best describe the overall anatomical location of the electrode array.
 %
-%   anatomicalLocationOfElectrodes : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
+%   anatomicalLocationOfElectrodes : (1,:) <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.UBERONParcellation" style="font-weight:bold">UBERONParcellation</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>, <a href="matlab:help openminds.sands.nonatlas.CustomAnatomicalEntity" style="font-weight:bold">CustomAnatomicalEntity</a>
 %                                    Add all anatomical entities that semantically best describe the anatomical location of each electrode contact of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
 %
-%   contactResistances             : (1,:) <a href="matlab:help openminds.core.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>, <a href="matlab:help openminds.core.QuantitativeValueRange" style="font-weight:bold">QuantitativeValueRange</a>
+%   contactResistances             : (1,:) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>, <a href="matlab:help openminds.core.miscellaneous.QuantitativeValueRange" style="font-weight:bold">QuantitativeValueRange</a>
 %                                    Enter the contact resistance for each electrode of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
 %
-%   device                         : (1,1) <a href="matlab:help openminds.ephys.ElectrodeArray" style="font-weight:bold">ElectrodeArray</a>
+%   device                         : (1,1) <a href="matlab:help openminds.ephys.device.ElectrodeArray" style="font-weight:bold">ElectrodeArray</a>
 %                                    Add the electrode array used.
 %
 %   lookupLabel                    : (1,1) string
 %                                    Enter a lookup label for this device usage that may help you to find this instance more easily.
 %
-%   metadataLocation               : (1,:) <a href="matlab:help openminds.core.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.FileBundle" style="font-weight:bold">FileBundle</a>
+%   metadataLocation               : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.data.FileBundle" style="font-weight:bold">FileBundle</a>
 %                                    Add all files or file bundles containing additional information about the usage of this device.
 %
-%   spatialLocationOfElectrodes    : (1,:) <a href="matlab:help openminds.sands.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
+%   spatialLocationOfElectrodes    : (1,:) <a href="matlab:help openminds.sands.miscellaneous.CoordinatePoint" style="font-weight:bold">CoordinatePoint</a>
 %                                    Add all coordinate points that best describe the spatial location of each electrode contact of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
 %
 %   usedElectrode                  : (1,:) string
 %                                    Enter the identifiers of all electrodes that are actually in use for this array.
 %
-%   usedSpecimen                   : (1,1) <a href="matlab:help openminds.core.SubjectState" style="font-weight:bold">SubjectState</a>, <a href="matlab:help openminds.core.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
+%   usedSpecimen                   : (1,1) <a href="matlab:help openminds.core.research.SubjectState" style="font-weight:bold">SubjectState</a>, <a href="matlab:help openminds.core.research.TissueSampleState" style="font-weight:bold">TissueSampleState</a>
 %                                    Add the state of the tissue sample or subject that this device was used on.
 
 %   This class was auto-generated by the openMINDS pipeline
@@ -46,7 +46,7 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
             {mustBeListOfUniqueItems(contactResistances)}
 
         % Add the electrode array used.
-        device (1,:) openminds.ephys.ElectrodeArray ...
+        device (1,:) openminds.ephys.device.ElectrodeArray ...
             {mustBeSpecifiedLength(device, 0, 1)}
 
         % Enter a lookup label for this device usage that may help you to find this instance more easily.
@@ -57,7 +57,7 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
             {mustBeListOfUniqueItems(metadataLocation)}
 
         % Add all coordinate points that best describe the spatial location of each electrode contact of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
-        spatialLocationOfElectrodes (1,:) openminds.sands.CoordinatePoint ...
+        spatialLocationOfElectrodes (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
             {mustBeListOfUniqueItems(spatialLocationOfElectrodes)}
 
         % Enter the identifiers of all electrodes that are actually in use for this array.
@@ -79,15 +79,15 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'anatomicalLocationOfArray', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"], ...
-            'anatomicalLocationOfElectrodes', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.CustomAnatomicalEntity", "openminds.sands.ParcellationEntity", "openminds.sands.ParcellationEntityVersion"], ...
-            'device', "openminds.ephys.ElectrodeArray", ...
-            'metadataLocation', ["openminds.core.File", "openminds.core.FileBundle"], ...
-            'usedSpecimen', ["openminds.core.SubjectState", "openminds.core.TissueSampleState"] ...
+            'anatomicalLocationOfArray', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"], ...
+            'anatomicalLocationOfElectrodes', ["openminds.controlledterms.CellType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.UBERONParcellation", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"], ...
+            'device', "openminds.ephys.device.ElectrodeArray", ...
+            'metadataLocation', ["openminds.core.data.File", "openminds.core.data.FileBundle"], ...
+            'usedSpecimen', ["openminds.core.research.SubjectState", "openminds.core.research.TissueSampleState"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
-            'contactResistances', ["openminds.core.QuantitativeValue", "openminds.core.QuantitativeValueRange"], ...
-            'spatialLocationOfElectrodes', "openminds.sands.CoordinatePoint" ...
+            'contactResistances', ["openminds.core.miscellaneous.QuantitativeValue", "openminds.core.miscellaneous.QuantitativeValueRange"], ...
+            'spatialLocationOfElectrodes', "openminds.sands.miscellaneous.CoordinatePoint" ...
         )
     end
 
@@ -102,5 +102,4 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
             str = obj.lookupLabel;
         end
     end
-
 end
