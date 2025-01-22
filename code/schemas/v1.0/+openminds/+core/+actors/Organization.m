@@ -3,7 +3,7 @@ classdef Organization < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.miscellaneous.DigitalIdentifier" style="font-weight:bold">DigitalIdentifier</a>
+%   digitalIdentifier : (1,:) <a href="matlab:help openminds.core.miscellaneous.GRIDID" style="font-weight:bold">GRIDID</a>, <a href="matlab:help openminds.core.miscellaneous.RORID" style="font-weight:bold">RORID</a>
 %                       Add one or several globally unique and persistent digital identifier for this organization.
 %
 %   fullName          : (1,1) string
@@ -12,8 +12,8 @@ classdef Organization < openminds.abstract.Schema
 %   hasParent         : (1,1) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
 %                       Add a parent organization to this organization.
 %
-%   homepage          : (1,1) string
-%                       Enter a internationalized resource identifier (IRI) to the homepage of this organization.
+%   homepage          : (1,1) <a href="matlab:help openminds.core.miscellaneous.URL" style="font-weight:bold">URL</a>
+%                       Add the uniform resource locator (URL) to the homepage of this organization.
 %
 %   shortName         : (1,1) string
 %                       Enter the short name of this organization.
@@ -22,7 +22,7 @@ classdef Organization < openminds.abstract.Schema
 
     properties
         % Add one or several globally unique and persistent digital identifier for this organization.
-        digitalIdentifier (1,:) openminds.core.miscellaneous.DigitalIdentifier ...
+        digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
             {mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the full name of the organization.
@@ -32,8 +32,9 @@ classdef Organization < openminds.abstract.Schema
         hasParent (1,:) openminds.core.actors.Organization ...
             {mustBeSpecifiedLength(hasParent, 0, 1)}
 
-        % Enter a internationalized resource identifier (IRI) to the homepage of this organization.
-        homepage (1,1) string
+        % Add the uniform resource locator (URL) to the homepage of this organization.
+        homepage (1,:) openminds.core.miscellaneous.URL ...
+            {mustBeSpecifiedLength(homepage, 0, 1)}
 
         % Enter the short name of this organization.
         shortName (1,1) string
@@ -49,8 +50,9 @@ classdef Organization < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'digitalIdentifier', "openminds.core.miscellaneous.DigitalIdentifier", ...
-            'hasParent', "openminds.core.actors.Organization" ...
+            'digitalIdentifier', ["openminds.core.miscellaneous.GRIDID", "openminds.core.miscellaneous.RORID"], ...
+            'hasParent', "openminds.core.actors.Organization", ...
+            'homepage', "openminds.core.miscellaneous.URL" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
