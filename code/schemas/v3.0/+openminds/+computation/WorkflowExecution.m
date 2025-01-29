@@ -36,7 +36,7 @@ classdef WorkflowExecution < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = []
+        Required = ["stage"]
     end
 
     properties (Constant, Hidden)
