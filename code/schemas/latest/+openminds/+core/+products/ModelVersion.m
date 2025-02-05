@@ -21,6 +21,9 @@ classdef ModelVersion < openminds.abstract.Schema
 %   digitalIdentifier      : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.SWHID" style="font-weight:bold">SWHID</a>
 %                            Add the globally unique and persistent digital identifier of this research product version.
 %
+%   entryPoint             : (1,1) string
+%                            Add the entry point for this model version (for example, the path of the main script file within the repository).
+%
 %   format                 : (1,:) <a href="matlab:help openminds.core.data.ContentType" style="font-weight:bold">ContentType</a>
 %                            Add the content type of this computational model version, or the content types of the files composing the model version.
 %
@@ -106,6 +109,9 @@ classdef ModelVersion < openminds.abstract.Schema
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.modelversion.DigitalIdentifier ...
             {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+
+        % Add the entry point for this model version (for example, the path of the main script file within the repository).
+        entryPoint (1,1) string
 
         % Add the content type of this computational model version, or the content types of the files composing the model version.
         format (1,:) openminds.core.data.ContentType ...
