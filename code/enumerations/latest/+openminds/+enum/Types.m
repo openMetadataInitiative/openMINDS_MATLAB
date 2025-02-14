@@ -43,6 +43,7 @@ classdef Types < openminds.abstract.TypesEnumeration
         WorkflowExecution("openminds.computation.WorkflowExecution")
         WorkflowRecipe("openminds.computation.WorkflowRecipe")
         WorkflowRecipeVersion("openminds.computation.WorkflowRecipeVersion")
+        MRAcquisitionType("openminds.controlledterms.MRAcquisitionType")
         MRIPulseSequence("openminds.controlledterms.MRIPulseSequence")
         MRIWeighting("openminds.controlledterms.MRIWeighting")
         UBERONParcellation("openminds.controlledterms.UBERONParcellation")
