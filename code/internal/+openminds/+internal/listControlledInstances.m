@@ -1,4 +1,4 @@
-function instances = listControlledInstances(schemaName, modelName, instanceName)
+function instances = listControlledInstances(schemaType, moduleName, instanceName)
 % listControlledInstances - List instances for given options.
 %
 %   This function returns a table containing information about instances.
@@ -9,15 +9,15 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
 %       instances = listControlledInstances() list all available controlled
 %           instances
 %
-%       instances = listControlledInstances(schemaName) list all available
-%           controlled instances for given schema name
+%       instances = listControlledInstances(schemaType) list all available
+%           controlled instances for given schema type
 %
-%       instances = listControlledInstances(schemaName, modelName) list all
-%           available controlled instances for given schema name
+%       instances = listControlledInstances(schemaType, moduleName) list all
+%           available controlled instances for given schema type and module
 %
 %   Input Arguments:
-%       schemaName - Name (default will list all)
-%       modelName - Name (default - controlledTerms)
+%       schemaType - openminds.enum.Types (default will list all)
+%       moduleName - openminds.enum.Models (default will list all)
 %
 %   Output Arguments:
 %       instances - Table
@@ -27,26 +27,19 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
 %   memory, and will be updated if new commit(s) are available on the
 %   instances repository.
 
+    arguments
+        schemaType (1,:) openminds.enum.Types = openminds.enum.Types.empty
+        moduleName (1,:) openminds.enum.Models = openminds.enum.Models.empty
+        instanceName (1,1) string = missing
+    end
+
     import openminds.internal.utility.git.isLatest
     import openminds.internal.utility.git.downloadRepository
 
-    if nargin < 3
-        instanceName = [];
-    end
-
-    if nargin < 2
-        modelName = '';
-    end
-
-    if nargin < 1
-        schemaName = '';
-    end
-    
     % Make singleton class that can be reset...
     persistent allInstancesTable
     
     % Check latest commit id for the instances github repository
-
     if isempty(allInstancesTable)
 
         instanceRootDirectory = openminds.internal.PathConstants.LocalInstanceFolder;
@@ -58,25 +51,26 @@ function instances = listControlledInstances(schemaName, modelName, instanceName
         instanceDirectory = fullfile(instanceRootDirectory, 'latest');
 
         allInstancesTable = openminds.internal.utility.dir.listInstances(...
-            'SchemaFileExtension', '.jsonld', ...
             'RootDirectory', instanceDirectory);
     end
 
     % Todo: match on camel case!!!
     
-    isRequested = true(height(allInstancesTable), 1);
+    keep = true(height(allInstancesTable), 1);
     
-    if ~isempty(schemaName)
-        isRequested = isRequested & strcmpi(allInstancesTable.SchemaName, schemaName);
+    if ~isempty(schemaType) && ~(isscalar(schemaType) && strcmp(schemaType, "None"))
+        keep = keep & ismember(allInstancesTable.SchemaName, schemaType);
     end
 
-    if ~isempty(modelName)
-        isRequested = isRequested & strcmpi(allInstancesTable.ModelName, modelName);
+    if ~isempty(moduleName)
+        %keep = keep & strcmpi(allInstancesTable.ModelName, moduleName);
+        keep = keep & ismember(allInstancesTable.ModelName, moduleName);
     end
 
-    if ~isempty(instanceName)
-        isRequested = isRequested & allInstancesTable.InstanceName == instanceName;
+    if ~ismissing(instanceName)
+        keep = keep & allInstancesTable.InstanceName == instanceName;
     end
 
-    instances = allInstancesTable(isRequested, :);
+    instances = allInstancesTable(keep, :);
 end
+
