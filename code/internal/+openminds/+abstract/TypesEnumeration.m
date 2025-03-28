@@ -52,12 +52,35 @@ classdef TypesEnumeration
 
     methods (Static)
         function typeEnum = fromClassName(className)
-            if ischar(className)
-                className = string(className);
+        % fromClassName - Get a Type enum from a class name
+        %
+        % Syntax:
+        %   typeEnum = openminds.enum.Types.fromClassName(className) Converts 
+        %   the provided class name(s) into the appropriate enumeration value (s).
+        %
+        % Input Arguments:
+        %   className - A string array representing the class name(s) to be
+        %              converted.
+        %
+        % Output Arguments:
+        %   typeEnum - The corresponding enumeration value(s) from 
+        %              openminds.enum.Types.
+        %
+        % Example:
+        %
+        %  openminds.enum.Types.fromClassName("openminds.core.Person")
+        %  
+        %  ans = 
+        % 
+        %    Types enumeration
+        % 
+        %       Person
+
+            arguments
+                className (1,:) string
             end
 
             if numel(className) > 1
-                if iscell(className); className = string(className); end
                 typeEnum = arrayfun(@(str) openminds.enum.Types.fromClassName(str), className);
                 return
             end
@@ -67,21 +90,44 @@ classdef TypesEnumeration
         end
 
         function typeEnum = fromAtType(typeName)
-            % Todo: validate typename...
-            assert(startsWith(typeName, openminds.constant.BaseURI), ...
+        % fromAtType - Convert an @type string to its corresponding enumeration.
+        %
+        % Syntax:
+        %   typeEnum = openminds.enum.Types.fromAtType(typeName) Converts the 
+        %   provided @type string into the appropriate enumeration value.
+        %
+        % Input Arguments:
+        %   typeName - A string array representing the @type to be converted.
+        %              The @type URI is expected to match Base URI for the 
+        %              currently active openMINDS version
+        %
+        % Output Arguments:
+        %   typeEnum - The corresponding enumeration value(s) from 
+        %              openminds.enum.Types.
+        %
+        % Example:
+        %
+        %  openminds.enum.Types.fromAtType("https://openminds.om-i.org/types/Person")
+        %  
+        %  ans = 
+        % 
+        %    Types enumeration
+        % 
+        %       Person
+        
+            arguments
+                typeName (1,:) string
+            end
+        
+            assert(all(startsWith(typeName, openminds.constant.BaseURI)), ...
                 'OPENMINDS_MATLAB:Types:InvalidAtType', ...
                 'Expected @type to start with "%s"', openminds.constant.BaseURI)
-
-            if ischar(typeName)
-                typeName = string(typeName);
-            end
-
+       
             if numel(typeName) > 1
-                if iscell(typeName); typeName = string(typeName); end
                 typeEnum = arrayfun(@(str) openminds.enum.Types.fromAtType(str), typeName);
                 return
             end
-
+        
             splitName = strsplit(typeName, '/');
             typeEnum = eval(sprintf('openminds.enum.Types.%s', splitName{end}));
         end
