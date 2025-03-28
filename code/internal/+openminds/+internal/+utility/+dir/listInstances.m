@@ -1,26 +1,19 @@
-function schemaInfo = listInstances(schemaModule, options)
-%listSourceSchemas List information about all available schemas.
+function instanceTable = listInstances(options)
+%listInstances List information about all available metadata instances.
 %
-%   schemaInfo = listSourceSchemas() returns a table with information
-%   about all the available schemas.
-
-% Todo: Rename function, as it is used for listing instances as well.
-
-% Note: Adapted from listSourceSchemas to list instances from the new
-% OMI/openMINDS_instances repository
-% This should be simplified.
+%   instanceTable = listInstances() returns a table with information
+%   about all the available controlled instances.
 
     arguments
-        schemaModule = {}
-        options.SchemaType (1,1) string = "terminology";
-        options.SchemaFileExtension = '.jsonld';
         options.VersionNumber (1,1) string = "latest"
         options.RootDirectory (1,1) string = ""
     end
 
+    instanceFileFormat = ".jsonld";
+
     versionNumber = openminds.internal.validateVersionNumber(options.VersionNumber);
     versionAsString = sprintf('v%s', versionNumber);
-        
+    
     % - Get path constant
     if options.RootDirectory == ""
         sourceSchemaFolder = openminds.internal.PathConstants.SourceSchemaFolder;
@@ -29,54 +22,28 @@ function schemaInfo = listInstances(schemaModule, options)
         sourceSchemaFolder = options.RootDirectory;
         schemaFolderPath = fullfile( sourceSchemaFolder);
     end
-    
-    filePaths = listSchemaFiles(schemaFolderPath, schemaModule, options.SchemaFileExtension);
-    
+
+    L = dir(fullfile(schemaFolderPath, '**', "*"+instanceFileFormat));
+    filePaths = join([{L.folder}', {L.name}'], filesep);
+
     if isempty(filePaths)
-        error("openMINDS:SourceFilesMissing", 'Could not find source files for openMINDS %s', versionAsString)
+        error("openMINDS:SourceFilesMissing", 'Could not find instance files for openMINDS %s', versionAsString)
     end
 
     S = collectInfoInStructArray(schemaFolderPath, filePaths);
 
-    schemaInfo = convertStructToTable(S);
-end
-
-function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExtension)
-%listSchemaFiles List schema files given a root directory
-
-    import openminds.internal.utility.dir.listSubDir
-    import openminds.internal.utility.dir.listFiles
-
-    if nargin < 3 || isempty(fileExtension)
-        fileExtension = '.json';
-    end
-
-    % - Look through subfolders for all json files of specified modules
-    [absPath, dirName] = listSubDir(schemaFolderPath, '', {}, 2);
-    if isempty(absPath)
-        absPath = schemaFolderPath;
-    end
-
-    if ~isempty(schemaModule) % Filter by given module(s), if any
-        [~, keepIdx] = intersect(dirName, schemaModule);
-        absPath = absPath(keepIdx);
-    end
-
-    [filePaths, ~] = listFiles(absPath, fileExtension);
+    instanceTable = convertStructToTable(S);
 end
 
 function S = collectInfoInStructArray(schemaFolderPath, filePaths)
     
-    FILE_EXT = '.schema.tpl';
     SANDS_INSTANCE_FOLDERS = openminds.internal.constants.SandsInstanceFolders();
     
     % - Get relevant parts of folder hierarchy for extracting information
     folderNames = replace(filePaths, schemaFolderPath, '');
-    [folderNames, fileNames] = fileparts(folderNames);
+    [folderNames, instanceNames] = fileparts(folderNames);
 
     % - Create struct array with information about all schemas
-    instanceNames = replace(fileNames, FILE_EXT, '');
-
     S = struct('InstanceName', instanceNames);
 
     for i = 1:numel(S)
