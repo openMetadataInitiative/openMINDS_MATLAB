@@ -3,12 +3,14 @@ classdef TypesEnumeration
     properties (SetAccess=immutable)
         ClassName (1,1) string
         AliasClassName (1,1) string
+        TypeURI (1,1) string
     end
 
     methods
         function obj = TypesEnumeration(name)
             obj.ClassName = name;
             obj.AliasClassName = obj.createAliasClassName();
+            obj.TypeURI = obj.getTypeURI();
         end
     end
 
@@ -38,11 +40,18 @@ classdef TypesEnumeration
                 aliasClassName = strjoin(classNameParts([1,2,end]), '.');
             end
         end
+
+        function typeURI = getTypeURI(obj)
+            if obj.ClassName == "None"
+                typeURI = "None";
+            else
+                typeURI = eval(sprintf('%s.X_TYPE', obj.ClassName));
+            end
+        end
     end
 
     methods (Static)
         function typeEnum = fromClassName(className)
-            
             if ischar(className)
                 className = string(className);
             end
@@ -55,6 +64,26 @@ classdef TypesEnumeration
 
             splitName = strsplit(className, '.');
             typeEnum = openminds.enum.Types(splitName{end});
+        end
+
+        function typeEnum = fromAtType(typeName)
+            % Todo: validate typename...
+            assert(startsWith(typeName, openminds.constant.BaseURI), ...
+                'OPENMINDS_MATLAB:Types:InvalidAtType', ...
+                'Expected @type to start with "%s"', openminds.constant.BaseURI)
+
+            if ischar(typeName)
+                typeName = string(typeName);
+            end
+
+            if numel(typeName) > 1
+                if iscell(typeName); typeName = string(typeName); end
+                typeEnum = arrayfun(@(str) openminds.enum.Types.fromAtType(str), typeName);
+                return
+            end
+
+            splitName = strsplit(typeName, '/');
+            typeEnum = eval(sprintf('openminds.enum.Types.%s', splitName{end}));
         end
     end
 end
