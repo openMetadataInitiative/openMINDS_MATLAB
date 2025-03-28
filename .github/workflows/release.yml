@@ -115,6 +115,13 @@ jobs:
           name: openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
           path: releases/openMINDS_MATLAB_${{ env.versionNumber }}.mltbx
 
+      - name: Update codemeta.json
+        uses: matlab-actions/run-command@v2
+        with:
+          command: | 
+            addpath(genpath("tools"));
+            updateCodeMetaFile("${{  github.ref_name }}")
+
       # Commit the updated Contents.m
       - name: Commit updated Contents.m file
         continue-on-error: true
@@ -123,6 +130,7 @@ jobs:
           git config user.email "<>"
           git status
           git add code/Contents.m
+          git add codemeta.json
           git commit -m "Final checkins for release ${{  github.ref_name }}"
           git fetch
           git push
