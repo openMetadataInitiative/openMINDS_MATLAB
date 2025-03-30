@@ -1,4 +1,4 @@
-classdef ParcellationEntityVersion < openminds.abstract.Schema
+classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
 %ParcellationEntityVersion - No description available.
 %
 %   PROPERTIES:
@@ -111,6 +111,17 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end
