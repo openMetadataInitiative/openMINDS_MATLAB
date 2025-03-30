@@ -22,6 +22,17 @@ from pipeline.constants import (
 
 from pipeline.utils import camel_case, InstanceLoader
 
+types_with_controlled_instances = [
+    "BrainAtlasVersion",
+    "BrainAtlas",
+    "CommonCoordinateSpaceVersion",
+    "CommonCoordinateSpace",
+    "ContentType",
+    "License",
+    "ParcellationEntity",
+    "ParcellationEntityVersion"
+]
+
 type_name_map = {
     "string": "string",
     "integer": "int64",
@@ -233,6 +244,12 @@ class MATLABSchemaBuilder(object):
         else:
             base_class = "openminds.abstract.Schema"
 
+        has_controlled_instance = class_name in types_with_controlled_instances
+        if has_controlled_instance:
+            # Add the controlled instance mixin to the base class
+            base_class = base_class + " & openminds.internal.mixin.HasControlledInstance"
+            print(base_class)
+
         if self._schema_model_name == "controlledTerms":
             instance_loader = InstanceLoader()
             known_instance_list = instance_loader.get_instance_collection(self.version, class_name)
@@ -243,6 +260,7 @@ class MATLABSchemaBuilder(object):
         self._template_variables = {
             "class_name": class_name,
             "base_class": base_class,
+            "has_controlled_instance": has_controlled_instance,
             "openminds_type": _expand_type_namespace( schema[SCHEMA_PROPERTY_TYPE] ),
             "docstring": schema.get("description", "No description available."),
             "props": props,
