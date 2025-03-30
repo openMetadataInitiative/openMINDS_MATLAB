@@ -12,7 +12,7 @@ function singletonObject = getSingleton(folderPath, options)
     SINGLETON_NAME = InstanceLibrary.SINGLETON_NAME;
     singletonObject = getappdata(0, SINGLETON_NAME);
     
-    if ~isempty(singletonObject) && isvalid(singletonObject) 
+    if ~isempty(singletonObject) && isvalid(singletonObject)
         if ~strcmp(folderPath, singletonObject.InstanceLibraryLocation)
             delete(singletonObject) % Reset singleton
             singletonObject = [];
@@ -23,7 +23,7 @@ function singletonObject = getSingleton(folderPath, options)
     end
 
     % Create a new singleton if necessary
-    if isempty(singletonObject) || ~isvalid(singletonObject) 
+    if isempty(singletonObject) || ~isvalid(singletonObject)
         options = rmfield(options, 'Reset');
         nvPairs = namedargs2cell(options);
         singletonObject = InstanceLibrary(folderPath, nvPairs{:});
