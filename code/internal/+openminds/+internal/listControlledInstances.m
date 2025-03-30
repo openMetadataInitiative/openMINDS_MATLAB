@@ -37,40 +37,23 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
     import openminds.internal.utility.git.downloadRepository
 
     % Make singleton class that can be reset...
-    persistent allInstancesTable
-    
-    % Check latest commit id for the instances github repository
-    if isempty(allInstancesTable)
+    instanceLibrary = openminds.internal.InstanceLibrary.getSingleton();
+    instanceTable = instanceLibrary.InstanceTable;
 
-        instanceRootDirectory = openminds.internal.PathConstants.LocalInstanceFolder;
+    keep = true(height(instanceTable), 1);
 
-        if ~isfolder(instanceRootDirectory) || ~isLatest('Repository', 'openMINDS_instances')
-            downloadRepository('openMINDS_instances')
-        end
-
-        instanceDirectory = fullfile(instanceRootDirectory, 'latest');
-
-        allInstancesTable = openminds.internal.utility.dir.listInstances(...
-            'RootDirectory', instanceDirectory);
-    end
-
-    % Todo: match on camel case!!!
-    
-    keep = true(height(allInstancesTable), 1);
-    
     if ~isempty(schemaType) && ~(isscalar(schemaType) && strcmp(schemaType, "None"))
-        keep = keep & ismember(allInstancesTable.SchemaName, schemaType);
+        keep = keep & ismember(instanceTable.Type, schemaType);
     end
 
     if ~isempty(moduleName)
-        %keep = keep & strcmpi(allInstancesTable.ModelName, moduleName);
-        keep = keep & ismember(allInstancesTable.ModelName, moduleName);
+        keep = keep & ismember(instanceTable.Module, moduleName);
     end
 
     if ~ismissing(instanceName)
-        keep = keep & allInstancesTable.InstanceName == instanceName;
+        keep = keep & instanceTable.InstanceName == instanceName;
     end
 
-    instances = allInstancesTable(keep, :);
+    instances = instanceTable(keep, :);
 end
 
