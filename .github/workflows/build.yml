@@ -49,7 +49,7 @@ jobs:
           if [ "${{ github.event_name }}" == "push" ]; then
             commit_message="Build triggered by manual update to pipeline"
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            commit_message="Build triggered by submodule ${{ inputs.repository }} version ${{ inputs.branch }}"
+            commit_message="Build triggered by workflow dispatch"
           else
             commit_message="Unknown event"
           fi
