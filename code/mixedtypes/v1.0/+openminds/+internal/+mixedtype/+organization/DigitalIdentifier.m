@@ -1,9 +1,0 @@
-classdef DigitalIdentifier < openminds.internal.abstract.LinkedCategory
-    properties (Constant, Hidden)
-        ALLOWED_TYPES = [ ...
-            "openminds.core.miscellaneous.GRIDID", ...
-            "openminds.core.miscellaneous.RORID" ...
-        ]
-        IS_SCALAR = false
-    end
-end
