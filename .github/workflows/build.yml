@@ -47,7 +47,7 @@ jobs:
 
           # Conditionally set commit message based on the event
           if [ "${{ github.event_name }}" == "push" ]; then
-            commit_message="Build triggered by manual update to pipeline"
+            commit_message="Build triggered by update to pipeline"
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             commit_message="Build triggered by workflow dispatch"
           else
