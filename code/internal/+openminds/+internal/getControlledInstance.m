@@ -11,7 +11,7 @@ function data = getControlledInstance(instanceName, schemaName, modelName, versi
     end
 
     if ismissing(versionNumber)
-        versionNumber = openminds.getSchemaVersion("VersionNumber");
+        versionNumber = openminds.getModelVersion("VersionNumber");
     end
     versionNumber = string(versionNumber);
 

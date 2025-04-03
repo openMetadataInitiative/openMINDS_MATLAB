@@ -2,16 +2,16 @@ function baseURI = BaseURI(version)
 % BaseURI Get the base URI for the specified OpenMINDS schema version
 %
 %   baseURI = openminds.constant.BaseURI(version) returns the base URI as a
-%   string that corresponds to the specified OpenMINDS schema version. This
-%   function dynamically selects the URI based on the version input. If no
-%   version is specified, the version number for the active openMINDS version
-%   is selected.
+%   string that corresponds to the base resource identifier for the specified
+%   OpenMINDS model version. This function dynamically selects the URI based on 
+%   the version input. If no version is specified, the version number of the 
+%   currently active openMINDS model is selected.
 %
 %   Input:
 %       version - (optional) An instance of openminds.internal.utility.VersionNumber
-%                 specifying the schema version. If no version is provided,
-%                 the function automatically retrieves the current schema
-%                 version using openminds.getSchemaVersion.
+%                 specifying the model version. If no version is provided,
+%                 the function automatically retrieves the current model
+%                 version using openminds.getModelVersion.
 %
 %   Output:
 %       baseURI - A string containing the base URI corresponding to the
@@ -25,7 +25,7 @@ function baseURI = BaseURI(version)
 %       baseURI = openminds.constant.BaseURI(3);  % Returns "https://openminds.ebrains.eu"
 %       baseURI = openminds.constant.BaseURI(4);  % Returns "https://openminds.om-i.org"
 %
-%   See also: openminds.getSchemaVersion
+%   See also: openminds.getModelVersion
 
     arguments
         version (1,1) openminds.internal.utility.VersionNumber ...
@@ -33,7 +33,7 @@ function baseURI = BaseURI(version)
     end
 
     if ismissing(version)
-        version = openminds.getSchemaVersion("VersionNumber");
+        version = openminds.getModelVersion("VersionNumber");
     end
 
     if version <= 3
