@@ -1,6 +1,9 @@
 classdef Configuration < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.Configuration", "openminds.core.File"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.data.File", ...
+            "openminds.core.research.Configuration" ...
+        ]
         IS_SCALAR = true
     end
 end

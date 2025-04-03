@@ -7,11 +7,9 @@ classdef ClassWriter < handle
 %   Subclasses can use these methods in order to translate a collection of
 %   schemas or templates into matlab class definitions.
 
-
-%   Todo: 
+%   Todo:
 %   [ ] Highlight properties and methods that should be set and used by
 %       subclasses in the class documentation.
- 
 
     properties
         ClassName string       % Name of class
@@ -58,20 +56,20 @@ classdef ClassWriter < handle
             if strcmp(firstLetter, lower(firstLetter))
                 newNameLowercase = newName;
                 newName{1}(1) = upper(firstLetter);
-                warning('Classname should start with a capital letter. Changed name from "%s" to "%s"', newNameLowercase, newName) %#ok<PFCEL> 
+                warning('Classname should start with a capital letter. Changed name from "%s" to "%s"', newNameLowercase, newName) %#ok<PFCEL>
             end
             obj.ClassName = newName;
         end
     end
 
-    methods 
+    methods
         function show(obj)
             fprintf(obj.ClassDefText)
         end
     end
 
     methods (Access = protected)
-        function isAbstract = isClassAbstract(obj)
+        function isAbstract = isClassAbstract(~)
         %isClassAbstract Whether class is abstract. Subclasses can override
             isAbstract = false;
         end
@@ -79,27 +77,26 @@ classdef ClassWriter < handle
 
     methods (Access = protected) % Methods which subclasses should implement
 
-        function writeDocString(obj)
+        function writeDocString(~)
         end
 
-        function writePropertyBlocks(obj)
+        function writePropertyBlocks(~)
         end
     
-        function writeEnumerationBlock(obj)
+        function writeEnumerationBlock(~)
         end
     
-        function writeEventBlocks(obj)
+        function writeEventBlocks(~)
         end
             
-        function writeMethodBlocks(obj)
+        function writeMethodBlocks(~)
         end
-
     end
     
     methods (Access = protected, Sealed)
         
         function addSuperclass(obj, varargin)
-        %addSuperclass Add superclass(es)     
+        %addSuperclass Add superclass(es)
             for i = 1:numel(varargin)
                 obj.SuperclassList(end+1) = varargin(i);
             end
@@ -150,7 +147,7 @@ classdef ClassWriter < handle
             fwrite(fid, obj.ClassDefText);
             fclose(fid);
 
-            %fprintf('Saved class definition for %s to:\n"%s"\n', obj.ClassName, filePath)
+            % fprintf('Saved class definition for %s to:\n"%s"\n', obj.ClassName, filePath)
         end
 
         function appendLine(obj, numIndent, str)
@@ -163,7 +160,6 @@ classdef ClassWriter < handle
             newStr{1}(1) = "%";
             obj.ClassDefText = obj.ClassDefText + newStr + newline;
         end
-    
     end
 
     % % Methods for starting and ending different code blocks
@@ -173,7 +169,7 @@ classdef ClassWriter < handle
         function initClassDef(obj)
         %writeClassDef Writes the class definition header for a class
             assert(obj.ClassDefText == "", ...
-                "Can not initialize class, because class definiton is not empty")
+                "Can not initialize class, because class definition is not empty")
             
             newStr = "classdef " + obj.ClassName;
             
@@ -294,7 +290,7 @@ classdef ClassWriter < handle
     
             enumValue = string(enumValue);
             if enumValue.strlength > 63
-                warning("Skip %s of %s because name is too long for MATLAB", enumValue, obj.SchemaClassName)
+                warning("Skip %s of %s because name is too long for MATLAB", enumValue, obj.ClassName)
                 return
             end
 
@@ -311,9 +307,9 @@ classdef ClassWriter < handle
         % Adding methods
         function startFunctionBlock(obj, functionName, options)
             arguments
-                obj (1,1) openminds.internal.generator.abstract.ClassWriter
-                functionName (1,1) string
-                options.Inputs (1,:) cell = {}
+                obj (1,1) openminds.internal.generator.abstract.ClassWriter %#ok<INUSA>
+                functionName (1,1) string %#ok<INUSA>
+                options.Inputs (1,:) cell = {} %#ok<INUSA>
                 options.Outputs (1,:) cell = {}
             end
             % Todo
@@ -323,14 +319,13 @@ classdef ClassWriter < handle
         function endFunctionBlock(obj)
             numIndent = 2;
             obj.appendLine(numIndent, "end");
-            %obj.appendLine(numIndent, ""); % Add empty line 
+            % obj.appendLine(numIndent, ""); % Add empty line
             obj.CurrentStep = "methods";
         end
-        
     end
     
     % Set/get for private properties
-    methods 
+    methods
         function set.CurrentStep(obj, newValue)
             currentStep = obj.CurrentStep;
             obj.CurrentStep = newValue;
@@ -360,7 +355,7 @@ classdef ClassWriter < handle
         function endClassMemberBlock(obj)
             numIndent = 1;
             obj.appendLine(numIndent, "end");
-            obj.appendLine(numIndent, ""); % Add empty line 
+            obj.appendLine(numIndent, ""); % Add empty line
             obj.CurrentStep = "classdef";
         end
 
@@ -376,7 +371,7 @@ classdef ClassWriter < handle
         end
 
         function str = indentLine(str, numIndents)
-        %indentLine Add intentation to a str representing a line of code
+        %indentLine Add indentation to a str representing a line of code
             indentationStr = openminds.internal.generator.abstract.ClassWriter.LineIndenter(numIndents);
             str = sprintf("%s%s", indentationStr, str);
         end

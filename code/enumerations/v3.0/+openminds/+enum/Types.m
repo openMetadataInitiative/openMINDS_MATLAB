@@ -1,5 +1,4 @@
 classdef Types < openminds.abstract.TypesEnumeration
-
     enumeration
         None('None')
         AtlasAnnotation("openminds.sands.atlas.AtlasAnnotation")
@@ -219,5 +218,4 @@ classdef Types < openminds.abstract.TypesEnumeration
         StimulationActivity("openminds.stimulation.activity.StimulationActivity")
         EphysStimulus("openminds.stimulation.stimulus.EphysStimulus")
     end
-    
 end

@@ -1,5 +1,4 @@
 classdef Types < openminds.abstract.TypesEnumeration
-
     enumeration
         None('None')
         AtlasAnnotation("openminds.sands.atlas.AtlasAnnotation")
@@ -44,6 +43,7 @@ classdef Types < openminds.abstract.TypesEnumeration
         WorkflowExecution("openminds.computation.WorkflowExecution")
         WorkflowRecipe("openminds.computation.WorkflowRecipe")
         WorkflowRecipeVersion("openminds.computation.WorkflowRecipeVersion")
+        MRAcquisitionType("openminds.controlledterms.MRAcquisitionType")
         MRIPulseSequence("openminds.controlledterms.MRIPulseSequence")
         MRIWeighting("openminds.controlledterms.MRIWeighting")
         UBERONParcellation("openminds.controlledterms.UBERONParcellation")
@@ -221,5 +221,4 @@ classdef Types < openminds.abstract.TypesEnumeration
         StimulationActivity("openminds.stimulation.activity.StimulationActivity")
         EphysStimulus("openminds.stimulation.stimulus.EphysStimulus")
     end
-    
 end

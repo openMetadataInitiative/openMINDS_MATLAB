@@ -1,6 +1,9 @@
 classdef MemberOf < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.Consortium", "openminds.core.Organization"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.actors.Consortium", ...
+            "openminds.core.actors.Organization" ...
+        ]
         IS_SCALAR = true
     end
 end

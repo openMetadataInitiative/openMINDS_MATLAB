@@ -8,13 +8,13 @@ function schemaName = getSchemaName(nameAlias)
 %
 %   Examples:
 %       openminds.internal.vocab.getSchemaName("person")
-%       ans = 
-% 
+%       ans =
+%
 %           "Person"
 %
 %       openminds.internal.vocab.getSchemaName("protocol execution")
-%       ans = 
-%        
+%       ans =
+%
 %           "ProtocolExecution"
 
     persistent typesVocab

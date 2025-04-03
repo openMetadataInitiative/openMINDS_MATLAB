@@ -1,20 +1,19 @@
 function update(mode)
 %UPDATE Updates openMINDS schemas if necessary.
 %
-%   openminds.internal.update() checks the commit ID for the previous schema 
-%   update and the current commit ID of the 'documentation' branch of the 
-%   openMINDS github repository. If they are the same and the mode is not 
-%   'force', it displays a message indicating that the schemas are up to date. 
+%   openminds.internal.update() checks the commit ID for the previous schema
+%   update and the current commit ID of the 'documentation' branch of the
+%   openMINDS github repository. If they are the same and the mode is not
+%   'force', it displays a message indicating that the schemas are up to date.
 %   Otherwise, it proceeds with updating the schemas.
 %
-%   openminds.internal.update(mode) allows specifying the update mode. The 
-%   default mode is 'default', but setting it to 'force' forces the update 
+%   openminds.internal.update(mode) allows specifying the update mode. The
+%   default mode is 'default', but setting it to 'force' forces the update
 %   regardless of the commit IDs.
 %
 %   Example:
 %       openminds.internal.update()
 %       openminds.internal.update('force')
-
 
     arguments
         mode (1,1) string = "default"
@@ -22,7 +21,6 @@ function update(mode)
 
     import openminds.internal.utility.git.getCurrentCommitID
     import openminds.internal.utility.git.loadPreviousCommitID
-
 
     % - Check commitID, and return if previous commit is is same as current
     previousCommitID = loadPreviousCommitID('RepositoryName', 'openMINDS', ...
@@ -37,7 +35,7 @@ function update(mode)
         disp('Downloading openMINDS schemas.')
         openminds.internal.generator.downloadSchemas()
 
-        disp('Generating openMINDS schemas.')
+        disp('Generating classes for openMINDS metadata types.')
         openminds.internal.generateSchemaClasses()
            
         disp('Finished!')
@@ -46,7 +44,7 @@ function update(mode)
         openminds.internal.downloadSchemas()
         
         disp('Updating openMINDS schemas.')
-        %openminds.internal.updateSchemas()
+        % openminds.internal.updateSchemas()
 
         % Temporary (openminds.internal.updateSchemas is not implemented yet)
         schemaFolderPath = fullfile(openminds.internal.Constants.SchemaFolder, 'matlab', '+openminds');
@@ -66,7 +64,6 @@ function update(mode)
     if ~any(strcmp(currentPathList, openminds.internal.Constants.SchemaFolder))
         addpath(genpath(openminds.internal.Constants.SchemaFolder))
     end
-    
 end
 
 % Todo: If updating, need to keep old schemas until update is complete.

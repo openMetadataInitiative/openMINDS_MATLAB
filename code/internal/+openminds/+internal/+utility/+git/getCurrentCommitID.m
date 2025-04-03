@@ -1,7 +1,7 @@
 function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
 %getCurrentCommitID Get current commit id for a branch of the openminds repo
 %
-%   commitID = getCurrentCommitID(branchName) returns the commitID for the 
+%   commitID = getCurrentCommitID(branchName) returns the commitID for the
 %   specified branch as a character vector
 
     arguments
@@ -15,8 +15,8 @@ function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
     apiURL = strjoin( [API_BASE_URL, "commits", options.BranchName], '/');
 
     % Get info about latest commit:
-    %data = webread(apiURL);
-    %commitID = data.sha;
+    % data = webread(apiURL);
+    % commitID = data.sha;
 
     % More specific api call to only get the sha-1 hash:
     requestOpts = weboptions();

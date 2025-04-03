@@ -1,36 +1,36 @@
-function selectOpenMindsVersion(version)
-% selectOpenMindsVersion - Select and "import" a specific version of openMINDS library.
+function selectOpenMindsVersion(versionNumber)
+% selectOpenMindsVersion - Select and "import" a specific version of openMINDS model.
 %
 % This function allows you to select a specific version of the openMINDS
-% library and load its components (schemas and mixed types) into the MATLAB
-% environment. The selected version can be specified as a version number or
-% as "latest" to load the most recent version available.
+% metadata model and load its components (classes for metadata types and mixed 
+% types) into the MATLAB environment. The selected version can be specified as 
+% a version number or as "latest" to load the most recent version available.
 %
 % Usage:
 %   selectOpenMindsVersion(version)
 %
 % Arguments:
 %   - version (optional) : string (default: "latest")
-%     The version of the openMINDS library to select and load. Use a specific
-%     version number like 1 or use "latest" to load the latest available version.
+%     The version of the openMINDS metadata model to select and load. Use a 
+%     specific version number like 1 or use "latest" to load the latest 
+%     available version.
 %
 % Notes:
-%   - The openMINDS library must be imported before using this function.
-%   - This function modifies the MATLAB path to include the selected version's
-%     schemas and mixedtypes subdirectories while removing the others.
+%   - The openMINDS package must be on the search path before using this function.
+%   - This function modifies the MATLAB search path to include the selected 
+%     version's types and mixedtypes subdirectories while removing the others.
 %
 % Example:
-%   % Load the latest version of openMINDS library
+%   % Load the latest version of openMINDS metadata model
 %   selectOpenMindsVersion();
 %
-%   % Load a specific version (e.g., v1.0) of openMINDS library
+%   % Load a specific version (e.g., v1.0) of openMINDS metadata model
 %   selectOpenMindsVersion(1);
 %
 %   % Load the latest version using version number
 %   selectOpenMindsVersion("latest");
 %
 % See also: addpath, rmpath
-
 
 % Author: Eivind Hennestad
 % Created: 2023-08-08
@@ -39,12 +39,9 @@ function selectOpenMindsVersion(version)
 % Copyright 2023 Open Metadata Initiative
 % Licensed under MIT License
 
-
-% Todo: Need to debug situation where one version is already on path, but
-% another is requested.
-
     arguments
-        version (1,1) string = "latest"
+        versionNumber (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(versionNumber)} = "latest"
     end
 
     rootPath = openminds.internal.rootpath();
@@ -53,31 +50,22 @@ function selectOpenMindsVersion(version)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
 
-    import openminds.internal.constants.*
-
-    % - Validate inputs
-    version = openminds.internal.validateVersionNumber(version);
-    
-    if str2double(version) == Models.getLatestVersionNumber()
-        version = "latest";
-    end
-
-    if version == "latest"
-        versionAsString = version;
+    % Get version number as string matching version numbers of version folders
+    if versionNumber == "latest"
+        versionAsString = 'latest';
     else
-        versionNumber = str2double(version);
-        versionAsString = sprintf('v%.1f', versionNumber);
+        versionAsString = string(versionNumber);
     end
 
-    % Remove the schema/mixedtypes subdirectory for all versions
+    % Remove the types/mixedtypes subdirectory for all versions
     warning('off', 'MATLAB:rmpath:DirNotFound')
-    rmpath(genpath( fullfile(rootPath, "schemas") ))
+    rmpath(genpath( fullfile(rootPath, "types") ))
     rmpath(genpath( fullfile(rootPath, "mixedtypes") ))
     rmpath(genpath( fullfile(rootPath, "enumerations") ))
     warning('on', 'MATLAB:rmpath:DirNotFound')
 
-    % Add the schema/mixedtypes subdirectory for the selected version
-    addpath(genpath( fullfile(rootPath, "schemas", versionAsString) ))
+    % Add the types/mixedtypes subdirectory for the selected version
+    addpath(genpath( fullfile(rootPath, "types", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
 end

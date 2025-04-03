@@ -1,8 +1,8 @@
 function setup(options)
 
     arguments
-        % UpdatePathDef - Add openMINDS_MATLAB to the search path and update 
-        % the pathdef file, making sure this toolbox stays on path when 
+        % UpdatePathDef - Add openMINDS_MATLAB to the search path and update
+        % the pathdef file, making sure this toolbox stays on path when
         % restarting MATLAB
         options.UpdatePathDef (1,1) logical = true
         
@@ -13,7 +13,8 @@ function setup(options)
     % Add the code folder to the search path
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
-    
+    addpath(fullfile(codeFolder, 'internal'))
+
     % Running startup will properly add openMINDS_MATLAB to the search path
     openminds.startup(options.Version)
     

@@ -1,5 +1,5 @@
 classdef SchemaInspector < handle
-% Utility class for inspection of a Schema    
+% Utility class for inspection of a Schema
 
     properties (SetAccess = immutable, GetAccess = private)
         metaClassObject
@@ -18,7 +18,7 @@ classdef SchemaInspector < handle
         PropertyNamesAll (1,:) string
     end
 
-    methods 
+    methods
         
         function obj = SchemaInspector(varargin)
             
@@ -32,7 +32,7 @@ classdef SchemaInspector < handle
                 error('Unsupported input type')
             end
             
-            %obj.countProperties()
+            % obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();
             obj.PropertyNamesAll = string( {obj.metaClassObject.PropertyList.Name} );
             
@@ -40,10 +40,9 @@ classdef SchemaInspector < handle
                 clear obj
             end
         end
-
     end
 
-    methods 
+    methods
         function n = get.NumProperties(obj)
             n = numel(obj.PropertyNames);
         end
@@ -64,7 +63,6 @@ classdef SchemaInspector < handle
             
             propertyNames = propertyNames(isPublic & ~isHidden);
         end
-        
     end
 
     methods (Access = public)

@@ -10,13 +10,9 @@ function S = listSchemasWithNonGenericLabel()
     tempsavepath = tempname;
     tempsavepath = [tempsavepath, '.mat'];
     
-    %disp(tempsavepath)
+    % disp(tempsavepath)
     cleanupObj = onCleanup(@(filepath)delete(tempsavepath));
 
-    numTestsFailed = 0;
-    numTestsTotal = 0;
-
-    C = cell(0, 4);
     count = 0;
     S = struct;
 
@@ -25,7 +21,6 @@ function S = listSchemasWithNonGenericLabel()
         iSchemaName = schemaTable{i, "SchemaName"};
         iModelName = schemaTable{i, "ModuleName"};
         iSubmoduleName = schemaTable{i, "SubModuleName"};
-
         
         schemaClassFunctionName = openminds.internal.utility.string.buildClassName(iSchemaName, iSubmoduleName, iModelName);
         schemaFcn = str2func(schemaClassFunctionName);
@@ -41,24 +36,22 @@ function S = listSchemasWithNonGenericLabel()
                 S.(iSchemaName).propertyName = "lookupLabel";
                 S.(iSchemaName).stringFormat = "sprintf('%s', lookupLabel)";
 
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'fullName')
                 S.(iSchemaName).propertyName = 'fullName';
                 S.(iSchemaName).stringFormat = "sprintf('%s', fullName)";
 
-
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'identifier')
                 S.(iSchemaName).propertyName = 'identifier';
                 S.(iSchemaName).stringFormat = "sprintf('%s', identifier)";
                 
-                %pass
+                % pass
             elseif isprop(itemPreSave, 'name')
                 S.(iSchemaName).propertyName = 'name';
                 S.(iSchemaName).stringFormat = "sprintf('%s', name)";
 
-
-                %pass
+                % pass
             else
 
                 S.(iSchemaName).propertyName = '';
@@ -67,15 +60,12 @@ function S = listSchemasWithNonGenericLabel()
                 fprintf('%s\n', iSchemaName)
             end
 
-
         catch ME
-
-            fprintf('Could not create schema %s\n', iSchemaName)
+            fprintf('Could not create schema %s due to error:\n%s\n', ...
+                iSchemaName, ME.message)
         end
-
-        
     end
 
-    %T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});
-    %fprintf('Number of tests that failed: %d/%d\n', numTestsFailed, numTestsTotal)
+    % T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});
+    % fprintf('Number of tests that failed: %d/%d\n', numTestsFailed, numTestsTotal)
 end

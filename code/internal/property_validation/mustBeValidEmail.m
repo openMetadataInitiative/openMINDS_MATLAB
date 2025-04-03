@@ -1,5 +1,5 @@
 function mustBeValidEmail(value)
-    % todo: include dashes and dots, and multilevel domains. 
+    % todo: include dashes and dots, and multilevel domains.
     % Compare match to value to see if they are equal..
     if ~isempty(value)
         matchedPattern = regexp(value, '\w*\@\w*\.\w*', 'match');

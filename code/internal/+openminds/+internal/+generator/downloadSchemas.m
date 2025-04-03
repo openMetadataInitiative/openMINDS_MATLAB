@@ -46,5 +46,5 @@ function downloadSchemas(versionNumber)
     delete(tempPath)
     
     % Save the current commit ID
-    %openminds.internal.utility.git.saveCurrentSchemaCommitID()
+    % openminds.internal.utility.git.saveCurrentSchemaCommitID()
 end

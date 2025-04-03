@@ -7,8 +7,7 @@ In this example we will create a metadata collection for the crew members of the
 We start by importing a csv file with crew member information:
 
 ```matlab
-currentPath = fileparts(matlab.desktop.editor.getActiveFilename);
-filePath = fullfile(currentPath, "data", "spacecraft_crew_members.csv");
+filePath = fullfile(openminds.toolboxdir(), "livescripts", "data", "spacecraft_crew_members.csv");
 crewMembers = readtable(filePath, "TextType", "String")
 ```
 | |givenName|familyName|alternateName|email|memberOf|
@@ -25,13 +24,13 @@ Let us create a set of metadata instances from this table that represents the cr
 
 With these assumptions we will create:
 
--  a metadata <samp>Collection</samp> for storing metadata instances 
--  a unique set of <samp>Consortium</samp> instances based on the name given in the <samp>memberOf</samp> column 
--  a <samp>ContactInformation</samp> instance based on the <samp>email</samp> column 
--  a <samp>Person</samp> instance for each table row with: 
-    - the <samp>givenName</samp>, <samp>familyName</samp>, and <samp>alternateName</samp> (if available) 
-    - a link to the respective  <samp>ContactInformation</samp> instance 
-    - a person-specific embedded <samp>Affiliation</samp> instance that links to the respective <samp>Consortium</samp> instance 
+- a metadata <samp>Collection</samp> for storing metadata instances 
+- a unique set of <samp>Consortium</samp> instances based on the name given in the <samp>memberOf</samp> column 
+- a <samp>ContactInformation</samp> instance based on the <samp>email</samp> column
+- a <samp>Person</samp> instance for each table row with: 
+  - the <samp>givenName</samp>, <samp>familyName</samp>, and <samp>alternateName</samp> (if available) 
+  - a link to the respective  <samp>ContactInformation</samp> instance
+  - a person-specific embedded <samp>Affiliation</samp> instance that links to the respective <samp>Consortium</samp> instance 
 
 We start by creating an empty metadata collection for storing metadata instances.
 
@@ -195,10 +194,15 @@ disp(collection.Nodes)
     "_:zaphod-beeblebrox@hitchhikers-guide.galaxy" ⟼ {[zaphod-beeblebrox@hitchhikers-guide.galaxy]  (ContactInformation)}
 ```
 
-A note here: Since the collection holds a mix of different types, each type is inside a cell (as indicated by the curly brackets). In order to get an instance from the <samp>Nodes</samp>, we need to use curly bracket indexing:
+A note here: Since the collection holds a mix of different types, each type is inside a cell (as indicated by the curly brackets). In order to get an instance from the <samp>Nodes</samp>, we need to index into a cell object:
 
 ```matlab
-person = collection.Nodes{"_:arthur-dent"}
+if isMATLABReleaseOlderThan("R2023a")
+    cellValue = collection.Nodes("_:arthur-dent");
+    person = cellValue{1}
+else
+    person = collection.Nodes{"_:arthur-dent"} % Curly brace syntax introduced in R2023a
+end
 ```
 
 ```TextOutput

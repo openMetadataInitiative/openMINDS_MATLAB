@@ -1,5 +1,4 @@
 classdef Types < openminds.abstract.TypesEnumeration
-
     enumeration
         None('None')
         AtlasAnnotation("openminds.sands.atlas.AtlasAnnotation")
@@ -102,5 +101,4 @@ classdef Types < openminds.abstract.TypesEnumeration
         TissueSampleCollectionState("openminds.core.research.TissueSampleCollectionState")
         TissueSampleState("openminds.core.research.TissueSampleState")
     end
-    
 end

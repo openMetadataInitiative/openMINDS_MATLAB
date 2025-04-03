@@ -39,4 +39,3 @@ end
 function displayMultipleMatchingSchemasWarning(schemaName)
     warning('Multiple vocab type elements matched schema with name "%s"', schemaName)
 end
-

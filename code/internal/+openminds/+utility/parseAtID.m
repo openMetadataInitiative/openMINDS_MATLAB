@@ -6,28 +6,28 @@ function varargout = parseAtID(semanticName)
 %
 %       [type, name] = parseAtID(semanticName)
 %
-%   Input: 
+%   Input:
 %       semanticName : A URI representing an openMINDS instance @id. Ex: https://openminds.ebrains.eu/instances/geneticStrainType/knockout
 %
 %   Output:
-%       S : A struct with fields 
+%       S : A struct with fields
 %           - Type
 %           - Name
 %
 %       OR
 %
 %       type : openMINDS type, i.e schema specification
-%       name : name of instance 
+%       name : name of instance
 %
 %   Example:
 %
 %    atId = "https://openminds.ebrains.eu/instances/geneticStrainType/knockout"
 %    S = openminds.internal.utility.parseAtID(atId)
-%    
-%    S = 
-%    
+%
+%    S =
+%
 %      struct with fields:
-%    
+%
 %        Type: "geneticStrainType"
 %        Name: "knockout"
 

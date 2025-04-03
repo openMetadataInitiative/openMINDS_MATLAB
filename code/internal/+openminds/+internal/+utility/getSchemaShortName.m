@@ -1,13 +1,13 @@
 function shortSchemaName = getSchemaShortName(fullSchemaName)
 %getSchemaShortName Get short schema name from full schema name
-% 
+%
 %   shortSchemaName = getSchemaShortName(fullSchemaName)
 %
 %   Example:
 %   fullSchemaName = 'openminds.core.research.Subject';
 %   shortSchemaName = openminds.internal.utility.getSchemaShortName(fullSchemaName)
 %   shortSchemaName =
-% 
+%
 %     'Subject'
 
     if iscell(fullSchemaName) && numel(fullSchemaName) > 1

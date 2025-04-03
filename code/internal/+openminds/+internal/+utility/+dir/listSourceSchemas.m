@@ -1,16 +1,14 @@
 function schemaInfo = listSourceSchemas(schemaModule, options)
-%listSourceSchemas List information about all available schemas.   
-%   
+%listSourceSchemas List information about all available schemas.
+%
 %   schemaInfo = listSourceSchemas() returns a table with information
 %   about all the available schemas.
-
-% Todo: Rename function, as it is used for listing instances as well.
 
     arguments
         schemaModule = {}
         options.SchemaType (1,1) string = "schema.tpl.json";
         options.SchemaFileExtension = '.json';
-        options.VersionNumber (1,1) string = "latest" 
+        options.VersionNumber (1,1) string = "latest"
     end
 
     versionNumber = openminds.internal.validateVersionNumber(options.VersionNumber);
@@ -35,7 +33,7 @@ function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExten
 %listSchemaFiles List schema files given a root directory
 
     import openminds.internal.utility.dir.listSubDir
-    import openminds.internal.utility.dir.listFiles 
+    import openminds.internal.utility.dir.listFiles
 
     if nargin < 3 || isempty(fileExtension)
         fileExtension = '.json';

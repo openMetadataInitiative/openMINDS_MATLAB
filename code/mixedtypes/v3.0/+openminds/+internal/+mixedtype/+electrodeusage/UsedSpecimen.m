@@ -1,6 +1,9 @@
 classdef UsedSpecimen < openminds.internal.abstract.LinkedCategory
     properties (Constant, Hidden)
-        ALLOWED_TYPES = ["openminds.core.SubjectState", "openminds.core.TissueSampleState"]
+        ALLOWED_TYPES = [ ...
+            "openminds.core.research.SubjectState", ...
+            "openminds.core.research.TissueSampleState" ...
+        ]
         IS_SCALAR = true
     end
 end

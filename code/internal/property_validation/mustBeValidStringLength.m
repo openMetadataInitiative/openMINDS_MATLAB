@@ -1,7 +1,6 @@
 function mustBeValidStringLength(value, minLength, maxLength)
     
     if numel(value) > 1
-        
     end
     
     if minLength > 0
@@ -12,4 +11,3 @@ function mustBeValidStringLength(value, minLength, maxLength)
     
     assert(strlength(value) >= minLength && strlength(value) <= minLength, msg)
 end
-

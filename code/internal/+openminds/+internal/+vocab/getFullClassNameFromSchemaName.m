@@ -16,15 +16,16 @@ function D = buildFullClassNameMap()
     % Todo: Use / or create openminds method for listing all schemas based
     % on selected version...
 
-    % Get currently active version
-    version = openminds.getSchemaVersion();
+    % Get currently active version of the openMINDS model
+    version = openminds.getModelVersion();
 
-    schemaPath = fullfile( openminds.internal.rootpath, "schemas", version, "+openminds");
+    typesFolder = fullfile( openminds.internal.rootpath, "types", version, "+openminds");
     
-    relativeFilePaths = recursiveDir(schemaPath, ...
-        'FileType', 'm', ...
-        "IgnoreList", "Contents", ...
-        "OutputType", "RelativeFilePath");
+    % List all schema/type class files for the current version
+    fileInfo = dir( fullfile(typesFolder, '**', '*.m'));
+    fileInfo( strcmp({fileInfo.name}, 'Contents.m') ) = []; % Ignore Contents.m
+    filePaths = string( fullfile( {fileInfo.folder}, {fileInfo.name} ) )';
+    relativeFilePaths = strrep(filePaths, typesFolder, '');
 
     [parentDir, schemaNames] = fileparts(relativeFilePaths);
     
@@ -32,7 +33,7 @@ function D = buildFullClassNameMap()
     packageNames = strcat("openminds", strrep( packageFolders, filesep, ".") );
     
     classNames = packageNames + "." + schemaNames;
-    D = dictionary(schemaNames,classNames);
+    D = dictionary(schemaNames, classNames);
 end
 
 function throwSchemaNotFoundError(schemaName)
