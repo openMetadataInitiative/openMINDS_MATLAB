@@ -6,6 +6,6 @@ classdef Constants < handle
         VocabURL     = openminds.internal.Constants.GithubURL + "/raw/main/vocab"
         LogoLightURL = openminds.internal.Constants.GithubURL + "/raw/main/img/light_openMINDS-logo.png";
         LogoDarkURL  = openminds.internal.Constants.GithubURL + "/raw/main/img/dark_openMINDS-logo.png";
-        SchemaFolder = fullfile(openminds.internal.rootpath(), 'schemas')
+        SchemaFolder = fullfile(openminds.internal.rootpath(), 'types')
     end
 end
