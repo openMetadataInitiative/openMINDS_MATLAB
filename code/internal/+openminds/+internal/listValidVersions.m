@@ -1,6 +1,6 @@
 function validVersions = listValidVersions()
-% getValidVersions - List valid openminds model version
-    schemaFolder = fullfile(openminds.internal.rootpath, 'schemas/');
+% listValidVersions - List valid versions of the openminds model
+    schemaFolder = fullfile(openminds.internal.rootpath, 'types');
     L = dir(schemaFolder);
     L(startsWith({L.name}, '.')|~[L.isdir])=[];
     validVersions = {L.name};

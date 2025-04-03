@@ -47,7 +47,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
     persistent schemaManifest
     if isempty(schemaManifest)
         try
-            schemaVersion = openminds.getSchemaVersion();
+            schemaVersion = openminds.getModelVersion();
             schemaManifest = openminds.internal.loadSchemaManifest(schemaVersion);
         catch
             error('Not implemented yet')
@@ -57,7 +57,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
     schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
 
     isMatch = strcmpi(schemaManifest.Name, string(schemaName));
-    version = openminds.getSchemaVersion();
+    version = openminds.getModelVersion();
 
     modelName = schemaManifest{isMatch, "Model"};
     subgroupName = schemaManifest{isMatch, "Group"};

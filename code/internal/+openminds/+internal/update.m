@@ -35,7 +35,7 @@ function update(mode)
         disp('Downloading openMINDS schemas.')
         openminds.internal.generator.downloadSchemas()
 
-        disp('Generating openMINDS schemas.')
+        disp('Generating classes for openMINDS metadata types.')
         openminds.internal.generateSchemaClasses()
            
         disp('Finished!')

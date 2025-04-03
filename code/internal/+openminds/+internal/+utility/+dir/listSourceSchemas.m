@@ -4,8 +4,6 @@ function schemaInfo = listSourceSchemas(schemaModule, options)
 %   schemaInfo = listSourceSchemas() returns a table with information
 %   about all the available schemas.
 
-% Todo: Rename function, as it is used for listing instances as well.
-
     arguments
         schemaModule = {}
         options.SchemaType (1,1) string = "schema.tpl.json";
