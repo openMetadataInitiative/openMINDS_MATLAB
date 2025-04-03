@@ -18,7 +18,7 @@ classdef Copyright < openminds.abstract.Schema
 
         % Enter the year during which the copyright was first asserted.
         year (1,1) string ...
-            {mustMatchPattern(year, '([0-9]{4}])')}
+            {mustMatchPattern(year, '([0-9]{4})')}
     end
 
     properties (Access = protected)

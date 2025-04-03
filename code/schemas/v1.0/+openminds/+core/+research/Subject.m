@@ -6,11 +6,14 @@ classdef Subject < openminds.abstract.Schema
 %   biologicalSex      : (1,1) <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>
 %                        Add the biological sex of this specimen.
 %
-%   genotype           : (1,1) <a href="matlab:help openminds.controlledterms.Genotype" style="font-weight:bold">Genotype</a>
-%                        Add the genotype of this specimen.
-%
 %   internalIdentifier : (1,1) string
 %                        Enter the identifier of this specimen that is used within the corresponding data.
+%
+%   isPartOf           : (1,:) <a href="matlab:help openminds.core.research.SubjectGroup" style="font-weight:bold">SubjectGroup</a>
+%                        Add all subject groups of which this subject is a member.
+%
+%   lookupLabel        : (1,1) string
+%                        Enter a lookup label for this specimen that may help you to more easily find it again.
 %
 %   phenotype          : (1,1) <a href="matlab:help openminds.controlledterms.Phenotype" style="font-weight:bold">Phenotype</a>
 %                        Add the phenotype of this specimen.
@@ -31,12 +34,15 @@ classdef Subject < openminds.abstract.Schema
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
             {mustBeSpecifiedLength(biologicalSex, 0, 1)}
 
-        % Add the genotype of this specimen.
-        genotype (1,:) openminds.controlledterms.Genotype ...
-            {mustBeSpecifiedLength(genotype, 0, 1)}
-
         % Enter the identifier of this specimen that is used within the corresponding data.
         internalIdentifier (1,1) string
+
+        % Add all subject groups of which this subject is a member.
+        isPartOf (1,:) openminds.core.research.SubjectGroup ...
+            {mustBeListOfUniqueItems(isPartOf)}
+
+        % Enter a lookup label for this specimen that may help you to more easily find it again.
+        lookupLabel (1,1) string
 
         % Add the phenotype of this specimen.
         phenotype (1,:) openminds.controlledterms.Phenotype ...
@@ -66,7 +72,7 @@ classdef Subject < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'biologicalSex', "openminds.controlledterms.BiologicalSex", ...
-            'genotype', "openminds.controlledterms.Genotype", ...
+            'isPartOf', "openminds.core.research.SubjectGroup", ...
             'phenotype', "openminds.controlledterms.Phenotype", ...
             'species', "openminds.controlledterms.Species", ...
             'strain', "openminds.controlledterms.Strain", ...

@@ -1,4 +1,4 @@
-classdef ParcellationEntity < openminds.abstract.Schema
+classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
 %ParcellationEntity - No description available.
 %
 %   PROPERTIES:
@@ -13,7 +13,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
 %                        Enter the definition for this parcellation entity.
 %
 %   hasParent          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
-%                        Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
+%                        Add all anatomical parent structures for this parcellation entity as defined within the corresponding brain atlas.
 %
 %   hasVersion         : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
 %                        Add all versions of this parcellation entity.
@@ -43,7 +43,7 @@ classdef ParcellationEntity < openminds.abstract.Schema
         % Enter the definition for this parcellation entity.
         definition (1,1) string
 
-        % Add all anatomical parent structures for this parcellation entity as defined within the corrsponding brain atlas.
+        % Add all anatomical parent structures for this parcellation entity as defined within the corresponding brain atlas.
         hasParent (1,:) openminds.sands.atlas.ParcellationEntity ...
             {mustBeListOfUniqueItems(hasParent)}
 
@@ -93,6 +93,17 @@ classdef ParcellationEntity < openminds.abstract.Schema
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end

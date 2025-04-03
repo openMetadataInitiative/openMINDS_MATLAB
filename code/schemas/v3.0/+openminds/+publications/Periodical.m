@@ -27,7 +27,7 @@ classdef Periodical < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = []
+        Required = ["name"]
     end
 
     properties (Constant, Hidden)

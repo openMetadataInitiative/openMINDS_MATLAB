@@ -1,5 +1,45 @@
 [
     {
+        "name": "DOI",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "GRIDID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "ISBN",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "ORCID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "RORID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "SWHID",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "URL",
+        "model": "core",
+        "group": "miscellaneous"
+    },
+    {
+        "name": "affiliation",
+        "model": "core",
+        "group": "actors"
+    },
+    {
         "name": "ageCategory",
         "model": "controlledTerms",
         "group": null
@@ -35,6 +75,11 @@
         "group": null
     },
     {
+        "name": "behavioralTask",
+        "model": "core",
+        "group": "research"
+    },
+    {
         "name": "biologicalSex",
         "model": "controlledTerms",
         "group": null
@@ -55,7 +100,17 @@
         "group": null
     },
     {
+        "name": "contactInformation",
+        "model": "core",
+        "group": "actors"
+    },
+    {
         "name": "contentType",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "contentTypePattern",
         "model": "core",
         "group": "data"
     },
@@ -145,6 +200,11 @@
         "group": null
     },
     {
+        "name": "file",
+        "model": "core",
+        "group": "data"
+    },
+    {
         "name": "fileBundle",
         "model": "core",
         "group": "data"
@@ -160,7 +220,17 @@
         "group": "data"
     },
     {
+        "name": "filePathPattern",
+        "model": "core",
+        "group": "data"
+    },
+    {
         "name": "fileRepository",
+        "model": "core",
+        "group": "data"
+    },
+    {
+        "name": "fileRepositoryStructure",
         "model": "core",
         "group": "data"
     },
@@ -245,6 +315,11 @@
         "group": "products"
     },
     {
+        "name": "numericalParameter",
+        "model": "core",
+        "group": "research"
+    },
+    {
         "name": "operatingDevice",
         "model": "controlledTerms",
         "group": null
@@ -263,6 +338,11 @@
         "name": "organization",
         "model": "core",
         "group": "actors"
+    },
+    {
+        "name": "parameterSet",
+        "model": "core",
+        "group": "research"
     },
     {
         "name": "parameterSetting",
@@ -325,6 +405,11 @@
         "group": "miscellaneous"
     },
     {
+        "name": "serviceLink",
+        "model": "core",
+        "group": "data"
+    },
+    {
         "name": "software",
         "model": "core",
         "group": "products"
@@ -358,6 +443,11 @@
         "name": "strain",
         "model": "controlledTerms",
         "group": null
+    },
+    {
+        "name": "stringParameter",
+        "model": "core",
+        "group": "research"
     },
     {
         "name": "subject",

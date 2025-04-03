@@ -1,6 +1,16 @@
 {
   "Aliases": [
     {
+      "NewName": "openminds.core.actors.Affiliation",
+      "OldNames": "openminds.core.Affiliation",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.actors.ContactInformation",
+      "OldNames": "openminds.core.ContactInformation",
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.actors.Contribution",
       "OldNames": "openminds.core.Contribution",
       "WarnOnOldName": false
@@ -21,8 +31,18 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.data.ContentTypePattern",
+      "OldNames": "openminds.core.ContentTypePattern",
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.data.Copyright",
       "OldNames": "openminds.core.Copyright",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.data.File",
+      "OldNames": "openminds.core.File",
       "WarnOnOldName": false
     },
     {
@@ -36,8 +56,18 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.data.FilePathPattern",
+      "OldNames": "openminds.core.FilePathPattern",
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.data.FileRepository",
       "OldNames": "openminds.core.FileRepository",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.data.FileRepositoryStructure",
+      "OldNames": "openminds.core.FileRepositoryStructure",
       "WarnOnOldName": false
     },
     {
@@ -48,6 +78,46 @@
     {
       "NewName": "openminds.core.data.License",
       "OldNames": "openminds.core.License",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.data.ServiceLink",
+      "OldNames": "openminds.core.ServiceLink",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.DOI",
+      "OldNames": "openminds.core.DOI",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.GRIDID",
+      "OldNames": "openminds.core.GRIDID",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.ISBN",
+      "OldNames": "openminds.core.ISBN",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.ORCID",
+      "OldNames": "openminds.core.ORCID",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.RORID",
+      "OldNames": "openminds.core.RORID",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.SWHID",
+      "OldNames": "openminds.core.SWHID",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.URL",
+      "OldNames": "openminds.core.URL",
       "WarnOnOldName": false
     },
     {
@@ -121,6 +191,21 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.research.BehavioralTask",
+      "OldNames": "openminds.core.BehavioralTask",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.research.NumericalParameter",
+      "OldNames": "openminds.core.NumericalParameter",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.research.ParameterSet",
+      "OldNames": "openminds.core.ParameterSet",
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.research.ParameterSetting",
       "OldNames": "openminds.core.ParameterSetting",
       "WarnOnOldName": false
@@ -133,6 +218,11 @@
     {
       "NewName": "openminds.core.research.ProtocolExecution",
       "OldNames": "openminds.core.ProtocolExecution",
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.research.StringParameter",
+      "OldNames": "openminds.core.StringParameter",
       "WarnOnOldName": false
     },
     {

@@ -30,6 +30,11 @@
         "group": "digitalIdentifier"
     },
     {
+        "name": "MRAcquisitionType",
+        "model": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "MRIPulseSequence",
         "model": "controlledTerms",
         "group": null

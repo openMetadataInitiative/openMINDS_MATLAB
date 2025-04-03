@@ -9,7 +9,7 @@ classdef ParameterSetting < openminds.abstract.Schema
 %   name        : (1,1) string
 %                 Enter the name of this parameter setting.
 %
-%   relevantFor : (1,1) <a href="matlab:help openminds.controlledterms.BehavioralTask" style="font-weight:bold">BehavioralTask</a>, <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>
+%   relevantFor : (1,1) <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>, <a href="matlab:help openminds.core.research.BehavioralTask" style="font-weight:bold">BehavioralTask</a>
 %                 Add the technique or behavioral task where this parameter setting is used in.
 %
 %   unit        : (1,1) <a href="matlab:help openminds.controlledterms.UnitOfMeasurement" style="font-weight:bold">UnitOfMeasurement</a>
@@ -50,7 +50,7 @@ classdef ParameterSetting < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'relevantFor', ["openminds.controlledterms.BehavioralTask", "openminds.controlledterms.Technique"], ...
+            'relevantFor', ["openminds.controlledterms.Technique", "openminds.core.research.BehavioralTask"], ...
             'unit', "openminds.controlledterms.UnitOfMeasurement" ...
         )
         EMBEDDED_PROPERTIES = struct(...

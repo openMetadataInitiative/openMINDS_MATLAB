@@ -6,8 +6,8 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
 %   IRI      : (1,1) string
 %              Enter the internationalized resource identifier (IRI) to this live paper resource item.
 %
-%   hostedBy : (1,1) <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>
-%              Add the host organization of this live paper resource item.
+%   hostedBy : (1,1) <a href="matlab:help openminds.controlledterms.Service" style="font-weight:bold">Service</a>, <a href="matlab:help openminds.core.actors.Organization" style="font-weight:bold">Organization</a>, <a href="matlab:help openminds.core.products.WebService" style="font-weight:bold">WebService</a>
+%              Add the web service or organization that hosts this live paper resource item.
 %
 %   isPartOf : (1,1) <a href="matlab:help openminds.publications.LivePaperSection" style="font-weight:bold">LivePaperSection</a>
 %              Add the live paper section this live paper resource item is part of.
@@ -21,8 +21,8 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
         % Enter the internationalized resource identifier (IRI) to this live paper resource item.
         IRI (1,1) string
 
-        % Add the host organization of this live paper resource item.
-        hostedBy (1,:) openminds.core.actors.Organization ...
+        % Add the web service or organization that hosts this live paper resource item.
+        hostedBy (1,:) openminds.internal.mixedtype.livepaperresourceitem.HostedBy ...
             {mustBeSpecifiedLength(hostedBy, 0, 1)}
 
         % Add the live paper section this live paper resource item is part of.
@@ -43,7 +43,7 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'hostedBy', "openminds.core.actors.Organization", ...
+            'hostedBy', ["openminds.controlledterms.Service", "openminds.core.actors.Organization", "openminds.core.products.WebService"], ...
             'isPartOf', "openminds.publications.LivePaperSection" ...
         )
         EMBEDDED_PROPERTIES = struct(...

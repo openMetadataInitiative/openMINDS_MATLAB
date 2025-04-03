@@ -1,4 +1,4 @@
-classdef BrainAtlasVersion < openminds.abstract.Schema
+classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
 %BrainAtlasVersion - No description available.
 %
 %   PROPERTIES:
@@ -27,7 +27,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
 %   digitalIdentifier      : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
 %                            Add the globally unique and persistent digital identifier of this research product version.
 %
-%   fullDocumentation      : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.miscellaneous.WebResource" style="font-weight:bold">WebResource</a>
+%   fullDocumentation      : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.miscellaneous.WebResource" style="font-weight:bold">WebResource</a>
 %                            Add the publication or file that acts as the full documentation of this research product version.
 %
 %   fullName               : (1,1) string
@@ -222,7 +222,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
             'coordinateSpace', "openminds.sands.atlas.CommonCoordinateSpaceVersion", ...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
-            'fullDocumentation', ["openminds.core.data.File", "openminds.core.digitalidentifier.DOI", "openminds.core.miscellaneous.WebResource"], ...
+            'fullDocumentation', ["openminds.core.data.File", "openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.miscellaneous.WebResource"], ...
             'funding', "openminds.core.miscellaneous.Funding", ...
             'isAlternativeVersionOf', "openminds.sands.atlas.BrainAtlasVersion", ...
             'isNewVersionOf', "openminds.sands.atlas.BrainAtlasVersion", ...
@@ -249,6 +249,17 @@ classdef BrainAtlasVersion < openminds.abstract.Schema
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end

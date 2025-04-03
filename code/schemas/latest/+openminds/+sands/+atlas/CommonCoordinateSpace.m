@@ -1,4 +1,4 @@
-classdef CommonCoordinateSpace < openminds.abstract.Schema
+classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
 %CommonCoordinateSpace - No description available.
 %
 %   PROPERTIES:
@@ -114,6 +114,17 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end

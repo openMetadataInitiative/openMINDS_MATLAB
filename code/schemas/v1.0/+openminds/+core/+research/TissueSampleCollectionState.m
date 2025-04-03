@@ -9,6 +9,9 @@ classdef TissueSampleCollectionState < openminds.abstract.Schema
 %   age               : (1,1) <a href="matlab:help openminds.core.miscellaneous.QuantitativeValue" style="font-weight:bold">QuantitativeValue</a>, <a href="matlab:help openminds.core.miscellaneous.QuantitativeValueRange" style="font-weight:bold">QuantitativeValueRange</a>
 %                       Add the age of the specimen (set) in this state.
 %
+%   lookupLabel       : (1,1) string
+%                       Enter a lookup label for this specimen (set) state that may help you to more easily find it again.
+%
 %   pathology         : (1,:) <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.DiseaseModel" style="font-weight:bold">DiseaseModel</a>
 %                       Add the pathology of the specimen (set) in this state.
 %
@@ -24,6 +27,9 @@ classdef TissueSampleCollectionState < openminds.abstract.Schema
         % Add the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Age ...
             {mustBeSpecifiedLength(age, 0, 1)}
+
+        % Enter a lookup label for this specimen (set) state that may help you to more easily find it again.
+        lookupLabel (1,1) string
 
         % Add the pathology of the specimen (set) in this state.
         pathology (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Pathology ...

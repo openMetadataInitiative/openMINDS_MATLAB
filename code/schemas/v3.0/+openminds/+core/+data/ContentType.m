@@ -1,4 +1,4 @@
-classdef ContentType < openminds.abstract.Schema
+classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
 %ContentType - Structured information on the content type of a file instance, bundle or repository.
 %
 %   PROPERTIES:
@@ -22,7 +22,7 @@ classdef ContentType < openminds.abstract.Schema
 %                      Enter the internationalized resource identifier (IRI) to the official registered media type (e.g., provided on IANA.org) matching this content type.
 %
 %   specification    : (1,1) string
-%                      Enter the internationalized resource identifier (IRI) to the offical specification of this content type. If no offical and public specification is available, leave blank and enter the specification under 'description'.
+%                      Enter the internationalized resource identifier (IRI) to the official specification of this content type. If no official and public specification is available, leave blank and enter the specification under 'description'.
 %
 %   synonym          : (1,:) string
 %                      Enter any synonyms of this content type.
@@ -50,7 +50,7 @@ classdef ContentType < openminds.abstract.Schema
         % Enter the internationalized resource identifier (IRI) to the official registered media type (e.g., provided on IANA.org) matching this content type.
         relatedMediaType (1,1) string
 
-        % Enter the internationalized resource identifier (IRI) to the offical specification of this content type. If no offical and public specification is available, leave blank and enter the specification under 'description'.
+        % Enter the internationalized resource identifier (IRI) to the official specification of this content type. If no official and public specification is available, leave blank and enter the specification under 'description'.
         specification (1,1) string
 
         % Enter any synonyms of this content type.
@@ -83,6 +83,17 @@ classdef ContentType < openminds.abstract.Schema
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end
