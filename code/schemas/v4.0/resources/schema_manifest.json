@@ -1,1092 +1,1092 @@
 [
     {
         "name": "DOI",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "GRIDID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "HANDLE",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "ISBN",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "ISSN",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "IdentifiersDotOrgID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "MRIPulseSequence",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "MRIWeighting",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "ORCID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "RORID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "RRID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "SWHID",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "UBERONParcellation",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "accountInformation",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "actionStatusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "affiliation",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "ageCategory",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "amountOfChemical",
-        "model": "chemicals",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "analysisTechnique",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "anatomicalAxesOrientation",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "anatomicalIdentificationType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "anatomicalPlane",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "anatomicalTargetPosition",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "annotationCriteriaType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "annotationType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "atlasAnnotation",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "atlasType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "auditoryStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "behavioralProtocol",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "biologicalOrder",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "biologicalProcess",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "biologicalSex",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "book",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "brainAtlas",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "brainAtlasVersion",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "breedingType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "cellCultureType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "cellPatching",
-        "model": "ephys",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "cellType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "channel",
-        "model": "ephys",
-        "group": "entity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "chapter",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "chemicalMixture",
-        "model": "chemicals",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "chemicalMixtureType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "chemicalSubstance",
-        "model": "chemicals",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "circle",
-        "model": "SANDS",
-        "group": "mathematicalShapes"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "colormap",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "comment",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "commonCoordinateSpace",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "commonCoordinateSpaceVersion",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "configuration",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "consortium",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "contactInformation",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "contentType",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "contentTypePattern",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "contribution",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "contributionType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "coordinatePoint",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "copyright",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "cranialWindowConstructionType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "cranialWindowPreparation",
-        "model": "specimenPrep",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "cranialWindowReinforcementType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "criteriaQualityType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "customAnatomicalEntity",
-        "model": "SANDS",
-        "group": "non-atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "customAnnotation",
-        "model": "SANDS",
-        "group": "non-atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "customCoordinateSpace",
-        "model": "SANDS",
-        "group": "non-atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "customPropertySet",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "dataAnalysis",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "dataCopy",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "dataType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "dataset",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "datasetVersion",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "deviceType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "differenceMeasure",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "disease",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "diseaseModel",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "educationalLevel",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "electricalStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "electrode",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "electrodeArray",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "electrodeArrayUsage",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "electrodePlacement",
-        "model": "ephys",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "electrodeUsage",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "ellipse",
-        "model": "SANDS",
-        "group": "mathematicalShapes"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "environment",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "ephysStimulus",
-        "model": "stimulation",
-        "group": "stimulus"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "ethicsAssessment",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "experimentalApproach",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "file",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileArchive",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileBundle",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileBundleGrouping",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "filePathPattern",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileRepository",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileRepositoryStructure",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "fileRepositoryType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "fileUsageRole",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "funding",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "genericComputation",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "geneticStrainType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "gustatoryStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "handedness",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "hardwareSystem",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "hash",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "language",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "laterality",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "launchConfiguration",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "learningResource",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "learningResourceType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "license",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "livePaper",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "livePaperResourceItem",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "livePaperSection",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "livePaperVersion",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "localFile",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "measuredQuantity",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "measuredSignalType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "measurement",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "metaDataModel",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "metaDataModelType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "metaDataModelVersion",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "model",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "modelAbstractionLevel",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "modelScope",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "modelValidation",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "modelVersion",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "molecularEntity",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "numericalProperty",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "olfactoryStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "operatingDevice",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "operatingSystem",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "opticalStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "optimization",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "organ",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "organismSubstance",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "organismSystem",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "organization",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "parcellationEntity",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "parcellationEntityVersion",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "parcellationTerminology",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "parcellationTerminologyVersion",
-        "model": "SANDS",
-        "group": "atlas"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "patchClampVariation",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "periodical",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "person",
-        "model": "core",
-        "group": "actors"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "pipette",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "pipetteUsage",
-        "model": "ephys",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "preparationType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "productAccessibility",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "productSource",
-        "model": "chemicals",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "programmingLanguage",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "project",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "propertyValueList",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "protocol",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "protocolExecution",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "publicationIssue",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "publicationVolume",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "qualitativeOverlap",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "qualitativeRelationAssessment",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "quantitativeRelationAssessment",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "quantitativeValue",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "quantitativeValueArray",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "quantitativeValueRange",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "recording",
-        "model": "ephys",
-        "group": "entity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "recordingActivity",
-        "model": "ephys",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "rectangle",
-        "model": "SANDS",
-        "group": "mathematicalShapes"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "researchProductGroup",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "scholarlyArticle",
-        "model": "publications",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "semanticDataType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "service",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "serviceLink",
-        "model": "core",
-        "group": "data"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "setup",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "setupType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "simulation",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "singleColor",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "slicingDevice",
-        "model": "specimenPrep",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "slicingDeviceUsage",
-        "model": "specimenPrep",
-        "group": "device"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "software",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "softwareAgent",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "softwareApplicationCategory",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "softwareFeature",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "softwareVersion",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "species",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "stimulationActivity",
-        "model": "stimulation",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "stimulationApproach",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "stimulationTechnique",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "stockNumber",
-        "model": "core",
-        "group": "digitalIdentifier"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "strain",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "stringProperty",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "subcellularEntity",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "subject",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "subjectAttribute",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "subjectGroup",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "subjectGroupState",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "subjectState",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tactileStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "technique",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "termSuggestion",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "terminology",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "tissueCulturePreparation",
-        "model": "specimenPrep",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSample",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSampleAttribute",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "tissueSampleCollection",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSampleCollectionState",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSampleSlicing",
-        "model": "specimenPrep",
-        "group": "activity"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSampleState",
-        "model": "core",
-        "group": "research"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "tissueSampleType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "typeOfUncertainty",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "unitOfMeasurement",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "validationTest",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "validationTestVersion",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "viewerSpecification",
-        "model": "SANDS",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "visualStimulusType",
-        "model": "controlledTerms",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "visualization",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "webResource",
-        "model": "core",
-        "group": "miscellaneous"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "webService",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "webServiceVersion",
-        "model": "core",
-        "group": "products"
+        "model": "_sources",
+        "group": null
     },
     {
         "name": "workflowExecution",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "workflowRecipe",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     },
     {
         "name": "workflowRecipeVersion",
-        "model": "computation",
+        "model": "_sources",
         "group": null
     }
 ]
