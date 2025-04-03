@@ -1,12 +1,13 @@
-% openMINDS (model schemas - v3.0)
-%   The schema folder contains MATLAB schemas for the following openMINDS models:
+% openMINDS metadata types - v3.0
+%   The types folder contains MATLAB classes for metadata types of the 
+%   following openMINDS modules:
 %
-%           chemicals - openminds.chemicals is a model.
-%         computation - openminds.computation is a model.
-%     controlledterms - openminds.controlledterms is a model.
-%                core - openminds.core is a model.
-%               ephys - openminds.ephys is a model.
-%        publications - openminds.publications is a model.
-%               sands - openminds.sands is a model.
-%        specimenprep - openminds.specimenprep is a model.
-%         stimulation - openminds.stimulation is a model.
+%           chemicals - openminds.chemicals is a module.
+%         computation - openminds.computation is a module.
+%     controlledterms - openminds.controlledterms is a module.
+%                core - openminds.core is a module.
+%               ephys - openminds.ephys is a module.
+%        publications - openminds.publications is a module.
+%               sands - openminds.sands is a module.
+%        specimenprep - openminds.specimenprep is a module.
+%         stimulation - openminds.stimulation is a module.
