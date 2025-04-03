@@ -1,5 +1,5 @@
 classdef (Abstract) ControlledTerm < openminds.abstract.Schema
-%ControlledTerm Abstract base class for schemas of the controlled terms model
+%ControlledTerm Abstract base class for metadata types of the controlled terms module
 
     properties (Access = protected)
         Required = {'name'}

@@ -17,5 +17,6 @@ function startup(version)
     
     % Run internal function that correctly configures the search path
     openminds.selectOpenMindsVersion(version)
-    fprintf('Added schemas for version "%s" to path\n', string(version))
+    fprintf(['Added version "%s" of the openMINDS metadata model to the ' ...
+             'search path.\n'], string(version))
 end

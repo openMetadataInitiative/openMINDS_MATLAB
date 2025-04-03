@@ -25,7 +25,7 @@ function downloadRepository(repositoryName, options)
     targetDirectory = openminds.internal.PathConstants.UserPath;
     targetDirectory = fullfile(targetDirectory, 'Repositories');
 
-    % - Create path for saving and download schemas
+    % - Create path for saving and download types
     zipFileName = webURI.Path(end);
 
     tempZipFilepath = tempname + "-" + zipFileName;
