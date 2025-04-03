@@ -1,0 +1,9 @@
+classdef IsPartOf < openminds.internal.abstract.LinkedCategory
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.core.data.FileBundle", ...
+            "openminds.core.data.FileRepository" ...
+        ]
+        IS_SCALAR = true
+    end
+end
