@@ -34,7 +34,7 @@ jobs:
 
       - name: Push to staging
         run: |
-          rm -rf staging/code/schemas/*
+          rm -rf staging/code/types/*
           rm -rf staging/code/mixedtypes/*
           rm -rf staging/code/enumerations/*
           cp -R target/* staging/code

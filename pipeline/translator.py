@@ -110,7 +110,7 @@ class MATLABSchemaBuilder(object):
 
 
     def _create_target_file_path(self) -> str:
-        target_root_path = os.path.join("target", "schemas", self.version)
+        target_root_path = os.path.join("target", "types", self.version)
         if self._schema_group_name:
             matlab_package_directory = os.path.join("+openminds", f"+{self._schema_model_name}".lower(), f"+{self._schema_group_name}".lower())
         else:
