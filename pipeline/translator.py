@@ -248,7 +248,6 @@ class MATLABSchemaBuilder(object):
         if has_controlled_instance:
             # Add the controlled instance mixin to the base class
             base_class = base_class + " & openminds.internal.mixin.HasControlledInstance"
-            print(base_class)
 
         if self._schema_model_name == "controlledTerms":
             instance_loader = InstanceLoader()
@@ -492,7 +491,8 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         elif "name" in property_names:
             return "str = obj.name;"        
         else:
-            warnings.warn(f"No display label method found for {schema_short_name}.")
+            #warnings.warn(f"No display label method found for {schema_short_name}.")
+            print(f"No display label method found for {schema_short_name}.")
             return "str = obj.createLabelForMissingLabelDefinition();"
 
 

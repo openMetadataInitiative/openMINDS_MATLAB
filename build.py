@@ -19,11 +19,6 @@ jinja_templates = initialise_jinja_templates()
 
 for schema_version in schema_loader.get_schema_versions():
 
-    # Skip build for version 1.0
-    if schema_version == "v1.0":
-        print("Skipping version v1.0")
-        continue
-
     # Step 3 - find all involved schemas for the current version
     schemas_file_paths = schema_loader.find_schemas(schema_version)
     # schemas_file_paths = [path for path in schemas_file_paths if "person" in path] # testing

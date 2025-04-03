@@ -307,6 +307,10 @@ def _get_template_variables(enum_type, schema_files, root_path):
 
         elif enum_type == "Types":
             matlab_class_name = _get_matlab_class_name(schema_info)
+            # Check if type name already exists 
+            if schema_info['type_name'] in [item['name'] for item in template_variable_list]:
+                # Skip if type name already exists
+                continue
             template_variable_list.append({'name': schema_info['type_name'], 'class_name': matlab_class_name})
         
     if enum_type == "Types":
