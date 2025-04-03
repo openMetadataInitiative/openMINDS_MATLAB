@@ -186,7 +186,7 @@ def save_resource_files(version, schema_path_list):
         
         # Remove redundant path information
         schema_path = schema_path.replace(root_directory, "")
-        schema_path = schema_path.replace(f"/_sources/openMINDS/types/{version}/", "")
+        schema_path = schema_path.replace(f"/_sources/openMINDS/schemas/{version}/", "")
         schema_path = schema_path.replace(".schema.omi.json", "")
         if schema_path[0] == "/":
             schema_path = schema_path[1:]
@@ -222,7 +222,7 @@ def save_resource_files(version, schema_path_list):
     manifest.sort(key=lambda x: x["name"])
     alias_json = {'Aliases': alias_list}
 
-    target_directory = f"target/schemas/{version}/resources"
+    target_directory = f"target/types/{version}/resources"
     os.makedirs(target_directory, exist_ok=True)
 
     # Save manifest to file as json
