@@ -532,7 +532,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         %   array of objects of that type, otherwise return instances as a
         %   mixed type array
 
-            instanceType = cellfun(@(c) class(c), values, 'uni', false);
+            if isa(values, 'cell')
+                instanceType = cellfun(@(c) class(c), values, 'uni', false);
+            else
+                instanceType = class(values);
+            end
             if numel( unique(instanceType) ) == 1
                 outValues = [values{:}];
             else
