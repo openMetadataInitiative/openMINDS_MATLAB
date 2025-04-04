@@ -346,7 +346,7 @@ classdef Collection < handle
             instances = obj.loadInstances(jsonldFilePaths);
             for i = 1:numel(instances)
                 if openminds.utility.isInstance(instances{i})
-                    obj.addNode(instances{i})
+                    obj.addNode(instances{i});
                 else
                     warning('todo')
                 end
@@ -410,6 +410,9 @@ classdef Collection < handle
             end
             
             obj.addSubNodes(instance)
+            if ~nargout
+                clear wasAdded
+            end
         end
         
         % Add sub node instances (linked types) to the Node container.
