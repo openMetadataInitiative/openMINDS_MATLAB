@@ -55,6 +55,10 @@ classdef Collection < handle
     properties (SetAccess = protected, Hidden)
         TypeMap (1,1) dictionary
     end
+
+    properties
+        LinkResolver
+    end
     
     methods % Constructor
         function obj = Collection(instance, options)
@@ -93,6 +97,7 @@ classdef Collection < handle
             arguments
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
+                options.LinkResolver (1,:) = []
             end
             
             % Initialize nodes
