@@ -435,10 +435,20 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
         function n = numArgumentsFromSubscript(obj, s, indexingContext)
             if (obj(1).isSubsForLinkedProperty(s) || obj(1).isSubsForEmbeddedProperty(s)) && numel(s) > 1
+                
+                % if strcmp(s(1).type, '.') && strcmp(s(2).type, '()')
+                %     %linkedTypeValues = builtin('subsref', obj, s(1:2));
+                %     linkedTypeValues = obj.subsref(s(1:2));
+                % 
+                % elseif strcmp(s(1).type, '.')
+                %     linkedTypeValues = builtin('subsref', obj, s(1));
+                % end
+
                 linkedTypeValues = builtin('subsref', obj, s(1));
-%                 if openminds.utility.isMixedInstance(linkedTypeValues)
-%                     linkedTypeValues = {linkedTypeValues.Instance};
-%                 end
+
+                if openminds.utility.isMixedInstance(linkedTypeValues)
+                    linkedTypeValues = {linkedTypeValues.Instance};
+                end
 
                 if strcmp( s(2).type, '()' ) && iscell(linkedTypeValues)
                     s(2).type = '{}';
@@ -535,10 +545,14 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             if isa(values, 'cell')
                 instanceType = cellfun(@(c) class(c), values, 'uni', false);
             else
-                instanceType = class(values);
+                instanceType = string(class(values));
             end
             if numel( unique(instanceType) ) == 1
-                outValues = [values{:}];
+                if iscell(values)
+                    outValues = [values{:}];
+                else
+                    outValues = values;
+                end
             else
                 outValues = feval(mixedTypeClassName, values);
             end

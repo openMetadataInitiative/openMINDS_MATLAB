@@ -95,6 +95,10 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                     % resolved externally in order to put a real instance in place.
                     obj(i).Instance = struct;
                     obj(i).Instance.id = instance{i}.at_id;
+                elseif isstruct(instance{i}) && isfield(instance{i}, 'x_id')
+                    % Variation of before
+                    obj(i).Instance = struct;
+                    obj(i).Instance.id = instance{i}.x_id;   
                 elseif isa(instance{i}, class(obj))
                     obj(i) = instance{i};
                 else

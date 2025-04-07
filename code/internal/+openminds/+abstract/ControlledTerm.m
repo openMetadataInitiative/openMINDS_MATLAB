@@ -62,10 +62,21 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     obj.deserializeFromName(varargin{1});
                 end
             elseif nargin == 1 && isstruct( varargin{1} ) && isfield(varargin{1}, 'at_id')
-                obj.deserializeFromName(varargin{1}.at_id);
+                numInstances = numel(varargin{1});
+                if numInstances > 1
+                    obj(numInstances) = feval(class(obj));
+                end
+                for i = 1:numel(varargin{1})
+                    obj(i).deserializeFromName(varargin{1}(i).at_id);
+                end
             else
+                [varargin, id] = obj.removeArg('id', varargin{:});
+                if ~isempty(id)
+                    obj.id = id; % Assign provided id
+                else
+                    obj.id = obj.generateInstanceId();
+                end
                 obj.assignPVPairs(varargin{:})
-                obj.id = obj.generateInstanceId();
             end
         end
     end

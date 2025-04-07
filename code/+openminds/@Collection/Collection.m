@@ -55,6 +55,10 @@ classdef Collection < handle
     properties (SetAccess = protected, Hidden)
         TypeMap (1,1) dictionary
     end
+
+    properties
+        LinkResolver
+    end
     
     methods % Constructor
         function obj = Collection(instance, options)
@@ -129,6 +133,16 @@ classdef Collection < handle
     methods
         function len = length(obj)
             len = numEntries(obj.Nodes);
+        end
+
+        function tf = isKey(obj, identifier)
+            tf = false;
+
+            if isConfigured(obj.Nodes)
+                if isKey(obj.Nodes, identifier)
+                    tf = true;
+                end
+            end
         end
         
         function add(obj, instance, options)
