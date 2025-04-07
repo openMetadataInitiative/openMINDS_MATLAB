@@ -97,6 +97,7 @@ classdef Collection < handle
             arguments
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
+                options.LinkResolver (1,:) = []
             end
             
             % Initialize nodes

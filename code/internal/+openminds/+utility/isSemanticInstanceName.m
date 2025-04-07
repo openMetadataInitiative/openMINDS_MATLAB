@@ -32,8 +32,8 @@ function tf = isSemanticInstanceName(name)
 
     URI = matlab.net.URI(name);
     
-    isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == ...
-        openminds.constant.BaseURI;
+    isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI("latest") ...
+        || sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI(3);
     
     URIPath = URI.Path;
     URIPath(URIPath=="")=[];

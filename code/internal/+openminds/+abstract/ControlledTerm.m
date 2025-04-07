@@ -98,7 +98,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
 
             import openminds.internal.getControlledInstance
             import openminds.internal.utility.getSchemaName
-            
+            instanceName = char(instanceName);
             schemaName = getSchemaName(class(obj));
 
             if openminds.utility.isSemanticInstanceName(instanceName)
