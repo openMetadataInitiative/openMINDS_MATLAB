@@ -101,10 +101,15 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             instanceName = char(instanceName);
             schemaName = getSchemaName(class(obj));
 
-            if openminds.utility.isSemanticInstanceName(instanceName)
-                 [~, instanceName] = openminds.utility.parseAtID(instanceName);
+            if openminds.utility.isIRI(instanceName)
+                if openminds.utility.isSemanticInstanceName(instanceName)
+                     [~, instanceName] = openminds.utility.parseAtID(instanceName);
+                else
+                    obj.id = instanceName;
+                    return
+                end
             end
-
+            
             [instanceName, instanceNameOrig] = deal(instanceName);
             if ~any(strcmp(obj.CONTROLLED_INSTANCES, instanceName))
                 % Try to make a valid name
@@ -123,7 +128,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     return
                 end
             else
-                error('No matching instances were found for name "%s"', instanceName)
+                warning('No matching instances were found for name "%s"', instanceName)
+                return
                 % error('Deserialization from user instance is not implemented yet')
             end
             propNames = {'at_id', 'name', 'definition', 'description', 'interlexIdentifier', 'knowledgeSpaceLink', 'preferredOntologyIdentifier', 'synonym'};
