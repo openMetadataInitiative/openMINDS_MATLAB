@@ -98,7 +98,12 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
                 elseif isstruct(instance{i}) && isfield(instance{i}, 'x_id')
                     % Variation of before
                     obj(i).Instance = struct;
-                    obj(i).Instance.id = instance{i}.x_id;   
+                    obj(i).Instance.id = instance{i}.x_id;
+                elseif isstruct(instance{i}) && isfield(instance{i}, 'at_type')
+                    % Embedded type as structure
+                    obj(i).Instance = openminds.fromTypeName(instance{i}.at_type);
+                    obj(i).Instance = obj(i).Instance.fromStruct(instance{i});
+
                 elseif isa(instance{i}, class(obj))
                     obj(i) = instance{i};
                 else
@@ -230,7 +235,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
         function displayScalarObject(obj)
             % This should not happen...
             disp(obj.Instance)
-            warning('Displaying scalar mixed type object')
+            warning('Displaying scalar mixed type object. This is a non-critical bug.')
         end
 
         function displayNonScalarObject(obj)

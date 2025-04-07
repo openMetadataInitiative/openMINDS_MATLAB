@@ -1,5 +1,6 @@
 classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & ...
-                  openminds.internal.mixin.CustomInstanceDisplay & openminds.internal.mixin.StructAdapter
+                  openminds.internal.mixin.CustomInstanceDisplay & ...
+                  openminds.internal.mixin.StructAdapter
 % Schema Abstract base class shared by all concrete Schema classes
 
 % Todo:
@@ -29,7 +30,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         LINKED_PROPERTIES struct %todo: name and classname, not openminds uri
         EMBEDDED_PROPERTIES struct
     end
-
+    
     events % Todo: Remove??
         InstanceChanged
         PropertyWithLinkedInstanceChanged
@@ -428,7 +429,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     varargout = cell(1, numOutputs);
                     [varargout{:}] = builtin('subsref', obj, subs);
                 else
-                    builtin('subsref', obj, subs)
+                    obj = builtin('subsref', obj, subs);
                 end
             end
         end
