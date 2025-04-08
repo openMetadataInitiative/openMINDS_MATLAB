@@ -41,4 +41,10 @@ classdef OpticalStimulusType < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.OpticalStimulusType.CONTROLLED_INSTANCES';
+        end
+    end
 end
