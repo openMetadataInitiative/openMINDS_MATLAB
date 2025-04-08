@@ -35,4 +35,10 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.{{ class_name }}.CONTROLLED_INSTANCES';
+        end
+    end
 end
