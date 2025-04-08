@@ -42,4 +42,10 @@ classdef AnnotationCriteriaType < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.AnnotationCriteriaType.CONTROLLED_INSTANCES';
+        end
+    end
 end

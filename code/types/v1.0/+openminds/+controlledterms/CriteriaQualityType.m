@@ -31,4 +31,10 @@ classdef CriteriaQualityType < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.CriteriaQualityType.CONTROLLED_INSTANCES';
+        end
+    end
 end
