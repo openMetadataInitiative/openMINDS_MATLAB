@@ -48,4 +48,10 @@ classdef VisualStimulusType < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.VisualStimulusType.CONTROLLED_INSTANCES';
+        end
+    end
 end

@@ -53,4 +53,10 @@ classdef Service < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.Service.CONTROLLED_INSTANCES';
+        end
+    end
 end

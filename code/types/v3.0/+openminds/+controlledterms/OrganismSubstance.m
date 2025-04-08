@@ -44,4 +44,10 @@ classdef OrganismSubstance < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.OrganismSubstance.CONTROLLED_INSTANCES';
+        end
+    end
 end

@@ -31,4 +31,10 @@ classdef DatasetType < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.DatasetType.CONTROLLED_INSTANCES';
+        end
+    end
 end
