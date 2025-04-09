@@ -1,5 +1,7 @@
 function versionNum = getModelVersion(outputType)
     
+    % Todo: save version number in prefs/singleton?
+
     arguments
         % outputType - char or VersionNumber. char is default to keep
         % backwards compatibility. Todo: Deprecate char option
@@ -7,19 +9,27 @@ function versionNum = getModelVersion(outputType)
             {mustBeMember(outputType, ["char", "VersionNumber"])} = "char"
     end
 
-    typeFolder = fullfile(openminds.internal.rootpath, 'types/');
-    pathSplit = strsplit(path, pathsep);
+    persistent lastTic cachedVersionNumber
+    if isempty(lastTic); lastTic = uint64(0); end
 
-    matchedIdx = find(contains(pathSplit, typeFolder));
-
-    if numel(matchedIdx) > 1
-        warning('Multiple openMINDS model versions are present on the search path.');
+    if toc(lastTic) > 1
+        typeFolder = fullfile(openminds.internal.rootpath, 'types/');
+        pathSplit = strsplit(path, pathsep);
+    
+        matchedIdx = find(contains(pathSplit, typeFolder));
+    
+        if numel(matchedIdx) > 1
+            warning('Multiple openMINDS model versions are present on the search path.');
+        end
+    
+        versionName = strrep(pathSplit{matchedIdx(1)}, typeFolder, '');
+        cachedVersionNumber = openminds.internal.utility.VersionNumber(versionName);
+        cachedVersionNumber.Format = "vX.Y";
+        lastTic = tic();
     end
+    versionNum = cachedVersionNumber;
 
-    versionNum = strrep(pathSplit{matchedIdx(1)}, typeFolder, '');
-
-    if outputType == "VersionNumber"
-        versionNum = openminds.internal.utility.VersionNumber(versionNum);
-        versionNum.Format = "vX.Y";
+    if outputType == "char"
+        versionNum = char(versionNum);
     end
 end

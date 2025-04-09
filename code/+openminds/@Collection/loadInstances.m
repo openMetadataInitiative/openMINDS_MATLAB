@@ -121,8 +121,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
                 else
                     % Check if instance is a controlled instance
                     if startsWith(instanceId, "https://openminds.ebrains.eu/instances/")
-                        [schemaName, instanceName] = openminds.utility.parseAtID(instanceId);
-                        resolvedInstances{j} = openminds.internal.getControlledInstance(instanceName, schemaName);
+                        resolvedInstances{j} = openminds.instanceFromIRI(instanceId);
                     end
                 end
             end

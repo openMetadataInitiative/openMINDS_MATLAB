@@ -59,6 +59,10 @@ classdef Collection < handle
         % efficiently extract instances of a specific type.
         TypeMap (1,1) dictionary
     end
+
+    properties
+        LinkResolver
+    end
     
     methods % Constructor
         function obj = Collection(instance, options)
@@ -97,6 +101,7 @@ classdef Collection < handle
             arguments
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
+                options.LinkResolver (1,:) = []
             end
 
             % Initialize nodes
@@ -133,6 +138,16 @@ classdef Collection < handle
     methods
         function len = length(obj)
             len = numEntries(obj.Nodes);
+        end
+
+        function tf = isKey(obj, identifier)
+            tf = false;
+
+            if isConfigured(obj.Nodes)
+                if isKey(obj.Nodes, identifier)
+                    tf = true;
+                end
+            end
         end
         
         function add(obj, instance, options)
