@@ -241,6 +241,8 @@ classdef Collection < handle
             end
             
             instanceKeys = obj.getInstanceKeysForType(type);
+            if isempty(instanceKeys); return; end
+            
             instances = obj.Nodes(instanceKeys);
             instances = [instances{:}]; % Create non-cell array
 
@@ -443,25 +445,29 @@ classdef Collection < handle
         function instanceKeys = getInstanceKeysForType(obj, instanceType)
         % getInstanceKeysForType Get all ids for instances of a given type
 
-            typeKeys = obj.TypeMap.keys;
-
-            isMatch = strcmp(typeKeys, instanceType.ClassName);
-            if any(isMatch)
-                if isMATLABReleaseOlderThan("R2023b")
-                    instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+            if isConfigured(obj.TypeMap)
+                typeKeys = obj.TypeMap.keys;
+    
+                isMatch = strcmp(typeKeys, instanceType.ClassName);
+                if any(isMatch)
+                    if isMATLABReleaseOlderThan("R2023b")
+                        instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+                    else
+                        instanceKeys = obj.TypeMap{typeKeys(isMatch)};
+                    end
                 else
-                    instanceKeys = obj.TypeMap{typeKeys(isMatch)};
+                    instanceKeys = {};
+                    return
                 end
+                
+                existingKeys = obj.Nodes.keys();
+                
+                % Sanity check, make sure all keys exist in Nodes dictionary
+                assert( all( ismember( instanceKeys, existingKeys ) ), ...
+                    'TypeMap has too many keys' )
             else
-                instanceKeys = {};
-                return
+                instanceKeys = string.empty;
             end
-            
-            existingKeys = obj.Nodes.keys();
-            
-            % Sanity check, make sure all keys exist in Nodes dictionary
-            assert( all( ismember( instanceKeys, existingKeys ) ), ...
-                'TypeMap has too many keys' )
         end
 
         function refreshTypeKeys(obj, instanceType)
