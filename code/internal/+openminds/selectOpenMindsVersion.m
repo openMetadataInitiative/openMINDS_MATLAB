@@ -1,5 +1,5 @@
 function selectOpenMindsVersion(versionNumber)
-% selectOpenMindsVersion - Select and "import" a specific version of openMINDS model.
+% selectOpenMindsVersion - Select and "import" a specific version of the openMINDS model.
 %
 % This function allows you to select a specific version of the openMINDS
 % metadata model and load its components (classes for metadata types and mixed 
