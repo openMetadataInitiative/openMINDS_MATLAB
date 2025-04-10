@@ -327,8 +327,8 @@ classdef Collection < handle
 
             if numel(filePath) == 1 && isfolder(filePath{1})
                 rootPath = filePath{1};
-                folderPaths = openminds.internal.utility.dir.listSubDir(rootPath, '', {}, inf);
-                jsonldFilePaths = openminds.internal.utility.dir.listFiles(folderPaths, '.jsonld');
+                jsonldListing = dir(fullfile(rootPath, '**', '*.jsonld'));
+                jsonldFilePaths = fullfile({jsonldListing.folder}, {jsonldListing.name});
             else
                 jsonldFilePaths = filePath;
             end
