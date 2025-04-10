@@ -12,8 +12,9 @@ function testToolbox(varargin)
     codeFolder = fullfile(projectRootDirectory, "code");
     codecoverageFileList = getCodeCoverageFileList(codeFolder); % local function
 
-    warnState = warning('off', 'MATLAB:alias:DuplicateAlias');
-    warningCleanup = onCleanup(@() warning(warnState));
+    warnStateA = warning('off', 'MATLAB:alias:DuplicateAlias');
+    warnStateB = warning('off', 'MATLAB:alias:MissingNewClass');
+    warningCleanup = onCleanup(@() warning([warnStateA, warnStateB]));
 
     if strcmp(getenv('GITHUB_ACTIONS'), 'true')
         verbosity = "Terse";
