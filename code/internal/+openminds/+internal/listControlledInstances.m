@@ -17,7 +17,7 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
 %
 %   Input Arguments:
 %       schemaType - openminds.enum.Types (default will list all)
-%       moduleName - openminds.enum.Models (default will list all)
+%       moduleName - openminds.enum.Modules (default will list all)
 %
 %   Output Arguments:
 %       instances - Table
@@ -29,7 +29,7 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
 
     arguments
         schemaType (1,:) openminds.enum.Types = openminds.enum.Types.empty
-        moduleName (1,:) openminds.enum.Models = openminds.enum.Models.empty
+        moduleName (1,:) openminds.enum.Modules = openminds.enum.Modules.empty
         instanceName (1,1) string = missing
     end
 
