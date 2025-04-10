@@ -1,1097 +1,1097 @@
 [
     {
         "name": "DOI",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "GRIDID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "HANDLE",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "ISBN",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "ISSN",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "IdentifiersDotOrgID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "MRAcquisitionType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "MRIPulseSequence",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "MRIWeighting",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "ORCID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "RORID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "RRID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "SWHID",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "UBERONParcellation",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "accountInformation",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "actionStatusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "affiliation",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "ageCategory",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "amountOfChemical",
-        "model": "chemicals",
+        "module": "chemicals",
         "group": null
     },
     {
         "name": "analysisTechnique",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "anatomicalAxesOrientation",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "anatomicalIdentificationType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "anatomicalPlane",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "anatomicalTargetPosition",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "annotationCriteriaType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "annotationType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "atlasAnnotation",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "atlasType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "auditoryStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "behavioralProtocol",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "biologicalOrder",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "biologicalProcess",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "biologicalSex",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "book",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "brainAtlas",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "brainAtlasVersion",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "breedingType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "cellCultureType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "cellPatching",
-        "model": "ephys",
+        "module": "ephys",
         "group": "activity"
     },
     {
         "name": "cellType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "channel",
-        "model": "ephys",
+        "module": "ephys",
         "group": "entity"
     },
     {
         "name": "chapter",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "chemicalMixture",
-        "model": "chemicals",
+        "module": "chemicals",
         "group": null
     },
     {
         "name": "chemicalMixtureType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "chemicalSubstance",
-        "model": "chemicals",
+        "module": "chemicals",
         "group": null
     },
     {
         "name": "circle",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "mathematicalShapes"
     },
     {
         "name": "colormap",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "comment",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "commonCoordinateSpace",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "commonCoordinateSpaceVersion",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "configuration",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "consortium",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "contactInformation",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "contentType",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "contentTypePattern",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "contribution",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "contributionType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "coordinatePoint",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "copyright",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "cranialWindowConstructionType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "cranialWindowPreparation",
-        "model": "specimenPrep",
+        "module": "specimenPrep",
         "group": "activity"
     },
     {
         "name": "cranialWindowReinforcementType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "criteriaQualityType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "customAnatomicalEntity",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "non-atlas"
     },
     {
         "name": "customAnnotation",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "non-atlas"
     },
     {
         "name": "customCoordinateSpace",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "non-atlas"
     },
     {
         "name": "customPropertySet",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "dataAnalysis",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "dataCopy",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "dataType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "dataset",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "datasetVersion",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "deviceType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "differenceMeasure",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "disease",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "diseaseModel",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "educationalLevel",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "electricalStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "electrode",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "electrodeArray",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "electrodeArrayUsage",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "electrodePlacement",
-        "model": "ephys",
+        "module": "ephys",
         "group": "activity"
     },
     {
         "name": "electrodeUsage",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "ellipse",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "mathematicalShapes"
     },
     {
         "name": "environment",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "ephysStimulus",
-        "model": "stimulation",
+        "module": "stimulation",
         "group": "stimulus"
     },
     {
         "name": "ethicsAssessment",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "experimentalApproach",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "file",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileArchive",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileBundle",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileBundleGrouping",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "filePathPattern",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileRepository",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileRepositoryStructure",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "fileRepositoryType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "fileUsageRole",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "funding",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "genericComputation",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "geneticStrainType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "gustatoryStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "handedness",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "hardwareSystem",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "hash",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "language",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "laterality",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "launchConfiguration",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "learningResource",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "learningResourceType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "license",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "livePaper",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "livePaperResourceItem",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "livePaperSection",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "livePaperVersion",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "localFile",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "measuredQuantity",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "measuredSignalType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "measurement",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "metaDataModel",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "metaDataModelType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "metaDataModelVersion",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "model",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "modelAbstractionLevel",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "modelScope",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "modelValidation",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "modelVersion",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "molecularEntity",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "numericalProperty",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "olfactoryStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "operatingDevice",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "operatingSystem",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "opticalStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "optimization",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "organ",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "organismSubstance",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "organismSystem",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "organization",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "parcellationEntity",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "parcellationEntityVersion",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "parcellationTerminology",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "parcellationTerminologyVersion",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "atlas"
     },
     {
         "name": "patchClampVariation",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "periodical",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "person",
-        "model": "core",
+        "module": "core",
         "group": "actors"
     },
     {
         "name": "pipette",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "pipetteUsage",
-        "model": "ephys",
+        "module": "ephys",
         "group": "device"
     },
     {
         "name": "preparationType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "productAccessibility",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "productSource",
-        "model": "chemicals",
+        "module": "chemicals",
         "group": null
     },
     {
         "name": "programmingLanguage",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "project",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "propertyValueList",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "protocol",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "protocolExecution",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "publicationIssue",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "publicationVolume",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "qualitativeOverlap",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "qualitativeRelationAssessment",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "quantitativeRelationAssessment",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "quantitativeValue",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "quantitativeValueArray",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "quantitativeValueRange",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "recording",
-        "model": "ephys",
+        "module": "ephys",
         "group": "entity"
     },
     {
         "name": "recordingActivity",
-        "model": "ephys",
+        "module": "ephys",
         "group": "activity"
     },
     {
         "name": "rectangle",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "mathematicalShapes"
     },
     {
         "name": "researchProductGroup",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "scholarlyArticle",
-        "model": "publications",
+        "module": "publications",
         "group": null
     },
     {
         "name": "semanticDataType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "service",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "serviceLink",
-        "model": "core",
+        "module": "core",
         "group": "data"
     },
     {
         "name": "setup",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "setupType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "simulation",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "singleColor",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "slicingDevice",
-        "model": "specimenPrep",
+        "module": "specimenPrep",
         "group": "device"
     },
     {
         "name": "slicingDeviceUsage",
-        "model": "specimenPrep",
+        "module": "specimenPrep",
         "group": "device"
     },
     {
         "name": "software",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "softwareAgent",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "softwareApplicationCategory",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "softwareFeature",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "softwareVersion",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "species",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "stimulationActivity",
-        "model": "stimulation",
+        "module": "stimulation",
         "group": "activity"
     },
     {
         "name": "stimulationApproach",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "stimulationTechnique",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "stockNumber",
-        "model": "core",
+        "module": "core",
         "group": "digitalIdentifier"
     },
     {
         "name": "strain",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "stringProperty",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "subcellularEntity",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "subject",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "subjectAttribute",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "subjectGroup",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "subjectGroupState",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "subjectState",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "tactileStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "technique",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "termSuggestion",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "terminology",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "tissueCulturePreparation",
-        "model": "specimenPrep",
+        "module": "specimenPrep",
         "group": "activity"
     },
     {
         "name": "tissueSample",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "tissueSampleAttribute",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "tissueSampleCollection",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "tissueSampleCollectionState",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "tissueSampleSlicing",
-        "model": "specimenPrep",
+        "module": "specimenPrep",
         "group": "activity"
     },
     {
         "name": "tissueSampleState",
-        "model": "core",
+        "module": "core",
         "group": "research"
     },
     {
         "name": "tissueSampleType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "typeOfUncertainty",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "unitOfMeasurement",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "validationTest",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "validationTestVersion",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "viewerSpecification",
-        "model": "SANDS",
+        "module": "SANDS",
         "group": "miscellaneous"
     },
     {
         "name": "visualStimulusType",
-        "model": "controlledTerms",
+        "module": "controlledTerms",
         "group": null
     },
     {
         "name": "visualization",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "webResource",
-        "model": "core",
+        "module": "core",
         "group": "miscellaneous"
     },
     {
         "name": "webService",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "webServiceVersion",
-        "model": "core",
+        "module": "core",
         "group": "products"
     },
     {
         "name": "workflowExecution",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "workflowRecipe",
-        "model": "computation",
+        "module": "computation",
         "group": null
     },
     {
         "name": "workflowRecipeVersion",
-        "model": "computation",
+        "module": "computation",
         "group": null
     }
 ]
