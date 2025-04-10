@@ -2,532 +2,850 @@
   "Aliases": [
     {
       "NewName": "openminds.sands.atlas.AtlasAnnotation",
-      "OldNames": "openminds.sands.AtlasAnnotation",
+      "OldNames": [
+        "openminds.sands.AtlasAnnotation",
+        "openminds.AtlasAnnotation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.BrainAtlas",
-      "OldNames": "openminds.sands.BrainAtlas",
+      "OldNames": [
+        "openminds.sands.BrainAtlas",
+        "openminds.BrainAtlas"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.BrainAtlasVersion",
-      "OldNames": "openminds.sands.BrainAtlasVersion",
+      "OldNames": [
+        "openminds.sands.BrainAtlasVersion",
+        "openminds.BrainAtlasVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.CommonCoordinateSpace",
-      "OldNames": "openminds.sands.CommonCoordinateSpace",
+      "OldNames": [
+        "openminds.sands.CommonCoordinateSpace",
+        "openminds.CommonCoordinateSpace"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.CommonCoordinateSpaceVersion",
-      "OldNames": "openminds.sands.CommonCoordinateSpaceVersion",
+      "OldNames": [
+        "openminds.sands.CommonCoordinateSpaceVersion",
+        "openminds.CommonCoordinateSpaceVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.ParcellationEntity",
-      "OldNames": "openminds.sands.ParcellationEntity",
+      "OldNames": [
+        "openminds.sands.ParcellationEntity",
+        "openminds.ParcellationEntity"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.ParcellationEntityVersion",
-      "OldNames": "openminds.sands.ParcellationEntityVersion",
+      "OldNames": [
+        "openminds.sands.ParcellationEntityVersion",
+        "openminds.ParcellationEntityVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.ParcellationTerminology",
-      "OldNames": "openminds.sands.ParcellationTerminology",
+      "OldNames": [
+        "openminds.sands.ParcellationTerminology",
+        "openminds.ParcellationTerminology"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.atlas.ParcellationTerminologyVersion",
-      "OldNames": "openminds.sands.ParcellationTerminologyVersion",
+      "OldNames": [
+        "openminds.sands.ParcellationTerminologyVersion",
+        "openminds.ParcellationTerminologyVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.mathematicalshapes.Circle",
-      "OldNames": "openminds.sands.Circle",
+      "OldNames": [
+        "openminds.sands.Circle",
+        "openminds.Circle"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.mathematicalshapes.Ellipse",
-      "OldNames": "openminds.sands.Ellipse",
+      "OldNames": [
+        "openminds.sands.Ellipse",
+        "openminds.Ellipse"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.mathematicalshapes.Rectangle",
-      "OldNames": "openminds.sands.Rectangle",
+      "OldNames": [
+        "openminds.sands.Rectangle",
+        "openminds.Rectangle"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.AnatomicalTargetPosition",
-      "OldNames": "openminds.sands.AnatomicalTargetPosition",
+      "OldNames": [
+        "openminds.sands.AnatomicalTargetPosition",
+        "openminds.AnatomicalTargetPosition"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.CoordinatePoint",
-      "OldNames": "openminds.sands.CoordinatePoint",
+      "OldNames": [
+        "openminds.sands.CoordinatePoint",
+        "openminds.CoordinatePoint"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.QualitativeRelationAssessment",
-      "OldNames": "openminds.sands.QualitativeRelationAssessment",
+      "OldNames": [
+        "openminds.sands.QualitativeRelationAssessment",
+        "openminds.QualitativeRelationAssessment"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.QuantitativeRelationAssessment",
-      "OldNames": "openminds.sands.QuantitativeRelationAssessment",
+      "OldNames": [
+        "openminds.sands.QuantitativeRelationAssessment",
+        "openminds.QuantitativeRelationAssessment"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.SingleColor",
-      "OldNames": "openminds.sands.SingleColor",
+      "OldNames": [
+        "openminds.sands.SingleColor",
+        "openminds.SingleColor"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.miscellaneous.ViewerSpecification",
-      "OldNames": "openminds.sands.ViewerSpecification",
+      "OldNames": [
+        "openminds.sands.ViewerSpecification",
+        "openminds.ViewerSpecification"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.nonatlas.CustomAnatomicalEntity",
-      "OldNames": "openminds.sands.CustomAnatomicalEntity",
+      "OldNames": [
+        "openminds.sands.CustomAnatomicalEntity",
+        "openminds.CustomAnatomicalEntity"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.nonatlas.CustomAnnotation",
-      "OldNames": "openminds.sands.CustomAnnotation",
+      "OldNames": [
+        "openminds.sands.CustomAnnotation",
+        "openminds.CustomAnnotation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.sands.nonatlas.CustomCoordinateSpace",
-      "OldNames": "openminds.sands.CustomCoordinateSpace",
+      "OldNames": [
+        "openminds.sands.CustomCoordinateSpace",
+        "openminds.CustomCoordinateSpace"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.AccountInformation",
-      "OldNames": "openminds.core.AccountInformation",
+      "OldNames": [
+        "openminds.core.AccountInformation",
+        "openminds.AccountInformation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.Affiliation",
-      "OldNames": "openminds.core.Affiliation",
+      "OldNames": [
+        "openminds.core.Affiliation",
+        "openminds.Affiliation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.Consortium",
-      "OldNames": "openminds.core.Consortium",
+      "OldNames": [
+        "openminds.core.Consortium",
+        "openminds.Consortium"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.ContactInformation",
-      "OldNames": "openminds.core.ContactInformation",
+      "OldNames": [
+        "openminds.core.ContactInformation",
+        "openminds.ContactInformation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.Contribution",
-      "OldNames": "openminds.core.Contribution",
+      "OldNames": [
+        "openminds.core.Contribution",
+        "openminds.Contribution"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.Organization",
-      "OldNames": "openminds.core.Organization",
+      "OldNames": [
+        "openminds.core.Organization",
+        "openminds.Organization"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.actors.Person",
-      "OldNames": "openminds.core.Person",
+      "OldNames": [
+        "openminds.core.Person",
+        "openminds.Person"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.ContentType",
-      "OldNames": "openminds.core.ContentType",
+      "OldNames": [
+        "openminds.core.ContentType",
+        "openminds.ContentType"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.ContentTypePattern",
-      "OldNames": "openminds.core.ContentTypePattern",
+      "OldNames": [
+        "openminds.core.ContentTypePattern",
+        "openminds.ContentTypePattern"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.Copyright",
-      "OldNames": "openminds.core.Copyright",
+      "OldNames": [
+        "openminds.core.Copyright",
+        "openminds.Copyright"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.File",
-      "OldNames": "openminds.core.File",
+      "OldNames": [
+        "openminds.core.File",
+        "openminds.File"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.FileArchive",
-      "OldNames": "openminds.core.FileArchive",
+      "OldNames": [
+        "openminds.core.FileArchive",
+        "openminds.FileArchive"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.FileBundle",
-      "OldNames": "openminds.core.FileBundle",
+      "OldNames": [
+        "openminds.core.FileBundle",
+        "openminds.FileBundle"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.FilePathPattern",
-      "OldNames": "openminds.core.FilePathPattern",
+      "OldNames": [
+        "openminds.core.FilePathPattern",
+        "openminds.FilePathPattern"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.FileRepository",
-      "OldNames": "openminds.core.FileRepository",
+      "OldNames": [
+        "openminds.core.FileRepository",
+        "openminds.FileRepository"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.FileRepositoryStructure",
-      "OldNames": "openminds.core.FileRepositoryStructure",
+      "OldNames": [
+        "openminds.core.FileRepositoryStructure",
+        "openminds.FileRepositoryStructure"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.Hash",
-      "OldNames": "openminds.core.Hash",
+      "OldNames": [
+        "openminds.core.Hash",
+        "openminds.Hash"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.License",
-      "OldNames": "openminds.core.License",
+      "OldNames": [
+        "openminds.core.License",
+        "openminds.License"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.Measurement",
-      "OldNames": "openminds.core.Measurement",
+      "OldNames": [
+        "openminds.core.Measurement",
+        "openminds.Measurement"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.data.ServiceLink",
-      "OldNames": "openminds.core.ServiceLink",
+      "OldNames": [
+        "openminds.core.ServiceLink",
+        "openminds.ServiceLink"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.DOI",
-      "OldNames": "openminds.core.DOI",
+      "OldNames": [
+        "openminds.core.DOI",
+        "openminds.DOI"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.GRIDID",
-      "OldNames": "openminds.core.GRIDID",
+      "OldNames": [
+        "openminds.core.GRIDID",
+        "openminds.GRIDID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.HANDLE",
-      "OldNames": "openminds.core.HANDLE",
+      "OldNames": [
+        "openminds.core.HANDLE",
+        "openminds.HANDLE"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.ISBN",
-      "OldNames": "openminds.core.ISBN",
+      "OldNames": [
+        "openminds.core.ISBN",
+        "openminds.ISBN"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.ISSN",
-      "OldNames": "openminds.core.ISSN",
+      "OldNames": [
+        "openminds.core.ISSN",
+        "openminds.ISSN"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.IdentifiersDotOrgID",
-      "OldNames": "openminds.core.IdentifiersDotOrgID",
+      "OldNames": [
+        "openminds.core.IdentifiersDotOrgID",
+        "openminds.IdentifiersDotOrgID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.ORCID",
-      "OldNames": "openminds.core.ORCID",
+      "OldNames": [
+        "openminds.core.ORCID",
+        "openminds.ORCID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.RORID",
-      "OldNames": "openminds.core.RORID",
+      "OldNames": [
+        "openminds.core.RORID",
+        "openminds.RORID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.RRID",
-      "OldNames": "openminds.core.RRID",
+      "OldNames": [
+        "openminds.core.RRID",
+        "openminds.RRID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.SWHID",
-      "OldNames": "openminds.core.SWHID",
+      "OldNames": [
+        "openminds.core.SWHID",
+        "openminds.SWHID"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.digitalidentifier.StockNumber",
-      "OldNames": "openminds.core.StockNumber",
+      "OldNames": [
+        "openminds.core.StockNumber",
+        "openminds.StockNumber"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.Comment",
-      "OldNames": "openminds.core.Comment",
+      "OldNames": [
+        "openminds.core.Comment",
+        "openminds.Comment"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.Funding",
-      "OldNames": "openminds.core.Funding",
+      "OldNames": [
+        "openminds.core.Funding",
+        "openminds.Funding"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.QuantitativeValue",
-      "OldNames": "openminds.core.QuantitativeValue",
+      "OldNames": [
+        "openminds.core.QuantitativeValue",
+        "openminds.QuantitativeValue"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.QuantitativeValueArray",
-      "OldNames": "openminds.core.QuantitativeValueArray",
+      "OldNames": [
+        "openminds.core.QuantitativeValueArray",
+        "openminds.QuantitativeValueArray"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.QuantitativeValueRange",
-      "OldNames": "openminds.core.QuantitativeValueRange",
+      "OldNames": [
+        "openminds.core.QuantitativeValueRange",
+        "openminds.QuantitativeValueRange"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.ResearchProductGroup",
-      "OldNames": "openminds.core.ResearchProductGroup",
+      "OldNames": [
+        "openminds.core.ResearchProductGroup",
+        "openminds.ResearchProductGroup"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.miscellaneous.WebResource",
-      "OldNames": "openminds.core.WebResource",
+      "OldNames": [
+        "openminds.core.WebResource",
+        "openminds.WebResource"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.Dataset",
-      "OldNames": "openminds.core.Dataset",
+      "OldNames": [
+        "openminds.core.Dataset",
+        "openminds.Dataset"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.DatasetVersion",
-      "OldNames": "openminds.core.DatasetVersion",
+      "OldNames": [
+        "openminds.core.DatasetVersion",
+        "openminds.DatasetVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.MetaDataModel",
-      "OldNames": "openminds.core.MetaDataModel",
+      "OldNames": [
+        "openminds.core.MetaDataModel",
+        "openminds.MetaDataModel"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.MetaDataModelVersion",
-      "OldNames": "openminds.core.MetaDataModelVersion",
+      "OldNames": [
+        "openminds.core.MetaDataModelVersion",
+        "openminds.MetaDataModelVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.Model",
-      "OldNames": "openminds.core.Model",
+      "OldNames": [
+        "openminds.core.Model",
+        "openminds.Model"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.ModelVersion",
-      "OldNames": "openminds.core.ModelVersion",
+      "OldNames": [
+        "openminds.core.ModelVersion",
+        "openminds.ModelVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.Project",
-      "OldNames": "openminds.core.Project",
+      "OldNames": [
+        "openminds.core.Project",
+        "openminds.Project"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.Setup",
-      "OldNames": "openminds.core.Setup",
+      "OldNames": [
+        "openminds.core.Setup",
+        "openminds.Setup"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.Software",
-      "OldNames": "openminds.core.Software",
+      "OldNames": [
+        "openminds.core.Software",
+        "openminds.Software"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.SoftwareVersion",
-      "OldNames": "openminds.core.SoftwareVersion",
+      "OldNames": [
+        "openminds.core.SoftwareVersion",
+        "openminds.SoftwareVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.WebService",
-      "OldNames": "openminds.core.WebService",
+      "OldNames": [
+        "openminds.core.WebService",
+        "openminds.WebService"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.products.WebServiceVersion",
-      "OldNames": "openminds.core.WebServiceVersion",
+      "OldNames": [
+        "openminds.core.WebServiceVersion",
+        "openminds.WebServiceVersion"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.BehavioralProtocol",
-      "OldNames": "openminds.core.BehavioralProtocol",
+      "OldNames": [
+        "openminds.core.BehavioralProtocol",
+        "openminds.BehavioralProtocol"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.Configuration",
-      "OldNames": "openminds.core.Configuration",
+      "OldNames": [
+        "openminds.core.Configuration",
+        "openminds.Configuration"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.CustomPropertySet",
-      "OldNames": "openminds.core.CustomPropertySet",
+      "OldNames": [
+        "openminds.core.CustomPropertySet",
+        "openminds.CustomPropertySet"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.NumericalProperty",
-      "OldNames": "openminds.core.NumericalProperty",
+      "OldNames": [
+        "openminds.core.NumericalProperty",
+        "openminds.NumericalProperty"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.PropertyValueList",
-      "OldNames": "openminds.core.PropertyValueList",
+      "OldNames": [
+        "openminds.core.PropertyValueList",
+        "openminds.PropertyValueList"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.Protocol",
-      "OldNames": "openminds.core.Protocol",
+      "OldNames": [
+        "openminds.core.Protocol",
+        "openminds.Protocol"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.ProtocolExecution",
-      "OldNames": "openminds.core.ProtocolExecution",
+      "OldNames": [
+        "openminds.core.ProtocolExecution",
+        "openminds.ProtocolExecution"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.Strain",
-      "OldNames": "openminds.core.Strain",
+      "OldNames": [
+        "openminds.core.Strain",
+        "openminds.Strain"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.StringProperty",
-      "OldNames": "openminds.core.StringProperty",
+      "OldNames": [
+        "openminds.core.StringProperty",
+        "openminds.StringProperty"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.Subject",
-      "OldNames": "openminds.core.Subject",
+      "OldNames": [
+        "openminds.core.Subject",
+        "openminds.Subject"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.SubjectGroup",
-      "OldNames": "openminds.core.SubjectGroup",
+      "OldNames": [
+        "openminds.core.SubjectGroup",
+        "openminds.SubjectGroup"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.SubjectGroupState",
-      "OldNames": "openminds.core.SubjectGroupState",
+      "OldNames": [
+        "openminds.core.SubjectGroupState",
+        "openminds.SubjectGroupState"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.SubjectState",
-      "OldNames": "openminds.core.SubjectState",
+      "OldNames": [
+        "openminds.core.SubjectState",
+        "openminds.SubjectState"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.TissueSample",
-      "OldNames": "openminds.core.TissueSample",
+      "OldNames": [
+        "openminds.core.TissueSample",
+        "openminds.TissueSample"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.TissueSampleCollection",
-      "OldNames": "openminds.core.TissueSampleCollection",
+      "OldNames": [
+        "openminds.core.TissueSampleCollection",
+        "openminds.TissueSampleCollection"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.TissueSampleCollectionState",
-      "OldNames": "openminds.core.TissueSampleCollectionState",
+      "OldNames": [
+        "openminds.core.TissueSampleCollectionState",
+        "openminds.TissueSampleCollectionState"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.core.research.TissueSampleState",
-      "OldNames": "openminds.core.TissueSampleState",
+      "OldNames": [
+        "openminds.core.TissueSampleState",
+        "openminds.TissueSampleState"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.activity.CellPatching",
-      "OldNames": "openminds.ephys.CellPatching",
+      "OldNames": [
+        "openminds.ephys.CellPatching",
+        "openminds.CellPatching"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.activity.ElectrodePlacement",
-      "OldNames": "openminds.ephys.ElectrodePlacement",
+      "OldNames": [
+        "openminds.ephys.ElectrodePlacement",
+        "openminds.ElectrodePlacement"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.activity.RecordingActivity",
-      "OldNames": "openminds.ephys.RecordingActivity",
+      "OldNames": [
+        "openminds.ephys.RecordingActivity",
+        "openminds.RecordingActivity"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.Electrode",
-      "OldNames": "openminds.ephys.Electrode",
+      "OldNames": [
+        "openminds.ephys.Electrode",
+        "openminds.Electrode"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.ElectrodeArray",
-      "OldNames": "openminds.ephys.ElectrodeArray",
+      "OldNames": [
+        "openminds.ephys.ElectrodeArray",
+        "openminds.ElectrodeArray"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.ElectrodeArrayUsage",
-      "OldNames": "openminds.ephys.ElectrodeArrayUsage",
+      "OldNames": [
+        "openminds.ephys.ElectrodeArrayUsage",
+        "openminds.ElectrodeArrayUsage"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.ElectrodeUsage",
-      "OldNames": "openminds.ephys.ElectrodeUsage",
+      "OldNames": [
+        "openminds.ephys.ElectrodeUsage",
+        "openminds.ElectrodeUsage"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.Pipette",
-      "OldNames": "openminds.ephys.Pipette",
+      "OldNames": [
+        "openminds.ephys.Pipette",
+        "openminds.Pipette"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.device.PipetteUsage",
-      "OldNames": "openminds.ephys.PipetteUsage",
+      "OldNames": [
+        "openminds.ephys.PipetteUsage",
+        "openminds.PipetteUsage"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.entity.Channel",
-      "OldNames": "openminds.ephys.Channel",
+      "OldNames": [
+        "openminds.ephys.Channel",
+        "openminds.Channel"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.ephys.entity.Recording",
-      "OldNames": "openminds.ephys.Recording",
+      "OldNames": [
+        "openminds.ephys.Recording",
+        "openminds.Recording"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.specimenprep.activity.CranialWindowPreparation",
-      "OldNames": "openminds.specimenprep.CranialWindowPreparation",
+      "OldNames": [
+        "openminds.specimenprep.CranialWindowPreparation",
+        "openminds.CranialWindowPreparation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.specimenprep.activity.TissueCulturePreparation",
-      "OldNames": "openminds.specimenprep.TissueCulturePreparation",
+      "OldNames": [
+        "openminds.specimenprep.TissueCulturePreparation",
+        "openminds.TissueCulturePreparation"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.specimenprep.activity.TissueSampleSlicing",
-      "OldNames": "openminds.specimenprep.TissueSampleSlicing",
+      "OldNames": [
+        "openminds.specimenprep.TissueSampleSlicing",
+        "openminds.TissueSampleSlicing"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.specimenprep.device.SlicingDevice",
-      "OldNames": "openminds.specimenprep.SlicingDevice",
+      "OldNames": [
+        "openminds.specimenprep.SlicingDevice",
+        "openminds.SlicingDevice"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.specimenprep.device.SlicingDeviceUsage",
-      "OldNames": "openminds.specimenprep.SlicingDeviceUsage",
+      "OldNames": [
+        "openminds.specimenprep.SlicingDeviceUsage",
+        "openminds.SlicingDeviceUsage"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.stimulation.activity.StimulationActivity",
-      "OldNames": "openminds.stimulation.StimulationActivity",
+      "OldNames": [
+        "openminds.stimulation.StimulationActivity",
+        "openminds.StimulationActivity"
+      ],
       "WarnOnOldName": false
     },
     {
       "NewName": "openminds.stimulation.stimulus.EphysStimulus",
-      "OldNames": "openminds.stimulation.EphysStimulus",
+      "OldNames": [
+        "openminds.stimulation.EphysStimulus",
+        "openminds.EphysStimulus"
+      ],
       "WarnOnOldName": false
     }
   ]
