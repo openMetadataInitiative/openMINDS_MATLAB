@@ -45,4 +45,10 @@ classdef QualitativeOverlap < openminds.abstract.ControlledTerm
             obj@openminds.abstract.ControlledTerm(varargin{:})
         end
     end
+
+    methods (Static)
+        function instances = listInstances()
+            instances = openminds.controlledterms.QualitativeOverlap.CONTROLLED_INSTANCES';
+        end
+    end
 end
