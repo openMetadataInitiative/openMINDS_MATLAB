@@ -6,54 +6,34 @@ function schemaInfo = listSourceSchemas(schemaModule, options)
 
     arguments
         schemaModule = {}
-        options.SchemaType (1,1) string = "schema.tpl.json";
-        options.SchemaFileExtension = '.json';
-        options.VersionNumber (1,1) string = "latest"
+        options.SchemaType (1,1) string = "schema.omi.json";
+        options.SchemaFileExtension = '*.omi.json';
+        options.VersionNumber (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(options.VersionNumber)} = "latest"
     end
 
-    versionNumber = openminds.internal.validateVersionNumber(options.VersionNumber);
-    versionAsString = sprintf('v%s', versionNumber);
+    versionAsString = char(options.VersionNumber);
         
     % - Get path constant
-    sourceSchemaFolder = openminds.internal.PathConstants.SourceSchemaFolder;
-    schemaFolderPath = fullfile( sourceSchemaFolder, versionAsString, options.SchemaType);
+    sourceSchemaFolder = char(openminds.internal.PathConstants.SourceSchemaFolder);
+    schemaFolderPath = fullfile( sourceSchemaFolder, versionAsString);
     
-    filePaths = listSchemaFiles(schemaFolderPath, schemaModule, options.SchemaFileExtension);
-    
+    L = dir(fullfile(schemaFolderPath, '**', options.SchemaFileExtension));
+    filePaths = fullfile({L.folder}, {L.name});
+
     if isempty(filePaths)
         error("openMINDS:SourceFilesMissing", 'Could not find source files for openMINDS %s', versionAsString)
     end
 
-    S = collectInfoInStructArray(schemaFolderPath, filePaths, options.SchemaType);
+    S = collectInfoInStructArray(schemaFolderPath, filePaths);
 
     schemaInfo = convertStructToTable(S);
 end
 
-function [filePaths] = listSchemaFiles(schemaFolderPath, schemaModule, fileExtension)
-%listSchemaFiles List schema files given a root directory
 
-    import openminds.internal.utility.dir.listSubDir
-    import openminds.internal.utility.dir.listFiles
-
-    if nargin < 3 || isempty(fileExtension)
-        fileExtension = '.json';
-    end
-
-    % - Look through subfolders for all json files of specified modules
-    [absPath, dirName] = listSubDir(schemaFolderPath, '', {}, 0);
+function S = collectInfoInStructArray(schemaFolderPath, filePaths)
     
-    if ~isempty(schemaModule) % Filter by given module(s), if any
-        [~, keepIdx] = intersect(dirName, schemaModule);
-        absPath = absPath(keepIdx);
-    end
-
-    [absPath, ~] = listSubDir(absPath, '', {}, 2);
-    [filePaths, ~] = listFiles(absPath, fileExtension);
-end
-
-function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
-    
-    FILE_EXT = '.schema.tpl';
+    FILE_EXT = '.schema.omi';
     
     % - Get relevant parts of folder hierarchy for extracting information
     folderNames = replace(filePaths, schemaFolderPath, '');
@@ -62,11 +42,7 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
     % - Create struct array with information about all schemas
     schemaNames = replace(fileNames, FILE_EXT, '');
 
-    if format == "instances"
-        S = struct('InstanceName', schemaNames);
-    else
-        S = struct('SchemaName', schemaNames);
-    end
+    S = struct('SchemaName', schemaNames);
 
     for i = 1:numel(S)
 
@@ -76,22 +52,16 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths, format)
         end
 
         S(i).ModuleName = thisFolderSplit{1};
-        S(i).ModuleVersion = thisFolderSplit{2};
         
-        if numel(thisFolderSplit) == 2
+        if numel(thisFolderSplit) == 1
             S(i).SubModuleName = '';
-
-        elseif numel(thisFolderSplit) == 3 && format == "instances"
-            S(i).SubModuleName = '';
+        
+        elseif numel(thisFolderSplit) == 2
+            S(i).SubModuleName = matlab.lang.makeValidName(thisFolderSplit{2});
+        
+        elseif numel(thisFolderSplit) == 3
+            S(i).SubModuleName = matlab.lang.makeValidName(thisFolderSplit{2});
             S(i).SchemaName = thisFolderSplit{3};
-        
-        elseif numel(thisFolderSplit) == 3 && format ~= "instances"
-            S(i).SubModuleName = matlab.lang.makeValidName(thisFolderSplit{3});
-        
-        elseif numel(thisFolderSplit) == 4
-            S(i).SubModuleName = matlab.lang.makeValidName(thisFolderSplit{3});
-            S(i).SchemaName = thisFolderSplit{4};
-        
         else
             error('Something unexpected happened');
         end

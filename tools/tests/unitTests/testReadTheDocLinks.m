@@ -81,8 +81,8 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
         function testSchemaDocLink(testCase, modelVersion)
             import openminds.internal.utility.getSchemaDocLink
 
-            openminds.startup(modelVersion)
-            cleanupObj = onCleanup(@(v) openminds.startup("latest"));
+            evalc( sprintf('openminds.startup("%s")', modelVersion) );
+            cleanupObj = onCleanup(@() evalc('openminds.startup("latest")'));
 
             url = getSchemaDocLink(...
                 "openminds.core.Subject", ...
