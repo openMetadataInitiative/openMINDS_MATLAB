@@ -15,6 +15,20 @@ classdef TypesEnumeration
     end
 
     methods
+        function instance = create(obj)
+        % create - Create a new instance (same as createInstance)
+            instance = obj.createInstance();
+        end
+
+        function instance = createInstance(obj)
+        % createInstance - Create a new instance
+            if numel(obj) == 1
+                instance = feval(obj.ClassName);
+            else
+                error('Can not create instances for list of types')
+            end
+        end
+
         function tf = ismissing(obj)
             tf = strcmp(obj.ClassName, 'None');
         end
