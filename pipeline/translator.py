@@ -65,7 +65,7 @@ class MATLABSchemaBuilder(object):
         with open(schema_file_path, "r") as schema_file:
             self._schema_payload = json.load(schema_file)
         
-        if self._schema_model_name == "controlledTerms":
+        if self._schema_module_name == "controlledTerms":
             self.class_template = jinja_templates["controlledterm_class"]
         else:
             self.class_template = jinja_templates["schema_class"]
@@ -95,7 +95,7 @@ class MATLABSchemaBuilder(object):
         _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
         
         self.version = _relative_path_without_extension[0]
-        self._schema_model_name = _relative_path_without_extension[1]
+        self._schema_module_name = _relative_path_without_extension[1]
         if len(_relative_path_without_extension) == 3:
             self._schema_group_name = []
         else:
@@ -112,9 +112,9 @@ class MATLABSchemaBuilder(object):
     def _create_target_file_path(self) -> str:
         target_root_path = os.path.join("target", "types", self.version)
         if self._schema_group_name:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_model_name}".lower(), f"+{self._schema_group_name}".lower())
+            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower(), f"+{self._schema_group_name}".lower())
         else:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_model_name}".lower())
+            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower())
         matlab_class_file_name = f"{self._schema_file_name}.{OUTPUT_FILE_FORMAT}"
         matlab_class_file_name = matlab_class_file_name[0].upper() + matlab_class_file_name[1:]
 
@@ -239,7 +239,7 @@ class MATLABSchemaBuilder(object):
 
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
         # Or; just remove this as it's not needed when using separate templates.
-        if self._schema_model_name == "controlledTerms":
+        if self._schema_module_name == "controlledTerms":
             base_class = "openminds.abstract.ControlledTerm"
         else:
             base_class = "openminds.abstract.Schema"
@@ -249,7 +249,7 @@ class MATLABSchemaBuilder(object):
             # Add the controlled instance mixin to the base class
             base_class = base_class + " & openminds.internal.mixin.HasControlledInstance"
 
-        if self._schema_model_name == "controlledTerms":
+        if self._schema_module_name == "controlledTerms":
             instance_loader = InstanceLoader()
             known_instance_list = instance_loader.get_instance_collection(self.version, class_name)
             known_instance_list.sort()
