@@ -37,4 +37,4 @@ for schema_version in schema_loader.get_schema_versions():
     save_resource_files(schema_version, schemas_file_paths)
     
     save_enumeration_classes("Types", schema_version, schema_loader, jinja_templates["types_enumeration"])
-    save_enumeration_classes("Models", schema_version, schema_loader, jinja_templates["models_enumeration"])
+    save_enumeration_classes("Modules", schema_version, schema_loader, jinja_templates["modules_enumeration"])

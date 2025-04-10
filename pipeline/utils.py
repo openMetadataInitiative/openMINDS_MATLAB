@@ -102,7 +102,7 @@ def initialise_jinja_templates(autoescape:bool=None):
         - `"schema_class"`: Template for schema class generation.
         - `"controlledterm_class"`: Template for controlled term class generation.
         - `"mixedtype_class"`: Template for mixed type class generation.
-        - `"models_enumeration"`: Template for models enumeration generation.
+        - `"modules_enumeration"`: Template for modules enumeration generation.
         - `"types_enumeration"`: Template for types enumeration generation.
 
     Notes:
@@ -129,7 +129,7 @@ def initialise_jinja_templates(autoescape:bool=None):
         "schema_class": jinja_environment.get_template("schema_class_template.txt"),
         "controlledterm_class": jinja_environment.get_template("controlledterm_class_template.txt"),
         "mixedtype_class": jinja_environment.get_template("mixedtype_class_template.txt"),
-        "models_enumeration": jinja_environment.get_template("models_enumeration_template.txt"),
+        "modules_enumeration": jinja_environment.get_template("modules_enumeration_template.txt"),
         "types_enumeration": jinja_environment.get_template("types_enumeration_template.txt"),
     }
 
@@ -197,7 +197,7 @@ def save_resource_files(version, schema_path_list):
         # Create meta dict for schema
         schema_meta = {}
         schema_meta["name"] = schema_path.pop()
-        schema_meta["model"] = schema_path[0]
+        schema_meta["module"] = schema_path[0]
 
         if len(schema_path) == 2:
             schema_meta["group"] = schema_path[1]
@@ -207,12 +207,16 @@ def save_resource_files(version, schema_path_list):
         if schema_meta["group"]: # Create alias definition for schema
             alias_def = {}
             short_class_name = capitalize_first_letter( schema_meta["name"] )
-            model_name = schema_meta["model"].lower()
+            module_name = schema_meta["module"].lower()
             group_name = schema_meta["group"].lower()
             group_name = re.sub(r'\W+', '', group_name) # Remove all non alphanumeric characters
-            alias_def["NewName"] = ".".join(["openminds", model_name, group_name, short_class_name])
-            alias_def["OldNames"] = ".".join(["openminds", model_name, short_class_name])
+            alias_def["NewName"] = ".".join(["openminds", module_name, group_name, short_class_name])
+            alias_def["OldNames"] = ".".join(["openminds", module_name, short_class_name])
             alias_def["WarnOnOldName"] = False
+            if version not in ["v1.0", "v2.0", "v3.0"]:
+                alternative_old_name = ".".join(["openminds", short_class_name]) 
+                # Append to old names where old names should be a list
+                alias_def["OldNames"] = [alias_def["OldNames"], alternative_old_name]
             alias_list.append(alias_def)
         else:
             pass
@@ -266,7 +270,7 @@ def _parse_source_file_path(schema_file_path:str, root_path:str):
     schema_info = {}
 
     schema_info["version"] = _relative_path_without_extension[0]
-    schema_info["model_name"] = _relative_path_without_extension[1]
+    schema_info["module_name"] = _relative_path_without_extension[1]
     if len(_relative_path_without_extension) == 3:
         schema_info["group_name"] = None
     else:
@@ -284,9 +288,9 @@ def _get_matlab_class_name(schema_info):
 
     # Combine the schema_info to get the full namespace name
     if schema_info["group_name"]:
-        matlab_namespace_name = f"openminds.{schema_info['model_name']}.{schema_info['group_name']}"
+        matlab_namespace_name = f"openminds.{schema_info['module_name']}.{schema_info['group_name']}"
     else:
-        matlab_namespace_name = f"openminds.{schema_info['model_name']}"
+        matlab_namespace_name = f"openminds.{schema_info['module_name']}"
 
     matlab_namespace_name = matlab_namespace_name.lower()
 
@@ -302,8 +306,8 @@ def _get_template_variables(enum_type, schema_files, root_path):
     for schema_file in schema_files:
         schema_info = _parse_source_file_path(schema_file, root_path)
 
-        if enum_type == "Models":
-            template_variable_list.append(schema_info['model_name'])
+        if enum_type == "Modules":
+            template_variable_list.append(schema_info['module_name'])
 
         elif enum_type == "Types":
             matlab_class_name = _get_matlab_class_name(schema_info)
@@ -316,5 +320,5 @@ def _get_template_variables(enum_type, schema_files, root_path):
     if enum_type == "Types":
         return {'types': template_variable_list }
     
-    elif enum_type == "Models":
-        return {'models': sorted(set(template_variable_list)) }
+    elif enum_type == "Modules":
+        return {'modules': sorted(set(template_variable_list)) }

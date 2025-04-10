@@ -1,0 +1,7 @@
+classdef Modules < openminds.base.ModulesEnumerationBase
+    enumeration
+        {%- for module in modules %}
+        {{module}}
+        {%- endfor %}
+    end
+end
