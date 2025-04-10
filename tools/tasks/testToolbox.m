@@ -12,6 +12,9 @@ function testToolbox(varargin)
     codeFolder = fullfile(projectRootDirectory, "code");
     codecoverageFileList = getCodeCoverageFileList(codeFolder); % local function
 
+    warnState = warning('off', 'MATLAB:alias:DuplicateAlias');
+    warningCleanup = onCleanup(@() warning(warnState));
+
     matbox.tasks.testToolbox(...
         projectRootDirectory, ...
         "CreateBadge", true, ...
