@@ -16,8 +16,8 @@ function manifest = loadSchemaManifest(versionNumber)
 %       manifest : A table containing the following variables for each
 %       schema:
 %           Name - Name of the schema
-%           Model - Name of the model the schema belongs to
-%           Group - Name of the group the schema belongs to. Some models do
+%           Module - Name of the module the schema belongs to
+%           Group - Name of the group the schema belongs to. Some modules do
 %               not have groups, and then this is a blank string.
 
     arguments
@@ -32,7 +32,7 @@ function manifest = loadSchemaManifest(versionNumber)
     % Convert data to table and convert columndata to string
     manifest = struct2table(data);
     manifest.name = string(manifest.name);
-    manifest.model = string(manifest.model);
+    manifest.module = string(manifest.module);
     
     isEmptyGroup = cellfun(@isempty, manifest.group(:));
     [manifest.group(isEmptyGroup)] = deal({''});
@@ -40,4 +40,5 @@ function manifest = loadSchemaManifest(versionNumber)
     manifest.group = string(manifest.group);
 
     % Rename variables
-    manifest.Properties.VariableNames = ["Name", "Model", "Group"];
+    manifest.Properties.VariableNames = ["Name", "Module", "Group"];
+end

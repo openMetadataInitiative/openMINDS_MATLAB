@@ -1,4 +1,4 @@
-classdef TypesEnumeration
+classdef TypesEnumerationBase
 
     properties (SetAccess=immutable)
         ClassName (1,1) string
@@ -7,7 +7,7 @@ classdef TypesEnumeration
     end
 
     methods
-        function obj = TypesEnumeration(name)
+        function obj = TypesEnumerationBase(name)
             obj.ClassName = name;
             obj.AliasClassName = obj.createAliasClassName();
             obj.TypeURI = obj.getTypeURI();
@@ -15,6 +15,20 @@ classdef TypesEnumeration
     end
 
     methods
+        function instance = create(obj)
+        % create - Create a new instance (same as createInstance)
+            instance = obj.createInstance();
+        end
+
+        function instance = createInstance(obj)
+        % createInstance - Create a new instance
+            if numel(obj) == 1
+                instance = feval(obj.ClassName);
+            else
+                error('Can not create instances for list of types')
+            end
+        end
+
         function tf = ismissing(obj)
             tf = strcmp(obj.ClassName, 'None');
         end
