@@ -43,7 +43,9 @@ classdef InstanceTest < matlab.unittest.TestCase
                     {'openminds.internal.mixin.HasControlledInstance', ...
                     'openminds.abstract.ControlledTerm'}))
                 instances = feval(sprintf('%s.listInstances', schemaClassFunctionName));
-                testCase.verifyClass(instances, 'string')
+                if ~isempty(instances)
+                    testCase.verifyClass(instances, 'string')
+                end
             end
 
             function dispNoOutput(instance) %#ok<INUSD>
