@@ -963,7 +963,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
     
     methods (Static)
         
-        function instances = getInstancesForSchema(schemaName, modelName)
+        function instances = getInstancesForSchema(schemaName, moduleName)
         
             % Make singleton class that can be reset...
             persistent allInstancesTable
@@ -975,7 +975,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
             % Todo: match on camel case!!!
 
-            isRequested = allInstancesTable.ModuleName == modelName & strcmpi(allInstancesTable.SchemaName, schemaName);
+            isRequested = allInstancesTable.ModuleName == moduleName & strcmpi(allInstancesTable.SchemaName, schemaName);
             
             instances = allInstancesTable(isRequested, :);
         end

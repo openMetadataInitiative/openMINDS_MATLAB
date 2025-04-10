@@ -1,9 +1,9 @@
-function data = getControlledInstance(instanceName, schemaName, modelName, versionNumber, options)
+function data = getControlledInstance(instanceName, schemaName, moduleName, versionNumber, options)
     
     arguments
         instanceName (1,1) string
         schemaName (1,1) string
-        modelName (1,1) string = "controlledTerms"
+        moduleName (1,1) string = "controlledTerms"
         versionNumber (1,1) openminds.internal.utility.VersionNumber ...
             {openminds.mustBeValidVersion(versionNumber)} = missing
         options.FileSource (1,1) string ...
@@ -23,36 +23,36 @@ function data = getControlledInstance(instanceName, schemaName, modelName, versi
     
     if options.FileSource == "local"
         try
-            data = getOfflineInstance(instanceName, schemaName, modelName, versionNumber);
+            data = getOfflineInstance(instanceName, schemaName, moduleName, versionNumber);
         catch
-            data = getOnlineInstance(instanceName, schemaName, modelName, versionNumber);
+            data = getOnlineInstance(instanceName, schemaName, moduleName, versionNumber);
         end
     else
-        data = getOnlineInstance(instanceName, schemaName, modelName, versionNumber);
+        data = getOnlineInstance(instanceName, schemaName, moduleName, versionNumber);
     end
 end
 
-function data = getOnlineInstance(instanceName, schemaName, modelName, versionNumber)
+function data = getOnlineInstance(instanceName, schemaName, moduleName, versionNumber)
 
-    filePath = getOnlineFilepath(instanceName, schemaName, modelName, versionNumber);
+    filePath = getOnlineFilepath(instanceName, schemaName, moduleName, versionNumber);
     jsonStr = webread(filePath);
     data = openminds.internal.utility.json.decode(jsonStr);
 
     % Save instance locally
-    filePath = getOfflineFilepath(instanceName, schemaName, modelName, versionNumber);
+    filePath = getOfflineFilepath(instanceName, schemaName, moduleName, versionNumber);
     openminds.internal.utility.filewrite(filePath, jsonStr)
 end
 
-function data = getOfflineInstance(instanceName, schemaName, modelName, versionNumber)
+function data = getOfflineInstance(instanceName, schemaName, moduleName, versionNumber)
 
     % import openminds.internal.listControlledInstances
     
-    % instanceTable = listControlledInstances(schemaName, modelName, instanceName);
+    % instanceTable = listControlledInstances(schemaName, moduleName, instanceName);
 
     % assert(size(instanceTable, 1) == 1, 'Expected a single match for instance "%s", but %d was found.', instanceName, size(instanceTable, 1))
     % jsonStr = fileread(instanceTable.Filepath);
 
-    filePath = getOfflineFilepath(instanceName, schemaName, modelName, versionNumber);
+    filePath = getOfflineFilepath(instanceName, schemaName, moduleName, versionNumber);
 
     if ~isfile(filePath)
         error('File does not exist')
@@ -63,26 +63,26 @@ function data = getOfflineInstance(instanceName, schemaName, modelName, versionN
     data = openminds.internal.utility.json.decode(jsonStr);
 end
 
-function pathStr = getOnlineFilepath(instanceName, schemaName, modelName, versionNumber)
+function pathStr = getOnlineFilepath(instanceName, schemaName, moduleName, versionNumber)
     import openminds.internal.constants.Github
     import openminds.internal.utility.string.uriJoin
 
-    fileParts = getRelativeInstanceFileParts(instanceName, schemaName, modelName);
+    fileParts = getRelativeInstanceFileParts(instanceName, schemaName, moduleName);
     relativePath = uriJoin(["main", "instances", versionNumber, fileParts]);
     pathStr = Github.getRawFileUrl("instances", relativePath);
 end
 
-function pathStr = getOfflineFilepath(instanceName, schemaName, modelName, versionNumber)
+function pathStr = getOfflineFilepath(instanceName, schemaName, moduleName, versionNumber)
     rootPath = openminds.internal.PathConstants.LocalInstanceFolder;
-    fileParts = getRelativeInstanceFileParts(instanceName, schemaName, modelName);
+    fileParts = getRelativeInstanceFileParts(instanceName, schemaName, moduleName);
     
     pathStr = fullfile(rootPath, versionNumber, fileParts{:});
 end
 
-function fileParts = getRelativeInstanceFileParts(instanceName, schemaName, modelName)
+function fileParts = getRelativeInstanceFileParts(instanceName, schemaName, moduleName)
     
-    % Initialize the folder list with foldername given the model
-    switch modelName
+    % Initialize the folder list with foldername determined by the module name
+    switch moduleName
         case 'controlledTerms'
             folderList = "terminologies";
         case 'sands'

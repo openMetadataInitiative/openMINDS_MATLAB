@@ -3,7 +3,7 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
 %
 %   This function returns a table containing information about instances.
 %   Input arguments can be used to control whether to show instances for
-%   particular schemas or models.
+%   particular schemas or modules.
 %
 %   Syntax:
 %       instances = listControlledInstances() list all available controlled
