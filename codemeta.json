@@ -1,0 +1,44 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "license": "https://spdx.org/licenses/MIT",
+  "isPartOf": "https://github.com/openMetadataInitiative",
+  "codeRepository": "https://github.com/openMetadataInitiative/openMINDS_MATLAB",
+  "contIntegration": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions",
+  "issueTracker": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/issues",
+  "name": "openMINDS MATLAB",
+  "description": "openMINDS MATLAB is a toolbox to support the creation and use of openMINDS metadata models and schemas in MATLAB, with import and export in JSON-LD format. The package contains all openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods.",
+  "applicationCategory": "neuroscience",
+  "releaseNotes": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases",
+  "funding": "https://cordis.europa.eu/project/id/945539",
+  "developmentStatus": "active",
+  "funder": {
+    "@type": "Organization",
+    "name": "European Commission"
+  },
+  "programmingLanguage": [
+    "MATLAB"
+  ],
+  "operatingSystem": [
+    "Linux",
+    "Windows",
+    "macOS"
+  ],
+  "softwareRequirements": [
+    "MATLAB R2022b or later"
+  ],
+  "relatedLink": [
+    "https://openminds-documentation.readthedocs.io"
+  ],
+  "author": [
+    {
+      "@type": "Person",
+      "@id": "https://orcid.org/0000-0002-8297-1753",
+      "givenName": "Eivind",
+      "familyName": "Hennestad"
+    }
+  ],
+  "version": "0.9.3",
+  "downloadUrl": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/download/v0.9.3/openMINDS_MATLAB_v0_9_3.mltbx",
+  "dateModified": "2024-10-01"
+}

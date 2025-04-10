@@ -5,7 +5,7 @@ function mustBeListOfUniqueItems(value)
         instanceTypes = cellfun(@(v) class(v), value, 'UniformOutput', 0);
         uniqueInstanceTypes = unique(instanceTypes);
         for instanceType = uniqueInstanceTypes
-            isOfType = contains( instanceTypes, instanceType );
+            isOfType = strcmp( instanceTypes, instanceType );
             valuesOfType = [value{isOfType}];
             if ischar(valuesOfType)
                 valuesOfType = string(valuesOfType);

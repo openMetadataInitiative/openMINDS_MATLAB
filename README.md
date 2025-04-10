@@ -38,6 +38,13 @@ MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.
 
 openMINDS for MATLAB requires **MATLAB R2022b** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
 
+### Cloning the repository
+```matlab
+% This will install openMINDS_MATLAB in your current working directory
+!git clone https://github.com/openMetadataInitiative/openMINDS_MATLAB
+run(fullfile('openMINDS_MATLAB', 'code', 'setup.m'))
+```
+
 ## Before you start
 [(Back to top)](#openminds-metadata-models-for-matlab)
 
