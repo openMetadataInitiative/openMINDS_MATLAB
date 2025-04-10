@@ -25,7 +25,15 @@ function fileList = getCodeCoverageFileList(codeFolder)
     L = cat(1, ...
         dir( fullfile(codeFolder, '+openminds', '**', '*.m') ), ...
         dir( fullfile(codeFolder, 'internal', '**', '*.m') ), ...
-        dir( fullfile(codeFolder, 'schemas', 'latest', '**', '*.m') ));
+        dir( fullfile(codeFolder, 'types', 'latest', '**', '*.m') ));
 
     fileList = fullfile(string({L.folder}'),string({L.name}'));
+    relativePaths = replace(fileList, codeFolder + filesep, '');
+
+    coverageIgnoreFile = fullfile(ommtools.projectdir(), 'tools', '.coverageignore');
+    ignorePatterns = string(splitlines( fileread(coverageIgnoreFile) ));
+    ignorePatterns(ignorePatterns=="") = [];
+
+    keep = ~startsWith(relativePaths, ignorePatterns);
+    fileList = fileList(keep);
 end
