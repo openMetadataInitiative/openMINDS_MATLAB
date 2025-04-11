@@ -67,7 +67,7 @@ function instances = loadInstances(filePath)%, options)
             end
 
         otherwise
-            error('Unkown output format')
+            error('Unkown input format')
     end
 
     if ~nargout
