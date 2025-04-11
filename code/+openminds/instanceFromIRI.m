@@ -38,4 +38,3 @@ function instance = instanceFromIRI(IRI)
     typeEnum = openminds.enum.Types(type);
     instance = feval(typeEnum.ClassName, IRI);
 end
-
