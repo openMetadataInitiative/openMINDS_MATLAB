@@ -44,11 +44,12 @@ end
 
 function str = getHtmlLink(schemaClassName, browserOption)
     
+    version = openminds.getModelVersion();
+
     persistent schemaManifest
-    if isempty(schemaManifest)
+    if isempty(schemaManifest) || ~isequal(schemaManifest.Properties.CustomProperties.ModelVersion, version)
         try
-            schemaVersion = openminds.getModelVersion();
-            schemaManifest = openminds.internal.loadSchemaManifest(schemaVersion);
+            schemaManifest = openminds.internal.loadSchemaManifest(version);
         catch
             error('Not implemented yet')
         end
@@ -57,7 +58,6 @@ function str = getHtmlLink(schemaClassName, browserOption)
     schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
 
     isMatch = strcmpi(schemaManifest.Name, string(schemaName));
-    version = openminds.getModelVersion();
 
     moduleName = schemaManifest{isMatch, "Module"};
     subgroupName = schemaManifest{isMatch, "Group"};

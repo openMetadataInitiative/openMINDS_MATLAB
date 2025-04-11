@@ -35,8 +35,7 @@ function downloadRepository(repositoryName, options)
    
     fprintf('Downloading repository "%s" from "%s"... ', ...
         repositoryName, options.Organization)
-    
-    downloadFile(tempZipFilepath, webURI.EncodedURI);
+    downloadFile(tempZipFilepath, webURI.EncodedURI, 'ShowFilename', true);
     fprintf('Done.\n')
 
     directoryForUnzip = tempname;

@@ -41,4 +41,7 @@ function manifest = loadSchemaManifest(versionNumber)
 
     % Rename variables
     manifest.Properties.VariableNames = ["Name", "Module", "Group"];
+
+    manifest = addprop(manifest, 'ModelVersion', 'table');
+    manifest.Properties.CustomProperties.ModelVersion = versionNumber;
 end

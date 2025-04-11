@@ -22,12 +22,14 @@ classdef SchemaInspector < handle
         
         function obj = SchemaInspector(varargin)
             
-            if isa(varargin{1}, 'char')
+            if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')
                 obj.metaClassObject = meta.class.fromName(varargin{1});
                 obj.SchemaClassName = varargin{1};
             elseif openminds.utility.isInstance(varargin{1})
                 obj.metaClassObject = metaclass(varargin{1});
                 obj.SchemaClassName = class(varargin{1});
+            else
+                error('Unsupported input type')
             end
             
             % obj.countProperties()
@@ -103,6 +105,19 @@ classdef SchemaInspector < handle
             % DefaultValue is a struct where each field is corresponding to
             % one property
             tf = isfield( mp.DefaultValue, propertyName );
+        end
+
+        function tf = isPropertyMixedType(obj, propertyName)
+            mp = obj.getMetaProperty(propertyName);
+            className = mp.Validation.Class.Name;
+            tf = startsWith(className, 'openminds.internal.mixedtype');
+        end
+
+        function className = getMixedTypeForProperty(obj, propertyName)
+            mp = obj.getMetaProperty(propertyName);
+            className = mp.Validation.Class.Name;
+            assert( startsWith(className, 'openminds.internal.mixedtype'), ...
+                'Property is not a mixed type' );
         end
     end
 

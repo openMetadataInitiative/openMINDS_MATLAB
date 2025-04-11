@@ -44,7 +44,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
                 obj(numel(versionSpecification)) = 1;
             end
 
-            for i = numel(versionSpecification)
+            for i = 1:numel(versionSpecification)
                 iVersion = versionSpecification{i};
 
                 if isstring(iVersion) || ischar(iVersion)
@@ -322,7 +322,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
             end
 
             arguments (Repeating)
-                validVersions (1,1) openminds.internal.utility.VersionNumber
+                validVersions openminds.internal.utility.VersionNumber
             end
 
             validVersions = [validVersions{:}];
