@@ -48,7 +48,11 @@ function downloadRepository(repositoryName, options)
     fprintf('Unzipping repository file (%s)... ', repositoryName)
     unzip(tempZipFilepath, directoryForUnzip)
     fprintf('Done.\n')
+
+    sourceDirectory = directoryForUnzip;
+
     if ~isfolder(targetDirectory)
+        mkdir(targetDirectory)
     end
 
     % Get repository folder name
