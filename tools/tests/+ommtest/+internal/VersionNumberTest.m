@@ -19,12 +19,12 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             % Create common version objects for use in tests
             import openminds.internal.utility.VersionNumber
             
-            testCase.Version1_0_0 = openminds.internal.utility.VersionNumber('1.0.0');
-            testCase.Version2_1_0 = openminds.internal.utility.VersionNumber('2.1.0');
-            testCase.Version2_1_3 = openminds.internal.utility.VersionNumber('2.1.3');
-            testCase.Version2_1_3_5 = openminds.internal.utility.VersionNumber('2.1.3.5');
-            testCase.LatestVersion = openminds.internal.utility.VersionNumber('latest');
-            testCase.MissingVersion = openminds.internal.utility.VersionNumber(missing);
+            testCase.Version1_0_0 = VersionNumber('1.0.0');
+            testCase.Version2_1_0 = VersionNumber('2.1.0');
+            testCase.Version2_1_3 = VersionNumber('2.1.3');
+            testCase.Version2_1_3_5 = VersionNumber('2.1.3.5');
+            testCase.LatestVersion = VersionNumber('latest');
+            testCase.MissingVersion = VersionNumber(missing);
         end
     end
     
@@ -34,34 +34,34 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test basic version string
-            v = openminds.internal.utility.VersionNumber('1.2.3');
+            v = VersionNumber('1.2.3');
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(3));
             testCase.verifyEqual(v.Build, uint8(0));
             
             % Test with 'v' prefix
-            v = openminds.internal.utility.VersionNumber('v1.2.3');
+            v = VersionNumber('v1.2.3');
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(3));
             
             % Test with build number
-            v = openminds.internal.utility.VersionNumber('1.2.3.4');
+            v = VersionNumber('1.2.3.4');
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(3));
             testCase.verifyEqual(v.Build, uint8(4));
             
             % Test with partial version
-            v = openminds.internal.utility.VersionNumber('1.2');
+            v = VersionNumber('1.2');
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(0));
             testCase.verifyEqual(v.Build, uint8(0));
             
             % Test with single number
-            v = openminds.internal.utility.VersionNumber('1');
+            v = VersionNumber('1');
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(0));
             testCase.verifyEqual(v.Patch, uint8(0));
@@ -73,21 +73,21 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test with array of numbers
-            v = openminds.internal.utility.VersionNumber([1, 2, 3]);
+            v = VersionNumber([1, 2, 3]);
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(3));
             testCase.verifyEqual(v.Build, uint8(0));
             
             % Test with array including build
-            v = openminds.internal.utility.VersionNumber([1, 2, 3, 4]);
+            v = VersionNumber([1, 2, 3, 4]);
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(2));
             testCase.verifyEqual(v.Patch, uint8(3));
             testCase.verifyEqual(v.Build, uint8(4));
             
             % Test with single number
-            v = openminds.internal.utility.VersionNumber(1);
+            v = VersionNumber(1);
             testCase.verifyEqual(v.Major, uint8(1));
             testCase.verifyEqual(v.Minor, uint8(0));
             testCase.verifyEqual(v.Patch, uint8(0));
@@ -99,12 +99,12 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test 'latest' version
-            v = openminds.internal.utility.VersionNumber('latest');
+            v = VersionNumber('latest');
             testCase.verifyTrue(v.IsLatest);
             testCase.verifyEqual(v.Major, uint8(255));
             
             % Test missing version
-            v = openminds.internal.utility.VersionNumber(missing);
+            v = VersionNumber(missing);
             testCase.verifyTrue(v.IsMissing);
         end
         
@@ -113,14 +113,14 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test with cell array of versions
-            versions = openminds.internal.utility.VersionNumber({'1.0.0', '2.1.0', '3.2.1'});
+            versions = VersionNumber({'1.0.0', '2.1.0', '3.2.1'});
             testCase.verifyLength(versions, 3);
             testCase.verifyEqual(versions(1).Major, uint8(1));
             testCase.verifyEqual(versions(2).Major, uint8(2));
             testCase.verifyEqual(versions(3).Major, uint8(3));
             
             % Test with mixed types
-            versions = openminds.internal.utility.VersionNumber({'1.0.0', [2, 1, 0], 'latest'});
+            versions = VersionNumber({'1.0.0', [2, 1, 0], 'latest'});
             testCase.verifyLength(versions, 3);
             testCase.verifyEqual(versions(1).Major, uint8(1));
             testCase.verifyEqual(versions(2).Major, uint8(2));
@@ -132,12 +132,12 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test with Format option
-            v = openminds.internal.utility.VersionNumber('1.2.3', 'Format', 'vX.Y');
+            v = VersionNumber('1.2.3', 'Format', 'vX.Y');
             testCase.verifyEqual(v.Format, "vX.Y");
             testCase.verifyEqual(string(v), "v1.2");
             
             % Test with IsLatest option
-            v = openminds.internal.utility.VersionNumber('1.2.3', 'IsLatest', true);
+            v = VersionNumber('1.2.3', 'IsLatest', true);
             testCase.verifyTrue(v.IsLatest);
             testCase.verifyEqual(string(v), "latest");
         end
@@ -147,9 +147,9 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test with invalid version string
-            testCase.verifyError(@() openminds.internal.utility.VersionNumber('1.2.a'), '');
-            testCase.verifyError(@() openminds.internal.utility.VersionNumber('1.2.3-alpha'), '');
-            testCase.verifyError(@() openminds.internal.utility.VersionNumber('not-a-version'), '');
+            testCase.verifyError(@() VersionNumber('1.2.a'), '');
+            testCase.verifyError(@() VersionNumber('1.2.3-alpha'), '');
+            testCase.verifyError(@() VersionNumber('not-a-version'), '');
         end
         
         function testStringConversion(testCase)
@@ -195,42 +195,43 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             import openminds.internal.utility.VersionNumber
             
             % Test bumpMajor
-            v = openminds.internal.utility.VersionNumber('2.1.3');
+            v = VersionNumber('2.1.3');
             v.bumpMajor();
             testCase.verifyEqual(double(v), uint8([3, 0, 0, 0]));
             
             % Test bumpMinor
-            v = openminds.internal.utility.VersionNumber('2.1.3');
+            v = VersionNumber('2.1.3');
             v.bumpMinor();
             testCase.verifyEqual(double(v), uint8([2, 2, 0, 0]));
             
             % Test bumpPatch
-            v = openminds.internal.utility.VersionNumber('2.1.3');
+            v = VersionNumber('2.1.3');
             v.bumpPatch();
             testCase.verifyEqual(double(v), uint8([2, 1, 4, 0]));
             
             % Test bumpBuild
-            v = openminds.internal.utility.VersionNumber('2.1.3');
+            v = VersionNumber('2.1.3');
             v.bumpBuild();
             testCase.verifyEqual(double(v), uint8([2, 1, 3, 1]));
             
             % Test cascading resets
-            v = openminds.internal.utility.VersionNumber('2.1.3.5');
+            v = VersionNumber('2.1.3.5');
             v.bumpMajor();
             testCase.verifyEqual(double(v), uint8([3, 0, 0, 0]));
             
-            v = openminds.internal.utility.VersionNumber('2.1.3.5');
+            v = VersionNumber('2.1.3.5');
             v.bumpMinor();
             testCase.verifyEqual(double(v), uint8([2, 2, 0, 0]));
             
-            v = openminds.internal.utility.VersionNumber('2.1.3.5');
+            v = VersionNumber('2.1.3.5');
             v.bumpPatch();
             testCase.verifyEqual(double(v), uint8([2, 1, 4, 0]));
         end
         
         function testComparisonOperators(testCase)
             % Test comparison operators
-            
+            import openminds.internal.utility.VersionNumber
+
             % Test equality (==)
             testCase.verifyTrue(testCase.Version1_0_0 == testCase.Version1_0_0);
             testCase.verifyFalse(testCase.Version1_0_0 == testCase.Version2_1_0);
@@ -258,8 +259,8 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             testCase.verifyFalse(testCase.Version1_0_0 >= testCase.Version2_1_0);
             
             % Test with build numbers
-            v1 = openminds.internal.utility.VersionNumber('2.1.3');
-            v2 = openminds.internal.utility.VersionNumber('2.1.3.5');
+            v1 = VersionNumber('2.1.3');
+            v2 = VersionNumber('2.1.3.5');
             testCase.verifyTrue(v2 > v1);
             testCase.verifyTrue(v1 < v2);
             
@@ -270,8 +271,8 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             testCase.verifyFalse(testCase.LatestVersion <= testCase.Version2_1_3);
             
             % Test latest with latest
-            v1 = openminds.internal.utility.VersionNumber('latest');
-            v2 = openminds.internal.utility.VersionNumber('latest');
+            v1 = VersionNumber('latest');
+            v2 = VersionNumber('latest');
             testCase.verifyTrue(v1 == v2);
             testCase.verifyFalse(v1 ~= v2);
         end
@@ -282,18 +283,18 @@ classdef VersionNumberTest < matlab.unittest.TestCase
             
             % Create valid versions
             validVersions = [
-                openminds.internal.utility.VersionNumber('1.0.0')
-                openminds.internal.utility.VersionNumber('2.0.0')
-                openminds.internal.utility.VersionNumber('3.0.0')
+                VersionNumber('1.0.0')
+                VersionNumber('2.0.0')
+                VersionNumber('3.0.0')
             ];
             
             % Test with valid version
-            testVersion = openminds.internal.utility.VersionNumber('2.0.0');
+            testVersion = VersionNumber('2.0.0');
             testCase.verifyWarningFree(...
                 @() VersionNumber.validateVersion(testVersion, validVersions));
             
             % Test with invalid version
-            testVersion = openminds.internal.utility.VersionNumber('4.0.0');
+            testVersion = VersionNumber('4.0.0');
             testCase.verifyError(@() VersionNumber.validateVersion(testVersion, validVersions), 'VersionNumber:InvalidVersion');
         end
         
