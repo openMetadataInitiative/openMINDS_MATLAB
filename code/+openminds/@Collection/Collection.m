@@ -104,31 +104,11 @@ classdef Collection < handle
                 options.LinkResolver (1,:) = []
             end
 
-            % Initialize nodes
+            % Initialize protected maps
             obj.Nodes = dictionary;
             obj.TypeMap = dictionary;
             
-            if ~isempty(instance) && ~isempty(instance{1})
-                isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
-                isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
-                isMetadata = @(x) openminds.utility.isInstance(x);
-                
-                % Initialize from file(s)
-                if all( cellfun(isFilePath, instance) )
-                    obj.load(instance{:})
-    
-                % Initialize from folder
-                elseif all( cellfun(isFolderPath, instance) )
-                    obj.load(instance{:})
-    
-                % Initialize from instance(s)
-                elseif all( cellfun(isMetadata, instance) )
-                    obj.add(instance{:});
-    
-                else
-                    error('All given instances must be valid filepaths or openminds instances')
-                end
-            end
+            obj.initializeFromInstances(instance)
 
             obj.Name = options.Name;
             obj.Description = options.Description;
@@ -141,17 +121,17 @@ classdef Collection < handle
         end
 
         function tf = isKey(obj, identifier)
+        % isKey - Check if collection has a node with the given key / identifier
             tf = false;
-
             if isConfigured(obj.Nodes)
                 if isKey(obj.Nodes, identifier)
                     tf = true;
                 end
             end
         end
-        
+
         function add(obj, instance, options)
-        %add Add single or multiple instances to a collection.
+        % add - Add single or multiple metadata instances to the collection.
         %
         %   Example usage:
         %
@@ -189,7 +169,8 @@ classdef Collection < handle
         end
         
         function remove(obj, instance)
-            
+        % remove - Remove metadata instance from the collection
+        
             if isstring(instance) || ischar(instance)
                 instanceId = instance;
             elseif openminds.utility.isInstance(instance)
@@ -457,6 +438,37 @@ classdef Collection < handle
     end
 
     methods (Access = private)
+        function initializeFromInstances(obj, instance)
+        % Initialize collection from a set of metadata instances
+            if ~isempty(instance) && ~isempty(instance{1})
+                isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
+                isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
+                isMetadata = @(x) openminds.utility.isInstance(x);
+                
+                % Initialize from file(s)
+                if all( cellfun(isFilePath, instance) )
+                    obj.load(instance{:})
+    
+                % Initialize from folder
+                elseif all( cellfun(isFolderPath, instance) )
+                    obj.load(instance{:})
+    
+                % Initialize from instance(s)
+                elseif all( cellfun(isMetadata, instance) )
+                    obj.add(instance{:});
+    
+                else
+                    ME = MException(...
+                        'OPENMINDS_MATLAB:Collection:InvalidInstanceSpecification', ...
+                        ['Invalid instance specification. Each provided instance must be ', ...
+                        'either a valid file path or an object of an openMINDS ', ...
+                        'metadata type class.']);
+
+                    throwAsCaller(ME)
+                end
+            end
+        end
+
         function instanceKeys = getInstanceKeysForType(obj, instanceType)
         % getInstanceKeysForType Get all ids for instances of a given type
 
