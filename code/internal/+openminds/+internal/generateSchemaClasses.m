@@ -18,12 +18,15 @@ function generateSchemaClasses(action, options)
 
         options.SchemaType (1,1) string ...
             {mustBeMember(options.SchemaType, "schema.tpl.json")} = "schema.tpl.json"
-        options.VersionNumber (1,1) string = "latest"
+        options.VersionNumber (1,1) openminds.internal.utility.VersionNumber ...
+            {openminds.mustBeValidVersion(options.VersionNumber)} = "latest"
     end
 
-    versionNumber = openminds.internal.validateVersionNumber(options.VersionNumber);
+    versionNumber = string(options.VersionNumber);
 
-    schemaTable = openminds.internal.utility.dir.listSourceSchemas(VersionNumber=versionNumber);
+    schemaTable = openminds.internal.utility.dir.listSourceSchemas(...
+        "VersionNumber", options.VersionNumber );
+    
     schemaTable.Properties.RowNames = arrayfun(@(i) num2str(i), 1:size(schemaTable,1), 'UniformOutput', false);
     numSchemas = size(schemaTable, 1);
 

@@ -36,6 +36,18 @@ classdef InstanceTest < matlab.unittest.TestCase
             strRep = string(instance);
             testCase.verifyClass(strRep, 'string')
 
+            % list instances if the type has controlled instances
+            superClassNames = superclasses(schemaClassFunctionName);
+
+            if any(ismember(superClassNames, ...
+                    {'openminds.internal.mixin.HasControlledInstance', ...
+                    'openminds.abstract.ControlledTerm'}))
+                instances = feval(sprintf('%s.listInstances', schemaClassFunctionName));
+                if ~isempty(instances)
+                    testCase.verifyClass(instances, 'string')
+                end
+            end
+
             function dispNoOutput(instance) %#ok<INUSD>
                 c = evalc('disp(instance)'); %#ok<NASGU>
             end

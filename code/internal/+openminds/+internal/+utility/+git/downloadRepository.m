@@ -33,7 +33,7 @@ function downloadRepository(repositoryName, options)
     
     C1 = onCleanup(@(pathStr) delete(tempZipFilepath) );
    
-    fprintf('Downloading repository "%s" from "%s"...', ...
+    fprintf('Downloading repository "%s" from "%s"... ', ...
         repositoryName, options.Organization)
     downloadFile(tempZipFilepath, webURI.EncodedURI, 'ShowFilename', true);
     fprintf('Done.\n')
@@ -45,14 +45,10 @@ function downloadRepository(repositoryName, options)
 
     C2 = onCleanup(@(pathStr, mode) rmdir(directoryForUnzip, "s") );
 
-    fprintf('Unzipping repository file (%s)...', repositoryName)
+    fprintf('Unzipping repository file (%s)... ', repositoryName)
     unzip(tempZipFilepath, directoryForUnzip)
     fprintf('Done.\n')
-
-    sourceDirectory = directoryForUnzip;
-
     if ~isfolder(targetDirectory)
-        mkdir(targetDirectory)
     end
 
     % Get repository folder name
@@ -63,7 +59,7 @@ function downloadRepository(repositoryName, options)
         rmdir(fullfile(targetDirectory, folderName), "s")
     end
 
-    fprintf('Copying repository "%s" to local directory:\n(%s)...', repositoryName, targetDirectory)
+    fprintf('Copying repository "%s" to local directory:\n%s... ', repositoryName, targetDirectory)
     copyfile(sourceDirectory, targetDirectory)
     fprintf('Done.\n')
 
