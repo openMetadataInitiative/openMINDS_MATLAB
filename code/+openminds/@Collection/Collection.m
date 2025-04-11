@@ -210,7 +210,7 @@ classdef Collection < handle
                 allIds = obj.TypeMap(instanceType);
                 obj.TypeMap(instanceType) = { setdiff( allIds{1}, instanceId ) };
             else
-                error('Instance with id %s is not found in collection')
+                error('Instance with id %s is not found in collection', instanceId)
             end
         end
 
