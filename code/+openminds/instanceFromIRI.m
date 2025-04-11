@@ -1,15 +1,10 @@
-function instance = instanceFromIRI(iri)
-    
-    validBaseIri = [...
-        "https://openminds.ebrains.eu", ...
-        "https://openminds.om-i.org",
-        ];
+function instance = instanceFromIRI(IRI)
+% instanceFromIRI - Create an instance from an openMINDS IRI
+    arguments
+        IRI (1,1) string {openminds.mustBeValidOpenMINDSIRI}
+    end
 
-    assert(startsWith(iri, validBaseIri), ...
-        'Expected IRI to start with %s\n', ...
-        strjoin("""" + validBaseIri + """", ' or '));
-
-    [type, ~] = openminds.utility.parseAtID(iri);
+    [type, ~] = openminds.utility.parseAtID(IRI);
     typeEnum = openminds.enum.Types(type);
-    instance = feval(typeEnum.ClassName, iri);
+    instance = feval(typeEnum.ClassName, IRI);
 end

@@ -22,7 +22,7 @@ function schemaLabel = getSchemaLabelFromName(schemaName)
     S = S(isMatch);
     schemaLabel = string( S(1).label );
 
-    if numel(S) == 1
+    if isscalar(S)
         return
     else
         if getpref('openminds_ui', 'dev', false)
