@@ -7,22 +7,22 @@ function mustBeListOfUniqueItems(value)
         for instanceType = uniqueInstanceTypes
             isOfType = strcmp( instanceTypes, instanceType );
             valuesOfType = [value{isOfType}];
-            if ischar(valuesOfType)
-                valuesOfType = string(valuesOfType);
-            elseif isstruct(valuesOfType) % Instance is a struct with id, i.e unresolved link
-                if isfield(valuesOfType, 'id')
-                    valuesOfType = {valuesOfType.id};
-                else
-                    throw(InvalidTypeError)
-                end
+
+            if isstruct(valuesOfType) % Instance is a struct with id, i.e unresolved link
+                assert(isfield(valuesOfType, 'id'), ...
+                    'OPENMINDS_MATLAB:PropertyValidator:InvalidMixedTypeInstance', ...
+                    'Expected an unresolved reference of a mixed type instance to be a structure with an "id" field.')
+                valuesOfType = {valuesOfType.id};
             end
-            assert( isequal(valuesOfType, unique(valuesOfType, 'stable')), 'Value must be an array of unique items' );
+            assert( isequal(valuesOfType, unique(valuesOfType, 'stable')), ...
+                'OPENMINDS_MATLAB:PropertyValidator:MixedTypeInstancesMustBeUnique', ...
+                'Property value must be an array of unique items' );
         end
     else
-        assert( isequaln( sort(value), unique(value)), 'Value must contain unique items' );
+        assert( isequaln( sort(value), unique(value)), ...
+            'OPENMINDS_MATLAB:PropertyValidator:ValuesMustBeUnique', ...
+            'Property value must be an array of unique items' );
     end
 end
 
-function ME = InvalidTypeError()
-    ME = MException("OPENMINDS:InvalidValueType", "Value type is unexpected");
-end
+% Todo: For instances, should use identifiers and not object equality
