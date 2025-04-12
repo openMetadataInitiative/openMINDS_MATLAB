@@ -90,6 +90,7 @@ jobs:
         if: always()
         with:
           files: "docs/reports/test-results.xml"
+          check_name: "Test Results (${{ matrix.MATLABVersion }})"
           
       # Save the contents of the reports directory as an artifact
       - name: Save reports directory
