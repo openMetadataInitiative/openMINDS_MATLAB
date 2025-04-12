@@ -5,7 +5,7 @@ on:
   # This way tests will run on any push to a feature branch and when feature 
   # branches are merged to main, but not repeated when PRs are actually merged. 
   push:
-    branches-ignore: ["pipeline", "gh-badges"]
+    branches: [ "main" ]
     paths-ignore:
       - '*README.md'
       - '*md'
