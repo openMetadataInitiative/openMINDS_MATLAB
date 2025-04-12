@@ -113,5 +113,26 @@ classdef PropertyValidatorTest < matlab.unittest.TestCase
                 @() mustBeValidStringLength(testValue, 10, 15), ...
                 'OPENMINDS_MATLAB:PropertyValidators:InvalidStringLength')
         end
+
+        function testMustBeValidTime(testCase)
+
+            validTime = datetime(0,0,0,18,30,10);
+            inValidTime =  datetime(2024,1,1,18,30,10);
+            inValidTimeNoTime =  datetime(2024,1,1,0,0,0);
+
+
+            % Test function when value is a valid time
+            mustBeValidTime(validTime)
+
+            % Test function when datetime contains a year
+            testCase.verifyWarning(...
+                @() mustBeValidTime(inValidTime), ...
+                'OPENMINDS_MATLAB:PropertyValidators:InvalidTime')
+
+            % Test function when there is no time info
+            testCase.verifyWarning(...
+                @() mustBeValidTime(inValidTimeNoTime), ...
+                'OPENMINDS_MATLAB:PropertyValidators:InvalidTime')
+        end
     end
 end
