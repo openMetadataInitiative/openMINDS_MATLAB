@@ -146,7 +146,7 @@ classdef Collection < handle
 
     methods
         function len = length(obj)
-            len = numEntries(obj.Nodes);
+            len = obj.NumNodes;
         end
 
         function tf = isKey(obj, identifier)
