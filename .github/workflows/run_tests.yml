@@ -24,8 +24,8 @@ jobs:
       fail-fast: false
       matrix:
         MATLABVersion: [R2021a, R2024b]
-      env:
-        LatestMATLABVersion: R2024b
+    env:
+      LatestMATLABVersion: R2024b
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
