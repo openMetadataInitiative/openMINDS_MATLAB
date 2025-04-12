@@ -11,6 +11,8 @@ function mustBeListOfUniqueItems(value)
 % Note: If input is a list of typed metadata instances, equality is
 % determined by comparing the identifiers of the instances.
 
+    if isempty(value); return; end
+
     if openminds.utility.isMixedInstance(value)
         value = arrayfun(@(v) v.Instance, value, 'uni', 0);
         instanceTypes = cellfun(@(v) class(v), value, 'UniformOutput', 0);
@@ -45,11 +47,11 @@ function assertUniqueInstances(instances)
     instanceIdentifiers = {instances.id};
     assert(isequal(instanceIdentifiers, unique(instanceIdentifiers, 'stable')), ...
         'OPENMINDS_MATLAB:PropertyValidator:InstancesMustBeUnique', ...
-        'Property value must be an array of unique items');
+        'Value must be an array of unique instances');
 end
 
 function assertUniqueValues(values)
     assert(isequaln(sort(values), unique(values)), ...
         'OPENMINDS_MATLAB:PropertyValidator:ValuesMustBeUnique', ...
-        'Property value must be an array of unique items');
+        'Value must be an array of unique elements');
 end

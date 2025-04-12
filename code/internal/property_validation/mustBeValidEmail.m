@@ -21,7 +21,7 @@ function mustBeValidEmail(value)
         isValid = ~isempty(matchedStr);
         if ~isValid()
             error('OPENMINDS_MATLAB:PropertyValidators:InvalidEmail', ...
-                '"%s" is not a valid email adress', value)
+                '"%s" is not formatted as a valid email adress', value)
         end
     end
 end
