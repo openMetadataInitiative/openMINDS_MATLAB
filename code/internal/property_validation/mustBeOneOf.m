@@ -1,7 +1,7 @@
 function mustBeOneOf(value, allowedTypes)
-% mustBeOneOf - Check that value(s) are objects of the allowed classes
+% mustBeOneOf - Check that value(s) are object(s) of the allowed classes
 %
-% This class is almost identical to the builtin mustBeA, but will also work
+% This function is almost identical to the builtin mustBeA, but will also work
 % if value is a cell array of heterogeneous objects.
 
     if ~iscell(value)

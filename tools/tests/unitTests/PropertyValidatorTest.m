@@ -3,16 +3,47 @@ classdef PropertyValidatorTest < matlab.unittest.TestCase
     
     methods (Test)
         function testMustBeListOfUniqueItemsForMixedTypes(testCase)
-
+            import openminds.internal.mixedtype.organization.DigitalIdentifier
             org = organizationWithTwoIds(); % From oneOffs
             
-            % Should pass for property value of unique a mixed types
+            % Should pass for property value of unique mixed types
             mustBeListOfUniqueItems(org.digitalIdentifier)
 
-            nonUniqueIdentifiers = [org.digitalIdentifier, org.digitalIdentifier(1)];
+            nonUniqueDigitalIdentifiers = [...
+                org.digitalIdentifier, org.digitalIdentifier(1)];
+            
             testCase.verifyError(...
-                @() mustBeListOfUniqueItems(nonUniqueIdentifiers), ...
-                'OPENMINDS_MATLAB:PropertyValidator:MixedTypeInstancesMustBeUnique')
+                @() mustBeListOfUniqueItems(nonUniqueDigitalIdentifiers), ...
+                'OPENMINDS_MATLAB:PropertyValidator:InstancesMustBeUnique')
+
+            % Simulate unresolved mixed type references.
+            digitalIdentifierA = DigitalIdentifier(struct('at_id', '_:000001'));
+            digitalIdentifierB = DigitalIdentifier(struct('at_id', '_:000002'));
+            
+            uniqueDigitalIdentifiers = [digitalIdentifierA, digitalIdentifierB];
+
+            % Should pass for different ids
+            mustBeListOfUniqueItems(uniqueDigitalIdentifiers)
+            
+            % Verify error for non-unique ids
+            digitalIdentifierC = DigitalIdentifier(struct('at_id', '_:000001'));
+            nonUniqueDigitalIdentifiers = [uniqueDigitalIdentifiers, digitalIdentifierC];
+            testCase.verifyError(...
+                @()  mustBeListOfUniqueItems(nonUniqueDigitalIdentifiers), ...
+                'OPENMINDS_MATLAB:PropertyValidator:InstancesMustBeUnique')
+        end
+        
+        function testMustBeListOfUniqueItemsForInstances(testCase)
+            subjectA = openminds.core.Subject();
+            subjectB = openminds.core.Subject();
+
+            % Should pass for unique items
+            mustBeListOfUniqueItems([subjectA, subjectB])
+
+            % Should fail for non-unique items
+            testCase.verifyError(...
+                @() mustBeListOfUniqueItems([subjectA, subjectA]), ...
+                'OPENMINDS_MATLAB:PropertyValidator:InstancesMustBeUnique')
         end
 
         function testMustBeListOfUniqueItemsForStrings(testCase)
@@ -32,18 +63,6 @@ classdef PropertyValidatorTest < matlab.unittest.TestCase
 
             testCase.verifyError(...
                 @() mustBeListOfUniqueItems(["a", "b", "a"]), ...
-                'OPENMINDS_MATLAB:PropertyValidator:ValuesMustBeUnique')
-        end
-
-        function testMustBeListOfUniqueItemsForInstances(testCase)
-            subjectA = openminds.core.Subject();
-            subjectB = openminds.core.Subject();
-
-            % Should pass for unique items
-            mustBeListOfUniqueItems([subjectA, subjectB])
-
-            testCase.verifyError(...
-                @() mustBeListOfUniqueItems([subjectA, subjectA]), ...
                 'OPENMINDS_MATLAB:PropertyValidator:ValuesMustBeUnique')
         end
 
