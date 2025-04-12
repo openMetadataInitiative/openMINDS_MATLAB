@@ -1,7 +1,15 @@
 function mustBeOneOf(value, allowedTypes)
+% mustBeOneOf - Check that value(s) are objects of the allowed classes
+%
+% This class is almost identical to the builtin mustBeA, but will also work
+% if value is a cell array of heterogeneous objects.
 
     if ~iscell(value)
         value = {value};
+    end
+
+    if ischar(allowedTypes)
+        allowedTypes = {allowedTypes};
     end
     
     isOneOf = false(size(value));
@@ -18,7 +26,9 @@ function mustBeOneOf(value, allowedTypes)
     validTypesStr = getValidTypesAsFormattedString(allowedTypes);
 
     if ~isValidType
-        error('Value must be one of the following types:' + validTypesStr)
+        error(...
+            'OPENMINDS_MATLAB:PropertyValidators:MustBeTypeOf', ...
+            'Value must be one of the following types:' + validTypesStr)
     end
     % assert(isValidType, 'Value must be one of the following types:' + validTypesStr)
 end
