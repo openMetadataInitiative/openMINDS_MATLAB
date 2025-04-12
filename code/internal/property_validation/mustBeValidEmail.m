@@ -5,7 +5,8 @@ function mustBeValidEmail(value)
         matchedPattern = regexp(value, '\w*\@\w*\.\w*', 'match');
         isValid = ~isempty(matchedPattern);
         if ~isValid()
-            error('"%s" is not a valid email adress', value)
+            error('OPENMINDS_MATLAB:PropertyValidators:InvalidEmail', ...
+                '"%s" is not a valid email adress', value)
         end
     end
 end

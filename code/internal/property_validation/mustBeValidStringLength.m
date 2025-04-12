@@ -9,5 +9,6 @@ function mustBeValidStringLength(value, minLength, maxLength)
         msg = sprintf('String must be maximum %d characters', maxLength);
     end
     
-    assert(strlength(value) >= minLength && strlength(value) <= minLength, msg)
+    assert(strlength(value) >= minLength && strlength(value) <= maxLength, ...
+        'OPENMINDS_MATLAB:PropertyValidators:InvalidStringLength', msg)
 end
