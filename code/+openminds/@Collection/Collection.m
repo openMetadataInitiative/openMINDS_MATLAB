@@ -47,17 +47,22 @@ classdef Collection < handle
         % Description of the metadata collection
         Description (1,1) string
     end
+
+    properties (Dependent, Access = private)
+        NumNodes
+        NumTypes
+    end
     
     properties (SetAccess = protected)
         % Nodes - Dictionary storing instances as values with identifiers
         % as keys
-        Nodes (1,1) dictionary
+        Nodes {mustBeA(Nodes, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
     end
 
     properties (SetAccess = protected, Hidden)
         % TypeMap - Keeps a map/dictionary of types and instance ids to
         % efficiently extract instances of a specific type.
-        TypeMap (1,1) dictionary
+        TypeMap {mustBeA(TypeMap, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
     end
 
     properties
@@ -105,13 +110,37 @@ classdef Collection < handle
             end
 
             % Initialize protected maps
-            obj.Nodes = dictionary;
-            obj.TypeMap = dictionary;
+            if exist("isMATLABReleaseOlderThan", "file") ...
+                    && not(isMATLABReleaseOlderThan("R2022b"))
+                obj.Nodes = dictionary;
+                obj.TypeMap = dictionary;
+            else % Backwards compatibility
+                obj.Nodes = containers.Map;
+                obj.TypeMap = containers.Map;
+            end
             
             obj.initializeFromInstances(instance)
 
             obj.Name = options.Name;
             obj.Description = options.Description;
+        end
+    end
+
+    methods
+        function numNodes = get.NumNodes(obj)
+            if isa(obj.Nodes, 'dictionary')
+                numNodes = numEntries(obj.Nodes);
+            elseif isa(obj.Nodes, 'containers.Map')
+                numNodes = numel(obj.Nodes);
+            end
+        end
+                
+        function numTypes = get.NumTypes(obj)
+            if isa(obj.TypeMap, 'dictionary')
+                numTypes = numEntries(obj.TypeMap);
+            elseif isa(obj.TypeMap, 'containers.Map')
+                numTypes = numel(obj.TypeMap);
+            end
         end
     end
 
@@ -123,7 +152,7 @@ classdef Collection < handle
         function tf = isKey(obj, identifier)
         % isKey - Check if collection has a node with the given key / identifier
             tf = false;
-            if isConfigured(obj.Nodes)
+            if obj.NumNodes > 0
                 if isKey(obj.Nodes, identifier)
                     tf = true;
                 end
@@ -161,7 +190,7 @@ classdef Collection < handle
             % Todo:work for arrays
             tf = false;
 
-            if isConfigured(obj.Nodes)
+            if obj.NumNodes > 0
                 if isKey(obj.Nodes, instance.id)
                     tf = true;
                 end
@@ -179,7 +208,7 @@ classdef Collection < handle
                 error('Unexpected type "%s" for instance argument', class(instance))
             end
 
-            if isConfigured(obj.Nodes) && isKey(obj.Nodes, instanceId)
+            if obj.NumNodes > 0 && isKey(obj.Nodes, instanceId)
                 try 
                     instanceType = class( obj.Nodes{instanceId} );
                 catch % < R2023a
@@ -196,11 +225,11 @@ classdef Collection < handle
         end
 
         function instance = get(obj, nodeKey)
-            if isMATLABReleaseOlderThan("R2023b")
+            if exist("isMATLABReleaseOlderThan", "file") && not( isMATLABReleaseOlderThan("R2023b") )
+                instance = obj.Nodes{nodeKey};
+            else
                 instance = obj.Nodes(nodeKey);
                 instance = instance{1};
-            else
-                instance = obj.Nodes{nodeKey};
             end
         end
 
@@ -212,7 +241,7 @@ classdef Collection < handle
 
             tf = false;
             
-            if ~isConfigured(obj.Nodes)
+            if obj.NumNodes == 0
                 return
             end
             
@@ -232,7 +261,7 @@ classdef Collection < handle
 
             instances = [];
 
-            if ~isConfigured(obj.Nodes)
+            if obj.NumNodes
                 return
             end
             
@@ -380,7 +409,7 @@ classdef Collection < handle
                 return
             end
 
-            if isConfigured(obj.Nodes)
+            if obj.NumNodes > 0
                 if isKey(obj.Nodes, instance.id)
                     % warning('Node with id %s already exists in collection', instance.id)
                     if options.AbortIfNodeExists
@@ -395,7 +424,7 @@ classdef Collection < handle
 
                 % Add to TypeMap: Todo: Separate method
                 instanceType = class(instance);
-                if isConfigured(obj.TypeMap) && isKey(obj.TypeMap, instanceType)
+                if obj.NumTypes > 0 && isKey(obj.TypeMap, instanceType)
                     if isMATLABReleaseOlderThan("R2023b")
                         existingInstances = obj.TypeMap(instanceType);
                         obj.TypeMap(instanceType) = {[existingInstances{:}, string(instance.id)]};
@@ -472,7 +501,7 @@ classdef Collection < handle
         function instanceKeys = getInstanceKeysForType(obj, instanceType)
         % getInstanceKeysForType Get all ids for instances of a given type
 
-            if isConfigured(obj.TypeMap)
+            if obj.NumTypes > 0
                 typeKeys = obj.TypeMap.keys;
     
                 isMatch = strcmp(typeKeys, instanceType.ClassName);
