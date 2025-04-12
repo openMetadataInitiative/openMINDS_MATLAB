@@ -90,28 +90,3 @@ jobs:
         with:
           name: reports
           path: docs/reports
-
-      - name: Checkout gh-badges branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-badges
-          path: gh-badges
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push to gh-badges
-        run: |
-          cp .github/badges/code_issues.svg gh-badges/.github/badges/code_issues.svg
-          cp .github/badges/tests.svg gh-badges/.github/badges/tests.svg
-          cd gh-badges
-
-          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
-
-          # Only proceed with commit and push if changes are detected
-          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
-            git add .github/badges/*
-            git commit -m "Update code issues and tests badges"
-            git push -f
-          else
-            echo "Nothing to commit"
-          fi
