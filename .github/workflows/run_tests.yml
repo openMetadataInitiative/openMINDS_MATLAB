@@ -59,7 +59,7 @@ jobs:
         uses: matlab-actions/run-command@v2
         with:
           command: |
-            doCreateBadge = strcmp(${{ matrix.MATLABVersion }}, ${{ env.LatestMATLABVersion }});
+            doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}");
             addpath(genpath("tools")), testToolbox("CreateBadge", doCreateBadge)
 
       # Commit updated SVG badges for the issues and tests (if changed)
