@@ -131,7 +131,7 @@ classdef Collection < handle
             if isa(obj.Nodes, 'dictionary')
                 numNodes = numEntries(obj.Nodes);
             elseif isa(obj.Nodes, 'containers.Map')
-                numNodes = numel(obj.Nodes);
+                numNodes = length(obj.Nodes);
             end
         end
                 
@@ -139,7 +139,7 @@ classdef Collection < handle
             if isa(obj.TypeMap, 'dictionary')
                 numTypes = numEntries(obj.TypeMap);
             elseif isa(obj.TypeMap, 'containers.Map')
-                numTypes = numel(obj.TypeMap);
+                numTypes = length(obj.TypeMap);
             end
         end
     end
@@ -215,7 +215,11 @@ classdef Collection < handle
                     instance = obj.Nodes(instanceId);
                     instanceType = class( instance{1} );
                 end
-                obj.Nodes(instanceId) = [];
+                if isa(obj.Nodes, "dictionary")
+                    obj.Nodes(instanceId) = [];
+                else
+                    obj.Nodes.remove(instanceId);
+                end
 
                 allIds = obj.TypeMap(instanceType);
                 obj.TypeMap(instanceType) = { setdiff( allIds{1}, instanceId ) };
@@ -261,14 +265,23 @@ classdef Collection < handle
 
             instances = [];
 
-            if obj.NumNodes
+            if obj.NumNodes == 0
                 return
             end
             
             instanceKeys = obj.getInstanceKeysForType(type);
             if isempty(instanceKeys); return; end
             
-            instances = obj.Nodes(instanceKeys);
+            if isa(obj.Nodes, 'dictionary')
+                instances = obj.Nodes(instanceKeys);
+            else
+                instances = cell(1, numel(instanceKeys));
+                for i = 1:numel(instanceKeys)
+                    instances{i} = obj.Nodes(instanceKeys{i});
+                end
+                instances = [instances{:}];
+            end
+
             instances = [instances{:}]; % Create non-cell array
 
             % Filter by property values:
@@ -284,7 +297,12 @@ classdef Collection < handle
         end
 
         function updateLinks(obj)
-            for instance = obj.Nodes.values
+            allInstances = obj.Nodes.values;
+            if isa(obj.Nodes, 'containers.Map')
+                allInstances = [allInstances{:}];
+            end
+
+            for instance = allInstances
                 obj.addNode(instance{1}, ...
                     'AddSubNodesOnly', true, ...
                     'AbortIfNodeExists', false);
@@ -506,10 +524,15 @@ classdef Collection < handle
     
                 isMatch = strcmp(typeKeys, instanceType.ClassName);
                 if any(isMatch)
-                    if isMATLABReleaseOlderThan("R2023b")
-                        instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
-                    else
-                        instanceKeys = obj.TypeMap{typeKeys(isMatch)};
+                    if isa(obj.TypeMap, 'dictionary')
+                        if isMATLABReleaseOlderThan("R2023b")
+                            instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+                        else
+                            instanceKeys = obj.TypeMap{typeKeys(isMatch)};
+                        end
+                    elseif isa(obj.TypeMap, 'containers.Map')
+                        instanceKeys = obj.TypeMap(typeKeys{isMatch});
+                        instanceKeys = instanceKeys{1};
                     end
                 else
                     instanceKeys = {};
