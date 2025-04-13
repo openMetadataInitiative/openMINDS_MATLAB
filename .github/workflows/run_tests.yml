@@ -58,7 +58,8 @@ jobs:
         if: always()
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("tools")), testToolbox()
+          doCreateBadge = strcmp(${{ matrix.MATLABVersion }}, ${{ env.LatestMATLABVersion }});
+          command: addpath(genpath("tools")), testToolbox("CreateBadge", doCreateBadge)
 
       # Commit updated SVG badges for the issues and tests (if changed)
       - name: Commit svg badges if updated
