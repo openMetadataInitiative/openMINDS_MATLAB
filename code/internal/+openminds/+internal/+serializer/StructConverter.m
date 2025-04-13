@@ -45,7 +45,7 @@ classdef StructConverter < handle
     end
 
     properties (Access = private)
-        SchemaInspector
+        MetaType
     end
 
     properties (Constant, Access = protected)
@@ -93,7 +93,7 @@ classdef StructConverter < handle
                     obj.assignNameValueOptions(nvOptions)
         
                     obj.Instance = instanceObject;
-                    obj.SchemaInspector = openminds.internal.SchemaInspector(instanceObject);
+                    obj.MetaType = openminds.internal.meta.fromInstance(instanceObject);
         
                     obj.SchemaType = instanceObject.X_TYPE;
         
@@ -194,17 +194,17 @@ classdef StructConverter < handle
                 if isstring(iPropertyValue) && numel(iPropertyValue)==1 && ismissing(iPropertyValue); continue; end
 
                 % Handle linked, embedded and direct values.
-                if obj.SchemaInspector.isPropertyWithLinkedType(iPropertyName)
+                if obj.MetaType.isPropertyWithLinkedType(iPropertyName)
                     [S.(iVocabPropertyName), L] = obj.convertLinkedInstanceToStruct(iPropertyValue);
                     C = [C, L]; %#ok<AGROW>
-                elseif obj.SchemaInspector.isPropertyWithEmbeddedType(iPropertyName)
+                elseif obj.MetaType.isPropertyWithEmbeddedType(iPropertyName)
                     [S.(iVocabPropertyName), L] = obj.convertEmbeddedInstanceToStruct(iPropertyValue);
                     C = [C, L]; %#ok<AGROW>
                 else
                     S.(iVocabPropertyName) = iPropertyValue;
                 end
 
-                toScalar = obj.SchemaInspector.isPropertyValueScalar(iPropertyName);
+                toScalar = obj.MetaType.isPropertyValueScalar(iPropertyName);
                 if ~toScalar && numel(S.(iVocabPropertyName)) == 1
                     % Scalar values should still be serialized as array if
                     % property allows lists

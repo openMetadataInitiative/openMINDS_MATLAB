@@ -5,7 +5,7 @@ on:
   # This way tests will run on any push to a feature branch and when feature 
   # branches are merged to main, but not repeated when PRs are actually merged. 
   push:
-    branches-ignore: ["pipeline", "gh-badges"]
+    branches: [ "main" ]
     paths-ignore:
       - '*README.md'
       - '*md'
@@ -18,9 +18,14 @@ on:
 jobs:
   # This workflow contains a single job called "test"
   test:
-    name: Test openMINDS_MATLAB
-    # The type of runner that the job will run on
+    name: Test openMINDS_MATLAB (${{ matrix.MATLABVersion }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        MATLABVersion: [R2021b, R2024b]
+    env:
+      LatestMATLABVersion: R2024b
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,16 +35,19 @@ jobs:
       
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
+        with:
+          release: ${{ matrix.MATLABVersion }}
 
       # Check for MATLAB code issues in the project.
       - name: Check for MATLAB code issues
+        if: matrix.MATLABVersion == env.LatestMATLABVersion
         uses: matlab-actions/run-command@v2
-        if: always()
         with:
           command: addpath(genpath("tools")),codecheckToolbox()
     
       # Upload code issues report
       - name: Upload SARIF file
+        if: matrix.MATLABVersion == env.LatestMATLABVersion
         uses: github/codeql-action/upload-sarif@v3
         with:
           # Path to SARIF file relative to the root of the repository
@@ -47,14 +55,16 @@ jobs:
           
       # Run all tests in the project.
       - name: Run tests
-        uses: matlab-actions/run-command@v2
         if: always()
+        uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("tools")), testToolbox()
+          command: |
+            doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
+            addpath(genpath("tools")), testToolbox("CreateBadge", doCreateBadge)
 
       # Commit updated SVG badges for the issues and tests (if changed)
       - name: Commit svg badges if updated
-        if: always()
+        if: matrix.MATLABVersion == env.LatestMATLABVersion
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
@@ -70,8 +80,8 @@ jobs:
           fi
 
       - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
+        if: matrix.MATLABVersion == env.LatestMATLABVersion
         uses: codecov/codecov-action@v4
-        if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: docs/reports/codecoverage.xml
@@ -82,36 +92,12 @@ jobs:
         if: always()
         with:
           files: "docs/reports/test-results.xml"
+          check_name: "Test Results (${{ matrix.MATLABVersion }})"
           
       # Save the contents of the reports directory as an artifact
       - name: Save reports directory
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: reports
+          name: reports-${{ matrix.MATLABVersion }}
           path: docs/reports
-
-      - name: Checkout gh-badges branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-badges
-          path: gh-badges
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push to gh-badges
-        run: |
-          cp .github/badges/code_issues.svg gh-badges/.github/badges/code_issues.svg
-          cp .github/badges/tests.svg gh-badges/.github/badges/tests.svg
-          cd gh-badges
-
-          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
-
-          # Only proceed with commit and push if changes are detected
-          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
-            git add .github/badges/*
-            git commit -m "Update code issues and tests badges"
-            git push -f
-          else
-            echo "Nothing to commit"
-          fi
