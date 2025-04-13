@@ -27,7 +27,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
     end
 
     properties (Abstract, Constant, Hidden)
-        LINKED_PROPERTIES struct %todo: name and classname, not openminds uri
+        LINKED_PROPERTIES struct
         EMBEDDED_PROPERTIES struct
     end
     
