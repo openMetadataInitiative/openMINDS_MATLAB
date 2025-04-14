@@ -526,7 +526,8 @@ classdef Collection < handle
                 if any(isMatch)
                     if isa(obj.TypeMap, 'dictionary')
                         if isMATLABReleaseOlderThan("R2023b")
-                            instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+                            instanceKeys = obj.TypeMap(typeKeys(isMatch));
+                            instanceKeys = instanceKeys{1};
                         else
                             instanceKeys = obj.TypeMap{typeKeys(isMatch)};
                         end
