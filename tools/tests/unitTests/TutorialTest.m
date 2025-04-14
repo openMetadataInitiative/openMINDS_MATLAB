@@ -35,7 +35,8 @@ classdef TutorialTest <  matlab.unittest.TestCase
     
     methods (Test)
         function testTutorial(testCase, tutorialFile) %#ok<INUSD>
-            C = evalc( "run(tutorialFile)" );
+            tutorialFilePath = fullfile(testCase.RootDirectory, tutorialFile);
+            C = evalc( sprintf('run("%s")', tutorialFilePath) );
             testCase.verifyClass(C, 'char')
         end
     end
@@ -47,6 +48,6 @@ function tutorialFilePaths = listTutorialFiles()
     L = dir(fullfile(rootPath, 'livescripts', '*.mlx'));
     tutorialNames = setdiff({L.name}, TutorialTest.SkippedTutorials);
 
-    tutorialFilePaths = fullfile(rootPath, 'livescripts', tutorialNames);
-    tutorialFilePaths{end+1} = fullfile(rootPath, 'gettingStarted.mlx');
+    tutorialFilePaths = fullfile('livescripts', tutorialNames);
+    tutorialFilePaths{end+1} = 'gettingStarted.mlx';
 end
