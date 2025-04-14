@@ -2,8 +2,8 @@ function selectOpenMindsVersion(versionNumber)
 % selectOpenMindsVersion - Select and "import" a specific version of the openMINDS model.
 %
 % This function allows you to select a specific version of the openMINDS
-% metadata model and load its components (classes for metadata types and mixed 
-% types) into the MATLAB environment. The selected version can be specified as 
+% metadata model and load its components (classes for metadata types and mixed
+% types) into the MATLAB environment. The selected version can be specified as
 % a version number or as "latest" to load the most recent version available.
 %
 % Usage:
@@ -11,13 +11,13 @@ function selectOpenMindsVersion(versionNumber)
 %
 % Arguments:
 %   - version (optional) : string (default: "latest")
-%     The version of the openMINDS metadata model to select and load. Use a 
-%     specific version number like 1 or use "latest" to load the latest 
+%     The version of the openMINDS metadata model to select and load. Use a
+%     specific version number like 1 or use "latest" to load the latest
 %     available version.
 %
 % Notes:
 %   - The openMINDS package must be on the search path before using this function.
-%   - This function modifies the MATLAB search path to include the selected 
+%   - This function modifies the MATLAB search path to include the selected
 %     version's types and mixedtypes subdirectories while removing the others.
 %
 % Example:
@@ -68,4 +68,7 @@ function selectOpenMindsVersion(versionNumber)
     addpath(genpath( fullfile(rootPath, "types", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+
+    % Add a second pause for changes to take effect.
+    pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
 end

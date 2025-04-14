@@ -5,7 +5,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 %
 %   Known subclasses:
 %       - openminds.abstract.Schema
-%       - openmidns.internal.abstract.LinkedCategory
+%       - openmidns.internal.abstract.MixedTypeSet
 
 % Todo:
 %  [ ] Clean up and improve Compact Displays

@@ -99,51 +99,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
     end
 
-    methods (Access = public, Hidden)
-        
-        function tf = isPropertyWithLinkedType(obj, propertyName)
-            % Return true if property value is a linked type.
-            propertyNamesWithLinkedType = fieldnames(obj.LINKED_PROPERTIES);
-            tf = any( strcmp(propertyNamesWithLinkedType, propertyName) );
-        end
-
-        function linkedTypesForProperty = getLinkedTypesForProperty(obj, propertyName)
-            % Return linked types that are allowed for given property.
-            if obj.isPropertyWithLinkedType(propertyName)
-                linkedTypesForProperty = obj.LINKED_PROPERTIES.(propertyName);
-            else
-                error('Property %s does not have linked types', propertyName);
-            end
-        end
-
-        function tf = isLinkedTypeOfProperty(obj, type)
-        %isLinkedTypeOfProperty ???
-            tf = false;
-            
-            propertyNames = fieldnames( obj.LINKED_PROPERTIES );
-
-            for i = 1:numel(propertyNames)
-                types = obj.LINKED_PROPERTIES.(propertyNames{i});
-
-                for j = 1:numel(types)
-                    thisType = types{j};
-
-                    tf = strcmp(thisType, type);
-                    if tf; return; end
-
-                    thisTypeSplit = strsplit(thisType, '/');
-                    tf = strcmp(thisTypeSplit{end}, type);
-                    if tf; return; end
-                end
-            end
-        end
-
-        function propertyName = linkedTypeOfProperty(obj, type)
-            % Get property name which can be linked to given type
-            propertyName = obj.linkedTypeOfPropertyStatic(type, obj.LINKED_PROPERTIES);
-        end
-    end
-
     methods (Hidden) % Todo: remove?
         function str = char(obj)
             str = obj.getDisplayLabel();
@@ -172,11 +127,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     propName = subs(1).subs;
                     className = class(obj.(propName));
                 
-                    % Get the actual instance from a linkset subclass.
+                    % Get the actual instance from a MixedTypeSet subclass.
                     if contains(className, 'openminds.internal.mixedtype')
                         try
-                            % Place the openMINDS instance object in a linkset
-                            % wrapper class
+                            % Place the openMINDS instance object in a
+                            % MixedTypeSet wrapper class
                             classFcn = str2func(className);
                             value = classFcn(value);
                         catch MECause
@@ -440,7 +395,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 % if strcmp(s(1).type, '.') && strcmp(s(2).type, '()')
                 %     %linkedTypeValues = builtin('subsref', obj, s(1:2));
                 %     linkedTypeValues = obj.subsref(s(1:2));
-                % 
+                %
                 % elseif strcmp(s(1).type, '.')
                 %     linkedTypeValues = builtin('subsref', obj, s(1));
                 % end
@@ -569,7 +524,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
     end
 
-    methods (Access = protected)
+    methods (Access = protected) % Methods related to object display
         function displayLabel = getDisplayLabel(obj)
             %schemaShortName = obj.getSchemaShortName(class(obj));
 
@@ -613,35 +568,6 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
             import openminds.internal.utility.getSchemaName
             shortSchemaName = getSchemaName(fullSchemaName);
-        end
-    end
-
-    methods (Static, Hidden)
-        
-        function propertyName = linkedTypeOfPropertyStatic(type, linkedTypeProperties)
-            propertyName = "";
-            propertyNamesWithLinkedType = fieldnames( linkedTypeProperties );
-
-            for i = 1:numel(propertyNamesWithLinkedType)
-                types = linkedTypeProperties.(propertyNamesWithLinkedType{i});
-
-                for j = 1:numel(types)
-                    thisType = types{j};
-
-                    tf = strcmp(thisType, type);
-                    if tf
-                        propertyName = propertyNamesWithLinkedType{i};
-                        return
-                    end
-
-                    thisTypeSplit = strsplit(thisType, '/');
-                    tf = strcmp(thisTypeSplit{end}, type);
-                    if tf
-                        propertyName = propertyNamesWithLinkedType{i};
-                        return
-                    end
-                end
-            end
         end
     end
 end
