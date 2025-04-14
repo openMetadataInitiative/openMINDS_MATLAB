@@ -56,7 +56,8 @@ classdef ClassWriter < handle
             if strcmp(firstLetter, lower(firstLetter))
                 newNameLowercase = newName;
                 newName{1}(1) = upper(firstLetter);
-                warning('Classname should start with a capital letter. Changed name from "%s" to "%s"', newNameLowercase, newName) %#ok<PFCEL>
+                warning(['Classname should start with a capital letter. ', ...
+                    'Changed name from "%s" to "%s"'], newNameLowercase, string(newName))
             end
             obj.ClassName = newName;
         end

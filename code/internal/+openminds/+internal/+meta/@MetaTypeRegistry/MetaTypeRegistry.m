@@ -27,7 +27,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
     properties (Access = private)
         % Registry - Storage for cached Type objects
         % Uses dictionary in newer MATLAB versions, containers.Map in older ones
-        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
+        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
     properties (SetAccess = private)

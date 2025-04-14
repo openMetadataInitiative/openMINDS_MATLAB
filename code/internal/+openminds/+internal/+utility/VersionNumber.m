@@ -286,7 +286,7 @@ classdef VersionNumber < handle & matlab.mixin.CustomDisplay & matlab.mixin.Cust
             fprintf('  %s \n\n', string(obj));
         end
 
-        function displayEmptyObject(obj) %#ok<MANU>
+        function displayEmptyObject(~)
             fprintf(['  0x0 empty Version array', '\n']);
         end
 
