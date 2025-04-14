@@ -1,11 +1,6 @@
 classdef Type < handle
 % Type - Provides information about a type derived from an openMINDS metadata schema.
 
-
-    properties (SetAccess = immutable, GetAccess = private)
-        metaClassObject meta.class
-    end
-
     properties (SetAccess = immutable)
         Name char
         SchemaClassName char
@@ -14,20 +9,20 @@ classdef Type < handle
 
     properties (Dependent)
         NumProperties
+        MetaClassHandle meta.class
     end
 
     properties (Access = private)
         PropertyNamesAll (1,:) string
+        CachedMetaClassHandle meta.class
     end
 
     methods % Constructor
         function obj = Type(varargin)
             
             if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')
-                obj.metaClassObject = meta.class.fromName(varargin{1});
                 obj.SchemaClassName = varargin{1};
             elseif openminds.utility.isInstance(varargin{1})
-                obj.metaClassObject = metaclass(varargin{1});
                 obj.SchemaClassName = class(varargin{1});
             else
                 error('Unsupported input type')
@@ -38,7 +33,7 @@ classdef Type < handle
             
             % obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();
-            obj.PropertyNamesAll = string( {obj.metaClassObject.PropertyList.Name} );
+            obj.PropertyNamesAll = string( {obj.MetaClassHandle.PropertyList.Name} );
             
             if ~nargout
                 clear obj
@@ -50,20 +45,27 @@ classdef Type < handle
         function n = get.NumProperties(obj)
             n = numel(obj.PropertyNames);
         end
+
+        function value = get.MetaClassHandle(obj)
+            if isempty(obj.CachedMetaClassHandle) || ~isvalid(obj.CachedMetaClassHandle)
+                obj.CachedMetaClassHandle = meta.class.fromName(obj.SchemaClassName);
+            end
+            value = obj.CachedMetaClassHandle;
+        end
     end
 
     methods (Access = private)
         
         function metaProperty = getMetaProperty(obj, propertyName)
             propertyIndex = obj.PropertyNamesAll == string(propertyName);
-            metaProperty = obj.metaClassObject.PropertyList(propertyIndex);
+            metaProperty = obj.MetaClassHandle.PropertyList(propertyIndex);
         end
         
         function propertyNames = getPublicProperties(obj)
-            propertyNames = {obj.metaClassObject.PropertyList.Name};
-            propSetAccess = {obj.metaClassObject.PropertyList.SetAccess};
+            propertyNames = {obj.MetaClassHandle.PropertyList.Name};
+            propSetAccess = {obj.MetaClassHandle.PropertyList.SetAccess};
             isPublic = cellfun(@(c) strcmp(c, 'public'), propSetAccess);
-            isHidden = [obj.metaClassObject.PropertyList.Hidden];
+            isHidden = [obj.MetaClassHandle.PropertyList.Hidden];
             
             propertyNames = propertyNames(isPublic & ~isHidden);
         end
