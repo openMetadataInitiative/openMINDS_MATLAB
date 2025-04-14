@@ -1,30 +1,56 @@
-classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handle
-%LinkedTypeSet Abstract class representing a set of linked types
+classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
+% MixedTypeSet - Abstract class representing a set of types that can mixed
 
-% This class behaves as a container for holding an instance that can be mixed
-% with other instances. This is similar to the matlab.mixin.Heterogeneous,
-% but this class is context specific. I.e in general, a Person instance
-% should not be mixed with any other schema, but a subclass allows a Person
-% instance to be mixed with a specified set of other instances.
+% Many properties of openMINDS metadata schemas/types can hold linked or 
+% embedded metadata instances of different types. This class acts as a 
+% container that can hold a set of instances that can be mixed with instances 
+% of other types. This provides a way to add instances of different types
+% as property values to a property of an openMINDS metadata type even
+% though MATLAB does not natively support mixing different class objects in a
+% list.
 %
-% This class is internal and should not be exposed to users. Subclasses will be
-% used for schema property definitions if properties support linked/embedded
-% types of different types.
+% For each openMIDNS property that allows a set of different linked or embedded
+% types, the openMINDS_MATLAB build pipeline will generate a subclass of
+% the MixedTypeSet and place in the "mixedtypes/" folder
 
-% Rename to MixedTypeSet or MixableType
+
+% Developer notes:
+%
+% The behavior is similar to the matlab.mixin.Heterogeneous, but with some
+% key differences. If using matlab.mixin.Heterogeneous, it would need to be
+% added as a mixin the the base class of metadata types, i.e
+% openminds.abstract.Schema and as a result any typed instance could be
+% mixed with any other typed instance. However, the MixedTypeSet only
+% allows mixing a specified subset of instances in a specific context. For 
+% example, the openminds.internal.mixedtype.datasetversion.Author allows 
+% instances of types Consortium, Organization and Person to be mixed, and
+% the DatasetVersion type specifies that the author property is restricted
+% to the "*.Author" mixed type. Therefore mixing instances of these types
+% are supported only in a DatasetVersion/author context.
+%
+% Using the matlab.mixin.Heterogeneous as a mixin on the base class and
+% mustBeA for property validation on generated type classes is an an 
+% alternative option. Need to consider whether it is a benefit to allow all
+% metadata types to be represented in array form instead of cell array
+% form. Originally in this project, using the Heterogeneous mixin was not
+% an option because of the use of enumerations for controlled instances in
+% the ControlledTerm subtypes, but this was later removed.
+%
+% This class is internal and should not be exposed to users. 
 
 %   TODO:
 %       [ ] Implement subsref in order to get instances out.
 %       [ ] If all requested instances are the same, return a an object array
+%       [ ] Create a separate mixin class for the custom display related functionality
 %       [ ] Consider if we need to define intersect, union etc.
 %       [ ] Any other builtins needed???
 
 % Subclass from CustomInstanceDisplay but override some of the methods...
 
     properties (Abstract, Constant)
-        % Allowed types for a specific LinkedCategory instance
+        % Allowed types for a specific MixedTypeSet instance
         ALLOWED_TYPES
-        % Whether a specific LinkedCategory subclass should be "scalar".
+        % Whether a specific MixedTypeSet subclass should be "scalar".
         IS_SCALAR
     end
 
@@ -34,7 +60,7 @@ classdef LinkedCategory < openminds.internal.mixin.CustomInstanceDisplay & handl
     end
 
     methods
-        function obj = LinkedCategory(instance)
+        function obj = MixedTypeSet(instance)
             
             if nargin == 0; return; end
 
