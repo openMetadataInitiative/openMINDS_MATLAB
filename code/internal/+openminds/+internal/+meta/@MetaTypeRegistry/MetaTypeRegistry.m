@@ -62,7 +62,11 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
             % Initialize registry using dictionary if available (R2022b+)
             % otherwise fall back to containers.Map
             if exist('dictionary', 'file')
-                obj.Registry = configureDictionary('string', 'cell');
+                if exist('configureDictionary', 'file') % From R2023b
+                    obj.Registry = configureDictionary('string', 'cell');
+                else % Fallback for R2022b and R2023a
+                    obj.Registry = dictionary(string.empty, {});
+                end
             else
                 obj.Registry = containers.Map();
             end
