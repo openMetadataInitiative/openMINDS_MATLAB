@@ -41,7 +41,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
 
             % Try assigning
             try
-                registry('OriginalPerson') = metaPerson; %#ok<NASGU>
+                registry('OriginalPerson') = metaPerson;
             catch ME
                 testCase.verifyEqual(string(ME.identifier), ...
                     "OPENMINDS_MATLAB:MetaTypeRegistry:UnsupportedIndexingOperation")
@@ -49,11 +49,19 @@ classdef MetaTypeTest < matlab.unittest.TestCase
 
             % Try deleting
             try
-                registry('Person') = []; %#ok<NASGU>
+                registry('Person') = [];
             catch ME
                 testCase.verifyEqual(string(ME.identifier), ...
                     "OPENMINDS_MATLAB:MetaTypeRegistry:UnsupportedIndexingOperation")
             end
+
+            % Try getting an invalid key
+            testCase.verifyError(...
+                @() registry('InvalidType'), ...
+                "OPENMINDS_MATLAB:MetaTypeRegistry:InvalidKey")
+
+            % Try using chained indexing
+            testCase.verifyEqual( string(registry('Person').Name), "Person")
         end
 
         function testMetaType(testCase)

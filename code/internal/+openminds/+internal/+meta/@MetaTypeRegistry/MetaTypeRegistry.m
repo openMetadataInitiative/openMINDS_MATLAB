@@ -192,14 +192,14 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         %
         % This method is called when determining the number of outputs for
         % comma-separated list expansion with indexing
-            if numel(indexOp) <= 2
+            if numel(indexOp) <= 1
                 n = 1;
                 return;
             end
             
             % Forward to the contained object for nested indexing
-            containedObj = obj.(indexOp(1:2));
-            n = listLength(containedObj, indexOp(3:end), ctx);
+            metaType = obj.(indexOp(1));
+            n = listLength(metaType, indexOp(2:end), ctx);
         end
 
         function obj = parenDelete(~, ~) %#ok<STOUT> 
