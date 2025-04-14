@@ -21,7 +21,6 @@ classdef Type < handle
     end
 
     methods
-        
         function obj = Type(varargin)
             
             if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')
@@ -73,7 +72,7 @@ classdef Type < handle
     methods (Access = public)
 
         function tf = isPropertyValueScalar(obj, propertyName)
-        %isPropertyValueScalar Check if property value must be scalar
+        % isPropertyValueScalar - Check if property value must be scalar
 
             mp = obj.getMetaProperty(propertyName);
             
@@ -95,7 +94,7 @@ classdef Type < handle
         end
 
         function tf = isPropertyWithLinkedType(obj, propertyName)
-            % Return true if property value is a linked type.
+        % isPropertyWithLinkedType - Check if property has linked types.
             
             mp = obj.getMetaProperty('LINKED_PROPERTIES');
             % DefaultValue is a struct where each field is corresponding to
@@ -104,25 +103,105 @@ classdef Type < handle
         end
 
         function tf = isPropertyWithEmbeddedType(obj, propertyName)
-            % Return true if property value is an embedded type.
+        % isPropertyWithEmbeddedType - Check if property has embedded types.
+        
             mp = obj.getMetaProperty('EMBEDDED_PROPERTIES');
             
             % DefaultValue is a struct where each field is corresponding to
             % one property
             tf = isfield( mp.DefaultValue, propertyName );
         end
+                
+        function linkedTypesForProperty = listLinkedTypesForProperty(obj, propertyName)
+        % listLinkedTypesForProperty - Return list of linked types that are allowed for given property.
+            if obj.isPropertyWithLinkedType(propertyName)
+                mp = obj.getMetaProperty('LINKED_PROPERTIES');
+                linkedTypesForProperty =  mp.DefaultValue.(propertyName);
+            else
+                error('Property %s does not have linked types', propertyName);
+            end
+        end
+
+        function embeddedTypesForProperty = listEmbeddedTypesForProperty(obj, propertyName)
+        % listEmbeddedTypesForProperty - Return list of embedded types that are allowed for given property.
+            if obj.isPropertyWithEmbeddedType(propertyName)
+                mp = obj.getMetaProperty('EMBEDDED_PROPERTIES');
+                embeddedTypesForProperty =  mp.DefaultValue.(propertyName);
+            else
+                error('Property %s does not have embedded types', propertyName);
+            end
+        end
 
         function tf = isPropertyMixedType(obj, propertyName)
+        % isPropertyMixedType - Check if property has linked or embedded MixedTypeSets.
             mp = obj.getMetaProperty(propertyName);
             className = mp.Validation.Class.Name;
             tf = startsWith(className, 'openminds.internal.mixedtype');
         end
 
         function className = getMixedTypeForProperty(obj, propertyName)
+        % getMixedTypeForProperty - Get class name of MixedTypeSet for given property
             mp = obj.getMetaProperty(propertyName);
             className = mp.Validation.Class.Name;
             assert( startsWith(className, 'openminds.internal.mixedtype'), ...
                 'Property is not a mixed type' );
+        end
+
+        function tf = isLinkedTypeOfAnyProperty(obj, type)
+        % isLinkedTypeOfAnyProperty - Check if a given type can be linked
+        % from any property of this type
+
+            arguments
+                obj (1,1) openminds.internal.meta.Type
+                type (1,1) openminds.enum.Types
+            end
+
+            tf = false;
+
+            linkedTypeInfo = obj.getMetaProperty('LINKED_PROPERTIES').DefaultValue;
+
+            propertyNames = fieldnames( linkedTypeInfo );
+
+            for i = 1:numel(propertyNames)
+                types = linkedTypeInfo.(propertyNames{i});
+
+                for j = 1:numel(types)
+                    thisType = types{j};
+
+                    tf = strcmp(thisType, type.ClassName);
+                    if tf; return; end
+                end
+            end
+        end
+
+        function propertyName = linkedTypeOfProperty(obj, type)
+            % Get property name which can be linked to given type
+                    
+            arguments
+                obj (1,1) openminds.internal.meta.Type
+                type (1,1) openminds.enum.Types
+            end
+
+            linkedTypeInfo = obj.getMetaProperty('LINKED_PROPERTIES').DefaultValue;
+
+            propertyNamesWithLinkedType = fieldnames( linkedTypeInfo );
+
+            for i = 1:numel(propertyNamesWithLinkedType)
+                types = linkedTypeInfo.(propertyNamesWithLinkedType{i});
+
+                for j = 1:numel(types)
+                    thisType = types{j};
+
+                    tf = strcmp(thisType, type.ClassName);
+                    if tf
+                        propertyName = propertyNamesWithLinkedType{i};
+                        return
+                    end
+                end
+            end
+
+            error('OPENMINDS_MATLAB:MetaType:NotALinkedType', ...
+                '"%s" is not a linked type of any properties of "%s"', type, obj.Name)
         end
     end
 
