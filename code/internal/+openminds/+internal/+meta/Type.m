@@ -1,13 +1,15 @@
-classdef SchemaInspector < handle
-% Utility class for inspection of a Schema
+classdef Type < handle
+% Type - Provides information about a type derived from an openMINDS metadata schema.
+
 
     properties (SetAccess = immutable, GetAccess = private)
-        metaClassObject
+        metaClassObject meta.class
     end
 
     properties (SetAccess = immutable)
-        SchemaClassName
-        PropertyNames
+        Name char
+        SchemaClassName char
+        PropertyNames (1,:) string
     end
 
     properties (Dependent)
@@ -20,7 +22,7 @@ classdef SchemaInspector < handle
 
     methods
         
-        function obj = SchemaInspector(varargin)
+        function obj = Type(varargin)
             
             if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')
                 obj.metaClassObject = meta.class.fromName(varargin{1});
@@ -31,6 +33,9 @@ classdef SchemaInspector < handle
             else
                 error('Unsupported input type')
             end
+
+            splitClassName = strsplit(obj.SchemaClassName, '.');
+            obj.Name = splitClassName{end};
             
             % obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();

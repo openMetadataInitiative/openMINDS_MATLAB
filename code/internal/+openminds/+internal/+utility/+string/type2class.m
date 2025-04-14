@@ -6,7 +6,7 @@ function className = type2class(openmindsType)
     if startsWith(openmindsType, "https://openminds.om-i.org/types")
         className = openminds.enum.Types(schemaName).ClassName;
     else
-        modelName = lower( typeSplit{end-1} );
-        className = sprintf('openminds.%s.%s', modelName, schemaName);
+        moduleName = lower( typeSplit{end-1} );
+        className = sprintf('openminds.%s.%s', moduleName, schemaName);
     end
 end

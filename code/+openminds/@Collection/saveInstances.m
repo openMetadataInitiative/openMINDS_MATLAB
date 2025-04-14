@@ -67,7 +67,7 @@ function instanceFilePath = buildSingleInstanceFilepath(rootPath, jsonldInstance
 %buildSingleInstanceFilepath Build filepath for single instance.
 %
 %   Use the @type to create a filepath consisting of a folder hierarchy
-%   base on the openMINDS model the instance belong to.
+%   based on the openMINDS module the instance belong to.
 %
 %   Example:
 %

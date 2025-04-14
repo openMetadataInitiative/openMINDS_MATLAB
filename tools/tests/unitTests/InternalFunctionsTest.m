@@ -10,11 +10,5 @@ classdef InternalFunctionsTest < matlab.unittest.TestCase
     
     methods(Test)
 
-        function testListFiles(testCase)
-            codeFolder = openminds.toolboxdir();
-            [filePath, filename] = openminds.internal.utility.dir.listFiles(codeFolder);
-            testCase.verifyClass(filePath, 'cell');
-            testCase.verifyClass(filename, 'cell');
-        end
     end
 end

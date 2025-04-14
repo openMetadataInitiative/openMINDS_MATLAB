@@ -44,11 +44,12 @@ end
 
 function str = getHtmlLink(schemaClassName, browserOption)
     
+    version = openminds.getModelVersion();
+
     persistent schemaManifest
-    if isempty(schemaManifest)
+    if isempty(schemaManifest) || ~isequal(schemaManifest.Properties.CustomProperties.ModelVersion, version)
         try
-            schemaVersion = openminds.getModelVersion();
-            schemaManifest = openminds.internal.loadSchemaManifest(schemaVersion);
+            schemaManifest = openminds.internal.loadSchemaManifest(version);
         catch
             error('Not implemented yet')
         end
@@ -57,18 +58,17 @@ function str = getHtmlLink(schemaClassName, browserOption)
     schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
 
     isMatch = strcmpi(schemaManifest.Name, string(schemaName));
-    version = openminds.getModelVersion();
 
-    modelName = schemaManifest{isMatch, "Model"};
+    moduleName = schemaManifest{isMatch, "Module"};
     subgroupName = schemaManifest{isMatch, "Group"};
     schemaName = schemaManifest{isMatch, "Name"};
 
     if contains(schemaClassName, 'mixedtype')
         [~, fragment] = openminds.internal.utility.string.packageParts(schemaClassName);
-        url = generateDocumentationUrl(version, modelName, subgroupName, schemaName, fragment);
+        url = generateDocumentationUrl(version, moduleName, subgroupName, schemaName, fragment);
         displayLabel = fragment;
     else
-        url = generateDocumentationUrl(version, modelName, subgroupName, schemaName);
+        url = generateDocumentationUrl(version, moduleName, subgroupName, schemaName);
         displayLabel = openminds.internal.utility.getSchemaName(schemaClassName);
     end
 
@@ -95,9 +95,9 @@ function str = getHtmlLink(schemaClassName, browserOption)
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
 end
 
-function str = getOnlineHtmlLink(version, modelName, subgroupName, schemaName, browserOption, fragment) %#ok<DEFNU>
+function str = getOnlineHtmlLink(version, moduleName, subgroupName, schemaName, browserOption, fragment) %#ok<DEFNU>
     
-    filepath = generateDocumentationUrl(version, modelName, subgroupName, schemaName, fragment);
+    filepath = generateDocumentationUrl(version, moduleName, subgroupName, schemaName, fragment);
 
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
 end
@@ -106,7 +106,7 @@ function weblink = createLink(urlString, displayLabel, browserOption)
     weblink = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', urlString, browserOption, displayLabel);
 end
 
-function urlStr = generateDocumentationUrl(version, modelName, subgroupName, schemaName, fragment)
+function urlStr = generateDocumentationUrl(version, moduleName, subgroupName, schemaName, fragment)
     
     if nargin < 5
         fragment = '';
@@ -115,7 +115,7 @@ function urlStr = generateDocumentationUrl(version, modelName, subgroupName, sch
     import openminds.internal.utility.string.uriJoin
     BASE_URL = openminds.internal.constants.url.OpenMindsDocumentation;
 
-    urlStr = uriJoin(BASE_URL, version, 'schema_specifications', modelName, subgroupName, schemaName);
+    urlStr = uriJoin(BASE_URL, version, 'schema_specifications', moduleName, subgroupName, schemaName);
     urlStr = urlStr + ".html";
 
     if ~isempty(fragment)
@@ -128,8 +128,8 @@ function schemaClass = convertToMatlabClassname(schemaClass)
     schemaClass = strrep(schemaClass, 'https://openminds.ebrains.eu/', '');
     splitStr = strsplit(schemaClass, '/');
 
-    modelName = lower(splitStr{1});
+    moduleName = lower(splitStr{1});
     schemaName = splitStr{2};
 
-    schemaClass = strjoin({'openminds', modelName, schemaName}, '.');
+    schemaClass = strjoin({'openminds', moduleName, schemaName}, '.');
 end

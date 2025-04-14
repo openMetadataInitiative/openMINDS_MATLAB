@@ -1,34 +1,26 @@
 classdef InstanceTest < matlab.unittest.TestCase
 % InstanceTest - Unit test for creation and save/load of OpenMINDS instances
 
-    % Automatically generate a test case for each schema type
+    % Automatically generate a test case for each metadata type
     properties (TestParameter)
-        SchemaType = cellstr( enumeration('openminds.enum.Types') );
-    end
-
-    properties
-        ItemPreSave  % Property to store the object created in the first test
-        TempSavePath % Property to store the temporary save path
-        CurrentSchemaType   % Property to store the current schema type being tested
+        MetadataType = cellstr( enumeration('openminds.enum.Types') );
     end
 
     methods (Test)
     
-        function testCreateSchema(testCase, SchemaType)
-            % Get the schema class name and function handle
-
-            schemaType = openminds.enum.Types(SchemaType);
-            schemaClassFunctionName = schemaType.ClassName;
-            schemaFcn = str2func(schemaClassFunctionName);
+        function testCreateType(testCase, MetadataType)
+            % Get class constructor for metadata type
+            metadataType = openminds.enum.Types(MetadataType);
+            typeConstructor = str2func( metadataType.ClassName );
             
             % Skip abstract classes
-            mc = meta.class.fromName(schemaClassFunctionName);
+            mc = meta.class.fromName( metadataType.ClassName );
             if isempty(mc) || mc.Abstract
                 return;
             end
 
-            % Attempt to create an object of the schema class
-            instance = schemaFcn();
+            % Attempt to create an object of the type class for a metadata schema
+            instance = typeConstructor();
             testCase.assertInstanceOf(instance, 'openminds.abstract.Schema')
 
             testCase.verifyWarningFree( @(i)dispNoOutput(instance) )
@@ -36,32 +28,45 @@ classdef InstanceTest < matlab.unittest.TestCase
             strRep = string(instance);
             testCase.verifyClass(strRep, 'string')
 
+            % list instances if the type has controlled instances
+            superClassNames = superclasses(metadataType.ClassName);
+
+            if any(ismember(superClassNames, ...
+                    {'openminds.internal.mixin.HasControlledInstance', ...
+                    'openminds.abstract.ControlledTerm'}))
+                instances = feval(sprintf('%s.listInstances', metadataType.ClassName));
+                if ~isempty(instances)
+                    testCase.verifyClass(instances, 'string')
+                end
+            end
+
             function dispNoOutput(instance) %#ok<INUSD>
                 c = evalc('disp(instance)'); %#ok<NASGU>
             end
         end
 
-        function testSaveLoadForSchema(testCase, SchemaType)
-            % Test saving and loading for a specific schema type
+        function testSaveLoadForTypedInstance(testCase, MetadataType)
+            % Test saving and loading for a specific metadata type
 
-            if strcmp( SchemaType, "None" ); return; end
+            if strcmp( MetadataType, "None" ); return; end
 
-            % Get the schema class name and function handle
-            schemaType = openminds.enum.Types(SchemaType);
-            schemaClassFunctionName = schemaType.ClassName;
-            schemaFcn = str2func(schemaClassFunctionName);
-            
+            % Get class constructor for metadata type
+            metadataType = openminds.enum.Types(MetadataType);
+            typeConstructor = str2func( metadataType.ClassName );
+
             % Skip abstract classes
-            mc = meta.class.fromName(schemaClassFunctionName);
+            mc = meta.class.fromName(metadataType.ClassName);
             if isempty(mc) || mc.Abstract
                 return;
             end
 
-            % Attempt to create an object of the schema class
+            % Attempt to create an object of the type class for a metadata schema
             try
-                itemPreSave = schemaFcn();
+                itemPreSave = typeConstructor();
             catch ME
-                testCase.verifyFail(sprintf('Failed to create object for %s: %s', schemaClassFunctionName, ME.message));
+                testCase.verifyFail(...
+                    sprintf('Failed to create object for %s: %s', ...
+                    metadataType.ClassName, ME.message));
                 return;
             end
             
@@ -73,7 +78,9 @@ classdef InstanceTest < matlab.unittest.TestCase
             try
                 save(tempsavepath, 'itemPreSave');
             catch ME
-                testCase.verifyFail(sprintf('Failed to save object for %s: %s', schemaClassFunctionName, ME.message));
+                testCase.verifyFail(...
+                    sprintf('Failed to save object for %s: %s', ...
+                    metadataType.ClassName, ME.message));
                 return;
             end
 
@@ -81,13 +88,15 @@ classdef InstanceTest < matlab.unittest.TestCase
             try
                 S = load(tempsavepath, 'itemPreSave');
             catch ME
-                testCase.verifyFail(sprintf('Failed to load object for %s: %s', schemaClassFunctionName, ME.message));
+                testCase.verifyFail(...
+                    sprintf('Failed to load object for %s: %s', ...
+                    metadataType.ClassName, ME.message));
                 return;
             end
             
             % Verify that the loaded object matches the original object
             testCase.verifyEqual(S.itemPreSave, itemPreSave, ...
-                sprintf('Loaded object does not match the original for %s', schemaClassFunctionName));
+                sprintf('Loaded object does not match the original for %s', metadataType.ClassName));
         end
     end
 end

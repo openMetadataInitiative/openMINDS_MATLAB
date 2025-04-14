@@ -67,7 +67,7 @@ function instances = loadInstances(filePath)%, options)
             end
 
         otherwise
-            error('Unkown output format')
+            error('Unkown input format')
     end
 
     if ~nargout
@@ -83,21 +83,11 @@ function resolveLinks(instance, instanceIds, instanceCollection)
         return
     end
 
-    persistent schemaInspectorMap
-    if isempty(schemaInspectorMap)
-        schemaInspectorMap = dictionary;
-    end
-
-    instanceType = class(instance);
-    if ~isConfigured(schemaInspectorMap) || ~isKey(schemaInspectorMap, instanceType)
-        schemaInspectorMap(instanceType) = openminds.internal.SchemaInspector(instance);
-    end
-
-    schemaInspector = schemaInspectorMap(instanceType);
+    metaType = openminds.internal.meta.fromInstance(instance);
     
-    for i = 1:schemaInspector.NumProperties
-        thisPropertyName = schemaInspector.PropertyNames{i};
-        if schemaInspector.isPropertyWithLinkedType(thisPropertyName)
+    for i = 1:metaType.NumProperties
+        thisPropertyName = metaType.PropertyNames{i};
+        if metaType.isPropertyWithLinkedType(thisPropertyName)
             linkedInstances = instance.(thisPropertyName);
 
             resolvedInstances = cell(size(linkedInstances));
@@ -137,7 +127,7 @@ function resolveLinks(instance, instanceIds, instanceCollection)
                 instance.(thisPropertyName) = resolvedInstances;
             end
         
-        elseif schemaInspector.isPropertyWithEmbeddedType(thisPropertyName)
+        elseif metaType.isPropertyWithEmbeddedType(thisPropertyName)
             embeddedInstances = instance.(thisPropertyName);
 
             for j = 1:numel(embeddedInstances)
