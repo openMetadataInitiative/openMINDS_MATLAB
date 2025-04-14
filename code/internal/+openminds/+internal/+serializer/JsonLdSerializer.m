@@ -36,7 +36,8 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
             end
         end
 
-        function instances = deserialize(obj)
+        function instances = deserialize(obj) %#ok<MANU,STOUT>
+            error('Not implemented')
             % Todo:
             % json to struct
             % struct to openminds instances

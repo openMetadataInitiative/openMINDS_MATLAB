@@ -20,7 +20,15 @@ function codeMetaInfo = updateCodeMetaFile(versionString)
         versionString, strrep(versionString, '.', '_'));
     codeMetaInfo.dateModified = string(datetime('today', 'Format', 'yyyy-MM-dd'));
 
+    if isscalar(codeMetaInfo.author)
+        % Ensure author is encoded as an array
+        codeMetaInfo.author = {codeMetaInfo.author};
+    end
+
     jsonStr = jsonencode(codeMetaInfo, 'PrettyPrint', true);
+
+    % Add EOF newline
+    jsonStr = [jsonStr, newline];
 
     % Fix json-ld @props
     jsonStr = strrep(jsonStr, 'x_context', '@context');

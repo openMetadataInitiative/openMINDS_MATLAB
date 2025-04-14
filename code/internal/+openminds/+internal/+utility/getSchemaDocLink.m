@@ -77,26 +77,9 @@ function str = getHtmlLink(schemaClassName, browserOption)
     else
         str = createLink(url, displayLabel, browserOption);
     end
-    
-    return
-
-    persistent htmlFileTable
-    if isempty(htmlFileTable)
-        htmlFileTable = openminds.internal.utility.dir.listSourceSchemas(...
-            'SchemaType', 'html', 'SchemaFileExtension', 'html');
-    end
-
-    schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
-
-    isMatch = lower(htmlFileTable.SchemaName) == lower(schemaName);
-    filepath = htmlFileTable.Filepath(isMatch);
-    
-    % commandStr = sprintf('web(''%s'', ''%s'')', filepath, browserOption);
-    str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);
 end
 
 function str = getOnlineHtmlLink(version, moduleName, subgroupName, schemaName, browserOption, fragment) %#ok<DEFNU>
-    
     filepath = generateDocumentationUrl(version, moduleName, subgroupName, schemaName, fragment);
 
     str = sprintf('<a href="matlab:web %s %s" style="font-weight:bold">%s</a>', filepath, browserOption, schemaName);

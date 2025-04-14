@@ -27,7 +27,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
     properties (Access = private)
         % Registry - Storage for cached Type objects
         % Uses dictionary in newer MATLAB versions, containers.Map in older ones
-        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
+        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
     properties (SetAccess = private)
@@ -59,13 +59,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 options.ModelVersion (1,1) string
             end
             
-            % Initialize registry using dictionary if available (R2022b+)
-            % otherwise fall back to containers.Map
-            if exist('dictionary', 'file')
-                obj.Registry = configureDictionary('string', 'cell');
-            else
-                obj.Registry = containers.Map();
-            end
+            obj.initializeCache()
             
             % Apply options
             obj.ModelVersion = options.ModelVersion;
@@ -86,15 +80,25 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         % clearCache - Clear the registry cache
         %
         % This method can be used to force reloading of Type objects
-            if exist('dictionary', 'file')
-                obj.Registry = configureDictionary('string', 'cell');
-            else
-                obj.Registry = containers.Map();
-            end
+            obj.initializeCache()
         end
     end
 
     methods (Access = private)
+        function initializeCache(obj)
+            % Initialize registry using dictionary if available (R2022b+)
+            % otherwise fall back to containers.Map
+            if exist('dictionary', 'file')
+                if exist('configureDictionary', 'file') % From R2023b
+                    obj.Registry = configureDictionary('string', 'cell');
+                else % Fallback for R2022b and R2023a
+                    obj.Registry = dictionary(string.empty, {});
+                end
+            else
+                obj.Registry = containers.Map();
+            end
+        end
+
         function isValid = isValidKey(obj, keyName)
         % isValidKey - Check if a key is valid for the registry
         %

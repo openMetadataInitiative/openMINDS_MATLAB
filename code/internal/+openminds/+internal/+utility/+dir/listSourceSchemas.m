@@ -1,11 +1,10 @@
-function schemaInfo = listSourceSchemas(schemaModule, options)
+function schemaInfo = listSourceSchemas(options)
 %listSourceSchemas List information about all available schemas.
 %
 %   schemaInfo = listSourceSchemas() returns a table with information
 %   about all the available schemas.
 
     arguments
-        schemaModule = {}
         options.SchemaType (1,1) string = "schema.omi.json";
         options.SchemaFileExtension = '*.omi.json';
         options.VersionNumber (1,1) openminds.internal.utility.VersionNumber ...

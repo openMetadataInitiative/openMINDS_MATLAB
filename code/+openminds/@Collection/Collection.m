@@ -56,13 +56,13 @@ classdef Collection < handle
     properties (SetAccess = protected)
         % Nodes - Dictionary storing instances as values with identifiers
         % as keys
-        Nodes {mustBeA(Nodes, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
+        Nodes {mustBeA(Nodes, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
     properties (SetAccess = protected, Hidden)
         % TypeMap - Keeps a map/dictionary of types and instance ids to
         % efficiently extract instances of a specific type.
-        TypeMap {mustBeA(TypeMap, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
+        TypeMap {mustBeA(TypeMap, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
     properties
@@ -526,7 +526,8 @@ classdef Collection < handle
                 if any(isMatch)
                     if isa(obj.TypeMap, 'dictionary')
                         if isMATLABReleaseOlderThan("R2023b")
-                            instanceKeys = string( obj.TypeMap(typeKeys(isMatch)) );
+                            instanceKeys = obj.TypeMap(typeKeys(isMatch));
+                            instanceKeys = instanceKeys{1};
                         else
                             instanceKeys = obj.TypeMap{typeKeys(isMatch)};
                         end
