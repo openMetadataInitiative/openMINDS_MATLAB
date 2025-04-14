@@ -1,10 +1,17 @@
 classdef Type < handle
 % Type - Provides information about a type derived from an openMINDS metadata schema.
+%
+%   Provides utility methods for checking various property attributes of a 
+%   metadata type derived from an openMINDS metadata schema.
+%
+%   This class is meant to be used by internal/external applications that
+%   need to infer schema constraints that are implicitly coded into the 
+%   generated type classes, but not necessarily explcitly expressed.
 
     properties (SetAccess = immutable)
-        Name char
-        SchemaClassName char
-        PropertyNames (1,:) string
+        Name char                   % (Short) Name of openMINDS metadata type
+        ClassName char              % Full MATLAB class name of of openMINDS metadata type
+        PropertyNames (1,:) string  % List of property names for a metadata type
     end
 
     properties (Dependent)
@@ -21,14 +28,14 @@ classdef Type < handle
         function obj = Type(varargin)
             
             if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')
-                obj.SchemaClassName = varargin{1};
+                obj.ClassName = varargin{1};
             elseif openminds.utility.isInstance(varargin{1})
-                obj.SchemaClassName = class(varargin{1});
+                obj.ClassName = class(varargin{1});
             else
                 error('Unsupported input type')
             end
 
-            splitClassName = strsplit(obj.SchemaClassName, '.');
+            splitClassName = strsplit(obj.ClassName, '.');
             obj.Name = splitClassName{end};
             
             % obj.countProperties()
@@ -48,7 +55,7 @@ classdef Type < handle
 
         function value = get.MetaClassHandle(obj)
             if isempty(obj.CachedMetaClassHandle) || ~isvalid(obj.CachedMetaClassHandle)
-                obj.CachedMetaClassHandle = meta.class.fromName(obj.SchemaClassName);
+                obj.CachedMetaClassHandle = meta.class.fromName(obj.ClassName);
             end
             value = obj.CachedMetaClassHandle;
         end
