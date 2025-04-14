@@ -81,6 +81,19 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         end
     end
 
+    methods
+        function clearCache(obj)
+        % clearCache - Clear the registry cache
+        %
+        % This method can be used to force reloading of Type objects
+            if exist('dictionary', 'file')
+                obj.Registry = configureDictionary('string', 'cell');
+            else
+                obj.Registry = containers.Map();
+            end
+        end
+    end
+
     methods (Access = private)
         function isValid = isValidKey(obj, keyName)
         % isValidKey - Check if a key is valid for the registry
@@ -119,17 +132,6 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 throwAsCaller(ME)
             end
         end
-
-        function clearCache(obj)
-        % clearCache - Clear the registry cache
-        %
-        % This method can be used to force reloading of Type objects
-            if exist('dictionary', 'file')
-                obj.Registry = configureDictionary('string', 'cell');
-            else
-                obj.Registry = containers.Map();
-            end
-        end
     end
 
     methods (Access=protected)
@@ -144,6 +146,17 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
 
             obj.validateKey(keyName)
 
+            if any(ismember(obj.AvailableTypes, keyName))
+                % Key is a type name (e.g., 'Person')
+                typeEnum = openminds.enum.Types(keyName);
+            else
+                % Key is a class name (e.g., 'openminds.core.Person')
+                typeEnum = openminds.enum.Types.fromClassName(keyName);
+                keyName = string(typeEnum);
+            end
+
+
+
             % Check if the type is already in the registry
             if isKey(obj.Registry, keyName)
                 % Retrieve from cache
@@ -152,19 +165,8 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                     metaType = metaType{1};
                 end
             else
-                % Create a new Type object
-                if any(ismember(obj.AvailableTypes, keyName))
-                    % Key is a type name (e.g., 'Person')
-                    typeEnum = openminds.enum.Types(keyName);
-                    metaType = openminds.internal.meta.Type(typeEnum.ClassName);
-                    keyName = string(keyName);
-                else
-                    % Key is a class name (e.g., 'openminds.core.Person')
-                    metaType = openminds.internal.meta.Type(keyName);
-                    keyName = metaType.Name;
-                end
-                
-                % Cache the new Type object
+                % Create and cache a new object
+                metaType = openminds.internal.meta.Type(typeEnum.ClassName);
                 obj.Registry(keyName) = {metaType};
             end
             
