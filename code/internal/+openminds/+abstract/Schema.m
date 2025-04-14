@@ -384,7 +384,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     varargout = cell(1, numOutputs);
                     [varargout{:}] = builtin('subsref', obj, subs);
                 else
-                    obj = builtin('subsref', obj, subs);
+                    obj = builtin('subsref', obj, subs); %#ok<NASGU>
                 end
             end
         end

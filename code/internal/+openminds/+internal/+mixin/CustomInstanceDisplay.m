@@ -58,7 +58,8 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
     methods (Hidden, Access = protected) % CustomDisplay - Method implementation
         
-        function requiredProperties = getRequiredProperties(obj)
+        function requiredProperties = getRequiredProperties(~)
+            % Subclasses should override.
             requiredProperties = [];
         end
 
@@ -173,7 +174,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                 rep = matlab.display.PlainTextRepresentation(obj, repmat({str}, numRows, 1), displayConfiguration);
             elseif numObjects >= 1
                 % str = obj.DisplayString;
-                rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', arrayfun(@(i) obj(i).DisplayString, [1:numRows]', 'uni', 0) );
+                rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', arrayfun(@(i) obj(i).DisplayString, (1:numRows)', 'uni', 0) );
 
             elseif numObjects > 1
                 % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', obj.DisplayString );

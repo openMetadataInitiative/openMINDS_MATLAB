@@ -19,10 +19,10 @@ function S = listSchemasWithNonGenericLabel()
     for i = 1:numSchemas
 
         iSchemaName = schemaTable{i, "SchemaName"};
-        iModelName = schemaTable{i, "ModuleName"};
+        iModuleName = schemaTable{i, "ModuleName"};
         iSubmoduleName = schemaTable{i, "SubModuleName"};
         
-        schemaClassFunctionName = openminds.internal.utility.string.buildClassName(iSchemaName, iSubmoduleName, iModelName);
+        schemaClassFunctionName = openminds.internal.utility.string.buildClassName(iSchemaName, iSubmoduleName, iModuleName);
         schemaFcn = str2func(schemaClassFunctionName);
         
         mc = meta.class.fromName(schemaClassFunctionName);
