@@ -148,7 +148,7 @@ jobs:
       - name: Set version number
         id: set_version
         run: |
-          versionNumber=$(echo "${{ env.VERSION }}" | sed 's/\./_/g')
+          versionNumber=$(echo "${{ env.VERSION_TAG }}" | sed 's/\./_/g')
           echo "versionNumber=$versionNumber" >> $GITHUB_ENV
 
       # Save the MLTBX.
