@@ -1,4 +1,4 @@
-classdef {{ class_name }} < openminds.internal.abstract.LinkedCategory
+classdef {{ class_name }} < openminds.internal.abstract.MixedTypeSet
     properties (Constant, Hidden)
         ALLOWED_TYPES = [ ...
         {%- for full_type_name in allowed_types_list %}
