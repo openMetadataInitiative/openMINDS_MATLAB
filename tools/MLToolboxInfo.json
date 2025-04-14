@@ -2,13 +2,13 @@
     "Namespace" : "openminds",
     "ToolboxOptions": {
         "Identifier": "b8bc10bb-6afb-4c6a-b357-a57037d1dcb3",
-        "ToolboxName": "openMINDS Metadata Model",
+        "ToolboxName": "openMINDS Metadata Toolbox",
         "AuthorName": "Eivind Hennestad",
         "AuthorEmail": "eivihe@uio.no",
         "AuthorCompany": "openMetadataInitiative",
-        "Summary": "A MATLAB toolbox to create metadata instances using the openMINDS metadata models",
-        "Description": "MATLAB package for the openMINDS metadata models. The package contains all the latest openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods",
-        "MinimumMatlabRelease": "R2022b",
+        "Summary": "A MATLAB toolbox to create metadata instances using the openMINDS metadata model",
+        "Description": "MATLAB toolbox for creating openMINDS compliant linked metadata, supporting import and export of metadata instances in JSON-LD format.",
+        "MinimumMatlabRelease": "R2021b",
         "MaximumMatlabRelease": "",
         "ToolboxImageFile": "img/light_openMINDS-MATLAB-logo_toolbox.png",
         "ToolboxGettingStartedGuide": "code/gettingStarted.mlx"
