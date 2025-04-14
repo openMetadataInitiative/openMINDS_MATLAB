@@ -20,7 +20,7 @@ classdef Type < handle
         PropertyNamesAll (1,:) string
     end
 
-    methods
+    methods % Constructor
         function obj = Type(varargin)
             
             if isa(varargin{1}, 'char') || isa(varargin{1}, 'string')

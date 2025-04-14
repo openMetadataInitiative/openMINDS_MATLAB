@@ -68,4 +68,7 @@ function selectOpenMindsVersion(versionNumber)
     addpath(genpath( fullfile(rootPath, "types", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+
+    % Add a second pause for changes to take effect.
+    pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
 end
