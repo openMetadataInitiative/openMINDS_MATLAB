@@ -20,9 +20,19 @@ jobs:
   # 1. a matrixed test job run across MATLAB releases from R2021b to R2024b
   # 2. a reporting job that summarizes the tests, and updates release badge
   
-  validate_version:
+  check_retag:
     runs-on: ubuntu-latest
-    if: github.event_name == workflow_dispatch
+    steps:
+      - name: Fail if commit message contains [retag]
+        if: ${{ contains(github.event.head_commit.message, '[retag]') }}
+        run: |
+          echo "Error: Commit message contains [retag], skipping."
+          exit 1
+
+  validate_version:
+    needs: check_retag
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Check version format
         run: |
@@ -34,6 +44,7 @@ jobs:
           echo "Version '$version' is valid."
 
   test:
+    needs: [validate_version]
     strategy:
       fail-fast: false
       matrix:
@@ -185,7 +196,7 @@ jobs:
           git push origin --delete "${{ github.ref_name }}"
 
           # Recreate the tag with a message, including [skip ci] to prevent CI workflows
-          git tag -a "${{ github.ref_name }}" -m "Release ${{ github.ref_name }} [skip ci]" 
+          git tag -a "${{ github.ref_name }}" -m "Release ${{ github.ref_name }} [retag]" 
 
           # Push the new tag to the remote repository
           git push origin "${{ github.ref_name }}"
