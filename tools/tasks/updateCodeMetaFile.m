@@ -27,6 +27,9 @@ function codeMetaInfo = updateCodeMetaFile(versionString)
 
     jsonStr = jsonencode(codeMetaInfo, 'PrettyPrint', true);
 
+    % Add EOF newline
+    jsonStr = [jsonStr, newline];
+
     % Fix json-ld @props
     jsonStr = strrep(jsonStr, 'x_context', '@context');
     jsonStr = strrep(jsonStr, 'x_type', '@type');
