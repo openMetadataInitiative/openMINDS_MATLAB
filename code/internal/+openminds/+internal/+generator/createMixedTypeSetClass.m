@@ -1,19 +1,19 @@
-function className = createPropertyLinksetClass(schemaName, propertyName, linkedTypes, allowMultiple)
-% createPropertyLinksetClass Create a new linkset class for a given property
+function className = createMixedTypeSetClass(schemaName, propertyName, allowedTypes, allowMultiple)
+% createMixedTypeSetClass Create a new mixed type set class for a given property
 %
 % Syntax:
-%   className = createPropertyLinksetClass(propertyName, linkedTypes)
+%   className = createMixedTypeSetClass(propertyName, allowedTypes)
 %
 % Inputs:
 %   schemaName - The name of the schema the property belongs to
-%   propertyName - The name of the property to create a linkedcategory class for
-%   linkedTypes - A string array of the types that the property links to
+%   propertyName - The name of the property to create a MixedTypeSet subclass for
+%   allowedTypes - A string array of the types that the property links to
 %
 % Outputs:
-%   className - The name of the newly created linkset class
+%   className - The name of the newly created MixedTypeSet subclass
 %
 % Example:
-%   className = createPropertyLinksetClass('MySchema', 'MyProperty', ["Type1", "Type2"])
+%   className = createMixedTypeSetClass('MySchema', 'MyProperty', ["Type1", "Type2"])
 %
 % See also: openminds.abstract.MixedTypeSet
     
@@ -24,7 +24,7 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
     
     % Convert the cell array of types to a string representing a string
     % array
-    linkedTypes = cellArrayToTextStringArray(linkedTypes);
+    allowedTypes = cellArrayToTextStringArray(allowedTypes);
 
     packageNames = ["openminds", "internal", "mixedtype", lower(schemaName)];
     packageFolderNames = strcat("+", packageNames);
@@ -41,7 +41,7 @@ function className = createPropertyLinksetClass(schemaName, propertyName, linked
 
     % Modify the template based on inputs
     str = strrep(str, 'MixedTypeTemplate', propertyName);
-    str = strrep(str, '[]', linkedTypes);
+    str = strrep(str, '[]', allowedTypes);
     if allowMultiple
         str = strrep(str, 'true', 'false');
     end

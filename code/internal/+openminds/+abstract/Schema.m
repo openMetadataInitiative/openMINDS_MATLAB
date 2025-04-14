@@ -172,11 +172,11 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     propName = subs(1).subs;
                     className = class(obj.(propName));
                 
-                    % Get the actual instance from a linkset subclass.
+                    % Get the actual instance from a MixedTypeSet subclass.
                     if contains(className, 'openminds.internal.mixedtype')
                         try
-                            % Place the openMINDS instance object in a linkset
-                            % wrapper class
+                            % Place the openMINDS instance object in a 
+                            % MixedTypeSet wrapper class
                             classFcn = str2func(className);
                             value = classFcn(value);
                         catch MECause
