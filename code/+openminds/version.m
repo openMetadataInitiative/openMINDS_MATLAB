@@ -5,16 +5,16 @@ function versionStr = version(version)
 %   versionStr = openminds.version() returns the version string of the currently active
 %       version of the openMINDS metadata model
 %
-%   openminds.version(versionSpec) changes the currently active version of the 
+%   openminds.version(versionSpec) changes the currently active version of the
 %       openMINDS metadata model to the provided version
 %
-% Input Arguments: 
-%   version (numeric or string) - 
-%    The version number to set for the openMINDS metadata model. If this 
+% Input Arguments:
+%   version (numeric or string) -
+%    The version number to set for the openMINDS metadata model. If this
 %    argument is missing, the current version will be retrieved.
 %
-% Output Arguments: 
-%   versionStr - A string representing the current or newly set version 
+% Output Arguments:
+%   versionStr - A string representing the current or newly set version
 %   of the openMINDS metadata model.
 
     arguments

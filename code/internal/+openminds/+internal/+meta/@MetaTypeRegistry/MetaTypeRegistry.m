@@ -27,7 +27,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
     properties (Access = private)
         % Registry - Storage for cached Type objects
         % Uses dictionary in newer MATLAB versions, containers.Map in older ones
-        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> 
+        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
     end
 
     properties (SetAccess = private)
@@ -155,8 +155,6 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 keyName = string(typeEnum);
             end
 
-
-
             % Check if the type is already in the registry
             if isKey(obj.Registry, keyName)
                 % Retrieve from cache
@@ -179,7 +177,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
             end
         end
 
-        function obj = parenAssign(~, ~, ~) %#ok<STOUT> 
+        function obj = parenAssign(~, ~, ~) %#ok<STOUT>
         % parenAssign - Implements obj(...) = value assignment behavior
         %
         % This registry is read-only, so assignment operations are not supported
@@ -202,7 +200,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
             n = listLength(metaType, indexOp(2:end), ctx);
         end
 
-        function obj = parenDelete(~, ~) %#ok<STOUT> 
+        function obj = parenDelete(~, ~) %#ok<STOUT>
         % parenDelete - Implements delete obj(...) behavior
         %
         % This registry is read-only, so deletion operations are not supported

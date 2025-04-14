@@ -130,7 +130,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                     % Get the actual instance from a MixedTypeSet subclass.
                     if contains(className, 'openminds.internal.mixedtype')
                         try
-                            % Place the openMINDS instance object in a 
+                            % Place the openMINDS instance object in a
                             % MixedTypeSet wrapper class
                             classFcn = str2func(className);
                             value = classFcn(value);
@@ -395,7 +395,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 % if strcmp(s(1).type, '.') && strcmp(s(2).type, '()')
                 %     %linkedTypeValues = builtin('subsref', obj, s(1:2));
                 %     linkedTypeValues = obj.subsref(s(1:2));
-                % 
+                %
                 % elseif strcmp(s(1).type, '.')
                 %     linkedTypeValues = builtin('subsref', obj, s(1));
                 % end

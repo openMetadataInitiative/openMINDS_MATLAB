@@ -2,15 +2,15 @@ function mustBeValidEmail(value)
 % mustBeValidEmail - Validate if the input is formatted as an email address.
 %
 % Syntax:
-%   mustBeValidEmail(value) Checks if the input is formatted as an email 
-%   address and raises an error if it is invalid. This is not an exhaustive 
+%   mustBeValidEmail(value) Checks if the input is formatted as an email
+%   address and raises an error if it is invalid. This is not an exhaustive
 %   validation and it does not guarantee that the email address exists.
 %
 % Input Arguments:
 %   value - A string representing the email address to be validated.
 
     arguments
-        value (1,1) string 
+        value (1,1) string
     end
     
     value = char(value);

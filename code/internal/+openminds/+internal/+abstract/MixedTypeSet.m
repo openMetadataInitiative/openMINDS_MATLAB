@@ -1,9 +1,9 @@
 classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 % MixedTypeSet - Abstract class representing a set of types that can mixed
 
-% Many properties of openMINDS metadata schemas/types can hold linked or 
-% embedded metadata instances of different types. This class acts as a 
-% container that can hold a set of instances that can be mixed with instances 
+% Many properties of openMINDS metadata schemas/types can hold linked or
+% embedded metadata instances of different types. This class acts as a
+% container that can hold a set of instances that can be mixed with instances
 % of other types. This provides a way to add instances of different types
 % as property values to a property of an openMINDS metadata type even
 % though MATLAB does not natively support mixing different class objects in a
@@ -13,7 +13,6 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 % types, the openMINDS_MATLAB build pipeline will generate a subclass of
 % the MixedTypeSet and place in the "mixedtypes/" folder
 
-
 % Developer notes:
 %
 % The behavior is similar to the matlab.mixin.Heterogeneous, but with some
@@ -21,22 +20,22 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 % added as a mixin the the base class of metadata types, i.e
 % openminds.abstract.Schema and as a result any typed instance could be
 % mixed with any other typed instance. However, the MixedTypeSet only
-% allows mixing a specified subset of instances in a specific context. For 
-% example, the openminds.internal.mixedtype.datasetversion.Author allows 
+% allows mixing a specified subset of instances in a specific context. For
+% example, the openminds.internal.mixedtype.datasetversion.Author allows
 % instances of types Consortium, Organization and Person to be mixed, and
 % the DatasetVersion type specifies that the author property is restricted
 % to the "*.Author" mixed type. Therefore mixing instances of these types
 % are supported only in a DatasetVersion/author context.
 %
 % Using the matlab.mixin.Heterogeneous as a mixin on the base class and
-% mustBeA for property validation on generated type classes is an an 
+% mustBeA for property validation on generated type classes is an an
 % alternative option. Need to consider whether it is a benefit to allow all
 % metadata types to be represented in array form instead of cell array
 % form. Originally in this project, using the Heterogeneous mixin was not
 % an option because of the use of enumerations for controlled instances in
 % the ControlledTerm subtypes, but this was later removed.
 %
-% This class is internal and should not be exposed to users. 
+% This class is internal and should not be exposed to users.
 
 %   TODO:
 %       [ ] Implement subsref in order to get instances out.

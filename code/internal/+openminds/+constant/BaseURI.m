@@ -3,8 +3,8 @@ function baseURI = BaseURI(version)
 %
 %   baseURI = openminds.constant.BaseURI(version) returns the base URI as a
 %   string that corresponds to the base resource identifier for the specified
-%   OpenMINDS model version. This function dynamically selects the URI based on 
-%   the version input. If no version is specified, the version number of the 
+%   OpenMINDS model version. This function dynamically selects the URI based on
+%   the version input. If no version is specified, the version number of the
 %   currently active openMINDS model is selected.
 %
 %   Input:

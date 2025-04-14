@@ -1,11 +1,11 @@
 classdef Type < handle
 % Type - Provides information about a type derived from an openMINDS metadata schema.
 %
-%   Provides utility methods for checking various property attributes of a 
+%   Provides utility methods for checking various property attributes of a
 %   metadata type derived from an openMINDS metadata schema.
 %
 %   This class is meant to be used by internal/external applications that
-%   need to infer schema constraints that are implicitly coded into the 
+%   need to infer schema constraints that are implicitly coded into the
 %   generated type classes, but not necessarily explcitly expressed.
 
     properties (SetAccess = immutable)

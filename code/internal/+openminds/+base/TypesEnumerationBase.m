@@ -69,7 +69,7 @@ classdef TypesEnumerationBase
         % fromClassName - Get a Type enum from a class name
         %
         % Syntax:
-        %   typeEnum = openminds.enum.Types.fromClassName(className) Converts 
+        %   typeEnum = openminds.enum.Types.fromClassName(className) Converts
         %   the provided class name(s) into the appropriate enumeration value (s).
         %
         % Input Arguments:
@@ -77,17 +77,17 @@ classdef TypesEnumerationBase
         %              converted.
         %
         % Output Arguments:
-        %   typeEnum - The corresponding enumeration value(s) from 
+        %   typeEnum - The corresponding enumeration value(s) from
         %              openminds.enum.Types.
         %
         % Example:
         %
         %  openminds.enum.Types.fromClassName("openminds.core.Person")
-        %  
-        %  ans = 
-        % 
+        %
+        %  ans =
+        %
         %    Types enumeration
-        % 
+        %
         %       Person
 
             arguments
@@ -107,26 +107,26 @@ classdef TypesEnumerationBase
         % fromAtType - Convert an @type string to its corresponding enumeration.
         %
         % Syntax:
-        %   typeEnum = openminds.enum.Types.fromAtType(typeName) Converts the 
+        %   typeEnum = openminds.enum.Types.fromAtType(typeName) Converts the
         %   provided @type string into the appropriate enumeration value.
         %
         % Input Arguments:
         %   typeName - A string array representing the @type to be converted.
-        %              The @type URI is expected to match Base URI for the 
+        %              The @type URI is expected to match Base URI for the
         %              currently active openMINDS version
         %
         % Output Arguments:
-        %   typeEnum - The corresponding enumeration value(s) from 
+        %   typeEnum - The corresponding enumeration value(s) from
         %              openminds.enum.Types.
         %
         % Example:
         %
         %  openminds.enum.Types.fromAtType("https://openminds.om-i.org/types/Person")
-        %  
-        %  ans = 
-        % 
+        %
+        %  ans =
+        %
         %    Types enumeration
-        % 
+        %
         %       Person
         
             arguments
