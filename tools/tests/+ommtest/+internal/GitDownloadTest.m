@@ -9,7 +9,12 @@ classdef GitDownloadTest < matlab.unittest.TestCase
 
     methods (Test)
         function testDownloadRepo(testCase)
-            openminds.internal.utility.git.downloadRepository("TargetDirectory", pwd)
+
+            % Download a repo without capturing output
+            commandStr = sprintf([...
+                'openminds.internal.utility.git.downloadRepository', ...
+                '("TargetDirectory", "%s")'], pwd );
+            evalc(commandStr);
 
             testCase.verifyTrue(openminds.internal.utility.git.isLatest())
         end
