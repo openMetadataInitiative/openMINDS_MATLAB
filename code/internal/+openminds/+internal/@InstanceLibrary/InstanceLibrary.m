@@ -108,13 +108,13 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         function postSetInstanceLibraryLocation(obj)
             import openminds.internal.utility.git.isLatest
             import openminds.internal.utility.git.downloadRepository
-            %import openminds.internal.utility.git.pullRepository
+            % import openminds.internal.utility.git.pullRepository
 
             try
                 if ~isfolder(obj.InstanceLibraryLocation) ...
                         || ~isLatest('Repository', 'openMINDS_instances')
                     if obj.UseGit
-                        %pullRepository('openMINDS_instances', obj.InstanceLibraryLocation)
+                        % pullRepository('openMINDS_instances', obj.InstanceLibraryLocation)
                     else
                         downloadRepository('openMINDS_instances')
                     end

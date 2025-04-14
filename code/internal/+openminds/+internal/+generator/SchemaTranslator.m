@@ -492,7 +492,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function addSchemaProperty(obj, propertyName, propertyAttributes)
             
-            import openminds.internal.generator.createPropertyLinksetClass
+            import openminds.internal.generator.createMixedTypeSetClass
 
             % Store fieldnames of property attributes and use this to check
             % that all attributes have been handled.
@@ -573,7 +573,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                     % dataType = 'cell';
                     % validationFcnStr(end+1) = obj.getMultiTypeValidationFunctionString(propertyName, clsNames);
 
-                    dataType = createPropertyLinksetClass(obj.SchemaName, propertyName, clsNames, allowMultiple);
+                    dataType = createMixedTypeSetClass(obj.SchemaName, propertyName, clsNames, allowMultiple);
                     
                     % dataType = clsNames{1};
                     % warning('Multiple schemas allowed for property %s of schema %s', propertyName, obj.SchemaName)

@@ -56,4 +56,3 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
 
     instances = instanceTable(keep, :);
 end
-

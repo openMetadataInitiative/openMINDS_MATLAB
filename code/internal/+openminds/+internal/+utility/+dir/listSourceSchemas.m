@@ -30,7 +30,6 @@ function schemaInfo = listSourceSchemas(schemaModule, options)
     schemaInfo = convertStructToTable(S);
 end
 
-
 function S = collectInfoInStructArray(schemaFolderPath, filePaths)
     
     FILE_EXT = '.schema.omi';

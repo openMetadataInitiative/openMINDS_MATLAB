@@ -209,7 +209,7 @@ classdef Collection < handle
             end
 
             if obj.NumNodes > 0 && isKey(obj.Nodes, instanceId)
-                try 
+                try
                     instanceType = class( obj.Nodes{instanceId} );
                 catch % < R2023a
                     instance = obj.Nodes(instanceId);

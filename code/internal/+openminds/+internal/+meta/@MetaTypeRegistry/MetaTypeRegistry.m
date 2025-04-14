@@ -27,7 +27,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
     properties (Access = private)
         % Registry - Storage for cached Type objects
         % Uses dictionary in newer MATLAB versions, containers.Map in older ones
-        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> 
+        Registry {mustBeA(Registry, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP>
     end
 
     properties (SetAccess = private)
@@ -81,6 +81,19 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         end
     end
 
+    methods
+        function clearCache(obj)
+        % clearCache - Clear the registry cache
+        %
+        % This method can be used to force reloading of Type objects
+            if exist('dictionary', 'file')
+                obj.Registry = configureDictionary('string', 'cell');
+            else
+                obj.Registry = containers.Map();
+            end
+        end
+    end
+
     methods (Access = private)
         function isValid = isValidKey(obj, keyName)
         % isValidKey - Check if a key is valid for the registry
@@ -95,20 +108,28 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 obj (1,1) openminds.internal.meta.MetaTypeRegistry
                 keyName (1,1) string
             end
+
+            % Todo: Check validity against alias names of type class.
             
             % Check if the key matches either a type name or a class name
             isValid = any(ismember(obj.AvailableTypes, keyName)) || ...
                      any(ismember(obj.AvailableClassNames, keyName));
         end
         
-        function clearCache(obj)
-        % clearCache - Clear the registry cache
-        %
-        % This method can be used to force reloading of Type objects
-            if exist('dictionary', 'file')
-                obj.Registry = configureDictionary('string', 'cell');
-            else
-                obj.Registry = containers.Map();
+        function validateKey(obj, keyName)
+        % validateKey - Check if a registry key is valid and throw error if not
+            arguments
+                obj (1,1) openminds.internal.meta.MetaTypeRegistry
+                keyName (1,1) string
+            end
+
+            % Validate the key
+            if ~obj.isValidKey(keyName)
+                ME = MException(...
+                    "OPENMINDS_MATLAB:MetaTypeRegistry:InvalidKey", ...
+                    ['"%s" is not a valid name or classname for an openMINDS ', ...
+                    'metadata type of version "%s".'], keyName, obj.ModelVersion);
+                throwAsCaller(ME)
             end
         end
     end
@@ -122,61 +143,41 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
             
             % Extract the key name from the indexing operation
             keyName = indexOp(1).Indices{1};
+
+            obj.validateKey(keyName)
+
+            if any(ismember(obj.AvailableTypes, keyName))
+                % Key is a type name (e.g., 'Person')
+                typeEnum = openminds.enum.Types(keyName);
+            else
+                % Key is a class name (e.g., 'openminds.core.Person')
+                typeEnum = openminds.enum.Types.fromClassName(keyName);
+                keyName = string(typeEnum);
+            end
+
+            % Check if the type is already in the registry
+            if isKey(obj.Registry, keyName)
+                % Retrieve from cache
+                metaType = obj.Registry(keyName);
+                if iscell(metaType)
+                    metaType = metaType{1};
+                end
+            else
+                % Create and cache a new object
+                metaType = openminds.internal.meta.Type(typeEnum.ClassName);
+                obj.Registry(keyName) = {metaType};
+            end
             
-            % Validate the key
-            assert(obj.isValidKey(keyName), ...
-                "OPENMINDS_MATLAB:MetaTypeRegistry:InvalidKey", ...
-                'Key must be a name or a classname of a metadata type.')
-            
-            try
-                % Check if the type is already in the registry
-                if isKey(obj.Registry, keyName)
-                    % Retrieve from cache
-                    metaType = obj.Registry(keyName);
-                    if iscell(metaType)
-                        metaType = metaType{1};
-                    end
-                else
-                    % Create a new Type object
-                    if any(ismember(obj.AvailableTypes, keyName))
-                        % Key is a type name (e.g., 'Person')
-                        typeEnum = openminds.enum.Types(keyName);
-                        metaType = openminds.internal.meta.Type(typeEnum.ClassName);
-                        keyName = string(keyName);
-                    else
-                        % Key is a class name (e.g., 'openminds.core.Person')
-                        metaType = openminds.internal.meta.Type(keyName);
-                        keyName = metaType.Name;
-                    end
-                    
-                    % Cache the new Type object
-                    obj.Registry(keyName) = {metaType};
-                end
-                
-                % Handle the output based on the indexing operation
-                if isscalar(indexOp)
-                    varargout{1} = metaType;
-                else
-                    % Forward additional indexing to the Type object
-                    [varargout{1:nargout}] = metaType.(indexOp(2:end));
-                end
-            catch ME
-                % Improve error handling with more informative messages
-                if strcmp(ME.identifier, 'MATLAB:undefinedVarOrClass')
-                    error('OPENMINDS_MATLAB:MetaTypeRegistry:ClassNotFound', ...
-                        'Could not find class for type "%s". Check if the model version is correct.', ...
-                        keyName);
-                elseif strcmp(ME.identifier, 'MATLAB:meta:class:NonExistentClass')
-                    error('OPENMINDS_MATLAB:MetaTypeRegistry:ClassNotFound', ...
-                        'Could not find class for type "%s". Check if the model version is correct.', ...
-                        keyName);
-                else
-                    rethrow(ME);
-                end
+            % Handle the output based on the indexing operation
+            if isscalar(indexOp)
+                varargout{1} = metaType;
+            else
+                % Forward additional indexing to the Type object
+                [varargout{1:nargout}] = metaType.(indexOp(2:end));
             end
         end
 
-        function obj = parenAssign(~, ~, ~) %#ok<STOUT> 
+        function obj = parenAssign(~, ~, ~) %#ok<STOUT>
         % parenAssign - Implements obj(...) = value assignment behavior
         %
         % This registry is read-only, so assignment operations are not supported
@@ -189,17 +190,17 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         %
         % This method is called when determining the number of outputs for
         % comma-separated list expansion with indexing
-            if numel(indexOp) <= 2
+            if numel(indexOp) <= 1
                 n = 1;
                 return;
             end
             
             % Forward to the contained object for nested indexing
-            containedObj = obj.(indexOp(1:2));
-            n = listLength(containedObj, indexOp(3:end), ctx);
+            metaType = obj.(indexOp(1));
+            n = listLength(metaType, indexOp(2:end), ctx);
         end
 
-        function obj = parenDelete(~, ~) %#ok<STOUT> 
+        function obj = parenDelete(~, ~) %#ok<STOUT>
         % parenDelete - Implements delete obj(...) behavior
         %
         % This registry is read-only, so deletion operations are not supported
