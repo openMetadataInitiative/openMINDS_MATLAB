@@ -170,7 +170,7 @@ jobs:
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
           git status
           git add code/Contents.m
           git add codemeta.json
@@ -193,7 +193,7 @@ jobs:
           cd gh-badges
 
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
 
           # Only proceed with commit and push if changes are detected
           if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
@@ -210,7 +210,7 @@ jobs:
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
 
           # Delete the existing tag locally and remotely if it already exists
           if git rev-parse --verify "refs/tags/${{ env.VERSION_TAG }}" > /dev/null 2>&1; then

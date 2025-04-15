@@ -71,7 +71,7 @@ jobs:
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "<>"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
           git fetch
 
           if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
