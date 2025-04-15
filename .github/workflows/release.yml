@@ -87,7 +87,7 @@ jobs:
         with:
           command: |
             addpath(genpath("tools"));
-            testToolbox('ReportSubdirectory',"${{ matrix.MATLABVersion }}", 'CreateBadge', false)     
+            testToolbox('ReportSubdirectory', "${{ matrix.MATLABVersion }}", 'CreateBadge', false)
 
       # Save the contents of the report directory from each release into an artifact.
       - name: Save report directory
@@ -129,7 +129,36 @@ jobs:
       - name: Generate tested with badge
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("tools")), createTestedWithBadgeforToolbox("${{ env.VERSION_TAG }}")     
+          command: | 
+            addpath(genpath("tools")); 
+            createTestedWithBadgeforToolbox("${{ env.VERSION_TAG }}")     
+
+      # Check out the gh-badges in a separate folder to commit the JSON badge
+      - name: Checkout gh-badges branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-badges
+          path: gh-badges
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Push the JSON badge to the gh-badges (if changes were detected)
+      - name: Push to gh-badges
+        run: |
+          mkdir -p gh-badges/.github/badges/${{ env.VERSION_TAG }}
+          cp .github/badges/${{ env.VERSION_TAG }}/tested_with.json gh-badges/.github/badges/${{ env.VERSION_TAG }}/tested_with.json
+          cd gh-badges
+
+          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
+
+          # Only proceed with commit and push if changes are detected
+          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
+            git add .github/badges/*
+            git commit -m "Update tested with badge for release"
+            git push -f
+          else
+            echo "Nothing to commit"
+          fi
 
       # Publish test results from all the releases
       - name: Publish test results
@@ -142,7 +171,9 @@ jobs:
       - name: Package toolbox
         uses: matlab-actions/run-command@v2
         with:
-          command: addpath(genpath("tools")), packageToolbox("specific","${{ env.VERSION_TAG }}")     
+          command: |
+            addpath(genpath("tools"));
+            packageToolbox("specific", "${{ env.VERSION_TAG }}")
 
       # Define the versionNumber using underscores, as this is used in the MLTBX
       - name: Set version number
@@ -165,8 +196,8 @@ jobs:
             addpath(genpath("tools"));
             updateCodeMetaFile("${{ env.VERSION_TAG }}")
 
-      # Commit the updated Contents.m
-      - name: Commit updated Contents.m file
+      # Commit the updated Contents.m and codemeta.json
+      - name: Commit updated Contents.m and codemeta.json files
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
@@ -174,35 +205,12 @@ jobs:
           git status
           git add code/Contents.m
           git add codemeta.json
-          git commit -m "Final checkins for release ${{ env.VERSION_TAG }}"
+          git commit -m "Final check-ins for release ${{ env.VERSION_TAG }} [skip-ci]"
           git fetch
           git push
 
-      # Commit the JSON for the MATLAB releases test badge to gh-badges branch
-      - name: Checkout gh-badges branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-badges
-          path: gh-badges
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push to gh-badges
-        run: |
-          mkdir -p gh-badges/.github/badges/${{ env.VERSION_TAG }}
-          cp .github/badges/${{ env.VERSION_TAG }}/tested_with.json gh-badges/.github/badges/${{ env.VERSION_TAG }}/tested_with.json
-          cd gh-badges
-
-          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
-
-          # Only proceed with commit and push if changes are detected
-          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
-            git add .github/badges/*
-            git commit -m "Update tested with badge for release"
-            git push -f
-          else
-            echo "Nothing to commit"
-          fi
+      - name: Fetch tags
+        run: git fetch --tags
 
       # (Re)tag the repo so that the updated files are included in the release tag
       - name: Update tag
