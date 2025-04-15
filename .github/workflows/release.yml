@@ -176,8 +176,8 @@ jobs:
             packageToolbox("specific", "${{ env.VERSION_TAG }}")
 
       # Define the versionNumber using underscores, as this is used in the MLTBX
-      - name: Set version number
-        id: set_version
+      - name: Format version tag with underscores and add to environment
+        id: set_version_with_underscores
         run: |
           versionNumber=$(echo "${{ env.VERSION_TAG }}" | sed 's/\./_/g')
           echo "versionNumber=$versionNumber" >> $GITHUB_ENV
