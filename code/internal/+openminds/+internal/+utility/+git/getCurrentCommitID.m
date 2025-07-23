@@ -22,6 +22,11 @@ function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
     requestOpts = weboptions();
     requestOpts.HeaderFields = {'Accept', 'application/vnd.github.sha'};
 
+    token = getenv('GITHUB_TOKEN');
+    if ~isempty(token)
+        requestOpts.HeaderFields = [requestOpts.HeaderFields; {'Authorization', ['token ' token]}];
+    end
+
     data = webread(apiURL, requestOpts);
     commitID = char(data');
 
