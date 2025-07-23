@@ -24,7 +24,7 @@ function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
 
     token = getenv('GITHUB_TOKEN');
     if ~isempty(token)
-        requestOpts.HeaderFields = [options.HeaderFields; {'Authorization', ['token ' token]}];
+        requestOpts.HeaderFields = [requestOpts.HeaderFields; {'Authorization', ['token ' token]}];
     end
 
     data = webread(apiURL, requestOpts);
