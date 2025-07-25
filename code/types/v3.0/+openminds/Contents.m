@@ -1,5 +1,5 @@
 % openMINDS metadata types - v3.0
-%   The types folder contains MATLAB classes for metadata types of the 
+%   The types folder contains MATLAB classes for metadata types of the
 %   following openMINDS modules:
 %
 %           chemicals - openminds.chemicals is a module.

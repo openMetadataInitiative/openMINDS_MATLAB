@@ -1,5 +1,5 @@
 % openMINDS metadata types - v2.0
-%   The types folder contains MATLAB classes for metadata types of the 
+%   The types folder contains MATLAB classes for metadata types of the
 %   following openMINDS modules:
 %
 %     controlledterms - openminds.controlledterms is a module.
