@@ -20,9 +20,9 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
 
             instances = convert@openminds.internal.serializer.StructConverter(obj);
 
-            if ~isa(instances, 'cell')
-                instances = {instances};
-            end
+            % if ~isa(instances, 'cell')
+            %     instances = {instances};
+            % end
             
             switch outputMode
                 case "single"

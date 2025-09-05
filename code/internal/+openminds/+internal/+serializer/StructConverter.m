@@ -25,9 +25,13 @@ classdef StructConverter < handle
 
         % Whether to include empty properties in the output struct
         IncludeEmptyProperties (1,1) logical = true
+        
+        UseSemanticPropertyName (1,1) logical = false
 
         % Whether to embed linked types in the output struct
         EmbedLinkedNodes (1,1) logical = false
+
+        IncludeIdentifier (1,1) logical = true
     end
 
     properties (SetAccess = private)
@@ -128,9 +132,14 @@ classdef StructConverter < handle
 
         function S = convert(obj)
         %serialize Serialize an openMINDS instance
+            try
+                S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
+            catch
+                S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', false);
 
-            S = arrayfun(@(o) o.convertInstanceToStruct(), obj, 'UniformOutput', true);
-            % S{1} = obj.convertStructToJsonld(S{1});
+                keyboard
+            end
+                % S{1} = obj.convertStructToJsonld(S{1});
 
             % Todo:
             %   [ ] Test cell arrays where a property can have links to
@@ -172,8 +181,11 @@ classdef StructConverter < handle
                 C = {S};
                 return
             end
-            
-            S.at_id = obj.getIdentifier(instanceObject.id);
+
+            if obj.IncludeIdentifier
+                S.at_id = obj.getIdentifier(instanceObject.id);
+            end
+
             S.at_type = instanceObject.X_TYPE;
             
             % Get public properties
@@ -185,8 +197,11 @@ classdef StructConverter < handle
                 iPropertyName = propertyNames{i};
                 iPropertyValue = instanceObject.(iPropertyName);
                 
-                % iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
-                iVocabPropertyName = iPropertyName;
+                if obj.UseSemanticPropertyName
+                    iVocabPropertyName = sprintf('VOCAB_URI_%s', iPropertyName);
+                else
+                    iVocabPropertyName = iPropertyName;
+                end
 
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
@@ -233,7 +248,7 @@ classdef StructConverter < handle
                     S(i).at_id = obj.getIdentifier(iValue.id);
                     
                     if obj.RecursionDepth > 0
-                        serializer = openminds.internal.serializer.StructConverter(iValue, obj.RecursionDepth-1);
+                        serializer = openminds.internal.serializer.StructConverter(iValue, "RecursionDepth", obj.RecursionDepth-1);
                         S_ = serializer.convert();
                         linkedInstances = [linkedInstances, S_]; %#ok<AGROW>
                     end
@@ -251,7 +266,12 @@ classdef StructConverter < handle
                 iValue = obj.validateInstance(embeddedInstance(i));
                 serializer = openminds.internal.serializer.StructConverter(iValue, 'RecursionDepth', obj.RecursionDepth-1);
                 S = serializer.convertInstanceToStruct;
-                S{1} = rmfield(S{1}, {'at_context', 'at_id'});
+                if isfield(S{1}, 'at_id')
+                    S{1} = rmfield(S{1}, {'at_id'});
+                end
+                if isfield(S{1}, 'at_context')
+                    S{1} = rmfield(S{1}, {'at_context'});
+                end
                 C{i} = S{1};
                 linkedInstances = [linkedInstances, S(2:end)]; %#ok<AGROW>
             end
