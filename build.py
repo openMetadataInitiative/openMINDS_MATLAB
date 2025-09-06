@@ -37,7 +37,7 @@ for schema_version in schema_loader.get_schema_versions():
             relative_path = os.path.relpath(schema_file_path, schema_root_path)
             schemaName = os.path.basename(schema_file_path)
             schemaName = schemaName.replace(".schema.omi.json", "")
-            print(f"::warning file={relative_path}, title=Error while building schema {schemaName} ({schema_version})::{e}")
+            print(f"::warning file={relative_path},title=Error while building schema {schemaName} ({schema_version})::{e}")
 
     save_resource_files(schema_version, schemas_file_paths)
     
