@@ -258,6 +258,7 @@ class MATLABSchemaBuilder(object):
 
         self._template_variables = {
             "class_name": class_name,
+            "full_class_name": _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map),
             "base_class": base_class,
             "has_controlled_instance": has_controlled_instance,
             "openminds_type": _expand_type_namespace( schema[SCHEMA_PROPERTY_TYPE] ),
@@ -337,6 +338,9 @@ def _generate_class_name(iri, class_name_map):
 
     # Ensure first letter of type_name is capitalized
     type_name = type_name[0].upper() + type_name[1:]
+
+    if type_name not in class_name_map:
+        raise KeyError(f"Class name '{type_name}' (IRI: {iri}) was not found in the map of all class names.")
 
     return class_name_map[type_name]
 
