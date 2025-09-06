@@ -3,7 +3,7 @@ name: Build schemas classes
 on:
   push:
     branches:
-      - update-pipeline-workflow
+      - pipeline
     paths-ignore:
       - 'README.md'
   workflow_dispatch:
