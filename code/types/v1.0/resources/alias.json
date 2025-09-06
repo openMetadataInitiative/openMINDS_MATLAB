@@ -51,11 +51,6 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.core.data.FileInstance",
-      "OldNames": "openminds.core.FileInstance",
-      "WarnOnOldName": false
-    },
-    {
       "NewName": "openminds.core.data.FilePathPattern",
       "OldNames": "openminds.core.FilePathPattern",
       "WarnOnOldName": false
@@ -118,16 +113,6 @@
     {
       "NewName": "openminds.core.miscellaneous.URL",
       "OldNames": "openminds.core.URL",
-      "WarnOnOldName": false
-    },
-    {
-      "NewName": "openminds.core.miscellaneous.DigitalIdentifier",
-      "OldNames": "openminds.core.DigitalIdentifier",
-      "WarnOnOldName": false
-    },
-    {
-      "NewName": "openminds.core.miscellaneous.DigitalIdentifierSchema",
-      "OldNames": "openminds.core.DigitalIdentifierSchema",
       "WarnOnOldName": false
     },
     {
@@ -203,11 +188,6 @@
     {
       "NewName": "openminds.core.research.ParameterSet",
       "OldNames": "openminds.core.ParameterSet",
-      "WarnOnOldName": false
-    },
-    {
-      "NewName": "openminds.core.research.ParameterSetting",
-      "OldNames": "openminds.core.ParameterSetting",
       "WarnOnOldName": false
     },
     {

@@ -160,16 +160,6 @@
         "group": "products"
     },
     {
-        "name": "digitalIdentifier",
-        "module": "core",
-        "group": "miscellaneous"
-    },
-    {
-        "name": "digitalIdentifierSchema",
-        "module": "core",
-        "group": "miscellaneous"
-    },
-    {
         "name": "disease",
         "module": "controlledTerms",
         "group": null
@@ -213,11 +203,6 @@
         "name": "fileBundleGrouping",
         "module": "controlledTerms",
         "group": null
-    },
-    {
-        "name": "fileInstance",
-        "module": "core",
-        "group": "data"
     },
     {
         "name": "filePathPattern",
@@ -341,11 +326,6 @@
     },
     {
         "name": "parameterSet",
-        "module": "core",
-        "group": "research"
-    },
-    {
-        "name": "parameterSetting",
         "module": "core",
         "group": "research"
     },

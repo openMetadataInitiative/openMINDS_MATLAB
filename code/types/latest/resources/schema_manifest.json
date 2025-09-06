@@ -30,17 +30,17 @@
         "group": "digitalIdentifier"
     },
     {
-        "name": "MRAcquisitionType",
-        "module": "controlledTerms",
-        "group": null
-    },
-    {
         "name": "MRIPulseSequence",
         "module": "controlledTerms",
         "group": null
     },
     {
         "name": "MRIWeighting",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
+        "name": "MRSpatialEncoding",
         "module": "controlledTerms",
         "group": null
     },
