@@ -45,7 +45,7 @@ jobs:
           if false; then
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "::notice title=No changes detected: No changes in build output compared to main branch"
+            echo "::notice title=No changes detected:: No changes in build output compared to main branch"
             echo "changes_detected=false" >> $GITHUB_OUTPUT
           fi
 
