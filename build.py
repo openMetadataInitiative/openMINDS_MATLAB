@@ -21,7 +21,7 @@ for schema_version in schema_loader.get_schema_versions():
 
     # Step 3 - find all involved schemas for the current version
     schemas_file_paths = schema_loader.find_schemas(schema_version)
-    schemas_file_paths = [path for path in schemas_file_paths if "atlasTerminology" in path] # testing
+    #schemas_file_paths = [path for path in schemas_file_paths if "person" in path] # testing
 
     class_name_map = get_class_name_map(schema_loader, schema_version)
 
@@ -37,7 +37,7 @@ for schema_version in schema_loader.get_schema_versions():
             relative_path = os.path.relpath(schema_file_path, schema_root_path)
             schemaName = os.path.basename(schema_file_path)
             schemaName = schemaName.replace(".schema.omi.json", "")
-            print(f"::warning file={relative_path} title=Error while building schema {schemaName} ({schema_version}):: {e}")
+            print(f"::warning file={relative_path}, title=Error while building schema {schemaName} ({schema_version})::{e}")
 
     save_resource_files(schema_version, schemas_file_paths)
     
