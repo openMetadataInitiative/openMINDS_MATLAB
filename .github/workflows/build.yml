@@ -29,18 +29,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          path: main
+          path: test_main
           token: ${{ secrets.GITHUB_TOKEN }}
           #ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Copy changes to main
         run: |
-          rm -rf main/code/types/*
-          rm -rf main/code/mixedtypes/*
-          rm -rf main/code/enumerations/*
-          cp -R target/* main/code
-          cp -R main/code/internal/resources/content_files/* main/code/
-          cp -R main/code/internal/resources/readme_files/* main/code/
+          rm -rf test_main/code/types/*
+          rm -rf test_main/code/mixedtypes/*
+          rm -rf test_main/code/enumerations/*
+          cp -R target/* test_main/code
+          cp -R test_main/code/internal/resources/content_files/* test_main/code/
+          cp -R test_main/code/internal/resources/readme_files/* test_main/code/
 
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -55,9 +55,26 @@ jobs:
         id: test_step
         uses: ehennestad/matbox-actions/test-code@v1
         with:
-          source_directory: main/code
-          tests_directory: main/tools/tests
-          tools_directory: main/tools
+          source_directory: test_main/code
+          tests_directory: test_main/tools/tests
+          tools_directory: test_main/tools
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          #ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Copy changes to main
+        run: |
+          rm -rf main/code/types/*
+          rm -rf main/code/mixedtypes/*
+          rm -rf main/code/enumerations/*
+          cp -R target/* main/code
+          cp -R main/code/internal/resources/content_files/* main/code/
+          cp -R main/code/internal/resources/readme_files/* main/code/
 
       - name: Push to main if tests pass
         run: |
