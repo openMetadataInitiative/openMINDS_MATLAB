@@ -32,7 +32,12 @@ for schema_version in schema_loader.get_schema_versions():
         try:
             MATLABSchemaBuilder(schema_file_path, schema_root_path, class_name_map, jinja_templates).build()
         except Exception as e:
-            print(f"Error while building schema {schema_file_path}: {e}")
+            #print(f"Error while building schema {schema_file_path}: {e}")
+            # get relative path from schema_root_path to schema_file_path
+            relative_path = os.path.relpath(schema_file_path, schema_root_path)
+            schemaName = os.path.basename(schema_file_path)
+            schemaName = schemaName.replace(".schema.omi.json", "")
+            print(f"::warning file={relative_path},title=Error while building class for schema '{schemaName}' ({schema_version})::{e}")
 
     save_resource_files(schema_version, schemas_file_paths)
     

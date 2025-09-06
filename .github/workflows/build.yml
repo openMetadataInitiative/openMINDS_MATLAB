@@ -10,7 +10,10 @@ on:
 
 jobs:
   build:
+    name: Build classes
     runs-on: ubuntu-latest
+    outputs:
+      build_updated: ${{ steps.check_changes.outputs.changes_detected }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,35 +28,122 @@ jobs:
           pip install -r requirements.txt
           python build.py
 
-      - name: Checkout staging branch
-        uses: actions/checkout@v3
+      - name: Checkout main branch
+        uses: actions/checkout@v4
         with:
-          ref: staging
-          path: staging
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+          path: main
 
-      - name: Push to staging
+      - name: Copy changes to main
         run: |
-          rm -rf staging/code/types/*
-          rm -rf staging/code/mixedtypes/*
-          rm -rf staging/code/enumerations/*
-          cp -R target/* staging/code
-          cp -R staging/code/internal/resources/content_files/* staging/code/
-          cp -R staging/code/internal/resources/readme_files/* staging/code/
-          cd staging
+          chmod +x ./.github/workflows/scripts/apply-new-build.sh
+          ./.github/workflows/scripts/apply-new-build.sh main
 
+      - name: Check if there are changes
+        id: check_changes
+        working-directory: main
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "::notice title=No changes detected:: No changes in build output compared to main branch"
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload build (target) as artifact
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: target
+          retention-days: 1
+
+  test-code:
+    name: Test with updated classes
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.build_updated == 'true'
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download build (target) artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: target
+
+      - name: Inject build into code directory
+        run: |
+          rm -rf code/{types,mixedtypes,enumerations}/*
+          cp -R target/* code
+          cp -R code/internal/resources/{content_files,readme_files}/* code/
+          rm -rf target
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          release: latest
+          cache: true
+
+      - name: Install MatBox
+        uses: ehennestad/matbox-actions/install-matbox@v1
+
+      - name: Run tests
+        id: test_step
+        uses: ehennestad/matbox-actions/test-code@v1
+        with:
+          source_directory: code
+          tests_directory: tools/tests
+          tools_directory: tools
+      
+      - name: Restore MATLAB path
+        uses: matlab-actions/run-command@v2
+        if: always()
+        with:
+          command: "restoredefaultpath(); savepath()"
+
+  push-changes:
+    name: Push updates to main
+    runs-on: ubuntu-latest
+    needs: [build, test-code]
+    if: needs.test-code.result == 'success' && needs.build.outputs.build_updated == 'true'
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Download build (target) artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: target
+
+      - name: Inject build into code directory
+        run: |
+          rm -rf code/{types,mixedtypes,enumerations}/*
+          cp -R target/* code
+          cp -R code/internal/resources/{content_files,readme_files}/* code/
+          rm -rf target
+
+      - name: Push to main
+        run: |
           git config --global user.email "openminds@ebrains.eu"
           git config --global user.name "openMINDS pipeline"
-
+      
           # Conditionally set commit message based on the event
           if [ "${{ github.event_name }}" == "push" ]; then
-            commit_message="Build triggered by update to pipeline"
+            commit_message="Build triggered by update to build pipeline"
           elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             commit_message="Build triggered by workflow dispatch"
           else
             commit_message="Unknown event"
           fi
-
+      
           # Only proceed with commit and push if changes are detected
           if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
             git add .
