@@ -42,7 +42,7 @@ jobs:
         id: check_changes
         working-directory: main
         run: |
-          if false
+          if false; then
             echo "changes_detected=true" >> $GITHUB_OUTPUT
           else
             echo "::notice title=No changes detected: No changes in build output compared to main branch"
