@@ -25,40 +25,70 @@ jobs:
           pip install -r requirements.txt
           python build.py
 
-      - name: Checkout staging branch
+      - name: Checkout main branch
         uses: actions/checkout@v3
         with:
-          ref: staging
-          path: staging
+          ref: main
+          path: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push to staging
+      - name: Copy changes to main
         run: |
-          rm -rf staging/code/types/*
-          rm -rf staging/code/mixedtypes/*
-          rm -rf staging/code/enumerations/*
-          cp -R target/* staging/code
-          cp -R staging/code/internal/resources/content_files/* staging/code/
-          cp -R staging/code/internal/resources/readme_files/* staging/code/
-          cd staging
+          rm -rf main/code/types/*
+          rm -rf main/code/mixedtypes/*
+          rm -rf main/code/enumerations/*
+          cp -R target/* main/code
+          cp -R main/code/internal/resources/content_files/* main/code/
+          cp -R main/code/internal/resources/readme_files/* main/code/
 
-          git config --global user.email "openminds@ebrains.eu"
-          git config --global user.name "openMINDS pipeline"
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          release: latest
+          cache: true
 
-          # Conditionally set commit message based on the event
-          if [ "${{ github.event_name }}" == "push" ]; then
-            commit_message="Build triggered by update to pipeline"
-          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            commit_message="Build triggered by workflow dispatch"
+      - name: Install MatBox
+        uses: ehennestad/matbox-actions/install-matbox@v1
+
+      - name: Run tests
+        id: test_step
+        continue-on-error: true
+        uses: ehennestad/matbox-actions/test-code@v1
+        with:
+          source_directory: main/code
+          tests_directory: main/tools/tests
+          tools_directory: main/tools
+
+      - name: Log test results
+        run: |
+          if [ "${{ steps.test_step.outcome }}" == "success" ]; then
+            echo "✅ Tests PASSED"
           else
-            commit_message="Unknown event"
+            echo "❌ Tests FAILED"
+            echo "Test step outcome: ${{ steps.test_step.outcome }}"
           fi
 
-          # Only proceed with commit and push if changes are detected
-          if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
-            git add .
-            git commit -m "$commit_message"
-            git push -f
-          else
-            echo "Nothing to commit"
-          fi
+      # - name: Push to main if tests pass (TEMPORARILY DISABLED)
+      #   if: steps.test_step.outcome == 'success'
+      #   run: |
+      #     cd main
+      #     git config --global user.email "openminds@ebrains.eu"
+      #     git config --global user.name "openMINDS pipeline"
+      # 
+      #     # Conditionally set commit message based on the event
+      #     if [ "${{ github.event_name }}" == "push" ]; then
+      #       commit_message="Build triggered by update to pipeline"
+      #     elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+      #       commit_message="Build triggered by workflow dispatch"
+      #     else
+      #       commit_message="Unknown event"
+      #     fi
+      # 
+      #     # Only proceed with commit and push if changes are detected
+      #     if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
+      #       git add .
+      #       git commit -m "$commit_message"
+      #       git push -f
+      #     else
+      #       echo "Nothing to commit"
+      #     fi
