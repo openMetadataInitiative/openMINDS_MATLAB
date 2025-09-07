@@ -81,8 +81,14 @@ classdef EphysStimulus < openminds.abstract.Schema
     end
 
     methods
-        function obj = EphysStimulus(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = EphysStimulus(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.stimulation.stimulus.EphysStimulus
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

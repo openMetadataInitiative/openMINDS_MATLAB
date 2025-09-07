@@ -42,8 +42,15 @@ classdef MRIPulseSequence < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = MRIPulseSequence(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = MRIPulseSequence(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

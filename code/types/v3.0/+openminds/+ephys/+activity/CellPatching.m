@@ -153,8 +153,14 @@ classdef CellPatching < openminds.abstract.Schema
     end
 
     methods
-        function obj = CellPatching(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = CellPatching(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.ephys.activity.CellPatching
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

@@ -39,8 +39,14 @@ classdef Ellipse < openminds.abstract.Schema
     end
 
     methods
-        function obj = Ellipse(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Ellipse(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.mathematicalshapes.Ellipse
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

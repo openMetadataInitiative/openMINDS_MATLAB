@@ -65,8 +65,14 @@ classdef Organization < openminds.abstract.Schema
     end
 
     methods
-        function obj = Organization(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Organization(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.actors.Organization
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

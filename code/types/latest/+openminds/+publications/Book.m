@@ -148,8 +148,14 @@ classdef Book < openminds.abstract.Schema
     end
 
     methods
-        function obj = Book(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Book(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.publications.Book
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

@@ -109,8 +109,14 @@ classdef Electrode < openminds.abstract.Schema
     end
 
     methods
-        function obj = Electrode(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Electrode(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.ephys.device.Electrode
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

@@ -55,8 +55,14 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
     end
 
     methods
-        function obj = BrainAtlas(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = BrainAtlas(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.BrainAtlas
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

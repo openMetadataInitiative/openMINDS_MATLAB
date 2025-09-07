@@ -36,8 +36,14 @@ classdef NumericalProperty < openminds.abstract.Schema
     end
 
     methods
-        function obj = NumericalProperty(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = NumericalProperty(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.research.NumericalProperty
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

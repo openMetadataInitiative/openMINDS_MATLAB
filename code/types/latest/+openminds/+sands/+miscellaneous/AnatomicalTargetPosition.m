@@ -53,8 +53,14 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
     end
 
     methods
-        function obj = AnatomicalTargetPosition(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = AnatomicalTargetPosition(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.miscellaneous.AnatomicalTargetPosition
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

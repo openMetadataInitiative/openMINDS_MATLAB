@@ -127,8 +127,14 @@ classdef RecordingActivity < openminds.abstract.Schema
     end
 
     methods
-        function obj = RecordingActivity(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = RecordingActivity(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.ephys.activity.RecordingActivity
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

@@ -160,8 +160,14 @@ classdef DataAnalysis < openminds.abstract.Schema
     end
 
     methods
-        function obj = DataAnalysis(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = DataAnalysis(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.computation.DataAnalysis
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

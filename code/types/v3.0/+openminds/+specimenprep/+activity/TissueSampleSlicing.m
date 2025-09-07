@@ -63,8 +63,14 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
     end
 
     methods
-        function obj = TissueSampleSlicing(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = TissueSampleSlicing(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.specimenprep.activity.TissueSampleSlicing
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

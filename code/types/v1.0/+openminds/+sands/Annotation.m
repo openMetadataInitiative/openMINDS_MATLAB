@@ -99,8 +99,14 @@ classdef Annotation < openminds.abstract.Schema
     end
 
     methods
-        function obj = Annotation(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Annotation(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.Annotation
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 
