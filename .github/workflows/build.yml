@@ -58,6 +58,14 @@ jobs:
           path: target
           retention-days: 1
 
+      - name: Upload injection script as artifact
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: injection-script
+          path: scripts/apply-new-build.sh
+          retention-days: 1
+
   test-code:
     name: Test with updated classes
     runs-on: ubuntu-latest
@@ -75,12 +83,16 @@ jobs:
           name: build
           path: target
 
+      - name: Download injection script
+        uses: actions/download-artifact@v4
+        with:
+          name: injection-script
+          path: scripts
+
       - name: Inject build into code directory
         run: |
-          rm -rf code/{types,mixedtypes,enumerations}/*
-          cp -R target/* code
-          cp -R code/internal/resources/{content_files,readme_files}/* code/
-          rm -rf target
+          chmod +x scripts/apply-new-build.sh
+          scripts/apply-new-build.sh .
 
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -123,12 +135,21 @@ jobs:
           name: build
           path: target
 
+      - name: Download injection script
+        uses: actions/download-artifact@v4
+        with:
+          name: injection-script
+          path: scripts
+
       - name: Inject build into code directory
         run: |
-          rm -rf code/{types,mixedtypes,enumerations}/*
-          cp -R target/* code
-          cp -R code/internal/resources/{content_files,readme_files}/* code/
+          chmod +x scripts/apply-new-build.sh
+          scripts/apply-new-build.sh .
+
+      - name : Clean up artifacts before commit
+        run: |
           rm -rf target
+          rm -rf scripts
 
       - name: Push to main
         run: |
