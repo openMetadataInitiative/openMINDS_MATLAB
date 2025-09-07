@@ -251,7 +251,8 @@ class MATLABSchemaBuilder(object):
 
         if self._schema_module_name == "controlledTerms":
             instance_loader = InstanceLoader()
-            known_instance_list = instance_loader.get_instance_collection(self.version, class_name)
+            # Pass the schema's filename as this should match the foldername where instances are stored
+            known_instance_list = instance_loader.get_instance_collection(self.version, self._schema_file_name)
             known_instance_list.sort()
         else:
             known_instance_list = []

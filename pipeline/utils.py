@@ -55,24 +55,20 @@ class InstanceLoader(object):
         else:
             return glob.glob(os.path.join(self.instances_sources, version, f'**/*.jsonld'), recursive=True)
 
-    def get_instance_collection(self, version:str, schema_name:str) -> List[str]:
-
-        # Make sure schema_name is correct casing (camel case) according to foldernames
-        if schema_name == schema_name.upper():
-            pass
-        elif schema_name in ["UBERONParcellation", "MRIPulseSequence"]:
-            # Todo: Need to find a general solution for these exceptions.
-            pass
-        else:
-            schema_name = camel_case(schema_name)
-
+    def get_instance_collection(self, version:str, schema_file_name:str) -> List[str]:
+        
         # Get list of all instance jsonld files in the given version for the given schema
         # This is a list of absolute pathnames
-        instance_list_complete = self.find_instances(version, schema_name)
+        instance_list_complete = self.find_instances(version, schema_file_name)
 
-        instance_list = [instance for instance in instance_list_complete if schema_name in instance]
+        instance_list = [instance for instance in instance_list_complete if schema_file_name in instance]
         instance_list = [extract_filename_without_extension(path_str) for path_str in instance_list]
         
+        # Show warning if no instances found
+        if len(instance_list) == 0:
+            print(f"Warning: No instances found for schema '{schema_file_name}' in version '{version}'")
+            return []
+
         return instance_list
     
 def initialise_jinja_templates(autoescape:bool=None):
