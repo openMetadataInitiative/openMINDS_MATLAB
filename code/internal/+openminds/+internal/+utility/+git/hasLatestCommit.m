@@ -1,4 +1,4 @@
-function tf = isLatest(options)
+function tf = hasLatestCommit(options)
 
     arguments
         options.RepositoryName = "openMINDS"

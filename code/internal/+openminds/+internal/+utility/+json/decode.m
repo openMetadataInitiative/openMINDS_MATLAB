@@ -3,7 +3,7 @@ function s = decode(str)
 
     % Find any property names starting with @ (syntax token?).
     % The regular expression matches any word prefixed by @, encapsulated
-    % in "" and followed by a colon. This should match hopefully only match
+    % in "" and followed by a colon. This should hopefully only match
     % for json-ld specific property names / keywords.
     % See also: https://www.w3.org/TR/json-ld/#syntax-tokens-and-keywords
 
