@@ -36,8 +36,8 @@ jobs:
 
       - name: Copy changes to main
         run: |
-          chmod +x ./.github/workflows/scripts/apply-new-build.sh
-          ./.github/workflows/scripts/apply-new-build.sh main
+          chmod +x ./scripts/apply-new-build.sh
+          ./scripts/apply-new-build.sh main
 
       - name: Check if there are changes
         id: check_changes
