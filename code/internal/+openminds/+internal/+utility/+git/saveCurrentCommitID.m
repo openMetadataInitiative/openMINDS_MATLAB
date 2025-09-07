@@ -9,7 +9,7 @@ function saveCurrentCommitID(commitDetails)
 %           Owner - Name of organization
 %
 
-    openMindsFolderPath = fullfile(userpath, 'openMINDS_MATLAB', 'Repositories');
+    openMindsFolderPath = openminds.internal.utility.git.getRepositoryTargetRootFolder();
     if ~isfolder(openMindsFolderPath); mkdir(openMindsFolderPath); end
     
     filePath = fullfile(openMindsFolderPath, 'repository_versions.json');
@@ -19,7 +19,10 @@ function saveCurrentCommitID(commitDetails)
 
     if isfile(filePath)
         S = jsondecode(fileread(filePath));
-
+        if isfield(S.repositories, 'Organization') % Compatibility, field was renamed
+            S.repositories = arrayfun(@(s) renameStructField(s, 'Organization', 'Owner'), S.repositories);
+        end
+        
         isPresent = arrayfun(@(s) structcmp(s, commitDetails, fields), S.repositories);
         if any(isPresent)
             S.repositories(isPresent) = commitDetails;
