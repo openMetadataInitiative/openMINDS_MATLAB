@@ -518,13 +518,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             end
         end
     
-        function warnIfPropValuesSupplied(obj, name)
-            if ~isempty(name)
-                nameStr = strjoin("  - " + string(name), newline);
-                warning('openMINDS:InstanceConstructor:NameValuePairsIgnored', ...
-                    'The following name-value pairs were ignored when creating an instance using a struct:\n%s', nameStr)
-            end
-        end
     end
 
     methods (Access = protected) % Methods related to setting new values
@@ -533,6 +526,14 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             schemaName = obj.getSchemaShortName( class(obj) );
             uuidStr = openminds.internal.utility.string.getuuid();
             instanceId = sprintf('%s/%s', schemaName, uuidStr);
+        end
+    
+        function warnIfPropValuesSupplied(~, name)
+            if ~isempty(name)
+                nameStr = strjoin("  - " + string(name), newline);
+                warning('openMINDS:InstanceConstructor:NameValuePairsIgnored', ...
+                    'The following name-value pairs were ignored when creating an instance using a struct:\n%s', nameStr)
+            end
         end
     end
 
