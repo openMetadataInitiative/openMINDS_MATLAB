@@ -567,7 +567,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
                 if isempty(clsNames)
                     dataType = '';
-                elseif numel(clsNames) == 1
+                elseif isscalar(clsNames)
                     dataType = clsNames{1};
                 else
                     % dataType = 'cell';

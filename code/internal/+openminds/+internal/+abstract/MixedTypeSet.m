@@ -78,7 +78,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
             end
 
             if ~iscell(instance)
-                if numel(instance) == 1
+                if isscalar(instance)
                     instance = {instance};
                 else
                     instance = arrayfun(@(i) i, instance, 'UniformOutput', false);

@@ -31,7 +31,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.StructConverter
                     instances = cellfun(@(i) obj.convertStructToJsonld(i), instances, 'UniformOutput', false);
             end
 
-            if numel(instances) == 1
+            if isscalar(instances)
                 instances = instances{1};
             end
         end

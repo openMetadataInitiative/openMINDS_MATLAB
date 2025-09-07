@@ -190,8 +190,8 @@ classdef StructConverter < handle
 
                 % Skip properties where value is not set.
                 if isempty(iPropertyValue); continue; end
-                if isstring(iPropertyValue) && numel(iPropertyValue)==1 && iPropertyValue==""; continue; end
-                if isstring(iPropertyValue) && numel(iPropertyValue)==1 && ismissing(iPropertyValue); continue; end
+                if isstring(iPropertyValue) && isscalar(iPropertyValue) && iPropertyValue==""; continue; end
+                if isstring(iPropertyValue) && isscalar(iPropertyValue) && ismissing(iPropertyValue); continue; end
 
                 % Handle linked, embedded and direct values.
                 if obj.MetaType.isPropertyWithLinkedType(iPropertyName)
@@ -205,7 +205,7 @@ classdef StructConverter < handle
                 end
 
                 toScalar = obj.MetaType.isPropertyValueScalar(iPropertyName);
-                if ~toScalar && numel(S.(iVocabPropertyName)) == 1
+                if ~toScalar && isscalar(S.(iVocabPropertyName))
                     % Scalar values should still be serialized as array if
                     % property allows lists
                     S.(iVocabPropertyName) = {S.(iVocabPropertyName)};

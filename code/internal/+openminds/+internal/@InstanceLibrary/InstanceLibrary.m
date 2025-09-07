@@ -166,7 +166,7 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 elseif any( strcmp(thisFolderSplit(1), SANDS_INSTANCE_FOLDERS))
                     types(i) = getTypeName(thisFolderSplit(1), "IsPlural", true);
                     modules(i) = "SANDS";
-                    if numel(thisFolderSplit) == 1
+                    if numel(thisFolderSplit) == 1 %#ok<ISCL>
                         subGroups(i) = missing;
                     elseif numel(thisFolderSplit) == 2
                         subGroups(i) = string(thisFolderSplit(2));

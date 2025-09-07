@@ -127,7 +127,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
                 propName = subs(1).subs;
 
-                if numel(subs) == 1
+                if isscalar(subs)
                     propName = subs(1).subs;
                     className = class(obj.(propName));
                 
@@ -153,7 +153,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
 
                 try
-                    if numel(subs) == 1
+                    if isscalar(subs)
                         % Assigning a linked property
                         oldValue = obj.subsref(subs);
 
@@ -507,7 +507,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             else
                 instanceType = string(class(values));
             end
-            if numel( unique(instanceType) ) == 1
+            if isscalar( unique(instanceType) )
                 if iscell(values)
                     outValues = [values{:}];
                 else
