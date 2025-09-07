@@ -1,71 +1,61 @@
-function S = listSchemasWithNonGenericLabel()
+function T = listSchemasLabelInfo(options)
+% listSchemasLabelInfo - Return a table with information about types and
+% their label property (if they have a "standard" label property)
+    arguments
+        options.Modules (1,1) string = "core" % Todo: Support list, use module enum
+        options.ShowNonGenericOnly (1,1) logical = true
+    end
     
-    moduleName = "core";
-    
-    schemaTable = openminds.internal.utility.dir.listSourceSchemas();
-    schemaTable = schemaTable(schemaTable.ModuleName == moduleName, :);
+    typesTable = openminds.internal.utility.dir.listSourceSchemas();
+    typesTable = typesTable(typesTable.ModuleName == options.Modules, :);
 
-    numSchemas = size(schemaTable, 1);
-
-    tempsavepath = tempname;
-    tempsavepath = [tempsavepath, '.mat'];
-    
-    % disp(tempsavepath)
-    cleanupObj = onCleanup(@(filepath)delete(tempsavepath));
+    numSchemas = size(typesTable, 1);
 
     count = 0;
-    S = struct;
+    S = struct('TypeName', {}, 'PropertyName', {}, 'StringFormat', {}, 'AllPropertyNames', {});
 
     for i = 1:numSchemas
 
-        iSchemaName = schemaTable{i, "SchemaName"};
-        iModuleName = schemaTable{i, "ModuleName"};
-        iSubmoduleName = schemaTable{i, "SubModuleName"};
+        iTypeName = typesTable{i, "SchemaName"};
+        iModuleName = typesTable{i, "ModuleName"};
+        iSubmoduleName = typesTable{i, "SubModuleName"};
         
-        schemaClassFunctionName = openminds.internal.utility.string.buildClassName(iSchemaName, iSubmoduleName, iModuleName);
-        schemaFcn = str2func(schemaClassFunctionName);
+        typeClassFunctionName = openminds.internal.utility.string.buildClassName(iTypeName, iSubmoduleName, iModuleName);
+        typeConstructorFcn = str2func(typeClassFunctionName);
         
-        mc = meta.class.fromName(schemaClassFunctionName);
+        mc = meta.class.fromName(typeClassFunctionName);
         if mc.Abstract; continue; end
         
-        try
-            count = count+1;
-            itemPreSave = schemaFcn();
+        count = count+1;
+        emptyInstance = typeConstructorFcn();
 
-            if isprop(itemPreSave, 'lookupLabel')
-                S.(iSchemaName).propertyName = "lookupLabel";
-                S.(iSchemaName).stringFormat = "sprintf('%s', lookupLabel)";
+        S(count).TypeName = iTypeName;
+        S(count).AllPropertyNames = string(strjoin(properties(emptyInstance), ', '));
 
-                % pass
-            elseif isprop(itemPreSave, 'fullName')
-                S.(iSchemaName).propertyName = 'fullName';
-                S.(iSchemaName).stringFormat = "sprintf('%s', fullName)";
+        if isprop(emptyInstance, 'lookupLabel')
+            S(count).PropertyName = "lookupLabel";
+            S(count).StringFormat = "sprintf('%s', lookupLabel)";
 
-                % pass
-            elseif isprop(itemPreSave, 'identifier')
-                S.(iSchemaName).propertyName = 'identifier';
-                S.(iSchemaName).stringFormat = "sprintf('%s', identifier)";
-                
-                % pass
-            elseif isprop(itemPreSave, 'name')
-                S.(iSchemaName).propertyName = 'name';
-                S.(iSchemaName).stringFormat = "sprintf('%s', name)";
+        elseif isprop(emptyInstance, 'fullName')
+            S(count).PropertyName = 'fullName';
+            S(count).StringFormat = "sprintf('%s', fullName)";
 
-                % pass
-            else
+        elseif isprop(emptyInstance, 'identifier')
+            S(count).PropertyName = 'identifier';
+            S(count).StringFormat = "sprintf('%s', identifier)";
 
-                S.(iSchemaName).propertyName = '';
-                S.(iSchemaName).stringFormat = "";
-
-                fprintf('%s\n', iSchemaName)
-            end
-
-        catch ME
-            fprintf('Could not create schema %s due to error:\n%s\n', ...
-                iSchemaName, ME.message)
+        elseif isprop(emptyInstance, 'name')
+            S(count).PropertyName = 'name';
+            S(count).StringFormat = "sprintf('%s', name)";
+        
+        else
+            S(count).PropertyName = "";
+            S(count).StringFormat = "";
         end
     end
+    T = struct2table(S);
 
-    % T = cell2table(C, 'VariableNames', {'SchemaName', 'Failure point', 'Error Message', 'Extended Error'});
-    % fprintf('Number of tests that failed: %d/%d\n', numTestsFailed, numTestsTotal)
+    if options.ShowNonGenericOnly
+        T = T(T.PropertyName=="", :);
+    end
 end
