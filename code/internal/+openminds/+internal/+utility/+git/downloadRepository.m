@@ -6,12 +6,12 @@ function downloadRepository(repositoryName, options)
 %
 %   Optional parameters:
 %       BranchName - Name of branch
-%       Organization - Name of organization
+%       Owner - Name of repository owner
 
     arguments
         repositoryName = "openMINDS"
         options.BranchName = "main"
-        options.Organization = "openMetadataInitiative"
+        options.Owner = openminds.internal.constants.Github.Organization
         options.TargetDirectory (1,1) string = ...
             fullfile(openminds.internal.PathConstants.UserPath, 'Repositories')
     end
@@ -21,7 +21,7 @@ function downloadRepository(repositoryName, options)
     import openminds.internal.utility.git.saveCurrentCommitID
 
     webUrl = sprintf("https://github.com/%s/%s/archive/refs/heads/%s.zip", ...
-        options.Organization, repositoryName, options.BranchName);
+        options.Owner, repositoryName, options.BranchName);
     webURI = matlab.net.URI( webUrl );
 
     % - Create path for saving and download types
@@ -33,7 +33,7 @@ function downloadRepository(repositoryName, options)
     C1 = onCleanup(@(pathStr) delete(tempZipFilepath) );
    
     fprintf('Downloading repository "%s" from "%s"... ', ...
-        repositoryName, options.Organization)
+        repositoryName, options.Owner)
     downloadFile(tempZipFilepath, webURI.EncodedURI, 'ShowFilename', true);
     fprintf('Done.\n')
 
@@ -69,6 +69,6 @@ function downloadRepository(repositoryName, options)
     % Save current commit ID and repository details
     [~, commitDetails] = getCurrentCommitID(repositoryName, ...
         "BranchName", options.BranchName, ...
-        "Organization", options.Organization);
+        "Owner", options.Owner);
     saveCurrentCommitID(commitDetails)
 end

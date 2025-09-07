@@ -7,10 +7,10 @@ function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
     arguments
         repositoryName = "openMINDS"
         options.BranchName = "main"
-        options.Organization = "openMetadataInitiative"
+        options.Owner = openminds.internal.constants.Github.Organization
     end
 
-    API_BASE_URL = sprintf("https://api.github.com/repos/%s/%s", options.Organization, repositoryName);
+    API_BASE_URL = sprintf("https://api.github.com/repos/%s/%s", options.Owner, repositoryName);
     
     apiURL = strjoin( [API_BASE_URL, "commits", options.BranchName], '/');
 
@@ -35,6 +35,6 @@ function [commitID, commitDetails] = getCurrentCommitID(repositoryName, options)
         commitDetails.CommitID = commitID;
         commitDetails.RepositoryName = repositoryName;
         commitDetails.BranchName = options.BranchName;
-        commitDetails.Organization = options.Organization;
+        commitDetails.Owner = options.Owner;
     end
 end

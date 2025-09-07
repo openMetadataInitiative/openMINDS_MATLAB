@@ -6,7 +6,7 @@ function saveCurrentCommitID(commitDetails)
 %           CommitID - Commit ID (sha1)
 %           RepositoryName - Name of repository
 %           BranchName - Name of branch
-%           Organization - Name of organization
+%           Owner - Name of organization
 %
 
     openMindsFolderPath = fullfile(userpath, 'openMINDS_MATLAB', 'Repositories');
@@ -14,7 +14,7 @@ function saveCurrentCommitID(commitDetails)
     
     filePath = fullfile(openMindsFolderPath, 'repository_versions.json');
     
-    fields = {'RepositoryName', 'BranchName', 'Organization'};
+    fields = {'RepositoryName', 'BranchName', 'Owner'};
     commitDetails.LastUpdate = string(datetime("now"));
 
     if isfile(filePath)
