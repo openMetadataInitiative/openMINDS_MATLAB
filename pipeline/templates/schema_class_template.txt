@@ -48,8 +48,14 @@ classdef {{ class_name }} < {{base_class}}
     end
 
     methods
-        function obj = {{ class_name }}(varargin)            
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = {{ class_name }}(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?{{ full_class_name }}
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 
