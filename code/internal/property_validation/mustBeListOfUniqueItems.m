@@ -44,7 +44,9 @@ function assertValidMixedTypeReference(structure)
 end
 
 function assertUniqueInstances(instances)
-    instanceIdentifiers = {instances.id};
+    % Extract all instance identifiers to a string array. Individual ids
+    % can be char or string type.
+    instanceIdentifiers = arrayfun(@(i) string(i.id), instances);
     assert(isequal(instanceIdentifiers, unique(instanceIdentifiers, 'stable')), ...
         'OPENMINDS_MATLAB:PropertyValidator:InstancesMustBeUnique', ...
         'Value must be an array of unique instances');
