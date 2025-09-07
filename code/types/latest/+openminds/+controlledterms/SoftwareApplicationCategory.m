@@ -42,8 +42,15 @@ classdef SoftwareApplicationCategory < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = SoftwareApplicationCategory(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = SoftwareApplicationCategory(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

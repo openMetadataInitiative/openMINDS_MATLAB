@@ -162,8 +162,14 @@ classdef ScholarlyArticle < openminds.abstract.Schema
     end
 
     methods
-        function obj = ScholarlyArticle(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ScholarlyArticle(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.publications.ScholarlyArticle
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

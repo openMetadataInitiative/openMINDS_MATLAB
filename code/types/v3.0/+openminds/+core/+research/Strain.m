@@ -125,8 +125,14 @@ classdef Strain < openminds.abstract.Schema
     end
 
     methods
-        function obj = Strain(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Strain(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.research.Strain
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

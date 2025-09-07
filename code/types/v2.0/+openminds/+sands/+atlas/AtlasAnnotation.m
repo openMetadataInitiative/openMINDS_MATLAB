@@ -108,8 +108,14 @@ classdef AtlasAnnotation < openminds.abstract.Schema
     end
 
     methods
-        function obj = AtlasAnnotation(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = AtlasAnnotation(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.atlas.AtlasAnnotation
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

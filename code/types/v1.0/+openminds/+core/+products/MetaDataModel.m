@@ -89,8 +89,14 @@ classdef MetaDataModel < openminds.abstract.Schema
     end
 
     methods
-        function obj = MetaDataModel(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = MetaDataModel(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.products.MetaDataModel
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

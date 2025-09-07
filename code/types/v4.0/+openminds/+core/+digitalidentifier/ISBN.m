@@ -30,8 +30,14 @@ classdef ISBN < openminds.abstract.Schema
     end
 
     methods
-        function obj = ISBN(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ISBN(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.digitalidentifier.ISBN
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

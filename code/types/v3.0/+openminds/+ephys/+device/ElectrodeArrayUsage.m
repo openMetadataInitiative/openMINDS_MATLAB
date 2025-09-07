@@ -92,8 +92,14 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
     end
 
     methods
-        function obj = ElectrodeArrayUsage(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ElectrodeArrayUsage(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.ephys.device.ElectrodeArrayUsage
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

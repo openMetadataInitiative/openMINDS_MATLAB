@@ -89,8 +89,14 @@ classdef Software < openminds.abstract.Schema
     end
 
     methods
-        function obj = Software(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Software(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.products.Software
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

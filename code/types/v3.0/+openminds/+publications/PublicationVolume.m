@@ -37,8 +37,14 @@ classdef PublicationVolume < openminds.abstract.Schema
     end
 
     methods
-        function obj = PublicationVolume(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = PublicationVolume(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.publications.PublicationVolume
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

@@ -32,12 +32,23 @@ classdef MRSpatialEncoding < openminds.abstract.ControlledTerm
 
     properties (Constant, Hidden)
         CONTROLLED_INSTANCES = [ ...
+            "frequencyEncoding", ...
+            "frequencyPhaseEncoding", ...
+            "frequencyPhasePhaseEncoding", ...
+            "phaseEncoding" ...
         ]
     end
 
     methods
-        function obj = MRSpatialEncoding(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = MRSpatialEncoding(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

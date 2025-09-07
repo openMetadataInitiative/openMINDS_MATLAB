@@ -218,8 +218,14 @@ classdef ModelVersion < openminds.abstract.Schema
     end
 
     methods
-        function obj = ModelVersion(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ModelVersion(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.products.ModelVersion
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

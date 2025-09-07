@@ -61,8 +61,14 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
     end
 
     methods
-        function obj = CustomCoordinateSpace(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = CustomCoordinateSpace(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.nonatlas.CustomCoordinateSpace
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

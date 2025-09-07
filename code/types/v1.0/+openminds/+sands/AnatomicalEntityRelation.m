@@ -63,8 +63,14 @@ classdef AnatomicalEntityRelation < openminds.abstract.Schema
     end
 
     methods
-        function obj = AnatomicalEntityRelation(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = AnatomicalEntityRelation(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.AnatomicalEntityRelation
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

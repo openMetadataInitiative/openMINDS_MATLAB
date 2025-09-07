@@ -1,13 +1,12 @@
-classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & ...
-                  openminds.internal.mixin.CustomInstanceDisplay & ...
-                  openminds.internal.mixin.StructAdapter
+classdef Schema < handle & matlab.mixin.SetGet & ...
+                  openminds.internal.mixin.StructAdapter & ...
+                  openminds.internal.mixin.CustomInstanceDisplay
+
 % Schema Abstract base class shared by all concrete Schema classes
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
-%   [ ] Do some classes have to inherit from a mixin.Heterogeneous class?
 %   [ ] Should controlled term instances be coded as enumeration classes?
-%   [ ] Distinguish embedded from linked types.
 %   [ ] Implement ismember and other methods doing "logic" on sets?
 
     properties (Constant, Hidden) % Move to instance/serializer
@@ -15,7 +14,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
     end
 
     properties (SetAccess = protected, Hidden) % Todo: SetAccess = immutable
-        id char = ''
+        id string = ""
     end
 
     properties (Abstract, Access = protected)
@@ -38,28 +37,33 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
 
     methods % Constructor
         
-        function obj = Schema(varargin)
-
-            % Todo: Assign in subclass constructors?
-            if ~isa(obj, 'openminds.abstract.ControlledTerm')
-                obj.id = obj.generateInstanceId();
+        function obj = Schema(instance, name, value)
+            arguments
+                instance (1,:) struct = struct.empty
+            end
+            arguments (Repeating)
+                name (1,1) string
+                value
             end
 
-            if numel(varargin)==1 && isstruct(varargin{1}) % Create scalar
-                obj = obj.fromStruct(varargin{1});
-            elseif numel(varargin)==1 && iscell(varargin{1}) % Create non-scalar
-                for i = 1:numel( varargin{1} )
-                    obj(i) = feval( class(obj) ); %#ok<AGROW>
-                    obj(i) = obj(i).fromStruct(varargin{1}{i}); %#ok<AGROW>
+            obj.id = obj.generateInstanceId();
+
+            if isempty(instance)
+                nvPairs = [name; value];
+                if ~isempty(nvPairs)
+                    obj.set(nvPairs{:});
                 end
-            elseif numel(varargin)==1
-                error('Not implemented for input arguments of type %s.', class(varargin{1}))
             else
-                [varargin, id] = obj.removeArg('id', varargin{:});
-                if ~isempty(id)
-                    obj.id = id; % Assign provided id
+                if isscalar(instance)
+                    obj = obj.fromStruct(instance);
+                else
+                    for i = 1:numel( instance )
+                        obj(i) = feval( class(obj) ); %#ok<AGROW>
+                        obj(i) = obj(i).fromStruct(instance(i)); %#ok<AGROW>
+                    end
                 end
-                obj.assignPVPairs(varargin{:})
+
+                obj.warnIfPropValuesSupplied(name)
             end
         end
     end
@@ -513,6 +517,7 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
                 outValues = feval(mixedTypeClassName, values);
             end
         end
+    
     end
 
     methods (Access = protected) % Methods related to setting new values
@@ -521,6 +526,14 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
             schemaName = obj.getSchemaShortName( class(obj) );
             uuidStr = openminds.internal.utility.string.getuuid();
             instanceId = sprintf('%s/%s', schemaName, uuidStr);
+        end
+    
+        function warnIfPropValuesSupplied(~, name)
+            if ~isempty(name)
+                nameStr = strjoin("  - " + string(name), newline);
+                warning('openMINDS:InstanceConstructor:NameValuePairsIgnored', ...
+                    'The following name-value pairs were ignored when creating an instance using a struct:\n%s', nameStr)
+            end
         end
     end
 

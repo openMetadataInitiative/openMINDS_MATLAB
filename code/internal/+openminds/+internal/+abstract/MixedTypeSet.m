@@ -53,7 +53,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         IS_SCALAR
     end
 
-    properties
+    properties % Todo: SetAccess = immutable ?
         % The openMINDS instance for an element of a mixed type object array
         Instance
     end
@@ -91,7 +91,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
             % Process each instance value
             for i = 1:numel(instance)
                 
-                if isstring(instance{i})
+                if isstring(instance{i}) || ischar(instance{i})
                     instanceName = instance{i};
                     % Check if we can create a controlled instance from it
                     for type = obj(i).ALLOWED_TYPES

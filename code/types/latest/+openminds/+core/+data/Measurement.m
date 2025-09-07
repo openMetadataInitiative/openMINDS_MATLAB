@@ -60,8 +60,14 @@ classdef Measurement < openminds.abstract.Schema
     end
 
     methods
-        function obj = Measurement(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Measurement(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.data.Measurement
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

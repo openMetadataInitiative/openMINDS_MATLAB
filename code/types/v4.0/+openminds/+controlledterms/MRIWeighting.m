@@ -36,8 +36,15 @@ classdef MRIWeighting < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = MRIWeighting(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = MRIWeighting(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

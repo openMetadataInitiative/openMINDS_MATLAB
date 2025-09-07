@@ -27,8 +27,15 @@ classdef CriteriaQualityType < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = CriteriaQualityType(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = CriteriaQualityType(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

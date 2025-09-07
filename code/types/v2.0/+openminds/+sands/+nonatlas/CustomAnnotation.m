@@ -104,8 +104,14 @@ classdef CustomAnnotation < openminds.abstract.Schema
     end
 
     methods
-        function obj = CustomAnnotation(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = CustomAnnotation(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.nonatlas.CustomAnnotation
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 
