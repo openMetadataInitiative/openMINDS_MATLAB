@@ -42,41 +42,46 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
     end
 
     methods
-        function obj = ControlledTerm(varargin)
+        function obj = ControlledTerm(instanceSpec, propValues)
             
-            if isempty(varargin)
-                return
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
             end
 
-            if numel(varargin) == 1 && ischar(varargin{1})
-                varargin{1} = string(varargin{1});
-            end
+            if ~isempty(instanceSpec)
+                if ischar(instanceSpec)
+                    instanceSpec = string(instanceSpec);
+                end
 
-            if nargin < 1
-                % Make a "null" instance
-            elseif nargin == 1 && isstring( varargin{1} ) && isfile( varargin{1} )
-                obj.load( varargin{1} )
-            elseif nargin == 1 && isstring( varargin{1} ) && ~isfile( varargin{1} )
-                % Deserialize from name of controlled instance
-                if ~ismissing(varargin{1})
-                    obj.deserializeFromName(varargin{1});
-                end
-            elseif nargin == 1 && isstruct( varargin{1} ) && isfield(varargin{1}, 'at_id')
-                numInstances = numel(varargin{1});
-                if numInstances > 1
-                    obj(numInstances) = feval(class(obj));
-                end
-                for i = 1:numel(varargin{1})
-                    obj(i).deserializeFromName(varargin{1}(i).at_id);
-                end
-            else
-                [varargin, id] = obj.removeArg('id', varargin{:});
-                if ~isempty(id)
-                    obj.id = id; % Assign provided id
+                if isstring( instanceSpec ) && isfile( instanceSpec )
+                    obj.load( instanceSpec ) % todo: Not implemented??
+                elseif isstring( instanceSpec ) && ~isfile( instanceSpec )
+                    % Deserialize from name of controlled instance
+                    if ~ismissing(instanceSpec)
+                        obj.deserializeFromName(instanceSpec);
+                    end
+                elseif isstruct( instanceSpec ) && isfield(instanceSpec, 'at_id')
+                    numInstances = numel(instanceSpec);
+                    if numInstances > 1
+                        obj(numInstances) = feval(class(obj));
+                    end
+                    for i = 1:numel(instanceSpec)
+                        obj(i).deserializeFromName(instanceSpec(i).at_id);
+                    end
                 else
+                    error('openMINDS:ControlledTerm:InvalidInput', ...
+                        'Expected instance spec to be a name, a filename or a structure with `at_id` field.')
+                end
+
+                names = fieldnames(propValues);
+                obj.warnIfPropValuesSupplied(names)
+            else
+                obj.set(propValues)
+                if ismissing(obj.id)
                     obj.id = obj.generateInstanceId();
                 end
-                obj.assignPVPairs(varargin{:})
             end
         end
     end
@@ -123,8 +128,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     data = getControlledInstance(instanceName, schemaName, 'controlledTerms');
                 catch
                     s = warning('off', 'backtrace');
+                    warningCleanup = onCleanup(@() warning(s));
                     warning('Controlled instance "%s" is not available.', instanceNameOrig)
-                    warning(s);
                     return
                 end
             else
