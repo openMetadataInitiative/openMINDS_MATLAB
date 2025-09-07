@@ -2,8 +2,7 @@ classdef Collection < handle
 %Collection A collection of openMINDS instances that can be saved to and
 % loaded from disk.
 %
-%   USAGE:
-%   - - - -
+% Syntax:
 %   collection = openminds.Collection() creates a new empty collection
 %
 %   collection = openminds.Collection(instanceA, instanceB, ...) creates a
@@ -11,15 +10,13 @@ classdef Collection < handle
 %   can be instances of openMINDS metadata or files holding serialized
 %   openMINDS metadata (jsonlds)
 %
-%   METHODS:
-%   - - - - -
-%       openminds.Collection/add         Add instances to collection
-%       openminds.Collection/updateLinks Update collection
-%       openminds.Collection/save        Save instances of collection to file
-%       openminds.Collection/load        Load instances from file and add to collection
+% Methods highlights:
+%   - add           Add instances to collection
+%   - updateLinks   Update collection
+%   - save          Save instances of collection to file
+%   - load          Load instances from file and add to collection
 %
-%   METHODS USAGE:
-%   - - - - - - - -
+% Examples:
 %
 %   collection.add(instanceC, instanceD) adds more instances to the
 %   collection.
@@ -39,6 +36,9 @@ classdef Collection < handle
 
 %   Todo: Validation.
 %   - Linked subject states should have same subject
+
+% The collection has a property for connecting to 
+
 
     properties
         % Name of the metadata collection
