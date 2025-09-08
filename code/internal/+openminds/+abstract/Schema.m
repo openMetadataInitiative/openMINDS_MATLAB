@@ -64,6 +64,47 @@ classdef Schema < handle & openminds.internal.extern.uiw.mixin.AssignPVPairs & .
         end
     end
 
+    methods
+        function str = serialize(obj, options)
+
+            arguments
+                obj
+                options.Serializer = "openminds.internal.serializer.JsonLdSerializer"
+                options.FilePath (1,1) string = missing
+                options.RecursionDepth (1,1) uint8 = 1
+                options.IncludeIdentifier (1,1) logical = true
+            end
+
+            serializer = str2func(options.Serializer);
+
+            str = serializer(obj, ...
+                'UseSemanticPropertyName', true, ...
+                'WithContext', false, ...
+                'RecursionDepth', options.RecursionDepth, ...
+                'IncludeIdentifier', options.IncludeIdentifier).convert("multiple");
+
+            if ~iscell(str); str = {str}; end
+
+            if ~ismissing(options.FilePath) % Todo:
+                outputPaths = cell(size(str));
+
+                for i = 1:numel(str)
+                    if filePath==""
+                        disp(str{i})
+                    else
+                        thisFilePath = buildSingleInstanceFilepath(filePath, str{i});
+                        openminds.internal.utility.filewrite(thisFilePath, str{i})
+                        outputPaths{i} = char(thisFilePath);
+                    end
+                end
+            end
+
+            if ~nargout
+                clear str
+            end
+        end
+    end
+
     methods (Access = public, Hidden)
         function linkedTypeList = getLinkedTypes(obj)
             linkedTypeList = {};
