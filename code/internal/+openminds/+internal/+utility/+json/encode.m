@@ -1,6 +1,11 @@
-function str = encode(s)
-    
-    str = jsonencode(s, 'PrettyPrint', true);
+function str = encode(s, options)
+
+    arguments
+        s struct
+        options.PrettyPrint (1,1) logical = true
+    end
+
+    str = jsonencode(s, 'PrettyPrint', options.PrettyPrint);
     % Todo: Use regexp to make sure we only replace json key names
     % str = strrep(str, '"x_', '"_');
     str = strrep(str, '"x_', '"@');

@@ -3,10 +3,6 @@ classdef StructConverter < handle
 %
 %   This is a proposal for what a serializer class could look like. Some
 %   unresolved questions remain.
-
-%     TODO:
-%     -----
-%     - Simplify recursiveness
 %
 %     QUESTIONS:
 %     ----------
@@ -298,7 +294,6 @@ classdef StructConverter < handle
     end
 
     methods (Static)
-
         function id = getIdentifier(instanceID)
             id = instanceID;
 
