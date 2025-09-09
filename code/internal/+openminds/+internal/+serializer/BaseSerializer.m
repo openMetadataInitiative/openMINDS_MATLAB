@@ -26,7 +26,7 @@ classdef (Abstract) BaseSerializer < handle
     end
 
     properties (Access = protected)
-        SerializationConfiguration
+        SerializationConfiguration openminds.internal.serializer.SerializationConfig
     end
 
     methods (Abstract, Access = protected)
@@ -49,6 +49,12 @@ classdef (Abstract) BaseSerializer < handle
         %   result : any
         %       Final serialized output in the target format
     end
+
+    methods (Access = protected)
+        function allStructs = postProcessInstances(obj, allStructs) %#ok<INUSD>
+            % Subclass can implement
+        end
+    end
     
     methods
         function obj = BaseSerializer(config)
@@ -57,18 +63,14 @@ classdef (Abstract) BaseSerializer < handle
                 config.?openminds.internal.serializer.SerializationConfig
             end
 
-            % Todo: Some configs are dependent on each other. 
-            % I.e, if output mode is single, WithContext should be false...
-            % Handle this in config class or here? I.e the 
-
-            obj.SerializationConfiguration = openminds.internal.serializer.SerializationConfig();
-            obj.SerializationConfiguration.updateFromStructure(config)
+            obj.SerializationConfiguration = ...
+                openminds.internal.serializer.SerializationConfig.fromStruct(config);
         end
     end
 
 
     methods
-        function result = serialize(obj, instances, config)
+        function result = serialize(obj, instances)
         %serialize Main entry point for serialization
         %
         %   result = serialize(obj, instances, config) serializes one or
@@ -78,8 +80,6 @@ classdef (Abstract) BaseSerializer < handle
         %   -----------
         %   instances : openminds.abstract.Schema or cell array
         %       Instance(s) to serialize
-        %   config : SerializationConfig
-        %       Configuration object for serialization
         %
         %   RETURNS:
         %   --------
@@ -89,33 +89,23 @@ classdef (Abstract) BaseSerializer < handle
             arguments
                 obj (1,1) openminds.internal.serializer.BaseSerializer
                 instances % openminds.abstract.Schema or cell array
-                config % SerializationConfig object
             end
             
             % Process instances to add openMINDS-specific fields and collect linked instances
-            [processedStructs, linkedInstances] = obj.processInstances(instances, config);
+            processedStructs = obj.processInstances(instances);
             
-            % Combine main instances with linked instances for output
-            if ~isempty(linkedInstances)
-                if iscell(processedStructs)
-                    allStructs = [processedStructs, linkedInstances];
-                else
-                    allStructs = [{processedStructs}, linkedInstances];
-                end
-            else
-                allStructs = processedStructs;
-            end
+            processedStructs = obj.postProcessInstances(processedStructs);
             
             % Delegate to subclass for format-specific output
-            result = obj.formatOutput(allStructs, config);
+            result = obj.formatOutput(processedStructs);
         end
     end
 
     methods (Access = private)
-        function [processedStructs, linkedInstances] = processInstances(obj, instances, config)
+        function processedStructs = processInstances(obj, instances)
         %processInstances Process instances and add openMINDS-specific fields
         %
-        %   [processedStructs, linkedInstances] = processInstances(obj, instances, config)
+        %   processedStructs = processInstances(obj, instances)
         %   converts instances to structs and adds openMINDS-specific
         %   fields like @type, @id, @context, and processes linked/embedded types.
         %   Returns both the main processed structs and any linked instances found.
@@ -123,16 +113,14 @@ classdef (Abstract) BaseSerializer < handle
             arguments
                 obj (1,1) openminds.internal.serializer.BaseSerializer
                 instances % openminds.abstract.Schema or cell array
-                config % SerializationConfig object
             end
             
             % Ensure instances is a cell array
             if ~iscell(instances)
-                instances = {instances};
-                wasScalar = true;
-            else
-                wasScalar = false;
+                instances = num2cell(instances);
             end
+
+            config = obj.SerializationConfiguration;
             
             % Create serialization context with linked instance collection
             context = openminds.internal.serializer.SerializationContext(config);
@@ -154,10 +142,14 @@ classdef (Abstract) BaseSerializer < handle
             else
                 linkedInstances = {};
             end
-            
-            % Return scalar if input was scalar
-            if wasScalar && numel(processedStructs) == 1
-                processedStructs = processedStructs{1};
+
+            % Combine main instances with linked instances for output
+            if ~isempty(linkedInstances)
+                if iscell(processedStructs)
+                    processedStructs = [processedStructs, linkedInstances];
+                else
+                    processedStructs = [{processedStructs}, linkedInstances];
+                end
             end
         end
         
@@ -187,6 +179,10 @@ classdef (Abstract) BaseSerializer < handle
                 % Get basic struct from StructAdapter
                 S = instance.toStruct();
                 
+                if ~obj.SerializationConfiguration.IncludeEmptyProperties
+                    S = obj.removeEmptyProperties(S);
+                end
+
                 % Add openMINDS-specific fields
                 S = obj.addOpenMindsFields(S, instance, context);
                 
@@ -228,13 +224,26 @@ classdef (Abstract) BaseSerializer < handle
             if context.Config.IncludeIdentifier
                 S.at_id = instance.id;
             end
-            
-            % Add @context if requested (typically only for root level)
-            if context.Config.WithContext && context.CurrentDepth == 0
-                S.at_context = struct('at_vocab', obj.DefaultVocabularyIRI);
-            end
         end
         
+        function S = removeEmptyProperties(~, S)
+            propNames = fieldnames(S);
+            propValues = struct2cell(S);
+
+            propNamesIgnore = false(size(propNames));
+            for i = 1:numel(propValues)
+                iPropertyValue = propValues{i};
+                if isempty(iPropertyValue)
+                    propNamesIgnore(i) = true;
+                elseif isstring(iPropertyValue) && isscalar(iPropertyValue)
+                    if iPropertyValue=="" || ismissing(iPropertyValue)
+                        propNamesIgnore(i) = true;
+                    end
+                end
+            end
+            S = rmfield(S, propNames(propNamesIgnore));
+        end
+
         function S = processLinkedProperties(obj, S, instance, context)
         %processLinkedProperties Process properties with linked types
         %
@@ -539,6 +548,7 @@ classdef (Abstract) BaseSerializer < handle
 
         function iri = get.DefaultVocabularyIRI(~)
             iri = sprintf("%s/vocab/", openminds.constant.BaseURI());
+            assert(endsWith(iri, '/'), 'Vocabulary IRI should end with "/"')
         end
     end
 end

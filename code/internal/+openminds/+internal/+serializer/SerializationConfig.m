@@ -10,29 +10,39 @@ classdef SerializationConfig < matlab.mixin.SetGet
 %   
 %   config = SerializationConfig( ...
 %       'RecursionDepth', 2, ...
-%       'WithContext', true, ...
 %       'IncludeEmptyProperties', false)
 %
 %   PROPERTIES:
 %   -----------
-%   RecursionDepth           - Maximum recursion depth for linked types
-%   WithContext              - Include @context in JSON-LD output
-%   IncludeEmptyProperties   - Include properties with empty values
-%   UseSemanticPropertyName  - Use semantic property names with vocab URI
+%   RecursionDepth           - Maximum recursion depth for linked types          Serialization option, not serializer 
+
+%   PropertyNameSyntax       - Whether to use expanded or compact syntax for property names       Json-ld serializer 
+%   PrettyPrint              - Format output for human readability               Json-ld  
+
 %   IncludeIdentifier        - Include @id in serialized output
+%   IncludeEmptyProperties   - Include properties with empty values              
+
 %   EnableCaching            - Enable instance caching for performance
 %   EnableValidation         - Enable validation during serialization
 %   OutputEncoding           - Character encoding for output files
-%   PrettyPrint              - Format output for human readability
+
+
+% Some notes:
+%   This serialiser is not a general json-ld serialiser, but simplified to
+%   work with openminds metadata. 
+%      - When using vocabulary mapping, we assume all properties live in
+%        the same namespace (i.e the openMINDS namespace) 
+% 
 
     properties
         % Core serialization options
         RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 1
         
         % JSON-LD specific options
-        WithContext (1,1) logical = false
-        UseSemanticPropertyName (1,1) logical = false
-        
+        % PropertyNameSyntax - Whether to use expanded or compact syntax
+        % for property names
+        PropertyNameSyntax (1,1) string {mustBeMember(PropertyNameSyntax, ["compact","expanded"])} = "compact"
+
         % Content options
         IncludeIdentifier (1,1) logical = true
         IncludeEmptyProperties (1,1) logical = false
@@ -43,11 +53,12 @@ classdef SerializationConfig < matlab.mixin.SetGet
         % Quality options
         EnableValidation (1,1) logical = true
         
-        % Output formatting options
+        % Output formatting options (Text only serialisation)
         OutputEncoding (1,1) string {mustBeMember(OutputEncoding, ["UTF-8", "UTF-16", "ASCII"])} = "UTF-8"
         PrettyPrint (1,1) logical = true
 
-        OutputMode (1,1) string {mustBeMember(OutputMode, ["single", "multiple"])} = "single"
+        OutputMode (1,1) string {mustBeMember(OutputMode, ["single", "multiple"])} = "multiple" % file / folder
+        
         % Todo: File export
         % Save to single, save to multiple
         % Filename / root foldername
@@ -69,11 +80,9 @@ classdef SerializationConfig < matlab.mixin.SetGet
         %       Maximum depth for recursively serializing linked types.
         %       0 = no recursion, only references
         %
-        %   WithContext : logical (default: true)
-        %       Include @context property in JSON-LD output
-        %
-        %   UseSemanticPropertyName : logical (default: false)
-        %       Use full semantic property names with vocabulary URI
+        %   PropertyNameSyntax : string (default: compact)
+        %       Use full semantic property names with vocabulary URI (expanded) 
+        %       or add vocabulary mapping in document context (compact).
         %
         %   IncludeIdentifier : logical (default: true)
         %       Include @id property in serialized instances
@@ -115,6 +124,16 @@ classdef SerializationConfig < matlab.mixin.SetGet
                 structure (1,1) struct
             end
             obj.set(structure)
+        end
+    end
+
+    methods (Static)
+        function obj = fromStruct(structure)
+            arguments
+                structure (1,1) struct
+            end
+            obj = openminds.internal.serializer.SerializationConfig();
+            obj.updateFromStructure(structure)
         end
     end
 end

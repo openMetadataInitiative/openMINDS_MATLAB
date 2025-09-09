@@ -19,7 +19,21 @@ function outputPaths = saveInstances(instance, filePath, options)
     import openminds.internal.serializer.StructConverter
     import openminds.internal.serializer.JsonLdSerializer
     
+    serializer = openminds.internal.serializer.JsonLdSerializer(...
+        "RecursionDepth", options.RecursionDepth, ...
+        "PropertyNameSyntax", "compact", ...
+        "PrettyPrint", true, ...
+        "OutputMode", "single");
+
+    res = serializer.serialize(instance);
+
+    % Save output....
+        
+
+    return
+
     switch options.OutputFormat
+
         case "jsonld"
             if options.SaveToSingleFile
                 outputMode = "single";

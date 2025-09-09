@@ -73,21 +73,15 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
             arguments
                 obj
-                options.Serializer = "openminds.internal.serializer.JsonLdSerializer"
+                options.Serializer = openminds.internal.serializer.JsonLdSerializer()
                 options.FilePath (1,1) string = missing
                 options.RecursionDepth (1,1) uint8 = 1
                 options.IncludeIdentifier (1,1) logical = true
             end
 
-            serializer = str2func(options.Serializer);
+            str = options.Serializer.serialize(obj);
 
-            str = serializer(obj, ...
-                'UseSemanticPropertyName', true, ...
-                'WithContext', false, ...
-                'RecursionDepth', options.RecursionDepth, ...
-                'IncludeIdentifier', options.IncludeIdentifier).convert("multiple");
-
-            if ~iscell(str); str = {str}; end
+            %if ~iscell(str); str = {str}; end
 
             if ~ismissing(options.FilePath) % Todo:
                 outputPaths = cell(size(str));
@@ -103,9 +97,9 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
             end
 
-            if ~nargout
-                clear str
-            end
+            %if ~nargout
+            %    clear str
+            %end
         end
     end
 
@@ -566,7 +560,8 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         %generateInstanceId Generate a unique instance id.
             schemaName = obj.getSchemaShortName( class(obj) );
             uuidStr = openminds.internal.utility.string.getuuid();
-            instanceId = sprintf('%s/%s', schemaName, uuidStr);
+            %instanceId = sprintf('%s/%s', schemaName, uuidStr);
+            instanceId = uuidStr;
         end
     
         function warnIfPropValuesSupplied(~, name)

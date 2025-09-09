@@ -16,7 +16,6 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
 %   - Supports single and multiple instance serialization
 %   - Maintains JSON-LD compliance
 
-
     methods
         function obj = JsonLdSerializer(config)
 
@@ -24,13 +23,59 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 config.?openminds.internal.serializer.SerializationConfig
             end
             nvPairs = namedargs2cell(config);
-
-            obj = obj@openminds.internal.serializer.BaseSerializer(nvPairs)
+            obj = obj@openminds.internal.serializer.BaseSerializer(nvPairs{:});
         end
     end
 
     methods (Access = protected)
-        function result = formatOutput(obj, processedStruct, config)
+        function allStructs = postProcessInstances(obj, allStructs)
+        % postProcessInstances - Processes instances to apply vocabulary
+        % mapping or semantic property naming based on the configuration settings.
+        %
+        % Syntax:
+        %   allStructs = postProcessInstances(obj, allStructs) 
+        %   This function modifies 'allStructs' by adding vocabulary mapping or
+        %   applying semantic property names depending on the object's serialization
+        %   configuration.
+        %
+        % Input Arguments:
+        %   obj - An object containing serialization configuration and methods
+        %   allStructs - A cell array of structures to be processed
+        %
+        % Output Arguments:
+        %   allStructs - The processed cell array of structures after applying
+        %   the necessary transformations
+        
+            arguments
+                obj (1,1) openminds.internal.serializer.JsonLdSerializer
+                allStructs (1,:) {mustBeCellOfStructs}
+            end
+        
+            if obj.SerializationConfiguration.OutputMode == "multiple"
+                % Add vocabulary mapping if requested.
+                if obj.SerializationConfiguration.PropertyNameSyntax == "compact"
+                    % Add to each document
+                    for i = 1:numel(allStructs)
+                        allStructs{i} = obj.addVocabularyMapping(allStructs{i});
+                    end
+                end
+            end
+        
+            % Apply semantic property naming if requested
+            if obj.SerializationConfiguration.PropertyNameSyntax == "expanded"
+                for i = 1:numel(allStructs)
+                    allStructs{i} = obj.applySemanticPropertyNames(allStructs{i});
+                end
+            end
+            
+            allStructs = obj.sortKeys(allStructs);
+        
+            if obj.SerializationConfiguration.OutputMode == "single"
+                allStructs = obj.createCollectionDocument(allStructs);
+            end
+        end
+
+        function result = formatOutput(obj, processedStruct)
         %formatOutput Convert processed struct to JSON-LD string
         %
         %   result = formatOutput(obj, processedStruct, config)
@@ -38,10 +83,8 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         %
         %   PARAMETERS:
         %   -----------
-        %   processedStruct : struct or cell array of structs
-        %       Struct(s) with openMINDS fields (@type, @id, etc.) added
-        %   config : SerializationConfig
-        %       Configuration object for serialization
+        %   processedStruct : cell array of structs with openMINDS fields 
+        %       (@type, @id, etc.) added
         %
         %   RETURNS:
         %   --------
@@ -50,70 +93,75 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             
             arguments
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
-                processedStruct % struct or cell array of structs
-                config % SerializationConfig object
+                processedStruct (1,:) {mustBeCellOfStructs}
             end
             
-            if iscell(processedStruct) && ~isscalar(processedStruct)
-                % Handle multiple instances
-                if config.OutputMode == "multiple"
-                    result = cell(size(processedStruct));
-                    for i = 1:numel(processedStruct)
-                        result{i} = obj.convertStructToJsonLd(processedStruct{i}, config);
-                    end
-                else
-                    processedStruct = struct( ...
-                        'at_context', {struct('at_vocab', obj.DefaultVocabularyIRI)}, ...
-                        'at_graph', {processedStruct} ...
-                    );
-                    result = obj.convertStructToJsonLd(processedStruct, ...
-                        "UseSemanticPropertyName", false);
-                end
-            else
-                % Handle single instance
-                result = obj.convertStructToJsonLd(processedStruct, config);
+            result = cell(1, numel(processedStruct));
+            for i = 1:numel(processedStruct)
+                result{i} = obj.convertStructToJsonLd(processedStruct{i});
+            end
+
+            if iscell(result) && isscalar(result)
+                result = result{1};
             end
         end
     end
 
-
     methods (Access = private)
-        function jsonStr = convertStructToJsonLd(obj, structInstance, config)
+        function S = addVocabularyMapping(obj, S)
+        % addVocabularyMapping - Add vocabulary mapping to json-ld @context key 
+            arguments
+                obj (1,1) openminds.internal.serializer.JsonLdSerializer
+                S (1,1) struct
+            end
+        
+            % Ensure @context exists and is a struct
+            if ~isfield(S, 'at_context') || ~isstruct(S.('at_context'))
+                S.('at_context') = struct();
+            end
+            
+            % Set @vocab (preserve any other context entries)
+            S.('at_context').('at_vocab') = obj.DefaultVocabularyIRI;
+        end
+
+        function jsonStr = convertStructToJsonLd(obj, structInstance)
         %convertStructToJsonLd Convert a single struct to JSON-LD string
         %
-        %   jsonStr = convertStructToJsonLd(obj, structInstance, config)
+        %   jsonStr = convertStructToJsonLd(obj, structInstance)
         %   converts a single processed struct to a JSON-LD string
             
+        % This function converts a structure to a json-ld document,
+        % providing workaround for MATLAB limitation that fieldnames of
+        % structures can only contain alphanumerics and underscores.
+
             arguments
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
                 structInstance (1,1) struct
-                config % SerializationConfig object
             end
             
-            % Apply semantic property naming if requested
-            if config.UseSemanticPropertyName
-                structInstance = obj.applySemanticPropertyNames(structInstance);
-            end
-            
+            config = obj.SerializationConfiguration;
+
             % Convert to JSON string
-            if config.PrettyPrint
-                jsonStr = openminds.internal.utility.json.encode(structInstance, 'PrettyPrint', true);
-            else
-                jsonStr = openminds.internal.utility.json.encode(structInstance);
-            end
-            
+            jsonStr = openminds.internal.utility.json.encode(structInstance, ...
+                'PrettyPrint', config.PrettyPrint);
+        
             % Replace vocabulary URI placeholders if semantic naming was used
-            if config.UseSemanticPropertyName
+            if config.PropertyNameSyntax == "expanded"
                 vocabUri = obj.DefaultVocabularyIRI;
                 jsonStr = strrep(jsonStr, 'VOCAB_URI_', vocabUri);
             end
         end
         
         function structInstance = applySemanticPropertyNames(obj, structInstance)
-        %applySemanticPropertyNames Apply semantic property naming
+        %applySemanticPropertyNames - Apply semantic property naming
         %
         %   structInstance = applySemanticPropertyNames(obj, structInstance)
         %   replaces property names with semantic vocabulary URIs
+        %
+        %   This function recursively prepends the "VOCAB_URI_" placeholder
+        %   to all property names (non -jsonld keywords) of a structure.
+        %   After conversion to jsonld, these placeholders will be replaced
+        %   with the actual vocabulary IRI.
             
             arguments
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
@@ -130,6 +178,11 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                     continue
                 end
                 
+                % Sanity check
+                assert(~startsWith(fieldName, 'VOCAB_URI_'), ...
+                    ['Internal error: Did not expect property name to ', ...
+                    'start with "VOCAB_URI" placeholder'] )
+
                 % Create semantic property name
                 semanticName = sprintf('VOCAB_URI_%s', fieldName);
                 
@@ -157,6 +210,61 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 end
             end
         end
+   
+        function allStructs = sortKeys(obj, allStructs)
+        % sortKeys - Sorts the keys of the given structs based on a predefined order.
+        %
+        % Sort by placing json-ld keywords first, then property names in
+        % alphabetical order
+        %
+        % Syntax:
+        %   allStructs = sortKeys(obj, allStructs)
+        %
+        % Input Arguments:
+        %   obj          - An object which may contain relevant properties for sorting.
+        %   allStructs   - An array of structures to be sorted by key order.
+        %
+        % Output Arguments:
+        %   allStructs   - The input structures sorted with keys in a specific order.
+        
+            arguments
+                obj (1,1) openminds.internal.serializer.JsonLdSerializer
+                allStructs (1,:) cell {mustBeCellOfStructs}
+            end
+        
+            jsonLdKeywords = ["at_context", "at_graph", "at_type", "at_id"];
+            for i = 1:numel(allStructs)
+                allFieldNames = string( fieldnames(allStructs{i}) );
+                allFieldNames = reshape(allFieldNames, 1, []); % Ensure row
+                
+                jsonLdKeywordFields = intersect(allFieldNames, jsonLdKeywords);
+                propertyFields = setdiff(allFieldNames, jsonLdKeywords);
+
+                fieldOrder = [ ...
+                    intersect(jsonLdKeywords, jsonLdKeywordFields, "stable"), ...
+                    sort(propertyFields) ];
+
+                fieldOrder = cellstr(fieldOrder);
+                
+                allStructs{i} = orderfields(allStructs{i}, fieldOrder);
+            end
+        end
+    
+        function document = createCollectionDocument(obj, documentList)
+        % createCollectionDocument - Combine all documents into a
+        % "collection document using the @graph keyword
+            arguments
+                obj (1,1) openminds.internal.serializer.JsonLdSerializer
+                documentList (1,:) cell {mustBeCellOfStructs}
+            end
+
+            document = struct();
+
+            if obj.SerializationConfiguration.PropertyNameSyntax == "compact"
+                document = obj.addVocabularyMapping(document);
+            end
+            document.at_graph = documentList;
+        end
     end
     
     methods (Static)
@@ -176,7 +284,6 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         %
         %   Configuration options (Name-Value pairs):
         %   RecursionDepth : integer (default: 1)
-        %   WithContext : logical (default: true)
         %   PrettyPrint : logical (default: true)
         %   UseSemanticPropertyName : logical (default: false)
         %   IncludeEmptyProperties : logical (default: false)
@@ -189,20 +296,17 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             arguments
                 instances % openminds.abstract.Schema or cell array
                 options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 1
-                options.WithContext (1,1) logical = true
                 options.PrettyPrint (1,1) logical = true
-                options.UseSemanticPropertyName (1,1) logical = false
+                options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"
                 options.IncludeEmptyProperties (1,1) logical = false
                 options.IncludeIdentifier (1,1) logical = true
             end
             
             % Create configuration
             config = SerializationConfig( ...
-                'Format', 'jsonld', ...
                 'RecursionDepth', options.RecursionDepth, ...
-                'WithContext', options.WithContext, ...
                 'PrettyPrint', options.PrettyPrint, ...
-                'UseSemanticPropertyName', options.UseSemanticPropertyName, ...
+                'PropertyNameSyntax', options.PropertyNameSyntax, ...
                 'IncludeEmptyProperties', options.IncludeEmptyProperties, ...
                 'IncludeIdentifier', options.IncludeIdentifier);
             
@@ -211,4 +315,17 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             jsonStr = serializer.serialize(instances, config);
         end
     end
+end
+
+function mustBeCellOfStructs(cellArray)
+    arguments
+        cellArray (1,:) cell
+    end
+
+    if isempty(cellArray), return; end
+
+    isCellOfStruct = cellfun(@isstruct, cellArray);
+    assert(all(isCellOfStruct), ...
+        "openMINDS_MATLAB:Validator:MustBeCellOfStruct", ...
+        'Expected input to be a cell array of structures.')
 end
