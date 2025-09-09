@@ -35,8 +35,14 @@ classdef StringProperty < openminds.abstract.Schema
     end
 
     methods
-        function obj = StringProperty(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = StringProperty(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.research.StringProperty
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

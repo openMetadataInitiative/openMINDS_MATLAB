@@ -32,12 +32,26 @@ classdef MRIWeighting < openminds.abstract.ControlledTerm
 
     properties (Constant, Hidden)
         CONTROLLED_INSTANCES = [ ...
+            "PDWeighting", ...
+            "R2-starWeighting", ...
+            "R2Weighting", ...
+            "T1RhoWeighting", ...
+            "T1Weighting", ...
+            "T2-starWeighting", ...
+            "T2Weighting" ...
         ]
     end
 
     methods
-        function obj = MRIWeighting(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = MRIWeighting(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

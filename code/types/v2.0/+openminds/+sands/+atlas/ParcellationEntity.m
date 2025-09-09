@@ -87,8 +87,14 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
     end
 
     methods
-        function obj = ParcellationEntity(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ParcellationEntity(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.atlas.ParcellationEntity
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

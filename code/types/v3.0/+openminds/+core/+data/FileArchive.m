@@ -45,8 +45,14 @@ classdef FileArchive < openminds.abstract.Schema
     end
 
     methods
-        function obj = FileArchive(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = FileArchive(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.data.FileArchive
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

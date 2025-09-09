@@ -34,6 +34,7 @@ classdef Terminology < openminds.abstract.ControlledTerm
         CONTROLLED_INSTANCES = [ ...
             "MRIPulseSequence", ...
             "MRIWeighting", ...
+            "MRSpatialEncoding", ...
             "UBERONParcellation", ...
             "actionStatusType", ...
             "ageCategory", ...
@@ -113,8 +114,15 @@ classdef Terminology < openminds.abstract.ControlledTerm
     end
 
     methods
-        function obj = Terminology(varargin)
-            obj@openminds.abstract.ControlledTerm(varargin{:})
+        function obj = Terminology(instanceSpec, propValues)
+            arguments
+                instanceSpec = []
+                propValues.?openminds.abstract.ControlledTerm
+                propValues.id (1,1) string
+            end
+
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

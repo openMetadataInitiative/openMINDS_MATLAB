@@ -51,8 +51,14 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
     end
 
     methods
-        function obj = LivePaperResourceItem(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = LivePaperResourceItem(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.publications.LivePaperResourceItem
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

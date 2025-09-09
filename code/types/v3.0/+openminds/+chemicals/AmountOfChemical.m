@@ -39,8 +39,14 @@ classdef AmountOfChemical < openminds.abstract.Schema
     end
 
     methods
-        function obj = AmountOfChemical(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = AmountOfChemical(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.chemicals.AmountOfChemical
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

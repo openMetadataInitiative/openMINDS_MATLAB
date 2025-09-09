@@ -105,8 +105,14 @@ classdef SubjectGroupState < openminds.abstract.Schema
     end
 
     methods
-        function obj = SubjectGroupState(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = SubjectGroupState(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.research.SubjectGroupState
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

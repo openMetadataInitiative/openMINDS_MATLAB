@@ -67,8 +67,14 @@ classdef Subject < openminds.abstract.Schema
     end
 
     methods
-        function obj = Subject(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Subject(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.research.Subject
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

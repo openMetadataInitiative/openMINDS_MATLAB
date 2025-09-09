@@ -1,9 +1,0 @@
-classdef RelevantFor < openminds.internal.abstract.MixedTypeSet
-    properties (Constant, Hidden)
-        ALLOWED_TYPES = [ ...
-            "openminds.controlledterms.Technique", ...
-            "openminds.core.research.BehavioralTask" ...
-        ]
-        IS_SCALAR = true
-    end
-end

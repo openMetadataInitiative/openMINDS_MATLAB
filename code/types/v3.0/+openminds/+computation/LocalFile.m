@@ -89,8 +89,14 @@ classdef LocalFile < openminds.abstract.Schema
     end
 
     methods
-        function obj = LocalFile(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = LocalFile(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.computation.LocalFile
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

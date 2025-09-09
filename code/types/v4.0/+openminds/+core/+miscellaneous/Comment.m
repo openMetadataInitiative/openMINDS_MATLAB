@@ -52,8 +52,14 @@ classdef Comment < openminds.abstract.Schema
     end
 
     methods
-        function obj = Comment(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Comment(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.miscellaneous.Comment
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

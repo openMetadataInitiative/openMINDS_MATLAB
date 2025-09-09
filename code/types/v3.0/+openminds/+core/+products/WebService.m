@@ -77,8 +77,14 @@ classdef WebService < openminds.abstract.Schema
     end
 
     methods
-        function obj = WebService(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = WebService(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.products.WebService
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

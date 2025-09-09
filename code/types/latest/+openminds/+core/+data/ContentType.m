@@ -75,8 +75,14 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
     end
 
     methods
-        function obj = ContentType(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = ContentType(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.data.ContentType
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

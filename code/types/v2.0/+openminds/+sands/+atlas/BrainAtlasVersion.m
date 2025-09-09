@@ -114,8 +114,14 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
     end
 
     methods
-        function obj = BrainAtlasVersion(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = BrainAtlasVersion(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.atlas.BrainAtlasVersion
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

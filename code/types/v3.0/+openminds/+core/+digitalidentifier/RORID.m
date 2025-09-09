@@ -30,8 +30,14 @@ classdef RORID < openminds.abstract.Schema
     end
 
     methods
-        function obj = RORID(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = RORID(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.core.digitalidentifier.RORID
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

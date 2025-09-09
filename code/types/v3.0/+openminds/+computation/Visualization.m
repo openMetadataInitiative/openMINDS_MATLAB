@@ -160,8 +160,14 @@ classdef Visualization < openminds.abstract.Schema
     end
 
     methods
-        function obj = Visualization(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Visualization(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.computation.Visualization
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 

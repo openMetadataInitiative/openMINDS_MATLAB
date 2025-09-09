@@ -39,8 +39,14 @@ classdef Rectangle < openminds.abstract.Schema
     end
 
     methods
-        function obj = Rectangle(varargin)
-            obj@openminds.abstract.Schema(varargin{:})
+        function obj = Rectangle(structInstance, propValues)
+            arguments
+                structInstance (1,:) struct = struct.empty
+                propValues.?openminds.sands.mathematicalshapes.Rectangle
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
         end
     end
 
