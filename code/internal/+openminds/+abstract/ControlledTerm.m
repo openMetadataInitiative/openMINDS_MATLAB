@@ -28,7 +28,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
         synonym (1,:) string {mustBeListOfUniqueItems(synonym)}
     end
 
-    properties (SetAccess = protected, Hidden) % Todo: Same as id, combine
+    properties (SetAccess = protected, Hidden) % Todo: Same as id, clean up
         at_id
     end
        
@@ -55,11 +55,16 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                     instanceSpec = string(instanceSpec);
                 end
 
-                if isstring( instanceSpec ) && isfile( instanceSpec )
-                    obj.load( instanceSpec ) % todo: Not implemented??
-                elseif isstring( instanceSpec ) && ~isfile( instanceSpec )
-                    % Deserialize from name of controlled instance
-                    if ~ismissing(instanceSpec)
+                if isstring( instanceSpec ) && ~ismissing(instanceSpec)
+                    % Check IRI first, because isfile will also check IRIs
+                    % and that is expensive (we only want to check local
+                    % files anyway) 
+                    if startsWith(instanceSpec, openminds.constant.BaseURI)
+                        obj.deserializeFromName(instanceSpec);
+                    elseif isfile( instanceSpec )
+                        obj.load( instanceSpec ) % todo: Not implemented??
+                    else
+                        % Deserialize from name of controlled instance
                         obj.deserializeFromName(instanceSpec);
                     end
                 elseif isstruct( instanceSpec ) && isfield(instanceSpec, 'at_id')
@@ -103,6 +108,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
 
             import openminds.internal.getControlledInstance
             import openminds.internal.utility.getSchemaName
+
             instanceName = char(instanceName);
             schemaName = getSchemaName(class(obj));
 
