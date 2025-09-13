@@ -7,6 +7,8 @@ function outputPaths = saveInstances(instance, filePath, options)
     %       a) saving to individual files
     %       b) saving to single file
     %   - Generalize saving to save to different formats.
+
+    %   - Option for flat or nested.
     
     arguments
         instance (1,:) %openminds.abstract.Schema or cell array
@@ -19,61 +21,49 @@ function outputPaths = saveInstances(instance, filePath, options)
     import openminds.internal.serializer.StructConverter
     import openminds.internal.serializer.JsonLdSerializer
     
-    serializer = openminds.internal.serializer.JsonLdSerializer(...
-        "RecursionDepth", options.RecursionDepth, ...
-        "PropertyNameSyntax", "compact", ...
-        "PrettyPrint", true, ...
-        "OutputMode", "single");
-
-    res = serializer.serialize(instance);
-
-    % Save output....
-        
-
-    return
+    if options.SaveToSingleFile
+        outputMode = "single";
+    else
+        outputMode = "multiple";
+    end
 
     switch options.OutputFormat
 
         case "jsonld"
+
+            serializer = openminds.internal.serializer.JsonLdSerializer(...
+                "RecursionDepth", options.RecursionDepth, ...
+                "PropertyNameSyntax", "compact", ...
+                "PrettyPrint", true, ...
+                "OutputMode", outputMode);
+        
+            jsonldDocuments = serializer.serialize(instance);
+
             if options.SaveToSingleFile
-                outputMode = "single";
-            else
-                outputMode = "multiple";
-            end
-            
-            if options.SaveToSingleFile
-                structs = StructConverter(instance, 'WithContext', false).convert();
-                jsonInstance = openminds.internal.serializer.struct2jsonld(structs);
-                
                 if filePath==""
-                    disp(jsonInstance)
+                    disp(jsonldDocuments)
                 else
-                    openminds.internal.utility.filewrite(filePath, jsonInstance)
+                    openminds.internal.utility.filewrite(filePath, jsonldDocuments)
                 end
                 outputPaths = filePath;
             else
-                str = JsonLdSerializer(instance, 'RecursionDepth', options.RecursionDepth).convert(outputMode);
-                if ~iscell(str); str = {str}; end
 
-                outputPaths = cell(size(str));
+                if ~iscell(jsonldDocuments); str = {jsonldDocuments}; end
 
-                for i = 1:numel(str)
+                outputPaths = cell(size(jsonldDocuments));
+
+                for i = 1:numel(jsonldDocuments)
                     if filePath==""
-                        disp(str{i})
+                        disp(jsonldDocuments{i})
                     else
-                        thisFilePath = buildSingleInstanceFilepath(filePath, str{i});
-                        openminds.internal.utility.filewrite(thisFilePath, str{i})
+                        thisFilePath = buildSingleInstanceFilepath(filePath, jsonldDocuments{i});
+                        openminds.internal.utility.filewrite(thisFilePath, jsonldDocuments{i})
                         outputPaths{i} = char(thisFilePath);
                     end
                 end
             end
-            
         otherwise
             error('Unkown output format')
-    end
-
-    if ~nargout
-        clear jsonInstance
     end
 end
 
@@ -81,19 +71,19 @@ function instanceFilePath = buildSingleInstanceFilepath(rootPath, jsonldInstance
 %buildSingleInstanceFilepath Build filepath for single instance.
 %
 %   Use the @type to create a filepath consisting of a folder hierarchy
-%   based on the openMINDS module the instance belong to.
+%   based on the openMINDS type the instance belong to.
 %
 %   Example:
 %
 %   @type = "https://openminds.ebrains.eu/core/Affiliation"
 %
-%   instanceFilePath = <RootPath>/core/Affiliation/<@id>.jsonld
+%   instanceFilePath = <RootPath>/affiliation/<@id>.jsonld
 
-    instance = openminds.internal.serializer.jsonld2struct(jsonldInstance);
-    classname = openminds.internal.utility.string.type2class(instance.at_type); %openminds.core.Affiliation
-    folderName = strrep(classname, '.', filesep);
-    folderName = strrep(folderName, 'openminds', rootPath);
-    if ~isfolder(folderName); mkdir(folderName); end
-    [~, filename] = fileparts(instance.at_id);
-    instanceFilePath = fullfile(folderName, [filename, '.jsonld']);
+    instance = openminds.internal.utility.json.decode(jsonldInstance);
+    type = openminds.enum.Types.fromAtType(instance.at_type);
+        
+    saveFolder = fullfile(rootPath, lower(char(type)));
+    if ~isfolder(saveFolder); mkdir(saveFolder); end
+
+    instanceFilePath = fullfile(saveFolder, [instance.at_id, '.jsonld']);
 end

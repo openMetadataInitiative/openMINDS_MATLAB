@@ -24,7 +24,7 @@ function instances = loadInstances(filePath)%, options)
             str = arrayfun(@fileread, filePath, 'UniformOutput', false);
             
             % Produce a cell array of instances represented as structs
-            if numel(str) == 1
+            if isscalar(str)
                 structInstances = jsonld2struct(str);
                 if ~iscell(structInstances); structInstances={structInstances};end
             else
@@ -42,13 +42,14 @@ function instances = loadInstances(filePath)%, options)
                     % instances{i} = struct('id', thisInstance.at_id);
                 else
                     openMindsType = thisInstance.at_type;
-                    className = openminds.internal.utility.string.type2class(openMindsType);
-    
-                    assert( isequal( eval(sprintf('%s.X_TYPE', className)), openMindsType), ...
-                        "Instance type does not match schema type. This is not supposed to happen, please report!")
+                       
+                    typeEnum = openminds.enum.Types.fromAtType(openMindsType);
+                    assert( strcmp( typeEnum.TypeURI, openMindsType), ...
+                        "Instance type does not match schema type. This " + ...
+                        "is not supposed to happen, please report!")
     
                     try
-                        instances{i} = feval(className, thisInstance);
+                        instances{i} = feval(typeEnum.ClassName, thisInstance);
                     catch ME
                         warning(ME.message)
                     end
