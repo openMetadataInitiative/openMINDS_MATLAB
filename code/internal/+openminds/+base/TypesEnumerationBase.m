@@ -36,6 +36,11 @@ classdef TypesEnumerationBase
         function name = getSchemaName(obj)
             name = openminds.internal.utility.getSchemaShortName(obj.ClassName);
         end
+
+        function moduleName = getModule(obj)
+            splitClassName = split(obj.ClassName, '.');
+            moduleName = openminds.enum.Modules(splitClassName{2});
+        end
     end
 
     methods (Access = private)
