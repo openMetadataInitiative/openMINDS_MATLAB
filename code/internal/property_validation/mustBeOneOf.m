@@ -26,9 +26,11 @@ function mustBeOneOf(value, allowedTypes)
     validTypesStr = getValidTypesAsFormattedString(allowedTypes);
 
     if ~isValidType
+        actualTypes = cellfun(@class, value, 'UniformOutput', false);
+        actualTypes = strjoin(actualTypes, ', ');
         error(...
             'OPENMINDS_MATLAB:PropertyValidators:MustBeTypeOf', ...
-            'Value must be one of the following types:' + validTypesStr)
+            'Value must be one of the following types but got "%s":' + validTypesStr, actualTypes)
     end
     % assert(isValidType, 'Value must be one of the following types:' + validTypesStr)
 end
