@@ -23,11 +23,13 @@ classdef LinkResolverRegistry < handle
                 % Already registered
                 return
             end
-            
-            existingIRIPrefixes = [obj.LinkResolvers.IRIPrefix];
-            if ismember(resolver.IRIPrefix, existingIRIPrefixes)
-                % Already registered
-                return
+
+            if ~isempty(obj.LinkResolvers)
+                existingIRIPrefixes = [obj.LinkResolvers.IRIPrefix];
+                if ismember(resolver.IRIPrefix, existingIRIPrefixes)
+                    % Already registered
+                    return
+                end
             end
 
             if isempty(obj.LinkResolvers)
