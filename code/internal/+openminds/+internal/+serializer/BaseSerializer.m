@@ -1,9 +1,13 @@
 classdef (Abstract) BaseSerializer < handle
-%BaseSerializer Abstract base class for openMINDS serializers
+% BaseSerializer - Abstract base class for openMINDS serialization
 %
 %   This class provides the core serialization logic for openMINDS
 %   instances, handling linked and embedded types according to openMINDS
 %   specifications. Concrete subclasses implement format-specific output.
+%
+%   An instance of this class will act as a visitor for a metadata instance 
+%   via its `serialize` method, in accordance with the Visitor design pattern: 
+%   https://refactoring.guru/design-patterns/visitor
 %
 %   USAGE:
 %   ------
@@ -58,7 +62,6 @@ classdef (Abstract) BaseSerializer < handle
     
     methods
         function obj = BaseSerializer(config)
-
             arguments
                 config.?openminds.internal.serializer.SerializationConfig
             end
@@ -91,13 +94,29 @@ classdef (Abstract) BaseSerializer < handle
                 instances % openminds.abstract.Schema or cell array
             end
             
-            % Process instances to add openMINDS-specific fields and collect linked instances
+            % Process instances to add openMINDS-specific fields and collect 
+            % linked instances
             processedStructs = obj.processInstances(instances);
             
             processedStructs = obj.postProcessInstances(processedStructs);
             
             % Delegate to subclass for format-specific output
             result = obj.formatOutput(processedStructs);
+        end
+    end
+
+    methods (Sealed, Access = protected)
+        function tf = isEmptyPropertyValue(~, propertyValue)
+            tf = false;
+            if isempty(propertyValue)
+                tf = true;
+            elseif isstring(propertyValue) && isscalar(propertyValue)
+                if propertyValue=="" || ismissing(propertyValue)
+                    tf = true;
+                end
+            elseif isdatetime(propertyValue) && isnat(propertyValue)
+                tf = true;
+            end
         end
     end
 
@@ -226,19 +245,15 @@ classdef (Abstract) BaseSerializer < handle
             end
         end
         
-        function S = removeEmptyProperties(~, S)
+        function S = removeEmptyProperties(obj, S)
             propNames = fieldnames(S);
             propValues = struct2cell(S);
 
             propNamesIgnore = false(size(propNames));
             for i = 1:numel(propValues)
                 iPropertyValue = propValues{i};
-                if isempty(iPropertyValue)
+                if obj.isEmptyPropertyValue(iPropertyValue)
                     propNamesIgnore(i) = true;
-                elseif isstring(iPropertyValue) && isscalar(iPropertyValue)
-                    if iPropertyValue=="" || ismissing(iPropertyValue)
-                        propNamesIgnore(i) = true;
-                    end
                 end
             end
             S = rmfield(S, propNames(propNamesIgnore));
@@ -547,7 +562,12 @@ classdef (Abstract) BaseSerializer < handle
         end
 
         function iri = get.DefaultVocabularyIRI(~)
-            iri = sprintf("%s/vocab/", openminds.constant.BaseURI());
+            baseIRI = openminds.constant.BaseURI();
+            if startsWith(baseIRI, "https://openminds.ebrains.eu")
+                iri = sprintf("%s/vocab/", baseIRI);
+            else
+                iri = sprintf("%s/props/", baseIRI);
+            end
             assert(endsWith(iri, '/'), 'Vocabulary IRI should end with "/"')
         end
     end
