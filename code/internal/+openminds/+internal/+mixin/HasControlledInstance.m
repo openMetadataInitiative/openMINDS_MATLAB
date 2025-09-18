@@ -12,12 +12,16 @@ classdef HasControlledInstance < handle
                 name (1,1) string
                 type (1,1) openminds.enum.Types
             end
+            % Todo: consolidate with instance resolver
             instances = openminds.internal.listControlledInstances(type);
             isMatch = instances.InstanceName==string(name);
             if any(isMatch)
                 data = jsondecode(fileread(instances.Filepath(isMatch)));
+                instance = feval(type.ClassName, data);
+            else
+                error(['Could not find data for instance of type "%s" ', ...
+                    'with name "%s"'], string(type), name)
             end
-            instance = feval(type.ClassName, data);
         end
     end
 end
