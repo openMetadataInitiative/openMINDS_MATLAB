@@ -1,7 +1,7 @@
-function tf = isSemanticInstanceName(name)
-% isSemanticInstanceName Check if a name represents a semantic instance URI
+function tf = isInstanceIRI(name) % Todo: Rename isControlledInstanceIRIIdentifier
+% isInstanceIRI Check if a name represents a semantic instance URI
 %
-%   tf = openminds.utility.isSemanticInstanceName(name) returns true if the
+%   tf = openminds.utility.isInstanceIRI(name) returns true if the
 %   input `name` is a valid semantic instance URI, and false otherwise. This
 %   function verifies if `name` meets the conditions to be identified as a
 %   semantic instance by:
@@ -21,7 +21,7 @@ function tf = isSemanticInstanceName(name)
 %
 %   Example:
 %       instanceURI = "https://openminds.om-i.org/instances/ageCategory/adolescent"
-%       tf = openminds.utility.isSemanticInstanceName(instanceURI);
+%       tf = openminds.utility.isInstanceIRI(instanceURI);
 %
 %   See also: matlab.net.URI, openminds.constant.BaseURI
 
