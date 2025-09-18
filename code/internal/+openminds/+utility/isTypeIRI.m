@@ -2,7 +2,7 @@ function tf = isTypeIRI(name)
 %isTypeIRI Check if name is a semantic name of a schema (type IRI)
     
     tf = false;
-    disp(rand())
+
     if startsWith(name, openminds.constant.BaseURI('v1')) % v1-v3
         [~, modules] = enumeration('openminds.enum.Modules');
         typeBaseIRI = openminds.constant.BaseURI('v1') + "/" + modules;
