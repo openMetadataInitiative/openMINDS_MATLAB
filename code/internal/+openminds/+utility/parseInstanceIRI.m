@@ -1,10 +1,10 @@
-function varargout = parseAtID(semanticName)
-% parseAtID - Parse an openMINDS @id for a controlled instance
+function varargout = parseInstanceIRI(semanticName)
+% parseInstanceIRI - Parse an openMINDS @id for a controlled instance
 %
 %   Syntax:
-%       S = parseAtID(semanticName)
+%       S = parseInstanceIRI(semanticName)
 %
-%       [type, name] = parseAtID(semanticName)
+%       [type, name] = parseInstanceIRI(semanticName)
 %
 %   Input:
 %       semanticName : A URI representing an openMINDS instance @id. Ex: https://openminds.ebrains.eu/instances/geneticStrainType/knockout
@@ -22,7 +22,7 @@ function varargout = parseAtID(semanticName)
 %   Example:
 %
 %    atId = "https://openminds.ebrains.eu/instances/geneticStrainType/knockout"
-%    S = openminds.internal.utility.parseAtID(atId)
+%    S = openminds.internal.utility.parseInstanceIRI(atId)
 %
 %    S =
 %
@@ -40,8 +40,11 @@ function varargout = parseAtID(semanticName)
         'Provided value "%s" is not a valid @id', semanticName)
     
     type = URIPath(2);
+    try
     name = URIPath(3);
-
+    catch
+        keyboard
+    end
     if nargout <= 1
         varargout = {struct('Type', type, 'Name', name)};
     else
