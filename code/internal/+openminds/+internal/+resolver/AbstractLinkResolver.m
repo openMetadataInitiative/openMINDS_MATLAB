@@ -1,4 +1,4 @@
-classdef (Abstract) AbstractLinkResolver < handle
+classdef (Abstract) AbstractLinkResolver < handle & matlab.mixin.Heterogeneous
 % AbstractLinkResolver - Abstract pattern for a LinkResolver class
 %
 %   Concrete implementations must implement these methods
