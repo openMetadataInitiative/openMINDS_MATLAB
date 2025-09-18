@@ -1,13 +1,14 @@
 classdef LinkResolverRegistry < handle
 % LinkResolverRegistry Singleton registry for LinkResolver instances.
 %
-    properties (Access = private)
+    properties (SetAccess = private)
         LinkResolvers (1,:) {mustBeA(LinkResolvers, ["double", "openminds.internal.resolver.AbstractLinkResolver"])}
     end
 
     methods (Access = private)
         function obj = LinkResolverRegistry()
             % Private constructor for singleton pattern.
+            obj.addLinkResolver(openminds.internal.resolver.InstanceResolver())
         end
     end
 
