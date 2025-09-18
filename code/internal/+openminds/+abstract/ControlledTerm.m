@@ -67,13 +67,18 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                         % Deserialize from name of controlled instance
                         obj.deserializeFromName(instanceSpec);
                     end
-                elseif isstruct( instanceSpec ) && isfield(instanceSpec, 'at_id')
+                elseif isstruct( instanceSpec ) && isfield(instanceSpec, 'at_id') || isfield(instanceSpec, 'x_id')
                     numInstances = numel(instanceSpec);
                     if numInstances > 1
                         obj(numInstances) = feval(class(obj));
                     end
                     for i = 1:numel(instanceSpec)
-                        obj(i).deserializeFromName(instanceSpec(i).at_id);
+                        if isfield(instanceSpec(i), 'at_id')
+                            iri = instanceSpec(i).at_id;
+                        elseif isfield(instanceSpec(i), 'x_id')
+                            iri = instanceSpec(i).x_id;
+                        end
+                        obj(i).deserializeFromName(iri);
                     end
                 else
                     error('openMINDS:ControlledTerm:InvalidInput', ...
@@ -113,8 +118,8 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
             schemaName = getSchemaName(class(obj));
 
             if openminds.utility.isIRI(instanceName)
-                if openminds.utility.isSemanticInstanceName(instanceName)
-                     [~, instanceName] = openminds.utility.parseAtID(instanceName);
+                if openminds.utility.isInstanceIRI(instanceName)
+                     [~, instanceName] = openminds.utility.parseInstanceIRI(instanceName);
                 else
                     obj.id = instanceName;
                     return
