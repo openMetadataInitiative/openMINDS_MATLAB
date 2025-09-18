@@ -77,8 +77,8 @@ classdef LinkResolverRegistry < handle
             end
     
             % Find resolver index
-            idx = find(obj.LinkResolvers == resolver, 1);
-    
+            idx = find(arrayfun(@(x) isequal(x, resolver), obj.LinkResolvers));
+
             if isempty(idx)
                 error('LinkResolverRegistry:ResolverNotFound', ...
                     'Resolver is not registered in this registry.');
