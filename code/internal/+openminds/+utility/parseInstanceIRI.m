@@ -1,50 +1,53 @@
-function varargout = parseInstanceIRI(semanticName)
+function varargout = parseInstanceIRI(instanceIRI)
 % parseInstanceIRI - Parse an openMINDS @id for a controlled instance
 %
 %   Syntax:
-%       S = parseInstanceIRI(semanticName)
+%       S = parseInstanceIRI(instanceIRI)
 %
-%       [type, name] = parseInstanceIRI(semanticName)
+%       [type, name] = parseInstanceIRI(instanceIRI)
 %
 %   Input:
-%       semanticName : A URI representing an openMINDS instance @id. Ex: https://openminds.ebrains.eu/instances/geneticStrainType/knockout
+%       instanceIRI : A URI/IRI representing an openMINDS instance IRI. 
+%       Ex: https://openminds.ebrains.eu/instances/geneticStrainType/knockout
 %
 %   Output:
 %       S : A struct with fields
-%           - Type
-%           - Name
-%
-%       OR
-%
-%       type : openMINDS type, i.e schema specification
+%           - Type (openminds.enum.Types)
+%           - Name (string)
+%     OR
+%       type : openMINDS type enum
 %       name : name of instance
 %
 %   Example:
 %
-%    atId = "https://openminds.ebrains.eu/instances/geneticStrainType/knockout"
-%    S = openminds.internal.utility.parseInstanceIRI(atId)
+%    instanceIRI = "https://openminds.ebrains.eu/instances/geneticStrainType/knockout"
+%    S = openminds.utility.parseInstanceIRI(instanceIRI)
 %
 %    S =
 %
 %      struct with fields:
 %
-%        Type: "geneticStrainType"
+%        Type: "GeneticStrainType"
 %        Name: "knockout"
 
-    URI = matlab.net.URI(semanticName);
+    arguments
+        instanceIRI (1,1) string
+    end
+
+    URI = matlab.net.URI(instanceIRI);
     
     URIPath = URI.Path;
     URIPath(URIPath=="")=[];
 
     assert( URIPath(1) == "instances", ...
-        'Provided value "%s" is not a valid @id', semanticName)
+        'Provided value "%s" is not a valid @id', instanceIRI)
     
-    type = URIPath(2);
-    try
-    name = URIPath(3);
-    catch
-        keyboard
-    end
+    splitIRI = split(instanceIRI, "/");
+
+    name = splitIRI(end);
+    typeName = splitIRI(end-1);
+    type = openminds.enum.Types(typeName);
+
     if nargout <= 1
         varargout = {struct('Type', type, 'Name', name)};
     else
