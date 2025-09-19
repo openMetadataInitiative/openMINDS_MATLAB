@@ -8,10 +8,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 %       - openminds.internal.abstract.MixedTypeSet
 
 % Todo:
-%  [ ] Clean up and improve Compact Displays
-%  [ ] Smarter collapse if single line display is too long.
 %  [ ] Add displayEmptyObject, displayScalarObject, displayNonScalarObject
-%  [ ] Distinguish between arrays and scalars...
 %  [ ] getFooter is different from instance/schema and mixedInstance...
 
     
@@ -42,9 +39,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
 
         function displayLabel = get.DisplayString(obj)
-            displayLabel = obj.getDisplayLabel();
-            if isempty(displayLabel)
-                displayLabel = '<not named>';
             if obj.isReference()
                 displayLabel = obj.REFERENCE_DISPLAY_LABEL;
             else
@@ -56,21 +50,17 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
     end
 
-    methods (Abstract, Access = protected) % Subclasses must implement.
-        
     % Abstract - Subclasses must implement:
     methods (Abstract, Access = protected) 
         tf = isReference(obj)
 
         str = getDisplayLabel(obj)
         
-        annotation = getAnnotation(obj)
         annotation = getAnnotation(obj, width)
 
         % str = getInstanceType(obj)
     end
 
-    methods (Hidden, Access = protected) % CustomDisplay - Method implementation
     % Abstract - Subclasses must implement:
     methods (Abstract, Access = ?openminds.internal.mixin.CustomInstanceDisplay)
         semanticName = getSemanticName(obj)
@@ -140,7 +130,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
         
         function displayNonScalarObject(obj)
-            displayNonScalarObject@matlab.mixin.CustomDisplay(obj)
         % displayNonScalarObject - Override non-scalar display
 
             % Get single line representation for each element
@@ -163,31 +152,20 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
     end
 
-    methods (Hidden) % % CustomCompactDisplayProvider - Method implementation
     % CustomCompactDisplayProvider - Method implementation
     methods (Hidden)
         
         function rep = compactRepresentationForSingleLine(obj, displayConfiguration, width)
-            import openminds.internal.utility.getSchemaName
-   
             if nargin < 2
                 displayConfiguration = matlab.display.DisplayConfiguration();
             end
-
             if nargin < 3
                 width = inf;
             end
             
             numObjects = numel(obj);
 
-            annotation = obj.getAnnotation();
-
             if numObjects == 0
-                str = 'None';
-                % schemaName = getSchemaName(class(obj));
-                % str = sprintf("0x0 empty %s", schemaName);
-                rep = matlab.display.PlainTextRepresentation(obj, str, displayConfiguration, 'Annotation', annotation);
-                % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', string(str));
                 str = openminds.internal.mixin.CustomInstanceDisplay.NULLVALUE_DISPLAY_LABEL;
                 annotation = obj.getAnnotation(width);
                 % displayConfiguration.DataDelimiters=["<", ">"];
@@ -196,8 +174,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                     obj, str, displayConfiguration, 'Annotation', annotation);
 
             elseif numObjects == 1
-                rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', obj.DisplayString, 'Annotation', annotation);
-            
                 % Create a representation without annotation to learn it's width
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
                     'StringArray', obj.DisplayString);
@@ -209,17 +185,13 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                     'StringArray', obj.DisplayString, ...
                     'Annotation', annotation);
             else
-                stringArray = obj.getStringArrayForSingleLine();
                 stringArray = obj.getStringArrayForSingleLine(displayConfiguration, width);
                 annotation = obj.getAnnotation(width);
 
-                rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation);
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
                     'StringArray', stringArray, ...
                     'Annotation', annotation);
                 
-                count = 1;
-
                 defaultRep = compactRepresentationForSingleLine@matlab.mixin.CustomCompactDisplayProvider(obj, displayConfiguration, width);
                 sizeTypeStr = defaultRep.PaddedDisplayOutput;
                 sizeTypeStr = strrep(sizeTypeStr, '[', '(');
@@ -234,7 +206,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                     end
 
                     tempStringArray(end) = tempStringArray(end) + "... " + sizeTypeStr;
-                    rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', tempStringArray, 'Annotation', annotation);
                     rep = fullDataRepresentation(obj, displayConfiguration, ...
                         'StringArray', tempStringArray, ...
                         'Annotation', annotation);
@@ -284,7 +255,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
     % Utility methods for CustomCompactDisplayProvider methods
     methods (Access = protected)
         
-        function stringArray = getStringArrayForSingleLine(obj)
         function stringArray = getStringArrayForSingleLine(obj, displayConfiguration, width) %#ok<INUSD> Subclasses might use extra input args
             stringArray = arrayfun(@(o) o.DisplayString, obj, 'UniformOutput', false);
             if iscell(stringArray)
