@@ -37,14 +37,11 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 %
 % This class is internal and should not be exposed to users.
 
-%   TODO:
-%       [ ] Implement subsref in order to get instances out.
-%       [ ] If all requested instances are the same, return a an object array
-%       [ ] Create a separate mixin class for the custom display related functionality
-%       [ ] Consider if we need to define intersect, union etc.
-%       [ ] Any other builtins needed???
-
-% Subclass from CustomInstanceDisplay but override some of the methods...
+% TODO:
+%  - [ ] Implement subsref in order to get instances out.
+%  - [ ] If all requested instances are the same, return an object array
+%  - [ ] Consider if we need to define intersect, union etc.
+%  - [ ] Any other builtins needed???
 
     properties (Abstract, Constant)
         % Allowed types for a specific MixedTypeSet instance
@@ -55,91 +52,72 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
     properties % Todo: SetAccess = immutable ?
         % The openMINDS instance for an element of a mixed type object array
-        Instance
+        Instance {mustBeA(Instance, ["double", "openminds.abstract.Schema"] )} = []
     end
 
     methods
-        function obj = MixedTypeSet(instance)
-            
-            if nargin == 0; return; end
+        function obj = MixedTypeSet(sourceValue)
+        % MixedTypeSet - Constructor for MixedTypeSet
 
-            % Handle empty instance
-            if isempty(instance)
-                obj(:) = [];
+        % Constructor supports many types of input to create instances from:
+        %
+        %   - char / string : IRI or name of a Controlled Term instance
+        %   - openMINDS instance
+        %   - mixed type instance
+        %   - cell array of openMINDS instances
+        %   - Mix of all the above
+        %  
+        % This flexibility is necessary because of how MATLAB's property type 
+        % validation works. When a class is specified as a property type, 
+        % any value assigned to that property is automatically passed to 
+        % the class constructor for conversion. This way a user does not
+        % have to explicitly create MixedType instances themselves, but
+        % work with more concrete data types.
+
+            if nargin == 0; return; end
+           
+            if isempty(sourceValue)
+                obj(:) = []; % Create empty instance
                 return
             end
 
-            % if isstruct(instance) && isfield(instance, 'at_id')
-            %     instance = {instance.at_id};
-            % end
-
-            if ischar(instance)
-                instance = string(instance);
+            if ischar(sourceValue)
+                sourceValue = string(sourceValue);
             end
 
-            if ~iscell(instance)
-                if numel(instance) == 1
-                    instance = {instance};
-                else
-                    instance = arrayfun(@(i) i, instance, 'UniformOutput', false);
-                end
+            if ~iscell(sourceValue) % Normalize to cell array
+                sourceValue = num2cell(sourceValue);
             end
-            
+
             % Preallocate object array
-            obj(numel(instance)) = feval(class(obj));
+            obj(1, numel(sourceValue)) = feval(class(obj));
             
             % Process each instance value
-            for i = 1:numel(instance)
+            for i = 1:numel(sourceValue)
                 
-                if isstring(instance{i}) || ischar(instance{i})
-                    instanceName = instance{i};
-                    % Check if we can create a controlled instance from it
-                    for type = obj(i).ALLOWED_TYPES
-                        if contains(type, 'openminds.controlledterms')
-                            allInstanceNames = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
-
-                            if openminds.utility.isSemanticInstanceName(instanceName)
-                                S = openminds.utility.parseAtID(instanceName);
-                                instanceName = S.Name;
-                            end
-                             
-                            isMatch = strcmp(instanceName, allInstanceNames);
-
-                            if any( isMatch )
-                                instance{i} = feval(type, instanceName);
-                                break
-                            end
-                        end
-                    end
+                if isstring(sourceValue{i}) || ischar(sourceValue{i})
+                    sourceValue{i} = obj(i).preprocessFromString(sourceValue{i});
                 end
 
-                if isstruct(instance{i}) && isfield(instance{i}, 'at_id')
-                    % Support initializing an Instance from a struct with
-                    % an @id. This will act as a placeholder for an
-                    % unresolved linked instance, and the link needs to be
-                    % resolved externally in order to put a real instance in place.
-                    obj(i).Instance = struct;
-                    obj(i).Instance.id = instance{i}.at_id;
-                elseif isstruct(instance{i}) && isfield(instance{i}, 'x_id')
-                    % Variation of before
-                    obj(i).Instance = struct;
-                    obj(i).Instance.id = instance{i}.x_id;
-                elseif isstruct(instance{i}) && isfield(instance{i}, 'at_type')
-                    % Embedded type as structure
-                    obj(i).Instance = openminds.fromTypeName(instance{i}.at_type);
-                    obj(i).Instance = obj(i).Instance.fromStruct(instance{i});
+                if isstruct(sourceValue{i}) % Linked or embedded instance
+                    obj(i).Instance = obj.initializeFromStructure(sourceValue{i});
 
-                elseif isa(instance{i}, class(obj))
-                    obj(i) = instance{i};
-                else
-                    mustBeOneOf(instance{i}, obj(i).ALLOWED_TYPES)
-                    obj(i).Instance = instance{i};
+                elseif isa(sourceValue{i}, class(obj)) % Already a mixed type instance
+                    obj(i) = sourceValue{i};
+                
+                else % An openMINDS typed instance: validate type, then add
+                    if isa(sourceValue{i}, "openminds.internal.MixedTypeReference")
+                        obj(i).Instance = sourceValue{i};
+                    else
+                        mustBeOneOf(sourceValue{i}, obj(i).ALLOWED_TYPES)
+                        obj(i).Instance = sourceValue{i};
+                    end
                 end
             end
         end
 
         function [lia, locb] = ismember(obj, B)
-        %ismember Check if instance instance is member of group
+        %ismember Check if instance is member of group
         
             % Todo: Revisit this. Is it useful. Is it robust?
 
@@ -201,9 +179,98 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
                         builtin('isequal', obj.Instance, instance);
             end
         end
+    
+        function instance = resolve(obj, options)
+            arguments
+                obj (1,:) openminds.internal.abstract.MixedTypeSet
+                options.NumLinksToResolve = 0
+            end
+            for i = 1:numel(obj)
+                if isa(obj(i).Instance, 'openminds.internal.MixedTypeReference')
+                    obj(i).Instance = obj(i).Instance.resolve("NumLinksToResolve", options.NumLinksToResolve);
+                else
+                    obj(i).Instance.resolve("NumLinksToResolve", options.NumLinksToResolve)
+                end
+            end
+            instance = {obj.Instance};
+        end
+    end
+
+    methods (Access = private)
+
+        function instance = preprocessFromString(obj, stringValue)
+        % preprocessFromString - Try to initialize an openMINDS instance
+        % from a controlled term name or IRI
+
+        % Note: If only a controlled term name is given, this function stops at 
+        % the first match. If multiple controlled term types contain instances 
+        % with the same name, the result may be unintended.
+
+            instance = [];
+
+            if openminds.utility.isInstanceIRI(stringValue)
+                [typeEnum, ~] = openminds.utility.parseInstanceIRI(stringValue);
+                mustBeOneOf(typeEnum.ClassName, obj(1).ALLOWED_TYPES)
+                instance = openminds.instanceFromIRI(stringValue);
+            else
+                % Check if we can create a controlled instance from it
+                for type = obj(1).ALLOWED_TYPES
+                    % Todo: Learn from ControlledTerm constructor, trying
+                    % more variations of stringValue
+                    if contains(type, 'openminds.controlledterms')
+                        allInstanceNames = eval(sprintf('%s.CONTROLLED_INSTANCES', type));
+                        if contains(stringValue, " ")
+                            stringValue = strrep(stringValue, ' ', '');
+                        end
+                        isMatch = strcmpi(stringValue, allInstanceNames);
+    
+                        if any( isMatch )
+                            instance = feval(type, stringValue);
+                            break
+                        end
+                    end
+                end
+            end
+
+            % Could not create instance from string: return original string
+            if isempty(instance)
+                instance = stringValue;
+            end
+        end
+    
+        function instance = initializeFromStructure(~, structure)
+        % initializeFromStructure - Initialize an instance from a structure
+            arguments
+                ~
+                structure (1,1) struct
+            end
+
+            if isfield(structure, 'at_id') % Linked instance
+                % Support initializing an Instance from a struct with
+                % an @id. This will act as a placeholder for an
+                % unresolved linked instance, and the link needs to be
+                % resolved externally in order to put a real instance in place.
+                instance = openminds.internal.MixedTypeReference(structure.at_id);
+        
+            elseif isfield(structure, 'x_id') % Linked instance
+                % Variation of above
+                instance = openminds.internal.MixedTypeReference(structure.x_id);
+        
+            elseif isfield(structure, 'at_type') % Embedded instance
+                instance = openminds.fromTypeName(structure.at_type);
+                instance = instance.fromStruct(structure);
+            else
+                % Todo: warning or error? From preference...
+                error('Unsupported structure') % TODO: more detailed error
+            end
+        end
     end
     
     methods (Access = protected)
+        function tf = isReference(obj)
+            tf = isa(obj.Instance, 'struct');
+        end
+
         function str = getDisplayLabel(obj)
             if isa(obj.Instance, 'struct')
                 str = '<unresolved link>';
@@ -212,17 +279,6 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
             else
                 error('Unsupported type for instance')
             end
-        end
-
-        function str = getSemanticName(obj)
-            shortName = obj.getShortName();
-            shortName = openminds.internal.utility.string.camelCase(shortName);
-            str = sprintf('https://openminds.ebrains.eu/vocab/%s', shortName);
-        end
-        
-        function str = getShortName(obj)
-            import openminds.internal.utility.string.packageParts
-            [~, str] = packageParts(class(obj));
         end
     end
     
@@ -288,11 +344,11 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
     % Utility methods for CustomCompactDisplayProvider methods
     methods (Access = protected)
         
-        function stringArray = getStringArrayForSingleLine(obj)
+        function stringArray = getStringArrayForSingleLine(obj, displayConfiguration, width)
             try
-                repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+                repArray = arrayfun(@(o) o.Instance.compactRepresentationForSingleLine(displayConfiguration, width), obj, 'UniformOutput', false);
             catch
-                repArray = arrayfun(@(o) o.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
+                repArray = arrayfun(@(o) o.compactRepresentationForSingleLine(displayConfiguration, width), obj, 'UniformOutput', false);
             end
             % stringArray = cellfun(@(r) r.Representation, repArray);
             % rep = fullDataRepresentation(obj, displayConfiguration, 'StringArray', stringArray, 'Annotation', annotation');
@@ -305,25 +361,93 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
     methods (Access = protected)
     
-        function annotation = getAnnotation(obj)
-            import openminds.internal.utility.getSchemaDocLink
-
-            if ~isempty(obj) && isa(obj(1).Instance, 'openminds.controlledterms.ControlledTerm')
-                % Todo: Use obj.Instance.getAnnotation (but: can't access method if protected...)
-                annotation = 'Controlled Instance';
-            else
-                allowedClasses = eval(sprintf('%s.ALLOWED_TYPES', class(obj)));
-                annotation = arrayfun(@(s) getSchemaDocLink(s), allowedClasses, 'UniformOutput', false);
-                annotation = strjoin(annotation, ', ');
-                
-                if eval( [class(obj), '.IS_SCALAR'] )
-                    prefix = 'One of';
+        function annotation = getAnnotation(obj, width)
+            if nargin < 2; width = inf; end
+            
+            if isempty(obj)
+                annotation = obj.getAnnotationForEmptyObject(width);
+            
+            elseif isscalar(obj)
+                if isa(obj.Instance, "openminds.internal.MixedTypeReference")
+                    annotation = obj.getAnnotationForEmptyObject(width);
                 else
-                    prefix = 'Any of';
+                    annotation = obj.getAnnotationForScalarObject(width);
                 end
-
-                annotation = sprintf('%s: %s', prefix, annotation);
+            else
+                annotation = obj.getAnnotationForNonScalarObject(width);
             end
+        end
+    
+        function annotation = getAnnotationForEmptyObject(obj, width)
+            import openminds.internal.utility.getSchemaDocLink
+            if eval( [class(obj), '.IS_SCALAR'] )
+                prefix = 'One of';
+            else
+                prefix = 'Any of';
+            end
+
+            availableWidth = width - strlength(prefix) - 2; % 2 = ": "
+
+            allAllowedClasses = eval(sprintf('%s.ALLOWED_TYPES', class(obj)));
+            allowedClassesShort = openminds.internal.utility.getSchemaShortName(allAllowedClasses);
+            
+            annotationWidth = arrayfun(@(x) strlength(x) + 2, allowedClassesShort); % +2 = ", "
+            cumWidth = cumsum(annotationWidth);
+            
+            postFix = '';
+            if any(cumWidth > availableWidth) % Truncate annotation
+                availableWidth = availableWidth - 10;
+                availableWidth = availableWidth - 4; % 4 = " ..." (postfix)
+                idx = find(cumWidth > availableWidth, 1, 'first') - 1;
+                allowedClasses = allAllowedClasses(1:idx);
+
+                allAllowedClassesStr = strjoin(allAllowedClasses, ',');
+
+                classNameSplit = strsplit(class(obj), '.');
+                classShortName = classNameSplit{end};
+                postFix = sprintf(...
+                    [' <a href="matlab:openminds.internal.display.printTypeLinks(', ...
+                    '''%s'', ''prefix'', ''%s'', ''Delimiter'', ''\\n  '')" ', ...
+                    'style="font-weight:bold">...</a>'], ...
+                    allAllowedClassesStr, ...
+                    sprintf('Types for %s can be %s:', classShortName, lower(prefix)));
+            else
+                allowedClasses = allAllowedClasses;
+            end
+
+            annotation = arrayfun(@(s) getSchemaDocLink(s), allowedClasses, 'UniformOutput', false);
+            annotation = strjoin(annotation, ', ');
+
+            annotation = sprintf('%s: %s%s', prefix, annotation, postFix);
+        end
+    
+        function annotation = getAnnotationForScalarObject(obj, ~)
+            import openminds.internal.utility.getSchemaDocLink
+            annotation = getSchemaDocLink(class(obj.Instance));
+        end
+
+        function annotation = getAnnotationForNonScalarObject(~, ~)
+            annotation = ''; return
+            % Each element will be annotated. Todo: Consider, whether we
+            % want to show the annotation for all allowed types in addition
+            % % import openminds.internal.utility.getSchemaDocLink
+            % % classNames = arrayfun(@(x) class(x.Instance), obj, "UniformOutput", false);
+            % % classNames = unique(classNames);
+            % % annotation = arrayfun(@(s) getSchemaDocLink(s), ...
+            % %     string(classNames), 'UniformOutput', false);
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
+        function semanticName = getSemanticName(obj)
+            import openminds.internal.utility.string.packageParts
+
+            iriPrefix = openminds.constant.PropertyIRIPrefix();
+            assert(isa(iriPrefix,'string'), 'Internal error: Expected string')
+
+            [~, shortName] = packageParts(class(obj));
+            shortName = openminds.internal.utility.string.camelCase(shortName);
+            semanticName = iriPrefix + shortName;
         end
     end
 
