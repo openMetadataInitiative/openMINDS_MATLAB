@@ -37,8 +37,7 @@ classdef Collection < handle
 %   Todo: Validation.
 %   - Linked subject states should have same subject
 
-% The collection has a property for connecting to 
-
+% Need mechanism to check if embedded nodes are added to the collection
 
     properties
         % Name of the metadata collection
@@ -65,8 +64,11 @@ classdef Collection < handle
         TypeMap {mustBeA(TypeMap, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
-    properties
+    properties (SetAccess = protected)
         LinkResolver
+        
+        % MetadataStore - Optional metadata store for saving/loading
+        MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
     end
     
     methods % Constructor
@@ -90,8 +92,12 @@ classdef Collection < handle
         %   collection = openminds.Collection(rootFolderPath)
         %   creates a collection and loads instances from files in a root
         %   folder.
+        %
+        %   collection = openminds.Collection(..., 'MetadataStore', store)
+        %   creates a collection with the specified metadata store. If no
+        %   instances are provided, the collection will automatically load
+        %   instances from the store.
         
-        %   TODO: This needs to be saved somehow.
         %   collection = openminds.Collection(..., NameA, ValueA, ... )
         %   also specifies optional name value pairs when creating the
         %   collection.
@@ -99,6 +105,7 @@ classdef Collection < handle
         %   Name-Value Pairs:
         %       - Name : A name for the collection
         %       - Description : A description of the collection
+        %       - MetadataStore : A metadata store for saving/loading instances
             
             arguments (Repeating)
                 instance % openminds.abstract.Schema
@@ -107,6 +114,7 @@ classdef Collection < handle
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
                 options.LinkResolver (1,:) = []
+                options.MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
             end
 
             % Initialize protected maps
@@ -123,6 +131,12 @@ classdef Collection < handle
 
             obj.Name = options.Name;
             obj.Description = options.Description;
+            obj.MetadataStore = options.MetadataStore;
+            
+            % Auto-load from MetadataStore if provided and no instances given
+            if isempty(instance) && ~isempty(obj.MetadataStore)
+                obj.load();
+            end
         end
     end
 
@@ -236,6 +250,11 @@ classdef Collection < handle
                 instance = instance{1};
             end
         end
+        
+        function instances = getAll(obj)
+        % getAll - Get all instances of collection
+            instances = obj.Nodes.values();
+        end
 
         function tf = hasType(obj, type)
             arguments
@@ -310,9 +329,9 @@ classdef Collection < handle
         end
 
         function outputPaths = save(obj, savePath, options)
-        %save Save the instance collection to disk in JSON-LD format.
+        % save - Save the instance collection to disk.
         %
-        %   collection.save(filePath) saves a collection to a jsonld file.
+        %   collection.save(filePath) saves a collection to the specified file.
         %
         %   collection.save(folderPath, "SaveToSingleFile", false) saves a
         %   collection to individual files in a folder.
@@ -338,57 +357,80 @@ classdef Collection < handle
         
             arguments
                 obj openminds.Collection
-                savePath (1,1) string
-                options.SaveToSingleFile (1,1) logical = true
-                % options.IncludeEmptyProperties (1,1) logical = false
+                savePath (1,1) string = ""
+                options.MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
+                % options.SaveFormat = "jsonld" Implement if more formats are supported
             end
             
             % Update links before saving
             obj.updateLinks()
-
             instances = obj.Nodes.values;
+
+            if savePath ~= ""
+                tempStore = openminds.internal.store.createTemporaryStore(savePath);
+                outputPaths = tempStore.save(instances);
             
-            outputPaths = obj.saveInstances(instances, savePath, ...
-                'SaveToSingleFile', options.SaveToSingleFile, ...
-                'RecursionDepth', 0);
-            % Note: For collections, recursion depth should be 0.
+            elseif ~isempty(options.MetadataStore)
+                outputPaths = obj.MetadataStore.save(instances);
+
+            elseif ~isempty(obj.MetadataStore)
+                % Use configured store
+                outputPaths = obj.MetadataStore.save(instances);
+
+            else
+                error('openminds:Collection:NoSavePath', ...
+                    'Either provide savePath or configure a MetadataStore');
+            end
             
             if ~nargout
                 clear outputPaths
             end
         end
-    
-        function load(obj, filePath)%, options)
-        %load Load instances from JSON-LD files on disk into the collection
+
+        function load(obj, loadPath, options)
+        %load - Load instances from files on disk or from MetadataStores into the collection
         %
-        %   collection.load(filePath) loads metadata from a jsonld file.
-        %
-        %   collection.load(folderPath) loads metadata from a folder.
+        %   collection.load() loads from the configured MetadataStore
+        %   collection.load(filePath) loads metadata from a JSON-LD file
+        %   collection.load(folderPath) loads metadata from a folder
         %
         %     INPUT
         %     -----
         %
-        %     filePath (str):
-        %         either a file or a directory from which the metadata will be read.
+        %     loadPath (str, optional):
+        %         Path to file or directory from which metadata will be read.
+        %         If not provided, uses the configured MetadataStore.
 
             arguments
                 obj openminds.Collection
-            end
-            arguments (Repeating)
-                filePath % openminds.abstract.Schema
+                loadPath (1,1) string = ""
+                options.MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
             end
 
-            if numel(filePath) == 1 && isfolder(filePath{1})
-                rootPath = filePath{1};
-                jsonldListing = dir(fullfile(rootPath, '**', '*.jsonld'));
-                jsonldFilePaths = fullfile({jsonldListing.folder}, {jsonldListing.name});
+            % Use MetadataStore if no explicit path provided
+            if loadPath == ""
+                if isempty(obj.MetadataStore) && isempty(options.MetadataStore)
+                    error('openminds:Collection:NoLoadPath', ...
+                        'Either provide loadPath or configure a MetadataStore');
+                end
+                if ~isempty(options.MetadataStore)
+                    instances = options.MetadataStore.load();
+                elseif ~isempty(obj.MetadataStore)
+                    instances = obj.MetadataStore.load();
+                end
             else
-                jsonldFilePaths = filePath;
+                % Create appropriate temporary store based on path type
+                if isfolder(loadPath)
+                    tempStore = openminds.internal.FolderMetadataStore(loadPath);
+                    instances = tempStore.load();
+                elseif isfile(loadPath)
+                    tempStore = openminds.internal.FileMetadataStore(loadPath);
+                    instances = tempStore.load();
+                else
+                    error('openminds:Collection:PathNotFound', 'Path not found: %s', loadPath);
+                end
             end
-
-            if isempty(jsonldFilePaths); return; end
-
-            instances = obj.loadInstances(jsonldFilePaths);
+            
             for i = 1:numel(instances)
                 if openminds.utility.isInstance(instances{i})
                     obj.addNode(instances{i});
@@ -400,10 +442,38 @@ classdef Collection < handle
     end
 
     methods (Static) % Methods in separate files
+        function collection = fromStore(metadataStore, options)
+        %fromStore Create a Collection and load instances from a MetadataStore
+        %
+        %   collection = openminds.Collection.fromStore(store) creates a
+        %   collection and loads all instances from the specified metadata store.
+        %
+        %   collection = openminds.Collection.fromStore(store, options)  
+        %   also specifies optional name-value pairs.
+        %
+        %   PARAMETERS:
+        %   -----------
+        %   metadataStore : openminds.interface.MetadataStore
+        %       The metadata store to load instances from
+        %   options : name-value pairs (optional)
+        %       - Name : A name for the collection
+        %       - Description : A description of the collection
+        %
+        %   RETURNS:
+        %   --------
+        %   collection : openminds.Collection
+        %       A new collection loaded with instances from the store
         
-        outputPaths = saveInstances(instance, filePath, options)
-        
-        instances = loadInstances(filePath)
+            arguments
+                metadataStore (1,1) openminds.interface.MetadataStore
+                options.Name (1,1) string = ""
+                options.Description (1,1) string = ""
+            end
+            
+            % Create collection with the metadata store
+            collection = openminds.Collection('MetadataStore', metadataStore, ...
+                'Name', options.Name, 'Description', options.Description);
+        end
     end
 
     methods (Access = protected)
@@ -463,17 +533,17 @@ classdef Collection < handle
         % Add sub node instances (linked types) to the Node container.
         function addSubNodes(obj, instance)
             % Add links.
-            linkedTypes = instance.getLinkedTypes();
-            for i = 1:numel(linkedTypes)
-                if openminds.utility.isInstance(linkedTypes{i})
-                    obj.addNode(linkedTypes{i});
+            linkedInstances = instance.getLinkedInstances();
+            for i = 1:numel(linkedInstances)
+                if openminds.utility.isInstance(linkedInstances{i})
+                    obj.addNode(linkedInstances{i});
                 end
             end
 
             % Add embeddings.
-            embeddedTypes = instance.getEmbeddedTypes();
-            for i = 1:numel(embeddedTypes)
-                obj.addNode(embeddedTypes{i}, 'AddSubNodesOnly', true);
+            embeddedInstances = instance.getEmbeddedInstances();
+            for i = 1:numel(embeddedInstances)
+                obj.addNode(embeddedInstances{i}, 'AddSubNodesOnly', true);
             end
         end
         
