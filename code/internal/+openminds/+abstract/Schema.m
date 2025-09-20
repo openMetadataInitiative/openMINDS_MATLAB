@@ -29,6 +29,12 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         LINKED_PROPERTIES struct
         EMBEDDED_PROPERTIES struct
     end
+
+    properties (Transient, Access = private)
+        % Should this be a logical flag instead? I.e IsReference?
+        % Should it be dependent?
+        State (1,1) string {mustBeMember(State, ["reference", "object"])} = "object"
+    end
     
     events % Todo: Remove??
         InstanceChanged
@@ -36,10 +42,9 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods % Constructor
-        
         function obj = Schema(instance, name, value)
             arguments
-                instance (1,:) struct = struct.empty
+                instance (1,:) {mustBeA(instance, "struct")} = struct.empty     % Use mustBeA instead of type to skip forced conversion
             end
             arguments (Repeating)
                 name (1,1) string
@@ -53,59 +58,123 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 if ~isempty(nvPairs)
                     obj.set(nvPairs{:});
                 end
+                if isscalar(name) && string(name) == "id" && startsWith(string(value), "https://")
+                    % Only IRI was set, assume this is a node reference
+                    obj.State = "reference";
+                end
             else
-                if isscalar(instance)
-                    obj = obj.fromStruct(instance);
-                else
-                    for i = 1:numel( instance )
-                        obj(i) = feval( class(obj) ); %#ok<AGROW>
-                        obj(i) = obj(i).fromStruct(instance(i)); %#ok<AGROW>
+                if ~isscalar(instance) % Preallocate object array
+                    obj(1, numel(instance)) = feval( class(obj) );
+                end
+                for i = 1:numel( instance )
+                    % Todo: Separate method to handle reference structure.
+                    obj(i) = obj(i).fromStruct(instance(i)); %#ok<AGROW>
+                    fields = fieldnames(instance(i));
+                    if isscalar(fields) && ismember(fields, ["x_id", "at_id"])
+                        obj(i).State = "reference"; %#ok<AGROW>
                     end
                 end
-
+                % Initializing from struct and name-value pairs should be
+                % mutually exclusive. Warn in name-value pairs were given.
                 obj.warnIfPropValuesSupplied(name)
+            end
+
+            for i = 1:numel(obj)
+                if isempty(char(obj(i).id)) % Might be an embedded node
+                    obj(i).id = obj(i).generateInstanceId(); %#ok<AGROW> % Generate a blank node id
+                end
             end
         end
     end
 
-    methods
-        function str = serialize(obj, options)
+    methods % Methods accepting visitors
+        function instance = resolve(obj, options)
+        % resolve - Resolve a reference node/instance based on it's identifier (IRI)
+            arguments
+                obj (1,:) openminds.abstract.Schema
+                options.NumLinksToResolve = 0
+                % options.IsEmbedded = false - Todo?
+                % Todo? Should resolver be an optional input?
+            end
 
+            % Todo: Node/obj is embedded, no identifier. Resolve "children" should work
+            % So, need to find a resolver based on IRIs of linked nodes.
+
+            instance = obj; % Initialize output
+            for i = 1:numel(obj)
+                if obj(i).State == "object" % Instance is resolved
+                    if options.NumLinksToResolve == 0
+                        fprintf('Instance is already resolved.\n')
+                        instance(i) = obj(i);
+                        return
+                    else
+                        nvPairs = {'NumLinksToResolve', options.NumLinksToResolve-1};
+                        linkedInstances = obj(i).getLinkedInstances();
+                        for j = 1:numel(linkedInstances)
+                            linkedInstances{j}.resolve(nvPairs{:})
+                        end
+                        embeddedInstances = obj(i).getEmbeddedInstances();
+                        for j = 1:numel(embeddedInstances)
+                            embeddedInstances{j}.resolve(nvPairs{:})
+                        end
+                    end
+                else
+                    resolver = openminds.internal.getLinkResolver([obj(i).id]);
+                    if isempty(resolver)
+                        error(...
+                            'openMINDS:LinkResolver:NotFound', ...
+                             'No link resolver found for object with id "%s".', obj(i).id);
+                    end
+                    obj(i) = resolver.resolve(obj(i), "NumLinksToResolve", options.NumLinksToResolve);
+                    obj(i).State = "object"; % Update state.
+                end
+            end
+            instance = obj; % Set output
+        end
+
+        function str = serialize(obj, options)
+        % serialize - Serialize the object
             arguments
                 obj
                 options.Serializer = openminds.internal.serializer.JsonLdSerializer()
-                options.FilePath (1,1) string = missing
-                options.RecursionDepth (1,1) uint8 = 1
-                options.IncludeIdentifier (1,1) logical = true
+                options.RecursionDepth (1,1) uint8 = 1 % Todo: remove - should be defined in serializer - or the serializer should be created from options...
+                options.IncludeIdentifier (1,1) logical = true % Todo: remove - should be defined in serializer
             end
+
+            % Create default serializer if not provided. 
+            % Accept more serializer options as inputs here.
 
             str = options.Serializer.serialize(obj);
-
-            %if ~iscell(str); str = {str}; end
-
-            if ~ismissing(options.FilePath) % Todo:
-                outputPaths = cell(size(str));
-
-                for i = 1:numel(str)
-                    if filePath==""
-                        disp(str{i})
-                    else
-                        thisFilePath = buildSingleInstanceFilepath(filePath, str{i});
-                        openminds.internal.utility.filewrite(thisFilePath, str{i})
-                        outputPaths{i} = char(thisFilePath);
-                    end
+        end
+    
+        function savedIdentifier = save(obj, metadataStore, options)
+            arguments
+                obj (1,:) openminds.abstract.Schema
+                metadataStore openminds.interface.MetadataStore
+                options.IsEmbedded (1,1) logical = false
+            end
+            savedIdentifier = strings(size(obj));
+            for i = 1:numel(obj)
+                savedIdentifier(i) = metadataStore.save(obj(i), "IsEmbedded", options.IsEmbedded);
+                if ~strcmp(obj(i).id, savedIdentifier(i))
+                    obj(i).id = savedIdentifier(i); % Update identifier of object
                 end
             end
-
-            %if ~nargout
-            %    clear str
-            %end
         end
     end
 
     methods (Access = public, Hidden)
-        function linkedTypeList = getLinkedTypes(obj)
-            linkedTypeList = {};
+
+        function typeName = getTypeName(obj)
+            classNameSplit = split(class(obj), '.');
+            typeName = classNameSplit{end};
+        end
+    end
+
+    methods (Access = public, Hidden) % Todo: Access = ?visitor
+        function linkedInstances = getLinkedInstances(obj)
+        % getLinkedInstances - Get all linked instances as a cell array
+            linkedInstances = {};
             linkedPropertyNames = fieldnames(obj.LINKED_PROPERTIES);
             
             for propName = string( row(linkedPropertyNames) )
@@ -113,25 +182,26 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 if ~isempty( propValue )
                     % Concatenate instances in a cell array
                     if openminds.utility.isMixedInstance(propValue)
-                        linkedTypeList = [linkedTypeList, {propValue.Instance}]; %#ok<AGROW>
+                        linkedInstances = [linkedInstances, {propValue.Instance}]; %#ok<AGROW>
                     elseif openminds.utility.isInstance(propValue)
-                        linkedTypeList = [linkedTypeList, num2cell(propValue)]; %#ok<AGROW>
+                        linkedInstances = [linkedInstances, num2cell(propValue)]; %#ok<AGROW>
                     end
                 end
             end
         end
 
-        function embeddedTypeList = getEmbeddedTypes(obj)
-            embeddedTypeList = {};
+        function embeddedInstances = getEmbeddedInstances(obj)
+        % getEmbeddedInstances - Get all embedded instances as a cell array
+            embeddedInstances = {};
             embeddedPropertyNames = fieldnames(obj.EMBEDDED_PROPERTIES);
             
             for propName = string( row(embeddedPropertyNames) )
                 propValue = obj.(propName);
                 if ~isempty( propValue )
                     if openminds.utility.isMixedInstance(propValue)
-                        embeddedTypeList = [embeddedTypeList, {propValue.Instance}]; %#ok<AGROW>
+                        embeddedInstances = [embeddedInstances, {propValue.Instance}]; %#ok<AGROW>
                     elseif openminds.utility.isInstance(propValue)
-                        embeddedTypeList = [embeddedTypeList, num2cell(propValue)]; %#ok<AGROW>
+                        embeddedInstances = [embeddedInstances, num2cell(propValue)]; %#ok<AGROW>
                     end
                 end
             end
@@ -162,7 +232,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
                 propName = subs(1).subs;
 
-                if numel(subs) == 1
+                if isscalar(subs)
                     propName = subs(1).subs;
                     className = class(obj.(propName));
                 
@@ -188,7 +258,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
 
                 try
-                    if numel(subs) == 1
+                    if isscalar(subs)
                         % Assigning a linked property
                         oldValue = obj.subsref(subs);
 
@@ -282,8 +352,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     catch MECause
                         switch MECause.identifier
                             case 'MATLAB:badsubscript'
-                                % Old value was not assigned, expanding
-                                % array
+                                % Old value was not assigned, expanding array
                                 obj = builtin('subsasgn', obj, subs, value);
                         end
                     end
@@ -295,9 +364,9 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
                 if numel(obj) >= 1
                     if obj.isSubsForPublicPropertyValue(subs)
-                        evtData = PropertyValueChangedEventData(value, oldValue, false); % false for unlinked prop
+                        evtData = PropertyValueChangedEventData(value, oldValue, false); % false for property which is not embedded or linked
                         obj.notify('InstanceChanged', evtData)
-                        % fprintf('Set unlinked property of %s\n', class(obj))
+                        % fprintf('Set "primitive" property type of %s\n', class(obj))
                     end
                 end
             end
@@ -341,6 +410,46 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
 
                 if openminds.utility.isMixedInstance(linkedTypeValues)
+
+                    % Specify special handling when calling methods of a
+                    % mixed type instance. 
+
+                    % method fallback
+                    if numel(subs) >= 2
+                        if strcmp( subs(2).type, '.' ) && ismethod(linkedTypeValues, subs(2).subs)
+                            if nargout == 0
+                                % Todo: need try/catch in case method does not return
+                                res = builtin('subsref', linkedTypeValues, subs(2:end));
+                                varargout = {res};
+                            else
+                                [varargout{:}] = builtin('subsref', linkedTypeValues, subs(2:end));
+                            end
+                            return
+                        end
+                    end
+
+                    % Todo: Is this necessary, resolve is a method, and this 
+                    % should not be reached. Is there any situation, where we 
+                    % call resolve and should moved on with further subsref of 
+                    % resolved instances, i.e support chained indexing?
+                    if strcmp( subs(end).subs, 'resolve')
+                        if numel(subs) == 2
+                            if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
+                                linkedTypeValues.resolve()
+                                subs(end) = [];
+                                %return
+                            end
+                        elseif numel(subs) == 3
+                            if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
+                                linkedTypeValues = builtin('subsref', linkedTypeValues, subs(2));
+                                linkedTypeValues.resolve()
+                                subs(end) = [];
+                                %return
+                            end
+                        elseif numel(subs) == 4
+                            error('Internal error: Not implemented')
+                        end
+                    end
 
                     % linkedTypeValues is an array of mixed types. The
                     % actual object(s) need to be retrieved from an
@@ -423,7 +532,24 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     varargout = cell(1, numOutputs);
                     [varargout{:}] = builtin('subsref', obj, subs);
                 else
-                    obj = builtin('subsref', obj, subs); %#ok<NASGU>
+                    try
+                        % First we try to collect output(s) using builtin assign
+                        varargout = builtin('subsref', obj, subs);
+                        if ~iscell(varargout)
+                            varargout = {varargout};
+                        end
+                    catch ME
+                        % If the assignment/method does not have any return
+                        % arguments, we fall back to using builtin without 
+                        % collecting / requiring any outputs.
+                        if strcmp(ME.identifier, 'MATLAB:TooManyOutputs')
+                            builtin('subsref', obj, subs);
+                        else
+                            % If assignment failed for any other reason, we
+                            % rethrow the exception.
+                            rethrow(ME)
+                        end
+                    end
                 end
             end
         end
@@ -542,7 +668,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             else
                 instanceType = string(class(values));
             end
-            if numel( unique(instanceType) ) == 1
+            if isscalar( unique(instanceType) )
                 if iscell(values)
                     outValues = [values{:}];
                 else
@@ -558,22 +684,34 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods (Access = protected) % Methods related to setting new values
         function instanceId = generateInstanceId(obj)
         %generateInstanceId Generate a unique instance id.
-            schemaName = obj.getSchemaShortName( class(obj) );
+
+        % Todo/idea: Specify custom identifier generator
+            
             uuidStr = openminds.internal.utility.string.getuuid();
-            %instanceId = sprintf('%s/%s', schemaName, uuidStr);
-            instanceId = uuidStr;
+            
+            % Use type prefix (currently inactive)
+            % schemaName = obj.getSchemaShortName( class(obj) );
+            % instanceId = sprintf('%s/%s', schemaName, uuidStr);
+            
+            % Use blank node identifier prefix
+            instanceId = "_:" + uuidStr;
         end
     
         function warnIfPropValuesSupplied(~, name)
             if ~isempty(name)
                 nameStr = strjoin("  - " + string(name), newline);
                 warning('openMINDS:InstanceConstructor:NameValuePairsIgnored', ...
-                    'The following name-value pairs were ignored when creating an instance using a struct:\n%s', nameStr)
+                    ['The following name-value pairs were ignored when ', ...
+                    'creating an instance using a struct:\n%s'], nameStr)
             end
         end
     end
 
     methods (Access = protected) % Methods related to object display
+        function tf = isReference(obj)
+            tf = obj.State == "reference";
+        end
+        
         function displayLabel = getDisplayLabel(obj)
             %schemaShortName = obj.getSchemaShortName(class(obj));
 
@@ -584,20 +722,26 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         end
 
         function str = createLabelForMissingLabelDefinition(obj)
+            % Note: Currently not in use.
             classNames = split( class(obj), '.');
             str = sprintf('<Unlabeled %s>', classNames{end});
         end
 
-        function annotation = getAnnotation(obj)
-
+        function annotation = getAnnotation(obj, ~)
+        % getAnnotation - Get annotation for type
             import openminds.internal.utility.getSchemaDocLink
-
-            % annotation = obj.getSchemaShortName(class(obj));
             annotation = getSchemaDocLink( class(obj) );
         end
 
         function requiredProperties = getRequiredProperties(obj)
             requiredProperties = obj.Required;
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
+        function semanticName = getSemanticName(obj)
+            % Using eval to ensure it also works for empty objects:
+            semanticName = eval(sprintf('%s.X_TYPE', class(obj)));
         end
     end
     
