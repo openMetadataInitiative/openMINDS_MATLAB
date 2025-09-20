@@ -1,12 +1,22 @@
-classdef MetadataStore < matlab.mixin.SetGet % Todo: visitor pattern
-% MetadataStore - Abstract pattern for a MetadataStore class
+classdef (Abstract) MetadataStore < matlab.mixin.SetGet
+% MetadataStore - Abstract interface for metadata storage implementations
 %
-%   This class defines an abstract pattern for a class that can "visit" an
-%   instance via its `save` method, in accordance with the Visitor design
-%   pattern: https://refactoring.guru/design-patterns/visitor
+%   This abstract class defines the common interface for all metadata store
+%   implementations. Different store types may have different signatures
+%   and requirements based on their storage paradigm:
 %
-%   Concrete implementations must implement these methods
-%       - save - Save an instance or a set of instances
+%   - KG Stores: Work with individual instances, save to remote Knowledge Graph
+%   - File Stores: Work with collections, save to local files/folders
+%   - Database Stores: Work with collections, save to databases
+%
+%   ABSTRACT METHODS (must be implemented by subclasses):
+%   --------------------------------------------------------
+%   
+%   save(obj, instances, varargin) - Save openMINDS instances to the store
+%   load(obj, varargin) - Load openMINDS instances from the store
+%
+%   Each implementation defines its own method signatures and behavior
+%   appropriate for its storage paradigm.
     
     properties (SetAccess = protected)
         Serializer 
@@ -14,11 +24,13 @@ classdef MetadataStore < matlab.mixin.SetGet % Todo: visitor pattern
     
     methods
         function obj = MetadataStore()
+            % Base constructor - concrete implementations handle their own setup
         end
     end
 
     methods (Abstract)
-        storedIdentifier = save(instances)
+        result = save(obj, instances, varargin)
+        instances = load(obj, varargin)
     end
 end
 
