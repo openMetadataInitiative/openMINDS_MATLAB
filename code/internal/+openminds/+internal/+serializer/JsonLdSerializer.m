@@ -12,9 +12,12 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
 %   FEATURES:
 %   ---------
 %   - Converts processed structs to JSON-LD strings
-%   - Handles vocabulary URI replacement
+%   - Handles vocabulary IRI replacement
 %   - Supports single and multiple instance serialization
-%   - Maintains JSON-LD compliance
+
+    properties (Constant)
+        DefaultFileExtension = ".jsonld"
+    end
 
     methods
         function obj = JsonLdSerializer(config)
@@ -51,8 +54,15 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 allStructs (1,:) {mustBeCellOfStructs}
             end
         
+            % Normalize empty values to ensure they get encoded to null
+            if obj.SerializationConfiguration.IncludeEmptyProperties
+                for i = 1:numel(allStructs)
+                    allStructs{i} = obj.normalizeEmptyProperties(allStructs{i});
+                end
+            end
+            
             if obj.SerializationConfiguration.OutputMode == "multiple"
-                % Add vocabulary mapping if requested.
+                % Add vocabulary mapping to @context if requested.
                 if obj.SerializationConfiguration.PropertyNameSyntax == "compact"
                     % Add to each document
                     for i = 1:numel(allStructs)
@@ -61,7 +71,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 end
             end
         
-            % Apply semantic property naming if requested
+            % Apply semantic property naming (expanded json-ld form) if requested
             if obj.SerializationConfiguration.PropertyNameSyntax == "expanded"
                 for i = 1:numel(allStructs)
                     allStructs{i} = obj.applySemanticPropertyNames(allStructs{i});
@@ -72,6 +82,8 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         
             if obj.SerializationConfiguration.OutputMode == "single"
                 allStructs = obj.createCollectionDocument(allStructs);
+                % Need to return cell of structs
+                allStructs = {allStructs};
             end
         end
 
@@ -147,11 +159,19 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         
             % Replace vocabulary URI placeholders if semantic naming was used
             if config.PropertyNameSyntax == "expanded"
-                vocabUri = obj.DefaultVocabularyIRI;
-                jsonStr = strrep(jsonStr, 'VOCAB_URI_', vocabUri);
+                vocabIRI = obj.DefaultVocabularyIRI;
+                
+                % Pattern matches ONLY JSON object keys of form:
+                %   "VOCAB_URI_<word>"   (optional spaces) :
+                % Capturing <word> for reinsertion after the vocabulary IRI.
+                % We restrict <word> to MATLAB identifier pattern [A-Za-z0-9_]+
+                % because applySemanticPropertyNames only ever generates that.
+                propertyKeyPattern = '"VOCAB_URI_([A-Za-z0-9_]+)"\s*:';
+                replacement = ['"' char(vocabIRI) '$1":'];
+                jsonStr = regexprep(jsonStr, propertyKeyPattern, replacement);
             end
         end
-        
+
         function structInstance = applySemanticPropertyNames(obj, structInstance)
         %applySemanticPropertyNames - Apply semantic property naming
         %
@@ -210,7 +230,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 end
             end
         end
-   
+
         function allStructs = sortKeys(obj, allStructs)
         % sortKeys - Sorts the keys of the given structs based on a predefined order.
         %
@@ -231,8 +251,8 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
                 allStructs (1,:) cell {mustBeCellOfStructs}
             end
-        
-            jsonLdKeywords = ["at_context", "at_graph", "at_type", "at_id"];
+
+            jsonLdKeywords = ["at_context", "at_id", "at_type", "at_graph"];
             for i = 1:numel(allStructs)
                 allFieldNames = string( fieldnames(allStructs{i}) );
                 allFieldNames = reshape(allFieldNames, 1, []); % Ensure row
@@ -249,7 +269,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 allStructs{i} = orderfields(allStructs{i}, fieldOrder);
             end
         end
-    
+
         function document = createCollectionDocument(obj, documentList)
         % createCollectionDocument - Combine all documents into a
         % "collection document using the @graph keyword
@@ -265,6 +285,20 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             end
             document.at_graph = documentList;
         end
+    
+        function S = normalizeEmptyProperties(obj, S)
+            propNames = fieldnames(S);
+            propValues = struct2cell(S);
+
+            for i = 1:numel(propValues)
+                iPropertyValue = propValues{i};
+                if obj.isEmptyPropertyValue(iPropertyValue)
+                    iPropertyName = propNames{i};
+                    % This will encode to null in jsonencode
+                    S.(iPropertyName) = string(missing);
+                end
+            end
+        end    
     end
     
     methods (Static)
@@ -302,17 +336,14 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 options.IncludeIdentifier (1,1) logical = true
             end
             
-            % Create configuration
-            config = SerializationConfig( ...
+            % Create serializer and serialize
+            serializer = openminds.internal.serializer.JsonLdSerializer(...
                 'RecursionDepth', options.RecursionDepth, ...
                 'PrettyPrint', options.PrettyPrint, ...
                 'PropertyNameSyntax', options.PropertyNameSyntax, ...
                 'IncludeEmptyProperties', options.IncludeEmptyProperties, ...
                 'IncludeIdentifier', options.IncludeIdentifier);
-            
-            % Create serializer and serialize
-            serializer = openminds.internal.serializer.JsonLdSerializer();
-            jsonStr = serializer.serialize(instances, config);
+            jsonStr = serializer.serialize(instances);
         end
     end
 end

@@ -29,6 +29,10 @@ classdef (Abstract) BaseSerializer < handle
         DefaultVocabularyIRI
     end
 
+    properties (Abstract, Access = public, Constant)
+        DefaultFileExtension string  % Default file extension when storing this format (e.g., ".jsonld")
+    end
+
     properties (Access = protected)
         SerializationConfiguration openminds.internal.serializer.SerializationConfig
     end
