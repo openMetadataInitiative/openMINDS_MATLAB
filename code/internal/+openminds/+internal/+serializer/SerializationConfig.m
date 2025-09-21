@@ -56,13 +56,10 @@ classdef SerializationConfig < matlab.mixin.SetGet
         % Output formatting options (Text only serialisation)
         OutputEncoding (1,1) string {mustBeMember(OutputEncoding, ["UTF-8", "UTF-16", "ASCII"])} = "UTF-8"
         PrettyPrint (1,1) logical = true
-
-        OutputMode (1,1) string {mustBeMember(OutputMode, ["single", "multiple"])} = "multiple" % file / folder
         
-        % Todo: File export
-        % Save to single, save to multiple
-        % Filename / root foldername
-        % Folder flat | nested
+        % OutputMode : Whether to output all metadata in a single document
+        % or in multiple documents
+        OutputMode (1,1) string {mustBeMember(OutputMode, ["single", "multiple"])} = "multiple" % single document / multiple documents
     end
 
     methods
