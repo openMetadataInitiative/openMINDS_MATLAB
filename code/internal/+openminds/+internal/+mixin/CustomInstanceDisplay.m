@@ -113,19 +113,20 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
         function groups = getPropertyGroups(obj)
 
-            displayPref = getpref('openminds', 'display', 'all');
-            if strcmp(displayPref, 'all')
-                groups = getPropertyGroups@matlab.mixin.CustomDisplay(obj);
-            else
-                propNames = properties(obj);
-                s = struct();
-                for i = 1:numel(propNames)
-                    if ~isempty( obj.(propNames{i}) )
-                        s.(propNames{i}) = obj.(propNames{i});
+            displayPref = openminds.getpref("PropertyDisplayMode");
+            switch displayPref
+                case "all"
+                    groups = getPropertyGroups@matlab.mixin.CustomDisplay(obj);
+                
+                case "non-empty"
+                    propNames = properties(obj);
+                    s = struct();
+                    for i = 1:numel(propNames)
+                        if ~isempty( obj.(propNames{i}) )
+                            s.(propNames{i}) = obj.(propNames{i});
+                        end
                     end
-                end
-    
-                groups = matlab.mixin.util.PropertyGroup(s);
+                    groups = matlab.mixin.util.PropertyGroup(s);
             end
         end
         

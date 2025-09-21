@@ -5,10 +5,11 @@ function printTypeLinks(typeNames, options)
         options.Delimiter
     end
     
-    typeLinks = openminds.internal.display.formatTypeLinksForDisplay(typeNames, "JoinDelimiter", options.Delimiter);
+    typeLinks = openminds.internal.display.getFormattedTypeLinksForDisplay(...
+        typeNames, "JoinDelimiter", options.Delimiter);
 
     if ~ismissing(options.prefix)
-        fprintf('%s\n  %s\n', options.prefix, typeLinks)
+        fprintf('%s\n  %s\n\n', options.prefix, typeLinks)
     else
         disp(typeLinks)
     end

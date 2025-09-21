@@ -1,5 +1,5 @@
-function formattedLinks = formatTypeLinksForDisplay(typeNames, options)
-% formatTypeLinksForDisplay - Get a formatted link for a type name
+function formattedLinks = getFormattedTypeLinksForDisplay(typeNames, options)
+% getFormattedTypeLinksForDisplay - Get a formatted link for a type name
 %
 %   Creates an html anchor <a> link which will display as a clickable
 %   hyperlink in the MATLAB command window.
