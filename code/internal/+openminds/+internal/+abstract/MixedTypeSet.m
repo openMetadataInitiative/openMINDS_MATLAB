@@ -196,8 +196,26 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     end
 
-    methods (Access = private)
+    methods (Access = private) % Internal utilities
+        function tf = isHomogeneous(obj)
+            classNames = strings(1, numel(obj));
+            for i = 1:numel(obj)
+                classNames(i) = class(obj(i).Instance);
+            end
+            uniqueClassNames = unique(classNames);
+            tf = isscalar(uniqueClassNames);
+        end
 
+        function instances = getInstances(obj)
+            if obj.isHomogeneous()
+                instances = [obj.Instance];
+            else
+                instances = obj;
+            end
+        end
+    end
+
+    methods (Access = private) % Construction helpers
         function instance = preprocessFromString(obj, stringValue)
         % preprocessFromString - Try to initialize an openMINDS instance
         % from a controlled term name or IRI
@@ -266,7 +284,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     end
     
-    methods (Access = protected)
+    methods (Access = protected) % Superclass implementations
         function tf = isReference(obj)
             tf = isa(obj.Instance, 'struct');
         end
@@ -359,8 +377,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     end
 
-    methods (Access = protected)
-    
+    methods (Access = protected) % Get annotations
         function annotation = getAnnotation(obj, width)
             if nargin < 2; width = inf; end
             
@@ -452,7 +469,6 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
     end
 
     methods (Static, Access = protected, Hidden)
-        
         function shortSchemaName = getSchemaShortName(fullSchemaName)
         %getSchemaShortName Get short schema name from full schema name
         %
@@ -463,7 +479,6 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         %   shortSchemaName = obj.getSchemaShortName(fullSchemaName)
         %
         %     'Subject'
-
             import openminds.internal.utility.getSchemaName
             shortSchemaName = getSchemaName(fullSchemaName);
         end
