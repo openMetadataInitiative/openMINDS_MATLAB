@@ -16,7 +16,7 @@ classdef GitDownloadTest < matlab.unittest.TestCase
                 '("TargetDirectory", "%s")'], pwd );
             evalc(commandStr);
 
-            testCase.verifyTrue(openminds.internal.utility.git.isLatest())
+            testCase.verifyTrue(openminds.internal.utility.git.hasLatestCommit())
         end
     end
 end
