@@ -15,6 +15,10 @@ on:
     branches: [ "main" ]
   # Allows for manually running this workflow from the Actions tab
   workflow_dispatch:
+  
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   # This workflow contains a single job called "test"
