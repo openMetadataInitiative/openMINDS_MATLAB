@@ -272,7 +272,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Verify that files are created
             files = dir(fullfile(folderPath, '**', '*.jsonld'));
-            testCase.verifyGreaterThan(length(files), 0);
+            testCase.verifyEqual(length(files), 7);
             
             % Create a new collection and load the files
             newCollection = openminds.Collection();
@@ -289,6 +289,8 @@ classdef CollectionTest < matlab.unittest.TestCase
             collection = openminds.Collection();
             person = personWithOneAffiliation();
             org = organizationWithOneId();
+
+            expectedNumDocuments = 7;
             
             collection.add(person, org);
             
@@ -302,13 +304,15 @@ classdef CollectionTest < matlab.unittest.TestCase
             instances = newCollection.getAll();
             
             % Verify that instances are loaded
-            testCase.verifyGreaterThan(length(instances), 0);
+            testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
         
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
             org = organizationWithOneId();
+
+            expectedNumDocuments = 7;
             
             % Save instances to a file
             filePath = 'instances.jsonld';
@@ -320,7 +324,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             instances = metadataStore.load();
             
             % Verify that instances are loaded
-            testCase.verifyGreaterThan(length(instances), 0);
+            testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
         
         % % function testGetBlankNodeIdentifier(testCase)
