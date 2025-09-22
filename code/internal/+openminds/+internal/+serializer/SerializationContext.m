@@ -143,6 +143,7 @@ classdef SerializationContext < handle
             
             obj.CurrentDepth = 0;
             obj.VisitedInstances = containers.Map();
+            obj.LinkedInstances  = containers.Map();
         end
     end
     
