@@ -254,6 +254,12 @@ classdef Collection < handle
         function instances = getAll(obj)
         % getAll - Get all instances of collection
             instances = obj.Nodes.values();
+            
+            % For older MATLAB releases, the instances might be nested a 
+            % cell array, need to unnest if that's the case:
+            if iscell(instances{1})
+                instances = [instances{:}];
+            end
         end
 
         function tf = hasType(obj, type)
@@ -364,7 +370,7 @@ classdef Collection < handle
             
             % Update links before saving
             obj.updateLinks()
-            instances = obj.Nodes.values;
+            instances = obj.getAll();
 
             if savePath ~= ""
                 tempStore = openminds.internal.store.createTemporaryStore(savePath);
