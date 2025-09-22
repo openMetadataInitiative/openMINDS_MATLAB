@@ -22,7 +22,7 @@ classdef SerializationContext < handle
         MaxRecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 0
     end
 
-    properties (SetAccess = {?openminds.internal.serializer.SerializationContext, ?openminds.internal.serializer.BaseSerializer})
+    properties (SetAccess = {?openminds.internal.serializer.SerializationContext})
         VisitedInstances containers.Map
         LinkedInstances containers.Map
     end
@@ -144,6 +144,10 @@ classdef SerializationContext < handle
             obj.CurrentDepth = 0;
             obj.VisitedInstances = containers.Map();
             obj.LinkedInstances  = containers.Map();
+        end
+    
+        function linkedInstances = getLinkedInstances(obj)
+            linkedInstances = obj.LinkedInstances.values();
         end
     end
     

@@ -146,7 +146,6 @@ classdef (Abstract) BaseSerializer < handle
             
             % Create serialization context with linked instance collection
             context = openminds.internal.serializer.SerializationContext(config);
-            context.LinkedInstances = containers.Map(); % Store linked instances by ID
             
             % Process each instance
             processedStructs = cell(size(instances));
@@ -155,15 +154,7 @@ classdef (Abstract) BaseSerializer < handle
             end
             
             % Extract linked instances from context
-            if context.LinkedInstances.Count > 0
-                linkedInstanceIds = context.LinkedInstances.keys();
-                linkedInstances = cell(1, context.LinkedInstances.Count);
-                for i = 1:numel(linkedInstanceIds)
-                    linkedInstances{i} = context.LinkedInstances(linkedInstanceIds{i});
-                end
-            else
-                linkedInstances = {};
-            end
+            linkedInstances = context.getLinkedInstances();
 
             % Combine main instances with linked instances for output
             if ~isempty(linkedInstances)
@@ -403,11 +394,13 @@ classdef (Abstract) BaseSerializer < handle
                 
                 % Only process if not already collected and not currently being processed
                 if ~context.LinkedInstances.isKey(char(instanceId)) && ~context.isVisited(instanceId)
-                    % Process the linked instance using the same context
-                    % This ensures all nested linked instances are collected in the main context
-                    processedInstance = obj.processInstance(actualInstance, context);
+                    % Create child context for processing linked instance
+                    % Child context shares the same LinkedInstances and VisitedInstances maps
+                    % but has incremented recursion depth
+                    childContext = context.createChildContext();
+                    processedInstance = obj.processInstance(actualInstance, childContext);
                     
-                    % Store in linked instances collection
+                    % Store in linked instances collection (shared with parent context)
                     context.LinkedInstances(char(instanceId)) = processedInstance;
                 end
             else
