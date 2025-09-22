@@ -268,7 +268,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Save the collection to multiple files
             folderPath = 'collection';
             mkdir(folderPath);
-            collection.save(folderPath, 'SaveToSingleFile', false);
+            collection.save(folderPath);
             
             % Verify that files are created
             files = dir(fullfile(folderPath, '**', '*.jsonld'));
@@ -295,9 +295,11 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Save the collection to a file
             filePath = 'collection.jsonld';
             collection.save(filePath);
-            
-            % Load instances from the file
-            instances = openminds.Collection.loadInstances(filePath);
+
+            % Create a new collection from that file
+            fileStore = openminds.internal.FileMetadataStore(filePath);
+            newCollection = openminds.Collection.fromStore(fileStore);
+            instances = newCollection.getAll();
             
             % Verify that instances are loaded
             testCase.verifyGreaterThan(length(instances), 0);
@@ -310,13 +312,12 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Save instances to a file
             filePath = 'instances.jsonld';
-            openminds.Collection.saveInstances({person, org}, filePath);
+            metadataStore = openminds.internal.FileMetadataStore(filePath, "RecursionDepth", 999);
+            metadataStore.save({person, org})
             
-            % Verify that the file exists
             testCase.verifyTrue(isfile(filePath));
-            
-            % Load the instances
-            instances = openminds.Collection.loadInstances(filePath);
+
+            instances = metadataStore.load();
             
             % Verify that instances are loaded
             testCase.verifyGreaterThan(length(instances), 0);

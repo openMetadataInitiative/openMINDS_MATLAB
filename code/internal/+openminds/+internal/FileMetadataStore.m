@@ -65,6 +65,9 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
         %   filePath : string
         %       Path to the created file
             
+
+        % Todo: What about recursion.
+
             arguments
                 obj (1,1) openminds.internal.FileMetadataStore
                 instances % openminds.abstract.Schema, cell array, or openminds.Collection
@@ -84,7 +87,7 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
             
             % Ensure directory exists
             [folder, ~, ~] = fileparts(obj.Location);
-            if ~isempty(folder) && ~isfolder(folder)
+            if folder ~= "" && ~isfolder(folder)
                 mkdir(folder);
             end
             
@@ -122,7 +125,7 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
             end
             
             % Use the existing loadInstances functionality
-            instances = openminds.Collection.loadInstances(obj.Location);
+            instances = openminds.internal.store.loadInstances(obj.Location);
         end
     end
 end

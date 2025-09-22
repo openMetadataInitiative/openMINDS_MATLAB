@@ -153,7 +153,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             filePaths = string(fullfile({fileListing.folder}, {fileListing.name}));
             
             % Use the existing loadInstances functionality
-            instances = openminds.Collection.loadInstances(filePaths);
+            instances = openminds.internal.store.loadInstances(obj.Location);
         end
     end
     
