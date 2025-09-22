@@ -12,10 +12,11 @@ function downloadRepository(repositoryName, options)
         repositoryName = "openMINDS"
         options.BranchName = "main"
         options.Owner = openminds.internal.constants.Github.Organization
+        options.TargetDirectory = openminds.internal.utility.git.getRepositoryTargetRootFolder()
     end
 
     % Todo: Should be a preference.
-    targetDirectory = openminds.internal.utility.git.getRepositoryTargetRootFolder();
+    targetDirectory = options.TargetDirectory;
     
     import openminds.internal.extern.fex.filedownload.downloadFile
     import openminds.internal.utility.git.getCurrentCommitID
