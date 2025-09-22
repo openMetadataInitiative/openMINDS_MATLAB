@@ -1,7 +1,5 @@
 function structInstance = jsonld2struct(jsonInstance)
 %Convert metadata instance(s) from JSON-LD text strings to struct arrays
-%
-%   See also openminds.internal.serializer.struct2jsonld
 
     vocabBaseUri = "https://openminds.ebrains.eu/vocab/";
 

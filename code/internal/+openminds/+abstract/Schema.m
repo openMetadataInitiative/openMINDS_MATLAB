@@ -75,7 +75,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     end
                 end
                 % Initializing from struct and name-value pairs should be
-                % mutually exclusive. Warn in name-value pairs were given.
+                % mutually exclusive. Warn if name-value pairs were given.
                 obj.warnIfPropValuesSupplied(name)
             end
 

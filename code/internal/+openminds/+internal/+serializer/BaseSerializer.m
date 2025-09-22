@@ -64,7 +64,7 @@ classdef (Abstract) BaseSerializer < handle
         end
     end
     
-    methods
+    methods % Constructor
         function obj = BaseSerializer(config)
             arguments
                 config.?openminds.internal.serializer.SerializationConfig
@@ -74,7 +74,6 @@ classdef (Abstract) BaseSerializer < handle
                 openminds.internal.serializer.SerializationConfig.fromStruct(config);
         end
     end
-
 
     methods
         function result = serialize(obj, instances)

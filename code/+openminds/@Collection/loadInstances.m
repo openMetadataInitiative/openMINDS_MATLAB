@@ -12,7 +12,6 @@ function instances = loadInstances(filePath)%, options)
         % options.RecursionDepth = 1
     end
 
-    import openminds.internal.serializer.JsonLdSerializer
     import openminds.internal.serializer.jsonld2struct
     
     [~, ~, serializationFormat] = fileparts(filePath(1));
