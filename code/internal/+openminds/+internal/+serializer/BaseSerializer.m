@@ -455,20 +455,15 @@ classdef (Abstract) BaseSerializer < handle
             
             % Process openMINDS instance
             if openminds.utility.isInstance(actualInstance)
-                % Temporarily disable @id inclusion for embedded instances
-                originalIncludeId = context.Config.IncludeIdentifier;
-                context.Config.IncludeIdentifier = false;
                 
                 % Process using the same context to ensure linked instances are collected
                 result = obj.processInstance(actualInstance, context);
                 
-                % Remove @id if it somehow got added
+                % Remove @id if it was added. Embedded nodes do not have
+                % their own identifiers.
                 if isfield(result, 'at_id')
                     result = rmfield(result, 'at_id');
                 end
-                
-                % Restore original config
-                context.Config.IncludeIdentifier = originalIncludeId;
             else
                 error('Unknown embedded instance type: %s', class(actualInstance));
             end

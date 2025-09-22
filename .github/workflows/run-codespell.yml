@@ -21,4 +21,4 @@ jobs:
     with:
       # Specify the path of a codespell config file relative to the repository 
       # root directory
-      config_file: .codespellrc
+      config_file: tools/.codespellrc
