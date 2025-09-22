@@ -106,13 +106,13 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
     methods (Access = private)
         function postSetInstanceLibraryLocation(obj)
-            import openminds.internal.utility.git.isLatest
+            import openminds.internal.utility.git.hasLatestCommit
             import openminds.internal.utility.git.downloadRepository
             % import openminds.internal.utility.git.pullRepository
 
             try
                 if ~isfolder(obj.InstanceLibraryLocation) ...
-                        || ~isLatest('Repository', 'openMINDS_instances')
+                        || ~hasLatestCommit('RepositoryName', 'openMINDS_instances')
                     if obj.UseGit
                         % pullRepository('openMINDS_instances', obj.InstanceLibraryLocation)
                     else
@@ -166,7 +166,7 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 elseif any( strcmp(thisFolderSplit(1), SANDS_INSTANCE_FOLDERS))
                     types(i) = getTypeName(thisFolderSplit(1), "IsPlural", true);
                     modules(i) = "SANDS";
-                    if numel(thisFolderSplit) == 1
+                    if numel(thisFolderSplit) == 1 %#ok<ISCL>
                         subGroups(i) = missing;
                     elseif numel(thisFolderSplit) == 2
                         subGroups(i) = string(thisFolderSplit(2));

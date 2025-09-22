@@ -6,7 +6,7 @@ classdef Type < handle
 %
 %   This class is meant to be used by internal/external applications that
 %   need to infer schema constraints that are implicitly coded into the
-%   generated type classes, but not necessarily explcitly expressed.
+%   generated type classes, but not necessarily explicitly expressed.
 
     properties (SetAccess = immutable)
         Name char                   % (Short) Name of openMINDS metadata type

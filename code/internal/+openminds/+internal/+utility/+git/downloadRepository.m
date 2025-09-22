@@ -6,34 +6,40 @@ function downloadRepository(repositoryName, options)
 %
 %   Optional parameters:
 %       BranchName - Name of branch
-%       Organization - Name of organization
+%       Owner - Name of repository owner
 
     arguments
         repositoryName = "openMINDS"
         options.BranchName = "main"
-        options.Organization = "openMetadataInitiative"
-        options.TargetDirectory (1,1) string = ...
-            fullfile(openminds.internal.PathConstants.UserPath, 'Repositories')
+        options.Owner = openminds.internal.constants.Github.Organization
     end
+
+    % Todo: Should be a preference.
+    targetDirectory = openminds.internal.utility.git.getRepositoryTargetRootFolder();
     
     import openminds.internal.extern.fex.filedownload.downloadFile
     import openminds.internal.utility.git.getCurrentCommitID
     import openminds.internal.utility.git.saveCurrentCommitID
+    import openminds.internal.utility.git.hasLatestCommit
 
-    webUrl = sprintf("https://github.com/%s/%s/archive/refs/heads/%s.zip", ...
-        options.Organization, repositoryName, options.BranchName);
-    webURI = matlab.net.URI( webUrl );
+    % Check if we already have the latest commit
+    if hasLatestCommit('RepositoryName', repositoryName, ...
+                      'BranchName', options.BranchName, ...
+                      'Owner', options.Owner)
+        fprintf('Repository "%s" is already up to date. Skipping download.\n', repositoryName);
+        return;
+    end
+
+    webURI = openminds.internal.utility.git.buildRepositoryURL(...
+        options.Owner, repositoryName, options.BranchName);
 
     % - Create path for saving and download types
     zipFileName = webURI.Path(end);
-
     tempZipFilepath = tempname + "-" + zipFileName;
-    % disp(tempZipFilepath)
-    
     C1 = onCleanup(@(pathStr) delete(tempZipFilepath) );
    
     fprintf('Downloading repository "%s" from "%s"... ', ...
-        repositoryName, options.Organization)
+        repositoryName, options.Owner)
     downloadFile(tempZipFilepath, webURI.EncodedURI, 'ShowFilename', true);
     fprintf('Done.\n')
 
@@ -50,25 +56,25 @@ function downloadRepository(repositoryName, options)
 
     sourceDirectory = directoryForUnzip;
 
-    if ~isfolder(options.TargetDirectory)
-        mkdir(options.TargetDirectory)
+    if ~isfolder(targetDirectory)
+        mkdir(targetDirectory)
     end
 
     % Get repository folder name
     L = dir(sourceDirectory); L(startsWith({L.name}, '.')) = [];
-    assert(numel(L) == 1, "Expected temporary folder to contain one downloaded item")
+    assert(isscalar(L), "Expected temporary folder to contain one downloaded item")
     folderName = strtrim( L.name );
-    if isfolder( fullfile(options.TargetDirectory, folderName) )
-        rmdir(fullfile(options.TargetDirectory, folderName), "s")
+    if isfolder( fullfile(targetDirectory, folderName) )
+        rmdir(fullfile(targetDirectory, folderName), "s")
     end
 
-    fprintf('Copying repository "%s" to local directory:\n%s... ', repositoryName, options.TargetDirectory)
-    copyfile(sourceDirectory, options.TargetDirectory)
+    fprintf('Copying repository "%s" to local directory:\n%s... ', repositoryName, targetDirectory)
+    copyfile(sourceDirectory, targetDirectory)
     fprintf('Done.\n')
 
     % Save current commit ID and repository details
     [~, commitDetails] = getCurrentCommitID(repositoryName, ...
         "BranchName", options.BranchName, ...
-        "Organization", options.Organization);
+        "Owner", options.Owner);
     saveCurrentCommitID(commitDetails)
 end

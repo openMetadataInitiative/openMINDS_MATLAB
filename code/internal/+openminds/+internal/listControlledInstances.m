@@ -33,9 +33,6 @@ function instances = listControlledInstances(schemaType, moduleName, instanceNam
         instanceName (1,1) string = missing
     end
 
-    import openminds.internal.utility.git.isLatest
-    import openminds.internal.utility.git.downloadRepository
-
     % Make singleton class that can be reset...
     instanceLibrary = openminds.internal.InstanceLibrary.getSingleton();
     instanceTable = instanceLibrary.InstanceTable;

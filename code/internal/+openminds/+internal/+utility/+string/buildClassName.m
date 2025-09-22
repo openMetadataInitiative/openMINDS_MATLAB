@@ -15,4 +15,5 @@ function name = buildClassName(schemaName, schemaCategory, schemaModule)
     else
         name = strjoin({'openminds', schemaModule, schemaCategory, schemaName}, '.');
     end
+    name = strrep(name, '_', '');
 end

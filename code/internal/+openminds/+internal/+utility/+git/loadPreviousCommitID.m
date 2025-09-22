@@ -3,16 +3,20 @@ function commitID = loadPreviousCommitID(options)
     arguments
         options.RepositoryName = "openMINDS"
         options.BranchName = "main"
-        options.Organization = "openMetadataInitiative"
+        options.Owner = openminds.internal.constants.Github.Organization
     end
 
-    openMindsFolderPath = fullfile(userpath, 'openMINDS_MATLAB', 'Repositories');
+    openMindsFolderPath = openminds.internal.utility.git.getRepositoryTargetRootFolder();
     filePath = fullfile(openMindsFolderPath, 'repository_versions.json');
     
     if isfile(filePath)
         S = jsondecode( fileread(filePath) );
 
-        fields = {'RepositoryName', 'BranchName', 'Organization'};
+        if isfield(S.repositories, 'Organization') % Compatibility, field was renamed
+            S.repositories = arrayfun(@(s) renameStructField(s, 'Organization', 'Owner'), S.repositories);
+        end
+
+        fields = {'RepositoryName', 'BranchName', 'Owner'};
         isPresent = arrayfun(@(s) structcmp(s, options, fields), S.repositories);
         if any(isPresent)
             commitID = S.repositories(isPresent).CommitID;
