@@ -2,7 +2,6 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
     
     if nargin < 2
         preferredDocumentation = openminds.getpref("DocLinkTarget");
-        preferredDocumentation = preferredDocumentation;
     end
 
     if strncmp( schemaClass, 'https', 5)

@@ -158,11 +158,7 @@ classdef (Abstract) BaseSerializer < handle
 
             % Combine main instances with linked instances for output
             if ~isempty(linkedInstances)
-                if iscell(processedStructs)
-                    processedStructs = [processedStructs, linkedInstances];
-                else
-                    processedStructs = [{processedStructs}, linkedInstances];
-                end
+                processedStructs = [processedStructs, linkedInstances];
             end
         end
         
@@ -218,7 +214,7 @@ classdef (Abstract) BaseSerializer < handle
         end
         
         function S = addOpenMindsFields(obj, S, instance, context)
-        %addOpenMindsFields Add @type, @id, @context fields
+        %addOpenMindsFields Add @type and @id fields
         %
         %   S = addOpenMindsFields(obj, S, instance, context)
         %   adds openMINDS-specific fields to the struct
@@ -426,7 +422,7 @@ classdef (Abstract) BaseSerializer < handle
             end
             
             % Handle single instance
-            if numel(embeddedInstances) == 1
+            if isscalar(embeddedInstances)
                 result = obj.processEmbeddedInstance(embeddedInstances, context);
                 return
             end
