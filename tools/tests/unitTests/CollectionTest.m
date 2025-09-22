@@ -306,14 +306,14 @@ classdef CollectionTest < matlab.unittest.TestCase
         end
         
         function testSaveInstances(testCase)
-            % Test the saveInstances static method
+            % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
             org = organizationWithOneId();
             
             % Save instances to a file
             filePath = 'instances.jsonld';
             metadataStore = openminds.internal.FileMetadataStore(filePath, "RecursionDepth", 999);
-            metadataStore.save({person, org})
+            metadataStore.save({person, org});
             
             testCase.verifyTrue(isfile(filePath));
 
