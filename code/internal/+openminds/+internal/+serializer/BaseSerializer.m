@@ -403,11 +403,9 @@ classdef (Abstract) BaseSerializer < handle
                 
                 % Only process if not already collected and not currently being processed
                 if ~context.LinkedInstances.isKey(char(instanceId)) && ~context.isVisited(instanceId)
-                    % Create child context for processing linked instance
-                    childContext = context.createChildContext();
-                    
-                    % Process the linked instance
-                    processedInstance = obj.processInstance(actualInstance, childContext);
+                    % Process the linked instance using the same context
+                    % This ensures all nested linked instances are collected in the main context
+                    processedInstance = obj.processInstance(actualInstance, context);
                     
                     % Store in linked instances collection
                     context.LinkedInstances(char(instanceId)) = processedInstance;
@@ -468,16 +466,12 @@ classdef (Abstract) BaseSerializer < handle
             
             % Process openMINDS instance
             if openminds.utility.isInstance(actualInstance)
-                % Create a temporary config that excludes @id for embedded instances
-                tempConfig = context.Config;
-                originalIncludeId = tempConfig.IncludeIdentifier;
-                tempConfig.IncludeIdentifier = false;
+                % Temporarily disable @id inclusion for embedded instances
+                originalIncludeId = context.Config.IncludeIdentifier;
+                context.Config.IncludeIdentifier = false;
                 
-                tempContext = openminds.internal.serializer.SerializationContext(tempConfig, "CurrentDepth", 0);
-                %tempContext.CurrentDepth = context.CurrentDepth;
-                tempContext.VisitedInstances = context.VisitedInstances;
-                
-                result = obj.processInstance(actualInstance, tempContext);
+                % Process using the same context to ensure linked instances are collected
+                result = obj.processInstance(actualInstance, context);
                 
                 % Remove @id if it somehow got added
                 if isfield(result, 'at_id')
@@ -485,7 +479,7 @@ classdef (Abstract) BaseSerializer < handle
                 end
                 
                 % Restore original config
-                tempConfig.IncludeIdentifier = originalIncludeId;
+                context.Config.IncludeIdentifier = originalIncludeId;
             else
                 error('Unknown embedded instance type: %s', class(actualInstance));
             end
