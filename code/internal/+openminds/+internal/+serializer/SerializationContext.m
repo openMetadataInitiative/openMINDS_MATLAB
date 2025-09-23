@@ -18,7 +18,6 @@ classdef SerializationContext < handle
 
 % Note: recursion depth only applies to linked properties, not embedded.
 
-
     properties (SetAccess = private)
         Config % SerializationConfig object
         CurrentDepth (1,1) {mustBeInteger, mustBeNonnegative} = 0

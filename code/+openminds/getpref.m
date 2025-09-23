@@ -5,7 +5,7 @@ function pref = getpref(preferenceName)
 %   pref = openminds.getpref() returns an object representing the user
 %   preferences for the openMINDS Metadata Toolbox
 %
-%   pref = openminds.getpref(preferenceName) Retrieves the value of the 
+%   pref = openminds.getpref(preferenceName) Retrieves the value of the
 %   specified user preference from the Preferences.
 %
 % Input Arguments:

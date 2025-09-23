@@ -1,4 +1,4 @@
-function instance = fromTypeName( typeNameIRI, instanceIdentifier, nvPairs)
+function instance = fromTypeName(typeNameIRI, instanceIdentifier, nvPairs)
 % fromTypeName - Creates an instance based on the given type name IRI.
 %
 % Syntax:

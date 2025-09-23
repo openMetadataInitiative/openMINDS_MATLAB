@@ -9,10 +9,9 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
 %   Add names of object superclasses in the ExcludeSuperclass property to
 %   exclude properties from certain superclasses.
 
-% Todo: 
+% Todo:
 %   - Add filter, i.e propertyIgnoreFilter
 %   - Add option to include specific properties
-
 
     properties (Hidden) % Options
         IncludeHidden (1,1) logical = false

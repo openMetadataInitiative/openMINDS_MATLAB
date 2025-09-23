@@ -10,7 +10,6 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 % Todo:
 %  [ ] Add displayEmptyObject, displayScalarObject, displayNonScalarObject
 %  [ ] getFooter is different from instance/schema and mixedInstance...
-
     
     properties (Dependent, Transient, Hidden)
         DisplayString
@@ -51,7 +50,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
     end
 
     % Abstract - Subclasses must implement:
-    methods (Abstract, Access = protected) 
+    methods (Abstract, Access = protected)
         tf = isReference(obj)
 
         str = getDisplayLabel(obj)
@@ -137,7 +136,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             repArray = arrayfun(@(o) o.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
             stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
             
-            % Remove array brackets          
+            % Remove array brackets
             stringArray = strrep(stringArray, '[', '');
             stringArray = strrep(stringArray, ']', '');
 
@@ -179,7 +178,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
                     'StringArray', obj.DisplayString);
                 
-                widthForAnnotation = width - rep.CharacterWidth - 3; % 3 = annotation padding " ()" 
+                widthForAnnotation = width - rep.CharacterWidth - 3; % 3 = annotation padding " ()"
                 annotation = obj.getAnnotation(widthForAnnotation);
                 
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
@@ -263,7 +262,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             else
                 warning('A cell array was expected, but result was %s. Please report.', class(stringArray))
             end
-            % Note: 2023-11-03: This function was returning a cell array but 
+            % Note: 2023-11-03: This function was returning a cell array but
             % should return a string array...
         end
     end

@@ -36,7 +36,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         % mapping or semantic property naming based on the configuration settings.
         %
         % Syntax:
-        %   allStructs = postProcessInstances(obj, allStructs) 
+        %   allStructs = postProcessInstances(obj, allStructs)
         %   This function modifies 'allStructs' by adding vocabulary mapping or
         %   applying semantic property names depending on the object's serialization
         %   configuration.
@@ -95,7 +95,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
         %
         %   PARAMETERS:
         %   -----------
-        %   processedStruct : cell array of structs with openMINDS fields 
+        %   processedStruct : cell array of structs with openMINDS fields
         %       (@type, @id, etc.) added
         %
         %   RETURNS:
@@ -121,7 +121,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
 
     methods (Access = private)
         function S = addVocabularyMapping(obj, S)
-        % addVocabularyMapping - Add vocabulary mapping to json-ld @context key 
+        % addVocabularyMapping - Add vocabulary mapping to json-ld @context key
             arguments
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
                 S (1,1) struct
@@ -298,7 +298,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                     S.(iPropertyName) = string(missing);
                 end
             end
-        end    
+        end
     end
     
     methods (Static)

@@ -6,7 +6,7 @@ classdef Preferences < matlab.mixin.CustomDisplay & handle
 %       PropertyDisplayMode (string)  : Which properties to display.
 %                                       Options: "all" (default) or "non-empty"
 %       DocLinkTarget       (string)  : Which documentation to link to.
-%                                       Options: 
+%                                       Options:
 %                                       - "help" : MATLAB docstrings
 %                                       - "online" : Online ReadTheDocs
 %                                       documentation

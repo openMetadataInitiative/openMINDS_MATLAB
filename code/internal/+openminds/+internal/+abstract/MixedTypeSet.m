@@ -66,10 +66,10 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         %   - mixed type instance
         %   - cell array of openMINDS instances
         %   - Mix of all the above
-        %  
-        % This flexibility is necessary because of how MATLAB's property type 
-        % validation works. When a class is specified as a property type, 
-        % any value assigned to that property is automatically passed to 
+        %
+        % This flexibility is necessary because of how MATLAB's property type
+        % validation works. When a class is specified as a property type,
+        % any value assigned to that property is automatically passed to
         % the class constructor for conversion. This way a user does not
         % have to explicitly create MixedType instances themselves, but
         % work with more concrete data types.
@@ -220,8 +220,8 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         % preprocessFromString - Try to initialize an openMINDS instance
         % from a controlled term name or IRI
 
-        % Note: If only a controlled term name is given, this function stops at 
-        % the first match. If multiple controlled term types contain instances 
+        % Note: If only a controlled term name is given, this function stops at
+        % the first match. If multiple controlled term types contain instances
         % with the same name, the result may be unintended.
 
             instance = [];

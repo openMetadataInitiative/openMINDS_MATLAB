@@ -34,14 +34,14 @@ function str = encode(s, options)
         options.ErrorOnUnknownAtPrefix (1,1) logical = false
     end
 
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     % 1. Encode to JSON (MATLAB-compliant fieldnames)
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     str = jsonencode(s, 'PrettyPrint', options.PrettyPrint);
 
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     % 2. Prepare JSON-LD keyword mapping
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
 
     jsonLdKeywords = openminds.internal.serializer.jsonld.getJsonLDKeywords();
     matlabShimKeywords = strrep(jsonLdKeywords, '@', 'at_');  % simple 1–1 map
@@ -49,9 +49,9 @@ function str = encode(s, options)
     % Put into a containers.Map for quick membership / lookup if needed
     keywordMap = containers.Map(matlabShimKeywords, jsonLdKeywords);
 
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     % 3. Replace only KNOWN keyword shims in object key positions
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     %
     % We look for patterns: "<matlabShim>" <optional whitespace> :
     % and replace ONLY the key portion.
@@ -75,9 +75,9 @@ function str = encode(s, options)
         end
     end
 
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     % 4. Detect unknown at_-prefixed keys (possible mistakes)
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     %
     % Find any remaining object keys of the form "at_<name>" that are NOT
     % part of the known mapping. These could indicate:
@@ -109,9 +109,9 @@ function str = encode(s, options)
         end
     end
 
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     % 5. Final newline guarantee
-    %----------------------------------------------------------------------
+    % ----------------------------------------------------------------------
     if ~isempty(str) && ~isequal(str(end), newline)
         str = [str newline];
     end

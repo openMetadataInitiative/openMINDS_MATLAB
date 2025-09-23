@@ -255,7 +255,7 @@ classdef Collection < handle
         % getAll - Get all instances of collection
             instances = obj.Nodes.values();
             
-            % For older MATLAB releases, the instances might be nested a 
+            % For older MATLAB releases, the instances might be nested a
             % cell array, need to unnest if that's the case:
             if iscell(instances{1})
                 instances = [instances{:}];
@@ -454,7 +454,7 @@ classdef Collection < handle
         %   collection = openminds.Collection.fromStore(store) creates a
         %   collection and loads all instances from the specified metadata store.
         %
-        %   collection = openminds.Collection.fromStore(store, options)  
+        %   collection = openminds.Collection.fromStore(store, options)
         %   also specifies optional name-value pairs.
         %
         %   PARAMETERS:

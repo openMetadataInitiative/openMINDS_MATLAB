@@ -7,7 +7,7 @@ function varargout = parseInstanceIRI(instanceIRI)
 %       [type, name] = parseInstanceIRI(instanceIRI)
 %
 %   Input:
-%       instanceIRI : A URI/IRI representing an openMINDS instance IRI. 
+%       instanceIRI : A URI/IRI representing an openMINDS instance IRI.
 %       Ex: https://openminds.ebrains.eu/instances/geneticStrainType/knockout
 %
 %   Output:

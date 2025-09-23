@@ -64,14 +64,13 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
         %   --------
         %   filePath : string
         %       Path to the created file
-            
 
         % Todo: What about recursion.
 
             arguments
                 obj (1,1) openminds.internal.FileMetadataStore
                 instances % openminds.abstract.Schema, cell array, or openminds.Collection
-                options struct = struct() %#ok<INUSA> 
+                options struct = struct() %#ok<INUSA>
             end
             
             % Handle Collection objects

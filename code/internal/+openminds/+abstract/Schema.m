@@ -141,7 +141,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 options.IncludeIdentifier (1,1) logical = true % Todo: remove - should be defined in serializer
             end
 
-            % Create default serializer if not provided. 
+            % Create default serializer if not provided.
             % Accept more serializer options as inputs here.
 
             str = options.Serializer.serialize(obj);
@@ -412,7 +412,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 if openminds.utility.isMixedInstance(linkedTypeValues)
 
                     % Specify special handling when calling methods of a
-                    % mixed type instance. 
+                    % mixed type instance.
 
                     % method fallback
                     if numel(subs) >= 2
@@ -428,23 +428,23 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                         end
                     end
 
-                    % Todo: Is this necessary, resolve is a method, and this 
-                    % should not be reached. Is there any situation, where we 
-                    % call resolve and should moved on with further subsref of 
+                    % Todo: Is this necessary, resolve is a method, and this
+                    % should not be reached. Is there any situation, where we
+                    % call resolve and should moved on with further subsref of
                     % resolved instances, i.e support chained indexing?
                     if strcmp( subs(end).subs, 'resolve')
                         if numel(subs) == 2
                             if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
                                 linkedTypeValues.resolve()
                                 subs(end) = [];
-                                %return
+                                % return
                             end
                         elseif numel(subs) == 3
                             if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
                                 linkedTypeValues = builtin('subsref', linkedTypeValues, subs(2));
                                 linkedTypeValues.resolve()
                                 subs(end) = [];
-                                %return
+                                % return
                             end
                         elseif numel(subs) == 4
                             error('Internal error: Not implemented')
@@ -540,7 +540,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                         end
                     catch ME
                         % If the assignment/method does not have any return
-                        % arguments, we fall back to using builtin without 
+                        % arguments, we fall back to using builtin without
                         % collecting / requiring any outputs.
                         if strcmp(ME.identifier, 'MATLAB:TooManyOutputs')
                             builtin('subsref', obj, subs);
@@ -678,7 +678,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 outValues = feval(mixedTypeClassName, values);
             end
         end
-    
     end
 
     methods (Access = protected) % Methods related to setting new values

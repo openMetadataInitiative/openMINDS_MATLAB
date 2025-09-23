@@ -23,7 +23,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 options.Serializer = []
                 options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 0
                 options.PrettyPrint (1,1) logical = true
-                options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"  
+                options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"
                 options.IncludeEmptyProperties (1,1) logical = false
                 options.IncludeIdentifier (1,1) logical = true
             end

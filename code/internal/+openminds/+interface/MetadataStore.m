@@ -11,7 +11,7 @@ classdef (Abstract) MetadataStore < matlab.mixin.SetGet
 %
 %   ABSTRACT METHODS (must be implemented by subclasses):
 %   --------------------------------------------------------
-%   
+%
 %   save(obj, instances, varargin) - Save openMINDS instances to the store
 %   load(obj, varargin) - Load openMINDS instances from the store
 %
@@ -19,7 +19,7 @@ classdef (Abstract) MetadataStore < matlab.mixin.SetGet
 %   appropriate for its storage paradigm.
     
     properties (SetAccess = protected)
-        Serializer 
+        Serializer
     end
     
     methods
@@ -33,4 +33,3 @@ classdef (Abstract) MetadataStore < matlab.mixin.SetGet
         instances = load(obj, varargin)
     end
 end
-

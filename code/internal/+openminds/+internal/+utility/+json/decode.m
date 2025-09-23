@@ -81,7 +81,6 @@ function s = decode(str, options)
         str = strjoin(newParts, "");
     end
 
-
     % ------------------------------------------------------------------
     % 3. Handle unknown keywords (if any)
     % ------------------------------------------------------------------

@@ -58,7 +58,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 if isstring( instanceSpec ) && ~ismissing(instanceSpec)
                     % Check IRI first, because isfile will also check IRIs
                     % and that is expensive (we only want to check local
-                    % files anyway) 
+                    % files anyway)
                     if startsWith(instanceSpec, openminds.constant.BaseURI)
                         obj.deserializeFromName(instanceSpec);
                     elseif isfile( instanceSpec )

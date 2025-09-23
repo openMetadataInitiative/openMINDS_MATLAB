@@ -7,32 +7,31 @@ classdef SerializationConfig < matlab.mixin.SetGet
 %   USAGE:
 %   ------
 %   config = SerializationConfig() % Default configuration
-%   
+%
 %   config = SerializationConfig( ...
 %       'RecursionDepth', 2, ...
 %       'IncludeEmptyProperties', false)
 %
 %   PROPERTIES:
 %   -----------
-%   RecursionDepth           - Maximum recursion depth for linked types          Serialization option, not serializer 
+%   RecursionDepth           - Maximum recursion depth for linked types          Serialization option, not serializer
 
-%   PropertyNameSyntax       - Whether to use expanded or compact syntax for property names       Json-ld serializer 
-%   PrettyPrint              - Format output for human readability               Json-ld  
+%   PropertyNameSyntax       - Whether to use expanded or compact syntax for property names       Json-ld serializer
+%   PrettyPrint              - Format output for human readability               Json-ld
 
 %   IncludeIdentifier        - Include @id in serialized output
-%   IncludeEmptyProperties   - Include properties with empty values              
+%   IncludeEmptyProperties   - Include properties with empty values
 
 %   EnableCaching            - Enable instance caching for performance
 %   EnableValidation         - Enable validation during serialization
 %   OutputEncoding           - Character encoding for output files
 
-
 % Some notes:
 %   This serialiser is not a general json-ld serialiser, but simplified to
-%   work with openminds metadata. 
+%   work with openminds metadata.
 %      - When using vocabulary mapping, we assume all properties live in
-%        the same namespace (i.e the openMINDS namespace) 
-% 
+%        the same namespace (i.e the openMINDS namespace)
+%
 
     properties
         % Core serialization options
@@ -68,7 +67,7 @@ classdef SerializationConfig < matlab.mixin.SetGet
         %
         %   config = SerializationConfig() creates default configuration
         %
-        %   config = SerializationConfig(Name, Value, ...) creates 
+        %   config = SerializationConfig(Name, Value, ...) creates
         %   configuration with specified options
         %
         %   PARAMETERS:
@@ -78,12 +77,12 @@ classdef SerializationConfig < matlab.mixin.SetGet
         %       0 = no recursion, only references
         %
         %   PropertyNameSyntax : string (default: compact)
-        %       Use full semantic property names with vocabulary URI (expanded) 
+        %       Use full semantic property names with vocabulary URI (expanded)
         %       or add vocabulary mapping in document context (compact).
         %
         %   IncludeIdentifier : logical (default: true)
         %       Include @id property in serialized instances
-        %       
+        %
         %   IncludeEmptyProperties : logical (default: false)
         %       Include properties that have empty values
         %

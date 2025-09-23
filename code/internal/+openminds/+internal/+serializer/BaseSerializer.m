@@ -5,8 +5,8 @@ classdef (Abstract) BaseSerializer < handle
 %   instances, handling linked and embedded types according to openMINDS
 %   specifications. Concrete subclasses implement format-specific output.
 %
-%   An instance of this class will act as a visitor for a metadata instance 
-%   via its `serialize` method, in accordance with the Visitor design pattern: 
+%   An instance of this class will act as a visitor for a metadata instance
+%   via its `serialize` method, in accordance with the Visitor design pattern:
 %   https://refactoring.guru/design-patterns/visitor
 %
 %   USAGE:
@@ -39,7 +39,7 @@ classdef (Abstract) BaseSerializer < handle
 
     methods (Abstract, Access = protected)
         result = formatOutput(obj, processedStruct)
-        %formatOutput Convert processed struct to final output format
+        % formatOutput Convert processed struct to final output format
         %
         %   result = formatOutput(obj, processedStruct, config)
         %   converts the processed struct (with openMINDS-specific
@@ -97,7 +97,7 @@ classdef (Abstract) BaseSerializer < handle
                 instances % openminds.abstract.Schema or cell array
             end
             
-            % Process instances to add openMINDS-specific fields and collect 
+            % Process instances to add openMINDS-specific fields and collect
             % linked instances
             processedStructs = obj.processInstances(instances);
             
