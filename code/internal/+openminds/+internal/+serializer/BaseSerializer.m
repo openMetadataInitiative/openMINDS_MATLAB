@@ -108,7 +108,73 @@ classdef (Abstract) BaseSerializer < handle
         end
     end
 
-    methods (Sealed, Access = protected)
+    methods (Access = protected) % Subclass can override
+        function S = addOpenMindsType(~, S, instance)
+        % addOpenMindsType - Add type to structure representation
+            arguments
+                ~ % This method does not use obj
+                S (1,1) struct
+                instance (1,1) openminds.abstract.Schema
+            end
+            S.at_type = instance.X_TYPE; % Add @type (always required)
+        end
+
+        function S = addInstanceIdentifier(~, S, instance)
+        % addInstanceIdentifier - Add identifier to structure representation
+            arguments
+                ~ % This method does not use obj
+                S (1,1) struct
+                instance (1,1) openminds.abstract.Schema
+            end
+            S.at_id = instance.id;
+        end
+
+        function references = createReferences(~, instances)
+        %createReferences Create reference structs for instances
+        %
+        %   references = createReferences(obj, instances)
+        %   creates structs containing only @id fields for the instances
+            
+            arguments
+                ~ % This method does not use obj
+                instances (1,:) % Array of instances
+            end
+
+            numInstances = numel(instances);
+            references = cell(1, numInstances);
+
+            for i = 1:numInstances
+                currentInstance = instances(i);
+                
+                if openminds.utility.isMixedInstance(currentInstance)
+                    instanceIdentifier = currentInstance.Instance.id;
+                
+                elseif openminds.utility.isInstance(currentInstance)
+                    instanceIdentifier = currentInstance.id;
+                
+                % Might already be a reference. Need to normalize
+                elseif isstruct(currentInstance)
+                    if isfield(currentInstance, 'at_id')
+                        instanceIdentifier = currentInstance.at_id;
+                    elseif isfield(currentInstance, 'x_id')
+                        instanceIdentifier = currentInstance.x_id;
+                    elseif isfield(currentInstance, 'id')
+                        instanceIdentifier = currentInstance.id;
+                    else
+                        error('Cannot create reference: struct has no id field');
+                    end
+                
+                else
+                    error('Cannot create reference for type: %s', ...
+                        class(currentInstance));
+                end
+
+                references{i} = struct('at_id', instanceIdentifier);
+            end
+        end
+    end
+
+    methods (Sealed, Access = protected) % Subclass can not override
         function tf = isEmptyPropertyValue(~, propertyValue)
             tf = false;
             if isempty(propertyValue)
@@ -193,8 +259,13 @@ classdef (Abstract) BaseSerializer < handle
                 end
 
                 % Add openMINDS-specific fields
-                S = obj.addOpenMindsFields(S, instance, context);
-                
+                S = obj.addOpenMindsType(S, instance);
+
+                % Add @id if requested (todo: and not embedded)
+                if context.Config.IncludeIdentifier
+                    S = obj.addInstanceIdentifier(S, instance);
+                end
+
                 % Process linked properties (respect recursion depth)
                 S = obj.processLinkedProperties(S, instance, context);
                 
@@ -211,28 +282,6 @@ classdef (Abstract) BaseSerializer < handle
             
             % Unmark visited after successful processing
             context.unmarkVisited(string(instance.id));
-        end
-        
-        function S = addOpenMindsFields(obj, S, instance, context)
-        %addOpenMindsFields Add @type and @id fields
-        %
-        %   S = addOpenMindsFields(obj, S, instance, context)
-        %   adds openMINDS-specific fields to the struct
-            
-            arguments
-                obj (1,1) openminds.internal.serializer.BaseSerializer
-                S (1,1) struct
-                instance (1,1) openminds.abstract.Schema
-                context (1,1) openminds.internal.serializer.SerializationContext
-            end
-            
-            % Add @type (always required)
-            S.at_type = instance.X_TYPE;
-            
-            % Add @id if requested and not embedded
-            if context.Config.IncludeIdentifier
-                S.at_id = instance.id;
-            end
         end
         
         function S = removeEmptyProperties(obj, S)
@@ -466,73 +515,6 @@ classdef (Abstract) BaseSerializer < handle
                 end
             else
                 error('Unknown embedded instance type: %s', class(actualInstance));
-            end
-        end
-        
-        function references = createReferences(obj, instances)
-        %createReferences Create reference structs for instances
-        %
-        %   references = createReferences(obj, instances)
-        %   creates structs containing only @id fields for the instances
-            
-            arguments
-                obj (1,1) openminds.internal.serializer.BaseSerializer
-                instances % Array of instances
-            end
-            
-            if isempty(instances)
-                references = {};
-                return
-            end
-            
-            % Handle single instance
-            if isscalar(instances)
-                references = obj.createReference(instances);
-                return
-            end
-            
-            % Handle multiple instances
-            references = cell(size(instances));
-            for i = 1:numel(instances)
-                references{i} = obj.createReference(instances(i));
-            end
-        end
-        
-        function reference = createReference(obj, instance)
-        %createReference Create a reference struct for a single instance
-        %
-        %   reference = createReference(obj, instance)
-        %   creates a struct containing only the @id field
-            
-            arguments
-                obj (1,1) openminds.internal.serializer.BaseSerializer
-                instance % Single instance
-            end
-            
-            % Handle mixed type instances
-            if openminds.utility.isMixedInstance(instance)
-                actualInstance = instance.Instance;
-            else
-                actualInstance = instance;
-            end
-            
-            % Handle struct instances
-            if isstruct(actualInstance)
-                if isfield(actualInstance, 'at_id')
-                    reference = struct('at_id', actualInstance.at_id);
-                elseif isfield(actualInstance, 'id')
-                    reference = struct('at_id', actualInstance.id);
-                else
-                    error('Cannot create reference: struct has no id field');
-                end
-                return
-            end
-            
-            % Handle openMINDS instances
-            if openminds.utility.isInstance(actualInstance)
-                reference = struct('at_id', actualInstance.id);
-            else
-                error('Cannot create reference for type: %s', class(actualInstance));
             end
         end
     end
