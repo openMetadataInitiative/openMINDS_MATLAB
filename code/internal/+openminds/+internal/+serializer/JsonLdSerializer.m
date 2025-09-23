@@ -231,45 +231,6 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             end
         end
 
-        function allStructs = sortKeys(obj, allStructs)
-        % sortKeys - Sorts the keys of the given structs based on a predefined order.
-        %
-        % Sort by placing json-ld keywords first, then property names in
-        % alphabetical order
-        %
-        % Syntax:
-        %   allStructs = sortKeys(obj, allStructs)
-        %
-        % Input Arguments:
-        %   obj          - An object which may contain relevant properties for sorting.
-        %   allStructs   - An array of structures to be sorted by key order.
-        %
-        % Output Arguments:
-        %   allStructs   - The input structures sorted with keys in a specific order.
-        
-            arguments
-                obj (1,1) openminds.internal.serializer.JsonLdSerializer
-                allStructs (1,:) cell {mustBeCellOfStructs}
-            end
-
-            jsonLdKeywords = ["at_context", "at_id", "at_type", "at_graph"];
-            for i = 1:numel(allStructs)
-                allFieldNames = string( fieldnames(allStructs{i}) );
-                allFieldNames = reshape(allFieldNames, 1, []); % Ensure row
-                
-                jsonLdKeywordFields = intersect(allFieldNames, jsonLdKeywords);
-                propertyFields = setdiff(allFieldNames, jsonLdKeywords);
-
-                fieldOrder = [ ...
-                    intersect(jsonLdKeywords, jsonLdKeywordFields, "stable"), ...
-                    sort(propertyFields) ];
-
-                fieldOrder = cellstr(fieldOrder);
-                
-                allStructs{i} = orderfields(allStructs{i}, fieldOrder);
-            end
-        end
-
         function document = createCollectionDocument(obj, documentList)
         % createCollectionDocument - Combine all documents into a
         % "collection document using the @graph keyword
@@ -297,6 +258,46 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                     % This will encode to null in jsonencode
                     S.(iPropertyName) = string(missing);
                 end
+            end
+        end
+    end
+
+    methods (Static, Access = private)
+        function allStructs = sortKeys(allStructs)
+        % sortKeys - Sorts the keys of the given structs based on a predefined order.
+        %
+        % Sort by placing json-ld keywords first, then property names in
+        % alphabetical order
+        %
+        % Syntax:
+        %   allStructs = sortKeys(obj, allStructs)
+        %
+        % Input Arguments:
+        %   obj          - An object which may contain relevant properties for sorting.
+        %   allStructs   - An array of structures to be sorted by key order.
+        %
+        % Output Arguments:
+        %   allStructs   - The input structures sorted with keys in a specific order.
+        
+            arguments
+                allStructs (1,:) cell {mustBeCellOfStructs}
+            end
+
+            jsonLdKeywords = ["at_context", "at_id", "at_type", "at_graph"];
+            for i = 1:numel(allStructs)
+                allFieldNames = string( fieldnames(allStructs{i}) );
+                allFieldNames = reshape(allFieldNames, 1, []); % Ensure row
+                
+                jsonLdKeywordFields = intersect(allFieldNames, jsonLdKeywords);
+                propertyFields = setdiff(allFieldNames, jsonLdKeywords);
+
+                fieldOrder = [ ...
+                    intersect(jsonLdKeywords, jsonLdKeywordFields, "stable"), ...
+                    sort(propertyFields) ];
+
+                fieldOrder = cellstr(fieldOrder);
+                
+                allStructs{i} = orderfields(allStructs{i}, fieldOrder);
             end
         end
     end
