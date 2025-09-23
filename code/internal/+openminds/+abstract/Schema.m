@@ -681,7 +681,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods (Access = protected) % Methods related to setting new values
-        function instanceId = generateInstanceId(obj)
+        function instanceId = generateInstanceId(obj) %#ok<MANU>
         %generateInstanceId Generate a unique instance id.
 
         % Todo/idea: Specify custom identifier generator
