@@ -14,4 +14,15 @@ classdef (Abstract) AbstractLinkResolver < handle & matlab.mixin.Heterogeneous
 
         tf = canResolve(IRI)
     end
+
+    methods(Sealed)
+        function tf = eq(obj, resolver)
+            if isempty(obj)
+                tf = isempty(resolver);
+            else
+                tf = arrayfun(@(x) isequal(x, resolver), obj) | ...
+                        strcmp([obj.IRIPrefix], resolver.IRIPrefix);
+            end
+        end
+    end
 end
