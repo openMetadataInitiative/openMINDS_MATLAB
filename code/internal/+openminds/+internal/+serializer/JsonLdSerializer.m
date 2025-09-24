@@ -301,52 +301,6 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             end
         end
     end
-    
-    methods (Static)
-        function jsonStr = serializeToJsonLd(instances, options)
-        %serializeToJsonLd Static convenience method for JSON-LD serialization
-        %
-        %   jsonStr = JsonLdSerializer.serializeToJsonLd(instances)
-        %   serializes instances to JSON-LD using default configuration
-        %
-        %   jsonStr = JsonLdSerializer.serializeToJsonLd(instances, Name, Value, ...)
-        %   serializes instances with custom configuration options
-        %
-        %   PARAMETERS:
-        %   -----------
-        %   instances : openminds.abstract.Schema or cell array
-        %       Instance(s) to serialize
-        %
-        %   Configuration options (Name-Value pairs):
-        %   RecursionDepth : integer (default: 1)
-        %   PrettyPrint : logical (default: true)
-        %   UseSemanticPropertyName : logical (default: false)
-        %   IncludeEmptyProperties : logical (default: false)
-        %
-        %   RETURNS:
-        %   --------
-        %   jsonStr : string or cell array of strings
-        %       JSON-LD formatted string(s)
-            
-            arguments
-                instances % openminds.abstract.Schema or cell array
-                options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 1
-                options.PrettyPrint (1,1) logical = true
-                options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"
-                options.IncludeEmptyProperties (1,1) logical = false
-                options.IncludeIdentifier (1,1) logical = true
-            end
-            
-            % Create serializer and serialize
-            serializer = openminds.internal.serializer.JsonLdSerializer(...
-                'RecursionDepth', options.RecursionDepth, ...
-                'PrettyPrint', options.PrettyPrint, ...
-                'PropertyNameSyntax', options.PropertyNameSyntax, ...
-                'IncludeEmptyProperties', options.IncludeEmptyProperties, ...
-                'IncludeIdentifier', options.IncludeIdentifier);
-            jsonStr = serializer.serialize(instances);
-        end
-    end
 end
 
 function mustBeCellOfStructs(cellArray)
