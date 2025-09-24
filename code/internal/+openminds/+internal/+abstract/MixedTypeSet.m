@@ -52,7 +52,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
     properties % Todo: SetAccess = immutable ?
         % The openMINDS instance for an element of a mixed type object array
-        Instance {mustBeA(Instance, ["double", "openminds.abstract.Schema"] )} = []
+        Instance {openminds.internal.validator.mustBeInstanceOrEmpty} = []
     end
 
     methods

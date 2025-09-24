@@ -37,7 +37,7 @@ classdef (Abstract) BaseSerializer < handle
         SerializationConfiguration openminds.internal.serializer.SerializationConfig
     end
 
-    methods (Abstract, Access = protected)
+    methods (Abstract, Access = protected) % Subclass must implement
         result = formatOutput(obj, processedStruct)
         % formatOutput Convert processed struct to final output format
         %
@@ -58,7 +58,7 @@ classdef (Abstract) BaseSerializer < handle
         %       Final serialized output in the target format
     end
 
-    methods (Access = protected)
+    methods (Access = protected) % Subclass can implement
         function allStructs = postProcessInstances(obj, allStructs) %#ok<INUSD>
             % Subclass can implement
         end
