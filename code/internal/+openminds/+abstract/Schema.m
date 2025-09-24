@@ -44,7 +44,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods % Constructor
         function obj = Schema(instance, name, value)
             arguments
-                instance (1,:) {mustBeA(instance, "struct")} = struct.empty     % Use mustBeA instead of type to skip forced conversion
+                instance (1,:) {mustBeA(instance, "struct")} = struct.empty     % Use mustBeA instead of type specification (e.g., 'instance struct') to avoid MATLAB's forced conversion of input arguments to 'struct'. Using 'mustBeA' only validates the type without attempting conversion, which prevents unexpected behavior if a non-struct is passed.
             end
             arguments (Repeating)
                 name (1,1) string
