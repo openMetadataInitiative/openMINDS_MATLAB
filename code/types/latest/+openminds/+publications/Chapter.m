@@ -49,7 +49,7 @@ classdef Chapter < openminds.abstract.Schema
 %                       Enter the name (or title) of this creative work.
 %
 %   pagination        : (1,1) string
-%                       Enter the page range of this chapter.
+%                       Enter the page range of this chapter, expressed as two numbers separated by a dash, e.g., '435-452'.
 %
 %   publicationDate   : (1,1) datetime
 %                       Enter the date on which this creative work was published, formatted as '2023-02-07'.
@@ -120,7 +120,7 @@ classdef Chapter < openminds.abstract.Schema
         % Enter the name (or title) of this creative work.
         name (1,1) string
 
-        % Enter the page range of this chapter.
+        % Enter the page range of this chapter, expressed as two numbers separated by a dash, e.g., '435-452'.
         pagination (1,1) string
 
         % Enter the date on which this creative work was published, formatted as '2023-02-07'.
