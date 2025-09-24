@@ -94,7 +94,7 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
                
                 set(obj(i), propertyNames', propertyValues');
                 
-                identifier = [];
+                identifier = []; % Todo: Should be handled by serializer
                 if isfield(S, 'at_id') % Not present for embedded values
                     identifier = S(i).at_id;
                 elseif isfield(S, 'x_id') % Not present for embedded values

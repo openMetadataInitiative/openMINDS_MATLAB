@@ -90,15 +90,33 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods % Methods accepting visitors
         function instance = resolve(obj, options)
         % resolve - Resolve a reference node/instance based on it's identifier (IRI)
+        %
+        % Syntax:
+        %   instance = instance.resolve(Name, Value)
+        %
+        % Input Arguments:
+        %  - instance (openminds.abstract.Schema) - 
+        %    an openMINDS typed metadata instance
+        %
+        %  - options (name-value pairs) -
+        %    Optional name-value pairs. Available options:
+        %
+        %    - NumLinksToResolve (numeric) -
+        %      Number of links to resolve (Default = 0)
+        %
+        %    - Resolver (resolver) - 
+        %      An instance of a Resolver. By default, a resolver is
+        %      selected from a registry of link resolvers based on the IRI
+        %      of the instance to be resolved.
+        %
+        % See also: openminds.registerLinkResolver
+
             arguments
                 obj (1,:) openminds.abstract.Schema
                 options.NumLinksToResolve = 0
+                options.LinkResolver openminds.internal.resolver.AbstractLinkResolver
                 % options.IsEmbedded = false - Todo?
-                % Todo? Should resolver be an optional input?
             end
-
-            % Todo: Node/obj is embedded, no identifier. Resolve "children" should work
-            % So, need to find a resolver based on IRIs of linked nodes.
 
             instance = obj; % Initialize output
             for i = 1:numel(obj)
@@ -108,23 +126,30 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                         instance(i) = obj(i);
                         return
                     else
-                        nvPairs = {'NumLinksToResolve', options.NumLinksToResolve-1};
+                        options.NumLinksToResolve = options.NumLinksToResolve-1;
+                        nvPairs = namedargs2cell(options);
                         linkedInstances = obj(i).getLinkedInstances();
                         for j = 1:numel(linkedInstances)
-                            linkedInstances{j}.resolve(nvPairs{:})
+                            linkedInstances{j}.resolve(nvPairs{:});
                         end
                         embeddedInstances = obj(i).getEmbeddedInstances();
                         for j = 1:numel(embeddedInstances)
-                            embeddedInstances{j}.resolve(nvPairs{:})
+                            embeddedInstances{j}.resolve(nvPairs{:});
                         end
                     end
                 else
-                    resolver = openminds.internal.getLinkResolver([obj(i).id]);
+                    if isfield(options, 'LinkResolver')
+                        resolver = options.LinkResolver;
+                    else
+                        resolver = openminds.internal.getLinkResolver([obj(i).id]);
+                    end
+
                     if isempty(resolver)
                         error(...
                             'openMINDS:LinkResolver:NotFound', ...
                              'No link resolver found for object with id "%s".', obj(i).id);
                     end
+
                     obj(i) = resolver.resolve(obj(i), "NumLinksToResolve", options.NumLinksToResolve);
                     obj(i).State = "object"; % Update state.
                 end

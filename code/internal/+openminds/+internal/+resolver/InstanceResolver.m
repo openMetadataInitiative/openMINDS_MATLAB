@@ -1,4 +1,5 @@
 classdef InstanceResolver < openminds.internal.resolver.AbstractLinkResolver
+% Resolver for openMINDS controlled instances
 
     properties (Constant)
         IRIPrefix = openminds.constant.BaseURI("v1") + "/instances" % Todo: get from constant
@@ -12,8 +13,9 @@ classdef InstanceResolver < openminds.internal.resolver.AbstractLinkResolver
             end
             [typeEnum, instanceName] = openminds.utility.parseInstanceIRI(instance.id);
             instances = openminds.internal.listControlledInstances(typeEnum);
-            isMatch = instances.InstanceName==string(instanceName);
+            isMatch = instances.InstanceName == string(instanceName);
             if any(isMatch)
+                % Todo: jsonld serializer
                 data = jsondecode(fileread(instances.Filepath(isMatch)));
             else
                 error(['Could not find data for instance with IRI ', ...
@@ -23,6 +25,7 @@ classdef InstanceResolver < openminds.internal.resolver.AbstractLinkResolver
         end
 
         function tf = canResolve(IRI)
+        % canResolve - Check whether this resolver can resolve an IRI
             arguments
                 IRI (1,:) string
             end

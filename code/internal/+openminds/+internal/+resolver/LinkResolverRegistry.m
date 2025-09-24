@@ -2,7 +2,7 @@ classdef LinkResolverRegistry < handle
 % LinkResolverRegistry Singleton registry for LinkResolver instances.
 %
     properties (SetAccess = private)
-        LinkResolvers (1,:) {mustBeA(LinkResolvers, ["double", "openminds.internal.resolver.AbstractLinkResolver"])}
+        LinkResolvers (1,:) {mustBeLinkResolverOrEmpty}
     end
 
     methods (Access = private)
@@ -66,6 +66,12 @@ classdef LinkResolverRegistry < handle
         function tf = hasLinkResolver(obj, name)
             tf = any( arrayfun(@(x) isa(x, name), obj.LinkResolvers));
         end
+    
+        function reset(obj)
+            obj.LinkResolvers = [];
+            % Add the default resolver
+            obj.addLinkResolver(openminds.internal.resolver.InstanceResolver())
+        end
     end
 
     methods (Access = private)
@@ -103,5 +109,20 @@ classdef LinkResolverRegistry < handle
             end
             obj = singletonInstance;
         end
+    end
+end
+
+function mustBeLinkResolverOrEmpty(value)
+% This special validator is necessary for object construction, because it
+% is not possible to create an empty object of an abstract class and as we
+% want to ensure the values of the LinkResolvers is an implementation of
+% the AbstractLinkResolver we also need to allow empty values.
+    if ~isempty(value)
+        actualType = arrayfun(@class, value, 'UniformOutput', false);
+        assert(...
+            isa(value, "openminds.internal.resolver.AbstractLinkResolver"), ...
+            'openMINDS_MATLAB:LinkResolverRegistry:InvalidLinkResolver', ...
+            ['LinkResolver must be a concrete implementation ', ...
+            'AbstractLinkResolver. Got %s instead'], strjoin(actualType, ', '))
     end
 end
