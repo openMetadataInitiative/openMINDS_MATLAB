@@ -44,6 +44,7 @@ jobs:
         uses: matlab-actions/setup-matlab@v2
         with:
           release: ${{ matrix.MATLABVersion }}
+          cache: true
 
       # Check for MATLAB code issues in the project.
       - name: Check for MATLAB code issues
