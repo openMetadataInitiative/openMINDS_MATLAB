@@ -2,7 +2,7 @@ function update(mode)
 %UPDATE Updates openMINDS schemas if necessary.
 %
 %   openminds.internal.update() checks the commit ID for the previous schema
-%   update and the current commit ID of the 'documentation' branch of the
+%   update and the current commit ID of the 'main' branch of the
 %   openMINDS github repository. If they are the same and the mode is not
 %   'force', it displays a message indicating that the schemas are up to date.
 %   Otherwise, it proceeds with updating the schemas.
@@ -22,11 +22,17 @@ function update(mode)
     import openminds.internal.utility.git.getCurrentCommitID
     import openminds.internal.utility.git.loadPreviousCommitID
 
+    repoOwner = openminds.internal.constants.Github.Organization;
+
     % - Check commitID, and return if previous commit is is same as current
-    previousCommitID = loadPreviousCommitID('RepositoryName', 'openMINDS', ...
-        'BranchName', 'documentation', 'Organization', 'HumanBrainProject');
+    previousCommitID = loadPreviousCommitID(...
+        'RepositoryName', 'openMINDS', ...
+        'BranchName', 'main', ...
+        'Owner', repoOwner);
+
     [currentCommitID, details] = getCurrentCommitID('openMINDS', ...
-        'BranchName', 'documentation', 'Organization', 'HumanBrainProject');
+        'BranchName', 'main', ...
+        'Owner', repoOwner);
 
     if isequal(previousCommitID, currentCommitID) && mode ~= "force"
         disp('Schemas are up to date.')

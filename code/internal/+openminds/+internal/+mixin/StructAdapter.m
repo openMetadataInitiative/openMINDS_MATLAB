@@ -9,6 +9,10 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
 %   Add names of object superclasses in the ExcludeSuperclass property to
 %   exclude properties from certain superclasses.
 
+% Todo:
+%   - Add filter, i.e propertyIgnoreFilter
+%   - Add option to include specific properties
+
     properties (Hidden) % Options
         IncludeHidden (1,1) logical = false
         IncludeTransient (1,1) logical = false
@@ -65,15 +69,19 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
 
         function obj = fromStruct(obj, S)
         %Create instance/list of instances from a struct array
-            
-            numInstances = numel(S);
-            obj(numInstances) = feval(class(obj));
 
+            arguments
+                obj (1,:) openminds.internal.mixin.StructAdapter
+                S (1,:) {mustBeSameLengthAs(S, obj)}
+            end
+
+            numInstances = numel(S);
             allowedPropertyNames = [obj(1).PropertyNames];
 
             for i = 1:numInstances
                 C = struct2cell(S(i));
                 fieldNames = fieldnames(S(i));
+
                 [fieldNames, iA] = intersect(fieldNames', allowedPropertyNames, 'stable');
 
                 propertyValues = C(iA);
@@ -86,8 +94,15 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
                
                 set(obj(i), propertyNames', propertyValues');
                 
+                identifier = []; % Todo: Should be handled by serializer
                 if isfield(S, 'at_id') % Not present for embedded values
-                    obj(i).assignInstanceId( S(i).at_id );
+                    identifier = S(i).at_id;
+                elseif isfield(S, 'x_id') % Not present for embedded values
+                    identifier = S(i).x_id;
+                end
+
+                if ~isempty(identifier)
+                    obj(i).assignInstanceId( identifier );
                 end
             end
 
@@ -205,5 +220,15 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
             mc = meta.class.fromName('openminds.internal.mixin.StructAdapter');
             propertyNames = {mc.PropertyList.Name};
         end
+    end
+end
+
+function mustBeSameLengthAs(S, obj)
+%MUSTBESAMELENGTHAS Validate that S has same length as obj
+%   Throws an error if the number of elements in S and obj differ.
+    if ~isequal(numel(S), numel(obj))
+        error("mustBeSameLengthAs:DimensionMismatch", ...
+            "The length of struct array must be the same length as the object array.\n" + ...
+            "Got %d and %d.", numel(S), numel(obj));
     end
 end

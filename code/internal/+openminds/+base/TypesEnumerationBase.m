@@ -22,7 +22,7 @@ classdef TypesEnumerationBase
 
         function instance = createInstance(obj)
         % createInstance - Create a new instance
-            if numel(obj) == 1
+            if isscalar(obj)
                 instance = feval(obj.ClassName);
             else
                 error('Can not create instances for list of types')
@@ -35,6 +35,11 @@ classdef TypesEnumerationBase
 
         function name = getSchemaName(obj)
             name = openminds.internal.utility.getSchemaShortName(obj.ClassName);
+        end
+
+        function moduleName = getModule(obj)
+            splitClassName = split(obj.ClassName, '.');
+            moduleName = openminds.enum.Modules(splitClassName{2});
         end
     end
 

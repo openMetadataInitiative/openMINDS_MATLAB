@@ -1,9 +1,7 @@
 function str = getSchemaDocLink(schemaClass, preferredDocumentation)
     
     if nargin < 2
-        % preferences.PreferredDocumentation = 'Command window help';
-        preferences.PreferredDocumentation = 'Default browser';
-        preferredDocumentation = preferences.PreferredDocumentation;
+        preferredDocumentation = openminds.getpref("DocLinkTarget");
     end
 
     if strncmp( schemaClass, 'https', 5)
@@ -15,7 +13,7 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
     end
 
     switch preferredDocumentation
-        case 'Command window help'
+        case {'Command window help', 'help'}
             str = getSimpleHelpLink(schemaClass);
 
         case 'Help popup'
@@ -24,7 +22,7 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
         case 'Matlab web'
             str = getHtmlLink(schemaClass, '-new -notoolbar');
 
-        case 'Default browser'
+        case {'Default browser', 'online'}
             str = getHtmlLink(schemaClass, '-browser');
 
         case "Raw URL"

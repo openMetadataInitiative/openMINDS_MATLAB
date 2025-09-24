@@ -51,7 +51,7 @@ function S = collectInfoInStructArray(schemaFolderPath, filePaths)
 
         S(i).ModuleName = thisFolderSplit{1};
         
-        if numel(thisFolderSplit) == 1
+        if numel(thisFolderSplit) == 1 %#ok<ISCL>
             S(i).SubModuleName = '';
         
         elseif numel(thisFolderSplit) == 2

@@ -34,7 +34,12 @@ function instance = instanceFromIRI(IRI)
         IRI (1,1) string {openminds.mustBeValidOpenMINDSIRI}
     end
 
-    [type, ~] = openminds.utility.parseAtID(IRI);
-    typeEnum = openminds.enum.Types(type);
-    instance = feval(typeEnum.ClassName, IRI);
+    [typeEnum, instanceName] = openminds.utility.parseInstanceIRI(IRI);
+    
+    if contains(typeEnum.ClassName, "controlledterms")
+        instance = feval(typeEnum.ClassName, IRI);
+    else
+        fcnStr = sprintf('%s.fromName', typeEnum.ClassName);
+        instance = feval(fcnStr, instanceName);
+    end
 end

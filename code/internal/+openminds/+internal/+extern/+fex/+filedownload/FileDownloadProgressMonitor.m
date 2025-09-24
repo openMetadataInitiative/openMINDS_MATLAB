@@ -263,7 +263,7 @@ classdef FileDownloadProgressMonitor < matlab.net.http.ProgressMonitor
             
             if isempty(vararginCellArray)
                 return
-            elseif numel(vararginCellArray) == 1 && isstruct(vararginCellArray{1})
+            elseif isscalar(vararginCellArray) && isstruct(vararginCellArray{1})
                 names = fieldnames(vararginCellArray{1});
                 values = struct2cell(vararginCellArray{1});
             else

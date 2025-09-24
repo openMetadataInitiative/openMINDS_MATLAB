@@ -15,7 +15,7 @@ function schemaName = getSchemaName(fullSchemaName, stringCase)
         stringCase (1,1) string = "same"
     end
 
-    if openminds.utility.isSemanticSchemaName(fullSchemaName)
+    if openminds.utility.isTypeIRI(fullSchemaName)
         schemaName = getSchemaNameFromSemanticName(fullSchemaName);
     elseif openminds.utility.isSchemaClassName(fullSchemaName) || contains(fullSchemaName, 'mixedtype')
         schemaName = getSchemaNameFromFullMatlabClassName(fullSchemaName);

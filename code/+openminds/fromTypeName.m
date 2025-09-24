@@ -1,4 +1,4 @@
-function instance = fromTypeName( typeNameIRI, instanceIdentifier )
+function instance = fromTypeName(typeNameIRI, instanceIdentifier, nvPairs)
 % fromTypeName - Creates an instance based on the given type name IRI.
 %
 % Syntax:
@@ -37,7 +37,8 @@ function instance = fromTypeName( typeNameIRI, instanceIdentifier )
     arguments
         typeNameIRI (1,1) string {openminds.mustBeValidOpenMINDSIRI}
         instanceIdentifier (1,1) string = ''
+        nvPairs cell = {}
     end
     enumType = openminds.enum.Types.fromAtType(typeNameIRI);
-    instance = feval(enumType.ClassName, 'id', char(instanceIdentifier));
+    instance = feval(enumType.ClassName, 'id', char(instanceIdentifier), nvPairs{:});
 end

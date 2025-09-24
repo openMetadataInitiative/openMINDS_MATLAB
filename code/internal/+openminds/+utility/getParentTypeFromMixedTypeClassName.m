@@ -1,7 +1,5 @@
 function schemaName = getParentTypeFromMixedTypeClassName(mixedTypeClassName)
-% getParentTypeFromMixedTypeClassName - Get schema name from a mixed type class name
-
-% Todo: Rename to getParentTypeFromMixedTypeClassName
+% getParentTypeFromMixedTypeClassName - Get (metadata) type name from a mixed type class name
 
     arguments
         mixedTypeClassName (1,1) string

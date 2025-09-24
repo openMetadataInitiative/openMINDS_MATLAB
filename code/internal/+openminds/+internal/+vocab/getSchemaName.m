@@ -37,7 +37,7 @@ function schemaName = getSchemaName(nameAlias)
 
     schemaName = string( allNames(isMatch) );
 
-    if numel(schemaName) == 1
+    if isscalar(schemaName)
         return
     elseif isempty(schemaName)
         throwEmptySchemaNameException(nameAlias);

@@ -38,7 +38,7 @@ function propertyAlias = getPropertyAlias(propertyName, options)
 
     propertyAlias = aliasMap(propertyName).(aliasType);
 
-    if numel(propertyName) == 1
+    if isscalar(propertyName)
         return
     elseif isempty(propertyName)
         throwEmptyPropertyNameException(propertyName);
