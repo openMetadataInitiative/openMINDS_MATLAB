@@ -167,7 +167,11 @@ classdef Preferences < matlab.mixin.CustomDisplay & handle
             if isprop(preferences, preferenceName)
                 prefValue = preferences.(preferenceName);
             else
-                error('There is no preferences with name "%s" in the preferences for the OpenMINDS-KG-Sync Toolbox', preferenceName)
+                errorId = "openMINDS_MATLAB:Preferences:PreferenceDoesNotExist";
+                error(errorId, ...
+                    ['There is no preferences with name "%s" in the ', ...
+                    'preferences for the openMINDS Metadata Toolbox'], ...
+                    preferenceName)
             end
         end
     end
