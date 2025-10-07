@@ -713,12 +713,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Access = ?openminds.internal.mixin.StructAdapter)
-        function assignInstanceId(obj, id)
-            obj.id = id;
-        end
-    end
-
     methods (Access = private)
                       
         function outValues = resolveMixedTypeOutput(~, values, mixedTypeClassName)
@@ -804,6 +798,12 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
         function requiredProperties = getRequiredProperties(obj)
             requiredProperties = obj.Required;
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.StructAdapter)
+        function assignInstanceId(obj, id)
+            obj.id = id;
         end
     end
 
