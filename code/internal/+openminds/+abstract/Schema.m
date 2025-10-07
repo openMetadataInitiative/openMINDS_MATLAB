@@ -193,6 +193,10 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             classNameSplit = split(class(obj), '.');
             typeName = classNameSplit{end};
         end
+
+        function tf = isUnresolved(obj)
+            tf = obj.isReference();
+        end
     end
 
     methods (Access = public, Hidden) % Todo: Access = ?visitor
@@ -265,7 +269,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             numInstances = numel(linkedInstances);
             isUnresolved = false(1, numInstances);
             for i = 1:numInstances
-                isUnresolved(i) = linkedInstances{i}.isResolved();
+                isUnresolved(i) = linkedInstances{i}.isUnresolved();
             end
         
             unresolvedInstances = linkedInstances(isUnresolved);
@@ -772,7 +776,10 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
     methods (Access = protected) % Methods related to object display
         function tf = isReference(obj)
-            tf = obj.IsReference;
+            tf = false(1, numel(obj));
+            for i = 1:numel(obj)
+                tf(i) = obj(i).IsReference;
+            end
         end
         
         function displayLabel = getDisplayLabel(obj)
