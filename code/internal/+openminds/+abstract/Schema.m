@@ -193,17 +193,26 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             classNameSplit = split(class(obj), '.');
             typeName = classNameSplit{end};
         end
+
+        function tf = isUnresolved(obj)
+            tf = obj.isReference();
+        end
     end
 
     methods (Access = public, Hidden) % Todo: Access = ?visitor
         function linkedInstances = getLinkedInstances(obj)
         % getLinkedInstances - Get all linked instances as a cell array
+
+            arguments
+                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+            end
+
             linkedInstances = {};
             linkedPropertyNames = fieldnames(obj.LINKED_PROPERTIES);
             
             for propName = string( row(linkedPropertyNames) )
                 propValue = obj.(propName);
-                if ~isempty( propValue )
+                if ~isempty( propValue ) % Todo: Add method for checking if node is empty
                     % Concatenate instances in a cell array
                     if openminds.utility.isMixedInstance(propValue)
                         linkedInstances = [linkedInstances, {propValue.Instance}]; %#ok<AGROW>
@@ -216,6 +225,11 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
         function embeddedInstances = getEmbeddedInstances(obj)
         % getEmbeddedInstances - Get all embedded instances as a cell array
+           
+            arguments
+                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+            end
+
             embeddedInstances = {};
             embeddedPropertyNames = fieldnames(obj.EMBEDDED_PROPERTIES);
             
@@ -230,6 +244,42 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
             end
         end
+    
+        function linkedIdentifiers = getUnresolvedLinks(obj)
+        % getUnresolvedLinks - Retrieve identifiers of unresolved links
+        %
+        % Syntax:
+        %   linkedIdentifiers = getUnresolvedLinks(obj) retrieves the identifiers 
+        %   of instances that are not resolved.
+        %
+        % Input Arguments:
+        %   obj - An object containing linked instances to be checked for 
+        %   resolution status.
+        %
+        % Output Arguments:
+        %   linkedIdentifiers - A cell array (1xN) containing identifiers of
+        %   unresolved linked instances.
+
+            arguments
+                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+            end
+
+            linkedInstances = obj.getLinkedInstances();
+            
+            numInstances = numel(linkedInstances);
+            isUnresolved = false(1, numInstances);
+            for i = 1:numInstances
+                isUnresolved(i) = linkedInstances{i}.isUnresolved();
+            end
+        
+            unresolvedInstances = linkedInstances(isUnresolved);
+            numUnresolvedInstances = numel(unresolvedInstances);
+            linkedIdentifiers = cell(1, numUnresolvedInstances);
+            for i = 1:numUnresolvedInstances
+                linkedIdentifiers{i} = unresolvedInstances{i}.id;
+            end
+        end
+        
     end
 
     methods (Hidden) % Todo: remove?
@@ -667,12 +717,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Access = ?openminds.internal.mixin.StructAdapter)
-        function assignInstanceId(obj, id)
-            obj.id = id;
-        end
-    end
-
     methods (Access = private)
                       
         function outValues = resolveMixedTypeOutput(~, values, mixedTypeClassName)
@@ -732,7 +776,10 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
     methods (Access = protected) % Methods related to object display
         function tf = isReference(obj)
-            tf = obj.IsReference;
+            tf = false(1, numel(obj));
+            for i = 1:numel(obj)
+                tf(i) = obj(i).IsReference;
+            end
         end
         
         function displayLabel = getDisplayLabel(obj)
@@ -758,6 +805,12 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
         function requiredProperties = getRequiredProperties(obj)
             requiredProperties = obj.Required;
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.StructAdapter)
+        function assignInstanceId(obj, id)
+            obj.id = id;
         end
     end
 
