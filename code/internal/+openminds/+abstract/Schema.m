@@ -30,10 +30,8 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         EMBEDDED_PROPERTIES struct
     end
 
-    properties (Transient, Access = private)
-        % Should this be a logical flag instead? I.e IsReference?
-        % Should it be dependent?
-        State (1,1) string {mustBeMember(State, ["reference", "object"])} = "object"
+    properties (Access = private)
+        IsReference (1,1) logical = false
     end
     
     events % Todo: Remove??
@@ -60,7 +58,8 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
                 if isscalar(name) && string(name) == "id" && startsWith(string(value), "https://")
                     % Only IRI was set, assume this is a node reference
-                    obj.State = "reference";
+                    % Todo: Should support general IRI
+                    obj.IsReference = true;
                 end
             else
                 if ~isscalar(instance) % Preallocate object array
@@ -71,7 +70,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     obj(i) = obj(i).fromStruct(instance(i)); %#ok<AGROW>
                     fields = fieldnames(instance(i));
                     if isscalar(fields) && ismember(fields, ["x_id", "at_id"])
-                        obj(i).State = "reference"; %#ok<AGROW>
+                        obj(i).IsReference = true; %#ok<AGROW>
                     end
                 end
                 % Initializing from struct and name-value pairs should be
@@ -120,7 +119,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
             instance = obj; % Initialize output
             for i = 1:numel(obj)
-                if obj(i).State == "object" % Instance is resolved
+                if ~obj(i).IsReference % Instance is resolved (not a reference)
                     if options.NumLinksToResolve == 0
                         fprintf('Instance is already resolved.\n')
                         instance(i) = obj(i);
@@ -151,7 +150,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     end
 
                     obj(i) = resolver.resolve(obj(i), "NumLinksToResolve", options.NumLinksToResolve);
-                    obj(i).State = "object"; % Update state.
+                    obj(i).IsReference = false; % Update state: mark as resolved
                 end
             end
             instance = obj; % Set output
@@ -733,7 +732,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
     methods (Access = protected) % Methods related to object display
         function tf = isReference(obj)
-            tf = obj.State == "reference";
+            tf = obj.IsReference;
         end
         
         function displayLabel = getDisplayLabel(obj)
