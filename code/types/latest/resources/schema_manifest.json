@@ -250,6 +250,11 @@
         "group": "atlas"
     },
     {
+        "name": "communicationProtocol",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "configuration",
         "module": "core",
         "group": "research"
@@ -358,6 +363,11 @@
         "name": "datasetVersion",
         "module": "core",
         "group": "products"
+    },
+    {
+        "name": "deploymentEnvironmentType",
+        "module": "controlledTerms",
+        "group": null
     },
     {
         "name": "deviceType",
