@@ -217,7 +217,7 @@ classdef ModelVersion < openminds.abstract.Schema
     methods
         function obj = ModelVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.products.ModelVersion
                 propValues.id (1,1) string
             end

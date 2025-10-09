@@ -246,7 +246,7 @@ classdef CommonCoordinateSpaceVersion < openminds.abstract.Schema & openminds.in
     methods
         function obj = CommonCoordinateSpaceVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.atlas.CommonCoordinateSpaceVersion
                 propValues.id (1,1) string
             end

@@ -209,7 +209,7 @@ classdef WorkflowRecipeVersion < openminds.abstract.Schema
     methods
         function obj = WorkflowRecipeVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.computation.WorkflowRecipeVersion
                 propValues.id (1,1) string
             end

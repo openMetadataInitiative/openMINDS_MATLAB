@@ -250,6 +250,11 @@
         "group": "atlas"
     },
     {
+        "name": "communicationInterfaceType",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "communicationProtocol",
         "module": "controlledTerms",
         "group": null
@@ -915,6 +920,11 @@
         "group": "products"
     },
     {
+        "name": "sovereignState",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "species",
         "module": "controlledTerms",
         "group": null
@@ -978,6 +988,11 @@
         "name": "subjectState",
         "module": "core",
         "group": "research"
+    },
+    {
+        "name": "supranationalBody",
+        "module": "controlledTerms",
+        "group": null
     },
     {
         "name": "tactileStimulusType",

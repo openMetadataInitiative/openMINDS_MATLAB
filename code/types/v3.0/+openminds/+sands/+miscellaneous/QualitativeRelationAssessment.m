@@ -49,7 +49,7 @@ classdef QualitativeRelationAssessment < openminds.abstract.Schema
     methods
         function obj = QualitativeRelationAssessment(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.miscellaneous.QualitativeRelationAssessment
                 propValues.id (1,1) string
             end

@@ -162,7 +162,7 @@ classdef Simulation < openminds.abstract.Schema
     methods
         function obj = Simulation(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.computation.Simulation
                 propValues.id (1,1) string
             end

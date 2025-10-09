@@ -105,7 +105,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
     methods
         function obj = ParcellationEntityVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.atlas.ParcellationEntityVersion
                 propValues.id (1,1) string
             end

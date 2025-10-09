@@ -85,7 +85,7 @@ classdef FileBundle < openminds.abstract.Schema
     methods
         function obj = FileBundle(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.data.FileBundle
                 propValues.id (1,1) string
             end

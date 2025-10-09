@@ -61,7 +61,7 @@ classdef ServiceLink < openminds.abstract.Schema
     methods
         function obj = ServiceLink(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.data.ServiceLink
                 propValues.id (1,1) string
             end

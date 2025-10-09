@@ -87,7 +87,7 @@ classdef LivePaper < openminds.abstract.Schema
     methods
         function obj = LivePaper(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.publications.LivePaper
                 propValues.id (1,1) string
             end

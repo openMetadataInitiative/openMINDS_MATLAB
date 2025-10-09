@@ -53,7 +53,7 @@ classdef AnatomicalEntity < openminds.abstract.Schema
     methods
         function obj = AnatomicalEntity(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.AnatomicalEntity
                 propValues.id (1,1) string
             end

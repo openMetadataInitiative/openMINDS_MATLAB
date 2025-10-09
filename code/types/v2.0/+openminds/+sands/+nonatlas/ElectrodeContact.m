@@ -77,7 +77,7 @@ classdef ElectrodeContact < openminds.abstract.Schema
     methods
         function obj = ElectrodeContact(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.nonatlas.ElectrodeContact
                 propValues.id (1,1) string
             end

@@ -41,7 +41,7 @@ classdef AmountOfChemical < openminds.abstract.Schema
     methods
         function obj = AmountOfChemical(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.chemicals.AmountOfChemical
                 propValues.id (1,1) string
             end

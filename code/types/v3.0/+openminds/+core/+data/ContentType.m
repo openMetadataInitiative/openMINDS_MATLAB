@@ -77,7 +77,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
     methods
         function obj = ContentType(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.data.ContentType
                 propValues.id (1,1) string
             end

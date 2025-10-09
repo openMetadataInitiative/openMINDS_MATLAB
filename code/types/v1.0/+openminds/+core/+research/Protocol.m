@@ -53,7 +53,7 @@ classdef Protocol < openminds.abstract.Schema
     methods
         function obj = Protocol(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.research.Protocol
                 propValues.id (1,1) string
             end

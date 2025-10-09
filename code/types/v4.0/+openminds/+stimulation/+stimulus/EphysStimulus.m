@@ -83,7 +83,7 @@ classdef EphysStimulus < openminds.abstract.Schema
     methods
         function obj = EphysStimulus(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.stimulation.stimulus.EphysStimulus
                 propValues.id (1,1) string
             end

@@ -223,7 +223,7 @@ classdef ValidationTestVersion < openminds.abstract.Schema
     methods
         function obj = ValidationTestVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.computation.ValidationTestVersion
                 propValues.id (1,1) string
             end

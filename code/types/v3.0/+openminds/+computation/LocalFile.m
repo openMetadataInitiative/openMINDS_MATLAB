@@ -91,7 +91,7 @@ classdef LocalFile < openminds.abstract.Schema
     methods
         function obj = LocalFile(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.computation.LocalFile
                 propValues.id (1,1) string
             end

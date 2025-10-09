@@ -243,7 +243,7 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
     methods
         function obj = BrainAtlasVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.sands.atlas.BrainAtlasVersion
                 propValues.id (1,1) string
             end

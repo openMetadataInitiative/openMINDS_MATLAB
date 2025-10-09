@@ -273,7 +273,7 @@ classdef DatasetVersion < openminds.abstract.Schema
     methods
         function obj = DatasetVersion(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?openminds.core.products.DatasetVersion
                 propValues.id (1,1) string
             end
@@ -284,7 +284,7 @@ classdef DatasetVersion < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s', obj.fullName);
+            str = sprintf('%s', obj.shortName);
         end
     end
 end
