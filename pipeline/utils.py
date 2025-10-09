@@ -246,6 +246,7 @@ def save_enumeration_classes(enum_type, version, schema_loader, enumeration_temp
 
     template_variables = _get_template_variables(enum_type, schema_files, root_path)
     enum_classdef_str = enumeration_template.render(template_variables)
+    enum_classdef_str = _strip_trailing_whitespace(enum_classdef_str)
 
     with open(target_file_path, "w", encoding="utf-8") as target_file:
         target_file.write(enum_classdef_str)
@@ -318,3 +319,7 @@ def _get_template_variables(enum_type, schema_files, root_path):
     
     elif enum_type == "Modules":
         return {'modules': sorted(set(template_variable_list)) }
+    
+def _strip_trailing_whitespace(s):
+    return "\n".join([line.rstrip() for line in s.splitlines()]) + "\n" # Also add single newline at the end
+
