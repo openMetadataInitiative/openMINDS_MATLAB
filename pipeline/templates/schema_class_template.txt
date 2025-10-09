@@ -50,7 +50,7 @@ classdef {{ class_name }} < {{base_class}}
     methods
         function obj = {{ class_name }}(structInstance, propValues)
             arguments
-                structInstance (1,:) struct = struct.empty
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
                 propValues.?{{ full_class_name }}
                 propValues.id (1,1) string
             end
