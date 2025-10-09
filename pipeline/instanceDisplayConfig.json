@@ -140,8 +140,8 @@
     "stringFormat": "sprintf('%s', fullName)"
   },
   "datasetVersion": {
-    "propertyName": "fullName",
-    "stringFormat": "sprintf('%s', fullName)"
+    "propertyName": "shortName",
+    "stringFormat": "sprintf('%s', shortName)"
   },
   "metaDataModel": {
     "propertyName": "fullName",
