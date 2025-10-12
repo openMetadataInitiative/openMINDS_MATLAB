@@ -1,9 +1,12 @@
-function packageToolbox(releaseType, versionString)
+function packageToolbox(releaseType, versionString, varargin)
     arguments
         releaseType {mustBeTextScalar,mustBeMember(releaseType,["build","major","minor","patch","specific"])} = "build"
         versionString {mustBeTextScalar} = "";
     end
-    
+    arguments (Repeating)
+        varargin
+    end
+
     ommtools.installMatBox("commit")
 
     projectRootDirectory = ommtools.projectdir();
@@ -22,6 +25,7 @@ function packageToolbox(releaseType, versionString)
     ];
 
     matbox.tasks.packageToolbox(projectRootDirectory, releaseType, versionString, ...
+        varargin{:}, ...
         "ToolboxShortName", "openMINDS_MATLAB", ...
         "PathFolders", toolboxPathFolders )
 end
