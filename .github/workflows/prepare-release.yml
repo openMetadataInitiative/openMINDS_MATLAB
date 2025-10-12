@@ -1,0 +1,25 @@
+name: Prepare toolbox release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+' # Matches tags like v1.2.3
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number in major.minor.patch format'
+        required: true
+        type: string
+
+jobs:
+  prepare-release:
+    name: Prepare toolbox release
+    uses: ehennestad/matbox-actions/.github/workflows/prepare-release-workflow.yml@v1
+    with:
+      version: ${{ inputs.version }}         # Do not change
+      ref_name: ${{ github.ref_name }}       # Do not change
+      source_directory: code
+      tests_directory: tools/tests
+      tools_directory: tools
+    secrets:
+      DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
