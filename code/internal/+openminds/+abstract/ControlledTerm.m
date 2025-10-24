@@ -50,6 +50,10 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
 
+            if isstring(instanceSpec) && isscalar(instanceSpec) && instanceSpec == ""
+                instanceSpec = string.empty;
+            end
+
             if ~isempty(instanceSpec)
                 if ischar(instanceSpec)
                     instanceSpec = string(instanceSpec);
