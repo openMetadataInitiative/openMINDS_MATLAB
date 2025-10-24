@@ -30,10 +30,12 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
         end
 
         function str = string(obj)
-            if numel(obj) > 1
-                str = strjoin( arrayfun(@(x) string(x.DisplayString), obj ), '; ');
-            else
+            if isempty(obj)
+                str = string.empty;
+            elseif isscalar(obj)
                 str = string( obj.DisplayString );
+            else
+                str = strjoin( arrayfun(@(x) string(x.DisplayString), obj ), '; ');
             end
         end
 
