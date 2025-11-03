@@ -34,7 +34,7 @@ classdef Circle < openminds.abstract.Schema
         function obj = Circle(structInstance, propValues)
             arguments
                 structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
-                propValues.?openminds.sands.mathematicalshapes.Circle
+                propValues.?openminds.sands.mathematicalshape.Circle
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);

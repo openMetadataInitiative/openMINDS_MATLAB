@@ -73,7 +73,7 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.mathematicalshapes.Circle",
+      "NewName": "openminds.sands.mathematicalshape.Circle",
       "OldNames": [
         "openminds.sands.Circle",
         "openminds.Circle"
@@ -81,7 +81,7 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.mathematicalshapes.Ellipse",
+      "NewName": "openminds.sands.mathematicalshape.Ellipse",
       "OldNames": [
         "openminds.sands.Ellipse",
         "openminds.Ellipse"
@@ -89,7 +89,7 @@
       "WarnOnOldName": false
     },
     {
-      "NewName": "openminds.sands.mathematicalshapes.Rectangle",
+      "NewName": "openminds.sands.mathematicalshape.Rectangle",
       "OldNames": [
         "openminds.sands.Rectangle",
         "openminds.Rectangle"

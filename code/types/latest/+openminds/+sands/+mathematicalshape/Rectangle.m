@@ -42,7 +42,7 @@ classdef Rectangle < openminds.abstract.Schema
         function obj = Rectangle(structInstance, propValues)
             arguments
                 structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
-                propValues.?openminds.sands.mathematicalshapes.Rectangle
+                propValues.?openminds.sands.mathematicalshape.Rectangle
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);

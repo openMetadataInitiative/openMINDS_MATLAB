@@ -12,7 +12,7 @@ classdef CranialWindowPreparation < openminds.abstract.Schema
 %   description       : (1,1) string
 %                       Enter a description of this activity.
 %
-%   dimension         : (1,1) <a href="matlab:help openminds.sands.mathematicalshapes.Circle" style="font-weight:bold">Circle</a>, <a href="matlab:help openminds.sands.mathematicalshapes.Ellipse" style="font-weight:bold">Ellipse</a>, <a href="matlab:help openminds.sands.mathematicalshapes.Rectangle" style="font-weight:bold">Rectangle</a>
+%   dimension         : (1,1) <a href="matlab:help openminds.sands.mathematicalshape.Circle" style="font-weight:bold">Circle</a>, <a href="matlab:help openminds.sands.mathematicalshape.Ellipse" style="font-weight:bold">Ellipse</a>, <a href="matlab:help openminds.sands.mathematicalshape.Rectangle" style="font-weight:bold">Rectangle</a>
 %                       Enter the dimension of the cranial window by defining its mathematical shape.
 %
 %   endTime           : (1,1) datetime
@@ -132,7 +132,7 @@ classdef CranialWindowPreparation < openminds.abstract.Schema
         )
         EMBEDDED_PROPERTIES = struct(...
             'customPropertySet', "openminds.core.research.CustomPropertySet", ...
-            'dimension', ["openminds.sands.mathematicalshapes.Circle", "openminds.sands.mathematicalshapes.Ellipse", "openminds.sands.mathematicalshapes.Rectangle"] ...
+            'dimension', ["openminds.sands.mathematicalshape.Circle", "openminds.sands.mathematicalshape.Ellipse", "openminds.sands.mathematicalshape.Rectangle"] ...
         )
     end
 

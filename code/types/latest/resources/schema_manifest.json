@@ -227,7 +227,7 @@
     {
         "name": "circle",
         "module": "SANDS",
-        "group": "mathematicalShapes"
+        "group": "mathematicalShape"
     },
     {
         "name": "colormap",
@@ -432,7 +432,7 @@
     {
         "name": "ellipse",
         "module": "SANDS",
-        "group": "mathematicalShapes"
+        "group": "mathematicalShape"
     },
     {
         "name": "environment",
@@ -837,7 +837,7 @@
     {
         "name": "rectangle",
         "module": "SANDS",
-        "group": "mathematicalShapes"
+        "group": "mathematicalShape"
     },
     {
         "name": "researchProductGroup",

@@ -42,7 +42,7 @@ classdef Ellipse < openminds.abstract.Schema
         function obj = Ellipse(structInstance, propValues)
             arguments
                 structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
-                propValues.?openminds.sands.mathematicalshapes.Ellipse
+                propValues.?openminds.sands.mathematicalshape.Ellipse
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
