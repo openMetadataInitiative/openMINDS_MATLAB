@@ -339,7 +339,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                         obj = builtin('subsasgn', obj, subs, value);
 
                         % Assign new value and trigger event
-                        evtData = PropertyValueChangedEventData(value, oldValue, true); % true for linked prop
+                        evtData = PropertyValueChangedEventData(value, oldValue, true, obj); % true for linked prop
                         obj.notify('PropertyWithLinkedInstanceChanged', evtData)
 
                     elseif numel(subs) > 1 && strcmp(subs(2).type, '.')
@@ -360,7 +360,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
                         % Assign new value and trigger event
                         linkedObj.subsasgn(subs(2:end), value);
-                        evtData = PropertyValueChangedEventData(value, oldValue, true); % true for linked prop
+                        evtData = PropertyValueChangedEventData(value, oldValue, true, obj); % true for linked prop
                         obj.notify('PropertyWithLinkedInstanceChanged', evtData)
 
                     elseif numel(subs) > 1 && strcmp(subs(2).type, '()')
@@ -436,10 +436,19 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 
                 obj = builtin('subsasgn', obj, subs, value);
 
-                if numel(obj) >= 1
+                if ~isempty(obj)
                     if obj.isSubsForPublicPropertyValue(subs)
-                        evtData = PropertyValueChangedEventData(value, oldValue, false); % false for property which is not embedded or linked
-                        obj.notify('InstanceChanged', evtData)
+                        if isscalar(obj)
+                            evtSource = obj;
+                        else
+                            if strcmp(subs(1).type, '()')
+                                evtSource = builtin('subsref', obj, subs(1));
+                            else
+                                error('Unexpected error. Please report')
+                            end
+                        end
+                        evtData = PropertyValueChangedEventData(value, oldValue, false, evtSource); % false for property which is not embedded or linked
+                        evtSource.notify('InstanceChanged', evtData)
                         % fprintf('Set "primitive" property type of %s\n', class(obj))
                     end
                 end
@@ -701,10 +710,24 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         % Return true if subs represent dot-indexing on a public property
             
             tf = false;
+
+            tempSubs = subs;
+
+            % If we are indexing into a subset of the objects, lets strip
+            % of the first subs element.
+            if strcmp( tempSubs(1).type, '()' )
+                if isscalar(tempSubs) % i.e instance() or instance(2) 
+                    return
+                else
+                    tempSubs = tempSubs(2:end);
+                end
+            end
     
-            if strcmp( subs(1).type, '.' )
+            % If subs represent dot-indexing, check if it is for a public
+            % property
+            if strcmp( tempSubs(1).type, '.' )
                 propNames = properties(obj);
-                tf = any( strcmp(subs(1).subs, propNames) );
+                tf = any( strcmp(tempSubs.subs, propNames) );
             end
         end
 

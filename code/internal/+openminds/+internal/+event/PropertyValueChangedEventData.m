@@ -5,16 +5,18 @@ classdef PropertyValueChangedEventData < event.EventData
         NewValue
         OldValue
         IsLinkedProperty = false
+        IsPropertyOf
     end
 
     methods
-        function obj = PropertyValueChangedEventData(newValue, oldValue, isLinkedProperty)
+        function obj = PropertyValueChangedEventData(newValue, oldValue, isLinkedProperty, isPropertyOf)
             if nargin < 3 || isempty(isLinkedProperty)
                 isLinkedProperty = false;
             end
             obj.NewValue = newValue;
             obj.OldValue = oldValue;
             obj.IsLinkedProperty = isLinkedProperty;
+            obj.IsPropertyOf = isPropertyOf;
         end
     end
 end
