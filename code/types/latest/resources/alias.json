@@ -433,6 +433,22 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.miscellaneous.GeoCoordinates",
+      "OldNames": [
+        "openminds.core.GeoCoordinates",
+        "openminds.GeoCoordinates"
+      ],
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.miscellaneous.Location",
+      "OldNames": [
+        "openminds.core.Location",
+        "openminds.Location"
+      ],
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.miscellaneous.QuantitativeValue",
       "OldNames": [
         "openminds.core.QuantitativeValue",

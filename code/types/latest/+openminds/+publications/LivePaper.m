@@ -66,7 +66,7 @@ classdef LivePaper < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["author", "description", "fullName", "hasVersion", "shortName"]
+        Required = ["author", "description", "fullName", "shortName"]
     end
 
     properties (Constant, Hidden)

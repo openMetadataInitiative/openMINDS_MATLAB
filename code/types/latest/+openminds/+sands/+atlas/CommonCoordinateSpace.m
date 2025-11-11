@@ -86,7 +86,7 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
     end
 
     properties (Access = protected)
-        Required = ["description", "fullName", "hasVersion", "shortName", "usedSpecies"]
+        Required = ["description", "fullName", "shortName", "usedSpecies"]
     end
 
     properties (Constant, Hidden)

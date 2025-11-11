@@ -15,9 +15,6 @@ classdef WebService < openminds.abstract.Schema
 %   fullName    : (1,1) string
 %                 Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion  : (1,:) <a href="matlab:help openminds.core.products.WebServiceVersion" style="font-weight:bold">WebServiceVersion</a>
-%                 Add all versions of this web service.
-%
 %   homepage    : (1,1) string
 %                 Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -44,10 +41,6 @@ classdef WebService < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this web service.
-        hasVersion (1,:) openminds.core.products.WebServiceVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -59,7 +52,7 @@ classdef WebService < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["description", "developer", "fullName", "hasVersion", "shortName"]
+        Required = ["description", "developer", "fullName", "shortName"]
     end
 
     properties (Constant, Hidden)
@@ -69,8 +62,7 @@ classdef WebService < openminds.abstract.Schema
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
-            'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
-            'hasVersion', "openminds.core.products.WebServiceVersion" ...
+            'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )

@@ -21,9 +21,6 @@ classdef Model < openminds.abstract.Schema
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.ModelVersion" style="font-weight:bold">ModelVersion</a>
-%                       Add all versions of this computational model.
-%
 %   homepage          : (1,1) string
 %                       Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -64,10 +61,6 @@ classdef Model < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this computational model.
-        hasVersion (1,:) openminds.core.products.ModelVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -87,7 +80,7 @@ classdef Model < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["abstractionLevel", "description", "developer", "fullName", "hasVersion", "scope", "shortName", "studyTarget"]
+        Required = ["abstractionLevel", "description", "developer", "fullName", "scope", "shortName", "studyTarget"]
     end
 
     properties (Constant, Hidden)
@@ -100,7 +93,6 @@ classdef Model < openminds.abstract.Schema
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.SWHID"], ...
-            'hasVersion', "openminds.core.products.ModelVersion", ...
             'scope', "openminds.controlledterms.ModelScope", ...
             'studyTarget', ["openminds.controlledterms.AuditoryStimulusType", "openminds.controlledterms.BiologicalOrder", "openminds.controlledterms.BiologicalSex", "openminds.controlledterms.BreedingType", "openminds.controlledterms.CellCultureType", "openminds.controlledterms.CellType", "openminds.controlledterms.Disease", "openminds.controlledterms.DiseaseModel", "openminds.controlledterms.ElectricalStimulusType", "openminds.controlledterms.GeneticStrainType", "openminds.controlledterms.GustatoryStimulusType", "openminds.controlledterms.Handedness", "openminds.controlledterms.MolecularEntity", "openminds.controlledterms.OlfactoryStimulusType", "openminds.controlledterms.OpticalStimulusType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.OrganismSystem", "openminds.controlledterms.Species", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.TactileStimulusType", "openminds.controlledterms.TermSuggestion", "openminds.controlledterms.TissueSampleType", "openminds.controlledterms.UBERONParcellation", "openminds.controlledterms.VisualStimulusType", "openminds.sands.atlas.ParcellationEntity", "openminds.sands.atlas.ParcellationEntityVersion", "openminds.sands.nonatlas.CustomAnatomicalEntity"] ...
         )

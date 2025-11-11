@@ -162,6 +162,8 @@ classdef Types < openminds.base.TypesEnumerationBase
         StockNumber("openminds.core.digitalidentifier.StockNumber")
         Comment("openminds.core.miscellaneous.Comment")
         Funding("openminds.core.miscellaneous.Funding")
+        GeoCoordinates("openminds.core.miscellaneous.GeoCoordinates")
+        Location("openminds.core.miscellaneous.Location")
         QuantitativeValue("openminds.core.miscellaneous.QuantitativeValue")
         QuantitativeValueArray("openminds.core.miscellaneous.QuantitativeValueArray")
         QuantitativeValueRange("openminds.core.miscellaneous.QuantitativeValueRange")

@@ -18,9 +18,6 @@ classdef Dataset < openminds.abstract.Schema
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.core.products.DatasetVersion" style="font-weight:bold">DatasetVersion</a>
-%                       Add all versions of this dataset.
-%
 %   homepage          : (1,1) string
 %                       Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -51,10 +48,6 @@ classdef Dataset < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this dataset.
-        hasVersion (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -66,7 +59,7 @@ classdef Dataset < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["author", "description", "fullName", "hasVersion", "shortName"]
+        Required = ["author", "description", "fullName", "shortName"]
     end
 
     properties (Constant, Hidden)
@@ -77,8 +70,7 @@ classdef Dataset < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'author', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
-            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.IdentifiersDotOrgID"], ...
-            'hasVersion', "openminds.core.products.DatasetVersion" ...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.IdentifiersDotOrgID"] ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )

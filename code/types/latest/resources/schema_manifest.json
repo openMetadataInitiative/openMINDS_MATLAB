@@ -515,6 +515,11 @@
         "group": null
     },
     {
+        "name": "geoCoordinates",
+        "module": "core",
+        "group": "miscellaneous"
+    },
+    {
         "name": "gustatoryStimulusType",
         "module": "controlledTerms",
         "group": null
@@ -588,6 +593,11 @@
         "name": "localFile",
         "module": "computation",
         "group": null
+    },
+    {
+        "name": "location",
+        "module": "core",
+        "group": "miscellaneous"
     },
     {
         "name": "measuredQuantity",

@@ -92,7 +92,7 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
     end
 
     properties (Access = protected)
-        Required = ["author", "description", "fullName", "hasTerminology", "hasVersion", "shortName"]
+        Required = ["author", "description", "fullName", "hasTerminology", "shortName"]
     end
 
     properties (Constant, Hidden)

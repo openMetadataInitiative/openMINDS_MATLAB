@@ -66,7 +66,7 @@ classdef WorkflowRecipe < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["description", "developer", "fullName", "hasVersion", "shortName"]
+        Required = ["description", "developer", "fullName", "shortName"]
     end
 
     properties (Constant, Hidden)
