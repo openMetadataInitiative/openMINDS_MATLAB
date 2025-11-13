@@ -3,8 +3,11 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 %
 %   PROPERTIES:
 %
-%   dataLocation       : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
+%   dataLocation       : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.miscellaneous.WebResource" style="font-weight:bold">WebResource</a>
 %                        Add the location of all files in which this parcellation terminology is stored.
+%
+%   digitalIdentifier  : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
+%                        Add the globally unique and persistent digital identifier of this parcellation terminology.
 %
 %   hasEntity          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
 %                        Add all parcellation entities which belong to this parcellation terminology.
@@ -16,8 +19,12 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 
     properties
         % Add the location of all files in which this parcellation terminology is stored.
-        dataLocation (1,:) openminds.core.data.File ...
+        dataLocation (1,:) openminds.internal.mixedtype.parcellationterminology.DataLocation ...
             {mustBeListOfUniqueItems(dataLocation)}
+
+        % Add the globally unique and persistent digital identifier of this parcellation terminology.
+        digitalIdentifier (1,:) openminds.internal.mixedtype.parcellationterminology.DigitalIdentifier ...
+            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
 
         % Add all parcellation entities which belong to this parcellation terminology.
         hasEntity (1,:) openminds.sands.atlas.ParcellationEntity ...
@@ -38,7 +45,8 @@ classdef ParcellationTerminology < openminds.abstract.Schema
 
     properties (Constant, Hidden)
         LINKED_PROPERTIES = struct(...
-            'dataLocation', "openminds.core.data.File", ...
+            'dataLocation', ["openminds.core.data.File", "openminds.core.miscellaneous.WebResource"], ...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
             'hasEntity', "openminds.sands.atlas.ParcellationEntity" ...
         )
         EMBEDDED_PROPERTIES = struct(...

@@ -24,9 +24,6 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
 %   hasTerminology     : (1,1) <a href="matlab:help openminds.sands.atlas.ParcellationTerminology" style="font-weight:bold">ParcellationTerminology</a>
 %                        Enter the parcellation terminology of this brain atlas.
 %
-%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.atlas.BrainAtlasVersion" style="font-weight:bold">BrainAtlasVersion</a>
-%                        Add versions of this brain atlas.
-%
 %   homepage           : (1,1) string
 %                        Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -70,10 +67,6 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
         hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminology ...
             {mustBeSpecifiedLength(hasTerminology, 0, 1)}
 
-        % Add versions of this brain atlas.
-        hasVersion (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -104,7 +97,6 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
             'author', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
-            'hasVersion', "openminds.sands.atlas.BrainAtlasVersion", ...
             'usedSpecies', "openminds.controlledterms.Species" ...
         )
         EMBEDDED_PROPERTIES = struct(...

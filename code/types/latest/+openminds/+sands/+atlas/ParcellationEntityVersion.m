@@ -85,7 +85,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
     end
 
     properties (Access = protected)
-        Required = ["name", "versionIdentifier"]
+        Required = ["lookupLabel", "name", "versionIdentifier"]
     end
 
     properties (Constant, Hidden)

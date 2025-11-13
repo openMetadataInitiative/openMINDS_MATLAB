@@ -18,9 +18,6 @@ classdef ValidationTest < openminds.abstract.Schema
 %   fullName                 : (1,1) string
 %                              Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion               : (1,:) <a href="matlab:help openminds.computation.ValidationTestVersion" style="font-weight:bold">ValidationTestVersion</a>
-%                              Add all versions of this validation test.
-%
 %   homepage                 : (1,1) string
 %                              Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -63,10 +60,6 @@ classdef ValidationTest < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this validation test.
-        hasVersion (1,:) openminds.computation.ValidationTestVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -106,7 +99,6 @@ classdef ValidationTest < openminds.abstract.Schema
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'digitalIdentifier', "openminds.core.digitalidentifier.DOI", ...
-            'hasVersion', "openminds.computation.ValidationTestVersion", ...
             'referenceDataAcquisition', "openminds.controlledterms.Technique", ...
             'scope', "openminds.controlledterms.ModelScope", ...
             'scoreType', "openminds.controlledterms.DifferenceMeasure", ...

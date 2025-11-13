@@ -67,7 +67,7 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
     end
 
     properties (Access = protected)
-        Required = ["name"]
+        Required = ["lookupLabel", "name"]
     end
 
     properties (Constant, Hidden)

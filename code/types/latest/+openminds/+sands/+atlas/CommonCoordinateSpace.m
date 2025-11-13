@@ -21,9 +21,6 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
 %   fullName           : (1,1) string
 %                        Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion         : (1,:) <a href="matlab:help openminds.sands.atlas.CommonCoordinateSpaceVersion" style="font-weight:bold">CommonCoordinateSpaceVersion</a>
-%                        Add all versions of this common coordinate space.
-%
 %   homepage           : (1,1) string
 %                        Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -63,10 +60,6 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this common coordinate space.
-        hasVersion (1,:) openminds.sands.atlas.CommonCoordinateSpaceVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -98,7 +91,6 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
             'author', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
-            'hasVersion', "openminds.sands.atlas.CommonCoordinateSpaceVersion", ...
             'usedSpecies', "openminds.controlledterms.Species" ...
         )
         EMBEDDED_PROPERTIES = struct(...

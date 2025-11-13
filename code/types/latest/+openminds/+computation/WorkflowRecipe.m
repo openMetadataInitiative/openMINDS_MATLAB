@@ -18,9 +18,6 @@ classdef WorkflowRecipe < openminds.abstract.Schema
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.computation.WorkflowRecipeVersion" style="font-weight:bold">WorkflowRecipeVersion</a>
-%                       Add all versions of this workflow recipe.
-%
 %   homepage          : (1,1) string
 %                       Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -51,10 +48,6 @@ classdef WorkflowRecipe < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this workflow recipe.
-        hasVersion (1,:) openminds.computation.WorkflowRecipeVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -77,8 +70,7 @@ classdef WorkflowRecipe < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'developer', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
-            'digitalIdentifier', "openminds.core.digitalidentifier.DOI", ...
-            'hasVersion', "openminds.computation.WorkflowRecipeVersion" ...
+            'digitalIdentifier', "openminds.core.digitalidentifier.DOI" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )

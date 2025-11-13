@@ -18,9 +18,6 @@ classdef LivePaper < openminds.abstract.Schema
 %   fullName          : (1,1) string
 %                       Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
 %
-%   hasVersion        : (1,:) <a href="matlab:help openminds.publications.LivePaperVersion" style="font-weight:bold">LivePaperVersion</a>
-%                       Add all versions of this live paper.
-%
 %   homepage          : (1,1) string
 %                       Enter the internationalized resource identifier (IRI) to the homepage of this research product.
 %
@@ -51,10 +48,6 @@ classdef LivePaper < openminds.abstract.Schema
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
-        % Add all versions of this live paper.
-        hasVersion (1,:) openminds.publications.LivePaperVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
-
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
 
@@ -77,8 +70,7 @@ classdef LivePaper < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'author', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
             'custodian', ["openminds.core.actors.Consortium", "openminds.core.actors.Organization", "openminds.core.actors.Person"], ...
-            'digitalIdentifier', "openminds.core.digitalidentifier.DOI", ...
-            'hasVersion', "openminds.publications.LivePaperVersion" ...
+            'digitalIdentifier', "openminds.core.digitalidentifier.DOI" ...
         )
         EMBEDDED_PROPERTIES = struct(...
         )
