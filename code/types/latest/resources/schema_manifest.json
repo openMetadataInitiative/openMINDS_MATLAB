@@ -370,6 +370,11 @@
         "group": "products"
     },
     {
+        "name": "dependencyImpact",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "deploymentEnvironmentType",
         "module": "controlledTerms",
         "group": null
@@ -655,6 +660,11 @@
         "group": "products"
     },
     {
+        "name": "modificationClause",
+        "module": "controlledTerms",
+        "group": null
+    },
+    {
         "name": "molecularEntity",
         "module": "controlledTerms",
         "group": null
@@ -708,6 +718,11 @@
         "name": "organization",
         "module": "core",
         "group": "actors"
+    },
+    {
+        "name": "organizationType",
+        "module": "controlledTerms",
+        "group": null
     },
     {
         "name": "parcellationEntity",
