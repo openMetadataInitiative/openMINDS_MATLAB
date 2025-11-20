@@ -35,7 +35,7 @@ function instance = instanceFromIRI(IRI)
     end
 
     [typeEnum, instanceName] = openminds.utility.parseInstanceIRI(IRI);
-    
+
     if contains(typeEnum.ClassName, "controlledterms")
         instance = feval(typeEnum.ClassName, IRI);
     else
