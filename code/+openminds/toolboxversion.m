@@ -5,7 +5,7 @@ function versionStr = toolboxversion()
     contentsFile = fullfile(rootPath, 'Contents.m');
 
     fileStr = fileread(contentsFile);
-   
+
     % First try to get a version with a sub-patch version number
     matchedStr = regexp(fileStr, 'Version \d*\.\d*\.\d*.\d*(?= )', 'match');
 

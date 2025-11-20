@@ -18,7 +18,7 @@ function pref = setpref(prefValues)
     end
 
     pref = openminds.utility.Preferences.getSingleton;
-    
+
     prefNames = fieldnames(prefValues);
     for i = 1:numel(prefNames)
         preferenceName = prefNames{i};

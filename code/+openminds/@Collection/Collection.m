@@ -52,7 +52,7 @@ classdef Collection < handle
         NumNodes
         NumTypes
     end
-    
+
     properties (SetAccess = protected)
         % Nodes - Dictionary storing instances as values with identifiers
         % as keys
@@ -67,11 +67,11 @@ classdef Collection < handle
 
     properties (SetAccess = protected)
         LinkResolver
-        
+
         % MetadataStore - Optional metadata store for saving/loading
         MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
     end
-    
+
     methods % Constructor
         function obj = Collection(instance, options)
         % Create an instance of an openMINDS collection
@@ -98,7 +98,7 @@ classdef Collection < handle
         %   creates a collection with the specified metadata store. If no
         %   instances are provided, the collection will automatically load
         %   instances from the store.
-        
+
         %   collection = openminds.Collection(..., NameA, ValueA, ... )
         %   also specifies optional name value pairs when creating the
         %   collection.
@@ -107,7 +107,7 @@ classdef Collection < handle
         %       - Name : A name for the collection
         %       - Description : A description of the collection
         %       - MetadataStore : A metadata store for saving/loading instances
-            
+
             arguments (Repeating)
                 instance % openminds.abstract.Schema
             end
@@ -127,13 +127,13 @@ classdef Collection < handle
                 obj.Nodes = containers.Map;
                 obj.TypeMap = containers.Map;
             end
-            
+
             obj.initializeFromInstances(instance)
 
             obj.Name = options.Name;
             obj.Description = options.Description;
             obj.MetadataStore = options.MetadataStore;
-            
+
             % Auto-load from MetadataStore if provided and no instances given
             if isempty(instance) && ~isempty(obj.MetadataStore)
                 obj.load();
@@ -149,7 +149,7 @@ classdef Collection < handle
                 numNodes = length(obj.Nodes);
             end
         end
-                
+
         function numTypes = get.NumTypes(obj)
             if isa(obj.TypeMap, 'dictionary')
                 numTypes = numEntries(obj.TypeMap);
@@ -203,7 +203,7 @@ classdef Collection < handle
                 end
             end
         end
-        
+
         function tf = contains(obj, instance)
             % Todo:work for arrays
             tf = false;
@@ -214,10 +214,10 @@ classdef Collection < handle
                 end
             end
         end
-        
+
         function remove(obj, instance)
         % remove - Remove metadata instance from the collection
-        
+
             if isstring(instance) || ischar(instance)
                 instanceId = instance;
             elseif openminds.utility.isInstance(instance)
@@ -254,11 +254,11 @@ classdef Collection < handle
                 instance = instance{1};
             end
         end
-        
+
         function instances = getAll(obj)
         % getAll - Get all instances of collection
             instances = obj.Nodes.values();
-            
+
             % For older MATLAB releases, the instances might be nested a
             % cell array, need to unnest if that's the case:
             if iscell(instances{1})
@@ -273,11 +273,11 @@ classdef Collection < handle
             end
 
             tf = false;
-            
+
             if obj.NumNodes == 0
                 return
             end
-            
+
             typeKeys = obj.TypeMap.keys;
             tf = any( endsWith(typeKeys, "."+type) ); %i.e ".Person"
         end
@@ -297,10 +297,10 @@ classdef Collection < handle
             if obj.NumNodes == 0
                 return
             end
-            
+
             instanceKeys = obj.getInstanceKeysForType(type);
             if isempty(instanceKeys); return; end
-            
+
             if isa(obj.Nodes, 'dictionary')
                 instances = obj.Nodes(instanceKeys);
             else
@@ -368,14 +368,14 @@ classdef Collection < handle
         %     ------
         %
         %     outputPaths (cell): A list of the file paths created.
-        
+
             arguments
                 obj openminds.Collection
                 savePath (1,1) string = ""
                 options.MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
                 % options.SaveFormat = "jsonld" Implement if more formats are supported
             end
-            
+
             % Update links before saving
             obj.updateLinks()
             instances = obj.getAll();
@@ -383,7 +383,7 @@ classdef Collection < handle
             if savePath ~= ""
                 tempStore = openminds.internal.store.createTemporaryStore(savePath);
                 outputPaths = tempStore.save(instances);
-            
+
             elseif ~isempty(options.MetadataStore)
                 outputPaths = obj.MetadataStore.save(instances);
 
@@ -395,7 +395,7 @@ classdef Collection < handle
                 error('openminds:Collection:NoSavePath', ...
                     'Either provide savePath or configure a MetadataStore');
             end
-            
+
             if ~nargout
                 clear outputPaths
             end
@@ -444,7 +444,7 @@ classdef Collection < handle
                     error('openminds:Collection:PathNotFound', 'Path not found: %s', loadPath);
                 end
             end
-            
+
             for i = 1:numel(instances)
                 if openminds.utility.isInstance(instances{i})
                     obj.addNode(instances{i});
@@ -477,13 +477,13 @@ classdef Collection < handle
         %   --------
         %   collection : openminds.Collection
         %       A new collection loaded with instances from the store
-        
+
             arguments
                 metadataStore (1,1) openminds.interface.MetadataStore
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
             end
-            
+
             % Create collection with the metadata store
             collection = openminds.Collection('MetadataStore', metadataStore, ...
                 'Name', options.Name, 'Description', options.Description);
@@ -501,7 +501,7 @@ classdef Collection < handle
             end
 
             wasAdded = false;
-            
+
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
             end
@@ -544,12 +544,12 @@ classdef Collection < handle
                     obj.TypeMap(instanceType) = {string(instance.id)};
                 end
             end
-            
+
             if ~nargout
                 clear wasAdded
             end
         end
-        
+
         % Add sub node instances (linked types) to the Node container.
         function addSubNodes(obj, instance)
             % Add links.
@@ -566,7 +566,7 @@ classdef Collection < handle
                 obj.addNode(embeddedInstances{i}, 'AddSubNodesOnly', true);
             end
         end
-        
+
         function identifier = getBlankNodeIdentifier(obj)
             fmt = '_:%06d';
             identifier = length(obj) + 1;
@@ -581,19 +581,19 @@ classdef Collection < handle
                 isFilePath = @(x) (ischar(x) || isstring(x)) && isfile(x);
                 isFolderPath = @(x) (ischar(x) || isstring(x)) && isfolder(x);
                 isMetadata = @(x) openminds.utility.isInstance(x);
-                
+
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
                     obj.load(instance{:})
-    
+
                 % Initialize from folder
                 elseif all( cellfun(isFolderPath, instance) )
                     obj.load(instance{:})
-    
+
                 % Initialize from instance(s)
                 elseif all( cellfun(isMetadata, instance) )
                     obj.add(instance{:});
-    
+
                 else
                     ME = MException(...
                         'OPENMINDS_MATLAB:Collection:InvalidInstanceSpecification', ...
@@ -611,7 +611,7 @@ classdef Collection < handle
 
             if obj.NumTypes > 0
                 typeKeys = obj.TypeMap.keys;
-    
+
                 isMatch = strcmp(typeKeys, instanceType.ClassName);
                 if any(isMatch)
                     if isa(obj.TypeMap, 'dictionary')
@@ -629,9 +629,9 @@ classdef Collection < handle
                     instanceKeys = {};
                     return
                 end
-                
+
                 existingKeys = obj.Nodes.keys();
-                
+
                 % Sanity check, make sure all keys exist in Nodes dictionary
                 assert( all( ismember( instanceKeys, existingKeys ) ), ...
                     'TypeMap has too many keys' )
