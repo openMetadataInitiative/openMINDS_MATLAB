@@ -10,12 +10,16 @@ classdef Preferences < matlab.mixin.CustomDisplay & handle
 %                                       - "help" : MATLAB docstrings
 %                                       - "online" : Online ReadTheDocs
 %                                       documentation
+%       AddControlledInstanceToCollection (logical): Whether to add
+%                                       openMINDS controlled instances to a
+%                                       collection
 
     properties (SetObservable)
         PropertyDisplayMode (1,1) string ...
             {mustBeMember(PropertyDisplayMode, ["all", "non-empty"])} = "all"
         DocLinkTarget (1,1) string ...
             {mustBeMember(DocLinkTarget, ["help", "online"])} = "online"
+        AddControlledInstanceToCollection (1,1) logical = true
     end
 
     properties (Constant, Access = private)

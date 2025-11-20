@@ -36,6 +36,7 @@ classdef Collection < handle
 
 %   Todo: Validation.
 %   - Linked subject states should have same subject
+%   - Add method to update links for specified instances
 
 % Need mechanism to check if embedded nodes are added to the collection
 
@@ -190,12 +191,15 @@ classdef Collection < handle
             end
             arguments
                 options.AddSubNodesOnly = false;
+                options.AbortIfNodeExists = true;
             end
 
             for i = 1:numel(instance)
                 thisInstance = instance{i};
                 for j = 1:numel(thisInstance) % If thisInstance is an array
-                    obj.addNode(thisInstance(j), "AddSubNodesOnly", options.AddSubNodesOnly);
+                    obj.addNode(thisInstance(j), ...
+                        "AddSubNodesOnly", options.AddSubNodesOnly, ...
+                        "AbortIfNodeExists", options.AbortIfNodeExists);
                 end
             end
         end
@@ -498,9 +502,13 @@ classdef Collection < handle
                 instance.id = obj.getBlankNodeIdentifier();
             end
 
-            % Do not add openminds controlled term instances
-            if startsWith(instance.id, "https://openminds.ebrains.eu/instances/")
-                return
+            % Do not add openminds controlled term instances if disabled in
+            % preferences
+            if startsWith(instance.id, "https://openminds.ebrains.eu/instances/") ...
+                || startsWith(instance.id, "https://openminds.om-i.org/instances/")
+                if ~openminds.getpref('AddControlledInstanceToCollection')
+                    return
+                end
             end
 
             if obj.NumNodes > 0
@@ -511,6 +519,10 @@ classdef Collection < handle
                     end
                 end
             end
+
+            % Add subnodes first
+            obj.addSubNodes(instance)
+
             
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
@@ -530,7 +542,6 @@ classdef Collection < handle
                 end
             end
             
-            obj.addSubNodes(instance)
             if ~nargout
                 clear wasAdded
             end
