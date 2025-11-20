@@ -331,6 +331,10 @@ classdef Collection < handle
                 allInstances = [allInstances{:}];
             end
 
+            if iscolumn(allInstances)
+                allInstances = reshape(allInstances, 1, []);
+            end
+
             for instance = allInstances
                 obj.addNode(instance{1}, ...
                     'AddSubNodesOnly', true, ...
@@ -523,7 +527,6 @@ classdef Collection < handle
             % Add subnodes first
             obj.addSubNodes(instance)
 
-            
             if ~options.AddSubNodesOnly
                 obj.Nodes(instance.id) = {instance};
                 wasAdded = true;
