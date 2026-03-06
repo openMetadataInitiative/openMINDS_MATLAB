@@ -24,14 +24,12 @@ function schemaName = getSchemaName(nameAlias)
     end
 
     C = struct2cell(typesVocab);
-    S = [C{:}];
 
-    allNames = {S.name};
-
+    allNames = cellfun(@(c) string(c.name), C);
     isMatch = strcmpi(allNames, nameAlias);
     
     if ~any(isMatch)
-        allLabels = {S.label};
+        allLabels = cellfun(@(c) string(c.label), C);
         isMatch = strcmpi(allLabels, nameAlias);
     end
 
