@@ -31,18 +31,18 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
                 'MATLAB:webservices:HTTP404StatusCodeError')
         end
 
-        function testSchemaDocLinkUBERONParcellation(testCase)
+        function testSchemaDocLinkBiologicalSex(testCase)
             import openminds.internal.utility.getSchemaDocLink
             
             url = getSchemaDocLink(...
-                "openminds.controlledterms.UBERONParcellation", ...
+                "openminds.controlledterms.BiologicalSex", ...
                 "Raw URL");
 
             try
                 webread(url);
             catch ME
                 errorMessage = sprintf([...
-                    'Failed to read documentation for UBERONParcellation with error:\n', ...
+                    'Failed to read documentation for BiologicalSex with error:\n', ...
                     '%s'], ME.message);
                 testCase.verifyFail(errorMessage)
             end

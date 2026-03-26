@@ -13,6 +13,13 @@ function data = getControlledInstance(instanceName, schemaName, moduleName, vers
     if ismissing(versionNumber)
         versionNumber = openminds.getModelVersion("VersionNumber");
     end
+
+    % Todo: remove. Pin latest version to v4.0 as instances from v5.0 are not 
+    % supported yet.
+    if versionNumber == "latest"
+        versionNumber = openminds.internal.utility.VersionNumber("4.0");
+        versionNumber.Format = "vX.Y";
+    end
     versionNumber = string(versionNumber);
 
     % Make type name lowercase unless it is an abbreviated typename like
