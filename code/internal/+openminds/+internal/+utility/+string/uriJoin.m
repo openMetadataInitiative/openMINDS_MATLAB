@@ -9,6 +9,6 @@ function strURI = uriJoin(varargin)
         strURI = strjoin(listOfStrings, '/');
     end
     catch
-        disp(varargin{:})
+        varargin{:}
     end
 end
