@@ -58,7 +58,7 @@ function data = getOfflineInstance(instanceName, schemaName, moduleName, version
 
     % assert(size(instanceTable, 1) == 1, 'Expected a single match for instance "%s", but %d was found.', instanceName, size(instanceTable, 1))
     % jsonStr = fileread(instanceTable.Filepath);
-    
+
     filePath = getOfflineFilepath(instanceName, schemaName, moduleName, versionNumber);
 
     if ~isfile(filePath)
