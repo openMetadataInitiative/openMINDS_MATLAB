@@ -10,5 +10,6 @@ function strURI = uriJoin(varargin)
     end
     catch
         varargin{:}
+        error('Debug')
     end
 end
