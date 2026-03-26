@@ -29,6 +29,12 @@ function versionNum = getModelVersion(outputType)
     end
     versionNum = cachedVersionNumber;
 
+    % Todo: remove. Pin latest version to v4.0 as v5.0 is not supported yet.
+    if versionNum == "latest"
+        versionNum = openminds.internal.utility.VersionNumber("4.0");
+        versionNum.Format = "vX.Y";
+    end
+
     if outputType == "char"
         versionNum = char(versionNum);
     end
