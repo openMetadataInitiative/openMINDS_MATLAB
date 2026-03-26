@@ -148,6 +148,9 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         
             numInstances = numel(filePaths);
             [types, modules, subGroups] = deal(repmat("", numInstances, 1));
+
+            hasWarned = containers.Map();
+
             for i = 1:numInstances
         
                 thisFolderSplit = split(folderNames(i), filesep);
@@ -179,7 +182,13 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                     modules(i) = "core";
                     subGroups(i) = missing;
                 else
-                    error('The instance folder with name "%s" is not implemented. Please report', thisFolderSplit(1))
+                    
+                    if ~isKey(hasWarned, thisFolderSplit(1))
+                        warning('OPENMINDS:InstanceLibrary:createInstanceTable:MissingTypeMapping', ...
+                           ['The instance folder with name "%s" is not ', ...
+                           'mapped to an openMINDS type. Please report'], thisFolderSplit(1))
+                        hasWarned(thisFolderSplit(1)) = true;
+                    end
                 end
             end
 
