@@ -41,11 +41,7 @@ classdef InstanceTest < matlab.unittest.TestCase
             end
 
             function dispNoOutput(instance) %#ok<INUSD>
-                try
                 c = evalc('disp(instance)'); %#ok<NASGU>
-                catch
-                    disp(c)
-                end
             end
         end
 

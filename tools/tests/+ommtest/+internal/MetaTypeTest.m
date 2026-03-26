@@ -6,8 +6,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
 
             registry = MetaTypeRegistry.getSingleton();
             testCase.verifyClass(registry, 'openminds.internal.meta.MetaTypeRegistry');
-            % Todo: uncomment. Currently pinned to v4.0 as v5.0 is not supported yet.
-            % testCase.verifyEqual(registry.ModelVersion, "latest")
+            testCase.verifyEqual(registry.ModelVersion, "latest")
 
             % Verify that we get the same handle if we ask for the singleton again
             newRegistry = MetaTypeRegistry.getSingleton();
