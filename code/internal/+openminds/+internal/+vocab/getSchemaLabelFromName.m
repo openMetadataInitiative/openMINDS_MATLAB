@@ -10,16 +10,15 @@ function schemaLabel = getSchemaLabelFromName(schemaName)
     end
 
     C = struct2cell(typesVocab);
-    S = [C{:}];
 
-    allNames = {S.name};
+    allNames = cellfun(@(c) string(c.name), C);
     isMatch = strcmpi(allNames, schemaName);
     
     if ~any(isMatch)
         throwNoMatchingSchemaException(schemaName);
     end
 
-    S = S(isMatch);
+    S = C{isMatch};
     schemaLabel = string( S(1).label );
 
     if isscalar(S)

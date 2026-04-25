@@ -7,12 +7,12 @@ function color = getSchemaColor(schemaName)
     end
     
     C = struct2cell(typesVocab);
-    S = [C{:}];
 
-    isMatch = strcmp({S.name}, schemaName);
+    allNames = cellfun(@(c) string(c.name), C);
+    isMatch = strcmpi(allNames, schemaName);
 
     if any(isMatch)
-        color = S(isMatch).color;
+        color = C{isMatch}.color;
     else
         error('No schemas matched name "%s"', schemaName)
     end
