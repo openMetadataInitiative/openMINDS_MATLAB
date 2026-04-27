@@ -4,7 +4,6 @@ Generates openMINDS MATLAB classes.
 
 import glob
 import json
-import math
 import os
 import re
 from typing import List, Dict
@@ -518,7 +517,7 @@ def _create_property_validator_functions(name, property_info):
 
         if "date" in property_info.get("_formats"):
             validation_functions += [f"mustBeValidDate({property_name})"]
-        elif "time" in property_info.get("_formats") == "time":
+        elif "time" in property_info.get("_formats"):
             validation_functions += [f"mustBeValidTime({property_name})"]
 
     if isinstance( property_info.get("type"), list ):
@@ -550,18 +549,24 @@ def _create_property_validator_functions(name, property_info):
 
         validation_functions += [f"mustMatchPattern({name}, '{escaped_str_pattern}')"]
 
-    if 'minimum' in property_info or 'maximum' in property_info:
-        min_value = property_info.get('minimum', float('nan'))
-        max_value = property_info.get('maximum', float('nan'))
+    if any(key in property_info for key in ('minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum')):
+        if property_info.get("type") == "integer":
+            validation_functions += [f"mustBeInteger({name})"]
 
-        validation_functions += [f"mustBeInteger({name})"]
-
-        if not math.isnan(min_value) and not math.isnan(max_value):
+        if 'minimum' in property_info and 'maximum' in property_info:
+            min_value = property_info['minimum']
+            max_value = property_info['maximum']
             validation_functions += [f"mustBeInRange({name}, {min_value}, {max_value})"]
-        elif math.isnan(min_value):
-            validation_functions += [f"mustBeLessThanOrEqual({name}, {max_value})"]
-        elif math.isnan(max_value):
-            validation_functions += [f"mustBeGreaterThanOrEqual({name}, {min_value})"]
+        elif 'minimum' in property_info:
+            validation_functions += [f"mustBeGreaterThanOrEqual({name}, {property_info['minimum']})"]
+        elif 'maximum' in property_info:
+            validation_functions += [f"mustBeLessThanOrEqual({name}, {property_info['maximum']})"]
+
+        if 'exclusiveMinimum' in property_info:
+            validation_functions += [f"mustBeGreaterThan({name}, {property_info['exclusiveMinimum']})"]
+
+        if 'exclusiveMaximum' in property_info:
+            validation_functions += [f"mustBeLessThan({name}, {property_info['exclusiveMaximum']})"]
 
     return validation_functions
 
