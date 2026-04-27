@@ -16,10 +16,10 @@ jobs:
       build_updated: ${{ steps.check_changes.outputs.changes_detected }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.11
 
@@ -29,7 +29,7 @@ jobs:
           python build.py
 
       - name: Checkout main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
           path: main
@@ -52,7 +52,7 @@ jobs:
 
       - name: Upload build (target) as artifact
         if: steps.check_changes.outputs.changes_detected == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build
           path: target
@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload injection script as artifact
         if: steps.check_changes.outputs.changes_detected == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: injection-script
           path: scripts/apply-new-build.sh
@@ -73,18 +73,18 @@ jobs:
     if: needs.build.outputs.build_updated == 'true'
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
 
       - name: Download build (target) artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build
           path: target
 
       - name: Download injection script
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: injection-script
           path: scripts
@@ -95,7 +95,7 @@ jobs:
           scripts/apply-new-build.sh .
 
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v2
+        uses: matlab-actions/setup-matlab@v3
         with:
           release: latest
           cache: true
@@ -112,7 +112,7 @@ jobs:
           tools_directory: tools
       
       - name: Restore MATLAB path
-        uses: matlab-actions/run-command@v2
+        uses: matlab-actions/run-command@v3
         if: always()
         with:
           command: "restoredefaultpath(); savepath()"
@@ -124,19 +124,19 @@ jobs:
     if: needs.test-code.result == 'success' && needs.build.outputs.build_updated == 'true'
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
           ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Download build (target) artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: build
           path: target
 
       - name: Download injection script
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: injection-script
           path: scripts
