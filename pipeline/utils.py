@@ -228,10 +228,12 @@ def save_resource_files(version, schema_path_list):
     # Save manifest to file as json
     with open(os.path.join(target_directory, "schema_manifest.json"), "w") as f:
         json.dump(manifest, f, indent=4)
+        f.write("\n")
 
     # Save alias definitions to file as json
     with open(os.path.join(target_directory, "alias.json"), "w") as f:
         json.dump(alias_json, f, indent=2)
+        f.write("\n")
 
 def save_enumeration_classes(enum_type, version, schema_loader, enumeration_template:Template):
 

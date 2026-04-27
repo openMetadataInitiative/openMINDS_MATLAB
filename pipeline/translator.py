@@ -314,6 +314,7 @@ class MATLABSchemaBuilder(object):
         }
 
         mixedtype_classdef_str = self.mixedtype_class_template.render(template_variables)
+        mixedtype_classdef_str = _strip_trailing_whitespace(mixedtype_classdef_str)
 
         with open(file_path, "w", encoding="utf-8") as target_file:
             target_file.write(mixedtype_classdef_str)
