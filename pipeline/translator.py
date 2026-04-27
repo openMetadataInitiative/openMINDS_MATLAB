@@ -350,6 +350,9 @@ def _generate_class_name(iri, class_name_map):
     Generate a class name from an IRI. 
     E.g https://openminds.ebrains.eu/core/Subject -> openminds.core.Subject
     """
+    if iri in class_name_map:
+        return class_name_map[iri]
+
     if iri.startswith("https://"): # v3 and lower
         parts = iri.split("/")[-2:]
     else: # v4 and higher
@@ -361,7 +364,7 @@ def _generate_class_name(iri, class_name_map):
     type_name = type_name[0].upper() + type_name[1:]
 
     if type_name not in class_name_map:
-        raise KeyError(f"Class name '{type_name}' (IRI: {iri}) was not found in the map of all class names.")
+        raise KeyError(f"Class name for IRI '{iri}' was not found in the map of all class names.")
 
     return class_name_map[type_name]
 

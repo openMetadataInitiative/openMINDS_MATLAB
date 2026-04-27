@@ -143,12 +143,20 @@ def get_class_name_map(schema_loader, version):
 
     for schema_file in schema_files:
         schema_info = _parse_source_file_path(schema_file, root_path)
-        class_name_map[schema_info['type_name']] = _get_matlab_class_name(schema_info)
+        matlab_class_name = _get_matlab_class_name(schema_info)
+
+        with open(schema_file, "r", encoding="utf-8") as file:
+            schema_payload = json.load(file)
+
+        if "_type" in schema_payload:
+            class_name_map[schema_payload["_type"]] = matlab_class_name
+
+        class_name_map.setdefault(schema_info['type_name'], matlab_class_name)
 
     # Add some exceptions
     if version == "v2.0":
-        print(class_name_map["CustomAnatomicalEntity"])
         class_name_map["AnatomicalEntity"] = class_name_map["CustomAnatomicalEntity"]
+        class_name_map["https://openminds.ebrains.eu/sands/AnatomicalEntity"] = class_name_map["CustomAnatomicalEntity"]
 
 
     return class_name_map
@@ -322,4 +330,3 @@ def _get_template_variables(enum_type, schema_files, root_path):
     
 def _strip_trailing_whitespace(s):
     return "\n".join([line.rstrip() for line in s.splitlines()]) + "\n" # Also add single newline at the end
-
