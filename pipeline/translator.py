@@ -390,7 +390,7 @@ def _get_schema_display_label(schema_short_name):
         schema_name_label = schema_short_name
     else:
         #Replace each capital letter with a space and the capital letter
-        schema_name_label = re.sub("([A-Z])", " \g<0>", schema_short_name).strip().lower()
+        schema_name_label = re.sub("([A-Z])", r" \g<0>", schema_short_name).strip().lower()
 
     return schema_name_label
 
