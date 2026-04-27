@@ -528,27 +528,20 @@ def _create_property_validator_functions(name, property_info):
         if not allow_multiple:
             validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
 
-    if 'maxItems' in property_info:
-        if 'minItems' in property_info:
-            min_items = property_info['minItems']
-            # Uncomment the following lines if needed
-            # if 'required' in obj.Schema and name not in obj.Schema['required']:
-            #     min_items = 0
-        else:
-            min_items = 0
-
-        max_items = property_info['maxItems']
+    if 'minItems' in property_info or 'maxItems' in property_info:
+        min_items = property_info.get('minItems', 0)
+        max_items = property_info.get('maxItems', 'inf')
         validation_functions += [f"mustBeSpecifiedLength({name}, {min_items}, {max_items})"]
 
-    elif 'uniqueItems' in property_info:
+    if property_info.get('uniqueItems') is True or property_info.get('unqiueItems') is True:
         validation_functions += [f"mustBeListOfUniqueItems({name})"]
 
-    elif 'minLength' in property_info or 'maxLength' in property_info:
+    if 'minLength' in property_info or 'maxLength' in property_info:
         min_length = property_info.get('minLength', 0)
         max_length = property_info.get('maxLength', float('inf'))
         validation_functions += [f"mustBeValidStringLength({name}, {min_length}, {max_length})"]
 
-    elif 'pattern' in property_info:
+    if 'pattern' in property_info:
         if 'archive.softwareheritage' in property_info['pattern']:
             print("SWHID str pattern validation is hard-coded")
             escaped_str_pattern = r"^https://archive.softwareheritage.org/swh:1:(cnt|dir|rel|rev|snp):[0-9a-f]{40}(;(origin|visit|anchor|path|lines)=[^ \t\r\n\f]+)*$"
@@ -557,7 +550,7 @@ def _create_property_validator_functions(name, property_info):
 
         validation_functions += [f"mustMatchPattern({name}, '{escaped_str_pattern}')"]
 
-    elif 'minimum' in property_info or 'maximum' in property_info:
+    if 'minimum' in property_info or 'maximum' in property_info:
         min_value = property_info.get('minimum', float('nan'))
         max_value = property_info.get('maximum', float('nan'))
 
