@@ -32,6 +32,21 @@ types_with_controlled_instances = [
     "ParcellationEntityVersion"
 ]
 
+controlled_term_base_properties = {
+    "definition",
+    "description",
+    "identifier",
+    "interlexIdentifier",
+    "knowledgeSpaceLink",
+    "name",
+    "ontologyIdentifier",
+    "otherCrossReference",
+    "otherOntologyIdentifier",
+    "preferredCrossReference",
+    "preferredOntologyIdentifier",
+    "synonym",
+}
+
 type_name_map = {
     "string": "string",
     "integer": "int64",
@@ -229,6 +244,11 @@ class MATLABSchemaBuilder(object):
         
         linked_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_linked"] ]
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
+        additional_controlled_term_props = [
+            prop for prop in props
+            if self._schema_module_name == "controlledTerms"
+            and prop["name"] not in controlled_term_base_properties
+        ]
 
         # Some schemas had the wrong type in older model versions, so this is unreliable
         #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map).split(".")[-1]
@@ -268,6 +288,7 @@ class MATLABSchemaBuilder(object):
             "required_properties": [f'{prop["name"]}' for prop in props if prop["required"]],
             "linked_types": linked_types,
             "embedded_types": embedded_types,
+            "additional_controlled_term_props": additional_controlled_term_props,
             "display_label_method_expression": display_label_method_expression,
             "known_instance_list": known_instance_list,
         }
