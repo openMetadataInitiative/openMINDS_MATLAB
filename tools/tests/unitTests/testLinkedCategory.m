@@ -25,16 +25,28 @@ classdef testLinkedCategory < matlab.unittest.TestCase
         function initializeInstances(testCase)
 
             % Create a dataset with one author of type Person
-            ds = openminds.core.Dataset();
-            ds.author = personWithOneAffiliation;
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                [person, affiliation] = personWithOneAffiliation();
+                ds = testLinkedCategory.createDatasetWithContributors(person, affiliation);
+            else
+                ds = openminds.core.Dataset();
+                ds.author = personWithOneAffiliation;
+            end
 
             testCase.DatasetWithOnePersonAuthor = ds;
 
             % Create a dataset and add two persons as authors.
-            ds = openminds.core.Dataset();
-            person1 = personWithOneAffiliation;
-            person2 = personWithTwoAffiliations;
-            ds.author = [person1, person2];
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                [person1, affiliation1] = personWithOneAffiliation();
+                [person2, affiliations2] = personWithTwoAffiliations();
+                ds = testLinkedCategory.createDatasetWithContributors( ...
+                    [person1, person2], [affiliation1, affiliations2]);
+            else
+                ds = openminds.core.Dataset();
+                person1 = personWithOneAffiliation;
+                person2 = personWithTwoAffiliations;
+                ds.author = [person1, person2];
+            end
 
             testCase.DatasetWithTwoPersonAuthor = ds;
         end
@@ -52,7 +64,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             % Get dataset for testing
             ds = testCase.DatasetWithOnePersonAuthor;
 
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
             expectedAuthorType = 'openminds.core.actors.Person';
             
             testCase.assertClass(author, expectedAuthorType)
@@ -61,7 +73,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
         function testRetrieveNestedScalarHomogeneousType(testCase)
             % Get dataset for testing
             ds = testCase.DatasetWithOnePersonAuthor;
-            organization = ds.author.affiliation.memberOf;
+            organization = testLinkedCategory.getOrganizations(ds);
             if ~isempty(organization)
                 testCase.assertClass(organization, 'openminds.core.actors.Organization')
             end
@@ -71,7 +83,8 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             % Get dataset for testing
             ds = testCase.DatasetWithOnePersonAuthor;
 
-            organizationName = ds.author.affiliation.memberOf.fullName;
+            organization = testLinkedCategory.getOrganizations(ds);
+            organizationName = ommtest.oneoffs.organizationName(organization);
             testCase.assertClass(organizationName, "string")
             
             % Alternative: This does not work.
@@ -83,14 +96,14 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             % Get dataset for testing
             ds = testCase.DatasetWithTwoPersonAuthor;
 
-            affiliationList = [ds.author.affiliation];
-            organizationList = [affiliationList.memberOf];
-            organizationName = [organizationList.fullName];
+            affiliationList = testLinkedCategory.getAffiliations(ds);
+            organizationList = testLinkedCategory.getOrganizations(ds);
+            organizationName = arrayfun( ...
+                @ommtest.oneoffs.organizationName, organizationList);
             
             testCase.assertClass(organizationName, 'string')
             
-            S = ds.author.affiliation; % Assert length of this is 3
-            testCase.assertLength(S, 3)
+            testCase.assertLength(affiliationList, 3)
         end
 
         function testRetrieveNonScalarHomogeneousType(testCase)
@@ -100,7 +113,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             ds = testCase.DatasetWithTwoPersonAuthor;
 
             % Check type of author property
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
             expectedAuthorType = 'openminds.core.actors.Person';
             testCase.assertClass(author, expectedAuthorType)
         end
@@ -111,7 +124,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
 
             % Todo: What should be expected here ?
             ds = testCase.DatasetWithTwoPersonAuthor;
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
 
             expectedParenIndexedType = 'openminds.core.actors.Person';
             testCase.assertClass(author(1), expectedParenIndexedType)
@@ -122,7 +135,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             % all elements of array
 
             ds = testCase.DatasetWithTwoPersonAuthor;
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
             
             expectedParenIndexedType = 'openminds.core.actors.Person';
             testCase.assertClass(author(:), expectedParenIndexedType)
@@ -130,7 +143,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
 
         function testNonScalarHomogeneousTypeLength(testCase)
             ds = testCase.DatasetWithTwoPersonAuthor;
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
             
             % Test length of array
             testCase.assertLength(author, 2)
@@ -143,7 +156,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             
             % Get dataset for testing
             ds = testCase.DatasetWithOnePersonAuthor;
-            author = ds.author;
+            author = testLinkedCategory.getAuthors(ds);
             
             try
                 authorName = author.givenName;
@@ -151,6 +164,48 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             catch
                 error('openMINDS:LinkedCategorySubsrefFailed', ...
                     'Failed to retrieve property from author')
+            end
+        end
+    end
+
+    methods (Static, Access = private)
+        function ds = createDatasetWithContributors(persons, affiliations)
+            contribution = openminds.core.Contribution( ...
+                "contributor", persons, ...
+                "type", openminds.controlledterms.ContributionType( ...
+                    [], "name", "authoring"));
+
+            ds = openminds.core.Dataset( ...
+                "contribution", contribution, ...
+                "contributorAffiliation", affiliations, ...
+                "description", "Test dataset", ...
+                "fullName", "Test dataset", ...
+                "shortName", "test-dataset");
+        end
+
+        function authors = getAuthors(ds)
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                authors = [ds.contribution.contributor];
+            else
+                authors = ds.author;
+            end
+        end
+
+        function affiliations = getAffiliations(ds)
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                affiliations = ds.contributorAffiliation;
+            else
+                affiliations = [ds.author.affiliation];
+            end
+        end
+
+        function organizations = getOrganizations(ds)
+            affiliations = testLinkedCategory.getAffiliations(ds);
+
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                organizations = [affiliations.organization];
+            else
+                organizations = [affiliations.memberOf];
             end
         end
     end

@@ -93,19 +93,21 @@ classdef ResolverTest < matlab.unittest.TestCase
             authorRef = openminds.core.Person('id', 'https://mock.io/author_456');
             
             % Create dataset with author reference
-            dataset = openminds.core.Dataset(...
-                'fullName', "Test Dataset", ...
-                'author', authorRef);
+            dataset = ResolverTest.createDatasetWithAuthors( ...
+                authorRef, "Test Dataset");
             
             % Verify author starts empty
-            testCase.verifyEqual(dataset.author.givenName, "");
+            authors = ResolverTest.getDatasetAuthors(dataset);
+            testCase.verifyEqual(authors.givenName, "");
             
             % Resolve the dataset (should resolve linked authors)
-            dataset.resolve('NumLinksToResolve', 1);
+            dataset.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
             
             % Verify author is now resolved
-            testCase.verifyEqual(dataset.author.givenName, "Mock");
-            testCase.verifyEqual(dataset.author.familyName, "Person");
+            authors = ResolverTest.getDatasetAuthors(dataset);
+            testCase.verifyEqual(authors.givenName, "Mock");
+            testCase.verifyEqual(authors.familyName, "Person");
         end
         
         function testInstanceResolverCanResolve(testCase)
@@ -189,18 +191,19 @@ classdef ResolverTest < matlab.unittest.TestCase
             
             % Create a dataset with an author reference
             authorRef = openminds.core.Person('id', 'https://mock.io/author_789');
-            dataset = openminds.core.Dataset(...
-                'fullName', "Test Dataset", ...
-                'author', authorRef);
+            dataset = ResolverTest.createDatasetWithAuthors( ...
+                authorRef, "Test Dataset");
             
             % Test that resolve method exists and can be called
             testCase.verifyTrue(ismethod(dataset, 'resolve'));
             
             % Resolve with link depth of 1
-            dataset.resolve('NumLinksToResolve', 1);
+            dataset.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
             
             % Verify the author was resolved
-            testCase.verifyEqual(dataset.author.givenName, "Mock");
+            authors = ResolverTest.getDatasetAuthors(dataset);
+            testCase.verifyEqual(authors.givenName, "Mock");
         end
         
         function testResolveMultipleLinkedInstances(testCase)
@@ -213,16 +216,54 @@ classdef ResolverTest < matlab.unittest.TestCase
             author2 = openminds.core.Person('id', 'https://mock.io/author2');
             
             % Create dataset with multiple authors
-            dataset = openminds.core.Dataset(...
-                'fullName', "Multi-Author Dataset", ...
-                'author', {author1, author2});
+            dataset = ResolverTest.createDatasetWithAuthors( ...
+                [author1, author2], "Multi-Author Dataset");
             
             % Resolve with link depth
-            dataset.resolve('NumLinksToResolve', 1);
+            dataset.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
             
             % Verify both authors were resolved
-            testCase.verifyEqual(dataset.author(1).givenName, "Mock");
-            testCase.verifyEqual(dataset.author(2).givenName, "Mock");
+            authors = ResolverTest.getDatasetAuthors(dataset);
+            testCase.verifyEqual(authors(1).givenName, "Mock");
+            testCase.verifyEqual(authors(2).givenName, "Mock");
+        end
+    end
+
+    methods (Static, Access = private)
+        function dataset = createDatasetWithAuthors(authors, fullName)
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                contribution = openminds.core.Contribution( ...
+                    "contributor", authors, ...
+                    "type", openminds.controlledterms.ContributionType( ...
+                        [], "name", "authoring"));
+
+                dataset = openminds.core.Dataset( ...
+                    "contribution", contribution, ...
+                    "description", fullName, ...
+                    "fullName", fullName, ...
+                    "shortName", fullName);
+            else
+                dataset = openminds.core.Dataset( ...
+                    "fullName", fullName, ...
+                    "author", authors);
+            end
+        end
+
+        function authors = getDatasetAuthors(dataset)
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                authors = [dataset.contribution.contributor];
+            else
+                authors = dataset.author;
+            end
+        end
+
+        function depth = datasetAuthorResolveDepth()
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                depth = 2;
+            else
+                depth = 1;
+            end
         end
     end
 end
