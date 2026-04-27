@@ -7,7 +7,7 @@ import json
 import os
 import re
 from typing import List, Dict
-from collections import defaultdict
+from collections import Counter, defaultdict
 import warnings
 
 from jinja2 import Template
@@ -31,21 +31,6 @@ types_with_controlled_instances = [
     "ParcellationEntity",
     "ParcellationEntityVersion"
 ]
-
-controlled_term_base_properties = {
-    "definition",
-    "description",
-    "identifier",
-    "interlexIdentifier",
-    "knowledgeSpaceLink",
-    "name",
-    "ontologyIdentifier",
-    "otherCrossReference",
-    "otherOntologyIdentifier",
-    "preferredCrossReference",
-    "preferredOntologyIdentifier",
-    "synonym",
-}
 
 type_name_map = {
     "string": "string",
@@ -73,6 +58,7 @@ class MATLABSchemaBuilder(object):
 
     def __init__(self, schema_file_path:str, root_path:str, class_name_map:Dict[str, str], jinja_templates:Dict[str, Template]):
         
+        self._schema_root_path = root_path
         self._parse_source_file_path(schema_file_path, root_path)
         self._class_name_map = class_name_map
 
@@ -244,11 +230,17 @@ class MATLABSchemaBuilder(object):
         
         linked_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_linked"] ]
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
-        additional_controlled_term_props = [
-            prop for prop in props
-            if self._schema_module_name == "controlledTerms"
-            and prop["name"] not in controlled_term_base_properties
-        ]
+        if self._schema_module_name == "controlledTerms":
+            controlled_term_base_properties = _get_controlled_term_base_properties(
+                self._schema_root_path,
+                self.version,
+            )
+            additional_controlled_term_props = [
+                prop for prop in props
+                if prop["name"] not in controlled_term_base_properties
+            ]
+        else:
+            additional_controlled_term_props = []
 
         # Some schemas had the wrong type in older model versions, so this is unreliable
         #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map).split(".")[-1]
@@ -344,6 +336,31 @@ class MATLABSchemaBuilder(object):
 def _create_matlab_name(json_name):
     """Remove the openMINDS prefix from a name"""
     return json_name.split('/')[-1]
+
+
+def _get_controlled_term_base_properties(schema_root_path, version):
+    """Return the common controlled-term property set for a schema version."""
+    controlled_term_schema_paths = glob.glob(
+        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+    )
+
+    property_sets = Counter()
+
+    for schema_file_path in controlled_term_schema_paths:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
+            schema_payload = json.load(schema_file)
+
+        property_names = frozenset(
+            _create_matlab_name(property_name)
+            for property_name in schema_payload.get("properties", {})
+        )
+        property_sets[property_names] += 1
+
+    if not property_sets:
+        return set()
+
+    return set(property_sets.most_common(1)[0][0])
+
 
 def _generate_class_name(iri, class_name_map):
     """
