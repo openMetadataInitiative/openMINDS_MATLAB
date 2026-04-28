@@ -49,6 +49,12 @@ format_map = {
     "ECMA262": "string"
 }
 
+PROPERTY_NAME_OVERRIDES = {
+    # MATLAB identifier override for openMINDS property names that are not
+    # valid MATLAB property names.
+    "z-stepSize": "zStepSize",
+}
+
 OUTPUT_FILE_FORMAT = "m"
 TEMPLATE_FILE_NAME = os.path.join("templates", "schema_class_template.txt")
 TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template.txt")
@@ -128,10 +134,23 @@ class MATLABSchemaBuilder(object):
         schema_short_name = _parse_schema_type( schema[SCHEMA_PROPERTY_TYPE] )
 
         props = [] # List of template property attributes (shortened name to avoid very long lines)
+        property_name_map = []
+        property_names = set()
 
         for full_name, property_info in sorted(schema["properties"].items(), key=_property_name_sort_key):
-            
+
+            openminds_property_name = _get_openminds_property_name(full_name)
             property_name = _create_matlab_name(full_name)
+
+            if property_name in property_names:
+                raise ValueError(f"Duplicate MATLAB property name '{property_name}' in schema '{schema_short_name}'.")
+            property_names.add(property_name)
+
+            if property_name != openminds_property_name:
+                property_name_map.append({
+                    "matlab_name": property_name,
+                    "openminds_name": openminds_property_name,
+                })
 
             allow_multiple = property_info.get("type") == "array"
             has_linked_type = SCHEMA_PROPERTY_LINKED_TYPES in property_info
@@ -269,6 +288,7 @@ class MATLABSchemaBuilder(object):
             "required_properties": [f'{prop["name"]}' for prop in props if prop["required"]],
             "linked_types": linked_types,
             "embedded_types": embedded_types,
+            "property_name_map": property_name_map,
             "display_label_method_expression": display_label_method_expression,
             "known_instance_list": known_instance_list,
         }
@@ -324,6 +344,11 @@ class MATLABSchemaBuilder(object):
 
 def _create_matlab_name(json_name):
     """Remove the openMINDS prefix from a name"""
+    property_name = _get_openminds_property_name(json_name)
+    return PROPERTY_NAME_OVERRIDES.get(property_name, property_name)
+
+def _get_openminds_property_name(json_name):
+    """Remove the openMINDS prefix from a property name"""
     return json_name.split('/')[-1]
 
 def _generate_class_name(iri, class_name_map):
