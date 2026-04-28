@@ -577,12 +577,10 @@ def _create_property_validator_functions(name, property_info):
     validation_functions = []
 
     if property_info.get("type") == 'integer':
-        validation_functions += [f'mustBeMinLength({property_name}, 0)']
-        validation_functions += [f'mustBeMaxLength({property_name}, 1)']
+        validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
     if _is_datetime_format(property_info):
-        validation_functions += [f'mustBeMinLength({property_name}, 0)']
-        validation_functions += [f'mustBeMaxLength({property_name}, 1)']
+        validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
         if "date" in property_info.get("_formats"):
             validation_functions += [f"mustBeValidDate({property_name})"]
@@ -594,8 +592,7 @@ def _create_property_validator_functions(name, property_info):
 
     if has_linked_type or has_embedded_type:
         if not allow_multiple:
-            validation_functions += [f'mustBeMinLength({property_name}, 0)']
-            validation_functions += [f'mustBeMaxLength({property_name}, 1)']
+            validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
     if 'minItems' in property_info or 'maxItems' in property_info:
         has_min_items = 'minItems' in property_info
