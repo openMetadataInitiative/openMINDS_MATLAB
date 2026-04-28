@@ -10,8 +10,8 @@ function controlledTermVersion = activateControlledTermBase(modelVersion)
 
     rootPath = openminds.internal.rootpath();
     abstractFolder = fullfile(rootPath, "internal", "+openminds", "+abstract");
-    sourceFile = fullfile(abstractFolder, "private", ...
-        "ControlledTerm_" + controlledTermVersion + ".m");
+    sourceFile = fullfile(abstractFolder, "private", "controlledTerms", ...
+        controlledTermVersion, "ControlledTerm.m");
     targetFile = fullfile(abstractFolder, "ControlledTerm.m");
 
     if ~isfile(sourceFile)

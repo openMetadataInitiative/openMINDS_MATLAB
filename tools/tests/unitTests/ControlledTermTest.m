@@ -56,7 +56,8 @@ classdef ControlledTermTest < matlab.unittest.TestCase
         function filePath = getControlledTermBasePath(~, version)
             rootPath = openminds.internal.rootpath();
             filePath = fullfile(rootPath, "internal", "+openminds", ...
-                "+abstract", "private", "ControlledTerm_" + version + ".m");
+                "+abstract", "private", "controlledTerms", version, ...
+                "ControlledTerm.m");
         end
     end
 end
