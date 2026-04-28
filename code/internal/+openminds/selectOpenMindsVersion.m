@@ -50,6 +50,8 @@ function selectOpenMindsVersion(versionNumber)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
 
+    openminds.internal.activateControlledTermBase(versionNumber);
+
     % Get version number as string matching version numbers of version folders
     if versionNumber == "latest"
         versionAsString = 'latest';
@@ -68,6 +70,10 @@ function selectOpenMindsVersion(versionNumber)
     addpath(genpath( fullfile(rootPath, "types", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
     addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+
+    % Version selection can replace shared abstract class files.
+    % Clear cached class definitions so MATLAB sees the active files.
+    evalin('base', 'clear classes')
 
     % Add a second pause for changes to take effect.
     pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
