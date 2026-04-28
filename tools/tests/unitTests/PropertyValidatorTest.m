@@ -83,25 +83,24 @@ classdef PropertyValidatorTest < matlab.unittest.TestCase
                 'OPENMINDS_MATLAB:PropertyValidators:MustBeTypeOf')
         end
 
-        function testMustBeSpecifiedLength(testCase)
+        function testMustBeMinAndMaxLength(testCase)
             testValue = 1:5;
-            
-            % Test function when value exactly matches the required length
-            mustBeSpecifiedLength(testValue, 1, 5)
-            
-            % Test function when value is inside the required length
-            % interval
-            mustBeSpecifiedLength(testValue, 0, 6)
 
-            % Test function when value is too long
-            testCase.verifyError(...
-                @() mustBeSpecifiedLength(testValue, 1, 4), ...
-                'OPENMINDS_MATLAB:PropertyValidators:ListIsTooLong')
+            mustBeMinLength(testValue, 5)
+            mustBeMinLength(testValue, 4)
+            mustBeMinLength([], 1)
 
-            % Test function when value is too long
             testCase.verifyError(...
-                @() mustBeSpecifiedLength(testValue, 10, 15), ...
+                @() mustBeMinLength(testValue, 6), ...
                 'OPENMINDS_MATLAB:PropertyValidators:ListIsTooShort')
+
+            mustBeMaxLength(testValue, 5)
+            mustBeMaxLength(testValue, 6)
+            mustBeMaxLength([], 1)
+
+            testCase.verifyError(...
+                @() mustBeMaxLength(testValue, 4), ...
+                'OPENMINDS_MATLAB:PropertyValidators:ListIsTooLong')
         end
 
         function testMustBeValidEmail(testCase)
