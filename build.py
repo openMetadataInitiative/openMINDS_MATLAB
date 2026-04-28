@@ -1,5 +1,6 @@
 import os.path
 import shutil
+import sys
 
 from pipeline.translator import MATLABSchemaBuilder
 from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_templates, save_resource_files, save_enumeration_classes, get_class_name_map
@@ -16,6 +17,7 @@ if os.path.exists("target"):
 
 # Step 2 - Initialise the jinja templates
 jinja_templates = initialise_jinja_templates()
+build_errors = []
 
 for schema_version in schema_loader.get_schema_versions():
 
@@ -37,6 +39,7 @@ for schema_version in schema_loader.get_schema_versions():
                 annotation_type = "warning"
             else:
                 annotation_type = "error"
+                build_errors.append((schema_version, schema_file_path, e))
 
             # get relative path from schema_root_path to schema_file_path
             relative_path = os.path.relpath(schema_file_path, schema_root_path)
@@ -48,3 +51,7 @@ for schema_version in schema_loader.get_schema_versions():
     
     save_enumeration_classes("Types", schema_version, schema_loader, jinja_templates["types_enumeration"])
     save_enumeration_classes("Modules", schema_version, schema_loader, jinja_templates["modules_enumeration"])
+
+if build_errors:
+    print(f"Build failed: {len(build_errors)} schema class(es) could not be generated.")
+    sys.exit(1)

@@ -29,12 +29,27 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
         {%- endfor %}
         ]
     end
+    {%- if additional_controlled_term_props %}
+
+    properties
+    {%- for prop in additional_controlled_term_props %}
+        % {{ prop.doc }}
+        {{ prop.name }} {{prop.size}} {{ prop.type }} {%- if prop.validators%} ...{% endif %}
+        {%- if prop.validators %}
+            {{prop.validators}}
+        {%- endif -%}
+    {%- if not loop.last -%}
+        {{ ' ' }}
+    {% endif %}
+    {%- endfor %}
+    end
+    {%- endif %}
 
     methods
         function obj = {{ class_name }}(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?{{ full_class_name }}
                 propValues.id (1,1) string
             end
 
