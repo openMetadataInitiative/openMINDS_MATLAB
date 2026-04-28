@@ -27,13 +27,19 @@ classdef CollectionTest < matlab.unittest.TestCase
         
         function testCreateCollectionWithInstances(testCase)
             % Test creating a collection with instances
-            person = personWithOneAffiliation();
-            %org = organizationWithOneId();
-            
-            collection = openminds.Collection(person);
-            
-            testCase.verifyEqual(length(collection), 5); 
-            % Person, ContactInformation, Organization, ORCID, RORID
+            [person, affiliation] = personWithOneAffiliation();
+
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                collection = openminds.Collection(person, affiliation);
+                expectedNumNodes = 6;
+                % Person, ContactInformation, ORCID, Affiliation, Organization, RORID
+            else
+                collection = openminds.Collection(person);
+                expectedNumNodes = 5;
+                % Person, ContactInformation, Organization, ORCID, RORID
+            end
+
+            testCase.verifyEqual(length(collection), expectedNumNodes);
 
             testCase.verifyTrue(collection.isKey(person.id));
         end
@@ -54,34 +60,38 @@ classdef CollectionTest < matlab.unittest.TestCase
         function testAddNodeWithLinkedType(testCase)
             % Test adding a node with linked types
             collection = openminds.Collection();
-            person = personWithOneAffiliation();
-            
-            collection.add(person);
+            [person, affiliation] = personWithOneAffiliation();
+
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                collection.add(affiliation);
+                org = affiliation.organization;
+            else
+                collection.add(person);
+                org = person.affiliation.memberOf;
+            end
             
             % Verify that the linked nodes are also added to the collection
             testCase.verifyGreaterThan(length(collection), 1);
             testCase.verifyTrue(collection.isKey(person.id));
-            
-            % Get the affiliation from the person
-            affiliation = person.affiliation;
 
-            % Get the organization from the affiliation
-            org = affiliation.memberOf;
             testCase.verifyTrue(collection.isKey(org.id));
         end
         
         function testAddNodeWithEmbeddedType(testCase)
             % Test adding a node with embedded types
             collection = openminds.Collection();
-            person = personWithOneAffiliation();
-            
-            collection.add(person);
-            
-            % Get the affiliation from the person
-            affiliation = person.affiliation;
 
-            % Affiliation is embedded, verify that it's key is not in the
-            % collection
+            if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+                [dataset, affiliation] = CollectionTest.datasetWithOneContributorAffiliation();
+                collection.add(dataset);
+            else
+                person = personWithOneAffiliation();
+                collection.add(person);
+                affiliation = person.affiliation;
+            end
+
+            % Affiliation is embedded in the containing schema, so the
+            % affiliation node itself should not be stored in the collection.
             testCase.verifyFalse(collection.isKey(affiliation.id));
         end
         
@@ -170,7 +180,9 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Verify that the retrieved organization is the same as the original
             testCase.verifyEqual(retrievedOrg.id, org.id);
-            testCase.verifyEqual(retrievedOrg.fullName, org.fullName);
+            testCase.verifyEqual( ...
+                ommtest.oneoffs.organizationName(retrievedOrg), ...
+                ommtest.oneoffs.organizationName(org));
         end
         
         function testHasType(testCase)
@@ -220,16 +232,16 @@ classdef CollectionTest < matlab.unittest.TestCase
             collection.add(person);
             initialLength = length(collection);
             
-            newAffiliation = openminds.core.Affiliation(...
-                'memberOf', openminds.core.Organization('fullName', 'University of Somewhere'), ...
-                'startDate', datetime("yesterday"));
-            person.affiliation(end+1) = newAffiliation;
+            newContact = openminds.core.ContactInformation( ...
+                "email", "john.smith@somewhere-else.org");
+            person.contactInformation = newContact;
             
             % Update links
             collection.updateLinks();
             
             % Verify that linked types are added
             testCase.verifyGreaterThan(length(collection), initialLength);
+            testCase.verifyTrue(collection.isKey(newContact.id));
         end
         
         function testSaveAndLoad(testCase)
@@ -272,7 +284,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Verify that files are created
             files = dir(fullfile(folderPath, '**', '*.jsonld'));
-            testCase.verifyEqual(length(files), 7);
+            testCase.verifyEqual(length(files), length(collection));
             
             % Create a new collection and load the files
             newCollection = openminds.Collection();
@@ -289,10 +301,9 @@ classdef CollectionTest < matlab.unittest.TestCase
             collection = openminds.Collection();
             person = personWithOneAffiliation();
             org = organizationWithOneId();
-
-            expectedNumDocuments = 7;
             
             collection.add(person, org);
+            expectedNumDocuments = length(collection);
             
             % Save the collection to a file
             filePath = 'collection.jsonld';
@@ -311,8 +322,8 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
             org = organizationWithOneId();
-
-            expectedNumDocuments = 7;
+            collection = openminds.Collection(person, org);
+            expectedNumDocuments = length(collection);
             
             % Save instances to a file
             filePath = 'instances.jsonld';
@@ -341,31 +352,19 @@ classdef CollectionTest < matlab.unittest.TestCase
     end
     
     methods (Static, Access = private)
-        function person = personWithOneAffiliation()
-            % Create a person with one affiliation
-            ror = openminds.core.RORID('identifier','https://ror.org/02jx3x895');
-            org = openminds.core.Organization('digitalIdentifier',ror,...
-                'fullName','University College London');
-            
-            af = openminds.core.Affiliation('memberOf', org);
-            
-            orcid = openminds.core.ORCID('identifier',...
-                'https://orcid.org/0000-0000-0000-0000');
-            
-            contact = openminds.core.ContactInformation('email',...
-                'johndsmith@somewhere.org');
-            
-            person = openminds.core.Person('familyName','Smith','givenName','John D.',...
-                'alternateName', "js", 'affiliation',af,'digitalIdentifier',orcid,...
-                'contactInformation',contact);
-        end
-        
-        function org = organizationWithOneId()
-            % Create an organization with one digital ID
-            ror = openminds.core.RORID('identifier','https://ror.org/01xtthb56');
-            
-            org = openminds.core.Organization('digitalIdentifier', ror,...
-                'fullName','University of Oslo');
+        function [dataset, affiliation] = datasetWithOneContributorAffiliation()
+            [person, affiliation] = personWithOneAffiliation();
+            contribution = openminds.core.Contribution( ...
+                "contributor", person, ...
+                "type", openminds.controlledterms.ContributionType( ...
+                    [], "name", "authoring"));
+
+            dataset = openminds.core.Dataset( ...
+                "contribution", contribution, ...
+                "contributorAffiliation", affiliation, ...
+                "description", "Test dataset", ...
+                "fullName", "Test dataset", ...
+                "shortName", "test-dataset");
         end
     end
 end

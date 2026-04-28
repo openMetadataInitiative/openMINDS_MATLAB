@@ -7,8 +7,9 @@ function org = organizationWithOneId()
 %   generated.
 %
 
-    ror = openminds.core.RORID('identifier','https://ror.org/01xtthb56');
-    
-    org = openminds.core.Organization('digitalIdentifier', ror,...
-        'fullName','University of Oslo');
+    if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
+        org = ommtest.oneoffs.v5.organizationWithOneId();
+    else
+        org = ommtest.oneoffs.v4.organizationWithOneId();
+    end
 end
