@@ -57,7 +57,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
                     end
                 else
                     error('openMINDS:ControlledTerm:InvalidInput', ...
-                        'Expected instance spec to be a name, a filename or a structure with `at_id` field.')
+                        'Expected instance spec to be a name, a filename, or a structure or structure array with an `at_id` or `x_id` field.')
                 end
 
                 names = fieldnames(propValues);
