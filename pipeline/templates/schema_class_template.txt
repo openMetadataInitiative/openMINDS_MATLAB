@@ -33,6 +33,16 @@ classdef {{ class_name }} < {{base_class}}
     properties (Constant, Hidden)
         X_TYPE = "{{openminds_type}}"
     end
+    {%- if property_name_map %}
+
+    properties (Constant, Hidden)
+        PROPERTY_NAME_MAP = struct(...
+            {%- for prop in property_name_map %}
+            '{{prop["matlab_name"]}}', '{{prop["openminds_name"]}}' {%- if not loop.last %}, {% else %} {% endif -%} ...
+            {%- endfor %}
+        )
+    end
+    {%- endif %}
 
     properties (Constant, Hidden)  {# List all properties with linked or embedded types #}
         LINKED_PROPERTIES = struct(...
