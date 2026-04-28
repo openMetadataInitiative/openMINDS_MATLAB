@@ -1,9 +1,0 @@
-classdef DataLocation < openminds.internal.abstract.MixedTypeSet
-    properties (Constant, Hidden)
-        ALLOWED_TYPES = [ ...
-            "openminds.core.data.File", ...
-            "openminds.core.data.FileBundle" ...
-        ]
-        IS_SCALAR = true
-    end
-end

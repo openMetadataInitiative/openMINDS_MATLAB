@@ -1,0 +1,9 @@
+classdef EthicsJurisdiction < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.SovereignState", ...
+            "openminds.controlledterms.SupranationalBody" ...
+        ]
+        IS_SCALAR = true
+    end
+end

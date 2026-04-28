@@ -1,0 +1,9 @@
+classdef Source < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.core.data.License", ...
+            "openminds.core.data.UsageAgreement" ...
+        ]
+        IS_SCALAR = false
+    end
+end

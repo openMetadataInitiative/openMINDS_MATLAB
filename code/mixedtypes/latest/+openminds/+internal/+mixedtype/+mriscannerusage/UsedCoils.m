@@ -1,0 +1,9 @@
+classdef UsedCoils < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.DeviceType", ...
+            "openminds.neuroimaging.device.MRICoilUsage" ...
+        ]
+        IS_SCALAR = false
+    end
+end

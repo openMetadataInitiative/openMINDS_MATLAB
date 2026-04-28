@@ -1,0 +1,9 @@
+classdef Type < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.DeviceType", ...
+            "openminds.core.products.HardwareProduct" ...
+        ]
+        IS_SCALAR = true
+    end
+end
