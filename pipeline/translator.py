@@ -595,9 +595,17 @@ def _create_property_validator_functions(name, property_info):
             validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
 
     if 'minItems' in property_info or 'maxItems' in property_info:
-        min_items = property_info.get('minItems', 0)
-        max_items = property_info.get('maxItems', 'inf')
-        validation_functions += [f"mustBeSpecifiedLength({name}, {min_items}, {max_items})"]
+        has_min_items = 'minItems' in property_info
+        has_max_items = 'maxItems' in property_info
+
+        if has_min_items and has_max_items:
+            min_items = property_info['minItems']
+            max_items = property_info['maxItems']
+            validation_functions += [f"mustBeSpecifiedLength({name}, {min_items}, {max_items})"]
+        elif has_min_items:
+            validation_functions += [f"mustBeMinLength({name}, {property_info['minItems']})"]
+        elif has_max_items:
+            validation_functions += [f"mustBeMaxLength({name}, {property_info['maxItems']})"]
 
     if property_info.get('uniqueItems') is True:
         validation_functions += [f"mustBeListOfUniqueItems({name})"]
