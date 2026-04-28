@@ -58,7 +58,7 @@ classdef Affiliation < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s', obj.memberOf);
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
 end

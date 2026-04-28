@@ -44,7 +44,7 @@ classdef Ellipse < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('ellipse(r1=%s, r2=%s)', obj.semiMajorAxis, obj.semiMinorAxis);
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
 end
