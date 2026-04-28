@@ -149,7 +149,7 @@ disp(contacts)
     "zaphod-beeblebrox@hitchhikers-guide.galaxy" ⟼ [zaphod-beeblebrox@hitchhikers-guide.galaxy] (ContactInformation)
 ```
 
-This gave us four **`ContactInformation`** instances. Next we create **`Person`** instances and each one to its **`ContactInformation`**. Finally we create one **`Membership`** instance per person and assign those memberships to the consortium.
+This gave us four **`ContactInformation`** instances. Next we create **`Person`** instances and link each one to its **`ContactInformation`** instance. Finally we create one **`Membership`** instance per person and assign those memberships to the consortium.
 
 ```matlab
 % Extract data to create a list of "Person" instances where each "Person" 
