@@ -1,6 +1,7 @@
 function majorVersion = currentSchemaMajorVersion()
 % currentSchemaMajorVersion - Identify the active openMINDS schema generation.
 
+    % Use the Organization type for probing
     organizationMeta = meta.class.fromName("openminds.core.actors.Organization");
     propertyNames = string({organizationMeta.PropertyList.Name});
 
