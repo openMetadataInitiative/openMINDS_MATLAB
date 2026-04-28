@@ -1,9 +1,0 @@
-classdef DigitalIdentifier < openminds.internal.abstract.MixedTypeSet
-    properties (Constant, Hidden)
-        ALLOWED_TYPES = [ ...
-            "openminds.core.digitalidentifier.DOI", ...
-            "openminds.core.digitalidentifier.RRID" ...
-        ]
-        IS_SCALAR = true
-    end
-end

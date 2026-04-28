@@ -1,0 +1,9 @@
+classdef BaseShape < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.sands.mathematicalshape.Circle", ...
+            "openminds.sands.mathematicalshape.Ellipse" ...
+        ]
+        IS_SCALAR = true
+    end
+end
