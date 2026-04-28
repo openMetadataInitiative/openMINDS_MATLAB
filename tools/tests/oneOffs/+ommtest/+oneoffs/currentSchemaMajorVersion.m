@@ -1,9 +1,11 @@
 function majorVersion = currentSchemaMajorVersion()
 % currentSchemaMajorVersion - Identify the active openMINDS schema generation.
 
-    schemaVersion = openminds.getModelVersion("VersionNumber");
+    % Use the Organization type for probing
+    organizationMeta = meta.class.fromName("openminds.core.actors.Organization");
+    propertyNames = string({organizationMeta.PropertyList.Name});
 
-    if schemaVersion > 4
+    if any(propertyNames == "name") && any(propertyNames == "countryOfFormation")
         majorVersion = 5;
     else
         majorVersion = 4;
