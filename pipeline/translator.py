@@ -467,6 +467,7 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         Create the display label expression to be added as a getDisplayLabel 
         method in the schema class
     """
+    property_names = [_create_matlab_name(name) for name in property_names]
 
     display_config_filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
     #display_config_filepath = 'instanceDisplayConfig.json'
@@ -497,6 +498,9 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         if not isinstance(prop_names, list):
             prop_names = [prop_names]
 
+        if not all(prop_name in property_names for prop_name in prop_names):
+            return _get_default_display_label_method_expression(schema_short_name, property_names)
+
         if not isinstance(str_formatter, list):
             str_formatter = [str_formatter]
 
@@ -511,20 +515,24 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         # Join the lines with newline 
         return '\n            '.join(str_formatter)
     else:
-        property_names = [_create_matlab_name(name) for name in property_names]
+        return _get_default_display_label_method_expression(schema_short_name, property_names)
 
-        if "lookupLabel" in property_names:
-            return "str = obj.lookupLabel;"
-        elif "fullName" in property_names:
-            return "str = obj.fullName;"
-        elif "identifier" in property_names:
-            return "str = obj.identifier;"
-        elif "name" in property_names:
-            return "str = obj.name;"        
-        else:
-            #warnings.warn(f"No display label method found for {schema_short_name}.")
-            print(f"No display label method found for {schema_short_name}.")
-            return "str = obj.createLabelForMissingLabelDefinition();"
+
+def _get_default_display_label_method_expression(schema_short_name, property_names):
+    """Create a display label expression from schema properties."""
+
+    if "lookupLabel" in property_names:
+        return "str = obj.lookupLabel;"
+    elif "fullName" in property_names:
+        return "str = obj.fullName;"
+    elif "identifier" in property_names:
+        return "str = obj.identifier;"
+    elif "name" in property_names:
+        return "str = obj.name;"
+    else:
+        #warnings.warn(f"No display label method found for {schema_short_name}.")
+        print(f"No display label method found for {schema_short_name}.")
+        return "str = obj.createLabelForMissingLabelDefinition();"
 
 
 def _create_property_validator_functions(name, property_info):
