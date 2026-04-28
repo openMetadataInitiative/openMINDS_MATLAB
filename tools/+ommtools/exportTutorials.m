@@ -14,6 +14,9 @@ function exportTutorials()
         
         for j = 1:numel(exportFormat)
             export(sourcePath, strrep(targetPath, '.mlx', exportFormat(j)));
+            if exportFormat(j) == ".html"
+                postProcessLivescriptHtml(strrep(targetPath, '.mlx', exportFormat(j)))
+            end
         end
     end
 end
