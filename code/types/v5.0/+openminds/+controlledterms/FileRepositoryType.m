@@ -49,7 +49,7 @@ classdef FileRepositoryType < openminds.abstract.ControlledTerm
         function obj = FileRepositoryType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.FileRepositoryType
                 propValues.id (1,1) string
             end
 

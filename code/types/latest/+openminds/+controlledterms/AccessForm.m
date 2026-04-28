@@ -44,7 +44,7 @@ classdef AccessForm < openminds.abstract.ControlledTerm
         function obj = AccessForm(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AccessForm
                 propValues.id (1,1) string
             end
 

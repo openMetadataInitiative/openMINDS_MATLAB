@@ -26,7 +26,7 @@ classdef Project < openminds.abstract.Schema
     properties
         % Add all parties that coordinate this project.
         coordinator (1,:) openminds.internal.mixedtype.project.Coordinator ...
-            {mustBeListOfUniqueItems(coordinator)}
+            {mustBeMinLength(coordinator, 1), mustBeListOfUniqueItems(coordinator)}
 
         % Enter a description of this project.
         description (1,1) string
@@ -36,7 +36,7 @@ classdef Project < openminds.abstract.Schema
 
         % Add all research product (versions) that are part of this project.
         hasPart (1,:) openminds.internal.mixedtype.project.HasPart ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this project.
         homepage (1,1) string

@@ -45,7 +45,7 @@ classdef CranialWindowConstructionType < openminds.abstract.ControlledTerm
         function obj = CranialWindowConstructionType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CranialWindowConstructionType
                 propValues.id (1,1) string
             end
 

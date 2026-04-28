@@ -43,7 +43,7 @@ classdef MuscularStructure < openminds.abstract.ControlledTerm
         function obj = MuscularStructure(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MuscularStructure
                 propValues.id (1,1) string
             end
 

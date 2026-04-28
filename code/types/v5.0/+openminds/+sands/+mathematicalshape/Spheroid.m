@@ -14,11 +14,11 @@ classdef Spheroid < openminds.abstract.Schema
     properties
         % Enter the equatorial diameters of this spheroid.
         equatorialDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(equatorialDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(equatorialDiameter)}
 
         % Enter the polar diameter of this spheroid.
         polarDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(polarDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(polarDiameter)}
     end
 
     properties (Access = protected)

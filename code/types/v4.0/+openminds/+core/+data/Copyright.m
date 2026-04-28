@@ -14,11 +14,11 @@ classdef Copyright < openminds.abstract.Schema
     properties
         % Add all parties that hold this copyright.
         holder (1,:) openminds.internal.mixedtype.copyright.Holder ...
-            {mustBeListOfUniqueItems(holder)}
+            {mustBeMinLength(holder, 1), mustBeListOfUniqueItems(holder)}
 
         % Enter the year during which the copyright was first asserted and, optionally, later years during which updated versions were published.
         year (1,:) string ...
-            {mustBeListOfUniqueItems(year)}
+            {mustBeMinLength(year, 1), mustBeListOfUniqueItems(year)}
     end
 
     properties (Access = protected)

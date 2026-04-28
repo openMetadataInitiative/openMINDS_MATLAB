@@ -30,7 +30,7 @@ classdef Modality < openminds.abstract.ControlledTerm
         function obj = Modality(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Modality
                 propValues.id (1,1) string
             end
 

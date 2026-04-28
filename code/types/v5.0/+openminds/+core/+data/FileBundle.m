@@ -35,30 +35,30 @@ classdef FileBundle < openminds.abstract.Schema
 
         % If the files within this bundle are organised and formatted according to a formal data structure, add the content type of this file bundle. Leave blank if no formal data structure has been applied to the files within this bundle.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add all entities that defined which files were grouped into this file bundle. Note that the schema types of the instances stated here, need to match the ones stated under 'groupingType'.
         groupedBy (1,:) openminds.internal.mixedtype.filebundle.GroupedBy ...
-            {mustBeListOfUniqueItems(groupedBy)}
+            {mustBeMinLength(groupedBy, 1), mustBeListOfUniqueItems(groupedBy)}
 
         % Add all grouping types that were used to define this file bundle. Note that the grouping types define the possible schema type of the instances stated under 'groupedBy'.
         groupingType (1,:) openminds.controlledterms.FileBundleGrouping ...
-            {mustBeListOfUniqueItems(groupingType)}
+            {mustBeMinLength(groupingType, 1), mustBeListOfUniqueItems(groupingType)}
 
         % Add the hash that was generated for this file bundle.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Add the file bundle or file repository this file bundle is part of.
         isPartOf (1,:) openminds.internal.mixedtype.filebundle.IsPartOf ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter the name of this file bundle.
         name (1,1) string
 
         % Enter the storage size of this file bundle.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

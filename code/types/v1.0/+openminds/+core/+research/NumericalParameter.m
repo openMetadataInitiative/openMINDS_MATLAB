@@ -16,7 +16,8 @@ classdef NumericalParameter < openminds.abstract.Schema
         name (1,1) string
 
         % Add at least one quantitative value for this parameter.
-        value (1,:) openminds.internal.mixedtype.numericalparameter.Value
+        value (1,:) openminds.internal.mixedtype.numericalparameter.Value ...
+            {mustBeMinLength(value, 1)}
     end
 
     properties (Access = protected)

@@ -30,7 +30,7 @@ classdef Genotype < openminds.abstract.ControlledTerm
         function obj = Genotype(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Genotype
                 propValues.id (1,1) string
             end
 

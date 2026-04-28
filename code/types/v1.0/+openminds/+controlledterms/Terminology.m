@@ -30,7 +30,7 @@ classdef Terminology < openminds.abstract.ControlledTerm
         function obj = Terminology(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Terminology
                 propValues.id (1,1) string
             end
 

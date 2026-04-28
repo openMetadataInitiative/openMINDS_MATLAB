@@ -14,7 +14,7 @@ classdef Copyright < openminds.abstract.Schema
     properties
         % Add one or several persons or organisations that hold the copyright.
         holder (1,:) openminds.internal.mixedtype.copyright.Holder ...
-            {mustBeListOfUniqueItems(holder)}
+            {mustBeMinLength(holder, 1), mustBeListOfUniqueItems(holder)}
 
         % Enter the year during which the copyright was first asserted.
         year (1,1) string ...

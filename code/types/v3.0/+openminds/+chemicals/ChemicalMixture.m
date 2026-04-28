@@ -26,18 +26,18 @@ classdef ChemicalMixture < openminds.abstract.Schema
 
         % Enter all components, including other mixtures, that are part of this chemical mixture.
         hasPart (1,:) openminds.chemicals.AmountOfChemical ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
 
         % Enter the name of this chemical mixture.
         name (1,1) string
 
         % Add the source of this chemical mixture.
         productSource (1,:) openminds.chemicals.ProductSource ...
-            {mustBeSpecifiedLength(productSource, 0, 1)}
+            {mustBeScalarOrEmpty(productSource)}
 
         % Add the type of this mixture.
         type (1,:) openminds.controlledterms.ChemicalMixtureType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

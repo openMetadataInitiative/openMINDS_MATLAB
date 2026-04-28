@@ -23,7 +23,7 @@ classdef ProductSource < openminds.abstract.Schema
     properties
         % Add the globally unique and persistent digital identifier of this product.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.RRID ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter the identifier for this product, excluding its RRID (e.g., a catalog number).
         identifier (1,1) string
@@ -33,11 +33,11 @@ classdef ProductSource < openminds.abstract.Schema
 
         % Add the party (private, commercial or industrial) that provided this product.
         provider (1,:) openminds.internal.mixedtype.productsource.Provider ...
-            {mustBeSpecifiedLength(provider, 0, 1)}
+            {mustBeScalarOrEmpty(provider)}
 
         % Enter the purity of the product as stated by the 'provider'.
         purity (1,:) openminds.internal.mixedtype.productsource.Purity ...
-            {mustBeSpecifiedLength(purity, 0, 1)}
+            {mustBeScalarOrEmpty(purity)}
     end
 
     properties (Access = protected)

@@ -43,7 +43,7 @@ classdef AnatomicalCavity < openminds.abstract.ControlledTerm
         function obj = AnatomicalCavity(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnatomicalCavity
                 propValues.id (1,1) string
             end
 

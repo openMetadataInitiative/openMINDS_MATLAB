@@ -44,7 +44,7 @@ classdef AnatomicalIdentificationType < openminds.abstract.ControlledTerm
         function obj = AnatomicalIdentificationType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnatomicalIdentificationType
                 propValues.id (1,1) string
             end
 

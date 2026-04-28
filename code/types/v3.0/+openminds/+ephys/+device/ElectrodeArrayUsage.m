@@ -35,38 +35,38 @@ classdef ElectrodeArrayUsage < openminds.abstract.Schema
     properties
         % Add all anatomical entities that semantically best describe the overall anatomical location of the electrode array.
         anatomicalLocationOfArray (1,:) openminds.internal.mixedtype.electrodearrayusage.AnatomicalLocationOfArray ...
-            {mustBeListOfUniqueItems(anatomicalLocationOfArray)}
+            {mustBeMinLength(anatomicalLocationOfArray, 1), mustBeListOfUniqueItems(anatomicalLocationOfArray)}
 
         % Add all anatomical entities that semantically best describe the anatomical location of each electrode contact of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
         anatomicalLocationOfElectrodes (1,:) openminds.internal.mixedtype.electrodearrayusage.AnatomicalLocationOfElectrodes ...
-            {mustBeListOfUniqueItems(anatomicalLocationOfElectrodes)}
+            {mustBeMinLength(anatomicalLocationOfElectrodes, 2), mustBeListOfUniqueItems(anatomicalLocationOfElectrodes)}
 
         % Enter the contact resistance for each electrode of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
         contactResistances (1,:) openminds.internal.mixedtype.electrodearrayusage.ContactResistances ...
-            {mustBeListOfUniqueItems(contactResistances)}
+            {mustBeMinLength(contactResistances, 2), mustBeListOfUniqueItems(contactResistances)}
 
         % Add the electrode array used.
         device (1,:) openminds.ephys.device.ElectrodeArray ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Enter a lookup label for this device usage that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.electrodearrayusage.MetadataLocation ...
-            {mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
 
         % Add all coordinate points that best describe the spatial location of each electrode contact of this array during its use, in the same order that the electrode identifiers for this electrode array have been specified.
         spatialLocationOfElectrodes (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeListOfUniqueItems(spatialLocationOfElectrodes)}
+            {mustBeMinLength(spatialLocationOfElectrodes, 2), mustBeListOfUniqueItems(spatialLocationOfElectrodes)}
 
         % Enter the identifiers of all electrodes that are actually in use for this array.
         usedElectrode (1,:) string ...
-            {mustBeListOfUniqueItems(usedElectrode)}
+            {mustBeMinLength(usedElectrode, 1), mustBeListOfUniqueItems(usedElectrode)}
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.electrodearrayusage.UsedSpecimen ...
-            {mustBeSpecifiedLength(usedSpecimen, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecimen)}
     end
 
     properties (Access = protected)

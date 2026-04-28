@@ -23,21 +23,21 @@ classdef Environment < openminds.abstract.Schema
     properties
         % Add the configuration of this computational environment.
         configuration (1,:) openminds.core.research.Configuration ...
-            {mustBeSpecifiedLength(configuration, 0, 1)}
+            {mustBeScalarOrEmpty(configuration)}
 
         % Enter a short text describing this computational environment.
         description (1,1) string
 
         % Add the hardware system on which this computational environment runs.
         hardware (1,:) openminds.computation.HardwareSystem ...
-            {mustBeSpecifiedLength(hardware, 0, 1)}
+            {mustBeScalarOrEmpty(hardware)}
 
         % Enter a descriptive name for this computational environment.
         name (1,1) string
 
         % Add all software versions available in this computational environment.
         software (1,:) openminds.core.products.SoftwareVersion ...
-            {mustBeListOfUniqueItems(software)}
+            {mustBeMinLength(software, 1), mustBeListOfUniqueItems(software)}
     end
 
     properties (Access = protected)

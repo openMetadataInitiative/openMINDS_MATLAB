@@ -14,11 +14,11 @@ classdef CircularSector < openminds.abstract.Schema
     properties
         % Enter the central angle of this circular sector.
         centralAngle (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(centralAngle, 0, 1)}
+            {mustBeScalarOrEmpty(centralAngle)}
 
         % Enter the radius of this circular sector.
         radius (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(radius, 0, 1)}
+            {mustBeScalarOrEmpty(radius)}
     end
 
     properties (Access = protected)

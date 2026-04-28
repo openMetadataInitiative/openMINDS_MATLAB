@@ -30,7 +30,7 @@ classdef ModelScope < openminds.abstract.ControlledTerm
         function obj = ModelScope(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModelScope
                 propValues.id (1,1) string
             end
 

@@ -23,22 +23,22 @@ classdef CustomCoordinateFramework < openminds.abstract.Schema
     properties
         % Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for the anatomical space of this custom coordinate framework.
         anatomicalAxesOrientation (1,:) openminds.controlledterms.AnatomicalAxesOrientation ...
-            {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalAxesOrientation)}
 
         % Enter the coordinate point in the native anatomical space of the template as [x, y] or [x, y, z] for two- or three-dimensional spaces, respectively, that has been defined as the origin of the anatomical space of this custom coordinate framework (i.e., as the central point where all axes intersect).
         axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(axesOrigin, 2, 3)}
+            {mustBeMinLength(axesOrigin, 2), mustBeMaxLength(axesOrigin, 3), mustBeListOfUniqueItems(axesOrigin)}
 
         % Add all image files used as visual representation of this custom coordinate framework.
         defaultImage (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(defaultImage)}
+            {mustBeMinLength(defaultImage, 1), mustBeListOfUniqueItems(defaultImage)}
 
         % Enter a descriptive name for this custom coordinate framework.
         name (1,1) string
 
         % Add the native unit that is used for this custom coordinate framework.
         nativeUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(nativeUnit, 0, 1)}
+            {mustBeScalarOrEmpty(nativeUnit)}
     end
 
     properties (Access = protected)

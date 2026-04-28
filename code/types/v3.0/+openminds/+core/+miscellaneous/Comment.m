@@ -20,18 +20,18 @@ classdef Comment < openminds.abstract.Schema
     properties
         % Add the research product (version) that this comment is about.
         about (1,:) openminds.internal.mixedtype.comment.About ...
-            {mustBeSpecifiedLength(about, 0, 1)}
+            {mustBeScalarOrEmpty(about)}
 
         % Enter the comment about the research product (version) stated under 'about'.
         comment (1,1) string
 
         % Add the person that created this comment.
         commenter (1,:) openminds.core.actors.Person ...
-            {mustBeSpecifiedLength(commenter, 0, 1)}
+            {mustBeScalarOrEmpty(commenter)}
 
         % Enter the date and time on which this comment was made, formatted as '2023-02-07T16:00:00+00:00'.
         timestamp (1,:) datetime ...
-            {mustBeSpecifiedLength(timestamp, 0, 1)}
+            {mustBeScalarOrEmpty(timestamp)}
     end
 
     properties (Access = protected)

@@ -42,7 +42,7 @@ classdef AnatomicalPlane < openminds.abstract.ControlledTerm
         function obj = AnatomicalPlane(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnatomicalPlane
                 propValues.id (1,1) string
             end
 

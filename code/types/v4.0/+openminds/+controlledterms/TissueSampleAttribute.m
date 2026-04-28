@@ -46,7 +46,7 @@ classdef TissueSampleAttribute < openminds.abstract.ControlledTerm
         function obj = TissueSampleAttribute(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.TissueSampleAttribute
                 propValues.id (1,1) string
             end
 

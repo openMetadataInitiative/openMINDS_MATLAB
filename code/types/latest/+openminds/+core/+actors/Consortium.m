@@ -23,7 +23,7 @@ classdef Consortium < openminds.abstract.Schema
     properties
         % Add the contact information of this consortium.
         contactInformation (1,:) openminds.core.actors.ContactInformation ...
-            {mustBeSpecifiedLength(contactInformation, 0, 1)}
+            {mustBeScalarOrEmpty(contactInformation)}
 
         % Enter the full name of this consortium.
         fullName (1,1) string
@@ -33,7 +33,7 @@ classdef Consortium < openminds.abstract.Schema
 
         % Add all membership records (one per member) for this consortium.
         memberships (1,:) openminds.core.miscellaneous.Membership ...
-            {mustBeListOfUniqueItems(memberships)}
+            {mustBeMinLength(memberships, 2), mustBeListOfUniqueItems(memberships)}
 
         % Enter a short name (or alias) for this consortium that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string

@@ -30,7 +30,7 @@ classdef SoftwareFeatureCategory < openminds.abstract.ControlledTerm
         function obj = SoftwareFeatureCategory(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SoftwareFeatureCategory
                 propValues.id (1,1) string
             end
 

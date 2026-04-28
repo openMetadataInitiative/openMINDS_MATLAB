@@ -90,7 +90,7 @@ classdef AnatomicalAxesOrientation < openminds.abstract.ControlledTerm
         function obj = AnatomicalAxesOrientation(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnatomicalAxesOrientation
                 propValues.id (1,1) string
             end
 

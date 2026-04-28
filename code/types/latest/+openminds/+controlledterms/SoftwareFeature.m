@@ -75,7 +75,7 @@ classdef SoftwareFeature < openminds.abstract.ControlledTerm
         function obj = SoftwareFeature(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SoftwareFeature
                 propValues.id (1,1) string
             end
 

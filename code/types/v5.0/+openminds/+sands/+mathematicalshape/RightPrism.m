@@ -14,11 +14,11 @@ classdef RightPrism < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance between the two base planes of this right prism.
         baseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(baseDistance)}
 
         % Enter the two-dimensional base shape of the two planes of this right prism.
         baseShape (1,:) openminds.internal.mixedtype.rightprism.BaseShape ...
-            {mustBeSpecifiedLength(baseShape, 0, 1)}
+            {mustBeScalarOrEmpty(baseShape)}
     end
 
     properties (Access = protected)

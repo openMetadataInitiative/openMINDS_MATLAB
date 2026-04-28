@@ -32,18 +32,18 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
 
         % Add the globally unique and persistent digital identifier of this brain atlas.
         digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name for this brain atlas.
         fullName (1,1) string
 
         % Add one or several brain atlas versions that belong to this brain atlas.
         hasVersion (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this brain atlas.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this brain atlas. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string

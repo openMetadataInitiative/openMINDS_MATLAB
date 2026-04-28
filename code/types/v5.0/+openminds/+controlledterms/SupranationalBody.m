@@ -51,7 +51,7 @@ classdef SupranationalBody < openminds.abstract.ControlledTerm
         function obj = SupranationalBody(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SupranationalBody
                 propValues.id (1,1) string
             end
 

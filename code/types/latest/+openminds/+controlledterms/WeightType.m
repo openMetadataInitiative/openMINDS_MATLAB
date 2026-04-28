@@ -46,7 +46,7 @@ classdef WeightType < openminds.abstract.ControlledTerm
         function obj = WeightType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.WeightType
                 propValues.id (1,1) string
             end
 

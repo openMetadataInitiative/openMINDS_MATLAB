@@ -20,11 +20,11 @@ classdef Location < openminds.abstract.Schema
 
         % Enter the country in which the location is found.
         country (1,:) openminds.controlledterms.SovereignState ...
-            {mustBeSpecifiedLength(country, 0, 1)}
+            {mustBeScalarOrEmpty(country)}
 
         % Enter the geographic coordinates of the location.
         geoCoordinates (1,:) openminds.core.miscellaneous.GeoCoordinates ...
-            {mustBeSpecifiedLength(geoCoordinates, 0, 1)}
+            {mustBeScalarOrEmpty(geoCoordinates)}
     end
 
     properties (Access = protected)

@@ -46,7 +46,7 @@ classdef BiologicalSex < openminds.abstract.ControlledTerm
         function obj = BiologicalSex(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.BiologicalSex
                 propValues.id (1,1) string
             end
 

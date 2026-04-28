@@ -45,7 +45,7 @@ classdef AccessChannel < openminds.abstract.ControlledTerm
         function obj = AccessChannel(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AccessChannel
                 propValues.id (1,1) string
             end
 

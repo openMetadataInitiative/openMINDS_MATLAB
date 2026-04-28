@@ -26,7 +26,7 @@ classdef Project < openminds.abstract.Schema
     properties
         % Add one or several project coordinators (person or organization).
         coordinator (1,:) openminds.internal.mixedtype.project.Coordinator ...
-            {mustBeListOfUniqueItems(coordinator)}
+            {mustBeMinLength(coordinator, 1), mustBeListOfUniqueItems(coordinator)}
 
         % Enter a description of this project.
         description (1,1) string
@@ -36,11 +36,11 @@ classdef Project < openminds.abstract.Schema
 
         % Add all research products or research product versions that are part of this project.
         hasResearchProducts (1,:) openminds.internal.mixedtype.project.HasResearchProducts ...
-            {mustBeListOfUniqueItems(hasResearchProducts)}
+            {mustBeMinLength(hasResearchProducts, 2), mustBeListOfUniqueItems(hasResearchProducts)}
 
         % Add the uniform resource locator (URL) to the homepage of this project.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter a short name (alias) for this project.
         shortName (1,1) string

@@ -62,73 +62,74 @@ classdef PipetteUsage < openminds.abstract.Schema
     properties
         % Add the anatomical entity that semantically best describes the anatomical location of the pipette tip.
         anatomicalLocation (1,:) openminds.internal.mixedtype.pipetteusage.AnatomicalLocation ...
-            {mustBeSpecifiedLength(anatomicalLocation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalLocation)}
 
         % Enter all chloride reversal potentials for the intracellular solution(s) of the pipette measured during its use.
-        chlorideReversalPotential (1,:) openminds.core.data.Measurement
+        chlorideReversalPotential (1,:) openminds.core.data.Measurement ...
+            {mustBeMinLength(chlorideReversalPotential, 1)}
 
         % Enter the compensation current for the series resistance of the pipette measured during its use.
         compensationCurrent (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(compensationCurrent, 0, 1)}
+            {mustBeScalarOrEmpty(compensationCurrent)}
 
         % Add the pipette used.
         device (1,:) openminds.ephys.device.Pipette ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Enter the membrane potential of e.g., a patched cell at the end of a recording measured during the use of this pipette.
         endMembranePotential (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(endMembranePotential, 0, 1)}
+            {mustBeScalarOrEmpty(endMembranePotential)}
 
         % Enter the holding membrane potential of e.g., a patched cell measured during the use of this pipette.
         holdingPotential (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(holdingPotential, 0, 1)}
+            {mustBeScalarOrEmpty(holdingPotential)}
 
         % Enter the input resistance of e.g., a patched cell measured during the use of this pipette.
         inputResistance (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(inputResistance, 0, 1)}
+            {mustBeScalarOrEmpty(inputResistance)}
 
         % Add the used compound for labelling e.g., a patched cell during the use of this pipette.
         labelingCompound (1,:) openminds.internal.mixedtype.pipetteusage.LabelingCompound ...
-            {mustBeSpecifiedLength(labelingCompound, 0, 1)}
+            {mustBeScalarOrEmpty(labelingCompound)}
 
         % Enter the liquid junction potential of e.g., a patched cell measured during the use of this pipette.
         liquidJunctionPotential (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(liquidJunctionPotential, 0, 1)}
+            {mustBeScalarOrEmpty(liquidJunctionPotential)}
 
         % Enter a lookup label for this device usage that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.pipetteusage.MetadataLocation ...
-            {mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
 
         % Enter the resistance of the pipette during its use.
         pipetteResistance (1,:) openminds.internal.mixedtype.pipetteusage.PipetteResistance ...
-            {mustBeSpecifiedLength(pipetteResistance, 0, 1)}
+            {mustBeScalarOrEmpty(pipetteResistance)}
 
         % Enter the solution with which the pipette was filled during its use.
         pipetteSolution (1,:) openminds.chemicals.ChemicalMixture ...
-            {mustBeSpecifiedLength(pipetteSolution, 0, 1)}
+            {mustBeScalarOrEmpty(pipetteSolution)}
 
         % Enter the seal resistance of e.g., a patched cell measured during the use of this pipette.
         sealResistance (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(sealResistance, 0, 1)}
+            {mustBeScalarOrEmpty(sealResistance)}
 
         % Enter the series resistance of the pipette measured during its use.
         seriesResistance (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(seriesResistance, 0, 1)}
+            {mustBeScalarOrEmpty(seriesResistance)}
 
         % Add the coordinate point that best describes the spatial location of the pipette tip during its use.
         spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeSpecifiedLength(spatialLocation, 0, 1)}
+            {mustBeScalarOrEmpty(spatialLocation)}
 
         % Enter the membrane potential of e.g., a patched cell at the beginning of a recording measured during the use of this pipette.
         startMembranePotential (1,:) openminds.core.data.Measurement ...
-            {mustBeSpecifiedLength(startMembranePotential, 0, 1)}
+            {mustBeScalarOrEmpty(startMembranePotential)}
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.pipetteusage.UsedSpecimen ...
-            {mustBeSpecifiedLength(usedSpecimen, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecimen)}
     end
 
     properties (Access = protected)

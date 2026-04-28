@@ -48,7 +48,7 @@ classdef MRIPulseSequence < openminds.abstract.ControlledTerm
         function obj = MRIPulseSequence(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MRIPulseSequence
                 propValues.id (1,1) string
             end
 

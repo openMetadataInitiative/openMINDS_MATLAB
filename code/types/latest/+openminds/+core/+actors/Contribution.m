@@ -14,11 +14,11 @@ classdef Contribution < openminds.abstract.Schema
     properties
         % Add all contributors who made this contribution, in the desired display order.
         contributor (1,:) openminds.internal.mixedtype.contribution.Contributor ...
-            {mustBeListOfUniqueItems(contributor)}
+            {mustBeMinLength(contributor, 1), mustBeListOfUniqueItems(contributor)}
 
         % Add the type of contribution.
         type (1,:) openminds.controlledterms.ContributionType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

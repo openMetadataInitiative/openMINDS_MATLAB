@@ -26,7 +26,7 @@ classdef SlicingDevice < openminds.abstract.Schema
     properties
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.slicingdevice.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
@@ -42,7 +42,7 @@ classdef SlicingDevice < openminds.abstract.Schema
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.slicingdevice.Type ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

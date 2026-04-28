@@ -42,7 +42,7 @@ classdef OperationalApproach < openminds.abstract.ControlledTerm
         function obj = OperationalApproach(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OperationalApproach
                 propValues.id (1,1) string
             end
 

@@ -14,11 +14,11 @@ classdef RightCylinder < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance between the two base planes of this right cylinder.
         baseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(baseDistance)}
 
         % Enter the two-dimensional elliptic base shape of the two planes of this right cylinder.
         baseShape (1,:) openminds.internal.mixedtype.rightcylinder.BaseShape ...
-            {mustBeSpecifiedLength(baseShape, 0, 1)}
+            {mustBeScalarOrEmpty(baseShape)}
     end
 
     properties (Access = protected)

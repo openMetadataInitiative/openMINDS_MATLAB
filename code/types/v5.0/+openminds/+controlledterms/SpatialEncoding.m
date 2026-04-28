@@ -46,7 +46,7 @@ classdef SpatialEncoding < openminds.abstract.ControlledTerm
         function obj = SpatialEncoding(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SpatialEncoding
                 propValues.id (1,1) string
             end
 

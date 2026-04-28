@@ -17,7 +17,7 @@ classdef Electrode < openminds.abstract.Schema
     properties
         % Add one or several electrical contacts of this electrode.
         electrodeContact (1,:) openminds.sands.nonatlas.ElectrodeContact ...
-            {mustBeListOfUniqueItems(electrodeContact)}
+            {mustBeMinLength(electrodeContact, 1), mustBeListOfUniqueItems(electrodeContact)}
 
         % Enter the identifier used for this electrode within the file it is stored in.
         internalIdentifier (1,1) string

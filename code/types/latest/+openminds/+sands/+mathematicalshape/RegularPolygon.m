@@ -14,11 +14,11 @@ classdef RegularPolygon < openminds.abstract.Schema
     properties
         % Enter the common distance from the center to a vertex of this regular polygon.
         circumradius (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(circumradius, 0, 1)}
+            {mustBeScalarOrEmpty(circumradius)}
 
         % Enter the number of sides of this regular polygon.
         numberOfSides (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfSides, 0, 1), mustBeInteger(numberOfSides), mustBeGreaterThanOrEqual(numberOfSides, 3)}
+            {mustBeScalarOrEmpty(numberOfSides), mustBeInteger(numberOfSides), mustBeGreaterThanOrEqual(numberOfSides, 3)}
     end
 
     properties (Access = protected)

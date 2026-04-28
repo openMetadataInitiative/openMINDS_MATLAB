@@ -38,19 +38,19 @@ classdef LocalFile < openminds.abstract.Schema
 
         % Add the file of which this is a copy.
         copyOf (1,:) openminds.core.data.File ...
-            {mustBeSpecifiedLength(copyOf, 0, 1)}
+            {mustBeScalarOrEmpty(copyOf)}
 
         % Add all data types that are specifically represented in this local file instance.
         dataType (1,:) openminds.controlledterms.DataType ...
-            {mustBeListOfUniqueItems(dataType)}
+            {mustBeMinLength(dataType, 1), mustBeListOfUniqueItems(dataType)}
 
         % Add the content type of this local file instance.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the hash that was generated for this local file instance.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Enter the name of this local file instance.
         name (1,1) string
@@ -60,11 +60,11 @@ classdef LocalFile < openminds.abstract.Schema
 
         % Add the special usage role of this local file instance.
         specialUsageRole (1,:) openminds.controlledterms.FileUsageRole ...
-            {mustBeSpecifiedLength(specialUsageRole, 0, 1)}
+            {mustBeScalarOrEmpty(specialUsageRole)}
 
         % Enter the storage size of this local file instance.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

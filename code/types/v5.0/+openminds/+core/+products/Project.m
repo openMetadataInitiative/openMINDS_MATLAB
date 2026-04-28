@@ -29,7 +29,7 @@ classdef Project < openminds.abstract.Schema
     properties
         % Add all individual, organisational, or consortial contributions to this project.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a description of this project.
         description (1,1) string
@@ -39,7 +39,7 @@ classdef Project < openminds.abstract.Schema
 
         % Add all research product (versions) that are part of this project.
         hasPart (1,:) openminds.internal.mixedtype.project.HasPart ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this project.
         homepage (1,1) string
@@ -49,7 +49,7 @@ classdef Project < openminds.abstract.Schema
 
         % Add the type of this project (e.g., research project, grant project).
         type (1,:) openminds.controlledterms.ProjectType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

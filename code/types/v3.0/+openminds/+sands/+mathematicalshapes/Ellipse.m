@@ -14,11 +14,11 @@ classdef Ellipse < openminds.abstract.Schema
     properties
         % Enter the length of the semi-minor axis of this ellipse.
         semiMajorAxis (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(semiMajorAxis, 0, 1)}
+            {mustBeScalarOrEmpty(semiMajorAxis)}
 
         % Enter the length of the semi-major axis of this ellipse.
         semiMinorAxis (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(semiMinorAxis, 0, 1)}
+            {mustBeScalarOrEmpty(semiMinorAxis)}
     end
 
     properties (Access = protected)

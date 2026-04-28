@@ -48,7 +48,7 @@ classdef ModificationScope < openminds.abstract.ControlledTerm
         function obj = ModificationScope(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModificationScope
                 propValues.id (1,1) string
             end
 

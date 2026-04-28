@@ -47,25 +47,25 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
 
         % Add all parties that contributed to this common coordinate space as authors.
         author (1,:) openminds.internal.mixedtype.commoncoordinatespace.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.commoncoordinatespace.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.commoncoordinatespace.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
         % Add all versions of this common coordinate space.
         hasVersion (1,:) openminds.sands.atlas.CommonCoordinateSpaceVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
@@ -75,14 +75,14 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this common coordinate space.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
 
         % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Add the species that was used for the creation of this common coordinate space.
         usedSpecies (1,:) openminds.controlledterms.Species ...
-            {mustBeSpecifiedLength(usedSpecies, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecies)}
     end
 
     properties (Access = protected)

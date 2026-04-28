@@ -44,34 +44,34 @@ classdef File < openminds.abstract.Schema
 
         % Add all data types that are specifically represented in this file instance.
         dataType (1,:) openminds.controlledterms.DataType ...
-            {mustBeListOfUniqueItems(dataType)}
+            {mustBeMinLength(dataType, 1), mustBeListOfUniqueItems(dataType)}
 
         % Add the overarching repository to which this file instance belongs.
         fileRepository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(fileRepository, 0, 1)}
+            {mustBeScalarOrEmpty(fileRepository)}
 
         % Add the content type of this file instance.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add all hashes that were generated for this file instance.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeListOfUniqueItems(hash)}
+            {mustBeMinLength(hash, 1), mustBeListOfUniqueItems(hash)}
 
         % Add all file bundles in which this file instance is grouped into.
         isPartOf (1,:) openminds.core.data.FileBundle ...
-            {mustBeListOfUniqueItems(isPartOf)}
+            {mustBeMinLength(isPartOf, 1), mustBeListOfUniqueItems(isPartOf)}
 
         % Enter the name of this file instance.
         name (1,1) string
 
         % Add the special usage role of this file instance.
         specialUsageRole (1,:) openminds.controlledterms.FileUsageRole ...
-            {mustBeSpecifiedLength(specialUsageRole, 0, 1)}
+            {mustBeScalarOrEmpty(specialUsageRole)}
 
         % Enter the storage size of this file instance.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

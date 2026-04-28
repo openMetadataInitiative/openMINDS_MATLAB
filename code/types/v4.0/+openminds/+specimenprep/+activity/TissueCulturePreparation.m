@@ -50,57 +50,57 @@ classdef TissueCulturePreparation < openminds.abstract.Schema
     properties
         % Add the culture medium used during this tissue culture preparation.
         cultureMedium (1,:) openminds.chemicals.ChemicalMixture ...
-            {mustBeSpecifiedLength(cultureMedium, 0, 1)}
+            {mustBeScalarOrEmpty(cultureMedium)}
 
         % Add the cell culture type of the resulting tissue cell culture.
         cultureType (1,:) openminds.controlledterms.CellCultureType ...
-            {mustBeSpecifiedLength(cultureType, 0, 1)}
+            {mustBeScalarOrEmpty(cultureType)}
 
         % Add any user-defined parameters grouped in context-specific sets that are not covered in the standardized properties of this activity.
         customPropertySet (1,:) openminds.core.research.CustomPropertySet ...
-            {mustBeListOfUniqueItems(customPropertySet)}
+            {mustBeMinLength(customPropertySet, 1), mustBeListOfUniqueItems(customPropertySet)}
 
         % Enter a description of this activity.
         description (1,1) string
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         endTime (1,:) datetime ...
-            {mustBeSpecifiedLength(endTime, 0, 1)}
+            {mustBeScalarOrEmpty(endTime), mustBeValidTime(endTime)}
 
         % Add the state of the specimen before it was prepared as culture in this activity.
         input (1,:) openminds.internal.mixedtype.tissueculturepreparation.Input ...
-            {mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter a lookup label for this activity that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the state of the prepared tissue sample culture that resulted from this activity.
         output (1,:) openminds.core.research.TissueSampleState ...
-            {mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.tissueculturepreparation.PerformedBy ...
-            {mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
-            {mustBeSpecifiedLength(preparationDesign, 0, 1)}
+            {mustBeScalarOrEmpty(preparationDesign)}
 
         % Add all protocols used during this activity.
         protocol (1,:) openminds.core.research.Protocol ...
-            {mustBeListOfUniqueItems(protocol)}
+            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         startTime (1,:) datetime ...
-            {mustBeSpecifiedLength(startTime, 0, 1)}
+            {mustBeScalarOrEmpty(startTime), mustBeValidTime(startTime)}
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.tissueculturepreparation.StudyTarget ...
-            {mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
     end
 
     properties (Access = protected)

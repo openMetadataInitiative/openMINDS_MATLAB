@@ -30,7 +30,7 @@ classdef Strain < openminds.abstract.ControlledTerm
         function obj = Strain(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Strain
                 propValues.id (1,1) string
             end
 

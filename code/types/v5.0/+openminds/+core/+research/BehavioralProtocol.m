@@ -26,7 +26,7 @@ classdef BehavioralProtocol < openminds.abstract.Schema
     properties
         % Add all sources in which this behavioral protocol is described in detail.
         describedIn (1,:) openminds.internal.mixedtype.behavioralprotocol.DescribedIn ...
-            {mustBeListOfUniqueItems(describedIn)}
+            {mustBeMinLength(describedIn, 1), mustBeListOfUniqueItems(describedIn)}
 
         % Enter a description of this behavioral protocol.
         description (1,1) string
@@ -39,11 +39,11 @@ classdef BehavioralProtocol < openminds.abstract.Schema
 
         % Add all stimulation approaches and/or techniques used within this behavioral protocol.
         stimulation (1,:) openminds.internal.mixedtype.behavioralprotocol.Stimulation ...
-            {mustBeListOfUniqueItems(stimulation)}
+            {mustBeMinLength(stimulation, 1), mustBeListOfUniqueItems(stimulation)}
 
         % Add all stimulus types used within this behavioral protocol.
         stimulusType (1,:) openminds.internal.mixedtype.behavioralprotocol.StimulusType ...
-            {mustBeListOfUniqueItems(stimulusType)}
+            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)}
     end
 
     properties (Access = protected)

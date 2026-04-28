@@ -14,11 +14,11 @@ classdef Kite < openminds.abstract.Schema
     properties
         % Enter the two common leg lengths (for the shorter and longer leg pairs) of this kite.
         legLengths (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(legLengths, 2, 2)}
+            {mustBeMinLength(legLengths, 2), mustBeMaxLength(legLengths, 2)}
 
         % Enter the length of the symmetry diagonal of this kite.
         symmetryDiagonalLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(symmetryDiagonalLength, 0, 1)}
+            {mustBeScalarOrEmpty(symmetryDiagonalLength)}
     end
 
     properties (Access = protected)

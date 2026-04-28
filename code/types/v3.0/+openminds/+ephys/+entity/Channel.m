@@ -17,7 +17,7 @@ classdef Channel < openminds.abstract.Schema
 
         % Add the unit of measurement for this channel.
         unit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(unit, 0, 1)}
+            {mustBeScalarOrEmpty(unit)}
     end
 
     properties (Access = protected)

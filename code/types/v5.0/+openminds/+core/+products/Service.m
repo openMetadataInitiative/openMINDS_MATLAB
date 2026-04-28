@@ -38,14 +38,14 @@ classdef Service < openminds.abstract.Schema
     properties
         % Add all contributions to this service.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a description (or abstract) of this service.
         description (1,1) string
 
         % Add the publication or file that acts as the documentation of this service.
         documentation (1,:) openminds.internal.mixedtype.service.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this service.
         fullName (1,1) string
@@ -55,22 +55,22 @@ classdef Service < openminds.abstract.Schema
 
         % Add all relevant keywords to this service, either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.service.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add all further publications besides the full documentation that provide the original context for the production of this service (e.g., an original research article describing the service).
         relatedPublication (1,:) openminds.internal.mixedtype.service.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Add the scope of this service, i.e., what analysis methods does it perform, what kinds of experimental data is it intended for.
         scope (1,:) openminds.internal.mixedtype.service.Scope ...
-            {mustBeListOfUniqueItems(scope)}
+            {mustBeMinLength(scope, 1), mustBeListOfUniqueItems(scope)}
 
         % Enter a short name (or alias) for this service that could be used as a shortened display title.
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for using this service.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
     end
 
     properties (Access = protected)

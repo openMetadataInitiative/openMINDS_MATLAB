@@ -20,7 +20,7 @@ classdef Configuration < openminds.abstract.Schema
 
         % Add the content type of this configuration.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Enter a lookup label for this configuration that may help you to find this instance more easily.
         lookupLabel (1,1) string

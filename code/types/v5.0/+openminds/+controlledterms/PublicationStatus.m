@@ -47,7 +47,7 @@ classdef PublicationStatus < openminds.abstract.ControlledTerm
         function obj = PublicationStatus(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.PublicationStatus
                 propValues.id (1,1) string
             end
 

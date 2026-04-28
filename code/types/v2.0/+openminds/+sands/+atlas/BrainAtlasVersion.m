@@ -47,40 +47,40 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
     properties
         % Add the common coordinate space in which this brain atlas version exists in.
         coordinateSpace (1,:) openminds.sands.atlas.CommonCoordinateSpace ...
-            {mustBeSpecifiedLength(coordinateSpace, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateSpace)}
 
         % Add the globally unique and persistent digital identifier of this brain atlas version.
         digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name for this brain atlas version.
         fullName (1,1) string
 
         % Add the parcellation terminology for this brain atlas version.
         hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminology ...
-            {mustBeSpecifiedLength(hasTerminology, 0, 1)}
+            {mustBeScalarOrEmpty(hasTerminology)}
 
         % Add the uniform resource locator (URL) to the homepage of this brain atlas version.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this brain atlas version. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string
 
         % Add one or several alternative versions to this brain atlas version.
         isAlternativeVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(isAlternativeVersionOf)}
+            {mustBeMinLength(isAlternativeVersionOf, 1), mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the earlier version of this brain atlas version.
         isNewVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isNewVersionOf)}
 
         % Enter the identifier (IRI) of the related ontological term matching this brain atlas version.
         ontologyIdentifier (1,1) string
 
         % Enter the date of first publication of this brain atlas version.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Enter a descriptive short name for this brain atlas version.
         shortName (1,1) string

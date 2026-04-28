@@ -38,34 +38,34 @@ classdef FileRepository < openminds.abstract.Schema
 
         % Add all content type patterns that identify matching content types for files within this file repository.
         contentTypePattern (1,:) openminds.core.data.ContentTypePattern ...
-            {mustBeListOfUniqueItems(contentTypePattern)}
+            {mustBeMinLength(contentTypePattern, 1), mustBeListOfUniqueItems(contentTypePattern)}
 
         % If the files and file bundles within this repository are organised and formatted according to a formal data structure, add the content type of this formal data structure. Leave blank if no formal data structure has been applied.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the hash that was generated for this file repository.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Add the host organization of this file repository.
         hostedBy (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(hostedBy, 0, 1)}
+            {mustBeScalarOrEmpty(hostedBy)}
 
         % Enter the name of this file repository.
         name (1,1) string
 
         % Enter the storage size of this file repository.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
 
         % Add the file repository structure that identifies the file path patterns used in this file repository.
         structurePattern (1,:) openminds.core.data.FileRepositoryStructure ...
-            {mustBeSpecifiedLength(structurePattern, 0, 1)}
+            {mustBeScalarOrEmpty(structurePattern)}
 
         % Add the type of this file repository.
         type (1,:) openminds.controlledterms.FileRepositoryType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

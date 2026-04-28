@@ -53,22 +53,22 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
 
         % Enter any alternate names, including any alternative abbreviations, for this parcellation entity version.
         alternateName (1,:) string ...
-            {mustBeListOfUniqueItems(alternateName)}
+            {mustBeMinLength(alternateName, 1), mustBeListOfUniqueItems(alternateName)}
 
         % Enter the refined or corrected name of this parcellation entity version.
         correctedName (1,1) string
 
         % Add all atlas annotations which define this parcellation entity version.
         hasAnnotation (1,:) openminds.sands.atlas.AtlasAnnotation ...
-            {mustBeListOfUniqueItems(hasAnnotation)}
+            {mustBeMinLength(hasAnnotation, 1), mustBeListOfUniqueItems(hasAnnotation)}
 
         % Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding brain atlas version.
         hasParent (1,:) openminds.internal.mixedtype.parcellationentityversion.HasParent ...
-            {mustBeListOfUniqueItems(hasParent)}
+            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
 
         % Add the version-independent information about this parcellation entity.
         isVersionOf (1,:) openminds.sands.atlas.ParcellationEntity ...
-            {mustBeSpecifiedLength(isVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isVersionOf)}
 
         % Enter a lookup label for this parcellation entity version that may help you to find this instance more easily.
         lookupLabel (1,1) string
@@ -78,11 +78,11 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation entity version.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
 
         % Add all relations (qualitative or quantitative) of this parcellation entity version to other anatomical entities.
         relationAssessment (1,:) openminds.internal.mixedtype.parcellationentityversion.RelationAssessment ...
-            {mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
 
         % Enter the version identifier of this parcellation entity version.
         versionIdentifier (1,1) string

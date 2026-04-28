@@ -14,11 +14,11 @@ classdef Trapezoid < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance between the parallel lines of the major and minor bases of this trapezoid.
         baseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(baseDistance)}
 
         % Enter the lengths of the major and minor bases of this trapezoid.
         baseLengths (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseLengths, 2, 2)}
+            {mustBeMinLength(baseLengths, 2), mustBeMaxLength(baseLengths, 2)}
     end
 
     properties (Access = protected)

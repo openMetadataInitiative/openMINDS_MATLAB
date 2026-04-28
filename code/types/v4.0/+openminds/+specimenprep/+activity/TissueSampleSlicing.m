@@ -53,61 +53,61 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
     properties
         % Add any user-defined parameters grouped in context-specific sets that are not covered in the standardized properties of this activity.
         customPropertySet (1,:) openminds.core.research.CustomPropertySet ...
-            {mustBeListOfUniqueItems(customPropertySet)}
+            {mustBeMinLength(customPropertySet, 1), mustBeListOfUniqueItems(customPropertySet)}
 
         % Enter a description of this activity.
         description (1,1) string
 
         % Add the device used to slice the tissue sample.
         device (1,:) openminds.specimenprep.device.SlicingDeviceUsage ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         endTime (1,:) datetime ...
-            {mustBeSpecifiedLength(endTime, 0, 1)}
+            {mustBeScalarOrEmpty(endTime), mustBeValidTime(endTime)}
 
         % Add the state of the specimen that was sliced during this activity.
         input (1,:) openminds.internal.mixedtype.tissuesampleslicing.Input ...
-            {mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter a lookup label for this activity that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the state of the tissue sample slice or collection of slices that resulted from this activity.
         output (1,:) openminds.internal.mixedtype.tissuesampleslicing.Output ...
-            {mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.tissuesampleslicing.PerformedBy ...
-            {mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
-            {mustBeSpecifiedLength(preparationDesign, 0, 1)}
+            {mustBeScalarOrEmpty(preparationDesign)}
 
         % Add all protocols used during this activity.
         protocol (1,:) openminds.core.research.Protocol ...
-            {mustBeListOfUniqueItems(protocol)}
+            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         startTime (1,:) datetime ...
-            {mustBeSpecifiedLength(startTime, 0, 1)}
+            {mustBeScalarOrEmpty(startTime), mustBeValidTime(startTime)}
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.tissuesampleslicing.StudyTarget ...
-            {mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
 
         % Enter the temperature at which the tissue sample was sliced during the activity.
         temperature (1,:) openminds.internal.mixedtype.tissuesampleslicing.Temperature ...
-            {mustBeSpecifiedLength(temperature, 0, 1)}
+            {mustBeScalarOrEmpty(temperature)}
 
         % Add the chemical mixture used as bath solution during this activity.
         tissueBathSolution (1,:) openminds.chemicals.ChemicalMixture ...
-            {mustBeSpecifiedLength(tissueBathSolution, 0, 1)}
+            {mustBeScalarOrEmpty(tissueBathSolution)}
     end
 
     properties (Access = protected)

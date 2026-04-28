@@ -35,25 +35,25 @@ classdef Pipette < openminds.abstract.Schema
     properties
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.pipette.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
 
         % Enter the external diameter of the pipette.
         externalDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(externalDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(externalDiameter)}
 
         % Enter the internal diameter of the pipette.
         internalDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(internalDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(internalDiameter)}
 
         % Enter the identifier (or label) of this pipette that is used within the corresponding data files to identify this pipette.
         internalIdentifier (1,1) string
 
         % Add the material that the pipette is made of.
         material (1,:) openminds.internal.mixedtype.pipette.Material ...
-            {mustBeSpecifiedLength(material, 0, 1)}
+            {mustBeScalarOrEmpty(material)}
 
         % Enter a descriptive name for this device, preferably defined by the owner.
         name (1,1) string
@@ -63,7 +63,7 @@ classdef Pipette < openminds.abstract.Schema
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.pipette.Type ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

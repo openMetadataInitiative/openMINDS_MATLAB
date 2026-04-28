@@ -50,7 +50,7 @@ classdef MeasuredQuantity < openminds.abstract.ControlledTerm
         function obj = MeasuredQuantity(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MeasuredQuantity
                 propValues.id (1,1) string
             end
 

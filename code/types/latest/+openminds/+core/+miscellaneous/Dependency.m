@@ -14,11 +14,11 @@ classdef Dependency < openminds.abstract.Schema
     properties
         % Add the impacts that failure of this dependency would have.
         failureImpact (1,:) openminds.controlledterms.DependencyImpact ...
-            {mustBeListOfUniqueItems(failureImpact)}
+            {mustBeMinLength(failureImpact, 1), mustBeListOfUniqueItems(failureImpact)}
 
         % Enter the resource that fulfils this dependency.
         fulfilledBy (1,:) openminds.internal.mixedtype.dependency.FulfilledBy ...
-            {mustBeSpecifiedLength(fulfilledBy, 0, 1)}
+            {mustBeScalarOrEmpty(fulfilledBy)}
     end
 
     properties (Access = protected)

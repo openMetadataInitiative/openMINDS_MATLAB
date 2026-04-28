@@ -26,18 +26,18 @@ classdef Organization < openminds.abstract.Schema
     properties
         % Enter all current and, if necessary, past affiliations of this organization.
         affiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(affiliation)}
+            {mustBeMinLength(affiliation, 1), mustBeListOfUniqueItems(affiliation)}
 
         % Add all globally unique and persistent digital identifier of this organization.
         digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
-            {mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the full name of this organization.
         fullName (1,1) string
 
         % Add all parent organizations of this organization.
         hasParent (1,:) openminds.core.actors.Organization ...
-            {mustBeListOfUniqueItems(hasParent)}
+            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this organization.
         homepage (1,1) string

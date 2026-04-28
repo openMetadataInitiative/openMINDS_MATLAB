@@ -35,15 +35,15 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
     properties
         % Add the atlas annotation which this parcellation entity defines.
         hasAnnotation (1,:) openminds.sands.atlas.AtlasAnnotation ...
-            {mustBeSpecifiedLength(hasAnnotation, 0, 1)}
+            {mustBeScalarOrEmpty(hasAnnotation)}
 
         % Add for this parcellation entity the defined anatomical parent structure.
         hasParent (1,:) openminds.sands.atlas.ParcellationEntity ...
-            {mustBeSpecifiedLength(hasParent, 0, 1)}
+            {mustBeScalarOrEmpty(hasParent)}
 
         % Add one or several parcellation terminologies to which this parcellation entity belongs.
         isPartOf (1,:) openminds.sands.atlas.ParcellationTerminology ...
-            {mustBeListOfUniqueItems(isPartOf)}
+            {mustBeMinLength(isPartOf, 1), mustBeListOfUniqueItems(isPartOf)}
 
         % Enter the name for this parcellation entity.
         name (1,1) string
@@ -53,11 +53,11 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
 
         % Add the related UBERON parcellation term.
         relatedUBERONTerm (1,:) openminds.controlledterms.UBERONParcellation ...
-            {mustBeSpecifiedLength(relatedUBERONTerm, 0, 1)}
+            {mustBeScalarOrEmpty(relatedUBERONTerm)}
 
         % Add one or several relations of this parcellation entity to parcellation entities of other parcellation terminologies.
         relationAssessment (1,:) openminds.internal.mixedtype.parcellationentity.RelationAssessment ...
-            {mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
 
         % Enter the version identifier of this parcellation entity.
         versionIdentifier (1,1) string

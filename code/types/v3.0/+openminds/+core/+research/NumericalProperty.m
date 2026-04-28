@@ -16,7 +16,8 @@ classdef NumericalProperty < openminds.abstract.Schema
         name (1,1) string
 
         % Enter all quantitative values that are described by this numerical property.
-        value (1,:) openminds.internal.mixedtype.numericalproperty.Value
+        value (1,:) openminds.internal.mixedtype.numericalproperty.Value ...
+            {mustBeMinLength(value, 1)}
     end
 
     properties (Access = protected)

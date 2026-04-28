@@ -50,29 +50,29 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
 
         % Add all parties that contributed to this brain atlas as authors.
         author (1,:) openminds.internal.mixedtype.brainatlas.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.brainatlas.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.brainatlas.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
         % Enter the parcellation terminology of this brain atlas.
         hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminology ...
-            {mustBeSpecifiedLength(hasTerminology, 0, 1)}
+            {mustBeScalarOrEmpty(hasTerminology)}
 
         % Add versions of this brain atlas.
         hasVersion (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
@@ -88,7 +88,7 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
 
         % Add the species that was used for the creation of this brain atlas.
         usedSpecies (1,:) openminds.controlledterms.Species ...
-            {mustBeSpecifiedLength(usedSpecies, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecies)}
     end
 
     properties (Access = protected)

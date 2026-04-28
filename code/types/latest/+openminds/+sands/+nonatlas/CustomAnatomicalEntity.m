@@ -20,18 +20,18 @@ classdef CustomAnatomicalEntity < openminds.abstract.Schema
     properties
         % Add all custom annotations which define this custom anatomical entity.
         hasAnnotation (1,:) openminds.sands.nonatlas.CustomAnnotation ...
-            {mustBeListOfUniqueItems(hasAnnotation)}
+            {mustBeMinLength(hasAnnotation, 1), mustBeListOfUniqueItems(hasAnnotation)}
 
         % Enter a descriptive name for this custom anatomical entity.
         name (1,1) string
 
         % Add the corresponding cross-species anatomical entity from the UBERON-derived terminologies that represents the generic anatomical concept underlying the custom anatomical entity.
         relatedInterspeciesAnatomy (1,:) openminds.internal.mixedtype.customanatomicalentity.RelatedInterspeciesAnatomy ...
-            {mustBeSpecifiedLength(relatedInterspeciesAnatomy, 0, 1)}
+            {mustBeScalarOrEmpty(relatedInterspeciesAnatomy)}
 
         % Add all relations (qualitative or quantitative) of this custom anatomical entity to other anatomical entities.
         relationAssessment (1,:) openminds.internal.mixedtype.customanatomicalentity.RelationAssessment ...
-            {mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
     end
 
     properties (Access = protected)

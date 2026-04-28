@@ -11,7 +11,7 @@ classdef Ellipse < openminds.abstract.Schema
     properties
         % Enter the lengths of the major and minor diameters of this ellipse.
         diameters (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(diameters, 2, 2)}
+            {mustBeMinLength(diameters, 2), mustBeMaxLength(diameters, 2)}
     end
 
     properties (Access = protected)

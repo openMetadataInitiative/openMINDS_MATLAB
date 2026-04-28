@@ -43,7 +43,7 @@ classdef ChemicalMixtureType < openminds.abstract.ControlledTerm
         function obj = ChemicalMixtureType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ChemicalMixtureType
                 propValues.id (1,1) string
             end
 

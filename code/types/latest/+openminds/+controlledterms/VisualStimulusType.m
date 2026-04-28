@@ -50,7 +50,7 @@ classdef VisualStimulusType < openminds.abstract.ControlledTerm
         function obj = VisualStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.VisualStimulusType
                 propValues.id (1,1) string
             end
 

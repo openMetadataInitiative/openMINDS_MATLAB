@@ -47,19 +47,19 @@ classdef Pipette < openminds.abstract.Schema
 
         % Add the type of this device.
         deviceType (1,:) openminds.controlledterms.DeviceType ...
-            {mustBeSpecifiedLength(deviceType, 0, 1)}
+            {mustBeScalarOrEmpty(deviceType)}
 
         % Add the globally unique and persistent digital identifier of this device.
         digitalIdentifier (1,:) openminds.internal.mixedtype.pipette.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter the external diameter of the pipette.
         externalDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(externalDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(externalDiameter)}
 
         % Enter the internal diameter of the pipette.
         internalDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(internalDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(internalDiameter)}
 
         % Enter the identifier (or label) of this pipette that is used within the corresponding data files to identify this pipette.
         internalIdentifier (1,1) string
@@ -69,18 +69,18 @@ classdef Pipette < openminds.abstract.Schema
 
         % Add the manufacturer (private or industrial) that constructed this device.
         manufacturer (1,:) openminds.internal.mixedtype.pipette.Manufacturer ...
-            {mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
 
         % Add the material that the pipette is made of.
         material (1,:) openminds.internal.mixedtype.pipette.Material ...
-            {mustBeSpecifiedLength(material, 0, 1)}
+            {mustBeScalarOrEmpty(material)}
 
         % Enter a descriptive name for this device, preferably including the model name as defined by the manufacturer.
         name (1,1) string
 
         % Add all parties that legally own this device.
         owner (1,:) openminds.internal.mixedtype.pipette.Owner ...
-            {mustBeListOfUniqueItems(owner)}
+            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)}
 
         % Enter the serial number of this device.
         serialNumber (1,1) string

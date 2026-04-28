@@ -23,7 +23,7 @@ classdef Protocol < openminds.abstract.Schema
     properties
         % Add all behavioral tasks that were executed as part of this protocol.
         behavioralTask (1,:) openminds.controlledterms.BehavioralTask ...
-            {mustBeListOfUniqueItems(behavioralTask)}
+            {mustBeMinLength(behavioralTask, 1), mustBeListOfUniqueItems(behavioralTask)}
 
         % Enter a description of this protocol.
         description (1,1) string
@@ -33,11 +33,11 @@ classdef Protocol < openminds.abstract.Schema
 
         % Add all study options this protocol offers.
         studyOption (1,:) openminds.internal.mixedtype.protocol.StudyOption ...
-            {mustBeListOfUniqueItems(studyOption)}
+            {mustBeMinLength(studyOption, 1), mustBeListOfUniqueItems(studyOption)}
 
         % Add all techniques that were used in this protocol.
         technique (1,:) openminds.controlledterms.Technique ...
-            {mustBeListOfUniqueItems(technique)}
+            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)}
     end
 
     properties (Access = protected)

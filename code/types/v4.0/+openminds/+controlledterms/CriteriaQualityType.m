@@ -41,7 +41,7 @@ classdef CriteriaQualityType < openminds.abstract.ControlledTerm
         function obj = CriteriaQualityType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CriteriaQualityType
                 propValues.id (1,1) string
             end
 

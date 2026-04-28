@@ -14,11 +14,11 @@ classdef SpecimenWeight < openminds.abstract.Schema
     properties
         % Enter the weight type for the specified weight value.
         type (1,:) openminds.controlledterms.WeightType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
 
         % Enter the weight value.
         weight (1,:) openminds.internal.mixedtype.specimenweight.Weight ...
-            {mustBeSpecifiedLength(weight, 0, 1)}
+            {mustBeScalarOrEmpty(weight)}
     end
 
     properties (Access = protected)

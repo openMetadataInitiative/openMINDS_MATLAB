@@ -56,22 +56,22 @@ classdef ValidationTest < openminds.abstract.Schema
     properties
         % Add all individual, organisational, or consortial contributions to this research product. Inherited by all product versions unless overridden at the version level.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product. Inherited by all product versions unless overridden at the version level.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter a description (or abstract) of this research product. Inherited by all product versions unless overridden at the version level.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
         documentation (1,:) openminds.internal.mixedtype.validationtest.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
         fullName (1,1) string
@@ -84,34 +84,34 @@ classdef ValidationTest < openminds.abstract.Schema
 
         % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
         keyword (1,:) openminds.internal.mixedtype.validationtest.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add all acquisition techniques that were used to obtain the reference data for this validation test.
         referenceDataAcquisition (1,:) openminds.controlledterms.Technique ...
-            {mustBeListOfUniqueItems(referenceDataAcquisition)}
+            {mustBeMinLength(referenceDataAcquisition, 1), mustBeListOfUniqueItems(referenceDataAcquisition)}
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
         relatedPublication (1,:) openminds.internal.mixedtype.validationtest.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Add the scope of this validation test.
         scope (1,:) openminds.controlledterms.ModelScope ...
-            {mustBeSpecifiedLength(scope, 0, 1)}
+            {mustBeScalarOrEmpty(scope)}
 
         % Add the type of score calculated in this validation test.
         scoreType (1,:) openminds.controlledterms.DifferenceMeasure ...
-            {mustBeSpecifiedLength(scoreType, 0, 1)}
+            {mustBeScalarOrEmpty(scoreType)}
 
         % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name). Inherited by all product versions unless overridden at the version level.
         shortName (1,1) string
 
         % Add all study targets of this validation test.
         studyTarget (1,:) openminds.internal.mixedtype.validationtest.StudyTarget ...
-            {mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
 
         % Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
     end
 
     properties (Access = protected)

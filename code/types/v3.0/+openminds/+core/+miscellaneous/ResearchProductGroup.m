@@ -17,7 +17,7 @@ classdef ResearchProductGroup < openminds.abstract.Schema
 
         % Add all research products (research product versions) that should be grouped under the given 'context'.
         hasPart (1,:) openminds.internal.mixedtype.researchproductgroup.HasPart ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 1), mustBeListOfUniqueItems(hasPart)}
     end
 
     properties (Access = protected)

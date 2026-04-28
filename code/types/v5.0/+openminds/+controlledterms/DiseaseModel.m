@@ -50,7 +50,7 @@ classdef DiseaseModel < openminds.abstract.ControlledTerm
         function obj = DiseaseModel(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DiseaseModel
                 propValues.id (1,1) string
             end
 

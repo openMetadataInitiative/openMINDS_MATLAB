@@ -71,51 +71,51 @@ classdef ScholarlyArticle < openminds.abstract.Schema
 
         % Add all parties that contributed to this creative work as authors.
         author (1,:) openminds.internal.mixedtype.scholarlyarticle.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.scholarlyarticle.CitedPublication ...
-            {mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
 
         % Enter the copyright information of this creative work.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Enter the date on which this creative work was created, formatted as '2023-02-07'.
         creationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(creationDate, 0, 1), mustBeValidDate(creationDate)}
+            {mustBeScalarOrEmpty(creationDate), mustBeValidDate(creationDate)}
 
         % Add all parties that fulfill the role of a custodian for this creative work (e.g., a corresponding author). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the creative work.
         custodian (1,:) openminds.internal.mixedtype.scholarlyarticle.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add all persons that edited this creative work.
         editor (1,:) openminds.core.actors.Person ...
-            {mustBeListOfUniqueItems(editor)}
+            {mustBeMinLength(editor, 1), mustBeListOfUniqueItems(editor)}
 
         % Add all funding information of this creative work.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Add the publication issue or volume this scholarly article is part of.
         isPartOf (1,:) openminds.internal.mixedtype.scholarlyarticle.IsPartOf ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.scholarlyarticle.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add the license of this creative work.
         license (1,:) openminds.core.data.License ...
-            {mustBeSpecifiedLength(license, 0, 1)}
+            {mustBeScalarOrEmpty(license)}
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(modificationDate, 0, 1), mustBeValidDate(modificationDate)}
+            {mustBeScalarOrEmpty(modificationDate), mustBeValidDate(modificationDate)}
 
         % Enter the name (or title) of this creative work.
         name (1,1) string
@@ -125,11 +125,11 @@ classdef ScholarlyArticle < openminds.abstract.Schema
 
         % Enter the date on which this creative work was published, formatted as '2023-02-07'.
         publicationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(publicationDate, 0, 1), mustBeValidDate(publicationDate)}
+            {mustBeScalarOrEmpty(publicationDate), mustBeValidDate(publicationDate)}
 
         % Add the party (private or commercial) that published this creative work.
         publisher (1,:) openminds.internal.mixedtype.scholarlyarticle.Publisher ...
-            {mustBeSpecifiedLength(publisher, 0, 1)}
+            {mustBeScalarOrEmpty(publisher)}
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string

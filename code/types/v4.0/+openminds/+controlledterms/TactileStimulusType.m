@@ -42,7 +42,7 @@ classdef TactileStimulusType < openminds.abstract.ControlledTerm
         function obj = TactileStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.TactileStimulusType
                 propValues.id (1,1) string
             end
 

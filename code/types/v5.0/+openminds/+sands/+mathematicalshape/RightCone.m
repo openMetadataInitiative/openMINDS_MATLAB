@@ -14,11 +14,11 @@ classdef RightCone < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance from the center of the base plane to the apex of this right cone.
         apexBaseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(apexBaseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(apexBaseDistance)}
 
         % Enter the two-dimensional elliptic base shape of this right cone.
         baseShape (1,:) openminds.internal.mixedtype.rightcone.BaseShape ...
-            {mustBeSpecifiedLength(baseShape, 0, 1)}
+            {mustBeScalarOrEmpty(baseShape)}
     end
 
     properties (Access = protected)

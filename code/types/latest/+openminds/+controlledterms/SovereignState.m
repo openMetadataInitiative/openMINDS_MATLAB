@@ -239,7 +239,7 @@ classdef SovereignState < openminds.abstract.ControlledTerm
         function obj = SovereignState(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SovereignState
                 propValues.id (1,1) string
             end
 

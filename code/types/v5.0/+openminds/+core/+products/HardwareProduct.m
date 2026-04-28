@@ -38,41 +38,41 @@ classdef HardwareProduct < openminds.abstract.Schema
     properties
         % Add all relevant contributions (e.g., manufacturing, testing) for this hardware product.
         contribution (1,:) openminds.internal.mixedtype.hardwareproduct.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter the copyright information of this hardware product.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Enter a short text describing this hardware product.
         description (1,1) string
 
         % Add the digital identifier for this hardware product.
         digitalIdentifier (1,:) openminds.internal.mixedtype.hardwareproduct.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add all relevant keywords to this hardware product, either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.hardwareproduct.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Enter the model name for this hardware product defined by the manufacturer. In case of versioned models, the version identifier should be included in the name.
         name (1,1) string
 
         % Add terms that describe what this hardware product does.
         scope (1,:) openminds.internal.mixedtype.hardwareproduct.Scope ...
-            {mustBeListOfUniqueItems(scope)}
+            {mustBeMinLength(scope, 1), mustBeListOfUniqueItems(scope)}
 
         % Add the specification(s) of this hardware product as property value list.
         specification (1,:) openminds.core.research.PropertyValueList ...
-            {mustBeSpecifiedLength(specification, 0, 1)}
+            {mustBeScalarOrEmpty(specification)}
 
         % Add the type of this hardware product.
         type (1,:) openminds.controlledterms.DeviceType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
 
         % Add all licenses and available usage agreements applicable to this hardware product.
         usageCondition (1,:) openminds.internal.mixedtype.hardwareproduct.UsageCondition ...
-            {mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
     end
 
     properties (Access = protected)

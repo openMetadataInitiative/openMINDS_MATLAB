@@ -45,7 +45,7 @@ classdef DeviceMountingType < openminds.abstract.ControlledTerm
         function obj = DeviceMountingType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DeviceMountingType
                 propValues.id (1,1) string
             end
 

@@ -26,18 +26,18 @@ classdef TissueSampleState < openminds.abstract.Schema
 
         % Add the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.tissuesamplestate.Age ...
-            {mustBeSpecifiedLength(age, 0, 1)}
+            {mustBeScalarOrEmpty(age)}
 
         % Enter a lookup label for this specimen (set) state that may help you to more easily find it again.
         lookupLabel (1,1) string
 
         % Add the pathology of the specimen (set) in this state.
         pathology (1,:) openminds.internal.mixedtype.tissuesamplestate.Pathology ...
-            {mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
 
         % Add the weight of the specimen (set) in this state.
         weight (1,:) openminds.internal.mixedtype.tissuesamplestate.Weight ...
-            {mustBeSpecifiedLength(weight, 0, 1)}
+            {mustBeScalarOrEmpty(weight)}
     end
 
     properties (Access = protected)

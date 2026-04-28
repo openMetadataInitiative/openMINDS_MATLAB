@@ -154,7 +154,7 @@ classdef AnalysisTechnique < openminds.abstract.ControlledTerm
         function obj = AnalysisTechnique(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnalysisTechnique
                 propValues.id (1,1) string
             end
 

@@ -44,7 +44,7 @@ classdef QualitativeOverlap < openminds.abstract.ControlledTerm
         function obj = QualitativeOverlap(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.QualitativeOverlap
                 propValues.id (1,1) string
             end
 

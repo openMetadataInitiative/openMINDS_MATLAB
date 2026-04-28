@@ -23,23 +23,23 @@ classdef Accessibility < openminds.abstract.Schema
     properties
         % Add the relevant access channel indicating where access takes place (physical, virtual, or hybrid).
         channel (1,:) openminds.controlledterms.AccessChannel ...
-            {mustBeSpecifiedLength(channel, 0, 1)}
+            {mustBeScalarOrEmpty(channel)}
 
         % Add the relevant access eligibility type indicating who is allowed to access (open, controlled, or restricted).
         eligibility (1,:) openminds.controlledterms.AccessEligibilityType ...
-            {mustBeSpecifiedLength(eligibility, 0, 1)}
+            {mustBeScalarOrEmpty(eligibility)}
 
         % Add the relevant access form indicating whether the user interacts directly or through mediation.
         form (1,:) openminds.controlledterms.AccessForm ...
-            {mustBeSpecifiedLength(form, 0, 1)}
+            {mustBeScalarOrEmpty(form)}
 
         % Add all relevant payment model types indicating how access costs are determined. If no payment is requires, select zero-cost payment model.
         paymentModel (1,:) openminds.controlledterms.PaymentModelType ...
-            {mustBeListOfUniqueItems(paymentModel)}
+            {mustBeMinLength(paymentModel, 1), mustBeListOfUniqueItems(paymentModel)}
 
         % Add the relevant access process type indicating how access is granted (immediate, registered, authenticated, or authorized).
         process (1,:) openminds.controlledterms.AccessProcessType ...
-            {mustBeSpecifiedLength(process, 0, 1)}
+            {mustBeScalarOrEmpty(process)}
     end
 
     properties (Access = protected)

@@ -30,7 +30,7 @@ classdef UBERONParcellation < openminds.abstract.ControlledTerm
         function obj = UBERONParcellation(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.UBERONParcellation
                 propValues.id (1,1) string
             end
 

@@ -23,15 +23,15 @@ classdef Person < openminds.abstract.Schema
     properties
         % Add the current and, if necessary, past affiliations of this person
         affiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(affiliation)}
+            {mustBeMinLength(affiliation, 1), mustBeListOfUniqueItems(affiliation)}
 
         % Add the contact information of this person.
         contactInformation (1,:) openminds.core.actors.ContactInformation ...
-            {mustBeSpecifiedLength(contactInformation, 0, 1)}
+            {mustBeScalarOrEmpty(contactInformation)}
 
         % Add one or several globally unique and persistent digital identifier for this person.
         digitalIdentifier (1,:) openminds.core.miscellaneous.ORCID ...
-            {mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the family name of this person.
         familyName (1,1) string

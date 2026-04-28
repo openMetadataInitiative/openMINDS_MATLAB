@@ -23,11 +23,11 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
 
         % Add the web service or organization that hosts this live paper resource item.
         hostedBy (1,:) openminds.internal.mixedtype.livepaperresourceitem.HostedBy ...
-            {mustBeSpecifiedLength(hostedBy, 0, 1)}
+            {mustBeScalarOrEmpty(hostedBy)}
 
         % Add the live paper section this live paper resource item is part of.
         isPartOf (1,:) openminds.publications.LivePaperSection ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter a descriptive name for this live paper resource item.
         name (1,1) string

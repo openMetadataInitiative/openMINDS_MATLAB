@@ -30,7 +30,7 @@ classdef EthicsAssessment < openminds.abstract.ControlledTerm
         function obj = EthicsAssessment(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.EthicsAssessment
                 propValues.id (1,1) string
             end
 

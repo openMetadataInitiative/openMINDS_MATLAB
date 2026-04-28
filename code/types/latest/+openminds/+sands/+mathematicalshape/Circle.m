@@ -11,7 +11,7 @@ classdef Circle < openminds.abstract.Schema
     properties
         % Enter the radius of this circle.
         radius (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(radius, 0, 1)}
+            {mustBeScalarOrEmpty(radius)}
     end
 
     properties (Access = protected)

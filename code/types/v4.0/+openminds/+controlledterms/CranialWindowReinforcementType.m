@@ -44,7 +44,7 @@ classdef CranialWindowReinforcementType < openminds.abstract.ControlledTerm
         function obj = CranialWindowReinforcementType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CranialWindowReinforcementType
                 propValues.id (1,1) string
             end
 

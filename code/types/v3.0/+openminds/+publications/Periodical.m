@@ -20,7 +20,7 @@ classdef Periodical < openminds.abstract.Schema
 
         % Add the globally unique and persistent digital identifier of this periodical.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.ISSN ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter the name (or title) of this periodical (e.g., Journal of Physiology).
         name (1,1) string

@@ -32,21 +32,21 @@ classdef WebService < openminds.abstract.Schema
     properties
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.webservice.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add all parties that developed this web service.
         developer (1,:) openminds.internal.mixedtype.webservice.Developer ...
-            {mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
         % Add all versions of this web service.
         hasVersion (1,:) openminds.core.products.WebServiceVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string

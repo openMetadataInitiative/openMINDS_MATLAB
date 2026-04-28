@@ -14,11 +14,11 @@ classdef Rectangle < openminds.abstract.Schema
     properties
         % Enter the length of this rectangle.
         length (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(length, 0, 1)}
+            {mustBeScalarOrEmpty(length)}
 
         % Enter the width of this rectangle.
         width (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(width, 0, 1)}
+            {mustBeScalarOrEmpty(width)}
     end
 
     properties (Access = protected)

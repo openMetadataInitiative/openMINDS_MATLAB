@@ -43,7 +43,7 @@ classdef OrganSystemStructure < openminds.abstract.ControlledTerm
         function obj = OrganSystemStructure(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OrganSystemStructure
                 propValues.id (1,1) string
             end
 

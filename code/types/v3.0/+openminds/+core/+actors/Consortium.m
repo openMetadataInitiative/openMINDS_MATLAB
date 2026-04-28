@@ -20,7 +20,7 @@ classdef Consortium < openminds.abstract.Schema
     properties
         % Add the contact information of this consortium.
         contactInformation (1,:) openminds.core.actors.ContactInformation ...
-            {mustBeSpecifiedLength(contactInformation, 0, 1)}
+            {mustBeScalarOrEmpty(contactInformation)}
 
         % Enter the full name of this consortium.
         fullName (1,1) string

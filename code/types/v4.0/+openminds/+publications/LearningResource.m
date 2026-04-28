@@ -86,90 +86,90 @@ classdef LearningResource < openminds.abstract.Schema
 
         % Add all research product (versions) this learning resource are about. Note that the learning resource should supplement the usage of the research product (versions) with e.g., instructions on their usage or additional information.
         about (1,:) openminds.internal.mixedtype.learningresource.About ...
-            {mustBeListOfUniqueItems(about)}
+            {mustBeMinLength(about, 1), mustBeListOfUniqueItems(about)}
 
         % Enter the abstract or a short description of the creative work.
         abstract (1,1) string
 
         % Add all parties that contributed to this creative work as authors.
         author (1,:) openminds.internal.mixedtype.learningresource.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.learningresource.CitedPublication ...
-            {mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
 
         % Enter the copyright information of this creative work.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Enter the date on which this creative work was created, formatted as '2023-02-07'.
         creationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(creationDate, 0, 1), mustBeValidDate(creationDate)}
+            {mustBeScalarOrEmpty(creationDate), mustBeValidDate(creationDate)}
 
         % Add all parties that fulfill the role of a custodian for this creative work (e.g., a corresponding author). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the creative work.
         custodian (1,:) openminds.internal.mixedtype.learningresource.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add all persons that edited this creative work.
         editor (1,:) openminds.core.actors.Person ...
-            {mustBeListOfUniqueItems(editor)}
+            {mustBeMinLength(editor, 1), mustBeListOfUniqueItems(editor)}
 
         % Add the educational level that best summarizes the prerequisite of this learning resource.
         educationalLevel (1,:) openminds.controlledterms.EducationalLevel ...
-            {mustBeSpecifiedLength(educationalLevel, 0, 1)}
+            {mustBeScalarOrEmpty(educationalLevel)}
 
         % Add all funding information of this creative work.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.learningresource.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Enter a description for the expected learning outcomes of this learning resource.
         learningOutcome (1,1) string
 
         % Add the license of this creative work.
         license (1,:) openminds.core.data.License ...
-            {mustBeSpecifiedLength(license, 0, 1)}
+            {mustBeScalarOrEmpty(license)}
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(modificationDate, 0, 1), mustBeValidDate(modificationDate)}
+            {mustBeScalarOrEmpty(modificationDate), mustBeValidDate(modificationDate)}
 
         % Enter the name (or title) of this creative work.
         name (1,1) string
 
         % Enter the order in which this resource should appear, relative to other resources with the same topic.
         order (1,:) int64 ...
-            {mustBeSpecifiedLength(order, 0, 1)}
+            {mustBeScalarOrEmpty(order)}
 
         % Enter any knowledge, skills, or abilities that are required to be able to use this learning resource.
         prerequisite (1,1) string
 
         % Enter the date on which this creative work was published, formatted as '2023-02-07'.
         publicationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(publicationDate, 0, 1), mustBeValidDate(publicationDate)}
+            {mustBeScalarOrEmpty(publicationDate), mustBeValidDate(publicationDate)}
 
         % Add the party (private or commercial) that published this creative work.
         publisher (1,:) openminds.internal.mixedtype.learningresource.Publisher ...
-            {mustBeSpecifiedLength(publisher, 0, 1)}
+            {mustBeScalarOrEmpty(publisher)}
 
         % Enter the time that is required to complete this learning resource.
         requiredTime (1,:) openminds.internal.mixedtype.learningresource.RequiredTime ...
-            {mustBeSpecifiedLength(requiredTime, 0, 1)}
+            {mustBeScalarOrEmpty(requiredTime)}
 
         % Enter the name or a short description of the aspect of the research product that is covered by this tutorial
         topic (1,1) string
 
         % Add the type of this learning resource.
         type (1,:) openminds.controlledterms.LearningResourceType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string

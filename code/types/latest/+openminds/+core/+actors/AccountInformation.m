@@ -14,7 +14,7 @@ classdef AccountInformation < openminds.abstract.Schema
     properties
         % Add the service associated with this account.
         service (1,:) openminds.core.products.Service ...
-            {mustBeSpecifiedLength(service, 0, 1)}
+            {mustBeScalarOrEmpty(service)}
 
         % Enter the user name for this account.
         userName (1,1) string

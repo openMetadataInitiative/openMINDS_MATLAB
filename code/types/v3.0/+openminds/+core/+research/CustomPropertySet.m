@@ -20,11 +20,11 @@ classdef CustomPropertySet < openminds.abstract.Schema
 
         % Add the location of the data that define the custom property set for the given context (e.g., stored as file or other entities such as property-value lists).
         dataLocation (1,:) openminds.internal.mixedtype.custompropertyset.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Add the technique for which this custom property set is relevant.
         relevantFor (1,:) openminds.internal.mixedtype.custompropertyset.RelevantFor ...
-            {mustBeSpecifiedLength(relevantFor, 0, 1)}
+            {mustBeScalarOrEmpty(relevantFor)}
     end
 
     properties (Access = protected)

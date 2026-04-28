@@ -11,7 +11,7 @@ classdef Sphere < openminds.abstract.Schema
     properties
         % Enter the radius of this sphere.
         radius (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(radius, 0, 1)}
+            {mustBeScalarOrEmpty(radius)}
     end
 
     properties (Access = protected)

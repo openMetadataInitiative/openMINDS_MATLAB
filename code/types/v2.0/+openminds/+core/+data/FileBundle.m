@@ -29,19 +29,19 @@ classdef FileBundle < openminds.abstract.Schema
     properties
         % If file instances within this bundle are organized and formatted according to a formal data structure use the appropriate contentType. Leave blank otherwise.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the concept which was used to group file instances into this file bundle.
         groupedBy (1,:) openminds.controlledterms.FileBundleGrouping ...
-            {mustBeSpecifiedLength(groupedBy, 0, 1)}
+            {mustBeScalarOrEmpty(groupedBy)}
 
         % Add the hash that was generated for this file bundle.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Add the file bundle or file repository this file bundle is a part of.
         isPartOf (1,:) openminds.internal.mixedtype.filebundle.IsPartOf ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter the name of this file bundle.
         name (1,1) string
@@ -51,7 +51,7 @@ classdef FileBundle < openminds.abstract.Schema
 
         % Enter the storage size this file bundle allocates.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

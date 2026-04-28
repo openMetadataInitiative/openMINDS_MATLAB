@@ -45,7 +45,7 @@ classdef SetupType < openminds.abstract.ControlledTerm
         function obj = SetupType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SetupType
                 propValues.id (1,1) string
             end
 

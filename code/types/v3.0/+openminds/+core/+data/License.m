@@ -29,7 +29,7 @@ classdef License < openminds.abstract.Schema & openminds.internal.mixin.HasContr
 
         % Enter the internationalized resource identifiers (IRIs) to webpages related to this license (e.g., a homepage).
         webpage (1,:) string ...
-            {mustBeListOfUniqueItems(webpage)}
+            {mustBeMinLength(webpage, 1), mustBeListOfUniqueItems(webpage)}
     end
 
     properties (Access = protected)

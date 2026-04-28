@@ -41,7 +41,7 @@ classdef AnnotationCriteriaType < openminds.abstract.ControlledTerm
         function obj = AnnotationCriteriaType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AnnotationCriteriaType
                 propValues.id (1,1) string
             end
 

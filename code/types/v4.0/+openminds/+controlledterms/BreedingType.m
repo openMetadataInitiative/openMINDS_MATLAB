@@ -45,7 +45,7 @@ classdef BreedingType < openminds.abstract.ControlledTerm
         function obj = BreedingType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.BreedingType
                 propValues.id (1,1) string
             end
 

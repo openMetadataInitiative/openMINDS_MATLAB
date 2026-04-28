@@ -11,7 +11,7 @@ classdef Rhombus < openminds.abstract.Schema
     properties
         % Enter the lengths of the two perpendicular diagonals of this rhombus.
         diagonalLengths (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(diagonalLengths, 2, 2)}
+            {mustBeMinLength(diagonalLengths, 2), mustBeMaxLength(diagonalLengths, 2)}
     end
 
     properties (Access = protected)

@@ -30,7 +30,7 @@ classdef Phenotype < openminds.abstract.ControlledTerm
         function obj = Phenotype(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Phenotype
                 propValues.id (1,1) string
             end
 

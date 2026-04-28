@@ -45,7 +45,7 @@ classdef MeasuredSignalType < openminds.abstract.ControlledTerm
         function obj = MeasuredSignalType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MeasuredSignalType
                 propValues.id (1,1) string
             end
 

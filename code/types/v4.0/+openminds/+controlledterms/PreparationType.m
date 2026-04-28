@@ -45,7 +45,7 @@ classdef PreparationType < openminds.abstract.ControlledTerm
         function obj = PreparationType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.PreparationType
                 propValues.id (1,1) string
             end
 

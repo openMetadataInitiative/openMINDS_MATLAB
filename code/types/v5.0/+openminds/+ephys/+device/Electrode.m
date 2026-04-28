@@ -35,25 +35,25 @@ classdef Electrode < openminds.abstract.Schema
     properties
         % Add the conductor material of this electrode.
         conductorMaterial (1,:) openminds.internal.mixedtype.electrode.ConductorMaterial ...
-            {mustBeSpecifiedLength(conductorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(conductorMaterial)}
 
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.electrode.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
 
         % Add the insulator material of this electrode.
         insulatorMaterial (1,:) openminds.internal.mixedtype.electrode.InsulatorMaterial ...
-            {mustBeSpecifiedLength(insulatorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(insulatorMaterial)}
 
         % Enter the identifier (or label) of this electrode that is used within the corresponding data files to identify this electrode.
         internalIdentifier (1,1) string
 
         % Enter the intrinsic resistance of this electrode.
         intrinsicResistance (1,:) openminds.internal.mixedtype.electrode.IntrinsicResistance ...
-            {mustBeSpecifiedLength(intrinsicResistance, 0, 1)}
+            {mustBeScalarOrEmpty(intrinsicResistance)}
 
         % Enter a descriptive name for this device, preferably defined by the owner.
         name (1,1) string
@@ -63,7 +63,7 @@ classdef Electrode < openminds.abstract.Schema
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.electrode.Type ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

@@ -17,15 +17,15 @@ classdef Affiliation < openminds.abstract.Schema
     properties
         % Enter the end date of this affiliation. Leave blank if the affiliation is still current.
         endDate (1,:) datetime ...
-            {mustBeSpecifiedLength(endDate, 0, 1), mustBeValidDate(endDate)}
+            {mustBeScalarOrEmpty(endDate), mustBeValidDate(endDate)}
 
         % Add organization to which a person is or was affiliated.
         organization (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(organization, 0, 1)}
+            {mustBeScalarOrEmpty(organization)}
 
         % Enter the start date of this affiliation.
         startDate (1,:) datetime ...
-            {mustBeSpecifiedLength(startDate, 0, 1), mustBeValidDate(startDate)}
+            {mustBeScalarOrEmpty(startDate), mustBeValidDate(startDate)}
     end
 
     properties (Access = protected)

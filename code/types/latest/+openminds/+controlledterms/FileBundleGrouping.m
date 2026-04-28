@@ -51,7 +51,7 @@ classdef FileBundleGrouping < openminds.abstract.ControlledTerm
         function obj = FileBundleGrouping(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.FileBundleGrouping
                 propValues.id (1,1) string
             end
 

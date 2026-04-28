@@ -29,30 +29,30 @@ classdef ElectrodeUsage < openminds.abstract.Schema
     properties
         % Add the anatomical entity that semantically best describes the anatomical location of the electrode contact.
         anatomicalLocation (1,:) openminds.internal.mixedtype.electrodeusage.AnatomicalLocation ...
-            {mustBeSpecifiedLength(anatomicalLocation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalLocation)}
 
         % Enter the contact resistance of this electrode during its use.
         contactResistance (1,:) openminds.internal.mixedtype.electrodeusage.ContactResistance ...
-            {mustBeSpecifiedLength(contactResistance, 0, 1)}
+            {mustBeScalarOrEmpty(contactResistance)}
 
         % Add the electrode used.
         device (1,:) openminds.ephys.device.Electrode ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Enter a lookup label for this device usage that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.electrodeusage.MetadataLocation ...
-            {mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
 
         % Add the coordinate point that best describes the spatial location of the electrode contact during its use.
         spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeSpecifiedLength(spatialLocation, 0, 1)}
+            {mustBeScalarOrEmpty(spatialLocation)}
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.electrodeusage.UsedSpecimen ...
-            {mustBeSpecifiedLength(usedSpecimen, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecimen)}
     end
 
     properties (Access = protected)

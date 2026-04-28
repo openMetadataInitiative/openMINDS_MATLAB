@@ -59,29 +59,29 @@ classdef AnatomicalAtlas < openminds.abstract.Schema
 
         % Add all individual, organisational, or consortial contributions to this research product. Inherited by all product versions unless overridden at the version level.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product. Inherited by all product versions unless overridden at the version level.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter a description (or abstract) of this research product. Inherited by all product versions unless overridden at the version level.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.anatomicalatlas.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
         documentation (1,:) openminds.internal.mixedtype.anatomicalatlas.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
         fullName (1,1) string
 
         % Enter the parcellation terminology of this anatomical atlas.
         hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminology ...
-            {mustBeSpecifiedLength(hasTerminology, 0, 1)}
+            {mustBeScalarOrEmpty(hasTerminology)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product. Inherited by all product versions unless overridden at the version level.
         homepage (1,1) string
@@ -91,25 +91,25 @@ classdef AnatomicalAtlas < openminds.abstract.Schema
 
         % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
         keyword (1,:) openminds.internal.mixedtype.anatomicalatlas.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Enter the internationalized resource identifier (IRI) to the related ontological term matching this anatomical atlas.
         ontologyIdentifier (1,1) string
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
         relatedPublication (1,:) openminds.internal.mixedtype.anatomicalatlas.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name). Inherited by all product versions unless overridden at the version level.
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add the taxon (e.g., species) that was used for the creation of this anatomical atlas.
         usedTaxon (1,:) openminds.internal.mixedtype.anatomicalatlas.UsedTaxon ...
-            {mustBeSpecifiedLength(usedTaxon, 0, 1)}
+            {mustBeScalarOrEmpty(usedTaxon)}
     end
 
     properties (Access = protected)

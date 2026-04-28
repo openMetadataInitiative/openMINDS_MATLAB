@@ -107,41 +107,41 @@ classdef SoftwareVersion < openminds.abstract.Schema
     properties
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.core.miscellaneous.Accessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Add all individual, organisational, or consortial contributions to this research product version. These values override the inherited values from the version-independent product.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product version.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Add all operating devices compatible with this software version.
         dependency (1,:) openminds.core.miscellaneous.Dependency ...
-            {mustBeListOfUniqueItems(dependency)}
+            {mustBeMinLength(dependency, 1), mustBeListOfUniqueItems(dependency)}
 
         % Enter a description (or abstract) of this research product version. This value overrides the inherited value from the version-independent product.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.softwareversion.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.softwareversion.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this research product version. This value overrides the inherited value from the version-independent product.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version. This value overrides the inherited value from the version-independent product.
         homepage (1,1) string
@@ -151,78 +151,78 @@ classdef SoftwareVersion < openminds.abstract.Schema
 
         % Add all interface versions that are implemented by this software version.
         implements (1,:) openminds.core.products.InterfaceVersion ...
-            {mustBeListOfUniqueItems(implements)}
+            {mustBeMinLength(implements, 1), mustBeListOfUniqueItems(implements)}
 
         % Add all content types that can be used as input by this software version.
         inputFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(inputFormat)}
+            {mustBeMinLength(inputFormat, 1), mustBeListOfUniqueItems(inputFormat)}
 
         % Add the software version preceding this software version.
         isPrecededBy (1,:) openminds.core.products.SoftwareVersion ...
-            {mustBeSpecifiedLength(isPrecededBy, 0, 1)}
+            {mustBeScalarOrEmpty(isPrecededBy)}
 
         % Add all software versions that can be used alternatively to this software version.
         isVariantOf (1,:) openminds.core.products.SoftwareVersion ...
-            {mustBeListOfUniqueItems(isVariantOf)}
+            {mustBeMinLength(isVariantOf, 1), mustBeListOfUniqueItems(isVariantOf)}
 
         % Add the version-independent information about this software.
         isVersionOf (1,:) openminds.core.products.Software ...
-            {mustBeSpecifiedLength(isVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isVersionOf)}
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.softwareversion.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add all languages supported by this software version.
         language (1,:) openminds.controlledterms.Language ...
-            {mustBeListOfUniqueItems(language)}
+            {mustBeMinLength(language, 1), mustBeListOfUniqueItems(language)}
 
         % Add all operating devices compatible with this software version.
         operatingDevice (1,:) openminds.controlledterms.OperatingDevice ...
-            {mustBeListOfUniqueItems(operatingDevice)}
+            {mustBeMinLength(operatingDevice, 1), mustBeListOfUniqueItems(operatingDevice)}
 
         % Add all operating systems supported by this software version.
         operatingSystem (1,:) openminds.controlledterms.OperatingSystem ...
-            {mustBeListOfUniqueItems(operatingSystem)}
+            {mustBeMinLength(operatingSystem, 1), mustBeListOfUniqueItems(operatingSystem)}
 
         % Add all content types that can be generated as output by this software version.
         outputFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(outputFormat)}
+            {mustBeMinLength(outputFormat, 1), mustBeListOfUniqueItems(outputFormat)}
 
         % Add all programming languages used to develop this software version.
         programmingLanguage (1,:) openminds.controlledterms.ProgrammingLanguage ...
-            {mustBeListOfUniqueItems(programmingLanguage)}
+            {mustBeMinLength(programmingLanguage, 1), mustBeListOfUniqueItems(programmingLanguage)}
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
-            {mustBeSpecifiedLength(publicationStatus, 0, 1)}
+            {mustBeScalarOrEmpty(publicationStatus)}
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.softwareversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Add terms that describe what this software version does.
         scope (1,:) openminds.internal.mixedtype.softwareversion.Scope ...
-            {mustBeListOfUniqueItems(scope)}
+            {mustBeMinLength(scope, 1), mustBeListOfUniqueItems(scope)}
 
         % Enter a short name (or alias) for this research product version that could be used as a shortened display title (e.g., for web services with too little space to display the full name). This value overrides the inherited value from the version-independent product.
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for handling this research product version. This value overrides the inherited value from the version-independent product.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.softwareversion.UsageCondition ...
-            {mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

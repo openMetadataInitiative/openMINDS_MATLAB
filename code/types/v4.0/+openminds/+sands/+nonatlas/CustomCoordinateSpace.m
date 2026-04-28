@@ -23,22 +23,22 @@ classdef CustomCoordinateSpace < openminds.abstract.Schema
     properties
         % Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for this custom coordinate space.
         anatomicalAxesOrientation (1,:) openminds.controlledterms.AnatomicalAxesOrientation ...
-            {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalAxesOrientation)}
 
         % Enter the origin (central point where all axes intersect) of this custom coordinate space for two-dimensional spaces as [x, y] or for three-dimensional space as [x, y, z].
         axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(axesOrigin, 2, 3)}
+            {mustBeMinLength(axesOrigin, 2), mustBeMaxLength(axesOrigin, 3), mustBeListOfUniqueItems(axesOrigin)}
 
         % Add all image files used as visual representation of this custom coordinate space.
         defaultImage (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(defaultImage)}
+            {mustBeMinLength(defaultImage, 1), mustBeListOfUniqueItems(defaultImage)}
 
         % Enter a descriptive name for this custom coordinate space.
         name (1,1) string
 
         % Add the native unit that is used for this custom coordinate space.
         nativeUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(nativeUnit, 0, 1)}
+            {mustBeScalarOrEmpty(nativeUnit)}
     end
 
     properties (Access = protected)

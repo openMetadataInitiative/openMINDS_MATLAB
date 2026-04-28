@@ -35,11 +35,11 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
     properties
         % Add all data types that may be represented via this content type.
         dataType (1,:) openminds.controlledterms.DataType ...
-            {mustBeListOfUniqueItems(dataType)}
+            {mustBeMinLength(dataType, 1), mustBeListOfUniqueItems(dataType)}
 
         % Enter the internationalized resource identifiers (IRIs) of sources that define or document this content type, preferably authoritative registries (e.g., IANA), or reference documentation (e.g., mimetype.io) if no registry entry exists.
         definingSource (1,:) string ...
-            {mustBeListOfUniqueItems(definingSource)}
+            {mustBeMinLength(definingSource, 1), mustBeListOfUniqueItems(definingSource)}
 
         % Enter a description of the content type specification. Leave blank if an official and public specification is linked under 'specification' for this content type.
         description (1,1) string
@@ -49,11 +49,11 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter all file extensions associated with this content type.
         fileExtension (1,:) string ...
-            {mustBeListOfUniqueItems(fileExtension)}
+            {mustBeMinLength(fileExtension, 1), mustBeListOfUniqueItems(fileExtension)}
 
         % Add all content types this content type is based on.
         isBasedOn (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(isBasedOn)}
+            {mustBeMinLength(isBasedOn, 1), mustBeListOfUniqueItems(isBasedOn)}
 
         % Enter the name of this content type following a IANA.org inspired convention.
         name (1,1) string
@@ -63,7 +63,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter any synonyms of this content type.
         synonym (1,:) string ...
-            {mustBeListOfUniqueItems(synonym)}
+            {mustBeMinLength(synonym, 1), mustBeListOfUniqueItems(synonym)}
     end
 
     properties (Access = protected)

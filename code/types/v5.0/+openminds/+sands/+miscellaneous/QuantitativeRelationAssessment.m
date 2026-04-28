@@ -17,15 +17,15 @@ classdef QuantitativeRelationAssessment < openminds.abstract.Schema
     properties
         % Add the protocol execution defining the criteria that were applied to determine this relation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the parcellation entity version to which the relation is described.
         inRelationTo (1,:) openminds.sands.atlas.ParcellationEntityVersion ...
-            {mustBeSpecifiedLength(inRelationTo, 0, 1)}
+            {mustBeScalarOrEmpty(inRelationTo)}
 
         % Enter the quantitative overlap between the two anatomical entities, preferably expressed in percentage.
         quantitativeOverlap (1,:) openminds.internal.mixedtype.quantitativerelationassessment.QuantitativeOverlap ...
-            {mustBeSpecifiedLength(quantitativeOverlap, 0, 1)}
+            {mustBeScalarOrEmpty(quantitativeOverlap)}
     end
 
     properties (Access = protected)

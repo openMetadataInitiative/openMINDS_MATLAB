@@ -29,11 +29,11 @@ classdef ElectrodeContact < openminds.abstract.Schema
     properties
         % Add the central coordinate of this electrode contact.
         coordinatePoint (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeSpecifiedLength(coordinatePoint, 0, 1)}
+            {mustBeScalarOrEmpty(coordinatePoint)}
 
         % Add one or several files in which the coordinate point and internal identifier of this electrode contact is defined in.
         definedIn (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(definedIn)}
+            {mustBeMinLength(definedIn, 1), mustBeListOfUniqueItems(definedIn)}
 
         % Enter the identifier used for this electrode contact within the file it is stored in.
         internalIdentifier (1,1) string
@@ -43,15 +43,15 @@ classdef ElectrodeContact < openminds.abstract.Schema
 
         % Add one or several files in which the recordings from this electrode contact were stored.
         relatedRecording (1,:) openminds.internal.mixedtype.electrodecontact.RelatedRecording ...
-            {mustBeListOfUniqueItems(relatedRecording)}
+            {mustBeMinLength(relatedRecording, 1), mustBeListOfUniqueItems(relatedRecording)}
 
         % Add one or several files in which the stimulations applied via this electrode contact were stored.
         relatedStimulation (1,:) openminds.internal.mixedtype.electrodecontact.RelatedStimulation ...
-            {mustBeListOfUniqueItems(relatedStimulation)}
+            {mustBeMinLength(relatedStimulation, 1), mustBeListOfUniqueItems(relatedStimulation)}
 
         % Add one or several image files in which the electrode contact is visualized in.
         visualizedIn (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(visualizedIn)}
+            {mustBeMinLength(visualizedIn, 1), mustBeListOfUniqueItems(visualizedIn)}
     end
 
     properties (Access = protected)

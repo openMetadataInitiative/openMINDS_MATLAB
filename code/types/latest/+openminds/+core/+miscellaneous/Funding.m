@@ -29,7 +29,7 @@ classdef Funding < openminds.abstract.Schema
 
         % Add the party that provided this funding.
         funder (1,:) openminds.internal.mixedtype.funding.Funder ...
-            {mustBeSpecifiedLength(funder, 0, 1)}
+            {mustBeScalarOrEmpty(funder)}
     end
 
     properties (Access = protected)

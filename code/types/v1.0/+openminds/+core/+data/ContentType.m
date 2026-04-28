@@ -29,7 +29,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter one or several file extensions associated with this content type.
         fileExtension (1,:) string ...
-            {mustBeListOfUniqueItems(fileExtension)}
+            {mustBeMinLength(fileExtension, 1), mustBeListOfUniqueItems(fileExtension)}
 
         % Enter the name (iana-inspired convention) of this content type.
         name (1,1) string
@@ -42,7 +42,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter one or several synonyms of this content type.
         synonym (1,:) string ...
-            {mustBeListOfUniqueItems(synonym)}
+            {mustBeMinLength(synonym, 1), mustBeListOfUniqueItems(synonym)}
     end
 
     properties (Access = protected)

@@ -44,7 +44,7 @@ classdef MRIParallelAcquisitionTechnique < openminds.abstract.ControlledTerm
         function obj = MRIParallelAcquisitionTechnique(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MRIParallelAcquisitionTechnique
                 propValues.id (1,1) string
             end
 

@@ -183,7 +183,7 @@ classdef MolecularEntity < openminds.abstract.ControlledTerm
         function obj = MolecularEntity(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MolecularEntity
                 propValues.id (1,1) string
             end
 
