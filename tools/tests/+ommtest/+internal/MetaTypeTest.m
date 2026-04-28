@@ -65,13 +65,14 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         end
 
         function testMetaType(testCase)
-            % The following verifications was written for v4.0 of the
-            % DatasetVersion schema and might need to change in the future
+            previousVersion = openminds.version();
+            openminds.version(5);
+            testCase.addTeardown(@() openminds.version(previousVersion))
             
             metaDSV = openminds.internal.meta.fromClassName('DatasetVersion');
 
             testCase.verifyTrue( metaDSV.isPropertyValueScalar('accessibility') )
-            testCase.verifyFalse( metaDSV.isPropertyValueScalar('author') )
+            testCase.verifyFalse( metaDSV.isPropertyValueScalar('contribution') )
             
             testCase.verifyTrue( metaDSV.isPropertyWithLinkedType('accessibility') )
             testCase.verifyFalse( metaDSV.isPropertyWithLinkedType('description') )
@@ -80,21 +81,33 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             testCase.verifyFalse( metaDSV.isPropertyWithEmbeddedType('accessibility') )
             testCase.verifyFalse( metaDSV.isPropertyWithEmbeddedType('description') )
             testCase.verifyTrue( metaDSV.isPropertyWithEmbeddedType('copyright') )
+            testCase.verifyTrue( metaDSV.isPropertyWithEmbeddedType('contribution') )
 
-            testCase.verifyTrue( metaDSV.isPropertyMixedType('author') )
+            testCase.verifyTrue( metaDSV.isPropertyMixedType('digitalIdentifier') )
+            testCase.verifyTrue( metaDSV.isPropertyMixedType('usageCondition') )
             testCase.verifyFalse( metaDSV.isPropertyMixedType('accessibility') )
+            testCase.verifyFalse( metaDSV.isPropertyMixedType('contribution') )
 
-            testCase.verifyTrue( metaDSV.isLinkedTypeOfAnyProperty("Person") )
-            testCase.verifyFalse( metaDSV.isLinkedTypeOfAnyProperty("SubjectState") )
+            testCase.verifyTrue( metaDSV.isLinkedTypeOfAnyProperty("SubjectState") )
+            testCase.verifyFalse( metaDSV.isLinkedTypeOfAnyProperty("Person") )
 
-            linkedAuthorTypes = metaDSV.listLinkedTypesForProperty('author');
-            testCase.verifyEqual(linkedAuthorTypes, ...
-                ["openminds.core.actors.Consortium", ...
-                "openminds.core.actors.Organization", ...
-                "openminds.core.actors.Person"])
+            linkedDigitalIdentifierTypes = metaDSV.listLinkedTypesForProperty('digitalIdentifier');
+            testCase.verifyEqual(linkedDigitalIdentifierTypes, ...
+                ["openminds.core.digitalidentifier.DOI", ...
+                "openminds.core.digitalidentifier.GenericIdentifier", ...
+                "openminds.core.digitalidentifier.IdentifiersDotOrgID", ...
+                "openminds.core.digitalidentifier.RRID"])
+
+            linkedUsageConditionTypes = metaDSV.listLinkedTypesForProperty('usageCondition');
+            testCase.verifyEqual(linkedUsageConditionTypes, ...
+                ["openminds.core.data.License", ...
+                "openminds.core.data.UsageAgreement"])
 
             embeddedCopyrightTypes = metaDSV.listEmbeddedTypesForProperty('copyright');
-            testCase.verifyEqual(embeddedCopyrightTypes, embeddedCopyrightTypes)
+            testCase.verifyEqual(embeddedCopyrightTypes, "openminds.core.data.Copyright")
+
+            embeddedContributionTypes = metaDSV.listEmbeddedTypesForProperty('contribution');
+            testCase.verifyEqual(embeddedContributionTypes, "openminds.core.actors.Contribution")
         end
     end
 end

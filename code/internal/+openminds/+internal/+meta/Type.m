@@ -89,7 +89,7 @@ classdef Type < handle
                     obj.isPropertyWithEmbeddedType(propertyName)
                 validationFcn = mp.Validation.ValidatorFunctions;
                 
-                isScalar = @(str) contains(str, 'mustBeSpecifiedLength') && contains(str, '0,1)');
+                isScalar = @(str) contains(str, 'mustBeScalarOrEmpty');
                 tf = any( cellfun(@(c) isScalar(func2str(c)), validationFcn) );
             else
                 if isa( mp.Validation.Size(2), 'meta.UnrestrictedDimension')
