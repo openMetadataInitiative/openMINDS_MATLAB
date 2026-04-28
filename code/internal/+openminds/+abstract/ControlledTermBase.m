@@ -36,7 +36,8 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
                     if startsWith(instanceSpec, openminds.constant.BaseURI)
                         obj.deserializeFromName(instanceSpec);
                     elseif isfile( instanceSpec )
-                        obj.load( instanceSpec ) % todo: Not implemented??
+                        error('OPENMINDS_MATLAB:ControlledTerm:Initialize', ...
+                            'Filepath input is not supported.')
                     else
                         % Deserialize from name of controlled instance
                         obj.deserializeFromName(instanceSpec);
