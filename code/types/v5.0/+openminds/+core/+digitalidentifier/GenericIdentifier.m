@@ -17,7 +17,7 @@ classdef GenericIdentifier < openminds.abstract.Schema
     properties
         % Add the organization that governs and/or emits the identifier.
         emitter (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(emitter, 0, 1)}
+            {mustBeScalarOrEmpty(emitter)}
 
         % Enter a persistent, unique identifier emitted by an organization.
         identifier (1,1) string

@@ -23,15 +23,15 @@ classdef AnatomicalTargetPosition < openminds.abstract.Schema
 
         % Add all anatomical entities that describe the target position(s).
         anatomicalTarget (1,:) openminds.internal.mixedtype.anatomicaltargetposition.AnatomicalTarget ...
-            {mustBeListOfUniqueItems(anatomicalTarget)}
+            {mustBeMinLength(anatomicalTarget, 1), mustBeListOfUniqueItems(anatomicalTarget)}
 
         % Add all coordinate points that describe the spatial location of the anatomical target structure(s).
         spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeListOfUniqueItems(spatialLocation)}
+            {mustBeMinLength(spatialLocation, 1), mustBeListOfUniqueItems(spatialLocation)}
 
         % Add the target identification type that best describes how the this anatomical target position was identified.
         targetIdentificationType (1,:) openminds.controlledterms.AnatomicalIdentificationType ...
-            {mustBeSpecifiedLength(targetIdentificationType, 0, 1)}
+            {mustBeScalarOrEmpty(targetIdentificationType)}
     end
 
     properties (Access = protected)

@@ -23,7 +23,7 @@ classdef WebResource < openminds.abstract.Schema
 
         % Add the expected content type of the document at this web resource.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
     end
 
     properties (Access = protected)

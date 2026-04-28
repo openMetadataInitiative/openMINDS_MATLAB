@@ -20,19 +20,19 @@ classdef WorkflowExecution < openminds.abstract.Schema
     properties
         % Add the configuration information for this workflow execution.
         configuration (1,:) openminds.internal.mixedtype.workflowexecution.Configuration ...
-            {mustBeSpecifiedLength(configuration, 0, 1)}
+            {mustBeScalarOrEmpty(configuration)}
 
         % Add the workflow recipe version used for this workflow execution.
         recipe (1,:) openminds.computation.WorkflowRecipeVersion ...
-            {mustBeSpecifiedLength(recipe, 0, 1)}
+            {mustBeScalarOrEmpty(recipe)}
 
         % Add all stages that were performed in this workflow execution.
         stage (1,:) openminds.internal.mixedtype.workflowexecution.Stage ...
-            {mustBeListOfUniqueItems(stage)}
+            {mustBeMinLength(stage, 1), mustBeListOfUniqueItems(stage)}
 
         % Add the agent that started this workflow execution.
         startedBy (1,:) openminds.internal.mixedtype.workflowexecution.StartedBy ...
-            {mustBeSpecifiedLength(startedBy, 0, 1)}
+            {mustBeScalarOrEmpty(startedBy)}
     end
 
     properties (Access = protected)

@@ -51,7 +51,7 @@ classdef DependencyImpact < openminds.abstract.ControlledTerm
         function obj = DependencyImpact(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DependencyImpact
                 propValues.id (1,1) string
             end
 

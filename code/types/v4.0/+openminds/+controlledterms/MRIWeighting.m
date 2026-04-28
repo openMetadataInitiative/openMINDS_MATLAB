@@ -39,7 +39,7 @@ classdef MRIWeighting < openminds.abstract.ControlledTerm
         function obj = MRIWeighting(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MRIWeighting
                 propValues.id (1,1) string
             end
 

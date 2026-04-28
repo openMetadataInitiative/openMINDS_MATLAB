@@ -14,11 +14,11 @@ classdef Rectangle < openminds.abstract.Schema
     properties
         % Enter the common length of the major sides of this rectangle.
         majorSideLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(majorSideLength, 0, 1)}
+            {mustBeScalarOrEmpty(majorSideLength)}
 
         % Enter the common length of the minor sides of this rectangle.
         minorSideLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(minorSideLength, 0, 1)}
+            {mustBeScalarOrEmpty(minorSideLength)}
     end
 
     properties (Access = protected)

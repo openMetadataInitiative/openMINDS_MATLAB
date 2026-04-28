@@ -46,7 +46,7 @@ classdef SemanticDataType < openminds.abstract.ControlledTerm
         function obj = SemanticDataType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SemanticDataType
                 propValues.id (1,1) string
             end
 

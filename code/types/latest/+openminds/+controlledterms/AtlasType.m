@@ -45,7 +45,7 @@ classdef AtlasType < openminds.abstract.ControlledTerm
         function obj = AtlasType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AtlasType
                 propValues.id (1,1) string
             end
 

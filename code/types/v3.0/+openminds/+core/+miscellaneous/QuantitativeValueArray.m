@@ -22,21 +22,24 @@ classdef QuantitativeValueArray < openminds.abstract.Schema
 
     properties
         % Enter the negative uncertainties for all values. Note that the length of the arrays have to match.
-        negativeUncertainties (1,:) double
+        negativeUncertainties (1,:) double ...
+            {mustBeMinLength(negativeUncertainties, 2)}
 
         % Enter the positive uncertainties for all values. Note that the length of the arrays have to match.
-        positiveUncertainties (1,:) double
+        positiveUncertainties (1,:) double ...
+            {mustBeMinLength(positiveUncertainties, 2)}
 
         % Add the type of estimation for the uncertainties.
         typeOfUncertainty (1,:) openminds.controlledterms.TypeOfUncertainty ...
-            {mustBeSpecifiedLength(typeOfUncertainty, 0, 1)}
+            {mustBeScalarOrEmpty(typeOfUncertainty)}
 
         % Add the unit of measurement of the values and their uncertainties.
         unit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(unit, 0, 1)}
+            {mustBeScalarOrEmpty(unit)}
 
         % Enter all measured values.
-        values (1,:) double
+        values (1,:) double ...
+            {mustBeMinLength(values, 2)}
     end
 
     properties (Access = protected)

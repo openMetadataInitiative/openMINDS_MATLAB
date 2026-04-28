@@ -23,23 +23,23 @@ classdef TissueSampleSlicing < openminds.abstract.Schema
     properties
         % Add the device used to slice the tissue sample.
         device (1,:) openminds.specimenprep.device.SlicingDeviceUsage ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Add the state of the specimen that was sliced during this activity.
         input (1,:) openminds.internal.mixedtype.tissuesampleslicing.Input ...
-            {mustBeSpecifiedLength(input, 0, 1)}
+            {mustBeScalarOrEmpty(input)}
 
         % Add the state of the tissue sample slice or collection of slices that resulted from this activity.
         output (1,:) openminds.internal.mixedtype.tissuesampleslicing.Output ...
-            {mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
 
         % Enter the temperature at which the tissue sample was sliced during the activity.
         temperature (1,:) openminds.internal.mixedtype.tissuesampleslicing.Temperature ...
-            {mustBeSpecifiedLength(temperature, 0, 1)}
+            {mustBeScalarOrEmpty(temperature)}
 
         % Add the chemical mixture used as bath solution during this activity.
         tissueBathSolution (1,:) openminds.chemicals.ChemicalMixture ...
-            {mustBeSpecifiedLength(tissueBathSolution, 0, 1)}
+            {mustBeScalarOrEmpty(tissueBathSolution)}
     end
 
     properties (Access = protected)

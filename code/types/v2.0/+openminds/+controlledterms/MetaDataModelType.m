@@ -30,7 +30,7 @@ classdef MetaDataModelType < openminds.abstract.ControlledTerm
         function obj = MetaDataModelType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MetaDataModelType
                 propValues.id (1,1) string
             end
 

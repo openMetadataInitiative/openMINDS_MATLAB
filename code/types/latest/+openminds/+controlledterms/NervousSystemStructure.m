@@ -2678,7 +2678,7 @@ classdef NervousSystemStructure < openminds.abstract.ControlledTerm
         function obj = NervousSystemStructure(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.NervousSystemStructure
                 propValues.id (1,1) string
             end
 

@@ -29,23 +29,23 @@ classdef Person < openminds.abstract.Schema
     properties
         % Enter all current and, if desired, past affiliations of this person.
         affiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(affiliation)}
+            {mustBeMinLength(affiliation, 1), mustBeListOfUniqueItems(affiliation)}
 
         % Enter any other known full name of this person.
         alternateName (1,:) string ...
-            {mustBeListOfUniqueItems(alternateName)}
+            {mustBeMinLength(alternateName, 1), mustBeListOfUniqueItems(alternateName)}
 
         % Add the information about web service accounts held by this person.
         associatedAccount (1,:) openminds.core.actors.AccountInformation ...
-            {mustBeListOfUniqueItems(associatedAccount)}
+            {mustBeMinLength(associatedAccount, 1), mustBeListOfUniqueItems(associatedAccount)}
 
         % Add the contact information of this person.
         contactInformation (1,:) openminds.core.actors.ContactInformation ...
-            {mustBeSpecifiedLength(contactInformation, 0, 1)}
+            {mustBeScalarOrEmpty(contactInformation)}
 
         % Add all globally unique and persistent digital identifier of this person.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.ORCID ...
-            {mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the family name of this person.
         familyName (1,1) string

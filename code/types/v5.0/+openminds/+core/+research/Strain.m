@@ -50,30 +50,30 @@ classdef Strain < openminds.abstract.Schema
     properties
         % Enter all identifiers for this strain, excluding its ontological identifiers or RRID (e.g., identifiers from the Mouse Genome Informatics (MGI) database or Rat Genome Database (RGD)).
         alternateIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(alternateIdentifier)}
+            {mustBeMinLength(alternateIdentifier, 1), mustBeListOfUniqueItems(alternateIdentifier)}
 
         % Add the background strain that explains the majority of the genetic background and/or causes the majority of the prominent traits. If two strains contributed equally, state both.
         backgroundStrain (1,:) openminds.core.research.Strain ...
-            {mustBeSpecifiedLength(backgroundStrain, 1, 2)}
+            {mustBeMinLength(backgroundStrain, 1), mustBeMaxLength(backgroundStrain, 2), mustBeListOfUniqueItems(backgroundStrain)}
 
         % Add the breeding type for this strain.
         breedingType (1,:) openminds.controlledterms.BreedingType ...
-            {mustBeSpecifiedLength(breedingType, 0, 1)}
+            {mustBeScalarOrEmpty(breedingType)}
 
         % Enter a short text describing this strain.
         description (1,1) string
 
         % Add the 'Research Resource Identifier' (RRID) of this strain.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.RRID ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add all (human) diseases and/or conditions that this strain is a model for.
         diseaseModel (1,:) openminds.internal.mixedtype.strain.DiseaseModel ...
-            {mustBeListOfUniqueItems(diseaseModel)}
+            {mustBeMinLength(diseaseModel, 1), mustBeListOfUniqueItems(diseaseModel)}
 
         % Add the genetic background type of this strain.
         geneticStrainType (1,:) openminds.controlledterms.GeneticStrainType ...
-            {mustBeSpecifiedLength(geneticStrainType, 0, 1)}
+            {mustBeScalarOrEmpty(geneticStrainType)}
 
         % Enter the laboratory code assigned by the Institute of Laboratory Animal Research (ILAR) for the investigator or organization that has created this strain following the defined pattern (e.g., Aaa).
         laboratoryCode (1,1) string ...
@@ -84,22 +84,22 @@ classdef Strain < openminds.abstract.Schema
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this strain.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
 
         % Enter a short description for the phenotype of this strain.
         phenotype (1,1) string
 
         % Add the species of this strain.
         species (1,:) openminds.controlledterms.Species ...
-            {mustBeSpecifiedLength(species, 0, 1)}
+            {mustBeScalarOrEmpty(species)}
 
         % Add the stock number from the vendor the strain was supplied from/is in stock at.
         stockNumber (1,:) openminds.core.digitalidentifier.StockNumber ...
-            {mustBeSpecifiedLength(stockNumber, 0, 1)}
+            {mustBeScalarOrEmpty(stockNumber)}
 
         % Enter any synonyms (including abbreviations) of this strain.
         synonym (1,:) string ...
-            {mustBeListOfUniqueItems(synonym)}
+            {mustBeMinLength(synonym, 1), mustBeListOfUniqueItems(synonym)}
     end
 
     properties (Access = protected)

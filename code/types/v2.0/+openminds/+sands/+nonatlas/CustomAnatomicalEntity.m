@@ -17,14 +17,14 @@ classdef CustomAnatomicalEntity < openminds.abstract.Schema
     properties
         % Add the custom annotation which this custom anatomical entity defines.
         hasAnnotation (1,:) openminds.sands.nonatlas.CustomAnnotation ...
-            {mustBeSpecifiedLength(hasAnnotation, 0, 1)}
+            {mustBeScalarOrEmpty(hasAnnotation)}
 
         % Enter a descriptive name for this custom anatomical entity.
         name (1,1) string
 
         % Add one or several relations of this custom anatomical entity to parcellation entities used in defined parcellation terminologies.
         relationAssessment (1,:) openminds.internal.mixedtype.customanatomicalentity.RelationAssessment ...
-            {mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
     end
 
     properties (Access = protected)

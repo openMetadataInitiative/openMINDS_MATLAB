@@ -48,7 +48,7 @@ classdef ModificationConsentRequirement < openminds.abstract.ControlledTerm
         function obj = ModificationConsentRequirement(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModificationConsentRequirement
                 propValues.id (1,1) string
             end
 

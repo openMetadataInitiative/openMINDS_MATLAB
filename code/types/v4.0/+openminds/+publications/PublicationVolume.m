@@ -14,7 +14,7 @@ classdef PublicationVolume < openminds.abstract.Schema
     properties
         % Add the periodical this publication volume is part of.
         isPartOf (1,:) openminds.publications.Periodical ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter the volume number of this publication volume.
         volumeNumber (1,1) string

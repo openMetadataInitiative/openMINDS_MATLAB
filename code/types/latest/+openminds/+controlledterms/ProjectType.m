@@ -44,7 +44,7 @@ classdef ProjectType < openminds.abstract.ControlledTerm
         function obj = ProjectType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ProjectType
                 propValues.id (1,1) string
             end
 

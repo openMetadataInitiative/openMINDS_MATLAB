@@ -14,7 +14,7 @@ classdef FileRepositoryStructure < openminds.abstract.Schema
     properties
         % Add all file path patterns that define this file repository structure.
         filePathPattern (1,:) openminds.core.data.FilePathPattern ...
-            {mustBeListOfUniqueItems(filePathPattern)}
+            {mustBeMinLength(filePathPattern, 1), mustBeListOfUniqueItems(filePathPattern)}
 
         % Enter a lookup label for this file repository structure.
         lookupLabel (1,1) string

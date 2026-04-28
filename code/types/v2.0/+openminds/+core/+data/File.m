@@ -41,30 +41,30 @@ classdef File < openminds.abstract.Schema
 
         % Add the over all repository to which this single file belongs.
         fileRepository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(fileRepository, 0, 1)}
+            {mustBeScalarOrEmpty(fileRepository)}
 
         % Add the content type of this file instance.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the hash that was generated for this file instance.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Add one or several bundles in which this single file can be grouped.
         isPartOf (1,:) openminds.core.data.FileBundle ...
-            {mustBeListOfUniqueItems(isPartOf)}
+            {mustBeMinLength(isPartOf, 1), mustBeListOfUniqueItems(isPartOf)}
 
         % Enter the name of this single file.
         name (1,1) string
 
         % Add a special usage role for this single file.
         specialUsageRole (1,:) openminds.controlledterms.FileUsageRole ...
-            {mustBeSpecifiedLength(specialUsageRole, 0, 1)}
+            {mustBeScalarOrEmpty(specialUsageRole)}
 
         % Enter the storage size this file instance allocates.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

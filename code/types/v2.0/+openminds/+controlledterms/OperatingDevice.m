@@ -30,7 +30,7 @@ classdef OperatingDevice < openminds.abstract.ControlledTerm
         function obj = OperatingDevice(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OperatingDevice
                 propValues.id (1,1) string
             end
 

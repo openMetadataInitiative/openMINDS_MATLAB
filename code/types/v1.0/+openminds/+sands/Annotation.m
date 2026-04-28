@@ -38,41 +38,42 @@ classdef Annotation < openminds.abstract.Schema
     properties
         % Add the coordinate point identifying the best view of this annotation in space.
         bestViewPoint (1,:) openminds.sands.CoordinatePoint ...
-            {mustBeSpecifiedLength(bestViewPoint, 0, 1)}
+            {mustBeScalarOrEmpty(bestViewPoint)}
 
         % Add the protocol execution defining the criteria that were applied to produce this annotation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the quality type of the stated criteria used to define this annotation.
         criteriaQualityType (1,:) openminds.controlledterms.CriteriaQualityType ...
-            {mustBeSpecifiedLength(criteriaQualityType, 0, 1)}
+            {mustBeScalarOrEmpty(criteriaQualityType)}
 
         % Enter the preferred display color (RGB) for this annotation.
         displayColor (1,:) int64 ...
-            {mustBeSpecifiedLength(displayColor, 3, 3)}
+            {mustBeMinLength(displayColor, 3), mustBeMaxLength(displayColor, 3)}
 
         % Add one or several (source) images that inspired the definition of this annotation.
         inspiredBy (1,:) openminds.sands.Image ...
-            {mustBeListOfUniqueItems(inspiredBy)}
+            {mustBeMinLength(inspiredBy, 1), mustBeListOfUniqueItems(inspiredBy)}
 
         % Enter the identifier used for this annotation within the file it is stored in.
         internalIdentifier (1,1) string
 
         % Add one or both sides of the body or bilateral organ that this annotation is defined in.
         laterality (1,:) openminds.controlledterms.Laterality ...
-            {mustBeSpecifiedLength(laterality, 1, 2)}
+            {mustBeMinLength(laterality, 1), mustBeMaxLength(laterality, 2), mustBeListOfUniqueItems(laterality)}
 
         % Add one or several anatomical entities that name this annotation.
         namingTerm (1,:) openminds.sands.AnatomicalEntity ...
-            {mustBeListOfUniqueItems(namingTerm)}
+            {mustBeMinLength(namingTerm, 1), mustBeListOfUniqueItems(namingTerm)}
 
         % Add one or several anatomical entities of registered brain atlas annotations to which this annotation is related to.
-        relatedAtlasTerm (1,:) openminds.sands.AnatomicalEntity
+        relatedAtlasTerm (1,:) openminds.sands.AnatomicalEntity ...
+            {mustBeMinLength(relatedAtlasTerm, 1)}
 
         % Add the image in which this annotation is visualized in.
         visualizedIn (1,:) openminds.sands.Image ...
-            {mustBeSpecifiedLength(visualizedIn, 0, 1)}
+            {mustBeScalarOrEmpty(visualizedIn)}
     end
 
     properties (Access = protected)

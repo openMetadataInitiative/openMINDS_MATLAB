@@ -17,14 +17,15 @@ classdef Frustum < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance between the centered major and minor base planes of this frustum.
         baseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(baseDistance)}
 
         % Enter the major two-dimensional base shape of this frustum.
         majorBaseShape (1,:) openminds.internal.mixedtype.frustum.MajorBaseShape ...
-            {mustBeSpecifiedLength(majorBaseShape, 0, 1)}
+            {mustBeScalarOrEmpty(majorBaseShape)}
 
         % Enter the ratio of the smaller to the larger base size of this frustum.
-        minorBaseScale (1,1) double
+        minorBaseScale (1,1) double ...
+            {mustBeGreaterThan(minorBaseScale, 0), mustBeLessThan(minorBaseScale, 1)}
     end
 
     properties (Access = protected)

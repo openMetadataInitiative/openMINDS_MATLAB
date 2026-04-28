@@ -29,30 +29,30 @@ classdef MRICoilUsage < openminds.abstract.Schema
     properties
         % Only applicable to radiofrequency (RF) coils! Enter the active coil element identifier(s) corresponding to the transmitting and/or receiving elements that were electrically active during this acquisition; the number of identifiers typically matches the number of physical elements in the selected RF coil and may be fewer if some elements were disabled.
         activeElement (1,:) string ...
-            {mustBeListOfUniqueItems(activeElement)}
+            {mustBeMinLength(activeElement, 1), mustBeListOfUniqueItems(activeElement)}
 
         % Add the MRI Coil used.
         device (1,:) openminds.neuroimaging.device.MRICoil ...
-            {mustBeSpecifiedLength(device, 0, 1)}
+            {mustBeScalarOrEmpty(device)}
 
         % Enter a lookup label for this device usage that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.mricoilusage.MetadataLocation ...
-            {mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
 
         % Add the anatomical mounting location of the coil, indicating where the coil was positioned on or around the subject (for example, head, neck, knee, or torso). This information is typically applicable to radiofrequency (RF) coils and may be omitted for gradient or shim systems.
         mountingLocation (1,:) openminds.controlledterms.ExternalBodyRegion ...
-            {mustBeSpecifiedLength(mountingLocation, 0, 1)}
+            {mustBeScalarOrEmpty(mountingLocation)}
 
         % Add the signal directionality of the coil, indicating whether it was used for signal transmission, reception, or both. This information is typically defined in the system configuration and can be retrieved from the DICOM header or scanner hardware metadata.
         signalDirectionality (1,:) openminds.controlledterms.SignalDirectionality ...
-            {mustBeSpecifiedLength(signalDirectionality, 0, 1)}
+            {mustBeScalarOrEmpty(signalDirectionality)}
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.mricoilusage.UsedSpecimen ...
-            {mustBeSpecifiedLength(usedSpecimen, 0, 1)}
+            {mustBeScalarOrEmpty(usedSpecimen)}
     end
 
     properties (Access = protected)

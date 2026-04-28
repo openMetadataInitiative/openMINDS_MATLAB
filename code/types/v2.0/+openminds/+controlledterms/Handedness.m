@@ -30,7 +30,7 @@ classdef Handedness < openminds.abstract.ControlledTerm
         function obj = Handedness(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Handedness
                 propValues.id (1,1) string
             end
 

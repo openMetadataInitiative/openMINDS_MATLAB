@@ -38,34 +38,34 @@ classdef GridImageStack < openminds.abstract.Schema
 
         % Add the coordinate space in which this grid image stack exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridimagestack.CoordinateFramework ...
-            {mustBeSpecifiedLength(coordinateFramework, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateFramework)}
 
         % Add a reference to the file to which this grid image stack information applies. If the information applies uniformly to a grid image stack file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridimagestack.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter the common dimension of the consecutive grid image planes (optical sections) in pixels.
         dimension (1,:) int64 ...
-            {mustBeSpecifiedLength(dimension, 2, 2)}
+            {mustBeMinLength(dimension, 2), mustBeMaxLength(dimension, 2)}
 
         % Enter a descriptive name of this grid image stack preferably matching the filename.
         name (1,1) string
 
         % Enter the total number of consecutive grid image planes (optical sections) in this stack (at least two).
         numberOfImages (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfImages, 0, 1), mustBeInteger(numberOfImages), mustBeGreaterThanOrEqual(numberOfImages, 2)}
+            {mustBeScalarOrEmpty(numberOfImages), mustBeInteger(numberOfImages), mustBeGreaterThanOrEqual(numberOfImages, 2)}
 
         % Add the used device for obtaining this grid image stack.
         obtainedWith (1,:) openminds.internal.mixedtype.gridimagestack.ObtainedWith ...
-            {mustBeSpecifiedLength(obtainedWith, 0, 1)}
+            {mustBeScalarOrEmpty(obtainedWith)}
 
         % Enter the common physical pixel size for the consecutive grid image planes (optical sections) (in x,y order).
         pixelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(pixelSize, 2, 2)}
+            {mustBeMinLength(pixelSize, 2), mustBeMaxLength(pixelSize, 2)}
 
         % Enter the physical axial distance between consecutive image planes (optical sections) within this grid image stack.
         zStepSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(zStepSize, 0, 1)}
+            {mustBeScalarOrEmpty(zStepSize)}
     end
 
     properties (Access = protected)

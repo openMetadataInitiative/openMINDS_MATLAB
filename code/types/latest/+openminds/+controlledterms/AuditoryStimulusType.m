@@ -43,7 +43,7 @@ classdef AuditoryStimulusType < openminds.abstract.ControlledTerm
         function obj = AuditoryStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AuditoryStimulusType
                 propValues.id (1,1) string
             end
 

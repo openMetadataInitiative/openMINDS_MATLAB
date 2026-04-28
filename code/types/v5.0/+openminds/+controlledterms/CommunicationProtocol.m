@@ -47,7 +47,7 @@ classdef CommunicationProtocol < openminds.abstract.ControlledTerm
         function obj = CommunicationProtocol(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CommunicationProtocol
                 propValues.id (1,1) string
             end
 

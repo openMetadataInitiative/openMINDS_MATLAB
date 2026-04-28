@@ -23,18 +23,18 @@ classdef Organization < openminds.abstract.Schema
     properties
         % Add one or several globally unique and persistent digital identifier for this organization.
         digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
-            {mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Enter the full name of the organization.
         fullName (1,1) string
 
         % Add a parent organization to this organization.
         hasParent (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(hasParent, 0, 1)}
+            {mustBeScalarOrEmpty(hasParent)}
 
         % Add the uniform resource locator (URL) to the homepage of this organization.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the short name of this organization.
         shortName (1,1) string

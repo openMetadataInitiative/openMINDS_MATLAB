@@ -30,7 +30,7 @@ classdef Technique < openminds.abstract.ControlledTerm
         function obj = Technique(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Technique
                 propValues.id (1,1) string
             end
 

@@ -43,7 +43,7 @@ classdef OpticalStimulusType < openminds.abstract.ControlledTerm
         function obj = OpticalStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OpticalStimulusType
                 propValues.id (1,1) string
             end
 

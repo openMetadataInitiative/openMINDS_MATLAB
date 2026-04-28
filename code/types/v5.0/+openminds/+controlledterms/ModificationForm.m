@@ -48,7 +48,7 @@ classdef ModificationForm < openminds.abstract.ControlledTerm
         function obj = ModificationForm(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModificationForm
                 propValues.id (1,1) string
             end
 

@@ -38,18 +38,18 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
 
         % Enter any alternate names, including any alternative abbreviations, for this parcellation entity.
         alternateName (1,:) string ...
-            {mustBeListOfUniqueItems(alternateName)}
+            {mustBeMinLength(alternateName, 1), mustBeListOfUniqueItems(alternateName)}
 
         % Enter the definition for this parcellation entity.
         definition (1,1) string
 
         % Add all anatomical parent structures for this parcellation entity as defined within the corresponding brain atlas.
         hasParent (1,:) openminds.sands.atlas.ParcellationEntity ...
-            {mustBeListOfUniqueItems(hasParent)}
+            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
 
         % Add all versions of this parcellation entity.
         hasVersion (1,:) openminds.sands.atlas.ParcellationEntityVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter a lookup label for this parcellation entity that may help you to find this instance more easily.
         lookupLabel (1,1) string
@@ -59,11 +59,11 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation entity.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
 
         % Add the related anatomical entity as defined by the UBERON ontology.
         relatedUBERONTerm (1,:) openminds.internal.mixedtype.parcellationentity.RelatedUBERONTerm ...
-            {mustBeSpecifiedLength(relatedUBERONTerm, 0, 1)}
+            {mustBeScalarOrEmpty(relatedUBERONTerm)}
     end
 
     properties (Access = protected)

@@ -59,7 +59,7 @@ classdef DeviceType < openminds.abstract.ControlledTerm
         function obj = DeviceType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DeviceType
                 propValues.id (1,1) string
             end
 

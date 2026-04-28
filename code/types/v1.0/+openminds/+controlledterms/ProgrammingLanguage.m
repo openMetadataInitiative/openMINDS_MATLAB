@@ -30,7 +30,7 @@ classdef ProgrammingLanguage < openminds.abstract.ControlledTerm
         function obj = ProgrammingLanguage(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ProgrammingLanguage
                 propValues.id (1,1) string
             end
 

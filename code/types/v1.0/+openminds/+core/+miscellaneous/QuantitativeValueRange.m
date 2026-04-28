@@ -23,7 +23,7 @@ classdef QuantitativeValueRange < openminds.abstract.Schema
 
         % Add the unit of measurement of this quantitative value range.
         unit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(unit, 0, 1)}
+            {mustBeScalarOrEmpty(unit)}
     end
 
     properties (Access = protected)

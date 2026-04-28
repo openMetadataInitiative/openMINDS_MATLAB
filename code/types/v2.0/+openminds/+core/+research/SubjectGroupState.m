@@ -32,26 +32,26 @@ classdef SubjectGroupState < openminds.abstract.Schema
 
         % Add the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.subjectgroupstate.Age ...
-            {mustBeSpecifiedLength(age, 0, 1)}
+            {mustBeScalarOrEmpty(age)}
 
         % Add the age category of the subject in this state.
         ageCategory (1,:) openminds.controlledterms.AgeCategory ...
-            {mustBeListOfUniqueItems(ageCategory)}
+            {mustBeMinLength(ageCategory, 1), mustBeListOfUniqueItems(ageCategory)}
 
         % Add the preferred hand of the subject in this state.
         handedness (1,:) openminds.controlledterms.Handedness ...
-            {mustBeListOfUniqueItems(handedness)}
+            {mustBeMinLength(handedness, 1), mustBeListOfUniqueItems(handedness)}
 
         % Enter a lookup label for this specimen (set) state that may help you to more easily find it again.
         lookupLabel (1,1) string
 
         % Add the pathology of the specimen (set) in this state.
         pathology (1,:) openminds.internal.mixedtype.subjectgroupstate.Pathology ...
-            {mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
 
         % Add the weight of the specimen (set) in this state.
         weight (1,:) openminds.internal.mixedtype.subjectgroupstate.Weight ...
-            {mustBeSpecifiedLength(weight, 0, 1)}
+            {mustBeScalarOrEmpty(weight)}
     end
 
     properties (Access = protected)

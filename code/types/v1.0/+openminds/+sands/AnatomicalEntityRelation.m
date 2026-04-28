@@ -23,23 +23,23 @@ classdef AnatomicalEntityRelation < openminds.abstract.Schema
     properties
         % Add the protocol execution defining the criteria that were applied to determine this relation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the quality type of the stated criteria used to determine this relation.
         criteriaQualityType (1,:) openminds.controlledterms.CriteriaQualityType ...
-            {mustBeSpecifiedLength(criteriaQualityType, 0, 1)}
+            {mustBeScalarOrEmpty(criteriaQualityType)}
 
         % Add the anatomical entity to which the relation is described.
         inRelationTo (1,:) openminds.sands.AnatomicalEntity ...
-            {mustBeSpecifiedLength(inRelationTo, 0, 1)}
+            {mustBeScalarOrEmpty(inRelationTo)}
 
         % Add the qualitative overlap that best describes the relation between the two anatomical entities.
         qualitativeOverlap (1,:) openminds.controlledterms.QualitativeOverlap ...
-            {mustBeSpecifiedLength(qualitativeOverlap, 0, 1)}
+            {mustBeScalarOrEmpty(qualitativeOverlap)}
 
         % Add the quantitative overlap between the two anatomical entities preferably expressed in percentage.
         quantitativeOverlap (1,:) openminds.internal.mixedtype.anatomicalentityrelation.QuantitativeOverlap ...
-            {mustBeSpecifiedLength(quantitativeOverlap, 0, 1)}
+            {mustBeScalarOrEmpty(quantitativeOverlap)}
     end
 
     properties (Access = protected)

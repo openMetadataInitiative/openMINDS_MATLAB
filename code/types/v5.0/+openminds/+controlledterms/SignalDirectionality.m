@@ -45,7 +45,7 @@ classdef SignalDirectionality < openminds.abstract.ControlledTerm
         function obj = SignalDirectionality(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SignalDirectionality
                 propValues.id (1,1) string
             end
 

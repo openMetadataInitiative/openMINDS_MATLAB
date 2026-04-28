@@ -44,43 +44,43 @@ classdef Electrode < openminds.abstract.Schema
     properties
         % Add the conductor material of this electrode.
         conductorMaterial (1,:) openminds.internal.mixedtype.electrode.ConductorMaterial ...
-            {mustBeSpecifiedLength(conductorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(conductorMaterial)}
 
         % Enter a short text describing this device.
         description (1,1) string
 
         % Add the type of this device.
         deviceType (1,:) openminds.controlledterms.DeviceType ...
-            {mustBeSpecifiedLength(deviceType, 0, 1)}
+            {mustBeScalarOrEmpty(deviceType)}
 
         % Add the globally unique and persistent digital identifier of this device.
         digitalIdentifier (1,:) openminds.internal.mixedtype.electrode.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the insulator material of this electrode.
         insulatorMaterial (1,:) openminds.internal.mixedtype.electrode.InsulatorMaterial ...
-            {mustBeSpecifiedLength(insulatorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(insulatorMaterial)}
 
         % Enter the identifier (or label) of this electrode that is used within the corresponding data files to identify this electrode.
         internalIdentifier (1,1) string
 
         % Enter the intrinsic resistance of this electrode.
         intrinsicResistance (1,:) openminds.internal.mixedtype.electrode.IntrinsicResistance ...
-            {mustBeSpecifiedLength(intrinsicResistance, 0, 1)}
+            {mustBeScalarOrEmpty(intrinsicResistance)}
 
         % Enter a lookup label for this device that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the manufacturer (private or industrial) that constructed this device.
         manufacturer (1,:) openminds.internal.mixedtype.electrode.Manufacturer ...
-            {mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
 
         % Enter a descriptive name for this device, preferably including the model name as defined by the manufacturer.
         name (1,1) string
 
         % Add all parties that legally own this device.
         owner (1,:) openminds.internal.mixedtype.electrode.Owner ...
-            {mustBeListOfUniqueItems(owner)}
+            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)}
 
         % Enter the serial number of this device.
         serialNumber (1,1) string

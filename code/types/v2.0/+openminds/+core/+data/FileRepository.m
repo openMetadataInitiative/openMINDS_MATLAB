@@ -32,26 +32,26 @@ classdef FileRepository < openminds.abstract.Schema
 
         % If file instances and bundles within the repository are organized and formatted according to a formal data structure use the appropriate contentType. Leave blank otherwise.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the hash that was generated for this file repository.
         hash (1,:) openminds.core.data.Hash ...
-            {mustBeSpecifiedLength(hash, 0, 1)}
+            {mustBeScalarOrEmpty(hash)}
 
         % Add the host of this file repository.
         hostedBy (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(hostedBy, 0, 1)}
+            {mustBeScalarOrEmpty(hostedBy)}
 
         % Enter the name of this file repository.
         name (1,1) string
 
         % Add the type of this file repository.
         repositoryType (1,:) openminds.controlledterms.FileRepositoryType ...
-            {mustBeSpecifiedLength(repositoryType, 0, 1)}
+            {mustBeScalarOrEmpty(repositoryType)}
 
         % Enter the storage size this file repository allocates.
         storageSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(storageSize, 0, 1)}
+            {mustBeScalarOrEmpty(storageSize)}
     end
 
     properties (Access = protected)

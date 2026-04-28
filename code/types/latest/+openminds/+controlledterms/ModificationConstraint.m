@@ -50,7 +50,7 @@ classdef ModificationConstraint < openminds.abstract.ControlledTerm
         function obj = ModificationConstraint(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModificationConstraint
                 propValues.id (1,1) string
             end
 

@@ -17,15 +17,15 @@ classdef DeployedInterface < openminds.abstract.Schema
     properties
         % Add the accessibility of this deployed interface.
         accessibility (1,:) openminds.core.miscellaneous.Accessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Add the URL that serves as the entry point to this deployed interface.
         entryPoint (1,:) openminds.core.miscellaneous.WebResource ...
-            {mustBeSpecifiedLength(entryPoint, 0, 1)}
+            {mustBeScalarOrEmpty(entryPoint)}
 
         % Enter the interface version that is deployed.
         interface (1,:) openminds.core.products.InterfaceVersion ...
-            {mustBeSpecifiedLength(interface, 0, 1)}
+            {mustBeScalarOrEmpty(interface)}
     end
 
     properties (Access = protected)

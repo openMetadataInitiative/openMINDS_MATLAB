@@ -80,37 +80,37 @@ classdef WebServiceVersion < openminds.abstract.Schema
     properties
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.controlledterms.ProductAccessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Enter the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Add all parties that fulfill the role of a custodian for the research product version (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product version.
         custodian (1,:) openminds.internal.mixedtype.webserviceversion.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product version. Note that this version specific description will overwrite the description for the overarching dataset.
         description (1,1) string
 
         % Add all parties that developed this web service version. Note that these developers will overwrite the developer list provided for the overarching web service.
         developer (1,:) openminds.internal.mixedtype.webserviceversion.Developer ...
-            {mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
 
         % Add the publication or file that acts as the full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.webserviceversion.FullDocumentation ...
-            {mustBeSpecifiedLength(fullDocumentation, 0, 1)}
+            {mustBeScalarOrEmpty(fullDocumentation)}
 
         % Enter a descriptive full name (or title) for this research product version. Note that this version specific full name will overwrite the full name for the overarching dataset.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Add all software versions that are components of this web service version.
         hasPart (1,:) openminds.core.products.SoftwareVersion ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 1), mustBeListOfUniqueItems(hasPart)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version.
         homepage (1,1) string
@@ -120,46 +120,46 @@ classdef WebServiceVersion < openminds.abstract.Schema
 
         % Add all content types that can be used as input by this web service version.
         inputFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(inputFormat)}
+            {mustBeMinLength(inputFormat, 1), mustBeListOfUniqueItems(inputFormat)}
 
         % Add all web service versions that can be used alternatively to this web service version.
         isAlternativeVersionOf (1,:) openminds.core.products.WebServiceVersion ...
-            {mustBeListOfUniqueItems(isAlternativeVersionOf)}
+            {mustBeMinLength(isAlternativeVersionOf, 1), mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the web service version preceding this web service version.
         isNewVersionOf (1,:) openminds.core.products.WebServiceVersion ...
-            {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isNewVersionOf)}
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.webserviceversion.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add any other contributions to this research product version that are not covered under 'author'/'developer' or 'custodian'.
         otherContribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(otherContribution)}
+            {mustBeMinLength(otherContribution, 1), mustBeListOfUniqueItems(otherContribution)}
 
         % Add all content types that can be generated as output by this web service version.
         outputFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(outputFormat)}
+            {mustBeMinLength(outputFormat, 1), mustBeListOfUniqueItems(outputFormat)}
 
         % Add all further publications besides the full documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version).
         relatedPublication (1,:) openminds.internal.mixedtype.webserviceversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Enter a short name (or alias) for this research product version that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for handling this research product version.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

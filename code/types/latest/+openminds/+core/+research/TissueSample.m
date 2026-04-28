@@ -38,41 +38,41 @@ classdef TissueSample < openminds.abstract.Schema
     properties
         % Add all anatomical entities that describe the anatomical location of this tissue sample.
         anatomicalLocation (1,:) openminds.internal.mixedtype.tissuesample.AnatomicalLocation ...
-            {mustBeListOfUniqueItems(anatomicalLocation)}
+            {mustBeMinLength(anatomicalLocation, 1), mustBeListOfUniqueItems(anatomicalLocation)}
 
         % Add the biological sex of this specimen.
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
-            {mustBeSpecifiedLength(biologicalSex, 0, 1)}
+            {mustBeScalarOrEmpty(biologicalSex)}
 
         % Enter the identifier (or label) of this specimen that is used within the corresponding data files to identify this specimen.
         internalIdentifier (1,1) string
 
         % Add all tissue sample collections this tissue sample is part of.
         isPartOf (1,:) openminds.core.research.TissueSampleCollection ...
-            {mustBeListOfUniqueItems(isPartOf)}
+            {mustBeMinLength(isPartOf, 1), mustBeListOfUniqueItems(isPartOf)}
 
         % Add one or both sides of the body, bilateral organ or bilateral organ part that this tissue sample originates from.
         laterality (1,:) openminds.controlledterms.Laterality ...
-            {mustBeSpecifiedLength(laterality, 1, 2)}
+            {mustBeMinLength(laterality, 1), mustBeMaxLength(laterality, 2), mustBeListOfUniqueItems(laterality)}
 
         % Enter a lookup label for this specimen that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the biogical origin of this tissue sample.
         origin (1,:) openminds.internal.mixedtype.tissuesample.Origin ...
-            {mustBeSpecifiedLength(origin, 0, 1)}
+            {mustBeScalarOrEmpty(origin)}
 
         % Add the species or strain (a sub-type of a genetic variant of species) of this specimen.
         species (1,:) openminds.internal.mixedtype.tissuesample.Species ...
-            {mustBeSpecifiedLength(species, 0, 1)}
+            {mustBeScalarOrEmpty(species)}
 
         % Add all states in which this tissue sample was studied.
         studiedState (1,:) openminds.core.research.TissueSampleState ...
-            {mustBeListOfUniqueItems(studiedState)}
+            {mustBeMinLength(studiedState, 1), mustBeListOfUniqueItems(studiedState)}
 
         % Add the type of this tissue sample.
         type (1,:) openminds.controlledterms.TissueSampleType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

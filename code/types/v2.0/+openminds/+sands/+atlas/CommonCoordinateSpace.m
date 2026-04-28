@@ -44,40 +44,40 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
     properties
         % Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for this common coordinate space.
         anatomicalAxesOrientation (1,:) openminds.controlledterms.AnatomicalAxesOrientation ...
-            {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalAxesOrientation)}
 
         % Enter the origin of this common coordinate space (central point where axes intersect; 2D: [x, y] or 3D:[x, y, z]).
         axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(axesOrigin, 2, 3)}
+            {mustBeMinLength(axesOrigin, 2), mustBeMaxLength(axesOrigin, 3), mustBeListOfUniqueItems(axesOrigin)}
 
         % Add one or several image files used as visual representation of this common coordinate space.
         defaultImage (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(defaultImage)}
+            {mustBeMinLength(defaultImage, 1), mustBeListOfUniqueItems(defaultImage)}
 
         % Add the globally unique and persistent digital identifier of this common coordinate space.
         digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name for this common coordinate space.
         fullName (1,1) string
 
         % Add the uniform resource locator (URL) to the homepage of this common coordinate space.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this common coordinate space. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string
 
         % Add the native unit that is used for this common coordinate space.
         nativeUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(nativeUnit, 0, 1)}
+            {mustBeScalarOrEmpty(nativeUnit)}
 
         % Enter the identifier (IRI) of the related ontological term matching this common coordinate space.
         ontologyIdentifier (1,1) string
 
         % Enter the date of first publication of this common coordinate space.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Enter a descriptive short name for this common coordinate space.
         shortName (1,1) string

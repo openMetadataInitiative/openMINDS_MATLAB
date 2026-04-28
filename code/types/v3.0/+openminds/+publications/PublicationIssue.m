@@ -14,7 +14,7 @@ classdef PublicationIssue < openminds.abstract.Schema
     properties
         % Add the publication volume this publication issue is part of.
         isPartOf (1,:) openminds.publications.PublicationVolume ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter the issue number of this publication issue.
         issueNumber (1,1) string

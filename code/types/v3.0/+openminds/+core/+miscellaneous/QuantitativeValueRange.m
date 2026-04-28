@@ -23,14 +23,14 @@ classdef QuantitativeValueRange < openminds.abstract.Schema
 
         % Add the unit of measurement for the maximum value.
         maxValueUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(maxValueUnit, 0, 1)}
+            {mustBeScalarOrEmpty(maxValueUnit)}
 
         % Enter the minimum value.
         minValue (1,1) double
 
         % Add the unit of measurement for the minimum value.
         minValueUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(minValueUnit, 0, 1)}
+            {mustBeScalarOrEmpty(minValueUnit)}
     end
 
     properties (Access = protected)

@@ -29,7 +29,7 @@ classdef BrainAtlas < openminds.abstract.Schema & openminds.internal.mixin.HasCo
 
         % Add one or several brain atlas versions that belong to this brain atlas.
         hasVersion (1,:) openminds.sands.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this brain atlas.
         homepage (1,1) string

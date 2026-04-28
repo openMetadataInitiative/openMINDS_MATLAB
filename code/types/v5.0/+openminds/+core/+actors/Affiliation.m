@@ -14,11 +14,11 @@ classdef Affiliation < openminds.abstract.Schema
     properties
         % Add all organizations (in display order) with which the specified individual is affiliated.
         organization (1,:) openminds.core.actors.Organization ...
-            {mustBeListOfUniqueItems(organization)}
+            {mustBeMinLength(organization, 1), mustBeListOfUniqueItems(organization)}
 
         % Add the individual to whom this affiliation belongs.
         person (1,:) openminds.core.actors.Person ...
-            {mustBeSpecifiedLength(person, 0, 1)}
+            {mustBeScalarOrEmpty(person)}
     end
 
     properties (Access = protected)

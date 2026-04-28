@@ -41,38 +41,38 @@ classdef GridVolumeSequence < openminds.abstract.Schema
 
         % Add the coordinate space in which this grid volume sequence exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridvolumesequence.CoordinateFramework ...
-            {mustBeSpecifiedLength(coordinateFramework, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateFramework)}
 
         % Add a reference to the file to which this grid volume sequence information applies. If the information applies uniformly to a grid volume sequence file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridvolumesequence.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter the dimension of grid volumes.
         dimension (1,:) int64 ...
-            {mustBeSpecifiedLength(dimension, 3, 3)}
+            {mustBeMinLength(dimension, 3), mustBeMaxLength(dimension, 3)}
 
         % Enter a descriptive name of this grid volume sequence preferably matching the filename.
         name (1,1) string
 
         % Enter the number of planes in this grid volume sequence.
         numberOfPlanes (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfPlanes, 0, 1)}
+            {mustBeScalarOrEmpty(numberOfPlanes)}
 
         % Enter the total number of grid volumes in this sequence (at least two).
         numberOfVolumes (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfVolumes, 0, 1), mustBeInteger(numberOfVolumes), mustBeGreaterThanOrEqual(numberOfVolumes, 2)}
+            {mustBeScalarOrEmpty(numberOfVolumes), mustBeInteger(numberOfVolumes), mustBeGreaterThanOrEqual(numberOfVolumes, 2)}
 
         % Add the used device for obtaining this grid volume sequence.
         obtainedWith (1,:) openminds.internal.mixedtype.gridvolumesequence.ObtainedWith ...
-            {mustBeSpecifiedLength(obtainedWith, 0, 1)}
+            {mustBeScalarOrEmpty(obtainedWith)}
 
         % Enter the rate at which consecutive grid volume are captured in a sequence, preferably measured in Hertz (Hz).
         temporalSamplingFrequency (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(temporalSamplingFrequency, 0, 1)}
+            {mustBeScalarOrEmpty(temporalSamplingFrequency)}
 
         % Enter the physical voxel size for this grid volume sequence (in x,y,z order).
         voxelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(voxelSize, 3, 3)}
+            {mustBeMinLength(voxelSize, 3), mustBeMaxLength(voxelSize, 3)}
     end
 
     properties (Access = protected)

@@ -59,50 +59,50 @@ classdef Book < openminds.abstract.Schema
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.book.CitedPublication ...
-            {mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
 
         % Add all individual, organisational, or consortial contributions to this creative work.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product version.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter the copyright information of this creative work.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Enter the date on which this creative work was created, formatted as '2023-02-07'.
         creationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(creationDate, 0, 1), mustBeValidDate(creationDate)}
+            {mustBeScalarOrEmpty(creationDate), mustBeValidDate(creationDate)}
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.internal.mixedtype.book.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add all funding information of this creative work.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.book.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(modificationDate, 0, 1), mustBeValidDate(modificationDate)}
+            {mustBeScalarOrEmpty(modificationDate), mustBeValidDate(modificationDate)}
 
         % Enter the name (or title) of this creative work.
         name (1,1) string
 
         % Enter the date on which this creative work was published, formatted as '2023-02-07'.
         publicationDate (1,:) datetime ...
-            {mustBeSpecifiedLength(publicationDate, 0, 1), mustBeValidDate(publicationDate)}
+            {mustBeScalarOrEmpty(publicationDate), mustBeValidDate(publicationDate)}
 
         % Add all licenses and available data usage agreements applicable to this creative work.
         usageCondition (1,:) openminds.internal.mixedtype.book.UsageCondition ...
-            {mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string

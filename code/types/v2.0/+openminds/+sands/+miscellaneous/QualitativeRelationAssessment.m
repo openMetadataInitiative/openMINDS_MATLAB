@@ -17,15 +17,15 @@ classdef QualitativeRelationAssessment < openminds.abstract.Schema
     properties
         % Add the protocol execution defining the criteria that were applied to determine this relation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the anatomical entity to which the relation is described.
         inRelationTo (1,:) openminds.sands.atlas.ParcellationEntity ...
-            {mustBeSpecifiedLength(inRelationTo, 0, 1)}
+            {mustBeScalarOrEmpty(inRelationTo)}
 
         % Add the qualitative overlap that best describes the relation between the two anatomical entities.
         qualitativeOverlap (1,:) openminds.controlledterms.QualitativeOverlap ...
-            {mustBeSpecifiedLength(qualitativeOverlap, 0, 1)}
+            {mustBeScalarOrEmpty(qualitativeOverlap)}
     end
 
     properties (Access = protected)

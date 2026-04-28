@@ -49,7 +49,7 @@ classdef ActionStatusType < openminds.abstract.ControlledTerm
         function obj = ActionStatusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ActionStatusType
                 propValues.id (1,1) string
             end
 

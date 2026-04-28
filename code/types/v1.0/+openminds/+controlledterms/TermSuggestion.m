@@ -29,11 +29,17 @@ classdef TermSuggestion < openminds.abstract.ControlledTerm
         ]
     end
 
+    properties
+        % Add the terminology in which the suggested term should be integrated in.
+        terminology (1,:) openminds.controlledterms.Terminology ...
+            {mustBeScalarOrEmpty(terminology)}
+    end
+
     methods
         function obj = TermSuggestion(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.TermSuggestion
                 propValues.id (1,1) string
             end
 

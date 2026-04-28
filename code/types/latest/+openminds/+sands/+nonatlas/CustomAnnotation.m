@@ -38,42 +38,42 @@ classdef CustomAnnotation < openminds.abstract.Schema
     properties
         % Add the coordinate framework for this custom annotation.
         coordinateFramework (1,:) openminds.internal.mixedtype.customannotation.CoordinateFramework ...
-            {mustBeSpecifiedLength(coordinateFramework, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateFramework)}
 
         % Add the protocol execution defining the criteria that were applied to produce this annotation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the quality type of the stated criteria used to define this annotation.
         criteriaQualityType (1,:) openminds.controlledterms.CriteriaQualityType ...
-            {mustBeSpecifiedLength(criteriaQualityType, 0, 1)}
+            {mustBeScalarOrEmpty(criteriaQualityType)}
 
         % Add the criteria type for this annotation.
         criteriaType (1,:) openminds.controlledterms.AnnotationCriteriaType ...
-            {mustBeSpecifiedLength(criteriaType, 0, 1)}
+            {mustBeScalarOrEmpty(criteriaType)}
 
         % Add all (source) files that inspired the definition of this annotation.
         inspiredBy (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(inspiredBy)}
+            {mustBeMinLength(inspiredBy, 1), mustBeListOfUniqueItems(inspiredBy)}
 
         % Enter the identifier (or label) of this annotation that is used within the corresponding data files to identify this annotation.
         internalIdentifier (1,1) string
 
         % Add one or both sides of the body, bilateral organ or bilateral organ part that this annotation is defined in.
         laterality (1,:) openminds.controlledterms.Laterality ...
-            {mustBeSpecifiedLength(laterality, 1, 2)}
+            {mustBeMinLength(laterality, 1), mustBeMaxLength(laterality, 2), mustBeListOfUniqueItems(laterality)}
 
         % Add the preferred viewer specification to visualize this annotation.
         preferredVisualization (1,:) openminds.sands.miscellaneous.ViewerSpecification ...
-            {mustBeSpecifiedLength(preferredVisualization, 0, 1)}
+            {mustBeScalarOrEmpty(preferredVisualization)}
 
         % Add the non-parametric or parametric specification of this annotation.
         specification (1,:) openminds.internal.mixedtype.customannotation.Specification ...
-            {mustBeSpecifiedLength(specification, 0, 1)}
+            {mustBeScalarOrEmpty(specification)}
 
         % Add the geometry type of this annotation.
         type (1,:) openminds.controlledterms.AnnotationType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

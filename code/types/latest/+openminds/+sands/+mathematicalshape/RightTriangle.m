@@ -11,7 +11,7 @@ classdef RightTriangle < openminds.abstract.Schema
     properties
         % Enter the lengths of the two perpendicular legs of this right triangle.
         perpendicularLegLengths (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(perpendicularLegLengths, 2, 2)}
+            {mustBeMinLength(perpendicularLegLengths, 2), mustBeMaxLength(perpendicularLegLengths, 2)}
     end
 
     properties (Access = protected)

@@ -17,15 +17,15 @@ classdef Ellipsoid < openminds.abstract.Schema
     properties
         % Enter the intermediate diameter of this ellipsoid.
         intermediateDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(intermediateDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(intermediateDiameter)}
 
         % Enter the major diameter of this ellipsoid.
         majorDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(majorDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(majorDiameter)}
 
         % Enter the minor diameter of this ellipsoid.
         minorDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(minorDiameter, 0, 1)}
+            {mustBeScalarOrEmpty(minorDiameter)}
     end
 
     properties (Access = protected)

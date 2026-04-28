@@ -20,11 +20,11 @@ classdef ParameterSet < openminds.abstract.Schema
 
         % Add all numerical and string parameters that belong to this parameter set.
         parameter (1,:) openminds.internal.mixedtype.parameterset.Parameter ...
-            {mustBeListOfUniqueItems(parameter)}
+            {mustBeMinLength(parameter, 1), mustBeListOfUniqueItems(parameter)}
 
         % Add the technique or behavioral task where this set of parameters is used in.
         relevantFor (1,:) openminds.internal.mixedtype.parameterset.RelevantFor ...
-            {mustBeSpecifiedLength(relevantFor, 0, 1)}
+            {mustBeScalarOrEmpty(relevantFor)}
     end
 
     properties (Access = protected)

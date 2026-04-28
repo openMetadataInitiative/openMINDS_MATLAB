@@ -29,15 +29,15 @@ classdef ChemicalSubstance < openminds.abstract.Schema
 
         % Add the molecular entity that makes up this chemical substance.
         molecularEntity (1,:) openminds.controlledterms.MolecularEntity ...
-            {mustBeSpecifiedLength(molecularEntity, 0, 1)}
+            {mustBeScalarOrEmpty(molecularEntity)}
 
         % Add the source of this chemical substance.
         productSource (1,:) openminds.chemicals.ProductSource ...
-            {mustBeSpecifiedLength(productSource, 0, 1)}
+            {mustBeScalarOrEmpty(productSource)}
 
         % Enter the purity of this chemical substance.
         purity (1,:) openminds.internal.mixedtype.chemicalsubstance.Purity ...
-            {mustBeSpecifiedLength(purity, 0, 1)}
+            {mustBeScalarOrEmpty(purity)}
     end
 
     properties (Access = protected)

@@ -35,11 +35,11 @@ classdef Recording < openminds.abstract.Schema
 
         % Enter all channels used for this recording.
         channel (1,:) openminds.ephys.entity.Channel ...
-            {mustBeListOfUniqueItems(channel)}
+            {mustBeMinLength(channel, 1), mustBeListOfUniqueItems(channel)}
 
         % Add the location of the file or file bundle in which the recorded data is stored.
         dataLocation (1,:) openminds.internal.mixedtype.recording.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter the identifier (or label) of this recording that is used within the corresponding data files to identify this recording.
         internalIdentifier (1,1) string
@@ -49,15 +49,15 @@ classdef Recording < openminds.abstract.Schema
 
         % If this recording is part of a sequence of recordings (e.g., multiple repetitions or sweeps), add the recording preceding this recording.
         previousRecording (1,:) openminds.ephys.entity.Recording ...
-            {mustBeSpecifiedLength(previousRecording, 0, 1)}
+            {mustBeScalarOrEmpty(previousRecording)}
 
         % Add the device used to generate this recording.
         recordedWith (1,:) openminds.internal.mixedtype.recording.RecordedWith ...
-            {mustBeSpecifiedLength(recordedWith, 0, 1)}
+            {mustBeScalarOrEmpty(recordedWith)}
 
         % Enter the sampling frequency of this recording.
         samplingFrequency (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(samplingFrequency, 0, 1)}
+            {mustBeScalarOrEmpty(samplingFrequency)}
     end
 
     properties (Access = protected)

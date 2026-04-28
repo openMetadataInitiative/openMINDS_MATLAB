@@ -30,7 +30,7 @@ classdef Laterality < openminds.abstract.ControlledTerm
         function obj = Laterality(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Laterality
                 propValues.id (1,1) string
             end
 

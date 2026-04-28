@@ -53,7 +53,7 @@ classdef DataType < openminds.abstract.ControlledTerm
         function obj = DataType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DataType
                 propValues.id (1,1) string
             end
 

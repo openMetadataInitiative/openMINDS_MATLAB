@@ -59,7 +59,7 @@ classdef SubjectAttribute < openminds.abstract.ControlledTerm
         function obj = SubjectAttribute(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SubjectAttribute
                 propValues.id (1,1) string
             end
 

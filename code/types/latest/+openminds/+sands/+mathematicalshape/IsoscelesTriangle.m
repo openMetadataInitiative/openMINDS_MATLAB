@@ -14,11 +14,11 @@ classdef IsoscelesTriangle < openminds.abstract.Schema
     properties
         % Enter the angle at the apex between the two equal sides of this isosceles triangle.
         apexAngle (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(apexAngle, 0, 1)}
+            {mustBeScalarOrEmpty(apexAngle)}
 
         % Enter the common length of the two equal sides meeting at the apex of this isosceles triangle.
         legLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(legLength, 0, 1)}
+            {mustBeScalarOrEmpty(legLength)}
     end
 
     properties (Access = protected)

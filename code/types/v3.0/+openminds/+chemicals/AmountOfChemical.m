@@ -14,11 +14,11 @@ classdef AmountOfChemical < openminds.abstract.Schema
     properties
         % When used in a mixture, enter the amount of the substance within the mixture (e.g., as concentration or as ratio). When used in its pure state, enter the used amount of the substance.
         amount (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(amount, 0, 1)}
+            {mustBeScalarOrEmpty(amount)}
 
         % Add the chemical product that was used.
         chemicalProduct (1,:) openminds.internal.mixedtype.amountofchemical.ChemicalProduct ...
-            {mustBeSpecifiedLength(chemicalProduct, 0, 1)}
+            {mustBeScalarOrEmpty(chemicalProduct)}
     end
 
     properties (Access = protected)

@@ -52,7 +52,7 @@ classdef AgeCategory < openminds.abstract.ControlledTerm
         function obj = AgeCategory(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AgeCategory
                 propValues.id (1,1) string
             end
 

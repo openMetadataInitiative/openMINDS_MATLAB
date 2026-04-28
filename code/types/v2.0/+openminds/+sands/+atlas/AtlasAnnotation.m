@@ -44,15 +44,15 @@ classdef AtlasAnnotation < openminds.abstract.Schema
     properties
         % Add the coordinate point identifying the best view of this atlas annotation in space.
         bestViewPoint (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeSpecifiedLength(bestViewPoint, 0, 1)}
+            {mustBeScalarOrEmpty(bestViewPoint)}
 
         % Add the protocol execution defining the criteria that were applied to produce this atlas annotation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
-            {mustBeSpecifiedLength(criteria, 0, 1)}
+            {mustBeScalarOrEmpty(criteria)}
 
         % Add the quality type of the stated criteria used to define this atlas annotation.
         criteriaQualityType (1,:) openminds.controlledterms.CriteriaQualityType ...
-            {mustBeSpecifiedLength(criteriaQualityType, 0, 1)}
+            {mustBeScalarOrEmpty(criteriaQualityType)}
 
         % Enter the preferred display color (HEX) for this atlas annotation.
         displayColor (1,1) string ...
@@ -60,14 +60,14 @@ classdef AtlasAnnotation < openminds.abstract.Schema
 
         % Add one or several (source) files that inspired the definition of this atlas annotation.
         inspiredBy (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(inspiredBy)}
+            {mustBeMinLength(inspiredBy, 1), mustBeListOfUniqueItems(inspiredBy)}
 
         % Enter the identifier used for this annotation within the file it is stored in.
         internalIdentifier (1,1) string
 
         % Add one or both sides of the body, bilateral organ or bilateral organ part that this atlas annotation is defined in.
         laterality (1,:) openminds.controlledterms.Laterality ...
-            {mustBeSpecifiedLength(laterality, 1, 2)}
+            {mustBeMinLength(laterality, 1), mustBeMaxLength(laterality, 2), mustBeListOfUniqueItems(laterality)}
 
         % Enter a lookup label for this atlas annotation that may help you to more easily find it again.
         lookupLabel (1,1) string
@@ -83,7 +83,7 @@ classdef AtlasAnnotation < openminds.abstract.Schema
 
         % Add the (source) image file in which this atlas annotation is visualized in.
         visualizedIn (1,:) openminds.core.data.File ...
-            {mustBeSpecifiedLength(visualizedIn, 0, 1)}
+            {mustBeScalarOrEmpty(visualizedIn)}
     end
 
     properties (Access = protected)

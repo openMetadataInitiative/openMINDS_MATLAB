@@ -101,45 +101,45 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
 
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.controlledterms.ProductAccessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Add all parties that contributed to this brain atlas version as authors. Note that these authors will overwrite the author list provided for the overarching brain atlas.
         author (1,:) openminds.internal.mixedtype.brainatlasversion.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add the specific common coordinate space in which this brain atlas version exists.
         coordinateSpace (1,:) openminds.sands.atlas.CommonCoordinateSpaceVersion ...
-            {mustBeSpecifiedLength(coordinateSpace, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateSpace)}
 
         % Enter the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Add all parties that fulfill the role of a custodian for the research product version (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product version.
         custodian (1,:) openminds.internal.mixedtype.brainatlasversion.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product version. Note that this version specific description will overwrite the description for the overarching dataset.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.brainatlasversion.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.brainatlasversion.FullDocumentation ...
-            {mustBeSpecifiedLength(fullDocumentation, 0, 1)}
+            {mustBeScalarOrEmpty(fullDocumentation)}
 
         % Enter a descriptive full name (or title) for this research product version. Note that this version specific full name will overwrite the full name for the overarching dataset.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Enter the specific parcellation terminology of this brain atlas version.
         hasTerminology (1,:) openminds.sands.atlas.ParcellationTerminologyVersion ...
-            {mustBeSpecifiedLength(hasTerminology, 0, 1)}
+            {mustBeScalarOrEmpty(hasTerminology)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version.
         homepage (1,1) string
@@ -149,19 +149,19 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
 
         % Add all brain atlas versions that can be used alternatively to this brain atlas version.
         isAlternativeVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(isAlternativeVersionOf)}
+            {mustBeMinLength(isAlternativeVersionOf, 1), mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the brain atlas version preceding this brain atlas version.
         isNewVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isNewVersionOf)}
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.brainatlasversion.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add the license of this brain atlas version.
         license (1,:) openminds.core.data.License ...
-            {mustBeSpecifiedLength(license, 0, 1)}
+            {mustBeScalarOrEmpty(license)}
 
         % Enter the identifier of the major version release this research product version belongs to.
         majorVersionIdentifier (1,1) string
@@ -171,34 +171,34 @@ classdef BrainAtlasVersion < openminds.abstract.Schema & openminds.internal.mixi
 
         % Add any other contributions to this research product version that are not covered under 'author'/'developer' or 'custodian'.
         otherContribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(otherContribution)}
+            {mustBeMinLength(otherContribution, 1), mustBeListOfUniqueItems(otherContribution)}
 
         % Add all further publications besides the full documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version).
         relatedPublication (1,:) openminds.internal.mixedtype.brainatlasversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Enter a short name (or alias) for this research product version that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for handling this research product version.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add the type of this brain atlas version.
         type (1,:) openminds.controlledterms.AtlasType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
 
         % Add the specimen that was used for the creation of this brain atlas version.
         usedSpecimen (1,:) openminds.internal.mixedtype.brainatlasversion.UsedSpecimen ...
-            {mustBeListOfUniqueItems(usedSpecimen)}
+            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

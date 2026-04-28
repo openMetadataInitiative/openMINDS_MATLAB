@@ -53,61 +53,61 @@ classdef CranialWindowPreparation < openminds.abstract.Schema
     properties
         % Add the construction type of the cranial window.
         constructionType (1,:) openminds.controlledterms.CranialWindowConstructionType ...
-            {mustBeSpecifiedLength(constructionType, 0, 1)}
+            {mustBeScalarOrEmpty(constructionType)}
 
         % Add any user-defined parameters grouped in context-specific sets that are not covered in the standardized properties of this activity.
         customPropertySet (1,:) openminds.core.research.CustomPropertySet ...
-            {mustBeListOfUniqueItems(customPropertySet)}
+            {mustBeMinLength(customPropertySet, 1), mustBeListOfUniqueItems(customPropertySet)}
 
         % Enter a description of this activity.
         description (1,1) string
 
         % Enter the dimension of the cranial window by defining its mathematical shape.
         dimension (1,:) openminds.internal.mixedtype.cranialwindowpreparation.Dimension ...
-            {mustBeSpecifiedLength(dimension, 0, 1)}
+            {mustBeScalarOrEmpty(dimension)}
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         endTime (1,:) datetime ...
-            {mustBeSpecifiedLength(endTime, 0, 1)}
+            {mustBeScalarOrEmpty(endTime), mustBeValidTime(endTime)}
 
         % Add the state of the subject which received the cranial window before this activity.
         input (1,:) openminds.core.research.SubjectState ...
-            {mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter a lookup label for this activity that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the state of the subject which received the cranial window as a result of this activity.
         output (1,:) openminds.core.research.SubjectState ...
-            {mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.cranialwindowpreparation.PerformedBy ...
-            {mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
-            {mustBeSpecifiedLength(preparationDesign, 0, 1)}
+            {mustBeScalarOrEmpty(preparationDesign)}
 
         % Add all protocols used during this activity.
         protocol (1,:) openminds.core.research.Protocol ...
-            {mustBeListOfUniqueItems(protocol)}
+            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)}
 
         % Add the reinforcement type of the cranial window.
         reinforcementType (1,:) openminds.controlledterms.CranialWindowReinforcementType ...
-            {mustBeSpecifiedLength(reinforcementType, 0, 1)}
+            {mustBeScalarOrEmpty(reinforcementType)}
 
         % Enter the date and/or time on when this activity started, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         startTime (1,:) datetime ...
-            {mustBeSpecifiedLength(startTime, 0, 1)}
+            {mustBeScalarOrEmpty(startTime), mustBeValidTime(startTime)}
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.cranialwindowpreparation.StudyTarget ...
-            {mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
     end
 
     properties (Access = protected)

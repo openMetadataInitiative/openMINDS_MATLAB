@@ -44,7 +44,7 @@ classdef OrganizationType < openminds.abstract.ControlledTerm
         function obj = OrganizationType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OrganizationType
                 propValues.id (1,1) string
             end
 

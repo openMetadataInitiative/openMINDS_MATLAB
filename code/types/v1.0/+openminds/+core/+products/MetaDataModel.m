@@ -35,7 +35,7 @@ classdef MetaDataModel < openminds.abstract.Schema
     properties
         % Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.metadatamodel.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
         description (1,1) string ...
@@ -43,22 +43,22 @@ classdef MetaDataModel < openminds.abstract.Schema
 
         % Add one or several developers (person or organization) that contributed to the code implementation of this software.
         developer (1,:) openminds.internal.mixedtype.metadatamodel.Developer ...
-            {mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.metadatamodel.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
         fullName (1,1) string
 
         % Add one or several versions of this (meta)data model.
         hasVersion (1,:) openminds.core.products.MetaDataModelVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string

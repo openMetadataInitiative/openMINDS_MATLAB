@@ -17,7 +17,7 @@ classdef ContentTypePattern < openminds.abstract.Schema
     properties
         % Add the content type that can be defined by the regular expression of this content type pattern (e.g., for file extensions).
         contentType (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(contentType, 0, 1)}
+            {mustBeScalarOrEmpty(contentType)}
 
         % Enter a lookup label for this content type pattern that may help you to find this instance more easily.
         lookupLabel (1,1) string

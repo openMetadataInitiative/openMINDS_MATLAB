@@ -45,7 +45,7 @@ classdef ExternalBodyRegion < openminds.abstract.ControlledTerm
         function obj = ExternalBodyRegion(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ExternalBodyRegion
                 propValues.id (1,1) string
             end
 

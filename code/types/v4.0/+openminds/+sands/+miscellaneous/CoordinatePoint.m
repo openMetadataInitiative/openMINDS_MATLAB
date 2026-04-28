@@ -14,11 +14,11 @@ classdef CoordinatePoint < openminds.abstract.Schema
     properties
         % Add the coordinate space in which this coordinate point exists in.
         coordinateSpace (1,:) openminds.internal.mixedtype.coordinatepoint.CoordinateSpace ...
-            {mustBeSpecifiedLength(coordinateSpace, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateSpace)}
 
         % Enter the coordinates of this point within the stated coordinate space for two-dimensonal spaces as [x, y] or for three-dimensional space as [x, y, z].
         coordinates (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(coordinates, 2, 3)}
+            {mustBeMinLength(coordinates, 2), mustBeMaxLength(coordinates, 3)}
     end
 
     properties (Access = protected)

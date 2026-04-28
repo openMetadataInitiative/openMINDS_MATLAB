@@ -23,7 +23,7 @@ classdef ServiceLink < openminds.abstract.Schema
     properties
         % Add the location of the data that are linked to this specific service (e.g., stored as file (bundles) or registered as other entities such as atlas annotations).
         dataLocation (1,:) openminds.internal.mixedtype.servicelink.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter a display label for this service link.
         displayLabel (1,1) string
@@ -33,11 +33,11 @@ classdef ServiceLink < openminds.abstract.Schema
 
         % Add an image file to this service link that acts as a preview of its content or could function as an icon.
         previewImage (1,:) openminds.core.data.File ...
-            {mustBeSpecifiedLength(previewImage, 0, 1)}
+            {mustBeScalarOrEmpty(previewImage)}
 
         % Add all services in which the specified data can be opened by linking to each service’s interface (group of versions), specific interface version, or web resource.
         service (1,:) openminds.internal.mixedtype.servicelink.Service ...
-            {mustBeListOfUniqueItems(service)}
+            {mustBeMinLength(service, 1), mustBeListOfUniqueItems(service)}
     end
 
     properties (Access = protected)

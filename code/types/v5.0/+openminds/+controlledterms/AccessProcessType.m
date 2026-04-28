@@ -46,7 +46,7 @@ classdef AccessProcessType < openminds.abstract.ControlledTerm
         function obj = AccessProcessType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AccessProcessType
                 propValues.id (1,1) string
             end
 

@@ -41,43 +41,43 @@ classdef ElectrodeArray < openminds.abstract.Schema
     properties
         % Add the conductor material of this electrode array.
         conductorMaterial (1,:) openminds.internal.mixedtype.electrodearray.ConductorMaterial ...
-            {mustBeSpecifiedLength(conductorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(conductorMaterial)}
 
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.electrodearray.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
 
         % Enter the identifiers for each electrode of this electrode array. Note that the number of identifiers should match the number of electrodes of the array as stated under 'numberOfElectrodes'.
         electrodeIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(electrodeIdentifier)}
+            {mustBeMinLength(electrodeIdentifier, 2), mustBeListOfUniqueItems(electrodeIdentifier)}
 
         % Add the insulator material of this electrode array.
         insulatorMaterial (1,:) openminds.internal.mixedtype.electrodearray.InsulatorMaterial ...
-            {mustBeSpecifiedLength(insulatorMaterial, 0, 1)}
+            {mustBeScalarOrEmpty(insulatorMaterial)}
 
         % Enter the identifier (or label) of this electrode array that is used within the corresponding data files to identify this electrode array.
         internalIdentifier (1,1) string
 
         % Enter the intrinsic resistance of this electrode array.
         intrinsicResistance (1,:) openminds.internal.mixedtype.electrodearray.IntrinsicResistance ...
-            {mustBeSpecifiedLength(intrinsicResistance, 0, 1)}
+            {mustBeScalarOrEmpty(intrinsicResistance)}
 
         % Enter a descriptive name for this device, preferably defined by the owner.
         name (1,1) string
 
         % Enter the number of electrodes that belong to this electrode array.
         numberOfElectrodes (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfElectrodes, 0, 1), mustBeInteger(numberOfElectrodes), mustBeGreaterThanOrEqual(numberOfElectrodes, 2)}
+            {mustBeScalarOrEmpty(numberOfElectrodes), mustBeInteger(numberOfElectrodes), mustBeGreaterThanOrEqual(numberOfElectrodes, 2)}
 
         % Enter the serial number of this device.
         serialNumber (1,1) string
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.electrodearray.Type ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

@@ -43,7 +43,7 @@ classdef TissueStructure < openminds.abstract.ControlledTerm
         function obj = TissueStructure(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.TissueStructure
                 propValues.id (1,1) string
             end
 

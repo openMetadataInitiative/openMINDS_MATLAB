@@ -43,7 +43,7 @@ classdef ElectricalStimulusType < openminds.abstract.ControlledTerm
         function obj = ElectricalStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ElectricalStimulusType
                 propValues.id (1,1) string
             end
 

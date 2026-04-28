@@ -32,7 +32,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
     properties
         % Add all data types that may be represented via this content type.
         dataType (1,:) openminds.controlledterms.DataType ...
-            {mustBeListOfUniqueItems(dataType)}
+            {mustBeMinLength(dataType, 1), mustBeListOfUniqueItems(dataType)}
 
         % Enter a description of the content type specification. Leave blank if an official and public specification is linked under 'specification' for this content type.
         description (1,1) string
@@ -42,7 +42,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter all file extensions associated with this content type.
         fileExtension (1,:) string ...
-            {mustBeListOfUniqueItems(fileExtension)}
+            {mustBeMinLength(fileExtension, 1), mustBeListOfUniqueItems(fileExtension)}
 
         % Enter the name of this content type following a IANA.org inspired convention.
         name (1,1) string
@@ -55,7 +55,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
 
         % Enter any synonyms of this content type.
         synonym (1,:) string ...
-            {mustBeListOfUniqueItems(synonym)}
+            {mustBeMinLength(synonym, 1), mustBeListOfUniqueItems(synonym)}
     end
 
     properties (Access = protected)

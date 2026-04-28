@@ -30,7 +30,7 @@ classdef UnitOfMeasurement < openminds.abstract.ControlledTerm
         function obj = UnitOfMeasurement(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.UnitOfMeasurement
                 propValues.id (1,1) string
             end
 

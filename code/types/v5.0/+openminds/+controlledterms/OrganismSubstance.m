@@ -46,7 +46,7 @@ classdef OrganismSubstance < openminds.abstract.ControlledTerm
         function obj = OrganismSubstance(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OrganismSubstance
                 propValues.id (1,1) string
             end
 

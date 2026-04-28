@@ -23,7 +23,7 @@ classdef Protocol < openminds.abstract.Schema
     properties
         % Add a publication or file in which this protocol is (originally) described in detail.
         describedIn (1,:) openminds.internal.mixedtype.protocol.DescribedIn ...
-            {mustBeSpecifiedLength(describedIn, 0, 1)}
+            {mustBeScalarOrEmpty(describedIn)}
 
         % Enter a description of this protocol.
         description (1,1) string
@@ -33,11 +33,11 @@ classdef Protocol < openminds.abstract.Schema
 
         % Add all stimulus types used with this protocol.
         stimulusType (1,:) openminds.internal.mixedtype.protocol.StimulusType ...
-            {mustBeListOfUniqueItems(stimulusType)}
+            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)}
 
         % Add all techniques (including stimulation approaches and/or techniques) that were used in this protocol.
         technique (1,:) openminds.internal.mixedtype.protocol.Technique ...
-            {mustBeListOfUniqueItems(technique)}
+            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)}
     end
 
     properties (Access = protected)

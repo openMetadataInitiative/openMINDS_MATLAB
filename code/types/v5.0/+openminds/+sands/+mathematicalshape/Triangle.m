@@ -14,11 +14,11 @@ classdef Triangle < openminds.abstract.Schema
     properties
         % Enter the angle at the apex of this triangle.
         apexAngle (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(apexAngle, 0, 1)}
+            {mustBeScalarOrEmpty(apexAngle)}
 
         % Enter the lengths of the two sides meeting at the apex of this triangle.
         legLengths (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(legLengths, 2, 2)}
+            {mustBeMinLength(legLengths, 2), mustBeMaxLength(legLengths, 2)}
     end
 
     properties (Access = protected)

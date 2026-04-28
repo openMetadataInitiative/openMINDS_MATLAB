@@ -17,15 +17,15 @@ classdef ParcellationTerminologyVersion < openminds.abstract.Schema
     properties
         % Add the location of all files in which this parcellation terminology version is stored.
         dataLocation (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(dataLocation)}
+            {mustBeMinLength(dataLocation, 1), mustBeListOfUniqueItems(dataLocation)}
 
         % Add all parcellation entity versions which belong to this parcellation terminology version.
         hasEntity (1,:) openminds.sands.atlas.ParcellationEntityVersion ...
-            {mustBeListOfUniqueItems(hasEntity)}
+            {mustBeMinLength(hasEntity, 1), mustBeListOfUniqueItems(hasEntity)}
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this parcellation terminology version.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
     end
 
     properties (Access = protected)

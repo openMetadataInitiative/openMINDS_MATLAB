@@ -26,14 +26,14 @@ classdef LivePaperSection < openminds.abstract.Schema
 
         % Add the live paper version this live paper section is part of.
         isPartOf (1,:) openminds.publications.LivePaperVersion ...
-            {mustBeSpecifiedLength(isPartOf, 0, 1)}
+            {mustBeScalarOrEmpty(isPartOf)}
 
         % Enter the name (or title) of this live paper section.
         name (1,1) string
 
         % Enter an integer that is used to sort this live paper section in ascending order with other live paper sections of the overarching live paper version.
         order (1,:) int64 ...
-            {mustBeSpecifiedLength(order, 0, 1)}
+            {mustBeScalarOrEmpty(order)}
 
         % Add the type of this live paper section (e.g., 'custom', 'generic', 'models', 'morphology', or 'traces').
         type (1,1) string

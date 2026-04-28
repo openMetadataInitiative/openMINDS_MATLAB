@@ -32,33 +32,33 @@ classdef UsageAgreement < openminds.abstract.Schema
     properties
         % Add all natural persons and legal entities (in display order) responsible for creating and establishing this usage agreement.
         authoringParty (1,:) openminds.internal.mixedtype.usageagreement.AuthoringParty ...
-            {mustBeListOfUniqueItems(authoringParty)}
+            {mustBeMinLength(authoringParty, 1), mustBeListOfUniqueItems(authoringParty)}
 
         % Enter the full name of this usage agreement.
         fullName (1,1) string
 
         % Enter the jurisdiction in which this usage agreement was issued.
         jurisdiction (1,:) openminds.internal.mixedtype.usageagreement.Jurisdiction ...
-            {mustBeSpecifiedLength(jurisdiction, 0, 1)}
+            {mustBeScalarOrEmpty(jurisdiction)}
 
         % Add all the types of modifications that are allowed under this usage agreement.
         modificationProfile (1,:) openminds.internal.mixedtype.usageagreement.ModificationProfile ...
-            {mustBeListOfUniqueItems(modificationProfile)}
+            {mustBeMinLength(modificationProfile, 1), mustBeListOfUniqueItems(modificationProfile)}
 
         % Enter a short name (or alias) for this usage agreement that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Add all licenses or usage agreements that served as references in the creation of this usage agreement.
         source (1,:) openminds.internal.mixedtype.usageagreement.Source ...
-            {mustBeListOfUniqueItems(source)}
+            {mustBeMinLength(source, 1), mustBeListOfUniqueItems(source)}
 
         % Enter all channels through which users can obtain support and initiate negotiations regarding this usage agreement with the authoring party.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add the web resource that supplies the template for this usage agreement.
         template (1,:) openminds.core.miscellaneous.WebResource ...
-            {mustBeSpecifiedLength(template, 0, 1)}
+            {mustBeScalarOrEmpty(template)}
     end
 
     properties (Access = protected)

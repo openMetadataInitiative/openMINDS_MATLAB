@@ -14,11 +14,11 @@ classdef Contribution < openminds.abstract.Schema
     properties
         % Add all types of contribution made by the stated 'contributor'.
         contributor (1,:) openminds.internal.mixedtype.contribution.Contributor ...
-            {mustBeSpecifiedLength(contributor, 0, 1)}
+            {mustBeScalarOrEmpty(contributor)}
 
         % Add the party that performed the contribution.
         type (1,:) openminds.controlledterms.ContributionType ...
-            {mustBeListOfUniqueItems(type)}
+            {mustBeMinLength(type, 1), mustBeListOfUniqueItems(type)}
     end
 
     properties (Access = protected)

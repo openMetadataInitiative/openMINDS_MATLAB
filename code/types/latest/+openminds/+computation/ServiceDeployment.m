@@ -32,34 +32,34 @@ classdef ServiceDeployment < openminds.abstract.Schema
     properties
         % Add the software version and any other relevant research product version that was deployed.
         dependsOn (1,:) openminds.internal.mixedtype.servicedeployment.DependsOn ...
-            {mustBeListOfUniqueItems(dependsOn)}
+            {mustBeMinLength(dependsOn, 1), mustBeListOfUniqueItems(dependsOn)}
 
         % Enter the type of deployment environment, for example, 'production' or 'integration'.
         deploymentType (1,:) openminds.controlledterms.DeploymentEnvironmentType ...
-            {mustBeSpecifiedLength(deploymentType, 0, 1)}
+            {mustBeScalarOrEmpty(deploymentType)}
 
         % Enter the date and time at which this deployment ended, formatted according to ISO-8601.
         endTime (1,:) datetime ...
-            {mustBeSpecifiedLength(endTime, 0, 1)}
+            {mustBeScalarOrEmpty(endTime)}
 
         % Enter a label for this service deployment.
         name (1,1) string
 
         % Add the interfaces that have been deployed.
         provides (1,:) openminds.computation.DeployedInterface ...
-            {mustBeListOfUniqueItems(provides)}
+            {mustBeMinLength(provides, 1), mustBeListOfUniqueItems(provides)}
 
         % Add the service that has been deployed.
         service (1,:) openminds.core.products.Service ...
-            {mustBeSpecifiedLength(service, 0, 1)}
+            {mustBeScalarOrEmpty(service)}
 
         % Enter the date and time at which this deployment was started, formatted according to ISO-8601.
         startTime (1,:) datetime ...
-            {mustBeSpecifiedLength(startTime, 0, 1)}
+            {mustBeScalarOrEmpty(startTime)}
 
         % Add the deployed interfaces and any other relevant research product versions that are used by this deployment.
         uses (1,:) openminds.internal.mixedtype.servicedeployment.Uses ...
-            {mustBeListOfUniqueItems(uses)}
+            {mustBeMinLength(uses, 1), mustBeListOfUniqueItems(uses)}
     end
 
     properties (Access = protected)

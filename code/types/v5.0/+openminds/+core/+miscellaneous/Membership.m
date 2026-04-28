@@ -17,15 +17,15 @@ classdef Membership < openminds.abstract.Schema
     properties
         % Enter the end date of this membership, formatted as 'YYYY-MM-DD'.
         endDate (1,:) datetime ...
-            {mustBeSpecifiedLength(endDate, 0, 1), mustBeValidDate(endDate)}
+            {mustBeScalarOrEmpty(endDate), mustBeValidDate(endDate)}
 
         % Add the actor associated with this membership.
         member (1,:) openminds.internal.mixedtype.membership.Member ...
-            {mustBeSpecifiedLength(member, 0, 1)}
+            {mustBeScalarOrEmpty(member)}
 
         % Enter the start date of this membership, formatted as 'YYYY-MM-DD'.
         startDate (1,:) datetime ...
-            {mustBeSpecifiedLength(startDate, 0, 1), mustBeValidDate(startDate)}
+            {mustBeScalarOrEmpty(startDate), mustBeValidDate(startDate)}
     end
 
     properties (Access = protected)

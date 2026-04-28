@@ -26,19 +26,19 @@ classdef Measurement < openminds.abstract.Schema
 
         % Add the quantity that was measured during this measurement.
         measuredQuantity (1,:) openminds.controlledterms.MeasuredQuantity ...
-            {mustBeSpecifiedLength(measuredQuantity, 0, 1)}
+            {mustBeScalarOrEmpty(measuredQuantity)}
 
         % Add the used device for obtaining this measurement.
         obtainedWith (1,:) openminds.internal.mixedtype.measurement.ObtainedWith ...
-            {mustBeSpecifiedLength(obtainedWith, 0, 1)}
+            {mustBeScalarOrEmpty(obtainedWith)}
 
         % Enter the date and time on which this measurement was made, formatted as '2023-02-07T16:00:00+00:00'.
         timestamp (1,:) datetime ...
-            {mustBeSpecifiedLength(timestamp, 0, 1)}
+            {mustBeScalarOrEmpty(timestamp)}
 
         % Enter all values that were measured at the same time and are of the same measured quantity.
         value (1,:) openminds.internal.mixedtype.measurement.Value ...
-            {mustBeListOfUniqueItems(value)}
+            {mustBeMinLength(value, 1), mustBeListOfUniqueItems(value)}
     end
 
     properties (Access = protected)

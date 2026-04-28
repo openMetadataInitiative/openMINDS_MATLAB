@@ -47,25 +47,25 @@ classdef ValidationTest < openminds.abstract.Schema
     properties
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.validationtest.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add all parties that developed this validation test.
         developer (1,:) openminds.internal.mixedtype.validationtest.Developer ...
-            {mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
 
         % Add all versions of this validation test.
         hasVersion (1,:) openminds.computation.ValidationTestVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product.
         homepage (1,1) string
@@ -75,22 +75,22 @@ classdef ValidationTest < openminds.abstract.Schema
 
         % Add all acquisition techniques that were used to obtain the reference data for this validation test.
         referenceDataAcquisition (1,:) openminds.controlledterms.Technique ...
-            {mustBeListOfUniqueItems(referenceDataAcquisition)}
+            {mustBeMinLength(referenceDataAcquisition, 1), mustBeListOfUniqueItems(referenceDataAcquisition)}
 
         % Add the scope of this validation test.
         scope (1,:) openminds.controlledterms.ModelScope ...
-            {mustBeSpecifiedLength(scope, 0, 1)}
+            {mustBeScalarOrEmpty(scope)}
 
         % Add the type of score calculated in this validation test.
         scoreType (1,:) openminds.controlledterms.DifferenceMeasure ...
-            {mustBeSpecifiedLength(scoreType, 0, 1)}
+            {mustBeScalarOrEmpty(scoreType)}
 
         % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Add all study targets of this validation test.
         studyTarget (1,:) openminds.internal.mixedtype.validationtest.StudyTarget ...
-            {mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
     end
 
     properties (Access = protected)

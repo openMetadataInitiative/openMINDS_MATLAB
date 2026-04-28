@@ -45,7 +45,7 @@ classdef LearningResourceType < openminds.abstract.ControlledTerm
         function obj = LearningResourceType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.LearningResourceType
                 propValues.id (1,1) string
             end
 

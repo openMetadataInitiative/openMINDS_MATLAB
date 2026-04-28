@@ -14,11 +14,11 @@ classdef CentroidalPyramid < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance from the centroid of the base plane to the apex of this centroidal pyramid.
         apexBaseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(apexBaseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(apexBaseDistance)}
 
         % Enter the two-dimensional base shape of this centroidal pyramid.
         baseShape (1,:) openminds.internal.mixedtype.centroidalpyramid.BaseShape ...
-            {mustBeSpecifiedLength(baseShape, 0, 1)}
+            {mustBeScalarOrEmpty(baseShape)}
     end
 
     properties (Access = protected)

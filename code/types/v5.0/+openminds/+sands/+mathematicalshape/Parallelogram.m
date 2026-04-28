@@ -17,15 +17,15 @@ classdef Parallelogram < openminds.abstract.Schema
     properties
         % Enter the perpendicular distance between the parallel lines of the base of this parallelogram.
         baseDistance (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseDistance, 0, 1)}
+            {mustBeScalarOrEmpty(baseDistance)}
 
         % Enter the uniform length of the bottom and top sides (the base) of this parallelogram.
         baseLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(baseLength, 0, 1)}
+            {mustBeScalarOrEmpty(baseLength)}
 
         % Enter an interior angle between the base and an adjacent side of this parallelogram.
         interiorAngle (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(interiorAngle, 0, 1)}
+            {mustBeScalarOrEmpty(interiorAngle)}
     end
 
     properties (Access = protected)

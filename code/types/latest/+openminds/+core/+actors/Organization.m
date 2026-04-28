@@ -44,41 +44,41 @@ classdef Organization < openminds.abstract.Schema
 
         % Enter any other known name or acronym of this organization.
         alternateName (1,:) string ...
-            {mustBeListOfUniqueItems(alternateName)}
+            {mustBeMinLength(alternateName, 1), mustBeListOfUniqueItems(alternateName)}
 
         % Add the country where the organization was formed.
         countryOfFormation (1,:) openminds.controlledterms.SovereignState ...
-            {mustBeSpecifiedLength(countryOfFormation, 0, 1)}
+            {mustBeScalarOrEmpty(countryOfFormation)}
 
         % Add all globally unique and persistent digital identifier of this organization.
         digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
-            {mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
 
         % Add all parent organizations of this organization.
         hasParent (1,:) openminds.core.actors.Organization ...
-            {mustBeListOfUniqueItems(hasParent)}
+            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this organization.
         homepage (1,1) string
 
         % Add the jurisdiction under which the organization operates.
         jurisdiction (1,:) openminds.internal.mixedtype.organization.Jurisdiction ...
-            {mustBeSpecifiedLength(jurisdiction, 0, 1)}
+            {mustBeScalarOrEmpty(jurisdiction)}
 
         % Add the headquarters location of this organization.
         location (1,:) openminds.core.miscellaneous.Location ...
-            {mustBeSpecifiedLength(location, 0, 1)}
+            {mustBeScalarOrEmpty(location)}
 
         % Add all membership records (one per member) for this organization. Who is considered a qualified member is typically defined in the organization’s membership agreements.
         membership (1,:) openminds.core.miscellaneous.Membership ...
-            {mustBeListOfUniqueItems(membership)}
+            {mustBeMinLength(membership, 1), mustBeListOfUniqueItems(membership)}
 
         % Enter the organization’s preferred name for use in international contexts.
         name (1,1) string
 
         % Add the type of this organization (legal entity or organizational unit).
         type (1,:) openminds.controlledterms.OrganizationType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

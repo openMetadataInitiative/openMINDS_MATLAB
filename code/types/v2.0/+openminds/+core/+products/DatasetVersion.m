@@ -95,19 +95,19 @@ classdef DatasetVersion < openminds.abstract.Schema
     properties
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.controlledterms.ProductAccessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % If necessary, add one or several authors (person or organization) that contributed to the production and publication of this dataset version. Note that these authors will overwrite the once provided in the dataset product this version belongs to.
         author (1,:) openminds.internal.mixedtype.datasetversion.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Add one or several custodians (person or organization) that are responsible for this research product version.
         custodian (1,:) openminds.internal.mixedtype.datasetversion.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % If necessary, enter a version specific description (abstract) for this research product version (max. 2000 characters, incl. spaces; no references). If left blank, the research product version will inherit the 'description' of it's corresponding research product.
         description (1,1) string ...
@@ -115,73 +115,73 @@ classdef DatasetVersion < openminds.abstract.Schema
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the result of the ethics assessment of this dataset version.
         ethicsAssessment (1,:) openminds.controlledterms.EthicsAssessment ...
-            {mustBeSpecifiedLength(ethicsAssessment, 0, 1)}
+            {mustBeScalarOrEmpty(ethicsAssessment)}
 
         % Add all experimental approaches which this dataset version has deployed.
         experimentalApproach (1,:) openminds.controlledterms.ExperimentalApproach ...
-            {mustBeListOfUniqueItems(experimentalApproach)}
+            {mustBeMinLength(experimentalApproach, 1), mustBeListOfUniqueItems(experimentalApproach)}
 
         % Add the DOI, file or URL that points to a full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.datasetversion.FullDocumentation ...
-            {mustBeSpecifiedLength(fullDocumentation, 0, 1)}
+            {mustBeScalarOrEmpty(fullDocumentation)}
 
         % If necessary, enter a version specific descriptive full name (title) for this research product version. If left blank, the research product version will inherit the 'fullName' of it's corresponding research product.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product version.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this research product version. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string
 
         % Add the data that was used as input for this dataset version.
         inputData (1,:) openminds.internal.mixedtype.datasetversion.InputData ...
-            {mustBeListOfUniqueItems(inputData)}
+            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)}
 
         % Add all dataset versions that can be used alternatively to this dataset version.
         isAlternativeVersionOf (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeListOfUniqueItems(isAlternativeVersionOf)}
+            {mustBeMinLength(isAlternativeVersionOf, 1), mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the dataset version preceding this dataset version.
         isNewVersionOf (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isNewVersionOf)}
 
         % Enter custom keywords to this research product version.
         keyword (1,:) string ...
-            {mustBeSpecifiedLength(keyword, 1, 5)}
+            {mustBeMinLength(keyword, 1), mustBeMaxLength(keyword, 5), mustBeListOfUniqueItems(keyword)}
 
         % Add the license for this dataset version.
         license (1,:) openminds.core.data.License ...
-            {mustBeSpecifiedLength(license, 0, 1)}
+            {mustBeScalarOrEmpty(license)}
 
         % Add the contributions for each involved person or organization going beyond being an author, custodian or developer of this research product version.
         otherContribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(otherContribution)}
+            {mustBeMinLength(otherContribution, 1), mustBeListOfUniqueItems(otherContribution)}
 
         % Add one or several protocols that were used in this dataset version.
         protocol (1,:) openminds.core.research.Protocol ...
-            {mustBeListOfUniqueItems(protocol)}
+            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)}
 
         % Add further publications besides the documentation (e.g. an original research article) providing the original context for the production of this research product version.
         relatedPublication (1,:) openminds.internal.mixedtype.datasetversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) of the first broadcast/publication of this research product version.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Enter a short name (alias) for this research product version (max. 30 characters, no space).
         shortName (1,1) string ...
@@ -189,15 +189,15 @@ classdef DatasetVersion < openminds.abstract.Schema
 
         % Add one or several specimen (subjects and/or tissue samples) or specimen sets (subject groups and/or tissue sample collections) that were studied in this dataset.
         studiedSpecimen (1,:) openminds.internal.mixedtype.datasetversion.StudiedSpecimen ...
-            {mustBeListOfUniqueItems(studiedSpecimen)}
+            {mustBeMinLength(studiedSpecimen, 1), mustBeListOfUniqueItems(studiedSpecimen)}
 
         % Enter all channels through which a user can receive support for handling this research product.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add all data types (raw, derived or simulated) provided in this dataset version.
         type (1,:) openminds.controlledterms.SemanticDataType ...
-            {mustBeListOfUniqueItems(type)}
+            {mustBeMinLength(type, 1), mustBeListOfUniqueItems(type)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

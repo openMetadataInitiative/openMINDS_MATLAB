@@ -102,7 +102,7 @@ classdef CellType < openminds.abstract.ControlledTerm
         function obj = CellType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CellType
                 propValues.id (1,1) string
             end
 

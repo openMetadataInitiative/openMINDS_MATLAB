@@ -20,7 +20,7 @@ classdef AnatomicalEntity < openminds.abstract.Schema
     properties
         % Add another anatomical entity representing the anatomical parent structure of this anatomical entity.
         hasParent (1,:) openminds.sands.AnatomicalEntity ...
-            {mustBeSpecifiedLength(hasParent, 0, 1)}
+            {mustBeScalarOrEmpty(hasParent)}
 
         % Enter a descriptive name for this anatomical entity based on anatomical location or characteristics.
         name (1,1) string
@@ -30,7 +30,7 @@ classdef AnatomicalEntity < openminds.abstract.Schema
 
         % Add one or several relations of this anatomical entity to other anatomical entities that are used elsewhere to describe (roughly) the same anatomical location.
         otherAnatomicalRelation (1,:) openminds.sands.AnatomicalEntityRelation ...
-            {mustBeListOfUniqueItems(otherAnatomicalRelation)}
+            {mustBeMinLength(otherAnatomicalRelation, 1), mustBeListOfUniqueItems(otherAnatomicalRelation)}
     end
 
     properties (Access = protected)

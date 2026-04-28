@@ -14,11 +14,11 @@ classdef SpecimenAge < openminds.abstract.Schema
     properties
         % Enter the age value.
         age (1,:) openminds.internal.mixedtype.specimenage.Age ...
-            {mustBeSpecifiedLength(age, 0, 1)}
+            {mustBeScalarOrEmpty(age)}
 
         % Enter the age reference for the specified age value.
         reference (1,:) openminds.controlledterms.AgeReference ...
-            {mustBeSpecifiedLength(reference, 0, 1)}
+            {mustBeScalarOrEmpty(reference)}
     end
 
     properties (Access = protected)

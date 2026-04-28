@@ -54,7 +54,7 @@ classdef ModelAbstractionLevel < openminds.abstract.ControlledTerm
         function obj = ModelAbstractionLevel(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ModelAbstractionLevel
                 propValues.id (1,1) string
             end
 

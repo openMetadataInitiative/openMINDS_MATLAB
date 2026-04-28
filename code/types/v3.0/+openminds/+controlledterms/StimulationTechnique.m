@@ -58,7 +58,7 @@ classdef StimulationTechnique < openminds.abstract.ControlledTerm
         function obj = StimulationTechnique(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.StimulationTechnique
                 propValues.id (1,1) string
             end
 

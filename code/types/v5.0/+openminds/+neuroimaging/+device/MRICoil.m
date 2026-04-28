@@ -35,25 +35,25 @@ classdef MRICoil < openminds.abstract.Schema
     properties
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.mricoil.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
 
         % Enter the total number of coil elements.
         elementCount (1,:) int64 ...
-            {mustBeSpecifiedLength(elementCount, 0, 1), mustBeInteger(elementCount), mustBeGreaterThanOrEqual(elementCount, 1)}
+            {mustBeScalarOrEmpty(elementCount), mustBeInteger(elementCount), mustBeGreaterThanOrEqual(elementCount, 1)}
 
         % Add the mounting location intended by the manufacturer (e.g., head, neck, knee).
         intendedMountingLocation (1,:) openminds.controlledterms.ExternalBodyRegion ...
-            {mustBeSpecifiedLength(intendedMountingLocation, 0, 1)}
+            {mustBeScalarOrEmpty(intendedMountingLocation)}
 
         % Enter the identifier (or label) of this device that is used by the owner to identify or reference this device.
         internalIdentifier (1,1) string
 
         % Add the coil mounting type (e.g., built-in, external, interventional, wearable).
         mountingType (1,:) openminds.controlledterms.DeviceMountingType ...
-            {mustBeSpecifiedLength(mountingType, 0, 1)}
+            {mustBeScalarOrEmpty(mountingType)}
 
         % Enter a descriptive name for this device, preferably defined by the owner.
         name (1,1) string
@@ -63,7 +63,7 @@ classdef MRICoil < openminds.abstract.Schema
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.mricoil.Type ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

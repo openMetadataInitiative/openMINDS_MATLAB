@@ -38,7 +38,7 @@ classdef SubjectGroup < openminds.abstract.Schema
 
         % Add the biological sex of all specimen in this set.
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
-            {mustBeListOfUniqueItems(biologicalSex)}
+            {mustBeMinLength(biologicalSex, 1), mustBeListOfUniqueItems(biologicalSex)}
 
         % Enter the identifier of this specimen set that is used within the corresponding data.
         internalIdentifier (1,1) string
@@ -48,23 +48,23 @@ classdef SubjectGroup < openminds.abstract.Schema
 
         % Add the phenotype of all specimen in this set.
         phenotype (1,:) openminds.controlledterms.Phenotype ...
-            {mustBeListOfUniqueItems(phenotype)}
+            {mustBeMinLength(phenotype, 1), mustBeListOfUniqueItems(phenotype)}
 
         % Enter the number of specimen that belong to this set.
         quantity (1,:) int64 ...
-            {mustBeSpecifiedLength(quantity, 0, 1)}
+            {mustBeScalarOrEmpty(quantity)}
 
         % Add the species of all specimen in this set.
         species (1,:) openminds.controlledterms.Species ...
-            {mustBeListOfUniqueItems(species)}
+            {mustBeMinLength(species, 1), mustBeListOfUniqueItems(species)}
 
         % Add the strain of all specimen in this set.
         strain (1,:) openminds.controlledterms.Strain ...
-            {mustBeListOfUniqueItems(strain)}
+            {mustBeMinLength(strain, 1), mustBeListOfUniqueItems(strain)}
 
         % Add all states in which this subject group was studied.
         studiedState (1,:) openminds.core.research.SubjectGroupState ...
-            {mustBeListOfUniqueItems(studiedState)}
+            {mustBeMinLength(studiedState, 1), mustBeListOfUniqueItems(studiedState)}
     end
 
     properties (Access = protected)

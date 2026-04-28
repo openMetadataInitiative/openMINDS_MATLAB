@@ -32,26 +32,26 @@ classdef GridImage < openminds.abstract.Schema
 
         % Add the coordinate space in which this grid image exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridimage.CoordinateFramework ...
-            {mustBeSpecifiedLength(coordinateFramework, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateFramework)}
 
         % Add a reference to the file to which this grid image information applies. If the information applies uniformly to a grid image file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridimage.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter the dimension of this grid image in pixels.
         dimension (1,:) int64 ...
-            {mustBeSpecifiedLength(dimension, 2, 2)}
+            {mustBeMinLength(dimension, 2), mustBeMaxLength(dimension, 2)}
 
         % Enter a descriptive name of this grid image preferably matching the filename.
         name (1,1) string
 
         % Add the used device for obtaining this grid image.
         obtainedWith (1,:) openminds.internal.mixedtype.gridimage.ObtainedWith ...
-            {mustBeSpecifiedLength(obtainedWith, 0, 1)}
+            {mustBeScalarOrEmpty(obtainedWith)}
 
         % Enter the physical pixel size for this grid image (in x,y order).
         pixelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(pixelSize, 2, 2)}
+            {mustBeMinLength(pixelSize, 2), mustBeMaxLength(pixelSize, 2)}
     end
 
     properties (Access = protected)

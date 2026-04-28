@@ -104,49 +104,49 @@ classdef CommonCoordinateFrameworkVersion < openminds.abstract.Schema
 
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.core.miscellaneous.Accessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Add the axes orientation denoted in standard anatomical terms of direction (stated as XYZ) for the anatomical space of this common coordinate framework version.
         anatomicalAxesOrientation (1,:) openminds.controlledterms.AnatomicalAxesOrientation ...
-            {mustBeSpecifiedLength(anatomicalAxesOrientation, 0, 1)}
+            {mustBeScalarOrEmpty(anatomicalAxesOrientation)}
 
         % Enter the coordinate point in the native anatomical space of the template as [x, y] or [x, y, z] for two- or three-dimensional spaces, respectively, that has been defined as the origin of the anatomical space of this common coordinate framework version (i.e., as the central point where all axes intersect).
         axesOrigin (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(axesOrigin, 2, 3)}
+            {mustBeMinLength(axesOrigin, 2), mustBeMaxLength(axesOrigin, 3), mustBeListOfUniqueItems(axesOrigin)}
 
         % Add all individual, organisational, or consortial contributions to this research product version. These values override the inherited values from the version-independent product.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product version.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Add all image files used as visual representation of this common coordinate framework version.
         defaultImage (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(defaultImage)}
+            {mustBeMinLength(defaultImage, 1), mustBeListOfUniqueItems(defaultImage)}
 
         % Enter a description (or abstract) of this research product version. This value overrides the inherited value from the version-independent product.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this research product version. This value overrides the inherited value from the version-independent product.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version. This value overrides the inherited value from the version-independent product.
         homepage (1,1) string
@@ -156,58 +156,58 @@ classdef CommonCoordinateFrameworkVersion < openminds.abstract.Schema
 
         % Add the common coordinate framework version preceding this common coordinate framework version.
         isPrecededBy (1,:) openminds.sands.atlas.CommonCoordinateFrameworkVersion ...
-            {mustBeSpecifiedLength(isPrecededBy, 0, 1)}
+            {mustBeScalarOrEmpty(isPrecededBy)}
 
         % Add all common coordinate framework versions that can be used alternatively to this common coordinate framework version.
         isVariantOf (1,:) openminds.sands.atlas.CommonCoordinateFrameworkVersion ...
-            {mustBeListOfUniqueItems(isVariantOf)}
+            {mustBeMinLength(isVariantOf, 1), mustBeListOfUniqueItems(isVariantOf)}
 
         % Add the version-independent information about this common coordinate framework.
         isVersionOf (1,:) openminds.sands.atlas.CommonCoordinateFramework ...
-            {mustBeSpecifiedLength(isVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isVersionOf)}
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add the native unit that is used for this common coordinate framework version.
         nativeUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(nativeUnit, 0, 1)}
+            {mustBeScalarOrEmpty(nativeUnit)}
 
         % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this common coordinate framework version.
         ontologyIdentifier (1,:) string ...
-            {mustBeListOfUniqueItems(ontologyIdentifier)}
+            {mustBeMinLength(ontologyIdentifier, 1), mustBeListOfUniqueItems(ontologyIdentifier)}
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
-            {mustBeSpecifiedLength(publicationStatus, 0, 1)}
+            {mustBeScalarOrEmpty(publicationStatus)}
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Enter a short name (or alias) for this research product version that could be used as a shortened display title (e.g., for web services with too little space to display the full name). This value overrides the inherited value from the version-independent product.
         shortName (1,1) string
 
         % Enter all channels through which a user can receive support for handling this research product version. This value overrides the inherited value from the version-independent product.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.UsageCondition ...
-            {mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
 
         % Add the specimen(s) that were used in the creation of this common coordinate framework version.
         usedSpecimen (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.UsedSpecimen ...
-            {mustBeListOfUniqueItems(usedSpecimen)}
+            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

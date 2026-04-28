@@ -48,7 +48,7 @@ classdef SoftwareApplicationCategory < openminds.abstract.ControlledTerm
         function obj = SoftwareApplicationCategory(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SoftwareApplicationCategory
                 propValues.id (1,1) string
             end
 

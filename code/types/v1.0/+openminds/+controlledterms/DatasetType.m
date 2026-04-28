@@ -30,7 +30,7 @@ classdef DatasetType < openminds.abstract.ControlledTerm
         function obj = DatasetType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DatasetType
                 propValues.id (1,1) string
             end
 

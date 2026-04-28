@@ -49,7 +49,7 @@ classdef PulseShape < openminds.abstract.ControlledTerm
         function obj = PulseShape(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.PulseShape
                 propValues.id (1,1) string
             end
 

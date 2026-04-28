@@ -11,7 +11,7 @@ classdef Cube < openminds.abstract.Schema
     properties
         % Enter the common length of the sides of this cube.
         sideLength (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(sideLength, 0, 1)}
+            {mustBeScalarOrEmpty(sideLength)}
     end
 
     properties (Access = protected)

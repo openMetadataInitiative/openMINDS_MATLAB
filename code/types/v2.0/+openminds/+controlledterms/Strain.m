@@ -29,11 +29,17 @@ classdef Strain < openminds.abstract.ControlledTerm
         ]
     end
 
+    properties
+        % Enter other database identifiers for the given strain that are supported by the members of the Alliance of Genome Resources (https://www.alliancegenome.org/).
+        identifier (1,:) string ...
+            {mustBeMinLength(identifier, 1), mustBeListOfUniqueItems(identifier)}
+    end
+
     methods
         function obj = Strain(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Strain
                 propValues.id (1,1) string
             end
 

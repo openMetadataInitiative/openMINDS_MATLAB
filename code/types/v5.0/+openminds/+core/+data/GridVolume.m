@@ -35,30 +35,30 @@ classdef GridVolume < openminds.abstract.Schema
 
         % Add the coordinate space in which this grid volume exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridvolume.CoordinateFramework ...
-            {mustBeSpecifiedLength(coordinateFramework, 0, 1)}
+            {mustBeScalarOrEmpty(coordinateFramework)}
 
         % Add a reference to the file to which this grid volume information applies. If the information applies uniformly to a grid volume file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridvolume.DataLocation ...
-            {mustBeSpecifiedLength(dataLocation, 0, 1)}
+            {mustBeScalarOrEmpty(dataLocation)}
 
         % Enter the dimension of this grid volume.
         dimension (1,:) int64 ...
-            {mustBeSpecifiedLength(dimension, 3, 3)}
+            {mustBeMinLength(dimension, 3), mustBeMaxLength(dimension, 3)}
 
         % Enter a descriptive name of this grid volume preferably matching the filename.
         name (1,1) string
 
         % Enter number of planes in this grid volume.
         numberOfPlanes (1,:) int64 ...
-            {mustBeSpecifiedLength(numberOfPlanes, 0, 1)}
+            {mustBeScalarOrEmpty(numberOfPlanes)}
 
         % Add the used device for obtaining this grid volume.
         obtainedWith (1,:) openminds.internal.mixedtype.gridvolume.ObtainedWith ...
-            {mustBeSpecifiedLength(obtainedWith, 0, 1)}
+            {mustBeScalarOrEmpty(obtainedWith)}
 
         % Enter the physical voxel size for this grid volume (in x,y,z order).
         voxelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(voxelSize, 3, 3)}
+            {mustBeMinLength(voxelSize, 3), mustBeMaxLength(voxelSize, 3)}
     end
 
     properties (Access = protected)

@@ -89,7 +89,7 @@ classdef VascularStructure < openminds.abstract.ControlledTerm
         function obj = VascularStructure(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.VascularStructure
                 propValues.id (1,1) string
             end
 

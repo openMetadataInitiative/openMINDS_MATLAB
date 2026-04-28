@@ -22,14 +22,15 @@ classdef LaunchConfiguration < openminds.abstract.Schema
 
     properties
         % Enter all command line arguments for this launch configuration.
-        argument (1,:) string
+        argument (1,:) string ...
+            {mustBeMinLength(argument, 1)}
 
         % Enter a short text describing this launch configuration.
         description (1,1) string
 
         % Add any environment variables defined by this launch configuration.
         environmentVariable (1,:) openminds.core.research.PropertyValueList ...
-            {mustBeSpecifiedLength(environmentVariable, 0, 1)}
+            {mustBeScalarOrEmpty(environmentVariable)}
 
         % Enter the path to the command-line executable.
         executable (1,1) string

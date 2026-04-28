@@ -30,7 +30,7 @@ classdef ContributionType < openminds.abstract.ControlledTerm
         function obj = ContributionType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ContributionType
                 propValues.id (1,1) string
             end
 

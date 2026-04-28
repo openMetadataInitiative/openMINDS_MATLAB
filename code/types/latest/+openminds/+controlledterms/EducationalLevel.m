@@ -45,7 +45,7 @@ classdef EducationalLevel < openminds.abstract.ControlledTerm
         function obj = EducationalLevel(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.EducationalLevel
                 propValues.id (1,1) string
             end
 

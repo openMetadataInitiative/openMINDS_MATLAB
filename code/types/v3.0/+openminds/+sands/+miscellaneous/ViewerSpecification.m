@@ -23,15 +23,15 @@ classdef ViewerSpecification < openminds.abstract.Schema
 
         % Enter the coordinates of the anchor point that a viewer should use. Either state the anchor point of the annotation again or state another coordinate point.
         anchorPoint (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(anchorPoint, 2, 3)}
+            {mustBeMinLength(anchorPoint, 2), mustBeMaxLength(anchorPoint, 3)}
 
         % Enter the camera position that a viewer should use.
         cameraPosition (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
-            {mustBeSpecifiedLength(cameraPosition, 0, 1)}
+            {mustBeScalarOrEmpty(cameraPosition)}
 
         % Add the preferred color that a viewer should display.
         preferredDisplayColor (1,:) openminds.internal.mixedtype.viewerspecification.PreferredDisplayColor ...
-            {mustBeSpecifiedLength(preferredDisplayColor, 0, 1)}
+            {mustBeScalarOrEmpty(preferredDisplayColor)}
     end
 
     properties (Access = protected)

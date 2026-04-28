@@ -89,37 +89,37 @@ classdef MetaDataModelVersion < openminds.abstract.Schema
     properties
         % Add the accessibility of the data for this research product version.
         accessibility (1,:) openminds.core.miscellaneous.Accessibility ...
-            {mustBeSpecifiedLength(accessibility, 0, 1)}
+            {mustBeScalarOrEmpty(accessibility)}
 
         % Add all individual, organisational, or consortial contributions to this research product version. These values override the inherited values from the version-independent product.
         contribution (1,:) openminds.core.actors.Contribution ...
-            {mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
 
         % Add all affiliations for the individual contributors to this research product version.
         contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
-            {mustBeListOfUniqueItems(contributorAffiliation)}
+            {mustBeMinLength(contributorAffiliation, 1), mustBeListOfUniqueItems(contributorAffiliation)}
 
         % Enter the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
-            {mustBeSpecifiedLength(copyright, 0, 1)}
+            {mustBeScalarOrEmpty(copyright)}
 
         % Enter a description (or abstract) of this research product version. This value overrides the inherited value from the version-independent product.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.metadatamodelversion.DigitalIdentifier ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.metadatamodelversion.Documentation ...
-            {mustBeSpecifiedLength(documentation, 0, 1)}
+            {mustBeScalarOrEmpty(documentation)}
 
         % Enter a descriptive full name (or title) for this research product version. This value overrides the inherited value from the version-independent product.
         fullName (1,1) string
 
         % Add all funding information of this research product version.
         funding (1,:) openminds.core.miscellaneous.Funding ...
-            {mustBeListOfUniqueItems(funding)}
+            {mustBeMinLength(funding, 1), mustBeListOfUniqueItems(funding)}
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this research product version. This value overrides the inherited value from the version-independent product.
         homepage (1,1) string
@@ -129,58 +129,58 @@ classdef MetaDataModelVersion < openminds.abstract.Schema
 
         % Add the (meta)data model version preceding this (meta)data model version.
         isPrecededBy (1,:) openminds.core.products.MetaDataModelVersion ...
-            {mustBeSpecifiedLength(isPrecededBy, 0, 1)}
+            {mustBeScalarOrEmpty(isPrecededBy)}
 
         % Add all (meta)data model versions that can be used alternatively to this (meta)data model version.
         isVariantOf (1,:) openminds.core.products.MetaDataModelVersion ...
-            {mustBeListOfUniqueItems(isVariantOf)}
+            {mustBeMinLength(isVariantOf, 1), mustBeListOfUniqueItems(isVariantOf)}
 
         % Add the version-independent information about this (meta)data model.
         isVersionOf (1,:) openminds.core.products.MetaDataModel ...
-            {mustBeSpecifiedLength(isVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isVersionOf)}
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.metadatamodelversion.Keyword ...
-            {mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
-            {mustBeSpecifiedLength(publicationStatus, 0, 1)}
+            {mustBeScalarOrEmpty(publicationStatus)}
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.metadatamodelversion.RelatedPublication ...
-            {mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
-            {mustBeSpecifiedLength(releaseDate, 0, 1), mustBeValidDate(releaseDate)}
+            {mustBeScalarOrEmpty(releaseDate), mustBeValidDate(releaseDate)}
 
         % Add the file repository of this research product version.
         repository (1,:) openminds.core.data.FileRepository ...
-            {mustBeSpecifiedLength(repository, 0, 1)}
+            {mustBeScalarOrEmpty(repository)}
 
         % Add all content types in which (meta)data compliant with this (meta)data model version can be stored in.
         serializationFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(serializationFormat)}
+            {mustBeMinLength(serializationFormat, 1), mustBeListOfUniqueItems(serializationFormat)}
 
         % Enter a short name (or alias) for this research product version that could be used as a shortened display title (e.g., for web services with too little space to display the full name). This value overrides the inherited value from the version-independent product.
         shortName (1,1) string
 
         % Add all content types in which the schemas of this (meta)data model version are stored in.
         specificationFormat (1,:) openminds.core.data.ContentType ...
-            {mustBeListOfUniqueItems(specificationFormat)}
+            {mustBeMinLength(specificationFormat, 1), mustBeListOfUniqueItems(specificationFormat)}
 
         % Enter all channels through which a user can receive support for handling this research product version. This value overrides the inherited value from the version-independent product.
         supportChannel (1,:) string ...
-            {mustBeListOfUniqueItems(supportChannel)}
+            {mustBeMinLength(supportChannel, 1), mustBeListOfUniqueItems(supportChannel)}
 
         % Add the type of this (meta)data model version.
         type (1,:) openminds.controlledterms.MetaDataModelType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.metadatamodelversion.UsageCondition ...
-            {mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string

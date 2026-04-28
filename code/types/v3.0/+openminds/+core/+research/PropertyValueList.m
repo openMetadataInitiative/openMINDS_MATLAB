@@ -17,7 +17,7 @@ classdef PropertyValueList < openminds.abstract.Schema
 
         % Enter all numerical and string property-value pairs that belong to this property-value list.
         propertyValuePair (1,:) openminds.internal.mixedtype.propertyvaluelist.PropertyValuePair ...
-            {mustBeListOfUniqueItems(propertyValuePair)}
+            {mustBeMinLength(propertyValuePair, 1), mustBeListOfUniqueItems(propertyValuePair)}
     end
 
     properties (Access = protected)

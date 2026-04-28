@@ -45,7 +45,7 @@ classdef MRISpoilingTechnique < openminds.abstract.ControlledTerm
         function obj = MRISpoilingTechnique(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.MRISpoilingTechnique
                 propValues.id (1,1) string
             end
 

@@ -35,11 +35,11 @@ classdef Dataset < openminds.abstract.Schema
     properties
         % Add one or several authors (person or organization) that contributed to the production and publication of this dataset.
         author (1,:) openminds.internal.mixedtype.dataset.Author ...
-            {mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
 
         % Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.dataset.Custodian ...
-            {mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
 
         % Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
         description (1,1) string ...
@@ -47,18 +47,18 @@ classdef Dataset < openminds.abstract.Schema
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.core.miscellaneous.DOI ...
-            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+            {mustBeScalarOrEmpty(digitalIdentifier)}
 
         % Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
         fullName (1,1) string
 
         % Add one or several versions of this dataset.
         hasVersion (1,:) openminds.core.products.DatasetVersion ...
-            {mustBeListOfUniqueItems(hasVersion)}
+            {mustBeMinLength(hasVersion, 1), mustBeListOfUniqueItems(hasVersion)}
 
         % Add the uniform resource locator (URL) to the homepage of this research product.
         homepage (1,:) openminds.core.miscellaneous.URL ...
-            {mustBeSpecifiedLength(homepage, 0, 1)}
+            {mustBeScalarOrEmpty(homepage)}
 
         % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string

@@ -14,7 +14,7 @@ classdef FilePathPattern < openminds.abstract.Schema
     properties
         % Add the type of grouping that is defined by the given file path pattern.
         groupingType (1,:) openminds.controlledterms.FileBundleGrouping ...
-            {mustBeSpecifiedLength(groupingType, 0, 1)}
+            {mustBeScalarOrEmpty(groupingType)}
 
         % Enter the regular expression that defines this file path pattern.
         regex (1,1) string

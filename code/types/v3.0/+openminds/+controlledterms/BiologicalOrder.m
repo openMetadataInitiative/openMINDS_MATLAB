@@ -45,7 +45,7 @@ classdef BiologicalOrder < openminds.abstract.ControlledTerm
         function obj = BiologicalOrder(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.BiologicalOrder
                 propValues.id (1,1) string
             end
 

@@ -29,21 +29,21 @@ classdef Setup < openminds.abstract.Schema
 
         % Add all components, including other setups, that are part of this setup. Note that a setup should not be only composed of software.
         hasPart (1,:) openminds.internal.mixedtype.setup.HasPart ...
-            {mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
 
         % Enter the geographic location of this setup. This may include room number, building, institution and/or city.
         location (1,1) string
 
         % Add the manufacturer (private or industrial) that constructed this setup.
         manufacturer (1,:) openminds.internal.mixedtype.setup.Manufacturer ...
-            {mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
 
         % Enter a descriptive name for this setup.
         name (1,1) string
 
         % Add all types that describe this setup.
         type (1,:) openminds.controlledterms.SetupType ...
-            {mustBeListOfUniqueItems(type)}
+            {mustBeMinLength(type, 1), mustBeListOfUniqueItems(type)}
     end
 
     properties (Access = protected)

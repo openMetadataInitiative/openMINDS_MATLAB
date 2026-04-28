@@ -26,25 +26,25 @@ classdef Subject < openminds.abstract.Schema
     properties
         % Add the biological sex of this specimen.
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
-            {mustBeSpecifiedLength(biologicalSex, 0, 1)}
+            {mustBeScalarOrEmpty(biologicalSex)}
 
         % Enter the identifier (or label) of this specimen that is used within the corresponding data files to identify this specimen.
         internalIdentifier (1,1) string
 
         % Add all subject groups of which this subject is a member.
         isPartOf (1,:) openminds.core.research.SubjectGroup ...
-            {mustBeListOfUniqueItems(isPartOf)}
+            {mustBeMinLength(isPartOf, 1), mustBeListOfUniqueItems(isPartOf)}
 
         % Enter a lookup label for this specimen that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the species or strain (a sub-type of a genetic variant of species) of this specimen.
         species (1,:) openminds.internal.mixedtype.subject.Species ...
-            {mustBeSpecifiedLength(species, 0, 1)}
+            {mustBeScalarOrEmpty(species)}
 
         % Add all states in which this subject was studied.
         studiedState (1,:) openminds.core.research.SubjectState ...
-            {mustBeListOfUniqueItems(studiedState)}
+            {mustBeMinLength(studiedState, 1), mustBeListOfUniqueItems(studiedState)}
     end
 
     properties (Access = protected)

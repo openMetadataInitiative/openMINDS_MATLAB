@@ -20,11 +20,11 @@ classdef FileArchive < openminds.abstract.Schema
 
         % Add the content type of this file archive.
         format (1,:) openminds.core.data.ContentType ...
-            {mustBeSpecifiedLength(format, 0, 1)}
+            {mustBeScalarOrEmpty(format)}
 
         % Add the data that were ingested and modified to create this file archive.
         sourceData (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(sourceData)}
+            {mustBeMinLength(sourceData, 1), mustBeListOfUniqueItems(sourceData)}
     end
 
     properties (Access = protected)

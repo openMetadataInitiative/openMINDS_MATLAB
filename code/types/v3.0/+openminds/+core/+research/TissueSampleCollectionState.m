@@ -38,15 +38,15 @@ classdef TissueSampleCollectionState < openminds.abstract.Schema
 
         % Enter the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Age ...
-            {mustBeSpecifiedLength(age, 0, 1)}
+            {mustBeScalarOrEmpty(age)}
 
         % Add all attributes that can be ascribed to this tissue sample collection state.
         attribute (1,:) openminds.controlledterms.TissueSampleAttribute ...
-            {mustBeListOfUniqueItems(attribute)}
+            {mustBeMinLength(attribute, 1), mustBeListOfUniqueItems(attribute)}
 
         % Add all specimen states used to produce or obtain this tissue sample collection state.
         descendedFrom (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.DescendedFrom ...
-            {mustBeListOfUniqueItems(descendedFrom)}
+            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)}
 
         % Enter the identifier (or label) of this specimen (set) state that is used within the corresponding data files to identify this specimen (set) state.
         internalIdentifier (1,1) string
@@ -56,15 +56,15 @@ classdef TissueSampleCollectionState < openminds.abstract.Schema
 
         % Add all (human) diseases and/or conditions that the specimen (set) in this state has and/or is a model for.
         pathology (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Pathology ...
-            {mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
 
         % If there is a temporal relation between the states of a specimen (set), enter the relative time that has passed between this and the preceding specimen (set) state referenced under 'descendedFrom'.
         relativeTimeIndication (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.RelativeTimeIndication ...
-            {mustBeSpecifiedLength(relativeTimeIndication, 0, 1)}
+            {mustBeScalarOrEmpty(relativeTimeIndication)}
 
         % Enter the weight of the specimen (set) in this state.
         weight (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Weight ...
-            {mustBeSpecifiedLength(weight, 0, 1)}
+            {mustBeScalarOrEmpty(weight)}
     end
 
     properties (Access = protected)

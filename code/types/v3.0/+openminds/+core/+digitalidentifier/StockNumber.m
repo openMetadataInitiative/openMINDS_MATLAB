@@ -17,7 +17,7 @@ classdef StockNumber < openminds.abstract.Schema
 
         % Add the vendor that has the item with this identifier in stock.
         vendor (1,:) openminds.core.actors.Organization ...
-            {mustBeSpecifiedLength(vendor, 0, 1)}
+            {mustBeScalarOrEmpty(vendor)}
     end
 
     properties (Access = protected)

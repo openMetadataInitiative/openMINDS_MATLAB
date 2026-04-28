@@ -44,23 +44,23 @@ classdef SubjectGroupState < openminds.abstract.Schema
 
         % Enter the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.subjectgroupstate.Age ...
-            {mustBeSpecifiedLength(age, 0, 1)}
+            {mustBeScalarOrEmpty(age)}
 
         % Add the age category of the subject in this state.
         ageCategory (1,:) openminds.controlledterms.AgeCategory ...
-            {mustBeListOfUniqueItems(ageCategory)}
+            {mustBeMinLength(ageCategory, 1), mustBeListOfUniqueItems(ageCategory)}
 
         % Add all attributes that can be ascribed to this subject group state.
         attribute (1,:) openminds.controlledterms.SubjectAttribute ...
-            {mustBeListOfUniqueItems(attribute)}
+            {mustBeMinLength(attribute, 1), mustBeListOfUniqueItems(attribute)}
 
         % Add the previous subject group state.
         descendedFrom (1,:) openminds.core.research.SubjectGroupState ...
-            {mustBeSpecifiedLength(descendedFrom, 0, 1)}
+            {mustBeScalarOrEmpty(descendedFrom)}
 
         % Add all preferred types of handedness of the subject group in this state.
         handedness (1,:) openminds.controlledterms.Handedness ...
-            {mustBeListOfUniqueItems(handedness)}
+            {mustBeMinLength(handedness, 1), mustBeListOfUniqueItems(handedness)}
 
         % Enter the identifier (or label) of this specimen (set) state that is used within the corresponding data files to identify this specimen (set) state.
         internalIdentifier (1,1) string
@@ -70,15 +70,15 @@ classdef SubjectGroupState < openminds.abstract.Schema
 
         % Add all (human) diseases and/or conditions that the specimen (set) in this state has and/or is a model for.
         pathology (1,:) openminds.internal.mixedtype.subjectgroupstate.Pathology ...
-            {mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
 
         % If there is a temporal relation between the states of a specimen (set), enter the relative time that has passed between this and the preceding specimen (set) state referenced under 'descendedFrom'.
         relativeTimeIndication (1,:) openminds.internal.mixedtype.subjectgroupstate.RelativeTimeIndication ...
-            {mustBeSpecifiedLength(relativeTimeIndication, 0, 1)}
+            {mustBeScalarOrEmpty(relativeTimeIndication)}
 
         % Enter the weight of the specimen (set) in this state.
         weight (1,:) openminds.internal.mixedtype.subjectgroupstate.Weight ...
-            {mustBeSpecifiedLength(weight, 0, 1)}
+            {mustBeScalarOrEmpty(weight)}
     end
 
     properties (Access = protected)

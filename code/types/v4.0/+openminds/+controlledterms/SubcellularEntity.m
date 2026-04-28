@@ -53,7 +53,7 @@ classdef SubcellularEntity < openminds.abstract.ControlledTerm
         function obj = SubcellularEntity(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.SubcellularEntity
                 propValues.id (1,1) string
             end
 

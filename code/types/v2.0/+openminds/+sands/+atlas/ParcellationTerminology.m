@@ -32,18 +32,18 @@ classdef ParcellationTerminology < openminds.abstract.Schema
     properties
         % Add one or several files in which this parcellation terminology is stored in.
         definedIn (1,:) openminds.core.data.File ...
-            {mustBeListOfUniqueItems(definedIn)}
+            {mustBeMinLength(definedIn, 1), mustBeListOfUniqueItems(definedIn)}
 
         % Enter a descriptive full name for this parcellation terminology.
         fullName (1,1) string
 
         % Add one or several alternative versions to this parcellation terminology.
         isAlternativeVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeListOfUniqueItems(isAlternativeVersionOf)}
+            {mustBeMinLength(isAlternativeVersionOf, 1), mustBeListOfUniqueItems(isAlternativeVersionOf)}
 
         % Add the earlier version of this parcellation terminology.
         isNewVersionOf (1,:) openminds.sands.atlas.BrainAtlasVersion ...
-            {mustBeSpecifiedLength(isNewVersionOf, 0, 1)}
+            {mustBeScalarOrEmpty(isNewVersionOf)}
 
         % Enter the identifier (IRI) of the related ontological term matching this parcellation terminology.
         ontologyIdentifier (1,1) string

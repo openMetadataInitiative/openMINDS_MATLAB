@@ -44,7 +44,7 @@ classdef CellCultureType < openminds.abstract.ControlledTerm
         function obj = CellCultureType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.CellCultureType
                 propValues.id (1,1) string
             end
 

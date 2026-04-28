@@ -14,7 +14,7 @@ classdef ElectrodeArray < openminds.abstract.Schema
     properties
         % Add two or more electrodes which build this array.
         electrodes (1,:) openminds.sands.Electrode ...
-            {mustBeListOfUniqueItems(electrodes)}
+            {mustBeMinLength(electrodes, 2), mustBeListOfUniqueItems(electrodes)}
 
         % Enter the identifier used for this electrode array within the file it is stored in.
         internalIdentifier (1,1) string

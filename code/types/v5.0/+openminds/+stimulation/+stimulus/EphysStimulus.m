@@ -32,18 +32,18 @@ classdef EphysStimulus < openminds.abstract.Schema
     properties
         % Add the device used to deliver this stimulus.
         deliveredBy (1,:) openminds.internal.mixedtype.ephysstimulus.DeliveredBy ...
-            {mustBeSpecifiedLength(deliveredBy, 0, 1)}
+            {mustBeScalarOrEmpty(deliveredBy)}
 
         % Enter a short text describing this stimulus.
         description (1,1) string
 
         % Enter the total epoch length of this stimulus.
         epoch (1,:) openminds.core.miscellaneous.QuantitativeValue ...
-            {mustBeSpecifiedLength(epoch, 0, 1)}
+            {mustBeScalarOrEmpty(epoch)}
 
         % Add the device used to generate this stimulus.
         generatedBy (1,:) openminds.internal.mixedtype.ephysstimulus.GeneratedBy ...
-            {mustBeSpecifiedLength(generatedBy, 0, 1)}
+            {mustBeScalarOrEmpty(generatedBy)}
 
         % Enter the identifier (or label) of this stimulus that is used within the corresponding data files to identify this stimulus.
         internalIdentifier (1,1) string
@@ -53,11 +53,11 @@ classdef EphysStimulus < openminds.abstract.Schema
 
         % Add the specification information for this stimulus.
         specification (1,:) openminds.internal.mixedtype.ephysstimulus.Specification ...
-            {mustBeListOfUniqueItems(specification)}
+            {mustBeMinLength(specification, 1), mustBeListOfUniqueItems(specification)}
 
         % Add the type that describe this electrical stimulus.
         type (1,:) openminds.controlledterms.ElectricalStimulusType ...
-            {mustBeSpecifiedLength(type, 0, 1)}
+            {mustBeScalarOrEmpty(type)}
     end
 
     properties (Access = protected)

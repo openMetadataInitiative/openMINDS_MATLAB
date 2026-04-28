@@ -11,7 +11,7 @@ classdef ContactInformation < openminds.abstract.Schema
     properties
         % Enter all relevant contact email addresses.
         email (1,:) string ...
-            {mustBeListOfUniqueItems(email)}
+            {mustBeMinLength(email, 1), mustBeListOfUniqueItems(email)}
     end
 
     properties (Access = protected)

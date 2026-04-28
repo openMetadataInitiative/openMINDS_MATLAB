@@ -47,7 +47,7 @@ classdef DeploymentEnvironmentType < openminds.abstract.ControlledTerm
         function obj = DeploymentEnvironmentType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.DeploymentEnvironmentType
                 propValues.id (1,1) string
             end
 

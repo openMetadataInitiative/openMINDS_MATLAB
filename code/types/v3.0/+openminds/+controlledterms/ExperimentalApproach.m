@@ -79,7 +79,7 @@ classdef ExperimentalApproach < openminds.abstract.ControlledTerm
         function obj = ExperimentalApproach(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.ExperimentalApproach
                 propValues.id (1,1) string
             end
 

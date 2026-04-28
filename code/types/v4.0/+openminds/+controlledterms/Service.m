@@ -54,7 +54,7 @@ classdef Service < openminds.abstract.ControlledTerm
         function obj = Service(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.Service
                 propValues.id (1,1) string
             end
 

@@ -20,15 +20,15 @@ classdef QuantitativeValue < openminds.abstract.Schema
     properties
         % Add the type of uncertainty used for this quantitative value.
         typeOfUncertainty (1,:) openminds.controlledterms.TypeOfUncertainty ...
-            {mustBeSpecifiedLength(typeOfUncertainty, 0, 1)}
+            {mustBeScalarOrEmpty(typeOfUncertainty)}
 
         % Enter the measurement uncertainty of this quantitative value.
         uncertainty (1,:) double ...
-            {mustBeSpecifiedLength(uncertainty, 2, 2)}
+            {mustBeMinLength(uncertainty, 2), mustBeMaxLength(uncertainty, 2)}
 
         % Add the unit of measurement of this quantitative value.
         unit (1,:) openminds.controlledterms.UnitOfMeasurement ...
-            {mustBeSpecifiedLength(unit, 0, 1)}
+            {mustBeScalarOrEmpty(unit)}
 
         % Enter the measurement value of this quantitative value.
         value (1,1) double

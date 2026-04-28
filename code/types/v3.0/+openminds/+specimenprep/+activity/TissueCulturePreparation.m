@@ -20,19 +20,19 @@ classdef TissueCulturePreparation < openminds.abstract.Schema
     properties
         % Add the culture medium used during this tissue culture preparation.
         cultureMedium (1,:) openminds.chemicals.ChemicalMixture ...
-            {mustBeSpecifiedLength(cultureMedium, 0, 1)}
+            {mustBeScalarOrEmpty(cultureMedium)}
 
         % Add the cell culture type of the resulting tissue cell culture.
         cultureType (1,:) openminds.controlledterms.CellCultureType ...
-            {mustBeSpecifiedLength(cultureType, 0, 1)}
+            {mustBeScalarOrEmpty(cultureType)}
 
         % Add the state of the specimen before it was prepared as culture in this activity.
         input (1,:) openminds.internal.mixedtype.tissueculturepreparation.Input ...
-            {mustBeSpecifiedLength(input, 0, 1)}
+            {mustBeScalarOrEmpty(input)}
 
         % Add the state of the prepared tissue sample culture that resulted from this activity.
         output (1,:) openminds.core.research.TissueSampleState ...
-            {mustBeSpecifiedLength(output, 0, 1)}
+            {mustBeScalarOrEmpty(output)}
     end
 
     properties (Access = protected)

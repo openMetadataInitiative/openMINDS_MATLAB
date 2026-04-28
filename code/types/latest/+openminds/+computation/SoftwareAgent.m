@@ -17,14 +17,14 @@ classdef SoftwareAgent < openminds.abstract.Schema
     properties
         % Add the computational environment in which this software agent was running.
         environment (1,:) openminds.computation.Environment ...
-            {mustBeSpecifiedLength(environment, 0, 1)}
+            {mustBeScalarOrEmpty(environment)}
 
         % Enter a descriptive name for this software agent.
         name (1,1) string
 
         % Add the software version that is being run as this software agent.
         software (1,:) openminds.core.products.SoftwareVersion ...
-            {mustBeSpecifiedLength(software, 0, 1)}
+            {mustBeScalarOrEmpty(software)}
     end
 
     properties (Access = protected)

@@ -46,7 +46,7 @@ classdef GeneticStrainType < openminds.abstract.ControlledTerm
         function obj = GeneticStrainType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.GeneticStrainType
                 propValues.id (1,1) string
             end
 

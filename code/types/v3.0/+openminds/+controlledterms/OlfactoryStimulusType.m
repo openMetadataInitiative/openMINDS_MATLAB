@@ -40,7 +40,7 @@ classdef OlfactoryStimulusType < openminds.abstract.ControlledTerm
         function obj = OlfactoryStimulusType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.OlfactoryStimulusType
                 propValues.id (1,1) string
             end
 

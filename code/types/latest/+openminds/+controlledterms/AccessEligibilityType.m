@@ -45,7 +45,7 @@ classdef AccessEligibilityType < openminds.abstract.ControlledTerm
         function obj = AccessEligibilityType(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.controlledterms.AccessEligibilityType
                 propValues.id (1,1) string
             end
 
