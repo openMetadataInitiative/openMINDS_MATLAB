@@ -4,11 +4,10 @@ Generates openMINDS MATLAB classes.
 
 import glob
 import json
-import math
 import os
 import re
 from typing import List, Dict
-from collections import defaultdict
+from collections import Counter, defaultdict
 import warnings
 
 from jinja2 import Template
@@ -65,6 +64,7 @@ class MATLABSchemaBuilder(object):
 
     def __init__(self, schema_file_path:str, root_path:str, class_name_map:Dict[str, str], jinja_templates:Dict[str, Template]):
         
+        self._schema_root_path = root_path
         self._parse_source_file_path(schema_file_path, root_path)
         self._class_name_map = class_name_map
 
@@ -249,6 +249,17 @@ class MATLABSchemaBuilder(object):
         
         linked_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_linked"] ]
         embedded_types = [ {'name':prop["name"],'types':prop["type_list"]} for prop in props if prop["is_embedded"] ]
+        if self._schema_module_name == "controlledTerms":
+            controlled_term_base_properties = _get_controlled_term_base_properties(
+                self._schema_root_path,
+                self.version,
+            )
+            additional_controlled_term_props = [
+                prop for prop in props
+                if prop["name"] not in controlled_term_base_properties
+            ]
+        else:
+            additional_controlled_term_props = []
 
         # Some schemas had the wrong type in older model versions, so this is unreliable
         #class_name = _generate_class_name(schema[SCHEMA_PROPERTY_TYPE], self._class_name_map).split(".")[-1]
@@ -288,6 +299,7 @@ class MATLABSchemaBuilder(object):
             "required_properties": [f'{prop["name"]}' for prop in props if prop["required"]],
             "linked_types": linked_types,
             "embedded_types": embedded_types,
+            "additional_controlled_term_props": additional_controlled_term_props,
             "property_name_map": property_name_map,
             "display_label_method_expression": display_label_method_expression,
             "known_instance_list": known_instance_list,
@@ -351,11 +363,39 @@ def _get_openminds_property_name(json_name):
     """Remove the openMINDS prefix from a property name"""
     return json_name.split('/')[-1]
 
+
+def _get_controlled_term_base_properties(schema_root_path, version):
+    """Return the common controlled-term property set for a schema version."""
+    controlled_term_schema_paths = glob.glob(
+        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+    )
+
+    property_sets = Counter()
+
+    for schema_file_path in controlled_term_schema_paths:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
+            schema_payload = json.load(schema_file)
+
+        property_names = frozenset(
+            _create_matlab_name(property_name)
+            for property_name in schema_payload.get("properties", {})
+        )
+        property_sets[property_names] += 1
+
+    if not property_sets:
+        return set()
+
+    return set(property_sets.most_common(1)[0][0])
+
+
 def _generate_class_name(iri, class_name_map):
     """
     Generate a class name from an IRI. 
     E.g https://openminds.ebrains.eu/core/Subject -> openminds.core.Subject
     """
+    if iri in class_name_map:
+        return class_name_map[iri]
+
     if iri.startswith("https://"): # v3 and lower
         parts = iri.split("/")[-2:]
     else: # v4 and higher
@@ -367,7 +407,7 @@ def _generate_class_name(iri, class_name_map):
     type_name = type_name[0].upper() + type_name[1:]
 
     if type_name not in class_name_map:
-        raise KeyError(f"Class name '{type_name}' (IRI: {iri}) was not found in the map of all class names.")
+        raise KeyError(f"Class name for IRI '{iri}' was not found in the map of all class names.")
 
     return class_name_map[type_name]
 
@@ -393,7 +433,7 @@ def _get_schema_display_label(schema_short_name):
         schema_name_label = schema_short_name
     else:
         #Replace each capital letter with a space and the capital letter
-        schema_name_label = re.sub("([A-Z])", " \g<0>", schema_short_name).strip().lower()
+        schema_name_label = re.sub("([A-Z])", r" \g<0>", schema_short_name).strip().lower()
 
     return schema_name_label
 
@@ -537,14 +577,14 @@ def _create_property_validator_functions(name, property_info):
     validation_functions = []
 
     if property_info.get("type") == 'integer':
-        validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
+        validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
     if _is_datetime_format(property_info):
-        validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
+        validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
         if "date" in property_info.get("_formats"):
             validation_functions += [f"mustBeValidDate({property_name})"]
-        elif "time" in property_info.get("_formats") == "time":
+        elif "time" in property_info.get("_formats"):
             validation_functions += [f"mustBeValidTime({property_name})"]
 
     if isinstance( property_info.get("type"), list ):
@@ -552,29 +592,31 @@ def _create_property_validator_functions(name, property_info):
 
     if has_linked_type or has_embedded_type:
         if not allow_multiple:
-            validation_functions += [f'mustBeSpecifiedLength({property_name}, 0, 1)']
+            validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
-    if 'maxItems' in property_info:
-        if 'minItems' in property_info:
+    if 'minItems' in property_info or 'maxItems' in property_info:
+        has_min_items = 'minItems' in property_info
+        has_max_items = 'maxItems' in property_info
+
+        if has_min_items and has_max_items:
             min_items = property_info['minItems']
-            # Uncomment the following lines if needed
-            # if 'required' in obj.Schema and name not in obj.Schema['required']:
-            #     min_items = 0
-        else:
-            min_items = 0
+            max_items = property_info['maxItems']
+            validation_functions += [f"mustBeMinLength({name}, {min_items})"]
+            validation_functions += [f"mustBeMaxLength({name}, {max_items})"]
+        elif has_min_items:
+            validation_functions += [f"mustBeMinLength({name}, {property_info['minItems']})"]
+        elif has_max_items:
+            validation_functions += [f"mustBeMaxLength({name}, {property_info['maxItems']})"]
 
-        max_items = property_info['maxItems']
-        validation_functions += [f"mustBeSpecifiedLength({name}, {min_items}, {max_items})"]
-
-    elif 'uniqueItems' in property_info:
+    if property_info.get('uniqueItems') is True:
         validation_functions += [f"mustBeListOfUniqueItems({name})"]
 
-    elif 'minLength' in property_info or 'maxLength' in property_info:
+    if 'minLength' in property_info or 'maxLength' in property_info:
         min_length = property_info.get('minLength', 0)
         max_length = property_info.get('maxLength', float('inf'))
         validation_functions += [f"mustBeValidStringLength({name}, {min_length}, {max_length})"]
 
-    elif 'pattern' in property_info:
+    if 'pattern' in property_info:
         if 'archive.softwareheritage' in property_info['pattern']:
             print("SWHID str pattern validation is hard-coded")
             escaped_str_pattern = r"^https://archive.softwareheritage.org/swh:1:(cnt|dir|rel|rev|snp):[0-9a-f]{40}(;(origin|visit|anchor|path|lines)=[^ \t\r\n\f]+)*$"
@@ -583,18 +625,24 @@ def _create_property_validator_functions(name, property_info):
 
         validation_functions += [f"mustMatchPattern({name}, '{escaped_str_pattern}')"]
 
-    elif 'minimum' in property_info or 'maximum' in property_info:
-        min_value = property_info.get('minimum', float('nan'))
-        max_value = property_info.get('maximum', float('nan'))
+    if any(key in property_info for key in ('minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum')):
+        if property_info.get("type") == "integer":
+            validation_functions += [f"mustBeInteger({name})"]
 
-        validation_functions += [f"mustBeInteger({name})"]
-
-        if not math.isnan(min_value) and not math.isnan(max_value):
+        if 'minimum' in property_info and 'maximum' in property_info:
+            min_value = property_info['minimum']
+            max_value = property_info['maximum']
             validation_functions += [f"mustBeInRange({name}, {min_value}, {max_value})"]
-        elif math.isnan(min_value):
-            validation_functions += [f"mustBeLessThanOrEqual({name}, {max_value})"]
-        elif math.isnan(max_value):
-            validation_functions += [f"mustBeGreaterThanOrEqual({name}, {min_value})"]
+        elif 'minimum' in property_info:
+            validation_functions += [f"mustBeGreaterThanOrEqual({name}, {property_info['minimum']})"]
+        elif 'maximum' in property_info:
+            validation_functions += [f"mustBeLessThanOrEqual({name}, {property_info['maximum']})"]
+
+        if 'exclusiveMinimum' in property_info:
+            validation_functions += [f"mustBeGreaterThan({name}, {property_info['exclusiveMinimum']})"]
+
+        if 'exclusiveMaximum' in property_info:
+            validation_functions += [f"mustBeLessThan({name}, {property_info['exclusiveMaximum']})"]
 
     return validation_functions
 

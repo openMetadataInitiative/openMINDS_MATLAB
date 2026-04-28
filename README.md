@@ -4,3 +4,12 @@ This branch contains the openMINDS pipeline for the openMINDS_MATLAB repository.
 
 This pipeline consists of the following workflows:
 - `build` : Build the MATLAB schema classes from openMINDS source schemas when these are updated.
+
+
+## Getting started
+
+```bash
+pip install -r requirements.txt
+```
+
+python build.py
