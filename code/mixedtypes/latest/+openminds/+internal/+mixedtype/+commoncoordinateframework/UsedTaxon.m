@@ -1,0 +1,9 @@
+classdef UsedTaxon < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.controlledterms.BiologicalOrder", ...
+            "openminds.controlledterms.Species" ...
+        ]
+        IS_SCALAR = true
+    end
+end

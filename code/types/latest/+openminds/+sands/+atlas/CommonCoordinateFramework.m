@@ -1,0 +1,148 @@
+classdef CommonCoordinateFramework < openminds.abstract.Schema
+%CommonCoordinateFramework - No description available.
+%
+%   PROPERTIES:
+%
+%   abbreviation           : (1,1) string
+%                            Enter the official abbreviation of this common coordinate framework.
+%
+%   contribution           : (1,:) <a href="matlab:help openminds.core.actors.Contribution" style="font-weight:bold">Contribution</a>
+%                            Add all individual, organisational, or consortial contributions to this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   contributorAffiliation : (1,:) <a href="matlab:help openminds.core.actors.Affiliation" style="font-weight:bold">Affiliation</a>
+%                            Add all affiliations for the individual contributors to this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   description            : (1,1) string
+%                            Enter a description (or abstract) of this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   digitalIdentifier      : (1,1) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.digitalidentifier.RRID" style="font-weight:bold">RRID</a>
+%                            Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
+%
+%   documentation          : (1,1) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>, <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.miscellaneous.WebResource" style="font-weight:bold">WebResource</a>
+%                            Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   fullName               : (1,1) string
+%                            Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   homepage               : (1,1) string
+%                            Enter the internationalized resource identifier (IRI) to the homepage of this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   howToCite              : (1,1) string
+%                            Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
+%
+%   keyword                : (1,:) <a href="matlab:help openminds.controlledterms.AccessChannel" style="font-weight:bold">AccessChannel</a>, <a href="matlab:help openminds.controlledterms.AccessEligibilityType" style="font-weight:bold">AccessEligibilityType</a>, <a href="matlab:help openminds.controlledterms.AccessForm" style="font-weight:bold">AccessForm</a>, <a href="matlab:help openminds.controlledterms.AccessProcessType" style="font-weight:bold">AccessProcessType</a>, <a href="matlab:help openminds.controlledterms.ActionStatusType" style="font-weight:bold">ActionStatusType</a>, <a href="matlab:help openminds.controlledterms.AgeCategory" style="font-weight:bold">AgeCategory</a>, <a href="matlab:help openminds.controlledterms.AgeReference" style="font-weight:bold">AgeReference</a>, <a href="matlab:help openminds.controlledterms.AnalysisTechnique" style="font-weight:bold">AnalysisTechnique</a>, <a href="matlab:help openminds.controlledterms.AnatomicalAxesOrientation" style="font-weight:bold">AnatomicalAxesOrientation</a>, <a href="matlab:help openminds.controlledterms.AnatomicalCavity" style="font-weight:bold">AnatomicalCavity</a>, <a href="matlab:help openminds.controlledterms.AnatomicalIdentificationType" style="font-weight:bold">AnatomicalIdentificationType</a>, <a href="matlab:help openminds.controlledterms.AnatomicalPlane" style="font-weight:bold">AnatomicalPlane</a>, <a href="matlab:help openminds.controlledterms.AnnotationCriteriaType" style="font-weight:bold">AnnotationCriteriaType</a>, <a href="matlab:help openminds.controlledterms.AnnotationType" style="font-weight:bold">AnnotationType</a>, <a href="matlab:help openminds.controlledterms.AtlasType" style="font-weight:bold">AtlasType</a>, <a href="matlab:help openminds.controlledterms.AuditoryStimulusType" style="font-weight:bold">AuditoryStimulusType</a>, <a href="matlab:help openminds.controlledterms.BiologicalOrder" style="font-weight:bold">BiologicalOrder</a>, <a href="matlab:help openminds.controlledterms.BiologicalProcess" style="font-weight:bold">BiologicalProcess</a>, <a href="matlab:help openminds.controlledterms.BiologicalSex" style="font-weight:bold">BiologicalSex</a>, <a href="matlab:help openminds.controlledterms.BreedingType" style="font-weight:bold">BreedingType</a>, <a href="matlab:help openminds.controlledterms.CellCultureType" style="font-weight:bold">CellCultureType</a>, <a href="matlab:help openminds.controlledterms.CellType" style="font-weight:bold">CellType</a>, <a href="matlab:help openminds.controlledterms.ChemicalMixtureType" style="font-weight:bold">ChemicalMixtureType</a>, <a href="matlab:help openminds.controlledterms.Colormap" style="font-weight:bold">Colormap</a>, <a href="matlab:help openminds.controlledterms.CommunicationInterfaceType" style="font-weight:bold">CommunicationInterfaceType</a>, <a href="matlab:help openminds.controlledterms.CommunicationProtocol" style="font-weight:bold">CommunicationProtocol</a>, <a href="matlab:help openminds.controlledterms.ContributionType" style="font-weight:bold">ContributionType</a>, <a href="matlab:help openminds.controlledterms.CranialWindowConstructionType" style="font-weight:bold">CranialWindowConstructionType</a>, <a href="matlab:help openminds.controlledterms.CranialWindowReinforcementType" style="font-weight:bold">CranialWindowReinforcementType</a>, <a href="matlab:help openminds.controlledterms.CriteriaQualityType" style="font-weight:bold">CriteriaQualityType</a>, <a href="matlab:help openminds.controlledterms.DataType" style="font-weight:bold">DataType</a>, <a href="matlab:help openminds.controlledterms.DependencyImpact" style="font-weight:bold">DependencyImpact</a>, <a href="matlab:help openminds.controlledterms.DeploymentEnvironmentType" style="font-weight:bold">DeploymentEnvironmentType</a>, <a href="matlab:help openminds.controlledterms.DeviceMountingType" style="font-weight:bold">DeviceMountingType</a>, <a href="matlab:help openminds.controlledterms.DeviceType" style="font-weight:bold">DeviceType</a>, <a href="matlab:help openminds.controlledterms.DifferenceMeasure" style="font-weight:bold">DifferenceMeasure</a>, <a href="matlab:help openminds.controlledterms.Disease" style="font-weight:bold">Disease</a>, <a href="matlab:help openminds.controlledterms.DiseaseModel" style="font-weight:bold">DiseaseModel</a>, <a href="matlab:help openminds.controlledterms.EducationalLevel" style="font-weight:bold">EducationalLevel</a>, <a href="matlab:help openminds.controlledterms.ElectricalStimulusType" style="font-weight:bold">ElectricalStimulusType</a>, <a href="matlab:help openminds.controlledterms.ExperimentalApproach" style="font-weight:bold">ExperimentalApproach</a>, <a href="matlab:help openminds.controlledterms.ExternalBodyRegion" style="font-weight:bold">ExternalBodyRegion</a>, <a href="matlab:help openminds.controlledterms.FileBundleGrouping" style="font-weight:bold">FileBundleGrouping</a>, <a href="matlab:help openminds.controlledterms.FileRepositoryType" style="font-weight:bold">FileRepositoryType</a>, <a href="matlab:help openminds.controlledterms.FileUsageRole" style="font-weight:bold">FileUsageRole</a>, <a href="matlab:help openminds.controlledterms.GeneticStrainType" style="font-weight:bold">GeneticStrainType</a>, <a href="matlab:help openminds.controlledterms.GustatoryStimulusType" style="font-weight:bold">GustatoryStimulusType</a>, <a href="matlab:help openminds.controlledterms.Handedness" style="font-weight:bold">Handedness</a>, <a href="matlab:help openminds.controlledterms.Language" style="font-weight:bold">Language</a>, <a href="matlab:help openminds.controlledterms.Laterality" style="font-weight:bold">Laterality</a>, <a href="matlab:help openminds.controlledterms.LearningResourceType" style="font-weight:bold">LearningResourceType</a>, <a href="matlab:help openminds.controlledterms.MRIFatSuppressionTechnique" style="font-weight:bold">MRIFatSuppressionTechnique</a>, <a href="matlab:help openminds.controlledterms.MRIParallelAcquisitionTechnique" style="font-weight:bold">MRIParallelAcquisitionTechnique</a>, <a href="matlab:help openminds.controlledterms.MRIPulseSequence" style="font-weight:bold">MRIPulseSequence</a>, <a href="matlab:help openminds.controlledterms.MRISpoilingTechnique" style="font-weight:bold">MRISpoilingTechnique</a>, <a href="matlab:help openminds.controlledterms.MRIWeighting" style="font-weight:bold">MRIWeighting</a>, <a href="matlab:help openminds.controlledterms.MeasuredQuantity" style="font-weight:bold">MeasuredQuantity</a>, <a href="matlab:help openminds.controlledterms.MeasuredSignalType" style="font-weight:bold">MeasuredSignalType</a>, <a href="matlab:help openminds.controlledterms.MetaDataModelType" style="font-weight:bold">MetaDataModelType</a>, <a href="matlab:help openminds.controlledterms.ModelAbstractionLevel" style="font-weight:bold">ModelAbstractionLevel</a>, <a href="matlab:help openminds.controlledterms.ModelScope" style="font-weight:bold">ModelScope</a>, <a href="matlab:help openminds.controlledterms.ModificationConsentRequirement" style="font-weight:bold">ModificationConsentRequirement</a>, <a href="matlab:help openminds.controlledterms.ModificationConstraint" style="font-weight:bold">ModificationConstraint</a>, <a href="matlab:help openminds.controlledterms.ModificationForm" style="font-weight:bold">ModificationForm</a>, <a href="matlab:help openminds.controlledterms.ModificationScope" style="font-weight:bold">ModificationScope</a>, <a href="matlab:help openminds.controlledterms.MolecularEntity" style="font-weight:bold">MolecularEntity</a>, <a href="matlab:help openminds.controlledterms.MuscularStructure" style="font-weight:bold">MuscularStructure</a>, <a href="matlab:help openminds.controlledterms.NervousSystemStructure" style="font-weight:bold">NervousSystemStructure</a>, <a href="matlab:help openminds.controlledterms.OlfactoryStimulusType" style="font-weight:bold">OlfactoryStimulusType</a>, <a href="matlab:help openminds.controlledterms.OperatingDevice" style="font-weight:bold">OperatingDevice</a>, <a href="matlab:help openminds.controlledterms.OperatingSystem" style="font-weight:bold">OperatingSystem</a>, <a href="matlab:help openminds.controlledterms.OperationalApproach" style="font-weight:bold">OperationalApproach</a>, <a href="matlab:help openminds.controlledterms.OpticalStimulusType" style="font-weight:bold">OpticalStimulusType</a>, <a href="matlab:help openminds.controlledterms.Organ" style="font-weight:bold">Organ</a>, <a href="matlab:help openminds.controlledterms.OrganSystemStructure" style="font-weight:bold">OrganSystemStructure</a>, <a href="matlab:help openminds.controlledterms.OrganismSubstance" style="font-weight:bold">OrganismSubstance</a>, <a href="matlab:help openminds.controlledterms.OrganismSystem" style="font-weight:bold">OrganismSystem</a>, <a href="matlab:help openminds.controlledterms.OrganizationType" style="font-weight:bold">OrganizationType</a>, <a href="matlab:help openminds.controlledterms.PatchClampVariation" style="font-weight:bold">PatchClampVariation</a>, <a href="matlab:help openminds.controlledterms.PaymentModelType" style="font-weight:bold">PaymentModelType</a>, <a href="matlab:help openminds.controlledterms.PreparationType" style="font-weight:bold">PreparationType</a>, <a href="matlab:help openminds.controlledterms.ProgrammingLanguage" style="font-weight:bold">ProgrammingLanguage</a>, <a href="matlab:help openminds.controlledterms.ProjectType" style="font-weight:bold">ProjectType</a>, <a href="matlab:help openminds.controlledterms.PublicationStatus" style="font-weight:bold">PublicationStatus</a>, <a href="matlab:help openminds.controlledterms.PulseShape" style="font-weight:bold">PulseShape</a>, <a href="matlab:help openminds.controlledterms.QualitativeOverlap" style="font-weight:bold">QualitativeOverlap</a>, <a href="matlab:help openminds.controlledterms.SemanticDataType" style="font-weight:bold">SemanticDataType</a>, <a href="matlab:help openminds.controlledterms.SetupType" style="font-weight:bold">SetupType</a>, <a href="matlab:help openminds.controlledterms.SignalDirectionality" style="font-weight:bold">SignalDirectionality</a>, <a href="matlab:help openminds.controlledterms.SkeletalStructure" style="font-weight:bold">SkeletalStructure</a>, <a href="matlab:help openminds.controlledterms.SoftwareApplicationCategory" style="font-weight:bold">SoftwareApplicationCategory</a>, <a href="matlab:help openminds.controlledterms.SoftwareFeature" style="font-weight:bold">SoftwareFeature</a>, <a href="matlab:help openminds.controlledterms.SovereignState" style="font-weight:bold">SovereignState</a>, <a href="matlab:help openminds.controlledterms.SpatialEncoding" style="font-weight:bold">SpatialEncoding</a>, <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>, <a href="matlab:help openminds.controlledterms.StimulationApproach" style="font-weight:bold">StimulationApproach</a>, <a href="matlab:help openminds.controlledterms.StimulationTechnique" style="font-weight:bold">StimulationTechnique</a>, <a href="matlab:help openminds.controlledterms.SubcellularEntity" style="font-weight:bold">SubcellularEntity</a>, <a href="matlab:help openminds.controlledterms.SubjectAttribute" style="font-weight:bold">SubjectAttribute</a>, <a href="matlab:help openminds.controlledterms.SupranationalBody" style="font-weight:bold">SupranationalBody</a>, <a href="matlab:help openminds.controlledterms.TactileStimulusType" style="font-weight:bold">TactileStimulusType</a>, <a href="matlab:help openminds.controlledterms.Technique" style="font-weight:bold">Technique</a>, <a href="matlab:help openminds.controlledterms.TermSuggestion" style="font-weight:bold">TermSuggestion</a>, <a href="matlab:help openminds.controlledterms.Terminology" style="font-weight:bold">Terminology</a>, <a href="matlab:help openminds.controlledterms.TissueSampleAttribute" style="font-weight:bold">TissueSampleAttribute</a>, <a href="matlab:help openminds.controlledterms.TissueSampleType" style="font-weight:bold">TissueSampleType</a>, <a href="matlab:help openminds.controlledterms.TissueStructure" style="font-weight:bold">TissueStructure</a>, <a href="matlab:help openminds.controlledterms.TypeOfUncertainty" style="font-weight:bold">TypeOfUncertainty</a>, <a href="matlab:help openminds.controlledterms.UnitOfMeasurement" style="font-weight:bold">UnitOfMeasurement</a>, <a href="matlab:help openminds.controlledterms.VascularStructure" style="font-weight:bold">VascularStructure</a>, <a href="matlab:help openminds.controlledterms.VisualStimulusType" style="font-weight:bold">VisualStimulusType</a>, <a href="matlab:help openminds.controlledterms.WeightType" style="font-weight:bold">WeightType</a>
+%                            Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
+%
+%   ontologyIdentifier     : (1,:) string
+%                            Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this common coordinate framework.
+%
+%   relatedPublication     : (1,:) <a href="matlab:help openminds.core.digitalidentifier.DOI" style="font-weight:bold">DOI</a>, <a href="matlab:help openminds.core.digitalidentifier.GenericIdentifier" style="font-weight:bold">GenericIdentifier</a>, <a href="matlab:help openminds.core.digitalidentifier.HANDLE" style="font-weight:bold">HANDLE</a>, <a href="matlab:help openminds.core.digitalidentifier.ISBN" style="font-weight:bold">ISBN</a>, <a href="matlab:help openminds.core.digitalidentifier.ISSN" style="font-weight:bold">ISSN</a>, <a href="matlab:help openminds.publications.Book" style="font-weight:bold">Book</a>, <a href="matlab:help openminds.publications.Chapter" style="font-weight:bold">Chapter</a>, <a href="matlab:help openminds.publications.ScholarlyArticle" style="font-weight:bold">ScholarlyArticle</a>
+%                            Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
+%
+%   shortName              : (1,1) string
+%                            Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name). Inherited by all product versions unless overridden at the version level.
+%
+%   supportChannel         : (1,:) string
+%                            Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
+%
+%   usedTaxon              : (1,1) <a href="matlab:help openminds.controlledterms.BiologicalOrder" style="font-weight:bold">BiologicalOrder</a>, <a href="matlab:help openminds.controlledterms.Species" style="font-weight:bold">Species</a>
+%                            Add the taxon (e.g., species) that was used for the creation of this common coordinate framework.
+
+%   This class was auto-generated by the openMINDS pipeline
+
+    properties
+        % Enter the official abbreviation of this common coordinate framework.
+        abbreviation (1,1) string
+
+        % Add all individual, organisational, or consortial contributions to this research product. Inherited by all product versions unless overridden at the version level.
+        contribution (1,:) openminds.core.actors.Contribution ...
+            {mustBeListOfUniqueItems(contribution)}
+
+        % Add all affiliations for the individual contributors to this research product. Inherited by all product versions unless overridden at the version level.
+        contributorAffiliation (1,:) openminds.core.actors.Affiliation ...
+            {mustBeListOfUniqueItems(contributorAffiliation)}
+
+        % Enter a description (or abstract) of this research product. Inherited by all product versions unless overridden at the version level.
+        description (1,1) string
+
+        % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
+        digitalIdentifier (1,:) openminds.internal.mixedtype.commoncoordinateframework.DigitalIdentifier ...
+            {mustBeSpecifiedLength(digitalIdentifier, 0, 1)}
+
+        % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
+        documentation (1,:) openminds.internal.mixedtype.commoncoordinateframework.Documentation ...
+            {mustBeSpecifiedLength(documentation, 0, 1)}
+
+        % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
+        fullName (1,1) string
+
+        % Enter the internationalized resource identifier (IRI) to the homepage of this research product. Inherited by all product versions unless overridden at the version level.
+        homepage (1,1) string
+
+        % Enter the preferred citation text for this research product. Leave blank if citation text can be extracted from the assigned digital identifier.
+        howToCite (1,1) string
+
+        % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
+        keyword (1,:) openminds.internal.mixedtype.commoncoordinateframework.Keyword ...
+            {mustBeListOfUniqueItems(keyword)}
+
+        % Enter the internationalized resource identifiers (IRIs) to the related ontological terms matching this common coordinate framework.
+        ontologyIdentifier (1,:) string ...
+            {mustBeListOfUniqueItems(ontologyIdentifier)}
+
+        % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
+        relatedPublication (1,:) openminds.internal.mixedtype.commoncoordinateframework.RelatedPublication ...
+            {mustBeListOfUniqueItems(relatedPublication)}
+
+        % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name). Inherited by all product versions unless overridden at the version level.
+        shortName (1,1) string
+
+        % Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
+        supportChannel (1,:) string ...
+            {mustBeListOfUniqueItems(supportChannel)}
+
+        % Add the taxon (e.g., species) that was used for the creation of this common coordinate framework.
+        usedTaxon (1,:) openminds.internal.mixedtype.commoncoordinateframework.UsedTaxon ...
+            {mustBeSpecifiedLength(usedTaxon, 0, 1)}
+    end
+
+    properties (Access = protected)
+        Required = ["contribution", "description", "fullName", "howToCite", "shortName", "usedTaxon"]
+    end
+
+    properties (Constant, Hidden)
+        X_TYPE = "https://openminds.om-i.org/types/CommonCoordinateFramework"
+    end
+
+    properties (Constant, Hidden)
+        LINKED_PROPERTIES = struct(...
+            'digitalIdentifier', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.RRID"], ...
+            'documentation', ["openminds.core.data.File", "openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.ISBN", "openminds.core.miscellaneous.WebResource"], ...
+            'keyword', ["openminds.controlledterms.AccessChannel", "openminds.controlledterms.AccessEligibilityType", "openminds.controlledterms.AccessForm", "openminds.controlledterms.AccessProcessType", "openminds.controlledterms.ActionStatusType", "openminds.controlledterms.AgeCategory", "openminds.controlledterms.AgeReference", "openminds.controlledterms.AnalysisTechnique", "openminds.controlledterms.AnatomicalAxesOrientation", "openminds.controlledterms.AnatomicalCavity", "openminds.controlledterms.AnatomicalIdentificationType", "openminds.controlledterms.AnatomicalPlane", "openminds.controlledterms.AnnotationCriteriaType", "openminds.controlledterms.AnnotationType", "openminds.controlledterms.AtlasType", "openminds.controlledterms.AuditoryStimulusType", "openminds.controlledterms.BiologicalOrder", "openminds.controlledterms.BiologicalProcess", "openminds.controlledterms.BiologicalSex", "openminds.controlledterms.BreedingType", "openminds.controlledterms.CellCultureType", "openminds.controlledterms.CellType", "openminds.controlledterms.ChemicalMixtureType", "openminds.controlledterms.Colormap", "openminds.controlledterms.CommunicationInterfaceType", "openminds.controlledterms.CommunicationProtocol", "openminds.controlledterms.ContributionType", "openminds.controlledterms.CranialWindowConstructionType", "openminds.controlledterms.CranialWindowReinforcementType", "openminds.controlledterms.CriteriaQualityType", "openminds.controlledterms.DataType", "openminds.controlledterms.DependencyImpact", "openminds.controlledterms.DeploymentEnvironmentType", "openminds.controlledterms.DeviceMountingType", "openminds.controlledterms.DeviceType", "openminds.controlledterms.DifferenceMeasure", "openminds.controlledterms.Disease", "openminds.controlledterms.DiseaseModel", "openminds.controlledterms.EducationalLevel", "openminds.controlledterms.ElectricalStimulusType", "openminds.controlledterms.ExperimentalApproach", "openminds.controlledterms.ExternalBodyRegion", "openminds.controlledterms.FileBundleGrouping", "openminds.controlledterms.FileRepositoryType", "openminds.controlledterms.FileUsageRole", "openminds.controlledterms.GeneticStrainType", "openminds.controlledterms.GustatoryStimulusType", "openminds.controlledterms.Handedness", "openminds.controlledterms.Language", "openminds.controlledterms.Laterality", "openminds.controlledterms.LearningResourceType", "openminds.controlledterms.MRIFatSuppressionTechnique", "openminds.controlledterms.MRIParallelAcquisitionTechnique", "openminds.controlledterms.MRIPulseSequence", "openminds.controlledterms.MRISpoilingTechnique", "openminds.controlledterms.MRIWeighting", "openminds.controlledterms.MeasuredQuantity", "openminds.controlledterms.MeasuredSignalType", "openminds.controlledterms.MetaDataModelType", "openminds.controlledterms.ModelAbstractionLevel", "openminds.controlledterms.ModelScope", "openminds.controlledterms.ModificationConsentRequirement", "openminds.controlledterms.ModificationConstraint", "openminds.controlledterms.ModificationForm", "openminds.controlledterms.ModificationScope", "openminds.controlledterms.MolecularEntity", "openminds.controlledterms.MuscularStructure", "openminds.controlledterms.NervousSystemStructure", "openminds.controlledterms.OlfactoryStimulusType", "openminds.controlledterms.OperatingDevice", "openminds.controlledterms.OperatingSystem", "openminds.controlledterms.OperationalApproach", "openminds.controlledterms.OpticalStimulusType", "openminds.controlledterms.Organ", "openminds.controlledterms.OrganSystemStructure", "openminds.controlledterms.OrganismSubstance", "openminds.controlledterms.OrganismSystem", "openminds.controlledterms.OrganizationType", "openminds.controlledterms.PatchClampVariation", "openminds.controlledterms.PaymentModelType", "openminds.controlledterms.PreparationType", "openminds.controlledterms.ProgrammingLanguage", "openminds.controlledterms.ProjectType", "openminds.controlledterms.PublicationStatus", "openminds.controlledterms.PulseShape", "openminds.controlledterms.QualitativeOverlap", "openminds.controlledterms.SemanticDataType", "openminds.controlledterms.SetupType", "openminds.controlledterms.SignalDirectionality", "openminds.controlledterms.SkeletalStructure", "openminds.controlledterms.SoftwareApplicationCategory", "openminds.controlledterms.SoftwareFeature", "openminds.controlledterms.SovereignState", "openminds.controlledterms.SpatialEncoding", "openminds.controlledterms.Species", "openminds.controlledterms.StimulationApproach", "openminds.controlledterms.StimulationTechnique", "openminds.controlledterms.SubcellularEntity", "openminds.controlledterms.SubjectAttribute", "openminds.controlledterms.SupranationalBody", "openminds.controlledterms.TactileStimulusType", "openminds.controlledterms.Technique", "openminds.controlledterms.TermSuggestion", "openminds.controlledterms.Terminology", "openminds.controlledterms.TissueSampleAttribute", "openminds.controlledterms.TissueSampleType", "openminds.controlledterms.TissueStructure", "openminds.controlledterms.TypeOfUncertainty", "openminds.controlledterms.UnitOfMeasurement", "openminds.controlledterms.VascularStructure", "openminds.controlledterms.VisualStimulusType", "openminds.controlledterms.WeightType"], ...
+            'relatedPublication', ["openminds.core.digitalidentifier.DOI", "openminds.core.digitalidentifier.GenericIdentifier", "openminds.core.digitalidentifier.HANDLE", "openminds.core.digitalidentifier.ISBN", "openminds.core.digitalidentifier.ISSN", "openminds.publications.Book", "openminds.publications.Chapter", "openminds.publications.ScholarlyArticle"], ...
+            'usedTaxon', ["openminds.controlledterms.BiologicalOrder", "openminds.controlledterms.Species"] ...
+        )
+        EMBEDDED_PROPERTIES = struct(...
+            'contribution', "openminds.core.actors.Contribution", ...
+            'contributorAffiliation', "openminds.core.actors.Affiliation" ...
+        )
+    end
+
+    methods
+        function obj = CommonCoordinateFramework(structInstance, propValues)
+            arguments
+                structInstance (1,:) {mustBeA(structInstance, 'struct')} = struct.empty
+                propValues.?openminds.sands.atlas.CommonCoordinateFramework
+                propValues.id (1,1) string
+            end
+            propValues = namedargs2cell(propValues);
+            obj@openminds.abstract.Schema(structInstance, propValues{:})
+        end
+    end
+
+    methods (Access = protected)
+        function str = getDisplayLabel(obj)
+            str = obj.fullName;
+        end
+    end
+end

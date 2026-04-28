@@ -1,0 +1,9 @@
+classdef AssociatedProtocol < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.core.research.BehavioralProtocol", ...
+            "openminds.core.research.Protocol" ...
+        ]
+        IS_SCALAR = false
+    end
+end

@@ -1,0 +1,9 @@
+classdef Specification < openminds.internal.abstract.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.core.data.File", ...
+            "openminds.core.miscellaneous.WebResource" ...
+        ]
+        IS_SCALAR = true
+    end
+end
