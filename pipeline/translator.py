@@ -194,6 +194,10 @@ class MATLABSchemaBuilder(object):
             if _is_datetime_format(property_info):
                 size_attribute = "(1,:)"
 
+            if _is_scalar_number_with_range_validation(property_info):
+                size_attribute = "(1,:)"
+                size_attribute_doc = size_attribute
+
             # ...and for linked/embedded types
             if has_linked_type or has_embedded_type:
                 size_attribute = "(1,:)"
@@ -480,6 +484,10 @@ def _is_datetime_format(property_info):
             and  property_info.get("_formats") \
                 and any(item in ["date",  "date-time", "time"] for item in property_info.get("_formats"))
 
+def _is_scalar_number_with_range_validation(property_info):
+    return property_info.get("type") == "number" \
+        and any(key in property_info for key in ("minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum"))
+
 # # # LOCAL MATLAB SPECIFIC UTILITY FUNCTIONS # # #
 
 def _create_matlab_help_link(schema_class_name):
@@ -585,6 +593,9 @@ def _create_property_validator_functions(name, property_info):
     validation_functions = []
 
     if property_info.get("type") == 'integer':
+        validation_functions += [f'mustBeScalarOrEmpty({property_name})']
+
+    if _is_scalar_number_with_range_validation(property_info):
         validation_functions += [f'mustBeScalarOrEmpty({property_name})']
 
     if _is_datetime_format(property_info):
