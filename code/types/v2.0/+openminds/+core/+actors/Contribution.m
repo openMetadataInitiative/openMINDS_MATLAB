@@ -52,7 +52,7 @@ classdef Contribution < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s (%s)', obj.contributor, obj.type);
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
 end

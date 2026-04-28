@@ -117,7 +117,7 @@ classdef Organization < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s', obj.fullName);
+            str = obj.name;
         end
     end
 end

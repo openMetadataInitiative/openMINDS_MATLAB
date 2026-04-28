@@ -52,7 +52,7 @@ classdef Rectangle < openminds.abstract.Schema
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('rectangle(L=%s, W=%s)', obj.length, obj.width);
+            str = obj.createLabelForMissingLabelDefinition();
         end
     end
 end
