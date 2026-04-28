@@ -31,24 +31,20 @@ classdef ControlledTermTest < matlab.unittest.TestCase
             testCase.verifyEqual(term.otherOntologyIdentifier, "https://example.org/ontology")
         end
 
-        function testTermSuggestionPropertiesAreAccepted(testCase)
-            terminology = openminds.controlledterms.Terminology([], "name", "example");
-            term = openminds.controlledterms.TermSuggestion( ...
-                [], ...
-                "name", "candidate", ...
-                "addExistingTerminology", terminology, ...
-                "suggestNewTerminology", "new terminology");
-
-            testCase.verifyEqual(term.addExistingTerminology, terminology)
-            testCase.verifyEqual(term.suggestNewTerminology, "new terminology")
-        end
-
         function testLatestControlledTermBaseDoesNotExposeOlderProperties(testCase)
             term = openminds.controlledterms.ContributionType();
             propertyNames = string(properties(term));
 
             testCase.verifyFalse(ismember("interlexIdentifier", propertyNames))
             testCase.verifyFalse(ismember("knowledgeSpaceLink", propertyNames))
+        end
+
+        function testControlledTermBaseDoesNotExposeTermSuggestionProperties(testCase)
+            term = openminds.controlledterms.ContributionType();
+            propertyNames = string(properties(term));
+
+            testCase.verifyFalse(ismember("addExistingTerminology", propertyNames))
+            testCase.verifyFalse(ismember("suggestNewTerminology", propertyNames))
         end
     end
 

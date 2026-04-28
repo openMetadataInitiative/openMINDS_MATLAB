@@ -30,11 +30,6 @@ classdef (Abstract) ControlledTerm < openminds.abstract.Schema
         % Enter one or several synonyms (including abbreviations) for this controlled term.
         synonym (1,:) string {mustBeListOfUniqueItems(synonym)}
 
-        % Add an existing terminology in which the suggested term should be integrated in.
-        addExistingTerminology (1,:) openminds.controlledterms.Terminology
-
-        % Propose a name for a new terminology in which the suggested term should be integrated in.
-        suggestNewTerminology (1,1) string
     end
 
     properties (SetAccess = protected, Hidden) % Todo: Same as id, clean up
