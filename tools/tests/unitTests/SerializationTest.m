@@ -110,5 +110,17 @@ classdef SerializationTest < matlab.unittest.TestCase
 
             testCase.verifyEqual(loadedInstances{1}.email, contact.email);
         end
+
+        function testJsonLdCompactionPreservesLiteralValues(testCase)
+            contact = openminds.core.ContactInformation( ...
+                "email", "https://openminds.om-i.org/props/contact@example.org");
+            filePath = string(tempname) + ".jsonld";
+            metadataStore = openminds.internal.FileMetadataStore(filePath);
+
+            metadataStore.save(contact);
+            loadedInstances = metadataStore.load();
+
+            testCase.verifyEqual(loadedInstances{1}.email, contact.email);
+        end
     end
 end

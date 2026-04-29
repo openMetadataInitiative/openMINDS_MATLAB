@@ -7,7 +7,9 @@ function structInstance = jsonld2struct(jsonInstance)
     ];
 
     for i = 1:numel(vocabBaseUri)
-        jsonInstance = strrep(jsonInstance, vocabBaseUri(i), '');
+        propertyKeyPattern = sprintf('"%s([^"]+)"\\s*:', ...
+            regexptranslate('escape', vocabBaseUri(i)));
+        jsonInstance = regexprep(jsonInstance, propertyKeyPattern, '"$1":');
     end
     structInstance = openminds.internal.utility.json.decode(jsonInstance);
 
