@@ -295,6 +295,24 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(person.id));
             testCase.verifyTrue(newCollection.isKey(org.id));
         end
+
+        function testCreateCollectionFromMultipleFiles(testCase)
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            firstFilePath = "first-contact.jsonld";
+            secondFilePath = "second-contact.jsonld";
+            openminds.internal.FileMetadataStore(firstFilePath).save(firstContact);
+            openminds.internal.FileMetadataStore(secondFilePath).save(secondContact);
+
+            collection = openminds.Collection(firstFilePath, secondFilePath);
+
+            testCase.verifyEqual(length(collection), 2);
+            testCase.verifyTrue(collection.isKey(firstContact.id));
+            testCase.verifyTrue(collection.isKey(secondContact.id));
+        end
         
         function testLoadInstances(testCase)
             % Test the loadInstances static method
