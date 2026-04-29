@@ -317,6 +317,24 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Verify that instances are loaded
             testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
+
+        function testLoadHomogeneousGraphAsSeparateInstances(testCase)
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            filePath = "homogeneous-graph.jsonld";
+            openminds.internal.FileMetadataStore(filePath).save( ...
+                [firstContact, secondContact]);
+
+            newCollection = openminds.Collection();
+            newCollection.load(filePath);
+
+            testCase.verifyEqual(length(newCollection), 2);
+            testCase.verifyTrue(newCollection.isKey(firstContact.id));
+            testCase.verifyTrue(newCollection.isKey(secondContact.id));
+        end
         
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore

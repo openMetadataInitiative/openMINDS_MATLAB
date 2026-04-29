@@ -25,10 +25,10 @@ function instances = loadInstances(filePath)%, options)
             % Produce a cell array of instances represented as structs
             if isscalar(str)
                 structInstances = jsonld2struct(str);
-                if ~iscell(structInstances); structInstances={structInstances};end
             else
                 structInstances = cellfun(@jsonld2struct, str, 'UniformOutput', false);
             end
+            structInstances = normalizeStructInstances(structInstances);
             
             % Create instance objects
             instances = cell(size(structInstances));
@@ -72,6 +72,18 @@ function instances = loadInstances(filePath)%, options)
 
     if ~nargout
         clear str
+    end
+end
+
+function structInstances = normalizeStructInstances(structInstances)
+%normalizeStructInstances Return one cell element per serialized instance.
+
+    if iscell(structInstances)
+        structInstances = cellfun(@normalizeStructInstances, ...
+            structInstances, 'UniformOutput', false);
+        structInstances = [structInstances{:}];
+    else
+        structInstances = num2cell(reshape(structInstances, 1, []));
     end
 end
 
