@@ -184,6 +184,14 @@ classdef CollectionTest < matlab.unittest.TestCase
                 ommtest.oneoffs.organizationName(retrievedOrg), ...
                 ommtest.oneoffs.organizationName(org));
         end
+
+        function testGetAllEmptyCollection(testCase)
+            collection = openminds.Collection();
+
+            instances = collection.getAll();
+
+            testCase.verifyEqual(instances, {});
+        end
         
         function testHasType(testCase)
             % Test the hasType method

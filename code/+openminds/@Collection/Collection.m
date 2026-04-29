@@ -257,6 +257,11 @@ classdef Collection < handle
 
         function instances = getAll(obj)
         % getAll - Get all instances of collection
+            if obj.NumNodes == 0
+                instances = {};
+                return
+            end
+
             instances = obj.Nodes.values();
 
             % For older MATLAB releases, the instances might be nested a
