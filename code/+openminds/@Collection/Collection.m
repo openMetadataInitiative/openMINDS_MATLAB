@@ -331,6 +331,10 @@ classdef Collection < handle
         end
 
         function updateLinks(obj)
+            if obj.NumNodes == 0
+                return
+            end
+
             allInstances = obj.Nodes.values;
             if isa(obj.Nodes, 'containers.Map')
                 allInstances = [allInstances{:}];

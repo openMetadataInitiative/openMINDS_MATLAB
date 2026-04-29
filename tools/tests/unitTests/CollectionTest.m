@@ -192,6 +192,16 @@ classdef CollectionTest < matlab.unittest.TestCase
 
             testCase.verifyEqual(instances, {});
         end
+
+        function testSaveEmptyCollection(testCase)
+            collection = openminds.Collection();
+            filePath = "empty-collection.jsonld";
+
+            outputPath = collection.save(filePath);
+
+            testCase.verifyEqual(outputPath, filePath);
+            testCase.verifyTrue(isfile(filePath));
+        end
         
         function testHasType(testCase)
             % Test the hasType method
