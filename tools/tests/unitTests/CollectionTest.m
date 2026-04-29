@@ -403,6 +403,32 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(firstContact.id));
             testCase.verifyTrue(newCollection.isKey(secondContact.id));
         end
+
+        function testLoadPreservesPartiallyUnresolvedLinks(testCase)
+            firstIdentifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0001");
+            secondIdentifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0002");
+            person = openminds.core.Person( ...
+                "digitalIdentifier", [firstIdentifier, secondIdentifier]);
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                "OutputMode", "single", ...
+                "RecursionDepth", 0);
+            filePath = "partial-graph.jsonld";
+            openminds.internal.utility.filewrite( ...
+                filePath, serializer.serialize({person, firstIdentifier}));
+
+            instances = openminds.internal.store.loadInstances(filePath);
+            loadedPerson = instances{1};
+            loadedIdentifiers = loadedPerson.digitalIdentifier;
+
+            testCase.verifyEqual(numel(loadedIdentifiers), 2);
+            testCase.verifyEqual(loadedIdentifiers(1).Instance.id, ...
+                firstIdentifier.id);
+            testCase.verifyEqual(loadedIdentifiers(2).Instance.id, ...
+                secondIdentifier.id);
+        end
         
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
