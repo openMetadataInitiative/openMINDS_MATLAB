@@ -296,6 +296,24 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(org.id));
         end
 
+        function testFolderStoreSavesRecursiveLinkedDocuments(testCase)
+            identifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0000");
+            person = openminds.core.Person("digitalIdentifier", identifier);
+
+            folderPath = "recursive-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                folderPath, "RecursionDepth", 1);
+
+            outputPaths = metadataStore.save(person);
+
+            files = dir(fullfile(folderPath, "*.jsonld"));
+            testCase.verifyEqual(numel(outputPaths), 2);
+            testCase.verifyEqual(numel(files), 2);
+            testCase.verifyTrue(any(contains(string(outputPaths), "Person_")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "ORCID_")));
+        end
+
         function testCreateCollectionFromMultipleFiles(testCase)
             firstContact = openminds.core.ContactInformation( ...
                 "email", "first@example.org");

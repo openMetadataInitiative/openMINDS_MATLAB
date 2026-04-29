@@ -98,7 +98,8 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             % Save each document to a separate file
             outputPaths = cell(size(serializedDocuments));
             for i = 1:numel(serializedDocuments)
-                instance = instances{i};
+                instance = openminds.internal.serializer.jsonld2struct( ...
+                    serializedDocuments{i});
                 
                 % Build file path using unified method
                 filePath = obj.buildFilepath(instance);
@@ -180,13 +181,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   Flat:   /root/Person_123.jsonld
         %   Nested: /root/person/123.jsonld
         
-            % Get instance type and ID information
-            className = class(instance);
-            classNameParts = strsplit(className, '.');
-            typeName = classNameParts{end};
-            
-            % Get instance ID and make it filesystem-safe
-            instanceId = string(instance.id);
+            [typeName, instanceId] = getTypeNameAndId(instance);
             if startsWith(instanceId, "http")
                 idParts = strsplit(instanceId, '/');
                 safeId = idParts{end};
@@ -210,5 +205,17 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 instanceFilePath = fullfile(obj.Location, filename);
             end
         end
+    end
+end
+
+function [typeName, instanceId] = getTypeNameAndId(instance)
+    if isstruct(instance)
+        typeNameParts = strsplit(instance.at_type, '/');
+        typeName = typeNameParts{end};
+        instanceId = string(instance.at_id);
+    else
+        classNameParts = strsplit(class(instance), '.');
+        typeName = classNameParts{end};
+        instanceId = string(instance.id);
     end
 end
