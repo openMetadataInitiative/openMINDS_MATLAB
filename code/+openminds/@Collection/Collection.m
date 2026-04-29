@@ -385,7 +385,7 @@ classdef Collection < handle
                 outputPaths = tempStore.save(instances);
 
             elseif ~isempty(options.MetadataStore)
-                outputPaths = obj.MetadataStore.save(instances);
+                outputPaths = options.MetadataStore.save(instances);
 
             elseif ~isempty(obj.MetadataStore)
                 % Use configured store

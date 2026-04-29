@@ -337,6 +337,17 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Verify that instances are loaded
             testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
+
+        function testSaveUsesMethodMetadataStoreOption(testCase)
+            collection = openminds.Collection(organizationWithOneId());
+            filePath = "method-store-option.jsonld";
+            metadataStore = openminds.internal.FileMetadataStore(filePath);
+
+            outputPath = collection.save("", "MetadataStore", metadataStore);
+
+            testCase.verifyEqual(outputPath, filePath);
+            testCase.verifyTrue(isfile(filePath));
+        end
         
         % % function testGetBlankNodeIdentifier(testCase)
         % %     % Test the getBlankNodeIdentifier method
