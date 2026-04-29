@@ -105,7 +105,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                     serializedDocuments{i});
                 
                 % Build file path using unified method
-                filePath = obj.buildFilepath(instance);
+                filePath = obj.buildFilepath(instance, i);
                 
                 % Write to file
                 openminds.internal.utility.filewrite(filePath, serializedDocuments{i});
@@ -162,7 +162,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
     end
     
     methods (Access = private)
-        function instanceFilePath = buildFilepath(obj, instance)
+        function instanceFilePath = buildFilepath(obj, instance, documentIndex)
         %buildFilepath Build complete filepath for an instance
         %
         %   Creates the appropriate file path based on the store's Nested property.
@@ -185,7 +185,9 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   Nested: /root/person/123.jsonld
         
             [typeName, instanceId] = getTypeNameAndId(instance);
-            if startsWith(instanceId, "http")
+            if ismissing(instanceId) || instanceId == ""
+                safeId = sprintf('%04d', documentIndex);
+            elseif startsWith(instanceId, "http")
                 idParts = strsplit(instanceId, '/');
                 safeId = idParts{end};
             else
@@ -215,7 +217,11 @@ function [typeName, instanceId] = getTypeNameAndId(instance)
     if isstruct(instance)
         typeNameParts = strsplit(instance.at_type, '/');
         typeName = typeNameParts{end};
-        instanceId = string(instance.at_id);
+        if isfield(instance, 'at_id')
+            instanceId = string(instance.at_id);
+        else
+            instanceId = string(missing);
+        end
     else
         classNameParts = strsplit(class(instance), '.');
         typeName = classNameParts{end};

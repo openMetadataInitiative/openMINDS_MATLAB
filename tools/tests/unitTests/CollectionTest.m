@@ -346,6 +346,23 @@ classdef CollectionTest < matlab.unittest.TestCase
                 "ContactInformation_"));
         end
 
+        function testFolderStoreSavesInstanceWithoutIdentifier(testCase)
+            contact = openminds.core.ContactInformation( ...
+                "email", "contact@example.org");
+            folderPath = "identifier-free-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                folderPath, "IncludeIdentifier", false);
+
+            outputPaths = metadataStore.save(contact);
+            serializedDocument = fileread(outputPaths{1});
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+            testCase.verifyTrue(contains(string(outputPaths{1}), ...
+                "ContactInformation_0001"));
+            testCase.verifyFalse(contains(serializedDocument, '"@id"'));
+        end
+
         function testCreateCollectionFromMultipleFiles(testCase)
             firstContact = openminds.core.ContactInformation( ...
                 "email", "first@example.org");
