@@ -322,6 +322,20 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(any(contains(string(outputPaths), "ORCID_")));
         end
 
+        function testFolderStoreSavesScalarInstance(testCase)
+            contact = openminds.core.ContactInformation( ...
+                "email", "contact@example.org");
+            folderPath = "scalar-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore(folderPath);
+
+            outputPaths = metadataStore.save(contact);
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+            testCase.verifyTrue(contains(string(outputPaths{1}), ...
+                "ContactInformation_"));
+        end
+
         function testCreateCollectionFromMultipleFiles(testCase)
             firstContact = openminds.core.ContactInformation( ...
                 "email", "first@example.org");

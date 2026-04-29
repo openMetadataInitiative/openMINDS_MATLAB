@@ -94,6 +94,9 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             
             % Serialize instances to individual documents
             serializedDocuments = obj.Serializer.serialize(instances);
+            if ~iscell(serializedDocuments)
+                serializedDocuments = {serializedDocuments};
+            end
             
             % Save each document to a separate file
             outputPaths = cell(size(serializedDocuments));
