@@ -257,6 +257,11 @@ classdef Collection < handle
 
         function instances = getAll(obj)
         % getAll - Get all instances of collection
+            if obj.NumNodes == 0
+                instances = {};
+                return
+            end
+
             instances = obj.Nodes.values();
 
             % For older MATLAB releases, the instances might be nested a
@@ -326,6 +331,10 @@ classdef Collection < handle
         end
 
         function updateLinks(obj)
+            if obj.NumNodes == 0
+                return
+            end
+
             allInstances = obj.Nodes.values;
             if isa(obj.Nodes, 'containers.Map')
                 allInstances = [allInstances{:}];
@@ -385,7 +394,7 @@ classdef Collection < handle
                 outputPaths = tempStore.save(instances);
 
             elseif ~isempty(options.MetadataStore)
-                outputPaths = obj.MetadataStore.save(instances);
+                outputPaths = options.MetadataStore.save(instances);
 
             elseif ~isempty(obj.MetadataStore)
                 % Use configured store
@@ -584,11 +593,15 @@ classdef Collection < handle
 
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
-                    obj.load(instance{:})
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from folder
                 elseif all( cellfun(isFolderPath, instance) )
-                    obj.load(instance{:})
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from instance(s)
                 elseif all( cellfun(isMetadata, instance) )
