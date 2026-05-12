@@ -8,7 +8,7 @@
         "AuthorCompany": "openMetadataInitiative",
         "Summary": "A MATLAB toolbox to create metadata instances using the openMINDS metadata model",
         "Description": "MATLAB toolbox for creating openMINDS compliant linked metadata, supporting import and export of metadata instances in JSON-LD format.",
-        "MinimumMatlabRelease": "R2021b",
+        "MinimumMatlabRelease": "R2022a",
         "MaximumMatlabRelease": "",
         "ToolboxImageFile": "img/light_openMINDS-MATLAB-logo_toolbox.png",
         "ToolboxGettingStartedGuide": "code/gettingStarted.mlx"
