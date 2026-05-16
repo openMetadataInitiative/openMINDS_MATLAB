@@ -94,14 +94,18 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             
             % Serialize instances to individual documents
             serializedDocuments = obj.Serializer.serialize(instances);
+            if ~iscell(serializedDocuments)
+                serializedDocuments = {serializedDocuments};
+            end
             
             % Save each document to a separate file
             outputPaths = cell(size(serializedDocuments));
             for i = 1:numel(serializedDocuments)
-                instance = instances{i};
+                instance = openminds.internal.serializer.jsonld2struct( ...
+                    serializedDocuments{i});
                 
                 % Build file path using unified method
-                filePath = obj.buildFilepath(instance);
+                filePath = obj.buildFilepath(instance, i);
                 
                 % Write to file
                 openminds.internal.utility.filewrite(filePath, serializedDocuments{i});
@@ -158,7 +162,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
     end
     
     methods (Access = private)
-        function instanceFilePath = buildFilepath(obj, instance)
+        function instanceFilePath = buildFilepath(obj, instance, documentIndex)
         %buildFilepath Build complete filepath for an instance
         %
         %   Creates the appropriate file path based on the store's Nested property.
@@ -180,14 +184,10 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   Flat:   /root/Person_123.jsonld
         %   Nested: /root/person/123.jsonld
         
-            % Get instance type and ID information
-            className = class(instance);
-            classNameParts = strsplit(className, '.');
-            typeName = classNameParts{end};
-            
-            % Get instance ID and make it filesystem-safe
-            instanceId = string(instance.id);
-            if startsWith(instanceId, "http")
+            [typeName, instanceId] = getTypeNameAndId(instance);
+            if ismissing(instanceId) || instanceId == ""
+                safeId = sprintf('%04d', documentIndex);
+            elseif startsWith(instanceId, "http")
                 idParts = strsplit(instanceId, '/');
                 safeId = idParts{end};
             else
@@ -210,5 +210,21 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 instanceFilePath = fullfile(obj.Location, filename);
             end
         end
+    end
+end
+
+function [typeName, instanceId] = getTypeNameAndId(instance)
+    if isstruct(instance)
+        typeNameParts = strsplit(instance.at_type, '/');
+        typeName = typeNameParts{end};
+        if isfield(instance, 'at_id')
+            instanceId = string(instance.at_id);
+        else
+            instanceId = string(missing);
+        end
+    else
+        classNameParts = strsplit(class(instance), '.');
+        typeName = classNameParts{end};
+        instanceId = string(instance.id);
     end
 end

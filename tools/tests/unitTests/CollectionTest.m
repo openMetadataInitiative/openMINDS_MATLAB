@@ -184,6 +184,24 @@ classdef CollectionTest < matlab.unittest.TestCase
                 ommtest.oneoffs.organizationName(retrievedOrg), ...
                 ommtest.oneoffs.organizationName(org));
         end
+
+        function testGetAllEmptyCollection(testCase)
+            collection = openminds.Collection();
+
+            instances = collection.getAll();
+
+            testCase.verifyEqual(instances, {});
+        end
+
+        function testSaveEmptyCollection(testCase)
+            collection = openminds.Collection();
+            filePath = "empty-collection.jsonld";
+
+            outputPath = collection.save(filePath);
+
+            testCase.verifyEqual(outputPath, filePath);
+            testCase.verifyTrue(isfile(filePath));
+        end
         
         function testHasType(testCase)
             % Test the hasType method
@@ -295,6 +313,73 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(person.id));
             testCase.verifyTrue(newCollection.isKey(org.id));
         end
+
+        function testFolderStoreSavesRecursiveLinkedDocuments(testCase)
+            identifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0000");
+            person = openminds.core.Person("digitalIdentifier", identifier);
+
+            folderPath = "recursive-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                folderPath, "RecursionDepth", 1);
+
+            outputPaths = metadataStore.save(person);
+
+            files = dir(fullfile(folderPath, "*.jsonld"));
+            testCase.verifyEqual(numel(outputPaths), 2);
+            testCase.verifyEqual(numel(files), 2);
+            testCase.verifyTrue(any(contains(string(outputPaths), "Person_")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "ORCID_")));
+        end
+
+        function testFolderStoreSavesScalarInstance(testCase)
+            contact = openminds.core.ContactInformation( ...
+                "email", "contact@example.org");
+            folderPath = "scalar-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore(folderPath);
+
+            outputPaths = metadataStore.save(contact);
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+            testCase.verifyTrue(contains(string(outputPaths{1}), ...
+                "ContactInformation_"));
+        end
+
+        function testFolderStoreSavesInstanceWithoutIdentifier(testCase)
+            contact = openminds.core.ContactInformation( ...
+                "email", "contact@example.org");
+            folderPath = "identifier-free-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                folderPath, "IncludeIdentifier", false);
+
+            outputPaths = metadataStore.save(contact);
+            serializedDocument = fileread(outputPaths{1});
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+            testCase.verifyTrue(contains(string(outputPaths{1}), ...
+                "ContactInformation_0001"));
+            testCase.verifyFalse(contains(serializedDocument, '"@id"'));
+        end
+
+        function testCreateCollectionFromMultipleFiles(testCase)
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            firstFilePath = "first-contact.jsonld";
+            secondFilePath = "second-contact.jsonld";
+            openminds.internal.FileMetadataStore(firstFilePath).save(firstContact);
+            openminds.internal.FileMetadataStore(secondFilePath).save(secondContact);
+
+            collection = openminds.Collection(firstFilePath, secondFilePath);
+
+            testCase.verifyEqual(length(collection), 2);
+            testCase.verifyTrue(collection.isKey(firstContact.id));
+            testCase.verifyTrue(collection.isKey(secondContact.id));
+        end
         
         function testLoadInstances(testCase)
             % Test the loadInstances static method
@@ -317,6 +402,50 @@ classdef CollectionTest < matlab.unittest.TestCase
             % Verify that instances are loaded
             testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
+
+        function testLoadHomogeneousGraphAsSeparateInstances(testCase)
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            filePath = "homogeneous-graph.jsonld";
+            openminds.internal.FileMetadataStore(filePath).save( ...
+                [firstContact, secondContact]);
+
+            newCollection = openminds.Collection();
+            newCollection.load(filePath);
+
+            testCase.verifyEqual(length(newCollection), 2);
+            testCase.verifyTrue(newCollection.isKey(firstContact.id));
+            testCase.verifyTrue(newCollection.isKey(secondContact.id));
+        end
+
+        function testLoadPreservesPartiallyUnresolvedLinks(testCase)
+            firstIdentifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0001");
+            secondIdentifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0002");
+            person = openminds.core.Person( ...
+                "digitalIdentifier", [firstIdentifier, secondIdentifier]);
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                "OutputMode", "single", ...
+                "RecursionDepth", 0);
+            filePath = "partial-graph.jsonld";
+            openminds.internal.utility.filewrite( ...
+                filePath, serializer.serialize({person, firstIdentifier}));
+
+            instances = openminds.internal.store.loadInstances(filePath);
+            loadedPerson = instances{1};
+            loadedIdentifiers = loadedPerson.digitalIdentifier;
+
+            testCase.verifyEqual(numel(loadedIdentifiers), 2);
+            testCase.verifyEqual(loadedIdentifiers(1).Instance.id, ...
+                firstIdentifier.id);
+            testCase.verifyEqual(loadedIdentifiers(2).Instance.id, ...
+                secondIdentifier.id);
+        end
         
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
@@ -336,6 +465,17 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Verify that instances are loaded
             testCase.verifyEqual(length(instances), expectedNumDocuments);
+        end
+
+        function testSaveUsesMethodMetadataStoreOption(testCase)
+            collection = openminds.Collection(organizationWithOneId());
+            filePath = "method-store-option.jsonld";
+            metadataStore = openminds.internal.FileMetadataStore(filePath);
+
+            outputPath = collection.save("", "MetadataStore", metadataStore);
+
+            testCase.verifyEqual(outputPath, filePath);
+            testCase.verifyTrue(isfile(filePath));
         end
         
         % % function testGetBlankNodeIdentifier(testCase)
