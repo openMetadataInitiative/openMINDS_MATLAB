@@ -12,6 +12,9 @@ classdef MRIScannerUsage < openminds.abstract.Schema
 %   accelerationFactor           : (1,1) int64
 %                                  Enter the acceleration factor (R), defined as the ratio of fully sampled to reduced k-space acquisition, with R ≥ 1 and R = 1 indicating no acceleration. This value is specified in the sequence protocol and can be retrieved from the DICOM header.
 %
+%   device                       : (1,1) <a href="matlab:help openminds.neuroimaging.device.MRIScanner" style="font-weight:bold">MRIScanner</a>
+%                                  Add the MRI Scanner used.
+%
 %   diffusionEncodingParameters  : (1,:) <a href="matlab:help openminds.core.data.File" style="font-weight:bold">File</a>
 %                                  Add two diffusion encoding files: a b-value file specifying the diffusion weighting for each acquired volume and a b-vector file specifying the corresponding three-dimensional diffusion gradient directions. Ensure that both files are correctly ordered, that b-vectors are normalized, and that they are aligned with the image volumes.
 %
@@ -116,6 +119,10 @@ classdef MRIScannerUsage < openminds.abstract.Schema
         % Enter the acceleration factor (R), defined as the ratio of fully sampled to reduced k-space acquisition, with R ≥ 1 and R = 1 indicating no acceleration. This value is specified in the sequence protocol and can be retrieved from the DICOM header.
         accelerationFactor (1,:) int64 ...
             {mustBeScalarOrEmpty(accelerationFactor), mustBeInteger(accelerationFactor), mustBeGreaterThanOrEqual(accelerationFactor, 1)}
+
+        % Add the MRI Scanner used.
+        device (1,:) openminds.neuroimaging.device.MRIScanner ...
+            {mustBeScalarOrEmpty(device)}
 
         % Add two diffusion encoding files: a b-value file specifying the diffusion weighting for each acquired volume and a b-vector file specifying the corresponding three-dimensional diffusion gradient directions. Ensure that both files are correctly ordered, that b-vectors are normalized, and that they are aligned with the image volumes.
         diffusionEncodingParameters (1,:) openminds.core.data.File ...
@@ -238,7 +245,7 @@ classdef MRIScannerUsage < openminds.abstract.Schema
     end
 
     properties (Access = protected)
-        Required = ["echoTime", "repetitionTime", "sliceTiming"]
+        Required = ["device", "echoTime", "repetitionTime", "sliceTiming"]
     end
 
     properties (Constant, Hidden)
@@ -249,6 +256,7 @@ classdef MRIScannerUsage < openminds.abstract.Schema
         LINKED_PROPERTIES = struct(...
             'MRIWeighting', "openminds.controlledterms.MRIWeighting", ...
             'MTPulseShape', "openminds.controlledterms.PulseShape", ...
+            'device', "openminds.neuroimaging.device.MRIScanner", ...
             'diffusionEncodingParameters', "openminds.core.data.File", ...
             'fatSuppressionTechnique', "openminds.controlledterms.MRIFatSuppressionTechnique", ...
             'fieldOfView', [], ...
