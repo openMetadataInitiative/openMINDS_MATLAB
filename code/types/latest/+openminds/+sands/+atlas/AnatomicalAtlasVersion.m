@@ -46,10 +46,10 @@ classdef AnatomicalAtlasVersion < openminds.abstract.Schema
 %                            Enter the preferred citation text for this research product version. Leave blank if citation text can be extracted from the assigned digital identifier.
 %
 %   isPrecededBy           : (1,1) <a href="matlab:help openminds.sands.atlas.AnatomicalAtlasVersion" style="font-weight:bold">AnatomicalAtlasVersion</a>
-%                            Add the brain atlas version preceding this anatomical atlas version.
+%                            Add the anatomical atlas version preceding this anatomical atlas version.
 %
 %   isVariantOf            : (1,:) <a href="matlab:help openminds.sands.atlas.AnatomicalAtlasVersion" style="font-weight:bold">AnatomicalAtlasVersion</a>
-%                            Add all brain atlas versions that can be used alternatively to this anatomical atlas version.
+%                            Add all anatomical atlas versions that can be used alternatively to this anatomical atlas version.
 %
 %   isVersionOf            : (1,1) <a href="matlab:help openminds.sands.atlas.AnatomicalAtlas" style="font-weight:bold">AnatomicalAtlas</a>
 %                            Add the version-independent information about this anatomical atlas.
@@ -150,11 +150,11 @@ classdef AnatomicalAtlasVersion < openminds.abstract.Schema
         % Enter the preferred citation text for this research product version. Leave blank if citation text can be extracted from the assigned digital identifier.
         howToCite (1,1) string
 
-        % Add the brain atlas version preceding this anatomical atlas version.
+        % Add the anatomical atlas version preceding this anatomical atlas version.
         isPrecededBy (1,:) openminds.sands.atlas.AnatomicalAtlasVersion ...
             {mustBeScalarOrEmpty(isPrecededBy)}
 
-        % Add all brain atlas versions that can be used alternatively to this anatomical atlas version.
+        % Add all anatomical atlas versions that can be used alternatively to this anatomical atlas version.
         isVariantOf (1,:) openminds.sands.atlas.AnatomicalAtlasVersion ...
             {mustBeMinLength(isVariantOf, 1), mustBeListOfUniqueItems(isVariantOf)}
 
