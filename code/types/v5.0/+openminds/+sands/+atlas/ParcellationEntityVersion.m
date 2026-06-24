@@ -19,7 +19,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
 %                        Add all atlas annotations which define this parcellation entity version.
 %
 %   hasParent          : (1,:) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>, <a href="matlab:help openminds.sands.atlas.ParcellationEntityVersion" style="font-weight:bold">ParcellationEntityVersion</a>
-%                        Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding brain atlas version.
+%                        Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding anatomical atlas version.
 %
 %   isVersionOf        : (1,1) <a href="matlab:help openminds.sands.atlas.ParcellationEntity" style="font-weight:bold">ParcellationEntity</a>
 %                        Add the version-independent information about this parcellation entity.
@@ -62,7 +62,7 @@ classdef ParcellationEntityVersion < openminds.abstract.Schema & openminds.inter
         hasAnnotation (1,:) openminds.sands.atlas.AtlasAnnotation ...
             {mustBeMinLength(hasAnnotation, 1), mustBeListOfUniqueItems(hasAnnotation)}
 
-        % Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding brain atlas version.
+        % Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding anatomical atlas version.
         hasParent (1,:) openminds.internal.mixedtype.parcellationentityversion.HasParent ...
             {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
 
