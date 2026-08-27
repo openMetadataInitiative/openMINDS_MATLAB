@@ -47,12 +47,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
                         obj(numInstances) = feval(class(obj));
                     end
                     for i = 1:numel(instanceSpec)
-                        if isfield(instanceSpec(i), 'at_id')
-                            iri = instanceSpec(i).at_id;
-                        elseif isfield(instanceSpec(i), 'x_id')
-                            iri = instanceSpec(i).x_id;
-                        end
-                        obj(i).deserializeFromName(iri);
+                        obj(i).initializeFromStructure(instanceSpec(i));
                     end
                 else
                     error('openMINDS:ControlledTerm:InvalidInput', ...
@@ -81,6 +76,36 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
     end
 
     methods (Access = private)
+        function initializeFromStructure(obj, structure)
+        % initializeFromStructure - Populate this term from a decoded document
+        %
+        %   A structure that carries property values is a serialized
+        %   instance and is authoritative: its values are used as they
+        %   stand. That is the only way a term defined by a user, which by
+        %   definition is not in the controlled instance library, can
+        %   survive being written out and read back.
+        %
+        %   A structure that carries nothing but an identifier is a
+        %   reference. There is no data to take from it, so the term is
+        %   looked up in the controlled instance library instead.
+
+            identifier = openminds.internal.utility.getStructIdentifier(structure);
+
+            if openminds.abstract.ControlledTermBase.isBareReference(structure)
+                obj.deserializeFromName(identifier);
+                return
+            end
+
+            obj.fromStruct(structure);
+
+            % fromStruct assigns the identifier from an at_id or x_id
+            % field, but a document written without identifiers has
+            % neither, and the constructor has already generated one.
+            if ~openminds.abstract.ControlledTermBase.isEmptyValue(identifier)
+                obj.assignInstanceId(identifier);
+            end
+        end
+
         function deserializeFromName(obj, instanceName)
 
             import openminds.internal.getControlledInstance
@@ -156,6 +181,23 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
                 typeName(1) = lower(typeName(1));
             end
             typeName = string(typeName);
+        end
+
+        function tf = isBareReference(structure)
+        % isBareReference - True when a document carries no property values
+        %
+        %   Such a document points at a term without describing it, so
+        %   there is nothing to populate the instance from. The document
+        %   may still list every property with an empty value, which is
+        %   what a serializer writes for an unpopulated term when it
+        %   includes empty properties, so the test is on values rather
+        %   than on the presence of fields.
+
+            valueFields = setdiff(string(fieldnames(structure))', ...
+                openminds.internal.utility.jsonLdKeywordFields());
+            hasValue = arrayfun(@(name) ...
+                ~openminds.abstract.ControlledTermBase.isEmptyValue(structure.(name)), valueFields);
+            tf = ~any(hasValue);
         end
 
         function tf = isEmptyValue(value)
