@@ -27,17 +27,6 @@ classdef MixedTypeReference < openminds.abstract.Schema
         end
     end
 
-    methods
-        function instance = resolve(obj, options)
-            arguments
-                obj (1,:) openminds.abstract.Schema
-                options.NumLinksToResolve = 0
-            end
-            resolver = openminds.internal.getLinkResolver([obj.id]);
-            instance = resolver.resolve(obj, "NumLinksToResolve", options.NumLinksToResolve);
-        end
-    end
-
     methods (Hidden, Access = protected) % CustomDisplay - Method implementation
         function tf = isReference(~)
             tf = true;

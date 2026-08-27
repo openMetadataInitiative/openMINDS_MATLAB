@@ -18,7 +18,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             registry = openminds.internal.resolver.LinkResolverRegistry.instance();
             
             testCase.verifyNotEmpty(registry.LinkResolvers);
-            testCase.verifyTrue(isa(registry.LinkResolvers(1), ...
+            testCase.verifyTrue(isa(registry.LinkResolvers{1}, ...
                 'openminds.internal.resolver.InstanceResolver'));
         end
         
@@ -32,7 +32,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             
             % Verify it's in the registry
             registry = openminds.internal.resolver.LinkResolverRegistry.instance();
-            testCase.verifyTrue(any(registry.LinkResolvers == mockResolver));
+            testCase.verifyTrue(any( cellfun(@(r) r == mockResolver, registry.LinkResolvers) ));
         end
         
         function testGetResolverForValidIRI(testCase)
@@ -137,7 +137,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.internal.getLinkResolver('https://mock.io/test_123');
             
             % Verify mock resolver is now promoted to first position
-            testCase.verifyEqual(registry.LinkResolvers(1), mockResolver);
+            testCase.verifyEqual(registry.LinkResolvers{1}, mockResolver);
         end
         
         function testNoDuplicateResolvers(testCase)
@@ -265,6 +265,92 @@ classdef ResolverTest < matlab.unittest.TestCase
             output = evalc('resolvedPerson.resolve();');
             testCase.verifyEmpty(strtrim(output), ...
                 'resolve should not print to the command window.')
+        end
+
+        function testResolverReplacementIsWiredIntoParent(testCase)
+        % A resolver that cannot populate a reference in place returns a
+        % new instance. The traversal must put that instance on the parent
+        % property, or the resolved value is discarded.
+
+            replacingResolver = ommtest.helper.mock.ReplacingMockLinkResolver();
+            openminds.registerLinkResolver(replacingResolver);
+
+            reference = openminds.core.Person( ...
+                'id', 'https://replacing.mock/unknown_type_1');
+            dataset = ResolverTest.createDatasetWithAuthors(reference, "Replacing Dataset");
+
+            dataset.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
+
+            testCase.assertNotEmpty(replacingResolver.ResolvedIdentifiers, ...
+                'The resolver was never asked to resolve the reference.')
+
+            author = ResolverTest.getDatasetAuthors(dataset);
+            testCase.verifyEqual(author.givenName, "Replaced", ...
+                'The instance returned by the resolver was not stored on the parent.')
+        end
+
+        function testUnknownTypeReferenceResolvesByReplacement(testCase)
+        % A reference whose type is not known until it is probed cannot be
+        % populated in place, so resolving it must return a new instance of
+        % the discovered type.
+
+            replacingResolver = ommtest.helper.mock.ReplacingMockLinkResolver();
+            openminds.registerLinkResolver(replacingResolver);
+
+            reference = openminds.internal.MixedTypeReference( ...
+                "https://replacing.mock/unknown_type_2");
+
+            resolved = reference.resolve();
+
+            testCase.verifyClass(resolved, 'openminds.core.actors.Person')
+            testCase.verifyEqual(resolved.givenName, "Replaced")
+        end
+
+        function testTraversalTerminatesOnCircularGraph(testCase)
+        % A walk of the graph must stop when it returns to a node it has
+        % already visited. Nothing here is a reference, so nothing is
+        % resolved: what is exercised is the walk itself.
+
+            firstType = openminds.core.data.ContentType();
+            firstType.name = "first/type";
+            secondType = openminds.core.data.ContentType();
+            secondType.name = "second/type";
+
+            firstType.isBasedOn = secondType;
+            secondType.isBasedOn = firstType;
+
+            % 500 is MATLAB's default recursion limit. A walk that follows
+            % links without cycle detection cannot complete this graph at
+            % that depth, so finishing at all shows the cycle was detected.
+            firstType.resolve('NumLinksToResolve', 500);
+
+            testCase.verifyEqual(firstType.name, "first/type", ...
+                'The graph should be unchanged by walking it.')
+            testCase.verifyEqual(secondType.name, "second/type")
+        end
+
+        function testReferenceCycleResolvesAndTerminates(testCase)
+        % A cycle can exist only as references: resolving one node yields
+        % a link to a second whose resolution links back to the first.
+        % Both must be populated, and the traversal must stop when it
+        % returns to a node it has already resolved. 500 is MATLAB's
+        % default recursion limit, so a traversal without cycle detection
+        % cannot complete this.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.CyclicMockLinkResolver());
+
+            first = openminds.core.data.ContentType('id', ...
+                ommtest.helper.mock.CyclicMockLinkResolver.IRIPrefix + "a");
+
+            first = first.resolve('NumLinksToResolve', 500);
+
+            testCase.verifyEqual(first.name, "a")
+            second = first.isBasedOn;
+            testCase.verifyEqual(second.name, "b", ...
+                'The node the first one links to must be resolved as well.')
+            testCase.verifyEqual(string(second.isBasedOn.id), string(first.id), ...
+                'The second node must link back to the first.')
         end
 
         function testResolveMultipleLinkedInstances(testCase)
