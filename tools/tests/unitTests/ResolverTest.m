@@ -206,6 +206,67 @@ classdef ResolverTest < matlab.unittest.TestCase
             testCase.verifyEqual(authors.givenName, "Mock");
         end
         
+        function testResolveArrayContinuesPastResolvedElement(testCase)
+        % Every element of an array must be considered. An element that is
+        % already resolved must not stop the loop, or references later in
+        % the array are silently left unresolved.
+
+            mockResolver = ommtest.helper.mock.MockLinkResolver();
+            openminds.registerLinkResolver(mockResolver);
+
+            resolvedPerson = openminds.core.Person();
+            resolvedPerson.givenName = "Already";
+
+            referencePerson = openminds.core.Person('id', 'https://mock.io/person_after');
+
+            instances = [resolvedPerson, referencePerson];
+            instances.resolve();
+
+            testCase.verifyEqual(instances(1).givenName, "Already", ...
+                'The resolved element should be left alone.')
+            testCase.verifyEqual(instances(2).givenName, "Mock", ...
+                'The reference after a resolved element should still be resolved.')
+        end
+
+        function testResolveDepthIsPerArrayElement(testCase)
+        % The link depth is a budget for each element of the array, not a
+        % budget shared across the whole array. Resolving the links of one
+        % element must not exhaust the depth available to the next.
+
+            mockResolver = ommtest.helper.mock.MockLinkResolver();
+            openminds.registerLinkResolver(mockResolver);
+
+            firstDataset = ResolverTest.createDatasetWithAuthors( ...
+                openminds.core.Person('id', 'https://mock.io/author_first'), ...
+                "First Dataset");
+            secondDataset = ResolverTest.createDatasetWithAuthors( ...
+                openminds.core.Person('id', 'https://mock.io/author_second'), ...
+                "Second Dataset");
+
+            datasets = [firstDataset, secondDataset];
+            datasets.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
+
+            firstAuthor = ResolverTest.getDatasetAuthors(datasets(1));
+            secondAuthor = ResolverTest.getDatasetAuthors(datasets(2));
+
+            testCase.verifyEqual(firstAuthor.givenName, "Mock")
+            testCase.verifyEqual(secondAuthor.givenName, "Mock", ...
+                'The second element should get the same depth budget as the first.')
+        end
+
+        function testResolveIsQuiet(testCase)
+        % Resolving an instance that is already resolved is a no-op and must
+        % not write to the command window.
+
+            resolvedPerson = openminds.core.Person();
+            resolvedPerson.givenName = "Already";
+
+            output = evalc('resolvedPerson.resolve();');
+            testCase.verifyEmpty(strtrim(output), ...
+                'resolve should not print to the command window.')
+        end
+
         function testResolveMultipleLinkedInstances(testCase)
             % Test resolving a node with multiple linked instances
             mockResolver = ommtest.helper.mock.MockLinkResolver();

@@ -117,41 +117,33 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 % options.IsEmbedded = false - Todo?
             end
 
-            instance = obj; % Initialize output
             for i = 1:numel(obj)
-                if ~obj(i).IsReference % Instance is resolved (not a reference)
-                    if options.NumLinksToResolve == 0
-                        fprintf('Instance is already resolved.\n')
-                        instance(i) = obj(i);
-                        return
-                    else
-                        options.NumLinksToResolve = options.NumLinksToResolve-1;
-                        nvPairs = namedargs2cell(options);
-                        linkedInstances = obj(i).getLinkedInstances();
-                        for j = 1:numel(linkedInstances)
-                            linkedInstances{j}.resolve(nvPairs{:});
-                        end
-                        embeddedInstances = obj(i).getEmbeddedInstances();
-                        for j = 1:numel(embeddedInstances)
-                            embeddedInstances{j}.resolve(nvPairs{:});
-                        end
-                    end
-                else
-                    if isfield(options, 'LinkResolver')
-                        resolver = options.LinkResolver;
-                    else
-                        resolver = openminds.internal.getLinkResolver([obj(i).id]);
-                    end
-
-                    if isempty(resolver)
-                        error(...
-                            'openMINDS:LinkResolver:NotFound', ...
-                             'No link resolver found for object with id "%s".', obj(i).id);
-                    end
-
-                    obj(i) = resolver.resolve(obj(i), "NumLinksToResolve", options.NumLinksToResolve);
+                if obj(i).IsReference
+                    resolver = obj(i).selectLinkResolver(options);
+                    obj(i) = resolver.resolve(obj(i), ...
+                        "NumLinksToResolve", options.NumLinksToResolve);
                     obj(i).IsReference = false; % Update state: mark as resolved
+
+                elseif options.NumLinksToResolve > 0
+                    % The instance itself is resolved, so spend one unit of
+                    % depth following its links. Each element derives its
+                    % child depth from the incoming budget, so the depth one
+                    % element spends is still available to the next.
+                    childOptions = options;
+                    childOptions.NumLinksToResolve = options.NumLinksToResolve - 1;
+                    nvPairs = namedargs2cell(childOptions);
+
+                    linkedInstances = obj(i).getLinkedInstances();
+                    for j = 1:numel(linkedInstances)
+                        linkedInstances{j}.resolve(nvPairs{:});
+                    end
+                    embeddedInstances = obj(i).getEmbeddedInstances();
+                    for j = 1:numel(embeddedInstances)
+                        embeddedInstances{j}.resolve(nvPairs{:});
+                    end
                 end
+                % An instance that is already resolved and has no depth left
+                % to spend needs no work.
             end
             instance = obj; % Set output
         end
@@ -664,6 +656,23 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 end
             else
                 n = builtin('numArgumentsFromSubscript', obj, s, indexingContext);
+            end
+        end
+    end
+
+    methods (Access = private)
+        function resolver = selectLinkResolver(obj, options)
+        % selectLinkResolver - Resolver for this instance, from options or registry
+
+            if isfield(options, 'LinkResolver')
+                resolver = options.LinkResolver;
+            else
+                resolver = openminds.internal.getLinkResolver(obj.id);
+            end
+
+            if isempty(resolver)
+                error('openMINDS:LinkResolver:NotFound', ...
+                    'No link resolver found for object with id "%s".', obj.id);
             end
         end
     end
