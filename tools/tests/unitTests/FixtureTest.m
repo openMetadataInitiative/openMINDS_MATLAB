@@ -98,14 +98,10 @@ classdef FixtureTest < matlab.unittest.TestCase
                 "https://openminds.om-i.org/instances/species/homoSapiens")
         end
 
-        function testLegacyNamespaceDocumentIsRejectedClearly(testCase)
-        % A document written with the pre-v4 EBRAINS namespace cannot be
-        % loaded while a v4 model is active.
-        %
-        %   This pins current behaviour: the failure is a clear, identified
-        %   error rather than silent data loss. Supporting cross-namespace
-        %   loading would be an improvement, and this test must then be
-        %   changed to assert that the document loads.
+        function testLegacyNamespaceDocumentIsRead(testCase)
+        % A document written with the pre-v4 EBRAINS namespace must load
+        % under a v4 model. The type name is the last segment of the @type
+        % either way, and the types that share a name are the same type.
 
             legacyPath = fullfile(ommtest.helper.fixturePath(), ...
                 "collection_ebrains_legacy.jsonld");
@@ -113,10 +109,31 @@ classdef FixtureTest < matlab.unittest.TestCase
             testCase.assumeEqual(ommtest.helper.fixtureNamespaceTag(), "omi", ...
                 'This test only applies while a v4 or later model is active.')
 
-            testCase.verifyError(@() openminds.Collection(legacyPath), ...
-                'OPENMINDS_MATLAB:Types:InvalidAtType', ...
-                ['Loading a legacy namespace document should fail with a ', ...
-                'clear error identifying the namespace mismatch.'])
+            collection = openminds.Collection(legacyPath);
+
+            person = collection.list(openminds.enum.Types("Person"));
+            testCase.assertNumElements(person, 1, ...
+                'The legacy document should produce one Person.')
+            testCase.verifyEqual(person.givenName, "Ada")
+            testCase.verifyEqual(person.familyName, "Lovelace")
+        end
+
+        function testUnknownNamespaceIsRejectedClearly(testCase)
+        % A document from something that is not openMINDS at all must fail
+        % with an identified error rather than being partly read.
+
+            documentPath = fullfile(testCase.TemporaryFolder, "foreign.jsonld");
+            document = [ ...
+                '{"@context": {"@vocab": "https://example.org/props/"},' ...
+                ' "@graph": [{"@id": "_:x",' ...
+                ' "@type": "https://example.org/types/Person",' ...
+                ' "givenName": "Ada"}]}'];
+            fileIdentifier = fopen(documentPath, 'w');
+            fwrite(fileIdentifier, document);
+            fclose(fileIdentifier);
+
+            testCase.verifyError(@() openminds.Collection(documentPath), ...
+                'OPENMINDS_MATLAB:Types:InvalidAtType')
         end
     end
 
