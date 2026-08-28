@@ -1,143 +1,48 @@
-function instances = loadInstances(filePath)%, options)
-%loadInstances Load metadata instances from file(s)
-
-% Todo:
-%   - Add documentation
-%   - Test that this works in different cases. Single files, collection of
-%     files,
-%   - Generalize to work for multiple file formats.
+function instances = loadInstances(filePath)
+%loadInstances Load metadata instances from one or more files
+%
+%   instances = loadInstances(filePath) reads the given files and returns
+%   a cell array of openMINDS instances, with the references between them
+%   resolved to the instances themselves.
+%
+%   The format is chosen from the file extension. Parsing, type dispatch
+%   and link wiring are the deserializer's work; this function only reads
+%   the files and picks the deserializer.
+%
+%   Input Arguments:
+%     filePath - One or more paths to metadata files.
+%
+%   Output Arguments:
+%     instances - Cell array of openminds.abstract.Schema instances.
+%
+%   See also openminds.internal.serializer.JsonLdDeserializer
 
     arguments
-        filePath (1,:) string = ""
-        % options.RecursionDepth = 1
+        filePath (1,:) string = string.empty
     end
 
-    import openminds.internal.serializer.jsonld2struct
-    
-    [~, ~, serializationFormat] = fileparts(filePath(1));
-
-    switch serializationFormat
-        case ".jsonld"
-            
-            % Read one or more files
-            str = arrayfun(@fileread, filePath, 'UniformOutput', false);
-            
-            % Produce a cell array of instances represented as structs
-            if isscalar(str)
-                structInstances = jsonld2struct(str);
-                if ~iscell(structInstances); structInstances={structInstances};end
-            else
-                structInstances = cellfun(@jsonld2struct, str, 'UniformOutput', false);
-            end
-            
-            % Create instance objects
-            instances = cell(size(structInstances));
-            for i = 1:numel(structInstances)
-
-                thisInstance = structInstances{i};
-
-                if ~isfield(thisInstance, 'at_type')
-                    continue % Todo: Why skip?
-                    % instances{i} = struct('id', thisInstance.at_id);
-                else
-                    openMindsType = thisInstance.at_type;
-                       
-                    typeEnum = openminds.enum.Types.fromAtType(openMindsType);
-                    assert( strcmp( typeEnum.TypeURI, openMindsType), ...
-                        "Instance type does not match schema type. This " + ...
-                        "is not supposed to happen, please report!")
-    
-                    try
-                        instances{i} = feval(typeEnum.ClassName, thisInstance);
-                    catch ME
-                        warning(ME.message)
-                    end
-                end
-            end
-
-            isEmpty = cellfun(@(c) isempty(c), instances);
-            instances(isEmpty) = [];
-
-            instanceIds = cellfun(@(instance) instance.id, instances, 'UniformOutput', false);
-            instanceIds = string(instanceIds);
-            
-            % Link instances / Resolve linked objects...
-            for i = 1:numel(instances)
-                resolveLinks(instances{i}, instanceIds, instances)
-            end
-
-        otherwise
-            error('Unkown input format')
-    end
-
-    if ~nargout
-        clear str
-    end
-end
-
-function resolveLinks(instance, instanceIds, instanceCollection)
-%resolveLinks Resolve linked types, i.e replace an @id with the actual
-% instance object.
-
-    if isstruct(instance) % Instance is not resolvable (E.g belongs to remote collection)
+    instances = {};
+    if isempty(filePath)
         return
     end
 
-    metaType = openminds.internal.meta.fromInstance(instance);
-    
-    for i = 1:metaType.NumProperties
-        thisPropertyName = metaType.PropertyNames{i};
-        if metaType.isPropertyWithLinkedType(thisPropertyName)
-            linkedInstances = instance.(thisPropertyName);
+    deserializer = selectDeserializer(filePath(1));
 
-            resolvedInstances = cell(size(linkedInstances));
+    documents = arrayfun(@(path) string(fileread(path)), filePath);
+    instances = deserializer.deserialize(documents);
+end
 
-            for j = 1:numel(linkedInstances)
-                if openminds.utility.isMixedInstance(linkedInstances(j))
-                    try
-                        instanceId = linkedInstances(j).Instance.id;
-                    catch
-                        instanceId = linkedInstances(j).Instance;
-                    end
-                else
-                    instanceId = linkedInstances(j).id;
-                end
+function deserializer = selectDeserializer(filePath)
+% Pick a deserializer from the file extension.
 
-                isMatchedInstance = instanceIds == string(instanceId);
+    [~, ~, fileExtension] = fileparts(filePath);
 
-                if any(isMatchedInstance)
-                    resolvedInstances{j} = instanceCollection{isMatchedInstance};
-                    resolveLinks(resolvedInstances{j}, instanceIds, instanceCollection)
-                else
-                    % Check if instance is a controlled instance
-                    if startsWith(instanceId, "https://openminds.ebrains.eu/instances/")
-                        resolvedInstances{j} = openminds.instanceFromIRI(instanceId);
-                    end
-                end
-            end
-
-            try
-                resolvedInstances = [resolvedInstances{:}];
-            catch
-                assert(isa(resolvedInstances, 'cell'), ...
-                    'Expected resolved instances to be a cell array')
-            end
-
-            if ~isempty(resolvedInstances)
-                instance.(thisPropertyName) = resolvedInstances;
-            end
-        
-        elseif metaType.isPropertyWithEmbeddedType(thisPropertyName)
-            embeddedInstances = instance.(thisPropertyName);
-
-            for j = 1:numel(embeddedInstances)
-                if openminds.utility.isMixedInstance(embeddedInstances(j))
-                    embeddedInstance = embeddedInstances(j).Instance;
-                else
-                    embeddedInstance = embeddedInstances(j);
-                end
-                resolveLinks(embeddedInstance, instanceIds, instanceCollection)
-            end
-        end
+    switch lower(fileExtension)
+        case ".jsonld"
+            deserializer = openminds.internal.serializer.JsonLdDeserializer();
+        otherwise
+            error('openMINDS:LoadInstances:UnsupportedFormat', ...
+                ['Unsupported metadata file format "%s". ', ...
+                'Supported formats: .jsonld'], fileExtension)
     end
 end
