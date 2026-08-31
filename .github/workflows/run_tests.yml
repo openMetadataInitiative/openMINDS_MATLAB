@@ -81,9 +81,12 @@ jobs:
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
             addpath(genpath("tools")); testToolbox("CreateBadge", doCreateBadge)
 
-      # Commit updated SVG badges for the issues and tests (if changed)
+      # Commit updated SVG badges for the issues and tests (if changed).
+      # Push events only, so badge commits land on main and nowhere else:
+      # committing them on a pull_request event rewrites the PR head branch
+      # and breaks any stack built on top of it.
       - name: Commit svg badges if updated
-        if: matrix.MATLABVersion == env.LatestMATLABVersion
+        if: matrix.MATLABVersion == env.LatestMATLABVersion && github.event_name == 'push'
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"
