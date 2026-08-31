@@ -66,8 +66,6 @@ classdef Collection < handle
     end
 
     properties (SetAccess = protected)
-        LinkResolver
-
         % MetadataStore - Optional metadata store for saving/loading
         MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
     end
@@ -114,7 +112,6 @@ classdef Collection < handle
             arguments
                 options.Name (1,1) string = ""
                 options.Description (1,1) string = ""
-                options.LinkResolver (1,:) = []
                 options.MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
             end
 
@@ -385,7 +382,7 @@ classdef Collection < handle
                 outputPaths = tempStore.save(instances);
 
             elseif ~isempty(options.MetadataStore)
-                outputPaths = obj.MetadataStore.save(instances);
+                outputPaths = options.MetadataStore.save(instances);
 
             elseif ~isempty(obj.MetadataStore)
                 % Use configured store
