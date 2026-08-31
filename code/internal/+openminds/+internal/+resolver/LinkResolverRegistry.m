@@ -15,23 +15,33 @@ classdef LinkResolverRegistry < handle
     end
 
     methods
-        function addLinkResolver(obj, resolver)
-        % Add a resolver instance to the registry (no duplicates by handle).
+        function addLinkResolver(obj, resolver, options)
+        % Add a resolver to the registry, at most one per IRI prefix.
+        %
+        %   By default a resolver whose prefix is already registered is
+        %   ignored, so registering at startup is idempotent. Pass
+        %   Replace=true to swap the registered resolver for this one,
+        %   keeping its position: a library that reconfigures, for example
+        %   with a new server or credentials, re-registers rather than
+        %   mutating the resolver it registered earlier.
             arguments
                 obj (1,1) openminds.internal.resolver.LinkResolverRegistry
                 resolver (1,1) {mustBeA(resolver, "openminds.interface.LinkResolver")}
+                options.Replace (1,1) logical = false
             end
 
-            if obj.hasResolverForPrefix(resolver.IRIPrefix)
-                % Already registered
-                return
-            end
+            existingIndex = obj.indexOfPrefix(resolver.IRIPrefix);
 
-            obj.LinkResolvers{end+1} = resolver;
+            if isempty(existingIndex)
+                obj.LinkResolvers{end+1} = resolver;
+            elseif options.Replace
+                obj.LinkResolvers{existingIndex} = resolver;
+            end
+            % Otherwise already registered; keep the existing resolver.
         end
 
         function tf = hasResolverForPrefix(obj, iriPrefix)
-            tf = any( cellfun(@(r) r.IRIPrefix == iriPrefix, obj.LinkResolvers) );
+            tf = ~isempty( obj.indexOfPrefix(iriPrefix) );
         end
 
         function resolver = getLinkResolver(obj, IRI)
@@ -70,6 +80,11 @@ classdef LinkResolverRegistry < handle
     end
 
     methods (Access = private)
+        function index = indexOfPrefix(obj, iriPrefix)
+        % Position of the resolver registered for a prefix, or empty.
+            index = find( cellfun(@(r) r.IRIPrefix == iriPrefix, obj.LinkResolvers), 1 );
+        end
+
         function promoteResolver(obj, index)
         % promoteResolver - Reorder registry so the resolver at index is first
             arguments

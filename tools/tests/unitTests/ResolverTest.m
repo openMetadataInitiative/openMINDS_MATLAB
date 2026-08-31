@@ -140,6 +140,33 @@ classdef ResolverTest < matlab.unittest.TestCase
             testCase.verifyEqual(registry.LinkResolvers{1}, mockResolver);
         end
         
+        function testReplaceRegisteredResolver(testCase)
+        % A library that reconfigures needs its new resolver to take
+        % effect. Without Replace the first registration wins; with it,
+        % the resolver for that prefix is swapped and keeps its position.
+
+            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+
+            firstResolver = ommtest.helper.mock.MockLinkResolver();
+            secondResolver = ommtest.helper.mock.MockLinkResolver();
+            openminds.registerLinkResolver(firstResolver);
+
+            openminds.registerLinkResolver(secondResolver);
+            registered = registry.getLinkResolver("https://mock.io/x");
+            testCase.verifyTrue(registered == firstResolver, ...
+                'Without Replace, the first registration should win.')
+
+            openminds.registerLinkResolver(secondResolver, "Replace", true);
+            registered = registry.getLinkResolver("https://mock.io/x");
+            testCase.verifyTrue(registered == secondResolver, ...
+                'With Replace, the new resolver should take over the prefix.')
+
+            testCase.verifyEqual( ...
+                sum(cellfun(@(r) isa(r, 'ommtest.helper.mock.MockLinkResolver'), ...
+                    registry.LinkResolvers)), 1, ...
+                'Replacing should not add a second resolver for the prefix.')
+        end
+
         function testNoDuplicateResolvers(testCase)
             % Test that duplicate resolvers are not added
             resolver = ommtest.helper.mock.MockLinkResolver();
