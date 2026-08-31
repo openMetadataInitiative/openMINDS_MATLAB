@@ -1,5 +1,5 @@
-classdef MockLinkResolver < openminds.internal.resolver.AbstractLinkResolver
-%MockLinkResolver Mock implementation of AbstractLinkResolver for testing
+classdef MockLinkResolver < openminds.interface.LinkResolver
+%MockLinkResolver Mock implementation of openminds.interface.LinkResolver for testing
 %
 %   This class provides a mock implementation for testing resolver
 %   functionality with fake data. It can resolve instances with IRIs

@@ -1,4 +1,4 @@
-classdef JsonLdDeserializer < openminds.internal.serializer.BaseDeserializer
+classdef JsonLdDeserializer < openminds.abstract.BaseDeserializer
 % JsonLdDeserializer - Reads openMINDS instances from JSON-LD
 %
 %   The counterpart to JsonLdSerializer. Accepts either a single document

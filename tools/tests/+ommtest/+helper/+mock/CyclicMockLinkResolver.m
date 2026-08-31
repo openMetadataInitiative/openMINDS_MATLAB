@@ -1,4 +1,4 @@
-classdef CyclicMockLinkResolver < openminds.internal.resolver.AbstractLinkResolver
+classdef CyclicMockLinkResolver < openminds.interface.LinkResolver
 %CyclicMockLinkResolver Resolves two ContentType references that link to each other
 %
 %   Resolving the node "a" links it to a reference "b", and resolving "b"

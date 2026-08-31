@@ -120,7 +120,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             arguments
                 obj (1,:) openminds.abstract.Schema
                 options.NumLinksToResolve = 0
-                options.LinkResolver openminds.internal.resolver.AbstractLinkResolver
+                options.LinkResolver openminds.interface.LinkResolver
                 % options.IsEmbedded = false - Todo?
             end
 

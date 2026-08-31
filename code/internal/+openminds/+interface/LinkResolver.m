@@ -1,5 +1,5 @@
-classdef (Abstract) AbstractLinkResolver < handle
-% AbstractLinkResolver - Turns a reference node into a populated instance
+classdef (Abstract) LinkResolver < handle
+% LinkResolver - Turns a reference node into a populated instance
 %
 %   A resolver knows how to fetch the data behind one kind of identifier.
 %   It does not walk the graph: traversal, link depth and cycle detection
