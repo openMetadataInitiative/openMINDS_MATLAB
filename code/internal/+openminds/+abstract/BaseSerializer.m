@@ -207,6 +207,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 
             S = instance.toStruct();
             S = obj.formatDateTimeProperties(S, instance);
+            S = obj.listMultiValuedPrimitives(S, instance);
 
             if ~obj.SerializationConfiguration.IncludeEmptyProperties
                 S = obj.removeEmptyProperties(S);
@@ -235,6 +236,28 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 
                 S.(propertyName) = openminds.internal.utility.formatIsoDateTime( ...
                     value, DateOnly=metaType.isPropertyDateOnly(propertyName));
+            end
+        end
+
+        function S = listMultiValuedPrimitives(~, S, instance)
+        % A property that can hold several values is written as a list
+        % even when it holds one, as the reference implementation and the
+        % instance library do. Linked and embedded values get this from
+        % setPropertyValue; a primitive value comes straight from the
+        % instance and would otherwise encode as a scalar.
+
+            metaType = openminds.internal.meta.fromInstance(instance);
+
+            for propertyName = string(fieldnames(S))'
+                value = S.(propertyName);
+                isPrimitive = isstring(value) || isnumeric(value) || islogical(value);
+                if ~isPrimitive || ~isscalar(value)
+                    continue
+                end
+
+                if ~metaType.isPropertyValueScalar(propertyName)
+                    S.(propertyName) = {value}; % A cell encodes as a list
+                end
             end
         end
 

@@ -1,0 +1,87 @@
+{
+  "description": "Collection built natively by each openMINDS implementation for the interoperability test. Property names are the schema names. A value object with a $-key is resolved by the builder: $ref links another node of this collection by key, $instance links a controlled instance by IRI, $embedded holds an embedded instance, $date and $datetime hold ISO 8601 text. Nodes must be distinguishable by their own property values, because the comparison relabels blank nodes by content.",
+  "nodes": [
+    {
+      "key": "contact",
+      "type": "ContactInformation",
+      "properties": {
+        "email": [
+          "interop@example.org"
+        ]
+      }
+    },
+    {
+      "key": "person",
+      "type": "Person",
+      "properties": {
+        "givenName": "Ærø 🧠",
+        "familyName": "Interop",
+        "contactInformation": {
+          "$ref": "contact"
+        }
+      }
+    },
+    {
+      "key": "state",
+      "type": "SubjectState",
+      "properties": {
+        "lookupLabel": "sub-01_state-01",
+        "age": {
+          "$embedded": "SpecimenAge",
+          "properties": {
+            "age": {
+              "$embedded": "QuantitativeValue",
+              "properties": {
+                "value": 12.5
+              }
+            },
+            "reference": {
+              "$instance": "https://openminds.om-i.org/instances/ageReference/birth"
+            }
+          }
+        }
+      }
+    },
+    {
+      "key": "subject",
+      "type": "Subject",
+      "properties": {
+        "lookupLabel": "sub-01",
+        "species": {
+          "$instance": "https://openminds.om-i.org/instances/species/musMusculus"
+        },
+        "studiedState": [
+          {
+            "$ref": "state"
+          }
+        ]
+      }
+    },
+    {
+      "key": "dataset",
+      "type": "DatasetVersion",
+      "properties": {
+        "fullName": "Interoperability dataset",
+        "shortName": "interop",
+        "releaseDate": {
+          "$date": "2024-03-05"
+        },
+        "studiedSpecimen": [
+          {
+            "$ref": "subject"
+          }
+        ]
+      }
+    },
+    {
+      "key": "run",
+      "type": "ProtocolExecution",
+      "properties": {
+        "lookupLabel": "run-01",
+        "startTime": {
+          "$datetime": "2023-02-07T16:00:00+00:00"
+        }
+      }
+    }
+  ]
+}

@@ -99,6 +99,20 @@ classdef SerializationTest < matlab.unittest.TestCase
         end
 
 
+        function testMultiValuedPrimitiveWithOneValueIsAList(testCase)
+            % A property that can hold several values is written as a
+            % list even when it holds one, as the reference implementation
+            % does. A property that holds at most one value stays a scalar.
+            contact = openminds.core.ContactInformation("email", "one@example.org");
+            person = openminds.core.Person("givenName", "Solo");
+
+            testCase.verifyMatches(string(contact.serialize()), ...
+                '"email":\s*\[\s*"one@example.org"\s*\]');
+            testCase.verifyMatches(string(person.serialize()), ...
+                '"givenName":\s*"Solo"');
+        end
+
+
         function testScalarInstanceToDocument(testCase)
             scalarInstanceWithoutLinks = openminds.core.ContactInformation(...
                 "email", "test@mail.somewhere");
