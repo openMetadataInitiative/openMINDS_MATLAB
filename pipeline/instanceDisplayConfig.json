@@ -3,10 +3,20 @@
     "propertyName": "service",
     "stringFormat": "sprintf('%s', service)"
   },
-  "affiliation": {
-    "propertyName": "memberOf",
-    "stringFormat": "sprintf('%s', memberOf)"
-  },
+  "affiliation": [
+    {
+      "propertyName": ["organization", "person"],
+      "stringFormat": "sprintf('%s (%s)', organization, person)"
+    },
+    {
+      "propertyName": ["memberOf"],
+      "stringFormat": "sprintf('%s', memberOf)"
+    },
+    {
+      "propertyName": ["organization"],
+      "stringFormat": "sprintf('%s', organization)"
+    }
+  ],
   "consortium": {
     "propertyName": "fullName",
     "stringFormat": "sprintf('%s', fullName)"
@@ -15,10 +25,16 @@
     "propertyName": "email",
     "stringFormat": "sprintf('%s', email)"
   },
-  "contribution": {
-    "propertyName": ["contributor", "type"],
-    "stringFormat": "sprintf('%s (%s)', contributor, type)"
-  },
+  "contribution": [
+    {
+      "propertyName": ["contributor", "type"],
+      "stringFormat": "sprintf('%s (%s)', contributor, type)"
+    },
+    {
+      "propertyName": ["contributor", "contributionType"],
+      "stringFormat": "sprintf('%s (%s)', contributor, contributionType)"
+    }
+  ],
   "organization": {
     "propertyName": "fullName",
     "stringFormat": "sprintf('%s', fullName)"
@@ -120,16 +136,22 @@
     "stringFormat": ["if value ~= 1", "    str = sprintf('%d %ss', value, unit);", "else", "    str = sprintf('%d %s', value, unit);", "end"]
   },
   "quantitativeValueArray": {
-    "propertyName": "",
-    "stringFormat": ""
+    "propertyName": ["values", "unit"],
+    "stringFormat": "sprintf('%d values (%s)', numel(values), unit)"
   },
-  "quantitativeValueRange": {
-    "propertyName": "",
-    "stringFormat": ""
-  },
+  "quantitativeValueRange": [
+    {
+      "propertyName": ["minValue", "maxValue", "minValueUnit", "maxValueUnit"],
+      "stringFormat": "openminds.internal.display.getValueRangeString(minValue, maxValue, minValueUnit, maxValueUnit)"
+    },
+    {
+      "propertyName": ["minValue", "maxValue", "unit"],
+      "stringFormat": "openminds.internal.display.getValueRangeString(minValue, maxValue, unit, unit)"
+    }
+  ],
   "researchProductGroup": {
-    "propertyName": "",
-    "stringFormat": ""
+    "propertyName": ["context"],
+    "stringFormat": "sprintf('%s', context)"
   },
   "webResource": {
     "propertyName": "IRI",
@@ -188,8 +210,8 @@
     "stringFormat": "sprintf('%s', lookupLabel)"
   },
   "customPropertySet": {
-    "propertyName": "",
-    "stringFormat": ""
+    "propertyName": ["relevantFor", "context"],
+    "stringFormat": "sprintf('%s (%s)', relevantFor, context)"
   },
   "numericalProperty": {
     "propertyName": "name",
@@ -247,18 +269,30 @@
     "propertyName": "lookupLabel",
     "stringFormat": "sprintf('%s', lookupLabel)"
   },
-  "rectangle": {
-    "propertyName": ["length", "width"],
-    "stringFormat": "sprintf('rectangle(L=%s, W=%s)', length, width)"
-  },
+  "rectangle": [
+    {
+      "propertyName": ["majorSideLength", "minorSideLength"],
+      "stringFormat": "sprintf('%s x %s', majorSideLength, minorSideLength)"
+    },
+    {
+      "propertyName": ["length", "width"],
+      "stringFormat": "sprintf('%s x %s', length, width)"
+    }
+  ],
   "circle": {
     "propertyName": "radius",
     "stringFormat": "sprintf('circle(r=%s)', radius)"
   },
-  "ellipse": {
-    "propertyName": ["semiMajorAxis", "semiMinorAxis"],
-    "stringFormat": "sprintf('ellipse(r1=%s, r2=%s)', semiMajorAxis, semiMinorAxis)"
-  },
+  "ellipse": [
+    {
+      "propertyName": ["diameters"],
+      "stringFormat": "sprintf('%s', diameters)"
+    },
+    {
+      "propertyName": ["semiMajorAxis", "semiMinorAxis"],
+      "stringFormat": "sprintf('%s x %s', semiMajorAxis, semiMinorAxis)"
+    }
+  ],
   "singleColor": {
     "propertyName": ["value"],
     "stringFormat": "sprintf('%s', value)"
@@ -278,5 +312,211 @@
   "URL": {
     "propertyName": ["URL"],
     "stringFormat": "sprintf('%s', URL)"
+  },
+  "coordinatePoint": [
+    {
+      "propertyName": ["coordinateFramework"],
+      "stringFormat": "sprintf('%s', coordinateFramework)"
+    },
+    {
+      "propertyName": ["coordinateSpace"],
+      "stringFormat": "sprintf('%s', coordinateSpace)"
+    }
+  ],
+  "accessibility": {
+    "propertyName": ["form", "eligibility"],
+    "stringFormat": "sprintf('%s (%s)', form, eligibility)"
+  },
+  "membership": {
+    "propertyName": ["member"],
+    "stringFormat": "sprintf('%s', member)"
+  },
+  "location": {
+    "propertyName": ["address", "country"],
+    "stringFormat": "sprintf('%s (%s)', address, country)"
+  },
+  "geoCoordinates": {
+    "propertyName": ["latitude", "longitude"],
+    "stringFormat": "sprintf('%s, %s', latitude, longitude)"
+  },
+  "publicationVolume": {
+    "propertyName": ["isPartOf", "volumeNumber"],
+    "stringFormat": "sprintf('%s %s', isPartOf, volumeNumber)"
+  },
+  "dependency": {
+    "propertyName": ["fulfilledBy", "failureImpact"],
+    "stringFormat": "sprintf('%s (%s)', fulfilledBy, failureImpact)"
+  },
+  "deployedInterface": {
+    "propertyName": ["interface"],
+    "stringFormat": "sprintf('%s', interface)"
+  },
+  "workflowExecution": {
+    "propertyName": ["recipe"],
+    "stringFormat": "sprintf('%s', recipe)"
+  },
+  "annotation": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "atlasAnnotation": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "customAnnotation": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "electrode": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "electrodeArray": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "electrodeContact": {
+    "propertyName": ["internalIdentifier"],
+    "stringFormat": "sprintf('%s', internalIdentifier)"
+  },
+  "channel": {
+    "propertyName": ["internalIdentifier", "unit"],
+    "stringFormat": "sprintf('%s (%s)', internalIdentifier, unit)"
+  },
+  "parameterSet": {
+    "propertyName": ["relevantFor", "context"],
+    "stringFormat": "sprintf('%s (%s)', relevantFor, context)"
+  },
+  "measurement": {
+    "propertyName": ["measuredQuantity", "value"],
+    "stringFormat": "sprintf('%s: %s', measuredQuantity, value)"
+  },
+  "specimenAge": {
+    "propertyName": ["age", "reference"],
+    "stringFormat": "sprintf('%s (%s)', age, reference)"
+  },
+  "specimenWeight": {
+    "propertyName": ["weight", "type"],
+    "stringFormat": "sprintf('%s (%s)', weight, type)"
+  },
+  "anatomicalEntityRelation": {
+    "propertyName": ["qualitativeOverlap", "inRelationTo"],
+    "stringFormat": "sprintf('%s %s', qualitativeOverlap, inRelationTo)"
+  },
+  "qualitativeRelationAssessment": {
+    "propertyName": ["qualitativeOverlap", "inRelationTo"],
+    "stringFormat": "sprintf('%s %s', qualitativeOverlap, inRelationTo)"
+  },
+  "quantitativeRelationAssessment": {
+    "propertyName": ["quantitativeOverlap", "inRelationTo"],
+    "stringFormat": "sprintf('%s %s', quantitativeOverlap, inRelationTo)"
+  },
+  "anatomicalTargetPosition": {
+    "propertyName": ["anatomicalTarget"],
+    "stringFormat": "sprintf('%s', anatomicalTarget)"
+  },
+  "parcellationTerminology": {
+    "propertyName": ["ontologyIdentifier"],
+    "stringFormat": "sprintf('%s', ontologyIdentifier)"
+  },
+  "parcellationTerminologyVersion": {
+    "propertyName": ["ontologyIdentifier"],
+    "stringFormat": "sprintf('%s', ontologyIdentifier)"
+  },
+  "viewerSpecification": {
+    "propertyName": ["cameraPosition"],
+    "stringFormat": "sprintf('%s', cameraPosition)"
+  },
+  "image": {
+    "propertyName": ["definedIn"],
+    "stringFormat": "sprintf('%s', definedIn)"
+  },
+  "tissueCulturePreparation": {
+    "propertyName": ["cultureType"],
+    "stringFormat": "sprintf('%s', cultureType)"
+  },
+  "tissueSampleSlicing": {
+    "propertyName": ["device"],
+    "stringFormat": "sprintf('%s', device)"
+  },
+  "sphere": {
+    "propertyName": ["radius"],
+    "stringFormat": "sprintf('r = %s', radius)"
+  },
+  "cube": {
+    "propertyName": ["sideLength"],
+    "stringFormat": "sprintf('%s', sideLength)"
+  },
+  "square": {
+    "propertyName": ["sideLength"],
+    "stringFormat": "sprintf('%s', sideLength)"
+  },
+  "equilateralTriangle": {
+    "propertyName": ["sideLength"],
+    "stringFormat": "sprintf('%s', sideLength)"
+  },
+  "circularSector": {
+    "propertyName": ["radius", "centralAngle"],
+    "stringFormat": "sprintf('%s, %s', radius, centralAngle)"
+  },
+  "regularPolygon": {
+    "propertyName": ["numberOfSides", "circumradius"],
+    "stringFormat": "sprintf('%d sides, r = %s', numberOfSides, circumradius)"
+  },
+  "ellipsoid": {
+    "propertyName": ["majorDiameter", "intermediateDiameter", "minorDiameter"],
+    "stringFormat": "sprintf('%s x %s x %s', majorDiameter, intermediateDiameter, minorDiameter)"
+  },
+  "spheroid": {
+    "propertyName": ["equatorialDiameter", "polarDiameter"],
+    "stringFormat": "sprintf('%s x %s', equatorialDiameter, polarDiameter)"
+  },
+  "parallelogram": {
+    "propertyName": ["baseLength", "baseDistance"],
+    "stringFormat": "sprintf('%s x %s', baseLength, baseDistance)"
+  },
+  "isoscelesTriangle": {
+    "propertyName": ["legLength", "apexAngle"],
+    "stringFormat": "sprintf('%s, %s', legLength, apexAngle)"
+  },
+  "triangle": {
+    "propertyName": ["apexAngle"],
+    "stringFormat": "sprintf('%s', apexAngle)"
+  },
+  "rightTriangle": {
+    "propertyName": ["perpendicularLegLengths"],
+    "stringFormat": "sprintf('%s', perpendicularLegLengths)"
+  },
+  "kite": {
+    "propertyName": ["symmetryDiagonalLength"],
+    "stringFormat": "sprintf('%s', symmetryDiagonalLength)"
+  },
+  "rhombus": {
+    "propertyName": ["diagonalLengths"],
+    "stringFormat": "sprintf('%s', diagonalLengths)"
+  },
+  "trapezoid": {
+    "propertyName": ["baseDistance"],
+    "stringFormat": "sprintf('%s', baseDistance)"
+  },
+  "centroidalPyramid": {
+    "propertyName": ["baseShape", "apexBaseDistance"],
+    "stringFormat": "sprintf('%s (%s)', baseShape, apexBaseDistance)"
+  },
+  "rightCone": {
+    "propertyName": ["baseShape", "apexBaseDistance"],
+    "stringFormat": "sprintf('%s (%s)', baseShape, apexBaseDistance)"
+  },
+  "rightCylinder": {
+    "propertyName": ["baseShape", "baseDistance"],
+    "stringFormat": "sprintf('%s (%s)', baseShape, baseDistance)"
+  },
+  "rightPrism": {
+    "propertyName": ["baseShape", "baseDistance"],
+    "stringFormat": "sprintf('%s (%s)', baseShape, baseDistance)"
+  },
+  "frustum": {
+    "propertyName": ["majorBaseShape", "baseDistance"],
+    "stringFormat": "sprintf('%s (%s)', majorBaseShape, baseDistance)"
   }
 }
