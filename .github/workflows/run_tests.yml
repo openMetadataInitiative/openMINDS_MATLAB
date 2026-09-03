@@ -69,12 +69,11 @@ jobs:
       # pull request runs against a pinned release, so it cannot go red
       # because of a change in the other repository. The weekly schedule
       # runs against main, so drift between the implementations is noticed.
-      - name: Set up Python
-        id: python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
+      #
+      # The package goes into a virtual environment made from the runner's
+      # own Python, and the test calls that interpreter as a subprocess.
+      # PATH is left alone on purpose: MATLAB resolves its in-process
+      # Python (pyenv) from PATH, and the badge step depends on it.
       - name: Check out openMINDS_Python
         uses: actions/checkout@v6
         with:
@@ -83,7 +82,9 @@ jobs:
           path: openMINDS_Python
 
       - name: Install openMINDS_Python
-        run: python -m pip install --quiet ./openMINDS_Python
+        run: |
+          python3 -m venv "${{ runner.temp }}/openminds-python"
+          "${{ runner.temp }}/openminds-python/bin/python" -m pip install --quiet ./openMINDS_Python
 
       # Run all tests in the project.
       # The round-trip test covers every openMINDS type when
@@ -97,7 +98,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENMINDS_TEST_ALL_TYPES: ${{ (github.event_name == 'pull_request') && '0' || '1' }}
-          OPENMINDS_PYTHON: ${{ steps.python.outputs.python-path }}
+          OPENMINDS_PYTHON: ${{ runner.temp }}/openminds-python/bin/python
         with:
           command: |
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
