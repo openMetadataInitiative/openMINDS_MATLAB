@@ -76,6 +76,19 @@ classdef Type < handle
                 validatorFunctions) );
         end
 
+        function tf = hasDateValidator(metaProperty)
+        % hasDateValidator - Check for a mustBeValidDate validator
+
+            tf = false;
+            if isempty(metaProperty.Validation)
+                return
+            end
+
+            validatorFunctions = metaProperty.Validation.ValidatorFunctions;
+            tf = any( cellfun(@(c) contains(func2str(c), 'mustBeValidDate'), ...
+                validatorFunctions) );
+        end
+
         function tf = hasScalarSizeDeclaration(metaProperty)
         % hasScalarSizeDeclaration - Check for a size declaration of (1,1)
 
@@ -140,6 +153,17 @@ classdef Type < handle
             % property.
             tf = obj.hasScalarValidator(metaProperty) || ...
                     obj.hasScalarSizeDeclaration(metaProperty);
+        end
+
+        function tf = isPropertyDateOnly(obj, propertyName)
+        % isPropertyDateOnly - Check if a datetime property holds a date
+        %
+        %   The schema distinguishes a date from a date-time. Both are
+        %   held as datetime, and the generated classes mark a date with
+        %   the mustBeValidDate validator.
+
+            metaProperty = obj.getMetaProperty(propertyName);
+            tf = obj.hasDateValidator(metaProperty);
         end
 
         function tf = isPropertyWithLinkedType(obj, propertyName)

@@ -41,6 +41,64 @@ classdef SerializationTest < matlab.unittest.TestCase
         end
 
 
+        function testDatePropertySerializesAsIsoDate(testCase)
+            % A property the schema declares as a date is written as
+            % "yyyy-MM-dd", the form the reference implementation reads.
+            datasetVersion = openminds.core.DatasetVersion( ...
+                "releaseDate", datetime(2024, 3, 5));
+
+            jsonLdDoc = string(datasetVersion.serialize());
+
+            testCase.verifyMatches(jsonLdDoc, '"releaseDate":\s*"2024-03-05"');
+        end
+
+        function testDateTimePropertySerializesWithOffset(testCase)
+            % A date-time with a time zone carries its UTC offset, written
+            % as "+00:00" rather than "Z" to match the reference
+            % implementation. One without a time zone has no offset.
+            withZone = openminds.core.ProtocolExecution( ...
+                "startTime", datetime(2023, 2, 7, 16, 0, 0, "TimeZone", "UTC"));
+            withoutZone = openminds.core.ProtocolExecution( ...
+                "startTime", datetime(2023, 2, 7, 16, 0, 0));
+
+            testCase.verifyMatches(string(withZone.serialize()), ...
+                '"startTime":\s*"2023-02-07T16:00:00\+00:00"');
+            testCase.verifyMatches(string(withoutZone.serialize()), ...
+                '"startTime":\s*"2023-02-07T16:00:00"');
+        end
+
+        function testIsoDateTimeWithOffsetDeserializes(testCase)
+            % The reference implementation writes date-times with an
+            % offset. Both the "+00:00" and the "Z" spelling must load.
+            expected = datetime(2023, 2, 7, 16, 0, 0, "TimeZone", "UTC");
+            deserializer = openminds.internal.serializer.JsonLdDeserializer();
+
+            for offsetText = ["+00:00", "Z"]
+                jsonLdDoc = sprintf(['{"@context":{"@vocab":"https://openminds.om-i.org/props/"},' ...
+                    '"@id":"_:1","@type":"https://openminds.om-i.org/types/ProtocolExecution",' ...
+                    '"startTime":"2023-02-07T16:00:00%s"}'], offsetText);
+
+                instances = deserializer.deserialize(jsonLdDoc);
+
+                testCase.verifyEqual(instances{1}.startTime, expected, ...
+                    "Offset spelling: " + offsetText);
+            end
+        end
+
+        function testLegacyDateFormatStillDeserializes(testCase)
+            % Files written by earlier releases hold dates in the datetime
+            % display format. They must keep loading.
+            jsonLdDoc = ['{"@context":{"@vocab":"https://openminds.om-i.org/props/"},' ...
+                '"@id":"_:1","@type":"https://openminds.om-i.org/types/DatasetVersion",' ...
+                '"releaseDate":"05-Mar-2024"}'];
+            deserializer = openminds.internal.serializer.JsonLdDeserializer();
+
+            instances = deserializer.deserialize(jsonLdDoc);
+
+            testCase.verifyEqual(instances{1}.releaseDate, datetime(2024, 3, 5));
+        end
+
+
         function testScalarInstanceToDocument(testCase)
             scalarInstanceWithoutLinks = openminds.core.ContactInformation(...
                 "email", "test@mail.somewhere");

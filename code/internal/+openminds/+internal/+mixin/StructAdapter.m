@@ -91,7 +91,20 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
                 keep = cellfun(@(c) ~isempty(c), propertyValues);
                 propertyNames = fieldNames(keep);
                 propertyValues = propertyValues(keep);
-               
+
+                % Date and date-time text is read as ISO 8601. Left to
+                % itself, datetime does not read a UTC offset, so a
+                % date-time written by the reference implementation would
+                % make the whole node unreadable.
+                for iProp = 1:numel(propertyNames)
+                    value = propertyValues{iProp};
+                    if isdatetime(obj(i).(propertyNames{iProp})) ...
+                            && (ischar(value) || iscellstr(value) || isstring(value))
+                        propertyValues{iProp} = ...
+                            openminds.internal.utility.parseIsoDateTime(string(value));
+                    end
+                end
+
                 set(obj(i), propertyNames', propertyValues');
                 
                 identifier = []; % Todo: Should be handled by serializer
