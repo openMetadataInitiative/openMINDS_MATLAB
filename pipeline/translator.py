@@ -274,9 +274,9 @@ class MATLABSchemaBuilder(object):
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
         # Or; just remove this as it's not needed when using separate templates.
         if self._schema_module_name == "controlledTerms":
-            base_class = "openminds.abstract.ControlledTerm"
+            base_class = "openminds.base.ControlledTerm"
         else:
-            base_class = "openminds.abstract.Schema"
+            base_class = "openminds.Node"
 
         has_controlled_instance = class_name in types_with_controlled_instances
         if has_controlled_instance:

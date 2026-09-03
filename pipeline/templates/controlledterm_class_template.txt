@@ -1,4 +1,4 @@
-classdef {{ class_name }} < openminds.abstract.ControlledTerm
+classdef {{ class_name }} < openminds.base.ControlledTerm
 %{{ class_name }} - {{docstring}}
 %
 %   PROPERTIES: {# Create description for each property of schema #}
@@ -54,7 +54,7 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 
