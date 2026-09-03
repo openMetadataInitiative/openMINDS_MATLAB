@@ -65,11 +65,15 @@ classdef (Abstract) BaseDeserializer < handle
         % instantiateAll - Build one instance per node of the document
         %
         %   Also returns the nodes that could not be read, and the nodes
-        %   that carried properties the active model does not have.
+        %   that carried properties the active model does not have. A node
+        %   whose identifier an earlier node already carries is not read:
+        %   two nodes cannot both be the target of one link, and the
+        %   earlier one is kept.
 
             instances = cell(1, numel(rawStructs));
             unreadable = struct('Identifier', {}, 'Reason', {});
             dropped = struct('Identifier', {}, 'Properties', {});
+            seenIdentifiers = strings(1, 0);
 
             for i = 1:numel(rawStructs)
                 node = rawStructs{i};
@@ -87,10 +91,19 @@ classdef (Abstract) BaseDeserializer < handle
                 % document-level problem rather than one bad node, and
                 % reporting it as a skipped node would leave the caller
                 % with an empty result and a warning.
+                identifier = openminds.internal.utility.getStructIdentifier(node);
+                if identifier ~= "" && any(seenIdentifiers == identifier)
+                    unreadable(end+1) = struct( ...
+                        'Identifier', identifier, ...
+                        'Reason', "an earlier node carries the same identifier and is the one kept"); %#ok<AGROW>
+                    continue
+                end
+
                 typeEnum = openminds.enum.Types.fromAtType(node.at_type);
 
                 try
                     instances{i} = feval(typeEnum.ClassName, node);
+                    seenIdentifiers(end+1) = identifier; %#ok<AGROW>
                     droppedNames = droppedPropertyNames(node, instances{i});
                     if ~isempty(droppedNames)
                         dropped(end+1) = struct( ...
