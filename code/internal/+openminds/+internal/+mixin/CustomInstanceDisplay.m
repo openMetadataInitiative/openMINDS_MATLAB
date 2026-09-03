@@ -80,8 +80,8 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
         function str = getHeader(obj)
             
-            import openminds.internal.utility.getSchemaDocLink
-            docLinkStr = getSchemaDocLink(class(obj));
+            import openminds.internal.utility.getTypeDocLink
+            docLinkStr = getTypeDocLink(class(obj));
 
             semanticName = obj.getSemanticIRI();
             

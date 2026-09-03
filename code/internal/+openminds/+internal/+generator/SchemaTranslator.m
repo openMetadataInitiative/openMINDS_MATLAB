@@ -328,7 +328,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function writeSchemaPropertyDocumentation(obj)
            
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
 
             obj.appendDocString(1, "PROPERTIES:")
             obj.appendDocString(1, "")
@@ -386,7 +386,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                     types = {types};
                 end
             
-                types = cellfun(@(t) getSchemaDocLink(t, 'Command window help'), types, 'Uni', 0);
+                types = cellfun(@(t) getTypeDocLink(t, 'Command window help'), types, 'Uni', 0);
                 types = strjoin(types, ', ');
 
                 newStr = sprintf("%s: %s %s", paddedPropName, T.Size{i}, types);

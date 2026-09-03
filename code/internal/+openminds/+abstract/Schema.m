@@ -198,7 +198,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods (Access = public, Hidden)
 
         function typeName = getTypeName(obj)
-            typeName = openminds.internal.utility.getSchemaShortName(class(obj));
+            typeName = openminds.internal.utility.getTypeName(class(obj));
         end
 
         function tf = isReference(obj)
@@ -328,7 +328,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         function obj = subsasgn(obj, subs, value)
             
             import openminds.internal.event.PropertyValueChangedEventData
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
 
             if isequal(obj, [])
                 % As far as I understand, this only occurs during property
@@ -445,7 +445,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                     if contains(ME.message, 'Error setting property')
                         errorStruct.message = ME.message;
                     else
-                        classDocLink = getSchemaDocLink(class(obj), 'Help popup'); % Todo: Dataset or openminds.core.Dataset?
+                        classDocLink = getTypeDocLink(class(obj), 'Help popup'); % Todo: Dataset or openminds.core.Dataset?
                         msg = sprintf("Error setting property '%s' of class '%s'. ", propName, classDocLink);
                         errorStruct.message = msg + ME.message;
                     end
@@ -807,7 +807,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             uuidStr = openminds.internal.utility.string.getuuid();
             
             % Use type prefix (currently inactive)
-            % schemaName = obj.getSchemaShortName( class(obj) );
+            % schemaName = obj.getTypeName( class(obj) );
             % instanceId = sprintf('%s/%s', schemaName, uuidStr);
             
             % Use blank node identifier prefix
@@ -826,7 +826,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
     methods (Access = protected) % Methods related to object display
         function displayLabel = getDisplayLabel(obj)
-            %schemaShortName = obj.getSchemaShortName(class(obj));
+            %schemaShortName = obj.getTypeName(class(obj));
 
             % Use regexp to extract to schema name and the first part
             % of the uuid
@@ -842,8 +842,8 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
 
         function annotation = getAnnotation(obj, ~)
         % getAnnotation - Get annotation for type
-            import openminds.internal.utility.getSchemaDocLink
-            annotation = getSchemaDocLink( class(obj) );
+            import openminds.internal.utility.getTypeDocLink
+            annotation = getTypeDocLink( class(obj) );
         end
 
         function requiredProperties = getRequiredProperties(obj)

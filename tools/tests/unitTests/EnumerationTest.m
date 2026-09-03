@@ -39,8 +39,8 @@ classdef EnumerationTest < matlab.unittest.TestCase
             testCase.verifyFalse(typeEnum.ismissing());
             testCase.verifyTrue(noneEnum.ismissing());
             
-            % Test getSchemaName method
-            testCase.verifyEqual(typeEnum.getSchemaName(), "Person");
+            % Test getTypeName method
+            testCase.verifyEqual(typeEnum.getTypeName(), "Person");
             
             % Test static fromClassName method
             fromClassNameEnum = openminds.enum.Types.fromClassName("openminds.core.actors.Person");
