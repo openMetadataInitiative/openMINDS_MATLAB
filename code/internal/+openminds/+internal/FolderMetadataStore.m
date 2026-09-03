@@ -196,7 +196,9 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 idParts = strsplit(instanceId, '/');
                 safeId = idParts{end};
             else
-                safeId = instanceId;
+                % A blank node identifier is prefixed with "_:", which the
+                % sanitizing step below would turn into a second separator.
+                safeId = regexprep(instanceId, '^_:', '');
             end
             safeId = regexprep(safeId, '[^\w\-_.]', '_');
             

@@ -369,6 +369,27 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(isfile(outputPaths{1}));
         end
 
+        function testFolderStoreOmitsBlankNodePrefixFromFilename(testCase)
+            % A blank node identifier is prefixed with "_:". Both
+            % characters would otherwise be sanitized into separators,
+            % leaving the type and the identifier three underscores apart.
+            contact = openminds.core.ContactInformation( ...
+                "email", "prefix@example.org");
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "blank-node-folder-store");
+
+            outputPaths = metadataStore.save(contact);
+
+            [~, fileName] = fileparts(outputPaths{1});
+            expectedName = "ContactInformation_" + extractAfter(contact.id, "_:");
+            testCase.verifyEqual(string(fileName), expectedName);
+
+            % The identifier lives in the document, so the instance still
+            % round-trips regardless of what the file is called.
+            reloaded = metadataStore.load();
+            testCase.verifyEqual(reloaded{1}.id, contact.id);
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
