@@ -137,18 +137,41 @@ classdef TypesEnumerationBase
             arguments
                 typeName (1,:) string
             end
-        
-            assert(all(startsWith(typeName, openminds.constant.BaseURI)), ...
-                'OPENMINDS_MATLAB:Types:InvalidAtType', ...
-                'Expected @type to start with "%s"', openminds.constant.BaseURI)
-       
+
+            % Documents written for an older model use a different
+            % namespace. Both are accepted: the type name is the last
+            % segment either way, and it is resolved against the active
+            % model. That is a name match, not a migration. A type the
+            % active model does not have is rejected below; a property it
+            % does not have is dropped by fromStruct and reported by the
+            % deserializer; a property whose declaration changed fails on
+            % assignment and is reported as an unreadable node.
+            knownBaseURIs = openminds.constant.BaseURI("v1") + "/" | ...
+                            openminds.constant.BaseURI("v4") + "/";
+
+            isKnownNamespace = startsWith(typeName, knownBaseURIs);
+            if ~all(isKnownNamespace)
+                error('OPENMINDS_MATLAB:Types:InvalidAtType', ...
+                    'Expected @type to start with "%s" or "%s". Got "%s".', ...
+                    openminds.constant.BaseURI("v1"), ...
+                    openminds.constant.BaseURI("v4"), ...
+                    typeName(find(~isKnownNamespace, 1)))
+            end
+
             if numel(typeName) > 1
                 typeEnum = arrayfun(@(str) openminds.enum.Types.fromAtType(str), typeName);
                 return
             end
         
             splitName = strsplit(typeName, '/');
-            typeEnum = eval(sprintf('openminds.enum.Types.%s', splitName{end}));
+
+            try
+                typeEnum = openminds.enum.Types(splitName{end});
+            catch
+                error('OPENMINDS_MATLAB:Types:UnknownAtType', ...
+                    ['"%s" does not name a type in version "%s" of the ', ...
+                    'openMINDS model.'], splitName{end}, openminds.getModelVersion())
+            end
         end
     end
 end

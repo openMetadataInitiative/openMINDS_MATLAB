@@ -104,6 +104,39 @@ classdef DeserializerTest < matlab.unittest.TestCase
         end
     end
 
+    methods (Test) % Properties the active model does not have
+
+        function testPropertiesUnknownToTheModelAreReported(testCase)
+        % A document written for another model version can carry
+        % properties the active model does not have. They cannot be kept,
+        % but losing them silently would hide that the document was not
+        % read in full, so they are reported once, by node, and the
+        % known properties are still read.
+
+            document = DeserializerTest.collectionDocument(sprintf( ...
+                ['{"@id": "_:person-1", "@type": "%sPerson", "givenName": "Ada", ', ...
+                 '"interlexIdentifier": "http://uri.interlex.org/base/ilx_0000000"}'], ...
+                DeserializerTest.TypeIRI));
+
+            instances = testCase.verifyWarning(@() testCase.deserialize(document), ...
+                'openMINDS:Deserializer:DroppedProperties');
+
+            testCase.assertNumElements(instances, 1)
+            testCase.verifyEqual(instances{1}.givenName, "Ada", ...
+                'The properties the model does have are still read.')
+        end
+
+        function testDocumentWithinTheModelIsReadWithoutReport(testCase)
+        % The report fires only when something is lost. A document that
+        % uses only properties the active model has produces none.
+
+            document = DeserializerTest.collectionDocument( ...
+                DeserializerTest.personNode("_:person-1", "Ada"));
+
+            testCase.verifyWarningFree(@() testCase.deserialize(document));
+        end
+    end
+
     methods (Access = private)
         function instances = deserialize(~, documents)
             deserializer = openminds.internal.serializer.JsonLdDeserializer();

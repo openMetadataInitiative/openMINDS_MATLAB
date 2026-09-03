@@ -39,9 +39,10 @@ classdef (Abstract) BaseDeserializer < handle
         %   be read are left out and reported.
 
             rawStructs = obj.parseToStructs(data);
-            [instances, unreadable] = obj.instantiateAll(rawStructs);
+            [instances, unreadable, dropped] = obj.instantiateAll(rawStructs);
 
             obj.reportUnreadableNodes(unreadable);
+            obj.reportDroppedProperties(dropped);
 
             if isempty(instances)
                 return
@@ -60,11 +61,15 @@ classdef (Abstract) BaseDeserializer < handle
     end
 
     methods (Access = protected)
-        function [instances, unreadable] = instantiateAll(~, rawStructs)
+        function [instances, unreadable, dropped] = instantiateAll(~, rawStructs)
         % instantiateAll - Build one instance per node of the document
+        %
+        %   Also returns the nodes that could not be read, and the nodes
+        %   that carried properties the active model does not have.
 
             instances = cell(1, numel(rawStructs));
             unreadable = struct('Identifier', {}, 'Reason', {});
+            dropped = struct('Identifier', {}, 'Properties', {});
 
             for i = 1:numel(rawStructs)
                 node = rawStructs{i};
@@ -86,6 +91,12 @@ classdef (Abstract) BaseDeserializer < handle
 
                 try
                     instances{i} = feval(typeEnum.ClassName, node);
+                    droppedNames = droppedPropertyNames(node, instances{i});
+                    if ~isempty(droppedNames)
+                        dropped(end+1) = struct( ...
+                            'Identifier', nodeIdentifier(node), ...
+                            'Properties', {droppedNames}); %#ok<AGROW>
+                    end
                 catch ME
                     unreadable(end+1) = struct( ...
                         'Identifier', nodeIdentifier(node), ...
@@ -120,7 +131,45 @@ classdef (Abstract) BaseDeserializer < handle
                 warning('openMINDS:Deserializer:UnreadableNodes', '%s', message)
             end
         end
+
+        function reportDroppedProperties(~, dropped)
+        % reportDroppedProperties - Report properties the active model does not have
+        %
+        %   A document written for another model version can carry
+        %   properties this version lacks. They cannot be kept, and losing
+        %   them silently would hide that the document was not read in
+        %   full, so they are reported once, by node. This is a warning
+        %   whatever the unreadable-node policy: the nodes themselves were
+        %   read.
+
+            if isempty(dropped)
+                return
+            end
+
+            details = arrayfun( ...
+                @(entry) sprintf('  %s: %s', entry.Identifier, strjoin(entry.Properties, ', ')), ...
+                dropped, 'UniformOutput', false);
+
+            warning('openMINDS:Deserializer:DroppedProperties', ...
+                ['%d of the nodes in the data carry properties that version "%s" ', ...
+                'of the openMINDS model does not have. They were dropped:\n%s'], ...
+                numel(dropped), openminds.getModelVersion(), strjoin(details, newline))
+        end
     end
+end
+
+function names = droppedPropertyNames(node, instance)
+% Fields of a decoded node that the instance's type does not declare.
+%
+%   fromStruct keeps the fields that name a property of the type and
+%   drops the rest without a report. This mirrors that filter so the
+%   deserializer can say what was lost. Only the node itself is checked;
+%   fields dropped inside embedded values are not detected.
+
+    fields = string(fieldnames(node))';
+    known = [string(instance.PropertyNames), ...
+        openminds.internal.utility.jsonLdKeywordFields()];
+    names = setdiff(fields, known, 'stable');
 end
 
 function identifier = nodeIdentifier(node)
