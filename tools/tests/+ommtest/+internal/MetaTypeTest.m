@@ -64,6 +64,46 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             testCase.verifyEqual( string(registry('Person').Name), "Person")
         end
 
+        function testScalarConstraintFromValidator(testCase)
+        % A property restricted to a scalar by mustBeScalarOrEmpty must be
+        % reported as scalar even though its size declaration is (1,:).
+        % Both the generated type classes and openMINDS itself rely on
+        % this, because every linked and embedded property is declared
+        % that way.
+
+            metaType = openminds.internal.meta.Type( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyTrue( metaType.isPropertyValueScalar('scalarByValidator') )
+            testCase.verifyTrue( metaType.isPropertyValueScalar('scalarBySize') )
+            testCase.verifyFalse( metaType.isPropertyValueScalar('unrestrictedList') )
+        end
+
+        function testScalarConstraintOnGeneratedType(testCase)
+        % The same check against a generated type, so the behaviour is
+        % pinned for a real property and not only for the fixture.
+
+            metaType = openminds.internal.meta.fromClassName( ...
+                'openminds.core.miscellaneous.Membership');
+
+            testCase.verifyTrue( metaType.isPropertyValueScalar('startDate') )
+        end
+
+        function testPropertyWithoutDeclaredClassIsNotMixedType(testCase)
+        % Checking a property that has no declared class must answer the
+        % question rather than error, and asking for its mixed type must
+        % fail with an identified error.
+
+            metaType = openminds.internal.meta.Type( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyFalse( metaType.isPropertyMixedType('withoutDeclaredClass') )
+
+            testCase.verifyError( ...
+                @() metaType.getMixedTypeForProperty('withoutDeclaredClass'), ...
+                'OPENMINDS_MATLAB:MetaType:NotAMixedType')
+        end
+
         function testMetaType(testCase)
             previousVersion = openminds.version();
             openminds.version(5);

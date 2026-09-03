@@ -259,14 +259,7 @@ function numItems = requiredItemCount(metaType, propertyName, validatorText)
 %   that array handling is exercised, unless a min or max length validator
 %   requires otherwise.
 
-    % Inspect the validators directly rather than relying on
-    % metaType.isPropertyValueScalar, which only consults
-    % mustBeScalarOrEmpty for linked and embedded properties and reports
-    % unrestricted-size primitive properties as non-scalar.
-    isScalarProperty = any(contains(validatorText, "mustBeScalarOrEmpty")) ...
-        || metaType.isPropertyValueScalar(propertyName);
-
-    if isScalarProperty
+    if metaType.isPropertyValueScalar(propertyName)
         numItems = 1;
         return
     end

@@ -61,6 +61,53 @@ classdef Type < handle
         end
     end
 
+    methods (Static, Access = private)
+
+        function tf = hasScalarValidator(metaProperty)
+        % hasScalarValidator - Check for a mustBeScalarOrEmpty validator
+
+            tf = false;
+            if isempty(metaProperty.Validation)
+                return
+            end
+
+            validatorFunctions = metaProperty.Validation.ValidatorFunctions;
+            tf = any( cellfun(@(c) contains(func2str(c), 'mustBeScalarOrEmpty'), ...
+                validatorFunctions) );
+        end
+
+        function tf = hasScalarSizeDeclaration(metaProperty)
+        % hasScalarSizeDeclaration - Check for a size declaration of (1,1)
+
+            tf = false;
+            if isempty(metaProperty.Validation) || isempty(metaProperty.Validation.Size)
+                return
+            end
+
+            columnDimension = metaProperty.Validation.Size(2);
+
+            % Any dimension that is not fixed leaves the property
+            % unrestricted in size, so it is not scalar.
+            if isa(columnDimension, 'meta.FixedDimension')
+                tf = columnDimension.Length == 1;
+            end
+        end
+
+        function className = getDeclaredClassName(metaProperty)
+        % getDeclaredClassName - Class a property is restricted to, if any
+        %
+        %   Returns an empty string for a property declared without a
+        %   class, such as one whose type could not be resolved when the
+        %   type classes were generated.
+
+            className = "";
+            if isempty(metaProperty.Validation) || isempty(metaProperty.Validation.Class)
+                return
+            end
+            className = string(metaProperty.Validation.Class.Name);
+        end
+    end
+
     methods (Access = private)
         
         function metaProperty = getMetaProperty(obj, propertyName)
@@ -83,23 +130,16 @@ classdef Type < handle
         function tf = isPropertyValueScalar(obj, propertyName)
         % isPropertyValueScalar - Check if property value must be scalar
 
-            mp = obj.getMetaProperty(propertyName);
-            
-            if obj.isPropertyWithLinkedType(propertyName) || ...
-                    obj.isPropertyWithEmbeddedType(propertyName)
-                validationFcn = mp.Validation.ValidatorFunctions;
-                
-                isScalar = @(str) contains(str, 'mustBeScalarOrEmpty');
-                tf = any( cellfun(@(c) isScalar(func2str(c)), validationFcn) );
-            else
-                if isa( mp.Validation.Size(2), 'meta.UnrestrictedDimension')
-                    tf = false;
-                elseif isa( mp.Validation.Size(2), 'meta.FixedDimension')
-                    tf = mp.Validation.Size(2).Length == 1;
-                else
-                    error('Not implemented.') % Is this ever going to happen?
-                end
-            end
+            metaProperty = obj.getMetaProperty(propertyName);
+
+            % A property can be restricted to a scalar in two ways: a
+            % mustBeScalarOrEmpty validator, or a fixed size declaration.
+            % Linked and embedded properties are declared (1,:) and always
+            % use the validator, but a property holding a primitive value
+            % may use either, so both have to be checked for every
+            % property.
+            tf = obj.hasScalarValidator(metaProperty) || ...
+                    obj.hasScalarSizeDeclaration(metaProperty);
         end
 
         function tf = isPropertyWithLinkedType(obj, propertyName)
@@ -143,17 +183,24 @@ classdef Type < handle
 
         function tf = isPropertyMixedType(obj, propertyName)
         % isPropertyMixedType - Check if property has linked or embedded MixedTypeSets.
-            mp = obj.getMetaProperty(propertyName);
-            className = mp.Validation.Class.Name;
-            tf = startsWith(className, 'openminds.internal.mixedtype');
+            metaProperty = obj.getMetaProperty(propertyName);
+            declaredClass = obj.getDeclaredClassName(metaProperty);
+
+            % A property without a declared class cannot be a mixed type.
+            tf = declaredClass ~= "" && ...
+                    startsWith(declaredClass, 'openminds.internal.mixedtype');
         end
 
         function className = getMixedTypeForProperty(obj, propertyName)
         % getMixedTypeForProperty - Get class name of MixedTypeSet for given property
-            mp = obj.getMetaProperty(propertyName);
-            className = mp.Validation.Class.Name;
-            assert( startsWith(className, 'openminds.internal.mixedtype'), ...
-                'Property is not a mixed type' );
+            metaProperty = obj.getMetaProperty(propertyName);
+            className = obj.getDeclaredClassName(metaProperty);
+
+            if className == "" || ~startsWith(className, 'openminds.internal.mixedtype')
+                error('OPENMINDS_MATLAB:MetaType:NotAMixedType', ...
+                    'Property "%s" of "%s" is not a mixed type.', ...
+                    propertyName, obj.Name)
+            end
         end
 
         function tf = isLinkedTypeOfAnyProperty(obj, type)
