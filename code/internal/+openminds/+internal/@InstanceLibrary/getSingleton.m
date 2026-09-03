@@ -1,7 +1,7 @@
 function singletonObject = getSingleton(folderPath, options)
     arguments
         folderPath (1,1) string {mustBeFolder} = ...
-            openminds.internal.PathConstants.LocalInstanceFolder;
+            openminds.internal.constants.Paths.LocalInstanceFolder;
 
         options.UseGit (1,1) logical = false
         options.Reset (1,1) logical = false

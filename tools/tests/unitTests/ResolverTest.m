@@ -7,7 +7,7 @@ classdef ResolverTest < matlab.unittest.TestCase
     methods (TestMethodSetup)
         function setUp(~)
             % Reset the resolver registry to known state for each test
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             registry.reset()
         end
     end
@@ -15,7 +15,7 @@ classdef ResolverTest < matlab.unittest.TestCase
     methods (Test)
         function testRegistryInitialization(testCase)
             % Test that the registry initializes with InstanceResolver
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             
             testCase.verifyNotEmpty(registry.LinkResolvers);
             testCase.verifyTrue(isa(registry.LinkResolvers{1}, ...
@@ -31,7 +31,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
             
             % Verify it's in the registry
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             testCase.verifyTrue(any( cellfun(@(r) r == mockResolver, registry.LinkResolvers) ));
         end
         
@@ -127,7 +127,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             % Test that duplicate resolvers are not added
             resolver = ommtest.helper.mock.MockLinkResolver();
             
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             initialCount = length(registry.LinkResolvers);
             
             % Register same resolver twice
@@ -143,7 +143,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             resolver1 = ommtest.helper.mock.MockLinkResolver();
             resolver2 = ommtest.helper.mock.MockLinkResolver();
             
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             initialCount = length(registry.LinkResolvers);
             
             % Register both resolvers (should reject second one)
@@ -156,7 +156,7 @@ classdef ResolverTest < matlab.unittest.TestCase
         
         function testHasLinkResolverCheck(testCase)
             % Test the hasLinkResolver method
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             
             % Should have InstanceResolver by default
             testCase.verifyTrue(registry.hasLinkResolver(...

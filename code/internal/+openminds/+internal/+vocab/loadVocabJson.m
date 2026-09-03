@@ -12,10 +12,10 @@ function S = loadVocabJson(name)
         name (1,1) openminds.internal.vocab.enum.VocabType = "types"
     end
 
-    if ~isfile(openminds.internal.vocab.constants.VocabFilepath(name))
+    if ~isfile(openminds.internal.constants.VocabFilepath(name))
         openminds.internal.vocab.downloadVocabFiles()
     end
 
-    jsonStr = fileread( openminds.internal.vocab.constants.VocabFilepath(name) );
+    jsonStr = fileread( openminds.internal.constants.VocabFilepath(name) );
     S = jsondecode(jsonStr);
 end

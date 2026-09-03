@@ -90,7 +90,7 @@ classdef LinkResolverRegistry < handle
     end
 
     methods (Static)
-        function obj = instance()
+        function obj = getSingleton()
             % Singleton accessor.
             persistent singletonInstance
             if isempty(singletonInstance) || ~isvalid(singletonInstance)

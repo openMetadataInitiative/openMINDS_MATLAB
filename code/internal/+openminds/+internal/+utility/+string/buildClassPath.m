@@ -16,7 +16,7 @@ function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule
     schemaCategory = strrep( schemaCategory, 'schemas', ''); % Todo ??
     schemaCategory = lower( schemaCategory );
     schemaModule = lower(schemaModule);
-    rootPath = openminds.internal.PathConstants.MatlabSchemaFolder;
+    rootPath = openminds.internal.constants.Paths.TypesFolder;
     folderPath = fullfile( rootPath, '+openminds', ['+', schemaModule] );
 
     if ~isempty(schemaCategory) % Append schema category subfolder if relevant

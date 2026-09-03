@@ -6,7 +6,7 @@ function startup(version)
 
     arguments
         version (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(version)} = "latest"
+            {openminds.mustBeValidModelVersion(version)} = "latest"
     end
 
     disp('Initializing openMINDS_MATLAB...')
@@ -16,7 +16,7 @@ function startup(version)
     addpath( fullfile(codePath, 'internal') )
 
     % Run internal function that correctly configures the search path
-    openminds.selectOpenMindsVersion(version)
+    openminds.selectModelVersion(version)
     fprintf(['Added classes for version "%s" of the openMINDS metadata model ' ...
              'to the search path.\n'], string(version))
 end

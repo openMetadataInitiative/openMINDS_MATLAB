@@ -22,7 +22,7 @@ classdef ExternalIntegrationTest < matlab.unittest.TestCase
         end
 
         function resetResolverRegistry(testCase)
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
+            registry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
             registry.reset()
             testCase.addTeardown(@() registry.reset())
         end

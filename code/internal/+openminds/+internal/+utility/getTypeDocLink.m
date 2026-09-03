@@ -95,7 +95,7 @@ function urlStr = generateDocumentationUrl(version, moduleName, subgroupName, sc
     end
     
     import openminds.internal.utility.string.uriJoin
-    BASE_URL = openminds.internal.constants.url.OpenMindsDocumentation;
+    BASE_URL = openminds.internal.constants.DocumentationURL;
 
     urlStr = uriJoin(BASE_URL, version, 'schema_specifications', moduleName, subgroupName, schemaName);
     urlStr = urlStr + ".html";
