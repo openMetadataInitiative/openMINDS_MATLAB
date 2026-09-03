@@ -355,6 +355,20 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(collection.isKey(secondContact.id));
         end
 
+        function testFolderStoreSavesScalarInstance(testCase)
+            % A single instance serializes to one document rather than a
+            % cell, which the folder store must still handle.
+            contact = openminds.core.ContactInformation( ...
+                "email", "scalar@example.org");
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "scalar-folder-store");
+
+            outputPaths = metadataStore.save(contact);
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
