@@ -1,4 +1,4 @@
-classdef BehavioralProtocol < openminds.abstract.Schema
+classdef BehavioralProtocol < openminds.Node
 %BehavioralProtocol - Structured information about a protocol used in an experiment studying human or animal behavior.
 %
 %   PROPERTIES:
@@ -72,7 +72,7 @@ classdef BehavioralProtocol < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

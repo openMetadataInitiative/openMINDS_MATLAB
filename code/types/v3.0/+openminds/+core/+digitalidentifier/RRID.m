@@ -1,4 +1,4 @@
-classdef RRID < openminds.abstract.Schema
+classdef RRID < openminds.Node
 %RRID - A persistent identifier for a research resource provided by the Resource Identification Initiative.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef RRID < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

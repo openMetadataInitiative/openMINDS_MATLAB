@@ -9,7 +9,7 @@ classdef InstanceResolver < openminds.interface.LinkResolver
         function instance = resolveNode(~, instance)
             arguments
                 ~
-                instance (1,1) openminds.abstract.Schema
+                instance (1,1) openminds.Node
             end
 
             [typeEnum, instanceName] = openminds.utility.parseInstanceIRI(instance.id);

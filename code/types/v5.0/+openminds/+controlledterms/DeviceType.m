@@ -1,4 +1,4 @@
-classdef DeviceType < openminds.abstract.ControlledTerm
+classdef DeviceType < openminds.base.ControlledTerm
 %DeviceType - No description available.
 %
 %   PROPERTIES:
@@ -64,7 +64,7 @@ classdef DeviceType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

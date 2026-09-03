@@ -1,4 +1,4 @@
-classdef ElectrodeContact < openminds.abstract.Schema
+classdef ElectrodeContact < openminds.Node
 %ElectrodeContact - Structured information on an electrode contact.
 %
 %   PROPERTIES:
@@ -82,7 +82,7 @@ classdef ElectrodeContact < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Laterality < openminds.abstract.ControlledTerm
+classdef Laterality < openminds.base.ControlledTerm
 %Laterality - Structured information on the lateral direction.
 %
 %   PROPERTIES:
@@ -46,7 +46,7 @@ classdef Laterality < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

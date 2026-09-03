@@ -1,4 +1,4 @@
-classdef License < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
+classdef License < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %License - Structured information on a used license.
 %
 %   PROPERTIES:
@@ -55,7 +55,7 @@ classdef License < openminds.abstract.Schema & openminds.internal.mixin.HasContr
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

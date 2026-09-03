@@ -1,4 +1,4 @@
-classdef MetaDataModel < openminds.abstract.Schema
+classdef MetaDataModel < openminds.Node
 %MetaDataModel - No description available.
 %
 %   PROPERTIES:
@@ -96,7 +96,7 @@ classdef MetaDataModel < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

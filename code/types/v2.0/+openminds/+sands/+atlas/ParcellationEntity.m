@@ -1,4 +1,4 @@
-classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
+classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %ParcellationEntity - No description available.
 %
 %   PROPERTIES:
@@ -94,7 +94,7 @@ classdef ParcellationEntity < openminds.abstract.Schema & openminds.internal.mix
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Simulation < openminds.abstract.Schema
+classdef Simulation < openminds.Node
 %Simulation - Structured information about a process of running simulations of a computational model.
 %
 %   PROPERTIES:
@@ -167,7 +167,7 @@ classdef Simulation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

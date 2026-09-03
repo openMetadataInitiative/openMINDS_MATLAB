@@ -1,4 +1,4 @@
-classdef Contribution < openminds.abstract.Schema
+classdef Contribution < openminds.Node
 %Contribution - Structured information on the contribution made to a research product.
 %
 %   PROPERTIES:
@@ -46,7 +46,7 @@ classdef Contribution < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

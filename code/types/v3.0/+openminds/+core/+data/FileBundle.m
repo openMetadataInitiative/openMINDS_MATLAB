@@ -1,4 +1,4 @@
-classdef FileBundle < openminds.abstract.Schema
+classdef FileBundle < openminds.Node
 %FileBundle - Structured information on a bundle of file instances.
 %
 %   PROPERTIES:
@@ -90,7 +90,7 @@ classdef FileBundle < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

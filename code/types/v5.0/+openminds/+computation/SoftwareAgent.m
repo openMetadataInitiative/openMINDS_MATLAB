@@ -1,4 +1,4 @@
-classdef SoftwareAgent < openminds.abstract.Schema
+classdef SoftwareAgent < openminds.Node
 %SoftwareAgent - Structured information about a piece of software or web service that can perform a task autonomously.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef SoftwareAgent < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

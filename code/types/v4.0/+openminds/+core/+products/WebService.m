@@ -1,4 +1,4 @@
-classdef WebService < openminds.abstract.Schema
+classdef WebService < openminds.Node
 %WebService - No description available.
 %
 %   PROPERTIES:
@@ -84,7 +84,7 @@ classdef WebService < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

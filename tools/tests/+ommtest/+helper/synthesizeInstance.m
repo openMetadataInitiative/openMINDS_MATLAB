@@ -147,7 +147,7 @@ end
 function tf = isOpenMindsType(className)
     metaClass = meta.class.fromName(className);
     tf = ~isempty(metaClass) && ~metaClass.Abstract ...
-        && any(ismember(superclasses(className), {'openminds.abstract.Schema'}));
+        && any(ismember(superclasses(className), {'openminds.Node'}));
 end
 
 function values = synthesizeInstanceValues(allowedTypes, linkDepth, numItems)
@@ -227,7 +227,7 @@ function tf = isControlledTerm(className)
     superclassNames = superclasses(className);
     tf = any(ismember(superclassNames, ...
         {'openminds.internal.mixin.HasControlledInstance', ...
-         'openminds.abstract.ControlledTerm'}));
+         'openminds.base.ControlledTerm'}));
 end
 
 function [wasAssigned, reason] = tryAssign(instance, propertyName, candidates)

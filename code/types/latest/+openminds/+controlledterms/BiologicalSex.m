@@ -1,4 +1,4 @@
-classdef BiologicalSex < openminds.abstract.ControlledTerm
+classdef BiologicalSex < openminds.base.ControlledTerm
 %BiologicalSex - Structured information on the biological sex of a subject.
 %
 %   PROPERTIES:
@@ -51,7 +51,7 @@ classdef BiologicalSex < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

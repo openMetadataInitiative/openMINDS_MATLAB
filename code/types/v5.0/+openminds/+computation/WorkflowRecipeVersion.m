@@ -1,4 +1,4 @@
-classdef WorkflowRecipeVersion < openminds.abstract.Schema
+classdef WorkflowRecipeVersion < openminds.Node
 %WorkflowRecipeVersion - Structured information about a specific implemented version of a workflow recipe.
 %
 %   PROPERTIES:
@@ -222,7 +222,7 @@ classdef WorkflowRecipeVersion < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

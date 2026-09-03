@@ -1,4 +1,4 @@
-classdef DeploymentEnvironmentType < openminds.abstract.ControlledTerm
+classdef DeploymentEnvironmentType < openminds.base.ControlledTerm
 %DeploymentEnvironmentType - No description available.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef DeploymentEnvironmentType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Copyright < openminds.abstract.Schema
+classdef Copyright < openminds.Node
 %Copyright - Structured information on the copyright.
 %
 %   PROPERTIES:
@@ -45,7 +45,7 @@ classdef Copyright < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

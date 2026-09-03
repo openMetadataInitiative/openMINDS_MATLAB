@@ -1,4 +1,4 @@
-classdef ProgrammingLanguage < openminds.abstract.ControlledTerm
+classdef ProgrammingLanguage < openminds.base.ControlledTerm
 %ProgrammingLanguage - Structured information on the programming language.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef ProgrammingLanguage < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

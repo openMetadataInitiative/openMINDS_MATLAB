@@ -1,4 +1,4 @@
-classdef ContactInformation < openminds.abstract.Schema
+classdef ContactInformation < openminds.Node
 %ContactInformation - Structured information about how to contact a given person or consortium.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef ContactInformation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

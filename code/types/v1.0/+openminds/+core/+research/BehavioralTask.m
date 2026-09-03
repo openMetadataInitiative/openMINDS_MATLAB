@@ -1,4 +1,4 @@
-classdef BehavioralTask < openminds.abstract.Schema
+classdef BehavioralTask < openminds.Node
 %BehavioralTask - Structured information on the behavioral task that had to be performed by a subject.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef BehavioralTask < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

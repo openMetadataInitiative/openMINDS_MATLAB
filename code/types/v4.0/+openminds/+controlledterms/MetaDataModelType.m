@@ -1,4 +1,4 @@
-classdef MetaDataModelType < openminds.abstract.ControlledTerm
+classdef MetaDataModelType < openminds.base.ControlledTerm
 %MetaDataModelType - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef MetaDataModelType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

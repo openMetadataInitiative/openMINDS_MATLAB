@@ -1,4 +1,4 @@
-classdef SpatialEncoding < openminds.abstract.ControlledTerm
+classdef SpatialEncoding < openminds.base.ControlledTerm
 %SpatialEncoding - No description available.
 %
 %   PROPERTIES:
@@ -51,7 +51,7 @@ classdef SpatialEncoding < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

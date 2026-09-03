@@ -55,7 +55,7 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
         %
         %   PARAMETERS:
         %   -----------
-        %   instances : openminds.abstract.Schema, cell array, or openminds.Collection
+        %   instances : openminds.Node, cell array, or openminds.Collection
         %       Instance(s) to save
         %   options : struct (optional)
         %       Additional options (implementation-specific)
@@ -69,7 +69,7 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
 
             arguments
                 obj (1,1) openminds.internal.FileMetadataStore
-                instances % openminds.abstract.Schema, cell array, or openminds.Collection
+                instances % openminds.Node, cell array, or openminds.Collection
                 options struct = struct() %#ok<INUSA>
             end
             
@@ -111,7 +111,7 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
         %   RETURNS:
         %   --------
         %   instances : cell array
-        %       Cell array of openminds.abstract.Schema instances
+        %       Cell array of openminds.Node instances
             
             arguments
                 obj (1,1) openminds.internal.FileMetadataStore

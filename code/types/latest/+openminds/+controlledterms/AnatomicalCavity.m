@@ -1,4 +1,4 @@
-classdef AnatomicalCavity < openminds.abstract.ControlledTerm
+classdef AnatomicalCavity < openminds.base.ControlledTerm
 %AnatomicalCavity - No description available.
 %
 %   PROPERTIES:
@@ -78,7 +78,7 @@ classdef AnatomicalCavity < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

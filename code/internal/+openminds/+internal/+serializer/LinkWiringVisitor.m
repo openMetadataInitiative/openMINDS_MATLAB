@@ -1,4 +1,4 @@
-classdef LinkWiringVisitor < openminds.abstract.BaseVisitor
+classdef LinkWiringVisitor < openminds.base.Visitor
 % LinkWiringVisitor - Replaces reference stubs with the instances they name
 %
 %   After a document is parsed, each node is built on its own and its
@@ -10,7 +10,7 @@ classdef LinkWiringVisitor < openminds.abstract.BaseVisitor
 %   A stub naming a controlled instance that is not part of the document
 %   is resolved from the local instance library instead.
 %
-%   See also openminds.abstract.BaseDeserializer
+%   See also openminds.base.Deserializer
 
     properties (Access = private)
         % Identifier to instance, for everything in the document

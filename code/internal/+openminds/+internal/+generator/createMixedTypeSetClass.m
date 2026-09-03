@@ -15,7 +15,7 @@ function className = createMixedTypeSetClass(schemaName, propertyName, allowedTy
 % Example:
 %   className = createMixedTypeSetClass('MySchema', 'MyProperty', ["Type1", "Type2"])
 %
-% See also: openminds.abstract.MixedTypeSet
+% See also: openminds.base.MixedTypeSet
     
     import openminds.internal.generator.utility.cellArrayToStringArrayLiteral
     

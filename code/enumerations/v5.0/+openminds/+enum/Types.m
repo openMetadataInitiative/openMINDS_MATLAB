@@ -1,4 +1,4 @@
-classdef Types < openminds.base.TypesEnumerationBase
+classdef Types < openminds.base.TypesEnumeration
     enumeration
         None('None')
         AnatomicalAtlas("openminds.sands.atlas.AnatomicalAtlas")

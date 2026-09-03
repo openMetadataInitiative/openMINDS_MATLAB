@@ -1,5 +1,5 @@
-classdef (Abstract) BaseTransformer < openminds.internal.graph.TraversalCore
-% BaseTransformer - Map each node of an instance graph to an output value
+classdef (Abstract) Transformer < openminds.internal.graph.TraversalCore
+% Transformer - Map each node of an instance graph to an output value
 %
 %   Subclass this for operations that build something from a graph rather
 %   than modify it: serializing, exporting, converting between formats.
@@ -10,7 +10,7 @@ classdef (Abstract) BaseTransformer < openminds.internal.graph.TraversalCore
 %   ------
 %   Implement how a node begins and what its children contribute:
 %
-%       classdef MyTransformer < openminds.abstract.BaseTransformer
+%       classdef MyTransformer < openminds.base.Transformer
 %           methods (Access = protected)
 %               function result = beginNode(obj, node)
 %                   result = struct('type', node.X_TYPE);
@@ -31,20 +31,20 @@ classdef (Abstract) BaseTransformer < openminds.internal.graph.TraversalCore
 %   represented by representRevisit. Meeting it again later, in a
 %   different subtree, is not a cycle and is transformed normally.
 %
-%   This differs from openminds.abstract.BaseVisitor, where a node is
+%   This differs from openminds.base.Visitor, where a node is
 %   visited at most once for the whole traversal. A visitor acts on each
 %   node once; a transformer has to produce a value everywhere a node
 %   appears.
 %
-%   See also openminds.abstract.BaseVisitor, openminds.internal.graph.TraversalCore
+%   See also openminds.base.Visitor, openminds.internal.graph.TraversalCore
 
     methods (Sealed)
         function result = transform(obj, node)
         % transform - Build the representation of a node and its children
 
             arguments
-                obj (1,1) openminds.abstract.BaseTransformer
-                node (1,1) openminds.abstract.Schema
+                obj (1,1) openminds.base.Transformer
+                node (1,1) openminds.Node
             end
 
             if obj.wasVisited(node)

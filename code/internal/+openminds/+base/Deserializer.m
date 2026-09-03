@@ -1,7 +1,7 @@
-classdef (Abstract) BaseDeserializer < handle
-% BaseDeserializer - Turns serialized data into linked openMINDS instances
+classdef (Abstract) Deserializer < handle
+% Deserializer - Turns serialized data into linked openMINDS instances
 %
-%   The counterpart to BaseSerializer. Subclasses implement parseToStructs
+%   The counterpart to openminds.base.Serializer. Subclasses implement parseToStructs
 %   for one serialization format; this class provides the parts that do
 %   not depend on the format: dispatching each node to its type, building
 %   the instances, and wiring the references between them.
@@ -10,7 +10,7 @@ classdef (Abstract) BaseDeserializer < handle
 %   ------
 %   Subclasses implement one method:
 %
-%       classdef MyDeserializer < openminds.abstract.BaseDeserializer
+%       classdef MyDeserializer < openminds.base.Deserializer
 %           methods (Access = protected)
 %               function rawStructs = parseToStructs(obj, data)
 %                   ...
@@ -18,7 +18,7 @@ classdef (Abstract) BaseDeserializer < handle
 %           end
 %       end
 %
-%   See also openminds.abstract.BaseSerializer,
+%   See also openminds.base.Serializer,
 %   openminds.internal.serializer.LinkWiringVisitor
 
     properties (Access = protected)

@@ -1,4 +1,4 @@
-classdef ModificationScope < openminds.abstract.ControlledTerm
+classdef ModificationScope < openminds.base.ControlledTerm
 %ModificationScope - No description available.
 %
 %   PROPERTIES:
@@ -53,7 +53,7 @@ classdef ModificationScope < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Strain < openminds.abstract.ControlledTerm
+classdef Strain < openminds.base.ControlledTerm
 %Strain - No description available.
 %
 %   PROPERTIES:
@@ -44,7 +44,7 @@ classdef Strain < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

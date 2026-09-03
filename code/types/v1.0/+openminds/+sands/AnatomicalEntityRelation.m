@@ -1,4 +1,4 @@
-classdef AnatomicalEntityRelation < openminds.abstract.Schema
+classdef AnatomicalEntityRelation < openminds.Node
 %AnatomicalEntityRelation - Structured information on the relation between one anatomical entity and another.
 %
 %   PROPERTIES:
@@ -70,7 +70,7 @@ classdef AnatomicalEntityRelation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

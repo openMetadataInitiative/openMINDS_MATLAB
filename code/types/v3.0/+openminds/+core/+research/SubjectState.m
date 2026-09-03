@@ -1,4 +1,4 @@
-classdef SubjectState < openminds.abstract.Schema
+classdef SubjectState < openminds.Node
 %SubjectState - Structured information on a temporary state of a subject.
 %
 %   PROPERTIES:
@@ -112,7 +112,7 @@ classdef SubjectState < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

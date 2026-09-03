@@ -1,4 +1,4 @@
-classdef Consortium < openminds.abstract.Schema
+classdef Consortium < openminds.Node
 %Consortium - Structured information about an association of two or more persons or organizations, with the objective of participating in a common activity.
 %
 %   PROPERTIES:
@@ -56,7 +56,7 @@ classdef Consortium < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

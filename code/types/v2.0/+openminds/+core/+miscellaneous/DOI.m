@@ -1,4 +1,4 @@
-classdef DOI < openminds.abstract.Schema
+classdef DOI < openminds.Node
 %DOI - Structured information about a digital object identifier, as standardized by the International Organization for Standardization.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef DOI < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

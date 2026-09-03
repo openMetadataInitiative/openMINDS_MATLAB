@@ -1,4 +1,4 @@
-classdef CranialWindowReinforcementType < openminds.abstract.ControlledTerm
+classdef CranialWindowReinforcementType < openminds.base.ControlledTerm
 %CranialWindowReinforcementType - No description available.
 %
 %   PROPERTIES:
@@ -49,7 +49,7 @@ classdef CranialWindowReinforcementType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

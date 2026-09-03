@@ -1,4 +1,4 @@
-classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
+classdef CommonCoordinateSpace < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %CommonCoordinateSpace - No description available.
 %
 %   PROPERTIES:
@@ -115,7 +115,7 @@ classdef CommonCoordinateSpace < openminds.abstract.Schema & openminds.internal.
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

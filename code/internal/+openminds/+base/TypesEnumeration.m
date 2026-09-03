@@ -1,4 +1,4 @@
-classdef TypesEnumerationBase
+classdef TypesEnumeration
 
     properties (SetAccess=immutable)
         ClassName (1,1) string
@@ -7,7 +7,7 @@ classdef TypesEnumerationBase
     end
 
     methods
-        function obj = TypesEnumerationBase(name)
+        function obj = TypesEnumeration(name)
             obj.ClassName = name;
             obj.AliasClassName = obj.createAliasClassName();
             obj.TypeURI = obj.getTypeURI();

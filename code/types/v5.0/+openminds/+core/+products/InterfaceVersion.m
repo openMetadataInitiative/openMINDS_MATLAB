@@ -1,4 +1,4 @@
-classdef InterfaceVersion < openminds.abstract.Schema
+classdef InterfaceVersion < openminds.Node
 %InterfaceVersion - No description available.
 %
 %   PROPERTIES:
@@ -206,7 +206,7 @@ classdef InterfaceVersion < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

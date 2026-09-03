@@ -1,4 +1,4 @@
-classdef OrganSystemStructure < openminds.abstract.ControlledTerm
+classdef OrganSystemStructure < openminds.base.ControlledTerm
 %OrganSystemStructure - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef OrganSystemStructure < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

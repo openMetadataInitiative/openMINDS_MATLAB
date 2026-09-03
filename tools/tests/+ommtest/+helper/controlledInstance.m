@@ -6,7 +6,7 @@ function instance = controlledInstance(className, instanceName)
 %
 %   openMINDS exposes two disjoint mechanisms for controlled instances and
 %   there is no common entry point. Subclasses of
-%   openminds.abstract.ControlledTerm take the instance name directly in
+%   openminds.base.ControlledTerm take the instance name directly in
 %   their constructor, while types using the
 %   openminds.internal.mixin.HasControlledInstance mixin require the static
 %   fromName method and reject a string constructor argument. This function

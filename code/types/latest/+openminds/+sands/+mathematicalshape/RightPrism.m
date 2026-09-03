@@ -1,4 +1,4 @@
-classdef RightPrism < openminds.abstract.Schema
+classdef RightPrism < openminds.Node
 %RightPrism - No description available.
 %
 %   PROPERTIES:
@@ -46,7 +46,7 @@ classdef RightPrism < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

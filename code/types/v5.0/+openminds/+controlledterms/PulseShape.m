@@ -1,4 +1,4 @@
-classdef PulseShape < openminds.abstract.ControlledTerm
+classdef PulseShape < openminds.base.ControlledTerm
 %PulseShape - No description available.
 %
 %   PROPERTIES:
@@ -54,7 +54,7 @@ classdef PulseShape < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

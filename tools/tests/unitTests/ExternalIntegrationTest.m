@@ -3,8 +3,8 @@ classdef ExternalIntegrationTest < matlab.unittest.TestCase
 %
 %   Exercises the contract that lets a library integrate a database or
 %   format without changing openMINDS_MATLAB: a mock graph database with
-%   its own serializer (openminds.abstract.BaseSerializer), deserializer
-%   (openminds.abstract.BaseDeserializer), store
+%   its own serializer (openminds.base.Serializer), deserializer
+%   (openminds.base.Deserializer), store
 %   (openminds.interface.MetadataStore) and resolver
 %   (openminds.interface.LinkResolver). If a change here breaks these
 %   tests, it breaks every external integration, openminds-kg-sync

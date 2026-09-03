@@ -1,4 +1,4 @@
-classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasControlledInstance
+classdef ContentType < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %ContentType - Structured information on the content type of a file instance, bundle or repository.
 %
 %   PROPERTIES:
@@ -82,7 +82,7 @@ classdef ContentType < openminds.abstract.Schema & openminds.internal.mixin.HasC
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

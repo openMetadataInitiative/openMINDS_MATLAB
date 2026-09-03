@@ -1,4 +1,4 @@
-classdef TissueSample < openminds.abstract.Schema
+classdef TissueSample < openminds.Node
 %TissueSample - Structured information on a tissue sample.
 %
 %   PROPERTIES:
@@ -106,7 +106,7 @@ classdef TissueSample < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

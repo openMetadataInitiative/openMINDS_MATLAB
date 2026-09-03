@@ -4,5 +4,5 @@ function tf = isControlledInstance(value)
 %   tf = openminds.utility.isControlledInstance(value)
 
     % Todo: Should it work for arrays and cell arrays?
-    tf = isa(value, 'openminds.abstract.ControlledTerm');
+    tf = isa(value, 'openminds.base.ControlledTerm');
 end

@@ -18,7 +18,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 % The behavior is similar to the matlab.mixin.Heterogeneous, but with some
 % key differences. If using matlab.mixin.Heterogeneous, it would need to be
 % added as a mixin the the base class of metadata types, i.e
-% openminds.abstract.Schema and as a result any typed instance could be
+% openminds.Node and as a result any typed instance could be
 % mixed with any other typed instance. However, the MixedTypeSet only
 % allows mixing a specified subset of instances in a specific context. For
 % example, the openminds.internal.mixedtype.datasetversion.Author allows
@@ -182,7 +182,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
     
         function instance = resolve(obj, options)
             arguments
-                obj (1,:) openminds.internal.abstract.MixedTypeSet
+                obj (1,:) openminds.base.MixedTypeSet
                 options.NumLinksToResolve = 0
             end
             for i = 1:numel(obj)

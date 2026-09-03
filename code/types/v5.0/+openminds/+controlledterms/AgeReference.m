@@ -1,4 +1,4 @@
-classdef AgeReference < openminds.abstract.ControlledTerm
+classdef AgeReference < openminds.base.ControlledTerm
 %AgeReference - No description available.
 %
 %   PROPERTIES:
@@ -51,7 +51,7 @@ classdef AgeReference < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

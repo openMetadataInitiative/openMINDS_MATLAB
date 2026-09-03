@@ -1,4 +1,4 @@
-classdef Model < openminds.abstract.Schema
+classdef Model < openminds.Node
 %Model - Structured information on a computational model (concept level).
 %
 %   PROPERTIES:
@@ -139,7 +139,7 @@ classdef Model < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

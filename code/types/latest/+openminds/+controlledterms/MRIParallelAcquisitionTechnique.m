@@ -1,4 +1,4 @@
-classdef MRIParallelAcquisitionTechnique < openminds.abstract.ControlledTerm
+classdef MRIParallelAcquisitionTechnique < openminds.base.ControlledTerm
 %MRIParallelAcquisitionTechnique - No description available.
 %
 %   PROPERTIES:
@@ -49,7 +49,7 @@ classdef MRIParallelAcquisitionTechnique < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

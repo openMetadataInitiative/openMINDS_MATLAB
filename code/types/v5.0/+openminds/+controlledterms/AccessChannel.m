@@ -1,4 +1,4 @@
-classdef AccessChannel < openminds.abstract.ControlledTerm
+classdef AccessChannel < openminds.base.ControlledTerm
 %AccessChannel - No description available.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef AccessChannel < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

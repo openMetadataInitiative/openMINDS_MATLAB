@@ -1,4 +1,4 @@
-classdef Comment < openminds.abstract.Schema
+classdef Comment < openminds.Node
 %Comment - Structured information about a short text expressing an opinion on, or giving information about some entity.
 %
 %   PROPERTIES:
@@ -59,7 +59,7 @@ classdef Comment < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

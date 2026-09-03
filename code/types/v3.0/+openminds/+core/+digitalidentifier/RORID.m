@@ -1,4 +1,4 @@
-classdef RORID < openminds.abstract.Schema
+classdef RORID < openminds.Node
 %RORID - A persistent identifier for a research organization, provided by the Research Organization Registry.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef RORID < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

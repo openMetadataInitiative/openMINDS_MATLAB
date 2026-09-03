@@ -1,4 +1,4 @@
-classdef Recording < openminds.abstract.Schema
+classdef Recording < openminds.Node
 %Recording - No description available.
 %
 %   PROPERTIES:
@@ -88,7 +88,7 @@ classdef Recording < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

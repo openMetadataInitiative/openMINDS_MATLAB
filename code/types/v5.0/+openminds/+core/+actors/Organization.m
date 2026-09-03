@@ -1,4 +1,4 @@
-classdef Organization < openminds.abstract.Schema
+classdef Organization < openminds.Node
 %Organization - An entity comprised of one or more natural persons with a particular purpose. [adapted from Wikipedia](https://en.wikipedia.org/wiki/Organization)
 %
 %   PROPERTIES:
@@ -111,7 +111,7 @@ classdef Organization < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

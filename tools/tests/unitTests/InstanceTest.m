@@ -21,7 +21,7 @@ classdef InstanceTest < matlab.unittest.TestCase
 
             % Attempt to create an object of the type class for a metadata schema
             instance = typeConstructor();
-            testCase.assertInstanceOf(instance, 'openminds.abstract.Schema')
+            testCase.assertInstanceOf(instance, 'openminds.Node')
 
             testCase.verifyWarningFree( @(i)dispNoOutput(instance) )
 
@@ -33,7 +33,7 @@ classdef InstanceTest < matlab.unittest.TestCase
 
             if any(ismember(superClassNames, ...
                     {'openminds.internal.mixin.HasControlledInstance', ...
-                    'openminds.abstract.ControlledTerm'}))
+                    'openminds.base.ControlledTerm'}))
                 instances = feval(sprintf('%s.listInstances', metadataType.ClassName));
                 if ~isempty(instances)
                     testCase.verifyClass(instances, 'string')

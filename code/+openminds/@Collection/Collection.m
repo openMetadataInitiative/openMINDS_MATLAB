@@ -107,7 +107,7 @@ classdef Collection < handle
         %       - MetadataStore : A metadata store for saving/loading instances
 
             arguments (Repeating)
-                instance % openminds.abstract.Schema
+                instance % openminds.Node
             end
             arguments
                 options.Name (1,1) string = ""
@@ -184,7 +184,7 @@ classdef Collection < handle
                 obj openminds.Collection % Object of this class
             end
             arguments (Repeating)
-                instance % openminds.abstract.Schema
+                instance % openminds.Node
             end
             arguments
                 options.AddSubNodesOnly = false;
@@ -504,7 +504,7 @@ classdef Collection < handle
         function wasAdded = addNode(obj, instance, options)
             arguments
                 obj (1,1) openminds.Collection
-                instance (1,1) openminds.abstract.Schema
+                instance (1,1) openminds.Node
                 options.AddSubNodesOnly = false
                 options.AbortIfNodeExists = true;
             end

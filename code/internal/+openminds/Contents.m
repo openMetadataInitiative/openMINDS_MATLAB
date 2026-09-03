@@ -1,8 +1,8 @@
 % openMINDS (internal)
 %   Contains internal files to support the MATLAB classes for openMINDS metadata types
 %
-%        abstract - openminds.abstract is a package containing abstract base
-%                   classes for the openMINDS MATLAB schema classes.
+%        base     - openminds.base is a package containing the base classes
+%                   the openMINDS MATLAB type classes are built on
 %        internal - openminds.internal is a package containing functions and
 %                   classes to support generation and usage of the openMINDS
 %                   metadata types in MATLAB

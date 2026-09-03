@@ -1,4 +1,4 @@
-classdef Visualization < openminds.abstract.Schema
+classdef Visualization < openminds.Node
 %Visualization - Structured information about a process of visualizing a computational model, a computational process, or a dataset.
 %
 %   PROPERTIES:
@@ -167,7 +167,7 @@ classdef Visualization < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

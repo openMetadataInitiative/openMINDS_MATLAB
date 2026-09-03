@@ -1,4 +1,4 @@
-classdef LivePaperResourceItem < openminds.abstract.Schema
+classdef LivePaperResourceItem < openminds.Node
 %LivePaperResourceItem - No description available.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef LivePaperResourceItem < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

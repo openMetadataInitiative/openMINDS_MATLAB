@@ -68,7 +68,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %
         %   PARAMETERS:
         %   -----------
-        %   instances : openminds.abstract.Schema, cell array, or openminds.Collection
+        %   instances : openminds.Node, cell array, or openminds.Collection
         %       Instance(s) to save
         %   options : struct (optional)
         %       Additional options (implementation-specific)
@@ -80,7 +80,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             
             arguments
                 obj (1,1) openminds.internal.FolderMetadataStore
-                instances % openminds.abstract.Schema, cell array, or openminds.Collection
+                instances % openminds.Node, cell array, or openminds.Collection
                 options struct = struct() %#ok<INUSA>
             end
             
@@ -148,7 +148,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   RETURNS:
         %   --------
         %   instances : cell array
-        %       Cell array of openminds.abstract.Schema instances
+        %       Cell array of openminds.Node instances
             
             arguments
                 obj (1,1) openminds.internal.FolderMetadataStore
@@ -191,11 +191,11 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %
         %   The path is derived from the instance itself rather than from
         %   its serialized document, so this works regardless of which
-        %   BaseSerializer subclass produced the document.
+        %   Serializer subclass produced the document.
         %
         %   PARAMETERS:
         %   -----------
-        %   instance : openminds.abstract.Schema
+        %   instance : openminds.Node
         %       The instance to generate a filepath for
         %
         %   RETURNS:

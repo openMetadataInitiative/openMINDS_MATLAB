@@ -1,7 +1,7 @@
-classdef JsonLdSerializer < openminds.abstract.BaseSerializer
+classdef JsonLdSerializer < openminds.base.Serializer
 %JsonLdSerializer Serializer for JSON-LD format
 %
-%   This class extends BaseSerializer to provide JSON-LD specific
+%   This class extends openminds.base.Serializer to provide JSON-LD specific
 %   serialization for openMINDS instances.
 %
 %   USAGE:
@@ -26,7 +26,7 @@ classdef JsonLdSerializer < openminds.abstract.BaseSerializer
                 config.?openminds.internal.serializer.SerializationConfig
             end
             nvPairs = namedargs2cell(config);
-            obj = obj@openminds.abstract.BaseSerializer(nvPairs{:});
+            obj = obj@openminds.base.Serializer(nvPairs{:});
         end
     end
 
@@ -340,7 +340,7 @@ classdef JsonLdSerializer < openminds.abstract.BaseSerializer
         %
         %   PARAMETERS:
         %   -----------
-        %   instances : openminds.abstract.Schema or cell array
+        %   instances : openminds.Node or cell array
         %       Instance(s) to serialize
         %
         %   Configuration options (Name-Value pairs):
@@ -355,7 +355,7 @@ classdef JsonLdSerializer < openminds.abstract.BaseSerializer
         %       JSON-LD formatted string(s)
             
             arguments
-                instances % openminds.abstract.Schema or cell array
+                instances % openminds.Node or cell array
                 options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 1
                 options.PrettyPrint (1,1) logical = true
                 options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"

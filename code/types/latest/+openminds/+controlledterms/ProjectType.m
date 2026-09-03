@@ -1,4 +1,4 @@
-classdef ProjectType < openminds.abstract.ControlledTerm
+classdef ProjectType < openminds.base.ControlledTerm
 %ProjectType - No description available.
 %
 %   PROPERTIES:
@@ -49,7 +49,7 @@ classdef ProjectType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

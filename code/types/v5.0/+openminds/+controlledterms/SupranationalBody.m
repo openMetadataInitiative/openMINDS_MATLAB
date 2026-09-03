@@ -1,4 +1,4 @@
-classdef SupranationalBody < openminds.abstract.ControlledTerm
+classdef SupranationalBody < openminds.base.ControlledTerm
 %SupranationalBody - No description available.
 %
 %   PROPERTIES:
@@ -56,7 +56,7 @@ classdef SupranationalBody < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

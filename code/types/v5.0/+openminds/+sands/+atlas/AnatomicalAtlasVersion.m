@@ -1,4 +1,4 @@
-classdef AnatomicalAtlasVersion < openminds.abstract.Schema
+classdef AnatomicalAtlasVersion < openminds.Node
 %AnatomicalAtlasVersion - No description available.
 %
 %   PROPERTIES:
@@ -256,7 +256,7 @@ classdef AnatomicalAtlasVersion < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

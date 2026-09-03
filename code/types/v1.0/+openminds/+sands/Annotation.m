@@ -1,4 +1,4 @@
-classdef Annotation < openminds.abstract.Schema
+classdef Annotation < openminds.Node
 %Annotation - Structured information on an image annotation.
 %
 %   PROPERTIES:
@@ -107,7 +107,7 @@ classdef Annotation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 
