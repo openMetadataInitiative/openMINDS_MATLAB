@@ -9,13 +9,8 @@ classdef MockLinkResolver < openminds.internal.resolver.AbstractLinkResolver
         IRIPrefix = "https://mock.io/"
     end
     
-    methods (Static)
-        function instance = resolve(instance, options)
-            arguments
-                instance
-                options.NumLinksToResolve = 0 %#ok<INUSA>
-            end
-            
+    methods
+        function instance = resolveNode(~, instance)
             % Mock implementation - populate instance with fake data
             if isa(instance, 'openminds.core.Person')
                 % Populate a Person with mock data
@@ -36,9 +31,10 @@ classdef MockLinkResolver < openminds.internal.resolver.AbstractLinkResolver
             % For any other type, just leave as-is (could add more types as needed)
         end
         
-        function tf = canResolve(IRI)
+        function tf = canResolve(~, IRI)
             arguments
-                IRI (1,:) string
+                ~
+                IRI (1,1) string
             end
             % This mock resolver can handle IRIs that start with mock.io
             tf = startsWith(IRI, ommtest.helper.mock.MockLinkResolver.IRIPrefix);

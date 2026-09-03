@@ -97,6 +97,13 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         %  - instance (openminds.abstract.Schema) - 
         %    an openMINDS typed metadata instance
         %
+        % Output Arguments:
+        %  - instance - the resolved instance or instances. Resolving a
+        %    reference whose type was not known produces an instance of a
+        %    different class, so the result is returned rather than
+        %    assigned in place. If an array resolves to more than one
+        %    class, the result is a cell array.
+        %
         %  - options (name-value pairs) -
         %    Optional name-value pairs. Available options:
         %
@@ -117,35 +124,31 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 % options.IsEmbedded = false - Todo?
             end
 
-            for i = 1:numel(obj)
-                if obj(i).IsReference
-                    resolver = obj(i).selectLinkResolver(options);
-                    obj(i) = resolver.resolve(obj(i), ...
-                        "NumLinksToResolve", options.NumLinksToResolve);
-                    obj(i).IsReference = false; % Update state: mark as resolved
-
-                elseif options.NumLinksToResolve > 0
-                    % The instance itself is resolved, so spend one unit of
-                    % depth following its links. Each element derives its
-                    % child depth from the incoming budget, so the depth one
-                    % element spends is still available to the next.
-                    childOptions = options;
-                    childOptions.NumLinksToResolve = options.NumLinksToResolve - 1;
-                    nvPairs = namedargs2cell(childOptions);
-
-                    linkedInstances = obj(i).getLinkedInstances();
-                    for j = 1:numel(linkedInstances)
-                        linkedInstances{j}.resolve(nvPairs{:});
-                    end
-                    embeddedInstances = obj(i).getEmbeddedInstances();
-                    for j = 1:numel(embeddedInstances)
-                        embeddedInstances{j}.resolve(nvPairs{:});
-                    end
-                end
-                % An instance that is already resolved and has no depth left
-                % to spend needs no work.
+            visitorOptions = {"RemainingLinkDepth", options.NumLinksToResolve};
+            if isfield(options, 'LinkResolver')
+                visitorOptions = [visitorOptions, {"LinkResolver", options.LinkResolver}];
             end
-            instance = obj; % Set output
+
+            % Results are collected in a cell array rather than assigned
+            % back into obj, because resolving a reference whose type was
+            % unknown produces an instance of a different class, which
+            % cannot be stored in an array of the original class.
+            resolved = cell(1, numel(obj));
+            for i = 1:numel(obj)
+                % A fresh visitor per element, so the visited registry of
+                % one element does not stop a shared node from being
+                % resolved for the next.
+                visitor = openminds.internal.resolver.ResolvingVisitor(visitorOptions{:});
+                resolved{i} = visitor.visit(obj(i));
+            end
+
+            resolvedClasses = cellfun(@class, resolved, 'UniformOutput', false);
+            if isscalar(unique(resolvedClasses))
+                instance = [resolved{:}];
+            else
+                % Instances of different types cannot form an object array
+                instance = resolved;
+            end
         end
 
         function str = serialize(obj, options)
@@ -660,23 +663,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Access = private)
-        function resolver = selectLinkResolver(obj, options)
-        % selectLinkResolver - Resolver for this instance, from options or registry
-
-            if isfield(options, 'LinkResolver')
-                resolver = options.LinkResolver;
-            else
-                resolver = openminds.internal.getLinkResolver(obj.id);
-            end
-
-            if isempty(resolver)
-                error('openMINDS:LinkResolver:NotFound', ...
-                    'No link resolver found for object with id "%s".', obj.id);
-            end
-        end
-    end
-
     methods (Access = private) % Introspective utility methods
         
         function tf = isSubsForProperty(obj, subs)
@@ -843,6 +829,13 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods (Access = ?openminds.internal.mixin.StructAdapter)
         function assignInstanceId(obj, id)
             obj.id = id;
+        end
+    end
+
+    methods (Access = ?openminds.internal.resolver.ResolvingVisitor)
+        function markResolved(obj)
+        % markResolved - Record that this node is no longer a reference
+            obj.IsReference = false;
         end
     end
 
