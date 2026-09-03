@@ -15,6 +15,10 @@ on:
     branches: [ "main" ]
   # Allows for manually running this workflow from the Actions tab
   workflow_dispatch:
+  # Weekly full-model run, so the exhaustive round-trip sweep is exercised
+  # even in weeks without a push to main
+  schedule:
+    - cron: '0 3 * * 1'
   
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -61,19 +65,28 @@ jobs:
           sarif_file: docs/reports/code_issues.sarif
           
       # Run all tests in the project.
+      # The round-trip test covers every openMINDS type when
+      # OPENMINDS_TEST_ALL_TYPES is set, which takes several minutes. Pull
+      # requests run a representative sample instead. The full sweep runs
+      # on push to main, which is where the openMINDS pipeline lands
+      # regenerated type classes, and on the weekly schedule.
       - name: Run tests
         if: always()
         uses: matlab-actions/run-command@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENMINDS_TEST_ALL_TYPES: ${{ (github.event_name == 'pull_request') && '0' || '1' }}
         with:
           command: |
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
             addpath(genpath("tools")); testToolbox("CreateBadge", doCreateBadge)
 
-      # Commit updated SVG badges for the issues and tests (if changed)
+      # Commit updated SVG badges for the issues and tests (if changed).
+      # Push events only, so badge commits land on main and nowhere else:
+      # committing them on a pull_request event rewrites the PR head branch
+      # and breaks any stack built on top of it.
       - name: Commit svg badges if updated
-        if: matrix.MATLABVersion == env.LatestMATLABVersion
+        if: matrix.MATLABVersion == env.LatestMATLABVersion && github.event_name == 'push'
         continue-on-error: true
         run: |
           git config user.name "${{ github.workflow }} by ${{ github.actor }}"

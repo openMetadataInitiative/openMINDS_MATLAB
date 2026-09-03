@@ -1,0 +1,13 @@
+{
+  "@context": {
+    "@vocab": "https://openminds.ebrains.eu/vocab/"
+  },
+  "@graph": [
+    {
+      "@id": "https://openminds.ebrains.eu/instances/matlabTestFixture/person-001",
+      "@type": "https://openminds.ebrains.eu/core/Person",
+      "familyName": "Lovelace",
+      "givenName": "Ada"
+    }
+  ]
+}
