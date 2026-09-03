@@ -34,10 +34,13 @@ function tf = isInstanceIRI(name)
     isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI("latest") ...
         || sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI(3);
     
-    URIPath = URI.Path;
-    URIPath(URIPath=="")=[];
+    % The path is empty for an IRI with a host and nothing else, and its
+    % first segment is "" for one ending in a slash. Neither names an
+    % instance, and neither may index the first segment.
+    URIPath = string(URI.Path);
+    URIPath(URIPath == "") = [];
 
-    isInstanceUrl = URIPath(1) == "instances";
+    isInstanceUrl = ~isempty(URIPath) && URIPath(1) == "instances";
 
     tf = isValidUrl && isInstanceUrl;
 end
