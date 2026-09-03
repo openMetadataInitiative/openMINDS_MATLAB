@@ -115,8 +115,8 @@ classdef ResolverTest < matlab.unittest.TestCase
             resolver = openminds.internal.resolver.InstanceResolver();
             
             % Should resolve openMINDS instance IRIs
-            baseURI = openminds.constant.BaseURI("v4");
-            validIRI = baseURI + "/instances/person/123";
+            baseIRI = openminds.constant.BaseIRI("v4");
+            validIRI = baseIRI + "/instances/person/123";
             testCase.verifyTrue(resolver.canResolve(validIRI));
             
             % Should not resolve other IRIs

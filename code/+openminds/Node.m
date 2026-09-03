@@ -280,11 +280,11 @@ classdef Node < handle & matlab.mixin.SetGet & ...
             end
         end
     
-        function linkedIdentifiers = getUnresolvedLinks(obj)
-        % getUnresolvedLinks - Retrieve identifiers of unresolved links
+        function linkedIdentifiers = getUnresolvedLinkIdentifiers(obj)
+        % getUnresolvedLinkIdentifiers - Retrieve identifiers of unresolved links
         %
         % Syntax:
-        %   linkedIdentifiers = getUnresolvedLinks(obj) retrieves the identifiers 
+        %   linkedIdentifiers = getUnresolvedLinkIdentifiers(obj) retrieves the identifiers 
         %   of instances that are not resolved.
         %
         % Input Arguments:
@@ -804,7 +804,7 @@ classdef Node < handle & matlab.mixin.SetGet & ...
 
         % Todo/idea: Specify custom identifier generator
             
-            uuidStr = openminds.internal.utility.string.getuuid();
+            uuidStr = openminds.internal.utility.string.getUUID();
             
             % Use type prefix (currently inactive)
             % schemaName = obj.getTypeName( class(obj) );
@@ -895,10 +895,18 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
-        function semanticIRI = getSemanticIRI(obj)
+    methods
+        function typeIRI = getTypeIRI(obj)
+        % getTypeIRI - IRI of this node's openMINDS type
+
             % Using eval to ensure it also works for empty objects:
-            semanticIRI = eval(sprintf('%s.X_TYPE', class(obj)));
+            typeIRI = eval(sprintf('%s.X_TYPE', class(obj)));
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
+        function iri = getHeaderIRI(obj)
+            iri = obj.getTypeIRI();
         end
     end
     

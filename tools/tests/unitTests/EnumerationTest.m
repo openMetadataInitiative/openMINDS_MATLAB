@@ -19,13 +19,13 @@ classdef EnumerationTest < matlab.unittest.TestCase
             typeEnum = openminds.enum.Types.Person;
             testCase.verifyEqual(typeEnum.ClassName, "openminds.core.actors.Person");
             testCase.verifyEqual(typeEnum.AliasClassName, "openminds.core.Person");
-            testCase.verifyTrue(startsWith(typeEnum.TypeURI, "https://openminds."));
+            testCase.verifyTrue(startsWith(typeEnum.TypeIRI, "https://openminds."));
             
             % Test None special case
             noneEnum = openminds.enum.Types.None;
             testCase.verifyEqual(noneEnum.ClassName, "None");
             testCase.verifyEqual(noneEnum.AliasClassName, "None");
-            testCase.verifyEqual(noneEnum.TypeURI, "None");
+            testCase.verifyEqual(noneEnum.TypeIRI, "None");
             
             % Test instance creation
             personInstance = typeEnum.createInstance();
@@ -53,12 +53,12 @@ classdef EnumerationTest < matlab.unittest.TestCase
             
             % Test static fromAtType method
             % Note: This test assumes the base URI is consistent with the current version
-            baseURI = openminds.constant.BaseURI;
-            fromAtTypeEnum = openminds.enum.Types.fromAtType(baseURI + "/Person");
+            baseIRI = openminds.constant.BaseIRI;
+            fromAtTypeEnum = openminds.enum.Types.fromAtType(baseIRI + "/Person");
             testCase.verifyEqual(fromAtTypeEnum, openminds.enum.Types.Person);
             
             % Test static fromAtType with multiple inputs
-            multipleAtTypes = [baseURI + "/Person", baseURI + "/Dataset"];
+            multipleAtTypes = [baseIRI + "/Person", baseIRI + "/Dataset"];
             multipleEnumsFromAtType = openminds.enum.Types.fromAtType(multipleAtTypes);
             testCase.verifyEqual(multipleEnumsFromAtType, [openminds.enum.Types.Person, openminds.enum.Types.Dataset]);
             

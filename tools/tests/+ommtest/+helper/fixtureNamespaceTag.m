@@ -8,7 +8,7 @@ function tag = fixtureNamespaceTag()
 %   Fixtures are named by namespace rather than by version number because
 %   the namespace is what actually appears in the serialized document.
 
-    baseIRI = openminds.constant.BaseURI();
+    baseIRI = openminds.constant.BaseIRI();
 
     if startsWith(baseIRI, "https://openminds.om-i.org")
         tag = "omi";

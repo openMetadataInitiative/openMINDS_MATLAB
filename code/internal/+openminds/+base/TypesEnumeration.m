@@ -3,14 +3,14 @@ classdef TypesEnumeration
     properties (SetAccess=immutable)
         ClassName (1,1) string
         AliasClassName (1,1) string
-        TypeURI (1,1) string
+        TypeIRI (1,1) string
     end
 
     methods
         function obj = TypesEnumeration(name)
             obj.ClassName = name;
             obj.AliasClassName = obj.createAliasClassName();
-            obj.TypeURI = obj.getTypeURI();
+            obj.TypeIRI = obj.getTypeIRI();
         end
     end
 
@@ -55,11 +55,11 @@ classdef TypesEnumeration
             end
         end
 
-        function typeURI = getTypeURI(obj)
+        function typeIRI = getTypeIRI(obj)
             if obj.ClassName == "None"
-                typeURI = "None";
+                typeIRI = "None";
             else
-                typeURI = eval(sprintf('%s.X_TYPE', obj.ClassName));
+                typeIRI = eval(sprintf('%s.X_TYPE', obj.ClassName));
             end
         end
     end
@@ -141,15 +141,15 @@ classdef TypesEnumeration
             % does not have is dropped by fromStruct and reported by the
             % deserializer; a property whose declaration changed fails on
             % assignment and is reported as an unreadable node.
-            knownBaseURIs = openminds.constant.BaseURI("v1") + "/" | ...
-                            openminds.constant.BaseURI("v4") + "/";
+            knownBaseIRIs = openminds.constant.BaseIRI("v1") + "/" | ...
+                            openminds.constant.BaseIRI("v4") + "/";
 
-            isKnownNamespace = startsWith(typeName, knownBaseURIs);
+            isKnownNamespace = startsWith(typeName, knownBaseIRIs);
             if ~all(isKnownNamespace)
                 error('OPENMINDS_MATLAB:Types:InvalidAtType', ...
                     'Expected @type to start with "%s" or "%s". Got "%s".', ...
-                    openminds.constant.BaseURI("v1"), ...
-                    openminds.constant.BaseURI("v4"), ...
+                    openminds.constant.BaseIRI("v1"), ...
+                    openminds.constant.BaseIRI("v4"), ...
                     typeName(find(~isKnownNamespace, 1)))
             end
 

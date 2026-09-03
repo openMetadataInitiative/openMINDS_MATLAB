@@ -457,8 +457,10 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     end
 
-    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
-        function semanticIRI = getSemanticIRI(obj)
+    methods
+        function propertyIRI = getPropertyIRI(obj)
+        % getPropertyIRI - IRI of the openMINDS property this set of types belongs to
+
             import openminds.internal.utility.string.packageParts
 
             iriPrefix = openminds.constant.PropertyIRIPrefix();
@@ -466,7 +468,13 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
             [~, shortName] = packageParts(class(obj));
             shortName = openminds.internal.utility.string.camelCase(shortName);
-            semanticIRI = iriPrefix + shortName;
+            propertyIRI = iriPrefix + shortName;
+        end
+    end
+
+    methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
+        function iri = getHeaderIRI(obj)
+            iri = obj.getPropertyIRI();
         end
     end
 

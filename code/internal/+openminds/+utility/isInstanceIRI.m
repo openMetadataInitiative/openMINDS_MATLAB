@@ -22,7 +22,7 @@ function tf = isInstanceIRI(name)
 %       instanceIRI = "https://openminds.om-i.org/instances/ageCategory/adolescent"
 %       tf = openminds.utility.isInstanceIRI(instanceIRI);
 %
-%   See also: matlab.net.URI, openminds.constant.BaseURI
+%   See also: matlab.net.URI, openminds.constant.BaseIRI
 
     tf = false;
     if ~startsWith(name, "http")
@@ -31,8 +31,8 @@ function tf = isInstanceIRI(name)
 
     URI = matlab.net.URI(name);
     
-    isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI("latest") ...
-        || sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseURI(3);
+    isValidUrl = sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseIRI("latest") ...
+        || sprintf("%s://%s", URI.Scheme, URI.Host) == openminds.constant.BaseIRI(3);
     
     % The path is empty for an IRI with a host and nothing else, and its
     % first segment is "" for one ending in a slash. Neither names an

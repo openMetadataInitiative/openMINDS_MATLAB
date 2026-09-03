@@ -1,9 +1,9 @@
-function baseURI = BaseURI(version)
-% BaseURI Get the base URI for the specified OpenMINDS schema version
+function baseIRI = BaseIRI(version)
+% BaseIRI Get the base IRI for the specified OpenMINDS schema version
 %
-%   baseURI = openminds.constant.BaseURI(version) returns the base URI as a
+%   baseIRI = openminds.constant.BaseIRI(version) returns the base IRI as a
 %   string that corresponds to the base resource identifier for the specified
-%   OpenMINDS model version. This function dynamically selects the URI based on
+%   OpenMINDS model version. This function dynamically selects the IRI based on
 %   the version input. If no version is specified, the version number of the
 %   currently active openMINDS model is selected.
 %
@@ -14,7 +14,7 @@ function baseURI = BaseURI(version)
 %                 version using openminds.getModelVersion.
 %
 %   Output:
-%       baseURI - A string containing the base URI corresponding to the
+%       baseIRI - A string containing the base IRI corresponding to the
 %                 specified or default schema version.
 %
 %   Conditions:
@@ -22,8 +22,8 @@ function baseURI = BaseURI(version)
 %       - Versions >= 4 return "https://openminds.om-i.org"
 %
 %   Example:
-%       baseURI = openminds.constant.BaseURI(3);  % Returns "https://openminds.ebrains.eu"
-%       baseURI = openminds.constant.BaseURI(4);  % Returns "https://openminds.om-i.org"
+%       baseIRI = openminds.constant.BaseIRI(3);  % Returns "https://openminds.ebrains.eu"
+%       baseIRI = openminds.constant.BaseIRI(4);  % Returns "https://openminds.om-i.org"
 %
 %   See also: openminds.getModelVersion
 
@@ -37,8 +37,8 @@ function baseURI = BaseURI(version)
     end
 
     if version <= 3
-        baseURI = "https://openminds.ebrains.eu";
+        baseIRI = "https://openminds.ebrains.eu";
     elseif version >= 4
-        baseURI = "https://openminds.om-i.org";
+        baseIRI = "https://openminds.om-i.org";
     end
 end

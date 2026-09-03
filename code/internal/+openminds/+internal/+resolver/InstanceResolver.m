@@ -2,7 +2,7 @@ classdef InstanceResolver < openminds.interface.LinkResolver
 % InstanceResolver - Resolves openMINDS controlled instances from the local library
 
     properties (Constant)
-        IRIPrefix = openminds.constant.BaseURI("v1") + "/instances" % Todo: get from constant
+        IRIPrefix = openminds.constant.BaseIRI("v1") + "/instances" % Todo: get from constant
     end
 
     methods
@@ -35,8 +35,8 @@ classdef InstanceResolver < openminds.interface.LinkResolver
                 ~
                 IRI (1,1) string
             end
-            tf = startsWith(IRI, openminds.constant.BaseURI("v1") + "/instances") || ...
-                startsWith(IRI, openminds.constant.BaseURI("v4") + "/instances");
+            tf = startsWith(IRI, openminds.constant.BaseIRI("v1") + "/instances") || ...
+                startsWith(IRI, openminds.constant.BaseIRI("v4") + "/instances");
         end
     end
 end

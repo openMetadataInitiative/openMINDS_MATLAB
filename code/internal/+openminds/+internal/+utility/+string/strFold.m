@@ -1,4 +1,4 @@
-function folded_message = strfold(message, length)
+function folded_message = strFold(message, length)
     % Initialize an empty cell array to store the folded lines
     folded_message = {};
 
