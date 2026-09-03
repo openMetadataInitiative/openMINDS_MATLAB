@@ -528,6 +528,31 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyFalse(contains(document, "MixedTypeReference"));
         end
 
+        function testTypedReferenceSurvivesRoundTrip(testCase)
+            % A reference whose type is known is still a reference, not a
+            % node with no properties. It gets no file of its own, so
+            % loading the folder again gives back a reference rather than
+            % an empty node that the reference silently turned into.
+            referenceIRI = "https://graph.example/instances/contact-001";
+            person = openminds.core.Person("givenName", "A");
+            person.contactInformation = openminds.core.ContactInformation( ...
+                "id", referenceIRI);
+            testCase.assumeTrue(person.contactInformation.isReference());
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "typed-reference-folder-store");
+
+            outputPaths = metadataStore.save(person);
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(contains(string(outputPaths{1}), "Person_"));
+
+            reloaded = metadataStore.load();
+            testCase.assertEqual(numel(reloaded), 1);
+            reloadedLink = reloaded{1}.contactInformation;
+            testCase.verifyTrue(reloadedLink.isReference());
+            testCase.verifyEqual(string(reloadedLink.id), referenceIRI);
+        end
+
         function testSaveEmptyCollection(testCase)
             % A collection with no nodes still saves, giving an empty
             % collection document.

@@ -54,7 +54,7 @@ classdef LinkWiringVisitor < openminds.abstract.BaseVisitor
         function child = wireChild(obj, child)
         % wireChild - Swap a stub for the instance it names
 
-            if ~child.isUnresolved()
+            if ~child.isReference()
                 return
             end
 

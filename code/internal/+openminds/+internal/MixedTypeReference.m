@@ -27,10 +27,13 @@ classdef MixedTypeReference < openminds.abstract.Schema
         end
     end
 
-    methods (Hidden, Access = protected) % CustomDisplay - Method implementation
+    methods
         function tf = isReference(~)
             tf = true;
         end
+    end
+
+    methods (Hidden, Access = protected) % CustomDisplay - Method implementation
             
         function str = getHeader(obj)
             str = getHeader@matlab.mixin.CustomDisplay(obj);

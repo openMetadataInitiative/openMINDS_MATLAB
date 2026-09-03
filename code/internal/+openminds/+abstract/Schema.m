@@ -194,7 +194,35 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             typeName = classNameSplit{end};
         end
 
+        function tf = isReference(obj)
+        % isReference - Whether this instance stands for a node rather than being one
+        %
+        %   A reference carries an identifier and nothing else, and names a
+        %   node that is not present: a stub read from a document, a
+        %   placeholder created with only an IRI, or a link that has not
+        %   been resolved. A node that merely has no properties set is not
+        %   a reference. A reference is never written as a document of its
+        %   own and is not counted as a node of a collection.
+
+            tf = false(1, numel(obj));
+            for i = 1:numel(obj)
+                tf(i) = obj(i).IsReference;
+            end
+        end
+
         function tf = isUnresolved(obj)
+        % isUnresolved - Deprecated, use isReference
+        %
+        %   Kept so existing callers keep working. Warns once per session.
+
+            persistent hasWarned
+            if isempty(hasWarned)
+                hasWarned = true;
+                warning('openMINDS:Schema:IsUnresolvedDeprecated', ...
+                    ['isUnresolved is deprecated and will be removed in a ', ...
+                    'future release. Use isReference instead.'])
+            end
+
             tf = obj.isReference();
         end
     end
@@ -269,9 +297,9 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             numInstances = numel(linkedInstances);
             isUnresolved = false(1, numInstances);
             for i = 1:numInstances
-                isUnresolved(i) = linkedInstances{i}.isUnresolved();
+                isUnresolved(i) = linkedInstances{i}.isReference();
             end
-        
+
             unresolvedInstances = linkedInstances(isUnresolved);
             numUnresolvedInstances = numel(unresolvedInstances);
             linkedIdentifiers = cell(1, numUnresolvedInstances);
@@ -798,12 +826,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods (Access = protected) % Methods related to object display
-        function tf = isReference(obj)
-            tf = false(1, numel(obj));
-            for i = 1:numel(obj)
-                tf(i) = obj(i).IsReference;
-            end
-        end
         
         function displayLabel = getDisplayLabel(obj)
             %schemaShortName = obj.getSchemaShortName(class(obj));

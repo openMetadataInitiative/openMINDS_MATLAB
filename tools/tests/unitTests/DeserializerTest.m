@@ -152,7 +152,7 @@ classdef DeserializerTest < matlab.unittest.TestCase
             instances = testCase.deserialize(document);
 
             testCase.assertNumElements(instances, 1)
-            testCase.verifyTrue(instances{1}.contactInformation.isUnresolved(), ...
+            testCase.verifyTrue(instances{1}.contactInformation.isReference(), ...
                 'A reference the document does not define stays unresolved.')
         end
     end

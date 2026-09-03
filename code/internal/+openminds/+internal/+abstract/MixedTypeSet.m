@@ -284,11 +284,13 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     end
     
-    methods (Access = protected) % Superclass implementations
+    methods
         function tf = isReference(obj)
             tf = isa(obj.Instance, 'struct');
         end
+    end
 
+    methods (Access = protected) % Superclass implementations
         function str = getDisplayLabel(obj)
             if isa(obj.Instance, 'struct')
                 str = '<unresolved link>';

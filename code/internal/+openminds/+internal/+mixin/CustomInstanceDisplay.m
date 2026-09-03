@@ -52,9 +52,12 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
     end
 
     % Abstract - Subclasses must implement:
-    methods (Abstract, Access = protected)
+    methods (Abstract)
+        % isReference - Whether this stands for a node rather than being one
         tf = isReference(obj)
+    end
 
+    methods (Abstract, Access = protected)
         str = getDisplayLabel(obj)
         
         annotation = getAnnotation(obj, width)
