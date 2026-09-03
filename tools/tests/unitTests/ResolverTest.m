@@ -441,6 +441,18 @@ classdef ResolverTest < matlab.unittest.TestCase
                 'The same identifier must select the same resolver every time.')
         end
 
+        function testResolvingAnEmptyArrayKeepsItsClass(testCase)
+        % Resolving returns the instances it was given, so an empty array
+        % of a type comes back as an empty array of that type.
+
+            people = openminds.core.Person.empty(1, 0);
+
+            resolved = people.resolve();
+
+            testCase.verifyClass(resolved, 'openminds.core.actors.Person')
+            testCase.verifyEmpty(resolved)
+        end
+
         function testResolveMultipleLinkedInstances(testCase)
             % Test resolving a node with multiple linked instances
             mockResolver = ommtest.helper.mock.MockLinkResolver();
