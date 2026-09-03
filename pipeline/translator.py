@@ -549,21 +549,39 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         if not all(prop_name in property_names for prop_name in prop_names):
             return _get_default_display_label_method_expression(schema_short_name, property_names)
 
-        if not isinstance(str_formatter, list):
+        # A scalar stringFormat holds a single expression, which is assigned to
+        # the output variable here. A list holds a block of statements, which
+        # must assign the output variable itself because control flow lines such
+        # as "if" cannot be assigned from.
+        is_expression = not isinstance(str_formatter, list)
+        if is_expression:
             str_formatter = [str_formatter]
 
-        for i in range(len(prop_names)):
-            str_formatter = [sf.replace(prop_names[i], f"obj.{prop_names[i]}") for sf in str_formatter]
+        str_formatter = [_qualify_property_names(line, prop_names) for line in str_formatter]
 
-        for i, this_line in enumerate(str_formatter):
-            if 'sprintf' in this_line:
-                this_line = this_line.replace('sprintf', 'str = sprintf')
-                this_line = f"{this_line};"
-                str_formatter[i] = this_line
-        # Join the lines with newline 
+        if is_expression:
+            return f"str = {str_formatter[0]};"
+
+        # Join the lines with newline
         return '\n            '.join(str_formatter)
     else:
         return _get_default_display_label_method_expression(schema_short_name, property_names)
+
+
+def _qualify_property_names(expression, property_names):
+    """
+        Prefix every reference to a schema property in a display label
+        expression with "obj.", so that it resolves against the instance.
+
+        Matches are anchored on identifier boundaries and skip names preceded by
+        a dot. This keeps a short property name from being rewritten inside a
+        longer one ("minValue" within "minValueUnit") and leaves the namespace
+        segments of a qualified function call untouched.
+    """
+    for property_name in property_names:
+        pattern = r"(?<![\w.])" + re.escape(property_name) + r"(?!\w)"
+        expression = re.sub(pattern, f"obj.{property_name}", expression)
+    return expression
 
 
 def _get_default_display_label_method_expression(schema_short_name, property_names):
