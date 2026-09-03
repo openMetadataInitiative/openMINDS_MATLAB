@@ -24,6 +24,23 @@ classdef SerializationTest < matlab.unittest.TestCase
         end
 
 
+        function testVocabularyIriInValueSurvivesDecoding(testCase)
+            % The vocabulary prefix is stripped from property names when a
+            % document is decoded. A string value that happens to hold a
+            % vocabulary IRI must come back unchanged.
+            vocabularyIRI = openminds.internal.serializer.jsonld.getVocabularyIRIs();
+            literalValue = vocabularyIRI(1) + "notAnEmail";
+
+            instance = openminds.core.ContactInformation("email", literalValue);
+            jsonLdDoc = instance.serialize();
+
+            structInstance = openminds.internal.serializer.jsonld2struct( ...
+                string(jsonLdDoc));
+
+            testCase.verifyEqual(string(structInstance.email), literalValue);
+        end
+
+
         function testScalarInstanceToDocument(testCase)
             scalarInstanceWithoutLinks = openminds.core.ContactInformation(...
                 "email", "test@mail.somewhere");
