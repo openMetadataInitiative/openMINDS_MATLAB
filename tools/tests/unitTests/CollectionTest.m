@@ -269,6 +269,23 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(org.id));
         end
         
+        function testSaveWithMetadataStoreOption(testCase)
+        % A store passed to save by name-value must be the store used.
+        % This went through obj.MetadataStore instead, which is empty
+        % unless the collection was constructed with one.
+
+            personInstance = openminds.core.Person('givenName', "Store");
+            collection = openminds.Collection(personInstance);
+
+            filePath = fullfile(pwd, "via-option.jsonld"); % WorkingFolderFixture cwd
+            fileStore = openminds.internal.FileMetadataStore(filePath);
+
+            collection.save("", "MetadataStore", fileStore);
+
+            testCase.verifyTrue(isfile(filePath), ...
+                'The store passed by name-value should have been used to save.')
+        end
+
         function testSaveToMultipleFiles(testCase)
             % Test saving a collection to multiple files
             collection = openminds.Collection();
