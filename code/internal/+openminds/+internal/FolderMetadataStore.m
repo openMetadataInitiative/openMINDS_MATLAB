@@ -92,8 +92,13 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 instances = num2cell(instances);
             end
             
-            % Serialize instances to individual documents
+            % Serialize instances to individual documents. A single
+            % instance serializes to one document rather than a cell, so
+            % it is wrapped to keep the loop below uniform.
             serializedDocuments = obj.Serializer.serialize(instances);
+            if ~iscell(serializedDocuments)
+                serializedDocuments = {serializedDocuments};
+            end
             
             % Save each document to a separate file
             outputPaths = cell(size(serializedDocuments));
@@ -191,7 +196,9 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 idParts = strsplit(instanceId, '/');
                 safeId = idParts{end};
             else
-                safeId = instanceId;
+                % A blank node identifier is prefixed with "_:", which the
+                % sanitizing step below would turn into a second separator.
+                safeId = regexprep(instanceId, '^_:', '');
             end
             safeId = regexprep(safeId, '[^\w\-_.]', '_');
             

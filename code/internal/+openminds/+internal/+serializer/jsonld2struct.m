@@ -10,13 +10,21 @@ function structInstance = jsonld2struct(jsonInstance)
 %   generated type classes. Every openMINDS vocabulary is removed, not
 %   just the one belonging to the active model version, so a document
 %   written for an older model can still be read.
+%
+%   Only names in property-key position are rewritten. A string value may
+%   legitimately hold a vocabulary IRI, and stripping it there would
+%   silently corrupt the value.
 
     arguments
         jsonInstance (1,1) string
     end
 
     for vocabularyIRI = openminds.internal.serializer.jsonld.getVocabularyIRIs()
-        jsonInstance = strrep(jsonInstance, vocabularyIRI, "");
+        % Single-quoted so the double quotes delimiting a JSON key can be
+        % written literally in the pattern.
+        propertyKeyPattern = sprintf('"%s([^"]+)"\\s*:', ...
+            regexptranslate('escape', vocabularyIRI));
+        jsonInstance = regexprep(jsonInstance, propertyKeyPattern, '"$1":');
     end
 
     structInstance = openminds.internal.utility.json.decode(jsonInstance);

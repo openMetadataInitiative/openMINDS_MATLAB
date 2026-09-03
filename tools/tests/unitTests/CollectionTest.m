@@ -335,6 +335,89 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
         
+        function testCreateCollectionFromMultipleFiles(testCase)
+            % A collection constructed from several files loads each of
+            % them, rather than only the first.
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            firstFilePath = "first-contact.jsonld";
+            secondFilePath = "second-contact.jsonld";
+            openminds.internal.FileMetadataStore(firstFilePath).save(firstContact);
+            openminds.internal.FileMetadataStore(secondFilePath).save(secondContact);
+
+            collection = openminds.Collection(firstFilePath, secondFilePath);
+
+            testCase.verifyEqual(length(collection), 2);
+            testCase.verifyTrue(collection.isKey(firstContact.id));
+            testCase.verifyTrue(collection.isKey(secondContact.id));
+        end
+
+        function testFolderStoreSavesScalarInstance(testCase)
+            % A single instance serializes to one document rather than a
+            % cell, which the folder store must still handle.
+            contact = openminds.core.ContactInformation( ...
+                "email", "scalar@example.org");
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "scalar-folder-store");
+
+            outputPaths = metadataStore.save(contact);
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(isfile(outputPaths{1}));
+        end
+
+        function testFolderStoreOmitsBlankNodePrefixFromFilename(testCase)
+            % A blank node identifier is prefixed with "_:". Both
+            % characters would otherwise be sanitized into separators,
+            % leaving the type and the identifier three underscores apart.
+            contact = openminds.core.ContactInformation( ...
+                "email", "prefix@example.org");
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "blank-node-folder-store");
+
+            outputPaths = metadataStore.save(contact);
+
+            [~, fileName] = fileparts(outputPaths{1});
+            expectedName = "ContactInformation_" + extractAfter(contact.id, "_:");
+            testCase.verifyEqual(string(fileName), expectedName);
+
+            % The identifier lives in the document, so the instance still
+            % round-trips regardless of what the file is called.
+            reloaded = metadataStore.load();
+            testCase.verifyEqual(reloaded{1}.id, contact.id);
+        end
+
+        function testSaveEmptyCollection(testCase)
+            % A collection with no nodes still saves, giving an empty
+            % collection document.
+            collection = openminds.Collection();
+            filePath = "empty-collection.jsonld";
+
+            outputPaths = collection.save(filePath);
+
+            testCase.verifyTrue(isfile(filePath));
+            testCase.verifyEqual(string(outputPaths{1}), filePath);
+        end
+
+        function testFileStoreRoundTripsSupplementaryCharacters(testCase)
+            % A character outside the Basic Multilingual Plane is encoded
+            % as four bytes in UTF-8 and must survive a write and a read
+            % through the store.
+            brainEmoji = char([55358 56800]); % U+1F9E0 as a surrogate pair
+            givenName = "Mät " + brainEmoji;
+            person = openminds.core.Person("givenName", givenName);
+            metadataStore = openminds.internal.FileMetadataStore( ...
+                "supplementary-characters.jsonld");
+
+            metadataStore.save(person);
+            reloaded = metadataStore.load();
+
+            testCase.verifyEqual(reloaded{1}.givenName, givenName);
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();

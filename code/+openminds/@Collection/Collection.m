@@ -254,6 +254,12 @@ classdef Collection < handle
 
         function instances = getAll(obj)
         % getAll - Get all instances of collection
+            % An unconfigured dictionary cannot return its values
+            if obj.NumNodes == 0
+                instances = {};
+                return
+            end
+
             instances = obj.Nodes.values();
 
             % For older MATLAB releases, the instances might be nested a
@@ -323,6 +329,12 @@ classdef Collection < handle
         end
 
         function updateLinks(obj)
+            % An empty collection has nothing to link, and an unconfigured
+            % dictionary cannot return its values.
+            if obj.NumNodes == 0
+                return
+            end
+
             allInstances = obj.Nodes.values;
             if isa(obj.Nodes, 'containers.Map')
                 allInstances = [allInstances{:}];
@@ -581,11 +593,16 @@ classdef Collection < handle
 
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
-                    obj.load(instance{:})
+                    % load accepts a single path, so each is loaded in turn
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from folder
                 elseif all( cellfun(isFolderPath, instance) )
-                    obj.load(instance{:})
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from instance(s)
                 elseif all( cellfun(isMetadata, instance) )

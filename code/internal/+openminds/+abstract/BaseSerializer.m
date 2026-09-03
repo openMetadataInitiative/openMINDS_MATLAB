@@ -206,6 +206,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
         % Start from the instance's own property values.
 
             S = instance.toStruct();
+            S = obj.formatDateTimeProperties(S, instance);
 
             if ~obj.SerializationConfiguration.IncludeEmptyProperties
                 S = obj.removeEmptyProperties(S);
@@ -215,6 +216,25 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 
             if obj.SerializationConfiguration.IncludeIdentifier
                 S = obj.addInstanceIdentifier(S, instance);
+            end
+        end
+
+        function S = formatDateTimeProperties(~, S, instance)
+        % A datetime is written as ISO 8601 text, as a date or a date-time
+        % according to the schema. Left to itself, encoding would use the
+        % datetime display format, which the reference implementation
+        % cannot read and which drops the time zone.
+
+            metaType = openminds.internal.meta.fromInstance(instance);
+
+            for propertyName = string(fieldnames(S))'
+                value = S.(propertyName);
+                if ~isdatetime(value) || isempty(value) || all(isnat(value))
+                    continue
+                end
+
+                S.(propertyName) = openminds.internal.utility.formatIsoDateTime( ...
+                    value, DateOnly=metaType.isPropertyDateOnly(propertyName));
             end
         end
 
