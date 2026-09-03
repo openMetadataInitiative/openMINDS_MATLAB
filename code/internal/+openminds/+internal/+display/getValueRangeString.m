@@ -5,7 +5,7 @@ function str = getValueRangeString(minValue, maxValue, minValueUnit, maxValueUni
         minValueUnit = minValueUnit.name;
     end
     if isa(maxValueUnit, 'openminds.controlledterms.UnitOfMeasurement')
-        minValueUnit = maxValueUnit.name;
+        maxValueUnit = maxValueUnit.name;
     end
     
     minValueUnit = string(minValueUnit); maxValueUnit = string(maxValueUnit);
