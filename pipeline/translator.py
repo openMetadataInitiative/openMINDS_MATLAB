@@ -610,19 +610,28 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         elif is_upper_case_match:
             schema_filename = schema_short_name.upper()
 
-        this_config = config_json[schema_filename]
+        # A schema may be configured with alternatives, to be tried in order,
+        # because a model version can rename the properties a label is built
+        # from. The first alternative whose properties the schema declares wins.
+        alternatives = config_json[schema_filename]
+        if not isinstance(alternatives, list):
+            alternatives = [alternatives]
 
-        prop_names = this_config['propertyName']
-        str_formatter = this_config['stringFormat']
+        this_config = None
+        for alternative in alternatives:
+            prop_names = alternative['propertyName']
+            if not prop_names:
+                return "str = obj.createLabelForMissingLabelDefinition();"
+            if not isinstance(prop_names, list):
+                prop_names = [prop_names]
+            if all(prop_name in property_names for prop_name in prop_names):
+                this_config = alternative
+                break
 
-        if not prop_names:
-            return "str = obj.createLabelForMissingLabelDefinition();"
-
-        if not isinstance(prop_names, list):
-            prop_names = [prop_names]
-
-        if not all(prop_name in property_names for prop_name in prop_names):
+        if this_config is None:
             return _get_default_display_label_method_expression(schema_short_name, property_names)
+
+        str_formatter = this_config['stringFormat']
 
         # A scalar stringFormat holds a single expression, which is assigned to
         # the output variable here. A list holds a block of statements, which
@@ -643,6 +652,12 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         return _get_default_display_label_method_expression(schema_short_name, property_names)
 
 
+# A MATLAB character vector, allowing the doubled quote that escapes one.
+# The quote is also the transpose operator, which no display label expression
+# uses, so treating every quoted run as a literal is safe here.
+CHAR_LITERAL_PATTERN = re.compile(r"('(?:[^']|'')*')")
+
+
 def _qualify_property_names(expression, property_names):
     """
         Prefix every reference to a schema property in a display label
@@ -651,12 +666,19 @@ def _qualify_property_names(expression, property_names):
         Matches are anchored on identifier boundaries and skip names preceded by
         a dot. This keeps a short property name from being rewritten inside a
         longer one ("minValue" within "minValueUnit") and leaves the namespace
-        segments of a qualified function call untouched.
+        segments of a qualified function call untouched. Character literals are
+        left alone, so that a format string may use a property name as text.
     """
-    for property_name in property_names:
-        pattern = r"(?<![\w.])" + re.escape(property_name) + r"(?!\w)"
-        expression = re.sub(pattern, f"obj.{property_name}", expression)
-    return expression
+    # Splitting on a capturing group alternates unquoted and quoted segments,
+    # so the even indices hold the code to rewrite.
+    segments = CHAR_LITERAL_PATTERN.split(expression)
+    for index in range(0, len(segments), 2):
+        for property_name in property_names:
+            pattern = r"(?<![\w.])" + re.escape(property_name) + r"(?!\w)"
+            segments[index] = re.sub(
+                pattern, f"obj.{property_name}", segments[index]
+            )
+    return "".join(segments)
 
 
 def _get_default_display_label_method_expression(schema_short_name, property_names):

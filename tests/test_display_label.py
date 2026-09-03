@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import unittest
 from unittest import mock
 
@@ -75,6 +76,23 @@ class QualifyPropertyNamesTest(unittest.TestCase):
         self.assertEqual(
             _qualify_property_names("openminds.internal.unit.format(unit)", ["unit"]),
             "openminds.internal.unit.format(obj.unit)",
+        )
+
+    def test_does_not_qualify_a_property_name_used_as_literal_text(self):
+        # A format string may mention a property by name; only code is rewritten.
+        self.assertEqual(
+            _qualify_property_names("sprintf('%d values (%s)', numel(values), unit)", ["values", "unit"]),
+            "sprintf('%d values (%s)', numel(obj.values), obj.unit)",
+        )
+        self.assertEqual(
+            _qualify_property_names("sprintf('name: %s', name)", ["name"]),
+            "sprintf('name: %s', obj.name)",
+        )
+
+    def test_handles_an_escaped_quote_inside_a_literal(self):
+        self.assertEqual(
+            _qualify_property_names("sprintf('it''s %s', name)", ["name"]),
+            "sprintf('it''s %s', obj.name)",
         )
 
     def test_does_not_qualify_field_of_already_qualified_reference(self):
@@ -187,6 +205,36 @@ class DisplayLabelMethodExpressionTest(unittest.TestCase):
         )
 
 
+class DisplayLabelAlternativesTest(unittest.TestCase):
+    """A schema may configure alternatives, because a model version can rename
+    the properties a label is built from."""
+
+    CONFIG = {
+        "affiliation": [
+            {"propertyName": ["organization"], "stringFormat": "sprintf('%s', organization)"},
+            {"propertyName": ["memberOf"], "stringFormat": "sprintf('%s', memberOf)"},
+        ]
+    }
+
+    def test_uses_the_first_alternative_whose_properties_all_exist(self):
+        self.assertEqual(
+            display_label_for("Affiliation", ["organization", "startDate"], self.CONFIG),
+            "str = sprintf('%s', obj.organization);",
+        )
+
+    def test_falls_through_to_a_later_alternative(self):
+        self.assertEqual(
+            display_label_for("Affiliation", ["memberOf", "startDate"], self.CONFIG),
+            "str = sprintf('%s', obj.memberOf);",
+        )
+
+    def test_falls_back_to_the_default_when_no_alternative_applies(self):
+        self.assertEqual(
+            display_label_for("Affiliation", ["name"], self.CONFIG),
+            "str = obj.name;",
+        )
+
+
 class DefaultDisplayLabelTest(unittest.TestCase):
 
     def test_unconfigured_schema_uses_default_property_precedence(self):
@@ -216,16 +264,23 @@ class ShippedConfigTest(unittest.TestCase):
         with open(CONFIG_PATH, encoding="utf-8") as config_file:
             cls.config = json.load(config_file)
 
-    def test_every_configured_entry_assigns_the_output_variable(self):
+    def configured_schemas(self):
+        """Yield each schema with the property names of its first alternative."""
         for schema_name, entry in self.config.items():
-            property_names = entry["propertyName"]
-            if not property_names:
-                continue
-            if not isinstance(property_names, list):
-                property_names = [property_names]
-            with self.subTest(schema=schema_name):
+            alternatives = entry if isinstance(entry, list) else [entry]
+            for alternative in alternatives:
+                property_names = alternative["propertyName"]
+                if not property_names:
+                    continue
+                if not isinstance(property_names, list):
+                    property_names = [property_names]
+                yield schema_name, alternative, property_names
+
+    def test_every_configured_entry_assigns_the_output_variable(self):
+        for schema_name, alternative, property_names in self.configured_schemas():
+            with self.subTest(schema=schema_name, properties=property_names):
                 expression = display_label_for(
-                    schema_name, property_names, self.config
+                    schema_name, property_names, {schema_name: alternative}
                 )
                 self.assertRegex(
                     expression,
@@ -234,16 +289,38 @@ class ShippedConfigTest(unittest.TestCase):
                 )
 
     def test_no_configured_entry_double_qualifies_a_property(self):
-        for schema_name, entry in self.config.items():
-            property_names = entry["propertyName"]
-            if not property_names:
-                continue
-            if not isinstance(property_names, list):
-                property_names = [property_names]
-            with self.subTest(schema=schema_name):
+        for schema_name, alternative, property_names in self.configured_schemas():
+            with self.subTest(schema=schema_name, properties=property_names):
                 self.assertNotIn(
-                    "obj.obj.", display_label_for(schema_name, property_names, self.config)
+                    "obj.obj.",
+                    display_label_for(schema_name, property_names, {schema_name: alternative}),
                 )
+
+    def test_no_configured_entry_qualifies_inside_a_character_literal(self):
+        # A property name used as literal text in a format string must survive.
+        for schema_name, alternative, property_names in self.configured_schemas():
+            with self.subTest(schema=schema_name, properties=property_names):
+                expression = display_label_for(
+                    schema_name, property_names, {schema_name: alternative}
+                )
+                for literal in re.findall(r"'(?:[^']|'')*'", expression):
+                    self.assertNotIn(
+                        "obj.", literal,
+                        f"'{schema_name}' rewrote a property name inside {literal}",
+                    )
+
+    def test_every_alternative_uses_a_distinct_property_set(self):
+        # A later alternative that repeats an earlier property set is unreachable.
+        for schema_name, entry in self.config.items():
+            if not isinstance(entry, list):
+                continue
+            seen = []
+            for alternative in entry:
+                names = alternative["propertyName"]
+                names = frozenset(names if isinstance(names, list) else [names])
+                with self.subTest(schema=schema_name, properties=sorted(names)):
+                    self.assertNotIn(names, seen, f"'{schema_name}' has an unreachable alternative")
+                seen.append(names)
 
 
 if __name__ == "__main__":
