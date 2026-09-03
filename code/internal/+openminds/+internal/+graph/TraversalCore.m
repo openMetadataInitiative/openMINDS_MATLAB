@@ -15,18 +15,22 @@ classdef (Abstract) TraversalCore < handle
 %   openminds.abstract.BaseTransformer for the accumulating one.
 
     properties (Access = private)
-        % Identifiers of nodes seen so far. What "seen" means is decided by
-        % the protocol built on top: a visitor marks a node for the whole
-        % traversal, a transformer marks it only while its own subtree is
-        % being processed.
+        % The node seen for each identifier so far, keyed by identifier.
+        % What "seen" means is decided by the protocol built on top: a
+        % visitor marks a node for the whole traversal, a transformer marks
+        % it only while its own subtree is being processed. The node is
+        % stored, not just its identifier, so a later reference to the same
+        % identifier can be pointed at the object already visited for it.
         % Created in the constructor rather than as a default value,
-        % because a handle default would be shared by every instance.
-        VisitedNodeIds
+        % because a default handle would be one map shared by every
+        % instance.
+        VisitedNodes containers.Map
     end
 
     methods
         function obj = TraversalCore()
-            obj.reset()
+            obj.VisitedNodes = containers.Map( ...
+                'KeyType', 'char', 'ValueType', 'any');
         end
 
         function reset(obj)
@@ -34,8 +38,8 @@ classdef (Abstract) TraversalCore < handle
         %
         %   Call between independent traversals that share a visitor.
 
-            obj.VisitedNodeIds = containers.Map( ...
-                'KeyType', 'char', 'ValueType', 'logical');
+            obj.VisitedNodes = containers.Map( ...
+                'KeyType', 'char', 'ValueType', 'any');
         end
     end
 
@@ -87,17 +91,23 @@ classdef (Abstract) TraversalCore < handle
         end
 
         function tf = wasVisited(obj, node)
-            tf = obj.VisitedNodeIds.isKey(obj.nodeKey(node));
+            tf = obj.VisitedNodes.isKey(obj.nodeKey(node));
         end
 
         function markVisited(obj, node)
-            obj.VisitedNodeIds(obj.nodeKey(node)) = true;
+        % markVisited - Record node as the object standing for its identifier
+            obj.VisitedNodes(obj.nodeKey(node)) = node;
+        end
+
+        function node = visitedNode(obj, node)
+        % visitedNode - The object already visited for this node's identifier
+            node = obj.VisitedNodes(obj.nodeKey(node));
         end
 
         function unmarkVisited(obj, node)
             key = obj.nodeKey(node);
-            if obj.VisitedNodeIds.isKey(key)
-                obj.VisitedNodeIds.remove(key);
+            if obj.VisitedNodes.isKey(key)
+                obj.VisitedNodes.remove(key);
             end
         end
     end
@@ -142,7 +152,7 @@ classdef (Abstract) TraversalCore < handle
         end
     end
 
-    methods (Static, Access = private)
+    methods (Static, Access = protected)
         function key = nodeKey(node)
             key = char(node.id);
         end

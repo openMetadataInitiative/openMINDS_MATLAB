@@ -3,8 +3,9 @@ classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
 %
 %   Subclass this for operations that inspect or modify an instance graph
 %   in place: resolving references, wiring up links after deserialization,
-%   validating. Each node is visited at most once per traversal, so a
-%   circular graph terminates.
+%   validating. Each identifier is visited at most once per traversal, so
+%   a circular graph terminates, and every reference to an identifier is
+%   pointed at the one object visited for it.
 %
 %   USAGE:
 %   ------
@@ -48,14 +49,17 @@ classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
             end
 
             if obj.wasVisited(node)
+                node = obj.onRevisitNode(node);
                 return
             end
             obj.markVisited(node);
 
             node = obj.onVisitNode(node);
+            % The hook may replace the node. The replacement is what stands
+            % for the identifier from here on.
+            obj.markVisited(node);
 
-            obj.traverseEdges(node, obj.getLinkedEdges(node), @obj.doForLinkedEdge);
-            obj.traverseEdges(node, obj.getEmbeddedEdges(node), @obj.doForEmbeddedEdge);
+            obj.expandEdges(node);
 
             obj.onLeaveNode(node);
         end
@@ -78,6 +82,25 @@ classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
 
         function onLeaveNode(~, ~)
         % onLeaveNode - Act on a node after its edges have been traversed
+        end
+
+        function node = onRevisitNode(obj, node)
+        % onRevisitNode - Act on a node whose identifier was visited before
+        %
+        %   Returns the object already visited for the identifier, so a
+        %   second reference to it is unified with the first rather than
+        %   left as a separate copy. Override to do more.
+            node = obj.visitedNode(node);
+        end
+
+        function expandEdges(obj, node)
+        % expandEdges - Apply the edge methods to every edge of a node
+        %
+        %   Called by visit on a first visit. Also for subclasses that have
+        %   to walk a node's edges again, such as when the node is reached
+        %   with more link depth than it was expanded with before.
+            obj.traverseEdges(node, obj.getLinkedEdges(node), @obj.doForLinkedEdge);
+            obj.traverseEdges(node, obj.getEmbeddedEdges(node), @obj.doForEmbeddedEdge);
         end
     end
 

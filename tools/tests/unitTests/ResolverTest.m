@@ -380,6 +380,56 @@ classdef ResolverTest < matlab.unittest.TestCase
                 'The second node must link back to the first.')
         end
 
+        function testNodeWithinLinkBudgetIsResolvedRegardlessOfPathOrder(testCase)
+        % Link depth is a budget along a path. A node inside the budget
+        % along one path must be resolved even when a longer path reached
+        % it first with no budget left.
+        %
+        %   root -> detour -> shared -> leaf
+        %   root -> shared
+        %
+        % With a budget of 2, root -> shared -> leaf is inside it.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.ContentTypeMockResolver());
+
+            leaf = ResolverTest.contentTypeReference("leaf");
+            shared = ResolverTest.contentType("shared");
+            shared.isBasedOn = leaf;
+            detour = ResolverTest.contentType("detour");
+            detour.isBasedOn = shared;
+            root = ResolverTest.contentType("root");
+            root.isBasedOn = [detour, shared]; % detour first, so shared is first reached with no budget left
+
+            root.resolve('NumLinksToResolve', 2);
+
+            testCase.verifyEqual(leaf.name, "resolved", ...
+                'leaf is two links from root along root -> shared -> leaf and must be resolved.')
+        end
+
+        function testReferencesSharingAnIdentifierAreUnified(testCase)
+        % Two reference objects can carry the same identifier, for example
+        % when two nodes of a document point at the same external instance.
+        % Resolving fetches the identifier once and points every reference
+        % to it at that one object, so all links agree.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.ContentTypeMockResolver());
+
+            left = ResolverTest.contentType("left");
+            left.isBasedOn = ResolverTest.contentTypeReference("shared");
+            right = ResolverTest.contentType("right");
+            right.isBasedOn = ResolverTest.contentTypeReference("shared");
+            root = ResolverTest.contentType("root");
+            root.isBasedOn = [left, right];
+
+            root.resolve('NumLinksToResolve', 2);
+
+            testCase.verifyEqual(left.isBasedOn.name, "resolved")
+            testCase.verifyEqual(right.isBasedOn.name, "resolved", ...
+                'The second reference to the identifier must be resolved too.')
+            testCase.verifySameHandle(right.isBasedOn, left.isBasedOn, ...
+                'Both references must point at the one object resolved for the identifier.')
+        end
+
         function testResolveMultipleLinkedInstances(testCase)
             % Test resolving a node with multiple linked instances
             mockResolver = ommtest.helper.mock.MockLinkResolver();
@@ -405,6 +455,18 @@ classdef ResolverTest < matlab.unittest.TestCase
     end
 
     methods (Static, Access = private)
+        function instance = contentType(name)
+        % A resolved ContentType, a type that links to its own type.
+            instance = openminds.core.data.ContentType();
+            instance.name = name;
+        end
+
+        function reference = contentTypeReference(name)
+        % A ContentType reference that ContentTypeMockResolver can resolve.
+            reference = openminds.core.data.ContentType('id', ...
+                ommtest.helper.mock.ContentTypeMockResolver.IRIPrefix + name);
+        end
+
         function dataset = createDatasetWithAuthors(authors, fullName)
             if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
                 contribution = openminds.core.Contribution( ...
