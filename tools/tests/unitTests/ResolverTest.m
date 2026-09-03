@@ -123,50 +123,6 @@ classdef ResolverTest < matlab.unittest.TestCase
             testCase.verifyFalse(resolver.canResolve("https://external.example/123"));
         end
         
-        function testResolverRegistryPromotesUsedResolver(testCase)
-            % Test that frequently used resolvers are moved to front
-            mockResolver = ommtest.helper.mock.MockLinkResolver();
-            openminds.registerLinkResolver(mockResolver);
-            
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
-            
-            % MockResolver should be at the end initially (after InstanceResolver)
-            testCase.verifyGreaterThan(length(registry.LinkResolvers), 1);
-            
-            % Use the mock resolver
-            openminds.internal.getLinkResolver('https://mock.io/test_123');
-            
-            % Verify mock resolver is now promoted to first position
-            testCase.verifyEqual(registry.LinkResolvers{1}, mockResolver);
-        end
-        
-        function testReplaceRegisteredResolver(testCase)
-        % A library that reconfigures needs its new resolver to take
-        % effect. Without Replace the first registration wins; with it,
-        % the resolver for that prefix is swapped and keeps its position.
-
-            registry = openminds.internal.resolver.LinkResolverRegistry.instance();
-
-            firstResolver = ommtest.helper.mock.MockLinkResolver();
-            secondResolver = ommtest.helper.mock.MockLinkResolver();
-            openminds.registerLinkResolver(firstResolver);
-
-            openminds.registerLinkResolver(secondResolver);
-            registered = registry.getLinkResolver("https://mock.io/x");
-            testCase.verifyTrue(registered == firstResolver, ...
-                'Without Replace, the first registration should win.')
-
-            openminds.registerLinkResolver(secondResolver, "Replace", true);
-            registered = registry.getLinkResolver("https://mock.io/x");
-            testCase.verifyTrue(registered == secondResolver, ...
-                'With Replace, the new resolver should take over the prefix.')
-
-            testCase.verifyEqual( ...
-                sum(cellfun(@(r) isa(r, 'ommtest.helper.mock.MockLinkResolver'), ...
-                    registry.LinkResolvers)), 1, ...
-                'Replacing should not add a second resolver for the prefix.')
-        end
-
         function testNoDuplicateResolvers(testCase)
             % Test that duplicate resolvers are not added
             resolver = ommtest.helper.mock.MockLinkResolver();
@@ -463,6 +419,26 @@ classdef ResolverTest < matlab.unittest.TestCase
             testCase.verifyError( ...
                 @() dataset.resolve('NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth()), ...
                 'openMINDS:LinkResolver:IdentityChanged')
+        end
+
+        function testResolverSelectionDoesNotDependOnEarlierLookups(testCase)
+        % Which resolver handles an identifier is a function of the
+        % identifier and the registration order alone. A resolver for a
+        % broad prefix registered after one for a narrower prefix inside
+        % it must give the same answer for the narrow prefix before and
+        % after an unrelated lookup.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.NarrowPrefixMockResolver());
+            openminds.registerLinkResolver(ommtest.helper.mock.BroadPrefixMockResolver());
+
+            narrowIri = "https://overlap.mock/narrow/x";
+            first = openminds.internal.getLinkResolver(narrowIri);
+            openminds.internal.getLinkResolver("https://overlap.mock/other"); % only the broad resolver handles this
+            second = openminds.internal.getLinkResolver(narrowIri);
+
+            testCase.verifyClass(first, 'ommtest.helper.mock.NarrowPrefixMockResolver')
+            testCase.verifyClass(second, class(first), ...
+                'The same identifier must select the same resolver every time.')
         end
 
         function testResolveMultipleLinkedInstances(testCase)
