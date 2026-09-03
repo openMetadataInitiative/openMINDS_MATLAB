@@ -19,7 +19,7 @@ classdef LinkResolverRegistry < handle
         % Add a resolver instance to the registry (no duplicates by handle).
             arguments
                 obj (1,1) openminds.internal.resolver.LinkResolverRegistry
-                resolver (1,1) {mustBeA(resolver, "openminds.internal.resolver.AbstractLinkResolver")}
+                resolver (1,1) {mustBeA(resolver, "openminds.interface.LinkResolver")}
             end
 
             if obj.hasResolverForPrefix(resolver.IRIPrefix)

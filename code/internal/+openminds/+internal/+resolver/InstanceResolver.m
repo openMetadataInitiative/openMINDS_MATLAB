@@ -1,4 +1,4 @@
-classdef InstanceResolver < openminds.internal.resolver.AbstractLinkResolver
+classdef InstanceResolver < openminds.interface.LinkResolver
 % InstanceResolver - Resolves openMINDS controlled instances from the local library
 
     properties (Constant)

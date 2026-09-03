@@ -10,7 +10,7 @@ classdef ResolvingVisitor < openminds.abstract.BaseVisitor
 %   embedded instance does not, because an embedded instance is part of
 %   its parent rather than a separate node.
 %
-%   See also openminds.internal.resolver.AbstractLinkResolver
+%   See also openminds.interface.LinkResolver
 
     properties
         % Number of further links to follow.

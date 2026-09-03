@@ -1,4 +1,4 @@
-classdef ReplacingMockLinkResolver < openminds.internal.resolver.AbstractLinkResolver
+classdef ReplacingMockLinkResolver < openminds.interface.LinkResolver
 %ReplacingMockLinkResolver Resolver that replaces rather than populates
 %
 %   Mirrors the case where the type behind an identifier is not known

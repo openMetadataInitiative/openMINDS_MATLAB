@@ -10,7 +10,7 @@ classdef LinkWiringVisitor < openminds.abstract.BaseVisitor
 %   A stub naming a controlled instance that is not part of the document
 %   is resolved from the local instance library instead.
 %
-%   See also openminds.internal.serializer.BaseDeserializer
+%   See also openminds.abstract.BaseDeserializer
 
     properties (Access = private)
         % Identifier to instance, for everything in the document

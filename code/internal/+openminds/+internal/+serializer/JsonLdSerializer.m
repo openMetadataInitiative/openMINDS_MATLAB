@@ -1,4 +1,4 @@
-classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
+classdef JsonLdSerializer < openminds.abstract.BaseSerializer
 %JsonLdSerializer Serializer for JSON-LD format
 %
 %   This class extends BaseSerializer to provide JSON-LD specific
@@ -26,7 +26,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
                 config.?openminds.internal.serializer.SerializationConfig
             end
             nvPairs = namedargs2cell(config);
-            obj = obj@openminds.internal.serializer.BaseSerializer(nvPairs{:});
+            obj = obj@openminds.abstract.BaseSerializer(nvPairs{:});
         end
     end
 

@@ -99,7 +99,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
         %       Serialized output in the format specified by the subclass
             
             arguments
-                obj (1,1) openminds.internal.serializer.BaseSerializer
+                obj (1,1) openminds.abstract.BaseSerializer
                 instances % openminds.abstract.Schema or cell array
             end
             

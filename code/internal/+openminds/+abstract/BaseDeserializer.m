@@ -10,7 +10,7 @@ classdef (Abstract) BaseDeserializer < handle
 %   ------
 %   Subclasses implement one method:
 %
-%       classdef MyDeserializer < openminds.internal.serializer.BaseDeserializer
+%       classdef MyDeserializer < openminds.abstract.BaseDeserializer
 %           methods (Access = protected)
 %               function rawStructs = parseToStructs(obj, data)
 %                   ...
@@ -18,7 +18,7 @@ classdef (Abstract) BaseDeserializer < handle
 %           end
 %       end
 %
-%   See also openminds.internal.serializer.BaseSerializer,
+%   See also openminds.abstract.BaseSerializer,
 %   openminds.internal.serializer.LinkWiringVisitor
 
     properties (Access = protected)
