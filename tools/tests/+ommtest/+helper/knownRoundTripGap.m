@@ -5,9 +5,9 @@ function reason = knownRoundTripGap(typeName)
 %   explaining why the given openMINDS type currently fails to round trip
 %   through JSON-LD, or an empty string if the type is expected to succeed.
 %
-%   Every entry here is a defect in the library, not in the test. This list
-%   is expected to shrink. When a fix lands, the corresponding entry must
-%   be removed so the round-trip test starts guarding the fixed behaviour.
+%   Every entry here is a defect, not a property of the test. This list is
+%   expected to shrink. When a fix lands, the corresponding entry must be
+%   removed so the round-trip test starts guarding the fixed behaviour.
 %
 %   Input Arguments:
 %     typeName - Short name of an openMINDS type, e.g. "Person".
@@ -23,32 +23,25 @@ function reason = knownRoundTripGap(typeName)
 
     reason = "";
 
-    if isControlledTermType(typeName)
-        reason = "Controlled terms defined by the user lose every property " + ...
-            "on reload. ControlledTermBase/initializeControlledTerm discards " + ...
-            "the decoded struct and passes only the identifier to " + ...
-            "deserializeFromName, which finds no matching controlled instance " + ...
-            "and returns an empty object.";
-        return
-    end
-
-    if ismember(typeName, residualGapTypes())
+    if ismember(typeName, multiValuedControlledInstanceGap())
         reason = "Multi-valued properties linking to controlled instances " + ...
             "lose all but the first entry on reload.";
+
+    elseif typeName == "TermSuggestion"
+        reason = "addExistingTerminology is typed as an openMINDS type but " + ...
+            "is not registered in LINKED_PROPERTIES, so it serializes inline " + ...
+            "without a type or an identifier and cannot be read back. The " + ...
+            "generated controlled term classes do not declare that constant " + ...
+            "at all, so fixing it means changing the generator.";
     end
 end
 
-function tf = isControlledTermType(typeName)
-    className = openminds.enum.Types(typeName).ClassName;
-    tf = any(ismember(superclasses(className), {'openminds.abstract.ControlledTerm'}));
-end
-
-function typeNames = residualGapTypes()
-% Types that fail for reasons other than the controlled term defect.
+function typeNames = multiValuedControlledInstanceGap()
+% Types holding a multi-valued property that links to controlled instances.
 %
-%   Unlike the controlled term case there is no clean structural predicate
-%   for these, so they are listed explicitly. Determined by sweeping every
-%   type through save and load; see the round-trip test for the procedure.
+%   There is no clean structural predicate for these, because many types
+%   with such a property round trip correctly, so they are listed
+%   explicitly. Determined by sweeping every type through save and load.
 
     typeNames = [ ...
         "Accessibility", "AtlasAnnotation", "ChemicalSubstance", ...

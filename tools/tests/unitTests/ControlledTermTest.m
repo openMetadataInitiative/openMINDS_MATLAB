@@ -10,6 +10,39 @@ classdef ControlledTermTest < matlab.unittest.TestCase
                 openminds.constant.BaseURI + "/instances/contributionType/authoring")
         end
 
+        function testUserDefinedTermSurvivesDeserialization(testCase)
+        % A controlled term defined by a user is not in the controlled
+        % instance library, so there is nothing to look it up by. Its
+        % values have to be taken from the document it was read from.
+
+            structure = struct( ...
+                'at_id', "_:a-user-defined-term", ...
+                'at_type', "https://openminds.om-i.org/types/Species", ...
+                'name', "Novel species", ...
+                'definition', "A species that is not in the library.", ...
+                'synonym', {{'first synonym', 'second synonym'}});
+
+            term = openminds.controlledterms.Species(structure);
+
+            testCase.verifyEqual(term.name, "Novel species")
+            testCase.verifyEqual(term.definition, "A species that is not in the library.")
+            testCase.verifyEqual(term.synonym, ["first synonym", "second synonym"])
+            testCase.verifyEqual(string(term.id), "_:a-user-defined-term")
+        end
+
+        function testReferenceToKnownTermIsLookedUp(testCase)
+        % A document carrying only an identifier describes nothing, so the
+        % term is populated from the controlled instance library instead.
+
+            structure = struct( ...
+                'at_id', "https://openminds.om-i.org/instances/species/homoSapiens");
+
+            term = openminds.controlledterms.Species(structure);
+
+            testCase.verifyEqual(term.name, "Homo sapiens")
+            testCase.verifyNotEmpty(term.definition)
+        end
+
         function testOlderControlledTermPropertiesAreAccepted(testCase)
             sourceText = fileread(testCase.getControlledTermBasePath("v2"));
 
