@@ -19,10 +19,13 @@ classdef ReplacingMockLinkResolver < openminds.interface.LinkResolver
         function instance = resolveNode(obj, instance)
             obj.ResolvedIdentifiers(end+1) = string(instance.id);
 
-            replacement = openminds.core.Person();
-            replacement.givenName = "Replaced";
-            replacement.familyName = "Instance";
-            instance = replacement;
+            % Built from a record carrying the reference's identifier, as a
+            % resolver reading a store would do, so the replacement stands
+            % for the same node.
+            instance = openminds.core.Person(struct( ...
+                'at_id', char(instance.id), ...
+                'givenName', "Replaced", ...
+                'familyName', "Instance"));
         end
 
         function tf = canResolve(obj, IRI)

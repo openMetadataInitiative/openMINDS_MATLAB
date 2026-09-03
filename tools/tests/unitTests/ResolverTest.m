@@ -430,6 +430,41 @@ classdef ResolverTest < matlab.unittest.TestCase
                 'Both references must point at the one object resolved for the identifier.')
         end
 
+        function testResolvedReplacementKeepsTheReferenceIdentifier(testCase)
+        % A resolver may replace a reference with an instance of the type
+        % it discovered. The replacement stands for the same node, so it
+        % carries the identifier the reference carried; every link to it
+        % is written with that identifier.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.ReplacingMockLinkResolver());
+
+            referenceId = "https://replacing.mock/author-1";
+            author = openminds.core.Person('id', referenceId);
+            dataset = ResolverTest.createDatasetWithAuthors(author, "Dataset");
+
+            dataset = dataset.resolve( ...
+                'NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth());
+            resolvedAuthor = ResolverTest.getDatasetAuthors(dataset);
+
+            testCase.verifyEqual(string(resolvedAuthor.id), referenceId)
+        end
+
+        function testResolverThatDropsTheIdentifierIsRejected(testCase)
+        % A replacement without the reference's identifier would change
+        % the target of every link to it when the graph is written out
+        % again. That is a bug in the resolver, reported where it happens
+        % rather than hidden by patching the identifier.
+
+            openminds.registerLinkResolver(ommtest.helper.mock.IdentityDroppingMockLinkResolver());
+
+            author = openminds.core.Person('id', "https://dropping.mock/author-1");
+            dataset = ResolverTest.createDatasetWithAuthors(author, "Dataset");
+
+            testCase.verifyError( ...
+                @() dataset.resolve('NumLinksToResolve', ResolverTest.datasetAuthorResolveDepth()), ...
+                'openMINDS:LinkResolver:IdentityChanged')
+        end
+
         function testResolveMultipleLinkedInstances(testCase)
             % Test resolving a node with multiple linked instances
             mockResolver = ommtest.helper.mock.MockLinkResolver();

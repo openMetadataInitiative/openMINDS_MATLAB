@@ -57,8 +57,23 @@ classdef ResolvingVisitor < openminds.abstract.BaseVisitor
                 return
             end
 
+            referenceId = string(node.id);
             resolver = obj.selectResolver(node);
             node = resolver.resolveNode(node);
+
+            % A resolver may return a new instance when the type of the
+            % reference was not known. The new instance stands for the same
+            % node, so it must carry the identifier of the reference: every
+            % link to it is written with that identifier. A resolver that
+            % drops it has a bug, and restoring the identifier here would
+            % hide the bug rather than report it where it happens.
+            if string(node.id) ~= referenceId
+                error('openMINDS:LinkResolver:IdentityChanged', ...
+                    ['Resolver "%s" returned an instance with identifier "%s" for ', ...
+                     'the reference "%s". A resolver that builds a new instance ', ...
+                     'must give it the identifier of the reference it resolves.'], ...
+                    class(resolver), node.id, referenceId)
+            end
             markResolved(node)
         end
 
