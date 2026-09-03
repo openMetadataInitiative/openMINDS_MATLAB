@@ -27,14 +27,17 @@ function collection = buildInteropCollection(specPath)
     typeIRIBase = "https://openminds.om-i.org/types/";
 
     spec = jsondecode(openminds.internal.utility.readUtf8File(specPath));
-    nodesByKey = dictionary(string.empty, cell.empty);
+
+    % containers.Map rather than dictionary, which R2022a does not have
+    nodesByKey = containers.Map('KeyType', 'char', 'ValueType', 'any');
+    nodes = cell(1, numel(spec.nodes));
 
     for i = 1:numel(spec.nodes)
         node = spec.nodes(i);
-        nodesByKey(node.key) = {instantiate(node.type, node.properties)};
+        nodes{i} = instantiate(node.type, node.properties);
+        nodesByKey(node.key) = nodes{i};
     end
 
-    nodes = nodesByKey.values();
     collection = openminds.Collection(nodes{:});
 
     function instance = instantiate(typeName, properties)
@@ -67,8 +70,7 @@ function collection = buildInteropCollection(specPath)
     function value = resolveValueObject(object)
         % jsondecode turns "$ref" into the field name "x_ref"
         if isfield(object, 'x_ref')
-            value = nodesByKey(string(object.x_ref));
-            value = value{1};
+            value = nodesByKey(char(object.x_ref));
         elseif isfield(object, 'x_instance')
             value = openminds.instanceFromIRI(string(object.x_instance));
         elseif isfield(object, 'x_embedded')
