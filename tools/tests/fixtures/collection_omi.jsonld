@@ -16,7 +16,9 @@
     {
       "@id": "https://openminds.om-i.org/instances/matlabTestFixture/contact-001",
       "@type": "https://openminds.om-i.org/types/ContactInformation",
-      "email": "ada@example.org"
+      "email": [
+        "ada@example.org"
+      ]
     },
     {
       "@id": "https://openminds.om-i.org/instances/matlabTestFixture/person-001",
@@ -66,7 +68,9 @@
       "@type": "https://openminds.om-i.org/types/Species",
       "definition": "The species *Homo sapiens* (humans) belongs to the family of *hominidae* (great apes).",
       "name": "Homo sapiens",
-      "otherOntologyIdentifier": "http://uri.interlex.org/base/ilx_0105114",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/base/ilx_0105114"
+      ],
       "preferredCrossReference": "https://knowledge-space.org/wiki/NCBITaxon:9606#human",
       "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/NCBITaxon_9606",
       "synonym": [
