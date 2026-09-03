@@ -16,7 +16,10 @@ classdef HasControlledInstance < handle
             instances = openminds.internal.listControlledInstances(type);
             isMatch = instances.InstanceName==string(name);
             if any(isMatch)
-                data = jsondecode(fileread(instances.Filepath(isMatch)));
+                % Shared JSON-LD decode, so the struct carries at_-form
+                % keywords; raw jsondecode would mangle @id into x_id.
+                data = openminds.internal.utility.json.decode( ...
+                    fileread(instances.Filepath(isMatch)));
                 instance = feval(type.ClassName, data);
             else
                 error(['Could not find data for instance of type "%s" ', ...

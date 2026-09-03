@@ -60,7 +60,6 @@ function data = getOfflineInstance(instanceName, schemaName, moduleName, version
     end
 
     jsonStr = fileread(filePath);
-    jsonStr = strrep(jsonStr, '''', ''''''); %If character array contains ', need to replace with ''
     data = openminds.internal.utility.json.decode(jsonStr);
 end
 

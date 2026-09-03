@@ -21,8 +21,11 @@ classdef InstanceResolver < openminds.interface.LinkResolver
                     'Could not find data for instance with IRI "%s"', instance.id)
             end
 
-            % Todo: use the JSON-LD deserializer once it exists
-            data = jsondecode(fileread(instances.Filepath(isMatch)));
+            % Decode through the shared JSON-LD utility, so the struct
+            % carries at_-form keywords like every other decoded document.
+            % Raw jsondecode would mangle @id into x_id.
+            data = openminds.internal.utility.json.decode( ...
+                fileread(instances.Filepath(isMatch)));
             instance.fromStruct(data);
         end
 
