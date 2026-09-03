@@ -64,6 +64,27 @@ jobs:
           # Path to SARIF file relative to the root of the repository
           sarif_file: docs/reports/code_issues.sarif
           
+      # The interoperability test builds the same collection with the
+      # Python reference implementation and compares the two exports. A
+      # pull request runs against a pinned release, so it cannot go red
+      # because of a change in the other repository. The weekly schedule
+      # runs against main, so drift between the implementations is noticed.
+      - name: Set up Python
+        id: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check out openMINDS_Python
+        uses: actions/checkout@v6
+        with:
+          repository: openMetadataInitiative/openMINDS_Python
+          ref: ${{ github.event_name == 'schedule' && 'main' || 'v0.6.0' }}
+          path: openMINDS_Python
+
+      - name: Install openMINDS_Python
+        run: python -m pip install --quiet ./openMINDS_Python
+
       # Run all tests in the project.
       # The round-trip test covers every openMINDS type when
       # OPENMINDS_TEST_ALL_TYPES is set, which takes several minutes. Pull
@@ -76,6 +97,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENMINDS_TEST_ALL_TYPES: ${{ (github.event_name == 'pull_request') && '0' || '1' }}
+          OPENMINDS_PYTHON: ${{ steps.python.outputs.python-path }}
         with:
           command: |
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
