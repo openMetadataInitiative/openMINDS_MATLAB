@@ -244,7 +244,7 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
             if obj.SerializationConfiguration.PropertyNameSyntax == "compact"
                 document = obj.addVocabularyMapping(document);
             end
-            document.at_graph = documentList;
+            document.at_graph = obj.sortDocumentsByIdentifier(documentList);
         end
     
         function S = normalizeEmptyProperties(obj, S)
@@ -263,6 +263,32 @@ classdef JsonLdSerializer < openminds.internal.serializer.BaseSerializer
     end
 
     methods (Static, Access = private)
+        function documentList = sortDocumentsByIdentifier(documentList)
+        % sortDocumentsByIdentifier - Order the nodes of a collection document
+        %
+        %   The nodes otherwise appear in whatever order the collection
+        %   returns them, which depends on the container backing the
+        %   collection and therefore on the MATLAB release: dictionary
+        %   preserves insertion order, while containers.Map returns values
+        %   sorted by key. A @graph is an unordered set, so an explicit
+        %   order is imposed to make the document identical on every
+        %   release.
+        %
+        %   This applies only to the collection document. Documents
+        %   emitted separately are not reordered, because stores pair them
+        %   with their instances by position.
+
+            identifiers = strings(1, numel(documentList));
+            for i = 1:numel(documentList)
+                if isfield(documentList{i}, 'at_id')
+                    identifiers(i) = documentList{i}.at_id;
+                end
+            end
+
+            [~, sortOrder] = sort(identifiers);
+            documentList = documentList(sortOrder);
+        end
+
         function allStructs = sortKeys(allStructs)
         % sortKeys - Sorts the keys of the given structs based on a predefined order.
         %
