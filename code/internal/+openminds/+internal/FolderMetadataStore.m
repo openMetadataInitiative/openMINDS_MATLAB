@@ -4,6 +4,11 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
 % This class handles saving and loading openMINDS Collections to/from
 % multiple metadata files organized in a folder structure using a configurable serializer.
 %
+% Every node of the graph is written as a file of its own. Saving an
+% instance also saves every instance reachable from it through links and
+% embeddings, because a reference to a node that has no file could not be
+% followed when the folder is loaded again.
+%
 % USAGE:
 %   store = FolderMetadataStore("metadata_folder");  % Flat structure (default)
 %   store = FolderMetadataStore("metadata_folder", 'Nested', true);  % Nested structure
@@ -21,28 +26,29 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 folderPath (1,1) string
                 options.Nested (1,1) logical = false
                 options.Serializer = []
-                options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 0
                 options.PrettyPrint (1,1) logical = true
                 options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"
                 options.IncludeEmptyProperties (1,1) logical = false
-                options.IncludeIdentifier (1,1) logical = true
             end
-            
+
             % Call parent constructor
             obj = obj@openminds.interface.MetadataStore();
-            
+
             % Set immutable properties
             obj.Location = folderPath;
             obj.Nested = options.Nested;
-            
-            % Create JsonLdSerializer if not provided
+
+            % Create JsonLdSerializer if not provided. The store flattens
+            % the graph itself, so the serializer must not recurse into
+            % links, and every document carries its identifier so it can
+            % be linked to again on load. Neither is configurable here.
             if isempty(options.Serializer)
                 obj.Serializer = openminds.internal.serializer.JsonLdSerializer(...
-                    'RecursionDepth', options.RecursionDepth, ...
+                    'RecursionDepth', 0, ...
                     'PrettyPrint', options.PrettyPrint, ...
                     'PropertyNameSyntax', options.PropertyNameSyntax, ...
                     'IncludeEmptyProperties', options.IncludeEmptyProperties, ...
-                    'IncludeIdentifier', options.IncludeIdentifier, ...
+                    'IncludeIdentifier', true, ...
                     'OutputMode', 'multiple');
             else
                 obj.Serializer = options.Serializer;
@@ -78,20 +84,22 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 options struct = struct() %#ok<INUSA>
             end
             
-            % Handle Collection objects
+            % Every node reachable from the given instances is written,
+            % not only the instances themselves. The collection does the
+            % flattening; a new one is built so a collection passed in is
+            % left as it was.
             if isa(instances, 'openminds.Collection')
                 instances = instances.getAll();
+            elseif ~iscell(instances)
+                instances = num2cell(instances);
             end
-            
+            instances = openminds.Collection(instances{:}).getAll();
+
             % Ensure folder exists
             if ~isfolder(obj.Location)
                 mkdir(obj.Location);
             end
 
-            if ~iscell(instances)
-                instances = num2cell(instances);
-            end
-            
             % Serialize instances to individual documents. A single
             % instance serializes to one document rather than a cell, so
             % it is wrapped to keep the loop below uniform.
@@ -99,15 +107,26 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
             if ~iscell(serializedDocuments)
                 serializedDocuments = {serializedDocuments};
             end
-            
+
+            % Each file is named after the instance its document was built
+            % from, so documents and instances must line up one to one.
+            % They do unless the serializer was configured to recurse into
+            % links on its own.
+            if numel(serializedDocuments) ~= numel(instances)
+                error('openminds:FolderMetadataStore:DocumentCountMismatch', ...
+                    ['The serializer produced %d documents for %d instances. ', ...
+                    'A folder store writes one document per instance, so its ', ...
+                    'serializer must not recurse into linked instances: ', ...
+                    'configure it with RecursionDepth 0.'], ...
+                    numel(serializedDocuments), numel(instances));
+            end
+
             % Save each document to a separate file
             outputPaths = cell(size(serializedDocuments));
             for i = 1:numel(serializedDocuments)
-                instance = instances{i};
-                
                 % Build file path using unified method
-                filePath = obj.buildFilepath(instance);
-                
+                filePath = obj.buildFilepath(instances{i});
+
                 % Write to file
                 openminds.internal.utility.filewrite(filePath, serializedDocuments{i});
                 outputPaths{i} = filePath;
@@ -170,6 +189,10 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   For flat structure: saves all files in root folder with type prefix
         %   For nested structure: creates type-based subfolders with ID-only filenames
         %
+        %   The path is derived from the instance itself rather than from
+        %   its serialized document, so this works regardless of which
+        %   BaseSerializer subclass produced the document.
+        %
         %   PARAMETERS:
         %   -----------
         %   instance : openminds.abstract.Schema
@@ -184,12 +207,11 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
         %   ---------
         %   Flat:   /root/Person_123.jsonld
         %   Nested: /root/person/123.jsonld
-        
-            % Get instance type and ID information
-            className = class(instance);
-            classNameParts = strsplit(className, '.');
+
+            % Get instance type from its class name
+            classNameParts = strsplit(class(instance), '.');
             typeName = classNameParts{end};
-            
+
             % Get instance ID and make it filesystem-safe
             instanceId = string(instance.id);
             if startsWith(instanceId, "http")
@@ -201,7 +223,7 @@ classdef FolderMetadataStore < openminds.interface.MetadataStore
                 safeId = regexprep(instanceId, '^_:', '');
             end
             safeId = regexprep(safeId, '[^\w\-_.]', '_');
-            
+
             if obj.Nested
                 % Nested structure: create type subfolder + ID-only filename
                 typeFolder = lower(typeName);
