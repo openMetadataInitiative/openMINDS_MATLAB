@@ -6,7 +6,9 @@ function filewrite(filePath, textStr)
         mkdir(folderPath)
     end
     
-    fid = fopen(filePath, 'w');
-    fwrite(fid, textStr);
+    % Written as UTF-8 regardless of the platform default encoding, so a
+    % file is read back the same way on every platform.
+    fid = fopen(filePath, 'w', 'n', 'UTF-8');
+    fwrite(fid, textStr, 'char');
     fclose(fid);
 end

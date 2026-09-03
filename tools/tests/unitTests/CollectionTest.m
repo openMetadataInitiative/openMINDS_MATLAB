@@ -402,6 +402,22 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(string(outputPaths{1}), filePath);
         end
 
+        function testFileStoreRoundTripsSupplementaryCharacters(testCase)
+            % A character outside the Basic Multilingual Plane is encoded
+            % as four bytes in UTF-8 and must survive a write and a read
+            % through the store.
+            brainEmoji = char([55358 56800]); % U+1F9E0 as a surrogate pair
+            givenName = "Mät " + brainEmoji;
+            person = openminds.core.Person("givenName", givenName);
+            metadataStore = openminds.internal.FileMetadataStore( ...
+                "supplementary-characters.jsonld");
+
+            metadataStore.save(person);
+            reloaded = metadataStore.load();
+
+            testCase.verifyEqual(reloaded{1}.givenName, givenName);
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
