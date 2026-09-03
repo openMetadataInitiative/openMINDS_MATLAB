@@ -97,6 +97,16 @@ class MATLABSchemaBuilder(object):
         schema_classdef_str = self._expand_schema_template()
         return schema_classdef_str
 
+    def get_property_definitions(self):
+        """Return the template property attributes for this schema's properties.
+
+        Exposes the rendered property definitions without writing any file, so
+        that a class assembled from a subset of them, such as the controlled
+        term base class, is rendered exactly like the generated classes.
+        """
+        self._extract_template_variables()
+        return self._template_variables["props"]
+
     def _parse_source_file_path(self, schema_file_path:str, root_path:str):
         _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
         
@@ -366,6 +376,71 @@ def _create_matlab_name(json_name):
 def _get_openminds_property_name(json_name):
     """Remove the openMINDS prefix from a property name"""
     return json_name.split('/')[-1]
+
+
+def save_controlled_term_base_class(version, schema_root_path, class_name_map, jinja_templates):
+    """Generate the controlled term base class for a schema version.
+
+    The properties shared by the controlled term schemas of a model version
+    differ between versions, so the base class holding them is generated per
+    version alongside the types rather than maintained by hand.
+    """
+    base_property_names = _get_controlled_term_base_properties(schema_root_path, version)
+    if not base_property_names:
+        # Model versions without a controlled terms module need no base class.
+        return None
+
+    schema_file_path = _find_controlled_term_schema(
+        schema_root_path, version, base_property_names
+    )
+
+    builder = MATLABSchemaBuilder(
+        schema_file_path, schema_root_path, class_name_map, jinja_templates
+    )
+    props = [
+        prop for prop in builder.get_property_definitions()
+        if prop["name"] in base_property_names
+    ]
+
+    classdef_str = jinja_templates["controlledterm_base_class"].render({"props": props})
+    classdef_str = _strip_trailing_whitespace(classdef_str)
+
+    target_file_path = os.path.join(
+        "target", "base", version, "+openminds", "+base", "ControlledTerm.m"
+    )
+    os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
+    with open(target_file_path, "w", encoding="utf-8") as target_file:
+        target_file.write(classdef_str)
+
+    return target_file_path
+
+
+def _find_controlled_term_schema(schema_root_path, version, property_names):
+    """Return the controlled term schema whose properties are exactly the given set.
+
+    The base property set is taken from the schemas themselves, so at least one
+    schema declares it and no more than its own properties are needed to render
+    the base class.
+    """
+    schema_file_paths = sorted(glob.glob(
+        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+    ))
+
+    for schema_file_path in schema_file_paths:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
+            schema_payload = json.load(schema_file)
+
+        schema_property_names = {
+            _create_matlab_name(property_name)
+            for property_name in schema_payload.get("properties", {})
+        }
+        if schema_property_names == property_names:
+            return schema_file_path
+
+    raise ValueError(
+        f"No controlled term schema in version '{version}' declares the base "
+        f"property set {sorted(property_names)}."
+    )
 
 
 def _get_controlled_term_base_properties(schema_root_path, version):

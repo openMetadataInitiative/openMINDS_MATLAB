@@ -98,6 +98,7 @@ def initialise_jinja_templates(autoescape:bool=None):
         - `"schema_class"`: Template for schema class generation.
         - `"controlledterm_class"`: Template for controlled term class generation.
         - `"mixedtype_class"`: Template for mixed type class generation.
+        - `"controlledterm_base_class"`: Template for the controlled term base class.
         - `"modules_enumeration"`: Template for modules enumeration generation.
         - `"types_enumeration"`: Template for types enumeration generation.
 
@@ -124,6 +125,7 @@ def initialise_jinja_templates(autoescape:bool=None):
     jinja_templates = {
         "schema_class": jinja_environment.get_template("schema_class_template.txt"),
         "controlledterm_class": jinja_environment.get_template("controlledterm_class_template.txt"),
+        "controlledterm_base_class": jinja_environment.get_template("controlledterm_base_class_template.txt"),
         "mixedtype_class": jinja_environment.get_template("mixedtype_class_template.txt"),
         "modules_enumeration": jinja_environment.get_template("modules_enumeration_template.txt"),
         "types_enumeration": jinja_environment.get_template("types_enumeration_template.txt"),

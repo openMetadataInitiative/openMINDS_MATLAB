@@ -2,7 +2,7 @@ import os.path
 import shutil
 import sys
 
-from pipeline.translator import MATLABSchemaBuilder
+from pipeline.translator import MATLABSchemaBuilder, save_controlled_term_base_class
 from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_templates, save_resource_files, save_enumeration_classes, get_class_name_map
 
 print("***************************************")
@@ -48,6 +48,9 @@ for schema_version in schema_loader.get_schema_versions():
             print(f"::{annotation_type} file={relative_path},title=Error while building class for schema '{schemaName}' ({schema_version})::{e}")
 
     save_resource_files(schema_version, schemas_file_paths)
+
+    save_controlled_term_base_class(
+        schema_version, schema_loader.schemas_sources, class_name_map, jinja_templates)
     
     save_enumeration_classes("Types", schema_version, schema_loader, jinja_templates["types_enumeration"])
     save_enumeration_classes("Modules", schema_version, schema_loader, jinja_templates["modules_enumeration"])
