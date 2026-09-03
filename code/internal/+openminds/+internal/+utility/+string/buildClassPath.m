@@ -1,6 +1,9 @@
 function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule)
-%BUILDCLASSPATH Summary of this function goes here
-%   Detailed explanation goes here
+%buildClassPath File path of the generated class for a type
+%
+%   filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule)
+%   places the class under the +openminds/+<module>[/+<category>] package
+%   of the generated types folder.
     
     arguments
         schemaClassName

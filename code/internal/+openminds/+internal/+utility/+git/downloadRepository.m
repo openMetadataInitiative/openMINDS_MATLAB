@@ -20,11 +20,11 @@ function downloadRepository(repositoryName, options)
     
     import openminds.internal.extern.fex.filedownload.downloadFile
     import openminds.internal.utility.git.getCurrentCommitID
-    import openminds.internal.utility.git.saveCurrentCommitID
-    import openminds.internal.utility.git.hasLatestCommit
+    import openminds.internal.utility.git.writeRecordedCommitID
+    import openminds.internal.utility.git.isRecordedCommitCurrent
 
     % Check if we already have the latest commit
-    if hasLatestCommit('RepositoryName', repositoryName, ...
+    if isRecordedCommitCurrent('RepositoryName', repositoryName, ...
                       'BranchName', options.BranchName, ...
                       'Owner', options.Owner)
         fprintf('Repository "%s" is already up to date. Skipping download.\n', repositoryName);
@@ -77,5 +77,5 @@ function downloadRepository(repositoryName, options)
     [~, commitDetails] = getCurrentCommitID(repositoryName, ...
         "BranchName", options.BranchName, ...
         "Owner", options.Owner);
-    saveCurrentCommitID(commitDetails)
+    writeRecordedCommitID(commitDetails)
 end

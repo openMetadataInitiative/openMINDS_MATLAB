@@ -1,5 +1,10 @@
-function controlledTermVersion = activateControlledTermBase(modelVersion)
-%activateControlledTermBase Activate the controlled-term base for a model version.
+function controlledTermVersion = installControlledTermBase(modelVersion)
+%installControlledTermBase Copy the controlled-term base for a model version into place
+%
+%   The base class for controlled terms differs between model versions.
+%   The variant for the given version is copied over the tracked
+%   openminds.abstract.ControlledTerm file, so this writes to the source
+%   tree whenever the version changes.
 
     arguments
         modelVersion (1,1) openminds.internal.utility.VersionNumber ...

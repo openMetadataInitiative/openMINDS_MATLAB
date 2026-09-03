@@ -160,7 +160,7 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
         
         function propertyNames = get.PropertyNames(obj)
             if isempty(obj.PropertyNames_)
-                propertyNames = assignPropertyNames(obj);
+                propertyNames = initializePropertyNames(obj);
             else
                 propertyNames = obj.PropertyNames_;
             end
@@ -170,8 +170,8 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
     % Methods for updating list of property names
     methods (Access = private)
         
-        function propertyNames = assignPropertyNames(obj)
-        %assignPropertyNames Assign (initialize) the list of property names
+        function propertyNames = initializePropertyNames(obj)
+        %initializePropertyNames Build the cached list of property names
             obj.PropertyNames_ = cell({''}); % Set to non-empty
             obj.updatePropertyNames()
             

@@ -458,7 +458,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
     end
 
     methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
-        function semanticName = getSemanticName(obj)
+        function semanticIRI = getSemanticIRI(obj)
             import openminds.internal.utility.string.packageParts
 
             iriPrefix = openminds.constant.PropertyIRIPrefix();
@@ -466,23 +466,8 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
             [~, shortName] = packageParts(class(obj));
             shortName = openminds.internal.utility.string.camelCase(shortName);
-            semanticName = iriPrefix + shortName;
+            semanticIRI = iriPrefix + shortName;
         end
     end
 
-    methods (Static, Access = protected, Hidden)
-        function shortSchemaName = getSchemaShortName(fullSchemaName)
-        %getSchemaShortName Get short schema name from full schema name
-        %
-        %   shortSchemaName = getSchemaShortName(fullSchemaName)
-        %
-        %   Example:
-        %   fullSchemaName = 'openminds.core.research.Subject';
-        %   shortSchemaName = obj.getSchemaShortName(fullSchemaName)
-        %
-        %     'Subject'
-            import openminds.internal.utility.getSchemaName
-            shortSchemaName = getSchemaName(fullSchemaName);
-        end
-    end
 end

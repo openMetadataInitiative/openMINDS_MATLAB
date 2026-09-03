@@ -20,12 +20,12 @@ function update(mode)
     end
 
     import openminds.internal.utility.git.getCurrentCommitID
-    import openminds.internal.utility.git.loadPreviousCommitID
+    import openminds.internal.utility.git.readRecordedCommitID
 
     repoOwner = openminds.internal.constants.Github.Organization;
 
     % - Check commitID, and return if previous commit is is same as current
-    previousCommitID = loadPreviousCommitID(...
+    previousCommitID = readRecordedCommitID(...
         'RepositoryName', 'openMINDS', ...
         'BranchName', 'main', ...
         'Owner', repoOwner);
@@ -62,7 +62,7 @@ function update(mode)
         disp('Finished!')
     end
 
-    openminds.internal.utility.git.saveCurrentCommitID(details)
+    openminds.internal.utility.git.writeRecordedCommitID(details)
 
     % Check that the schemafolder in on path
     currentPathList = strsplit(path, pathsep);

@@ -1,4 +1,8 @@
-function mustBeValidOpenMINDSIRI(IRI)
+function mustBeOpenMINDSIRI(IRI)
+%mustBeOpenMINDSIRI Validate that an IRI belongs to an openMINDS namespace
+%
+%   This checks the namespace only. Whether the IRI names an instance or a
+%   type is for the caller to decide.
     arguments
         IRI (1,1) string
     end

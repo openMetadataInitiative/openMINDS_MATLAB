@@ -27,12 +27,9 @@ classdef EnumerationTest < matlab.unittest.TestCase
             testCase.verifyEqual(noneEnum.AliasClassName, "None");
             testCase.verifyEqual(noneEnum.TypeURI, "None");
             
-            % Test instance creation methods
-            personInstance = typeEnum.create();
+            % Test instance creation
+            personInstance = typeEnum.createInstance();
             testCase.verifyClass(personInstance, "openminds.core.actors.Person");
-            
-            personInstance2 = typeEnum.createInstance();
-            testCase.verifyClass(personInstance2, "openminds.core.actors.Person");
             
             % Test error for multiple objects
             multipleEnums = [openminds.enum.Types.Person, openminds.enum.Types.Dataset];

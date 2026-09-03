@@ -1,5 +1,5 @@
-function saveCurrentCommitID(commitDetails)
-% saveCurrentCommitID - Save commit id for current version of a repository
+function writeRecordedCommitID(commitDetails)
+% writeRecordedCommitID - Record the commit id a repository was downloaded at
 %
 %   Input arguments:
 %       commitDetails - a struct with the following fields:

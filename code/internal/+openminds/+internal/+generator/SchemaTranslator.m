@@ -407,7 +407,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
             % Write required and constant properties
             if isfield(obj.Schema, 'required')
-                required = obj.cellArrayToTextString(obj.Schema.required);
+                required = obj.cellArrayToCellLiteral(obj.Schema.required);
             else
                 required = '{}';
             end
@@ -436,7 +436,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
                     keyName = fieldnames(linkedPropertyInfo{i});
                     keyName = keyName{1};
                     linkedTypes = linkedPropertyInfo{i}.(keyName);
-                    linkedTypesStr = obj.cellArrayToTextString(linkedTypes);
+                    linkedTypesStr = obj.cellArrayToCellLiteral(linkedTypes);
                 
                     if i==numel(linkedPropertyInfo)
                         lineBreak = ' ...';
@@ -955,7 +955,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
             functionName = 'mustBeType';
 
-            validTypes = obj.cellArrayToTextString(clsNames);
+            validTypes = obj.cellArrayToCellLiteral(clsNames);
 
             str = sprintf("%s(%s, %s)", functionName, propertyName, validTypes);
         end
