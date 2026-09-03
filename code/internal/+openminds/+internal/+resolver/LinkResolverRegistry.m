@@ -46,7 +46,10 @@ classdef LinkResolverRegistry < handle
 
         function resolver = getLinkResolver(obj, IRI)
         % Return the first registered resolver that can handle IRI.
-        % Throws if none found.
+        %
+        %   Resolvers are tried in registration order, so when more than
+        %   one can handle an identifier the one registered first wins,
+        %   every time. Throws if none can.
             arguments
                 obj (1,1) openminds.internal.resolver.LinkResolverRegistry
                 IRI (1,1) string
@@ -57,7 +60,6 @@ classdef LinkResolverRegistry < handle
                 candidate = obj.LinkResolvers{i};
                 if candidate.canResolve(IRI)
                     resolver = candidate;
-                    obj.promoteResolver(i)
                     break
                 end
             end
@@ -85,21 +87,6 @@ classdef LinkResolverRegistry < handle
             index = find( cellfun(@(r) r.IRIPrefix == iriPrefix, obj.LinkResolvers), 1 );
         end
 
-        function promoteResolver(obj, index)
-        % promoteResolver - Reorder registry so the resolver at index is first
-            arguments
-                obj (1,1) openminds.internal.resolver.LinkResolverRegistry
-                index (1,1) double {mustBePositive, mustBeInteger}
-            end
-
-            if index == 1
-                return % Already at front
-            end
-
-            % Keep the relative order of the remaining resolvers
-            obj.LinkResolvers = [obj.LinkResolvers(index), ...
-                                 obj.LinkResolvers([1:index-1, index+1:end])];
-        end
     end
 
     methods (Static)

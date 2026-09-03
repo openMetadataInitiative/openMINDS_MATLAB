@@ -137,6 +137,46 @@ classdef DeserializerTest < matlab.unittest.TestCase
         end
     end
 
+    methods (Test) % References outside the document
+
+        function testReferenceToBareHostIriIsLeftUnresolved(testCase)
+        % A linked property may point outside the document. An identifier
+        % with a host and no path is a valid IRI and stays an unresolved
+        % reference rather than breaking the read.
+
+            document = DeserializerTest.collectionDocument(sprintf( ...
+                ['{"@id": "_:person-1", "@type": "%sPerson", "givenName": "Ada", ', ...
+                 '"contactInformation": [{"@id": "https://example.org"}]}'], ...
+                DeserializerTest.TypeIRI));
+
+            instances = testCase.deserialize(document);
+
+            testCase.assertNumElements(instances, 1)
+            testCase.verifyTrue(instances{1}.contactInformation.isUnresolved(), ...
+                'A reference the document does not define stays unresolved.')
+        end
+    end
+
+    methods (Test) % Malformed documents
+
+        function testDuplicateIdentifiersAreReported(testCase)
+        % Two nodes with one identifier cannot both be the target of a
+        % link. The first is kept and the second reported as unreadable,
+        % so a partial read is visible.
+
+            document = DeserializerTest.collectionDocument( ...
+                DeserializerTest.personNode("_:duplicate", "First"), ...
+                DeserializerTest.personNode("_:duplicate", "Second"));
+
+            instances = testCase.verifyWarning(@() testCase.deserialize(document), ...
+                'openMINDS:Deserializer:UnreadableNodes');
+
+            testCase.assertNumElements(instances, 1)
+            testCase.verifyEqual(instances{1}.givenName, "First", ...
+                'The first node with the identifier is the one kept.')
+        end
+    end
+
     methods (Access = private)
         function instances = deserialize(~, documents)
             deserializer = openminds.internal.serializer.JsonLdDeserializer();

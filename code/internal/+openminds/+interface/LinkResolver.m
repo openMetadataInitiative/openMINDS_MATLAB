@@ -26,7 +26,10 @@ classdef (Abstract) LinkResolver < handle
 %   until it is probed cannot be, because an instance cannot change its
 %   class: the resolver has to build an instance of the discovered type
 %   and return that instead. Both are legitimate, and which one applies is
-%   a property of the reference rather than of the resolver.
+%   a property of the reference rather than of the resolver. A replacement
+%   must carry the identifier of the reference it replaces, since every
+%   link to the node is written with that identifier; the resolving
+%   visitor errors when it does not.
 %
 %   See also openminds.internal.resolver.ResolvingVisitor, openminds.registerLinkResolver
 

@@ -124,6 +124,11 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 % options.IsEmbedded = false - Todo?
             end
 
+            if isempty(obj)
+                instance = obj; % Nothing to resolve; keep the class of the empty array
+                return
+            end
+
             visitorOptions = {"RemainingLinkDepth", options.NumLinksToResolve};
             if isfield(options, 'LinkResolver')
                 visitorOptions = [visitorOptions, {"LinkResolver", options.LinkResolver}];
