@@ -254,6 +254,12 @@ classdef Collection < handle
 
         function instances = getAll(obj)
         % getAll - Get all instances of collection
+            % An unconfigured dictionary cannot return its values
+            if obj.NumNodes == 0
+                instances = {};
+                return
+            end
+
             instances = obj.Nodes.values();
 
             % For older MATLAB releases, the instances might be nested a
@@ -323,6 +329,12 @@ classdef Collection < handle
         end
 
         function updateLinks(obj)
+            % An empty collection has nothing to link, and an unconfigured
+            % dictionary cannot return its values.
+            if obj.NumNodes == 0
+                return
+            end
+
             allInstances = obj.Nodes.values;
             if isa(obj.Nodes, 'containers.Map')
                 allInstances = [allInstances{:}];

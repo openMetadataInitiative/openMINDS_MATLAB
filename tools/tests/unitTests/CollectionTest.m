@@ -390,6 +390,18 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(reloaded{1}.id, contact.id);
         end
 
+        function testSaveEmptyCollection(testCase)
+            % A collection with no nodes still saves, giving an empty
+            % collection document.
+            collection = openminds.Collection();
+            filePath = "empty-collection.jsonld";
+
+            outputPaths = collection.save(filePath);
+
+            testCase.verifyTrue(isfile(filePath));
+            testCase.verifyEqual(string(outputPaths{1}), filePath);
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
