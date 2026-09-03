@@ -19,7 +19,13 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
     end
 
     methods (Access = protected)
-        function initializeControlledTerm(obj, instanceSpec, propValues)
+        function obj = initializeControlledTerm(obj, instanceSpec, propValues)
+        % initializeControlledTerm - Populate one or more terms from a spec
+        %
+        %   The object array is returned because a struct array spec
+        %   produces one term per element. Expanding obj inside this method
+        %   only grows the local copy, so a caller that ignores the return
+        %   value keeps just the first element.
             if isstring(instanceSpec) && isscalar(instanceSpec) && instanceSpec == ""
                 instanceSpec = string.empty;
             end

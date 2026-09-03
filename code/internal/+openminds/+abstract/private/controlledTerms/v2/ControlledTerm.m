@@ -32,7 +32,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.ControlledTermBase
                 propValues.id (1,1) string
             end
 
-            obj.initializeControlledTerm(instanceSpec, propValues)
+            obj = obj.initializeControlledTerm(instanceSpec, propValues);
         end
     end
 end

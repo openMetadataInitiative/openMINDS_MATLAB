@@ -30,6 +30,38 @@ classdef ControlledTermTest < matlab.unittest.TestCase
             testCase.verifyEqual(string(term.id), "_:a-user-defined-term")
         end
 
+        function testStructArrayProducesOneTermPerElement(testCase)
+        % A multi-valued property deserializes to a struct array of
+        % references. Each element must become its own term, or every
+        % entry after the first is lost.
+
+            references = struct('at_id', { ...
+                "https://openminds.om-i.org/instances/laterality/left", ...
+                "https://openminds.om-i.org/instances/laterality/right"});
+
+            terms = openminds.controlledterms.Laterality(references);
+
+            testCase.assertNumElements(terms, 2)
+            testCase.verifyEqual(string(terms(1).id), ...
+                "https://openminds.om-i.org/instances/laterality/left")
+            testCase.verifyEqual(string(terms(2).id), ...
+                "https://openminds.om-i.org/instances/laterality/right")
+        end
+
+        function testMultiValuedControlledPropertyKeepsEveryEntry(testCase)
+        % The same case reached through a property rather than the
+        % constructor, which is how deserialization gets there.
+
+            references = struct('at_id', { ...
+                "https://openminds.om-i.org/instances/laterality/left", ...
+                "https://openminds.om-i.org/instances/laterality/right"});
+
+            annotation = openminds.sands.AtlasAnnotation();
+            annotation.laterality = references;
+
+            testCase.verifyNumElements(annotation.laterality, 2)
+        end
+
         function testReferenceToKnownTermIsLookedUp(testCase)
         % A document carrying only an identifier describes nothing, so the
         % term is populated from the controlled instance library instead.
