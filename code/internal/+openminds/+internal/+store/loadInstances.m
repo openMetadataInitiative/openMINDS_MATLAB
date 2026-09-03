@@ -28,34 +28,8 @@ function instances = loadInstances(filePath)
 
     deserializer = selectDeserializer(filePath(1));
 
-    documents = arrayfun(@readDocument, filePath);
+    documents = arrayfun(@openminds.internal.utility.readUtf8File, filePath);
     instances = deserializer.deserialize(documents);
-end
-
-function document = readDocument(filePath)
-% Read a file as UTF-8 text.
-%
-% The bytes are decoded explicitly. The text readers (fileread, fread with
-% a char precision, readlines) decode a character outside the Basic
-% Multilingual Plane, such as an emoji, to the substitute character U+001A
-% (observed on R2025b), so metadata holding such characters would be
-% silently altered.
-
-    fileId = fopen(filePath, 'r');
-    if fileId < 0
-        error('openMINDS:LoadInstances:FileNotReadable', ...
-            'Could not open file "%s" for reading.', filePath)
-    end
-    fileCleanup = onCleanup(@() fclose(fileId));
-
-    bytes = fread(fileId, '*uint8')';
-    document = string(native2unicode(bytes, 'UTF-8'));
-
-    % A byte order mark is not part of the document
-    byteOrderMark = char(65279); % U+FEFF
-    if startsWith(document, byteOrderMark)
-        document = extractAfter(document, 1);
-    end
 end
 
 function deserializer = selectDeserializer(filePath)
