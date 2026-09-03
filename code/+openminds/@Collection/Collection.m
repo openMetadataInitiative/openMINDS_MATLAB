@@ -581,11 +581,16 @@ classdef Collection < handle
 
                 % Initialize from file(s)
                 if all( cellfun(isFilePath, instance) )
-                    obj.load(instance{:})
+                    % load accepts a single path, so each is loaded in turn
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from folder
                 elseif all( cellfun(isFolderPath, instance) )
-                    obj.load(instance{:})
+                    for i = 1:numel(instance)
+                        obj.load(instance{i})
+                    end
 
                 % Initialize from instance(s)
                 elseif all( cellfun(isMetadata, instance) )

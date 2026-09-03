@@ -335,6 +335,26 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(length(instances), expectedNumDocuments);
         end
         
+        function testCreateCollectionFromMultipleFiles(testCase)
+            % A collection constructed from several files loads each of
+            % them, rather than only the first.
+            firstContact = openminds.core.ContactInformation( ...
+                "email", "first@example.org");
+            secondContact = openminds.core.ContactInformation( ...
+                "email", "second@example.org");
+
+            firstFilePath = "first-contact.jsonld";
+            secondFilePath = "second-contact.jsonld";
+            openminds.internal.FileMetadataStore(firstFilePath).save(firstContact);
+            openminds.internal.FileMetadataStore(secondFilePath).save(secondContact);
+
+            collection = openminds.Collection(firstFilePath, secondFilePath);
+
+            testCase.verifyEqual(length(collection), 2);
+            testCase.verifyTrue(collection.isKey(firstContact.id));
+            testCase.verifyTrue(collection.isKey(secondContact.id));
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
