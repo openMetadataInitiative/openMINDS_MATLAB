@@ -511,6 +511,13 @@ classdef Collection < handle
 
             wasAdded = false;
 
+            % An unresolved reference stands for a node that is not here.
+            % It is not a node itself: it stays a reference wherever it is
+            % linked, and has nothing that could be saved or listed.
+            if isa(instance, 'openminds.internal.MixedTypeReference')
+                return
+            end
+
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
             end

@@ -390,6 +390,144 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(reloaded{1}.id, contact.id);
         end
 
+        function testFolderStoreSavesEveryLinkedNode(testCase)
+            % Saving an instance to a folder also saves everything it
+            % links to, each as a file of its own, so the references in
+            % the saved documents can be followed when the folder is
+            % loaded again.
+            identifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0000");
+            contact = openminds.core.ContactInformation( ...
+                "email", "linked@example.org");
+            person = openminds.core.Person( ...
+                "digitalIdentifier", identifier, ...
+                "contactInformation", contact);
+
+            folderPath = "linked-folder-store";
+            metadataStore = openminds.internal.FolderMetadataStore(folderPath);
+
+            outputPaths = metadataStore.save(person);
+
+            files = dir(fullfile(folderPath, "*.jsonld"));
+            testCase.verifyEqual(numel(outputPaths), 3);
+            testCase.verifyEqual(numel(files), 3);
+            testCase.verifyTrue(any(contains(string(outputPaths), "Person_")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "ORCID_")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "ContactInformation_")));
+
+            reloaded = metadataStore.load();
+            isPerson = cellfun(@(x) isa(x, 'openminds.core.Person'), reloaded);
+            reloadedPerson = reloaded{isPerson};
+            testCase.verifyEqual(reloadedPerson.contactInformation.email, contact.email, ...
+                'The saved link was not followed on load.');
+        end
+
+        function testFolderStoreRejectsRecursingSerializer(testCase)
+            % The store names each file after the instance its document
+            % came from, so a serializer that emits extra documents by
+            % recursing into links on its own cannot be paired with
+            % instances and is refused. Controlled instances are kept
+            % out of the collection here so the serializer finds a link
+            % the store did not flatten.
+            original = openminds.getpref('AddControlledInstanceToCollection');
+            testCase.addTeardown(@() openminds.setpref( ...
+                'AddControlledInstanceToCollection', original));
+            openminds.setpref('AddControlledInstanceToCollection', false);
+
+            subject = openminds.core.Subject();
+            subject.species = ommtest.helper.controlledInstance( ...
+                "openminds.controlledterms.Species", "Homo sapiens");
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "recursing-serializer-folder-store", "Serializer", ...
+                ommtest.helper.mock.MockTextSerializer("RecursionDepth", 1));
+
+            testCase.verifyError(@() metadataStore.save(subject), ...
+                'openminds:FolderMetadataStore:DocumentCountMismatch');
+        end
+
+        function testFolderStoreFilenamesDoNotDependOnJsonLd(testCase)
+            % The filename for a document is derived from the instance
+            % that produced it, not by decoding the document, so a
+            % serializer that is not JsonLdSerializer - such as one
+            % written against an external format - still gets sensible,
+            % type-based filenames, and the linked node is still saved.
+            identifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0000");
+            person = openminds.core.Person("digitalIdentifier", identifier);
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "non-jsonld-folder-store", "Serializer", ...
+                ommtest.helper.mock.MockTextSerializer("RecursionDepth", 0));
+
+            outputPaths = metadataStore.save(person);
+
+            testCase.verifyEqual(numel(outputPaths), 2);
+            testCase.verifyTrue(all(isfile(string(outputPaths))));
+            testCase.verifyTrue(all(endsWith(string(outputPaths), ".mocktext")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "Person_")));
+            testCase.verifyTrue(any(contains(string(outputPaths), "ORCID_")));
+        end
+
+        function testFolderStoreSavesColumnOfInstances(testCase)
+            % Collection.getAll returns a column cell, so the instances a
+            % store is given are often column-shaped. Each, with its
+            % links, is saved whatever the shape.
+            firstPerson = openminds.core.Person("givenName", "A", ...
+                "digitalIdentifier", openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0001"));
+            secondPerson = openminds.core.Person("givenName", "B", ...
+                "digitalIdentifier", openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0002"));
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "column-folder-store");
+
+            outputPaths = metadataStore.save({firstPerson; secondPerson});
+
+            testCase.verifyEqual(numel(outputPaths), 4);
+            testCase.verifyEqual(nnz(contains(string(outputPaths), "Person_")), 2);
+            testCase.verifyEqual(nnz(contains(string(outputPaths), "ORCID_")), 2);
+        end
+
+        function testFolderStoreWritesUnresolvedLinkAsReference(testCase)
+            % A link to a node that is not present, held as an untyped
+            % reference, is written as a reference in the linking document
+            % and gets no file of its own.
+            referenceIRI = "https://graph.example/instances/doi-001";
+            dataset = openminds.core.Dataset("fullName", "D");
+            dataset.digitalIdentifier = openminds.internal.MixedTypeReference(referenceIRI);
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "unresolved-link-folder-store");
+
+            outputPaths = metadataStore.save(dataset);
+
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(contains(string(outputPaths{1}), "Dataset_"));
+            testCase.verifyTrue(contains(fileread(outputPaths{1}), referenceIRI));
+        end
+
+        function testUnresolvedLinkIsNotANode(testCase)
+            % An untyped reference to a node that is not present is a
+            % placeholder, not a node: it is not counted, and saving the
+            % collection to a single file writes it as a reference in the
+            % linking document rather than failing on it.
+            referenceIRI = "https://graph.example/instances/doi-001";
+            dataset = openminds.core.Dataset("fullName", "D");
+            dataset.digitalIdentifier = openminds.internal.MixedTypeReference(referenceIRI);
+
+            collection = openminds.Collection(dataset);
+            testCase.verifyEqual(length(collection), 1);
+
+            filePath = "unresolved-link-collection.jsonld";
+            collection.save(filePath);
+
+            document = fileread(filePath);
+            testCase.verifyTrue(contains(document, referenceIRI));
+            testCase.verifyFalse(contains(document, "MixedTypeReference"));
+        end
+
         function testSaveEmptyCollection(testCase)
             % A collection with no nodes still saves, giving an empty
             % collection document.
