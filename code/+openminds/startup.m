@@ -11,10 +11,6 @@ function startup(version)
 
     disp('Initializing openMINDS_MATLAB...')
 
-    % NB: Assumes this function is located in code/+openminds:
-    codePath = fileparts( fileparts( mfilename('fullpath') ) );
-    addpath( fullfile(codePath, 'internal') )
-
     % Run internal function that correctly configures the search path
     openminds.selectModelVersion(version)
     fprintf(['Added classes for version "%s" of the openMINDS metadata model ' ...

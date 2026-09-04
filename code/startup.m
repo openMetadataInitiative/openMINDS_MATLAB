@@ -39,7 +39,6 @@ function startup(version)
 
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
-    addpath(fullfile(codeFolder, 'internal'))
 
     openminds.startup(version)
 end

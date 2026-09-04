@@ -1,6 +1,6 @@
 function persons = personArray()
 
-    filePath = fullfile(openminds.internal.rootpath, "livescripts", "data", "spacecraft_crew_members.csv");
+    filePath = fullfile(openminds.toolboxdir(), "livescripts", "data", "spacecraft_crew_members.csv");
     crewMembers = readtable(filePath, "TextType", "String");
 
     contacts = dictionary;
