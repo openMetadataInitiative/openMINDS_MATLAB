@@ -203,9 +203,10 @@ class MATLABSchemaBuilder(object):
                 size_attribute = "(1,1)"
             size_attribute_doc = size_attribute
 
-            # To work around not allowing empty scalars in matlab, the 
-            # actual size of of scalars is set to a list (Validators will
-            # ensure that only scalars are allowed)
+            # A MATLAB (1,1) property requires a value, so a scalar that maps a
+            # null is declared as a list and constrained to a scalar by a
+            # validator instead. The documented size keeps saying (1,1),
+            # because that is the cardinality the property actually holds.
             if property_info.get("type") == 'integer':
                 size_attribute = "(1,:)"
 
@@ -213,9 +214,9 @@ class MATLABSchemaBuilder(object):
             if _is_datetime_format(property_info):
                 size_attribute = "(1,:)"
 
+            # ...and for numbers constrained to a range
             if _is_scalar_number_with_range_validation(property_info):
                 size_attribute = "(1,:)"
-                size_attribute_doc = size_attribute
 
             # ...and for linked/embedded types
             if has_linked_type or has_embedded_type:

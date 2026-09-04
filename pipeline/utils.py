@@ -6,7 +6,7 @@ import shutil
 from typing import List
 
 from git import Repo, GitCommandError
-from jinja2 import Environment, select_autoescape, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 from jinja2 import Template
 
 def clone_sources():
@@ -71,24 +71,15 @@ class InstanceLoader(object):
 
         return instance_list
     
-def initialise_jinja_templates(autoescape:bool=None):
+def initialise_jinja_templates():
     """
     Initializes a Jinja2 environment and preloads templates into a dictionary for reuse.
 
-    This function sets up a Jinja2 `Environment` for loading templates from the `templates` 
-    subdirectory within the current script's directory. It then preloads a set of named templates 
-    into a dictionary, making them accessible by key for efficient repeated rendering. This 
-    approach avoids repeated environment initialization and template loading, optimizing 
+    This function sets up a Jinja2 `Environment` for loading templates from the `templates`
+    subdirectory within the current script's directory. It then preloads a set of named templates
+    into a dictionary, making them accessible by key for efficient repeated rendering. This
+    approach avoids repeated environment initialization and template loading, optimizing
     performance when rendering templates multiple times.
-
-    Parameters:
-    -----------
-    autoescape : bool, optional
-        Configures the autoescaping behavior for templates:
-        - `True` enables autoescaping for all templates.
-        - `False` disables autoescaping.
-        - `None` (default) uses Jinja2's `select_autoescape()` function to enable autoescaping for 
-          specific file types (e.g., `.html`, `.xml`).
 
     Returns:
     --------
@@ -104,22 +95,24 @@ def initialise_jinja_templates(autoescape:bool=None):
 
     Notes:
     ------
-    - The function uses `os.path.dirname(os.path.realpath(__file__))` to locate the directory of 
+    - The function uses `os.path.dirname(os.path.realpath(__file__))` to locate the directory of
       the current script, ensuring templates are loaded from the `templates` subdirectory.
-    - Autoescaping is configured to help prevent injection attacks for templates handling HTML or XML.
 
     Example Usage:
     --------------
-    templates = initialise_jinja_templates(autoescape=True)
+    templates = initialise_jinja_templates()
     rendered_schema = templates["schema_class"].render(data=schema_data)
     """
 
     module_directory = os.path.dirname(os.path.realpath(__file__))
     template_directory = os.path.join(module_directory, "templates")
-    
+
     jinja_environment = Environment(
         loader=FileSystemLoader(template_directory),
-        autoescape=select_autoescape(autoescape) if autoescape is not None else select_autoescape()
+        # Autoescaping is HTML escaping, which would corrupt the generated
+        # MATLAB: the "&" joining a base class to a mixin and the help links
+        # in property docstrings would come out as entities.
+        autoescape=False
     )
 
     jinja_templates = {
