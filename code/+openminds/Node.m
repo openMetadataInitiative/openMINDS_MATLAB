@@ -42,8 +42,19 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         IsReference (1,1) logical = false
     end
     
-    events % Todo: Remove??
+    events
+        % InstanceChanged - A plain property of this instance was assigned.
+        %
+        %   Raised on the instance that owns the property. Not raised for
+        %   linked or embedded properties; those raise
+        %   PropertyWithLinkedInstanceChanged instead.
         InstanceChanged
+
+        % PropertyWithLinkedInstanceChanged - A linked property was assigned,
+        % or a property of a linked instance was assigned through this one.
+        %
+        %   Raised on the instance the assignment was addressed to, not on
+        %   the linked instance that ultimately changed.
         PropertyWithLinkedInstanceChanged
     end
 
