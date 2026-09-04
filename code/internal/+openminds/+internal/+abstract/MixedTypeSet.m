@@ -306,8 +306,8 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 
         function str = getHeader(obj)
             % Todo: combine with superclass methods.
-            import openminds.internal.utility.getSchemaDocLink
-            docLinkStr = getSchemaDocLink(class(obj));
+            import openminds.internal.utility.getTypeDocLink
+            docLinkStr = getTypeDocLink(class(obj));
             
             % Todo: Consider indicating that the array has mixed types,
             % i.e is heterogeneous-like...
@@ -398,7 +398,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
         end
     
         function annotation = getAnnotationForEmptyObject(obj, width)
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
             if eval( [class(obj), '.IS_SCALAR'] )
                 prefix = 'One of';
             else
@@ -408,7 +408,7 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
             availableWidth = width - strlength(prefix) - 2; % 2 = ": "
 
             allAllowedClasses = eval(sprintf('%s.ALLOWED_TYPES', class(obj)));
-            allowedClassesShort = openminds.internal.utility.getSchemaShortName(allAllowedClasses);
+            allowedClassesShort = openminds.internal.utility.getTypeName(allAllowedClasses);
             
             annotationWidth = arrayfun(@(x) strlength(x) + 2, allowedClassesShort); % +2 = ", "
             cumWidth = cumsum(annotationWidth);
@@ -434,25 +434,25 @@ classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
                 allowedClasses = allAllowedClasses;
             end
 
-            annotation = arrayfun(@(s) getSchemaDocLink(s), allowedClasses, 'UniformOutput', false);
+            annotation = arrayfun(@(s) getTypeDocLink(s), allowedClasses, 'UniformOutput', false);
             annotation = strjoin(annotation, ', ');
 
             annotation = sprintf('%s: %s%s', prefix, annotation, postFix);
         end
     
         function annotation = getAnnotationForScalarObject(obj, ~)
-            import openminds.internal.utility.getSchemaDocLink
-            annotation = getSchemaDocLink(class(obj.Instance));
+            import openminds.internal.utility.getTypeDocLink
+            annotation = getTypeDocLink(class(obj.Instance));
         end
 
         function annotation = getAnnotationForNonScalarObject(~, ~)
             annotation = ''; return
             % Each element will be annotated. Todo: Consider, whether we
             % want to show the annotation for all allowed types in addition
-            % % import openminds.internal.utility.getSchemaDocLink
+            % % import openminds.internal.utility.getTypeDocLink
             % % classNames = arrayfun(@(x) class(x.Instance), obj, "UniformOutput", false);
             % % classNames = unique(classNames);
-            % % annotation = arrayfun(@(s) getSchemaDocLink(s), ...
+            % % annotation = arrayfun(@(s) getTypeDocLink(s), ...
             % %     string(classNames), 'UniformOutput', false);
         end
     end

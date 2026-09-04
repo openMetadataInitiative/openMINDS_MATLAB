@@ -1,4 +1,5 @@
-function str = getSchemaDocLink(schemaClass, preferredDocumentation)
+function str = getTypeDocLink(schemaClass, preferredDocumentation)
+%getTypeDocLink Documentation link for an openMINDS type, from its class name or type IRI
     
     if nargin < 2
         preferredDocumentation = openminds.getpref("DocLinkTarget");
@@ -31,12 +32,12 @@ function str = getSchemaDocLink(schemaClass, preferredDocumentation)
 end
 
 function str = getSimpleHelpLink(schemaClassName)
-    schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
+    schemaName = openminds.internal.utility.getTypeName(schemaClassName);
     str = sprintf('<a href="matlab:help %s" style="font-weight:bold">%s</a>', schemaClassName, schemaName);
 end
 
 function str = getHelpPopupLink(schemaClassName)
-    schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
+    schemaName = openminds.internal.utility.getTypeName(schemaClassName);
     str = sprintf('<a href="matlab:helpPopup %s" style="font-weight:bold">%s</a>', schemaClassName, schemaName);
 end
 
@@ -53,7 +54,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
         end
     end
 
-    schemaName = openminds.internal.utility.getSchemaName(schemaClassName);
+    schemaName = openminds.internal.utility.getTypeName(schemaClassName);
 
     isMatch = strcmpi(schemaManifest.Name, string(schemaName));
 
@@ -67,7 +68,7 @@ function str = getHtmlLink(schemaClassName, browserOption)
         displayLabel = fragment;
     else
         url = generateDocumentationUrl(version, moduleName, subgroupName, schemaName);
-        displayLabel = openminds.internal.utility.getSchemaName(schemaClassName);
+        displayLabel = openminds.internal.utility.getTypeName(schemaClassName);
     end
 
     if strcmp(browserOption, '-api')

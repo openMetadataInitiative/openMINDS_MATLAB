@@ -115,11 +115,11 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
         function deserializeFromName(obj, instanceName)
 
             import openminds.internal.getControlledInstance
-            import openminds.internal.utility.getSchemaName
+            import openminds.internal.utility.getTypeName
 
             instanceName = char(instanceName);
             instanceIRI = "";
-            schemaName = getSchemaName(class(obj));
+            schemaName = getTypeName(class(obj));
 
             if openminds.utility.isIRI(instanceName)
                 if openminds.utility.isInstanceIRI(instanceName)

@@ -32,9 +32,9 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
         end
 
         function testSchemaDocLinkBiologicalSex(testCase)
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
             
-            url = getSchemaDocLink(...
+            url = getTypeDocLink(...
                 "openminds.controlledterms.BiologicalSex", ...
                 "Raw URL");
 
@@ -49,9 +49,9 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
         end
 
         function testPropertyDoclink(testCase)
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
             
-            url = getSchemaDocLink(...
+            url = getTypeDocLink(...
                 "openminds.internal.mixedtype.datasetversion.Author", ...
                 "Raw URL");
             
@@ -66,9 +66,9 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
         end
 
         function testInvalidSchemaDocUrl(testCase)
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
             
-            url = getSchemaDocLink(...
+            url = getTypeDocLink(...
                 "openminds.core.Subject", ...
                 "Raw URL");
 
@@ -79,12 +79,12 @@ classdef testReadTheDocLinks < matlab.unittest.TestCase
         end
 
         function testSchemaDocLink(testCase, modelVersion)
-            import openminds.internal.utility.getSchemaDocLink
+            import openminds.internal.utility.getTypeDocLink
 
             evalc( sprintf('openminds.startup("%s")', modelVersion) );
             cleanupObj = onCleanup(@() evalc('openminds.startup("latest")'));
 
-            url = getSchemaDocLink(...
+            url = getTypeDocLink(...
                 "openminds.core.Subject", ...
                 "Raw URL");
 

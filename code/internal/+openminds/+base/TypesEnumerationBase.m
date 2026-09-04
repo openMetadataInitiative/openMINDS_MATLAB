@@ -28,8 +28,8 @@ classdef TypesEnumerationBase
             tf = strcmp(obj.ClassName, 'None');
         end
 
-        function name = getSchemaName(obj)
-            name = openminds.internal.utility.getSchemaShortName(obj.ClassName);
+        function name = getTypeName(obj)
+            name = openminds.internal.utility.getTypeName(obj.ClassName);
         end
 
         function moduleName = getModule(obj)

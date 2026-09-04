@@ -20,7 +20,7 @@ function formattedLinks = getFormattedTypeLinksForDisplay(typeNames, options)
     formattedLinks = repmat("", 1, numTypes);
 
     for i = 1:numTypes
-        formattedLinks(i) = openminds.internal.utility.getSchemaDocLink(char(typeNames(i)));
+        formattedLinks(i) = openminds.internal.utility.getTypeDocLink(char(typeNames(i)));
     end
 
     if options.Join

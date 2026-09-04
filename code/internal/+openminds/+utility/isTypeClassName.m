@@ -1,14 +1,14 @@
-function tf = isSchemaClassName(fullSchemaName)
-%isSchemaClassName Check if name is MATLAB full class name for schema
+function tf = isTypeClassName(className)
+%isTypeClassName Check whether a name is the full MATLAB class name of an openMINDS type
 
     arguments
-        fullSchemaName (1,1) string
+        className (1,1) string
     end
 
     tf = false;
 
-    if startsWith(fullSchemaName, "openminds.")
-        mc = meta.class.fromName(fullSchemaName);
+    if startsWith(className, "openminds.")
+        mc = meta.class.fromName(className);
         if ~isempty(mc)
             if ~mc.Abstract
                 superClassNames = {mc.SuperclassList.Name};

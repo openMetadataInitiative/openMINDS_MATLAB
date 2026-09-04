@@ -7,5 +7,5 @@ function schemaName = getParentTypeFromMixedTypeClassName(mixedTypeClassName)
 
     mixedTypeClassNameSplit = strsplit(mixedTypeClassName, '.');
     schemaNameLowercase = mixedTypeClassNameSplit{end-1};
-    schemaName = openminds.internal.vocab.getSchemaName(schemaNameLowercase);
+    schemaName = openminds.internal.vocab.getTypeNameFromAlias(schemaNameLowercase);
 end

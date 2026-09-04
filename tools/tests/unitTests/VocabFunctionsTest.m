@@ -2,16 +2,16 @@ classdef VocabFunctionsTest < matlab.unittest.TestCase
     % VocabFunctionsTest - Unit tests for functions in the vocab namespace
 
     methods (Test)
-        function testGetSchemaNameValidAlias(testCase)
-            % Test getSchemaName with a valid alias
-            schemaName = openminds.internal.vocab.getSchemaName("person");
-            testCase.verifyEqual(schemaName, "Person");
+        function testGetTypeNameFromAliasValidAlias(testCase)
+            % Test getTypeNameFromAlias with a valid alias
+            typeName = openminds.internal.vocab.getTypeNameFromAlias("person");
+            testCase.verifyEqual(typeName, "Person");
         end
 
-        function testGetSchemaNameInvalidAlias(testCase)
-            % Test getSchemaName with an invalid alias
-            testCase.verifyError(@() openminds.internal.vocab.getSchemaName("invalidAlias"), ...
-                'OPENMINDS:SchemaNameNotFound');
+        function testGetTypeNameFromAliasInvalidAlias(testCase)
+            % Test getTypeNameFromAlias with an invalid alias
+            testCase.verifyError(@() openminds.internal.vocab.getTypeNameFromAlias("invalidAlias"), ...
+                'OPENMINDS:TypeNameNotFound');
         end
 
         function testLoadVocabJsonValidFile(testCase)
