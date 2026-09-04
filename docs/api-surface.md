@@ -5,8 +5,14 @@ change. Written ahead of v1.0.0, when those promises start binding.
 
 ## The rule
 
-**A name is public if and only if it is reachable under `openminds.` without
-passing through `openminds.internal.`**
+**A name is internal if any segment of its package path is `internal`.
+Every other name under `openminds` is public.**
+
+The segment may sit at any depth. `openminds.internal.serializer.JsonLdSerializer`
+is internal, and so would be `openminds.graph.internal.Walker` if it existed.
+A subsystem can keep a private corner without inventing a second convention,
+and the test stays something you can apply by reading a call, with no list to
+consult.
 
 There is one exception, called out because it cannot be expressed in a package
 name: the unpackaged property validators in `code/validators` are public,
@@ -17,6 +23,33 @@ Folder layout follows the rule rather than defining it. Everything ships from
 `code/+openminds`, so the package path is the only boundary a reader has to
 learn.
 
+### The rule is not true yet: generated mixed types
+
+The 1520 generated mixed-type classes are emitted into
+`openminds.internal.mixedtype`, six model versions' worth. The rule therefore
+calls every one of them internal, and they are not internal in any sense a user
+would recognise:
+
+- `class(subject.species)` returns
+  `openminds.internal.mixedtype.subject.Species` for any "one of" property that
+  has not been assigned yet.
+- `getMixedTypeForProperty` returns the same names, and that method is part of
+  the introspection API that is now to become public.
+- The GUI constructs them by name.
+
+Assignment errors do not leak the name — they list the allowed public types —
+so the exposure is narrower than it first looks, but it is real.
+
+Either the classes move to `openminds.mixedtype`, or the rule acquires a second
+exception. *Recommendation: move them.* A rule with an exception per accident
+stops being a rule, these classes are part of the model's surface rather than
+an implementation detail, and v1.0.0 is the moment to pay for it. The move is
+mechanical and shaped like the `Node` rename: 1520 generated files, one
+generator emission site, and four hand-written references that name the full
+prefix in `Node.m` and `internal/meta/Type.m`. Checks written as
+`contains(name, 'mixedtype')` keep working, since the `mixedtype` segment
+survives.
+
 ## Stability promise from v1.0.0
 
 For public names, within a major version:
@@ -26,6 +59,10 @@ For public names, within a major version:
 - A function does not lose an input or output, and does not change the meaning
   of one.
 - A class does not remove or rename a public property, method, or event.
+- For a class declared extensible below, the same holds for its **protected**
+  members. A subclass that overrides a protected method depends on its name and
+  signature exactly as a caller depends on a public one, and "not sealed" is
+  otherwise an accident rather than a promise.
 - Additive change is always allowed: new functions, new optional name-value
   arguments, new properties.
 
@@ -114,9 +151,20 @@ Its public method set is already shaped like an API:
 `isPropertyValueScalar`, `isPropertyWithLinkedType`, `isPropertyWithEmbeddedType`,
 `isPropertyMixedType`, `getMixedTypeForProperty`, `listLinkedTypesForProperty`,
 `listEmbeddedTypesForProperty`, plus `NumProperties` and `PropertyNames`.
-*Recommendation: promote it.* Naming needs a decision — `openminds.TypeInfo` as
-a single top-level class avoids a `+meta` subpackage, which inside `+openminds`
-would shadow MATLAB's own `meta` package for code in this toolbox.
+**Decided: it becomes public.** Placement is the remaining question, and the
+case for top level over `openminds.utility` is that this is a pillar of the
+extender API rather than a miscellaneous helper — both consumers need it, and
+`utility` reads as the drawer you look in last. *Recommendation:
+`openminds.TypeInfo` at top level, alongside `Node`, `Collection` and
+`enum.Types`.* Avoid a `+meta` subpackage: inside `+openminds` it would shadow
+MATLAB's own `meta` package for code in this toolbox.
+
+Two notes for whoever implements it. The constructor already accepts either an
+instance or a class name, verified against both, so kg-sync's
+`meta.fromInstance` needs no public counterpart. And
+`getMixedTypeForProperty` returns an `openminds.internal.mixedtype.*` class
+name today, so promoting this class forces the mixed-type decision above; the
+two land together or the new public API returns internal names on day one.
 
 **2. `Node` hides members that extenders must call.** `isReference()`,
 `getLinkedInstances()`, `getEmbeddedInstances()` and the `id` property are all
@@ -129,12 +177,20 @@ Decide whether store implementers get a public traversal API or whether
 Related: kg-sync has a blocked TODO because a store cannot write back an
 identifier — `id` is `SetAccess = protected` with no public path for a store.
 
-**3. The `LinkResolver` contract leaks an internal type.** A resolver is handed
-an instance that may be an `openminds.internal.MixedTypeReference`, and kg-sync
-must test for it by class name to know whether the target type is known. A
-public interface cannot require an internal name to implement.
-*Recommendation: promote it to `openminds.base.MixedTypeReference`, or add a
-public predicate that answers the same question.*
+**3. The `LinkResolver` contract leaks an internal type.** This is a different
+problem from gap 6 below, though the two share a shape. Here the *interface*
+itself is the issue. Its own help text sets out a distinction every implementer
+must act on: a reference whose type is known can be populated in place, while
+one whose type is not known until it is probed must be replaced, because an
+instance cannot change its class. The interface then offers no public way to
+tell the two apart, so kg-sync tests
+`isa(instance, 'openminds.internal.MixedTypeReference')`. An interface that
+documents a fork and hides the switch is incomplete.
+*Recommendation: promote `MixedTypeReference` to `openminds.base`, or add a
+public predicate that answers the same question.* While there, note that the
+interface's help text names `openminds.internal.resolver.ResolvingVisitor`
+twice, once in a `See also` — public documentation pointing at internal
+classes.
 
 **4. Instance events carry an internal payload.** `Node` declares
 `InstanceChanged` and `PropertyWithLinkedInstanceChanged`. Nothing in the
@@ -146,21 +202,39 @@ a listener receives an
 delivering an internal type. *Recommendation: promote the event data class, or
 document its four properties as the stable payload contract.*
 
-**5. `Collection` is subclassed but has no subclassing contract.** The GUI
-extends it, overrides the protected `addNode`, relies on a protected
-`onNodesSet` hook, and reads the `Hidden` `TypeMap`. One of its own comments
-admits it is misusing `addNode` for want of a public way to update node links.
-*Recommendation: decide whether `Collection` is officially extensible. If yes,
-document the protected surface and add the missing link-update method. If no,
-seal it and offer an observer instead.* This is the largest open design
-question on the list.
+**5. `Collection` is extensible in fact but not in promise.** Nothing stops the
+GUI subclassing it: `Collection` is not sealed, so MATLAB lets a subclass
+override any protected method, and the GUI overrides `addNode`. The gap is not
+capability, it is coverage. The stability promise above would otherwise reach
+only public members, leaving `addNode`'s name and its name-value options free to
+change under a subclass that depends on them exactly as a caller depends on a
+public method.
+
+**Decided: `Collection` is extensible**, and the promise now extends to the
+protected members of classes declared so. What remains is to declare which
+classes those are and to write down the protected surface: `addNode`,
+`addSubNodes` and `getBlankNodeIdentifier`, plus read access to `Nodes` and the
+`Hidden` `TypeMap` that the GUI writes.
+
+Two findings from checking this. The GUI overrides `onNodesSet`, which exists
+nowhere in the toolbox — so that override is dead code and whatever the GUI
+expected on node changes is not happening. And a GUI comment admits it is
+misusing `addNode` for want of a public way to update node links, which is a
+missing method rather than a visibility question.
 
 **6. Serializer subclassing goes through an internal class.** kg-sync extends
 `openminds.internal.serializer.JsonLdSerializer` and overrides its protected
-post-processing hook. `openminds.base.Serializer` is already public, so the
-extension point exists but the useful concrete class does not.
-*Recommendation: make the JSON-LD serializer public, or document the base class
-hook as the supported way and ensure it is sufficient.*
+post-processing hook to emit a KG-flavoured document. `openminds.base.Serializer`
+is already public, so the extension point exists but the concrete class worth
+extending does not.
+
+**Decided: the JSON-LD serializer becomes public.** Subclassing the concrete
+serializer is the right way to vary one step of a format, and rebuilding
+JSON-LD from the abstract base to change a post-processing step would be
+absurd. Promotion brings its constructor name-value arguments and its
+protected hook into the promise, so both want documenting as part of the move.
+Note the hook was renamed to `postProcessDocuments` by the IRI branch, which
+breaks kg-sync's override; see the clean-break note below.
 
 **7. Type name, label and IRI conversion.** The GUI calls internal name helpers
 at roughly thirty sites. `openminds.enum.Types` already covers class name to
@@ -189,16 +263,39 @@ the GUI calls it from outside the class hierarchy, and also reads a
 *Recommendation: settle on one public way to get an instance's display label
 and document it.*
 
-## Open decisions
+## Decisions
 
-These need a call before the gaps above can be implemented.
+Settled 2026-09-04.
 
-1. The public name for type introspection, and whether it is a class or a
-   package.
-2. Whether `Collection` is officially subclassable, and if so what its protected
-   contract is.
-3. Whether store implementers traverse the graph through public `Node` methods
-   or through a separate visitor-shaped API.
-4. Whether v1.0.0 ships deprecation shims for the names the rename series
-   changed, or declares itself the clean break. No shims exist today except
-   `Node.isUnresolved`.
+1. **Type introspection is public.** Recommended as `openminds.TypeInfo` at top
+   level; see gap 1 for why not `openminds.utility` and not a `+meta` package.
+2. **`Collection` is extensible**, and the stability promise covers the
+   protected members of classes declared extensible. See gap 5.
+3. **The JSON-LD serializer is public.** Gap 3 is a separate problem about the
+   `LinkResolver` contract and needs its own fix. See gaps 3 and 6.
+4. **v1.0.0 is the clean break.** No deprecation shims for anything the rename
+   series changed. The promise starts at 1.0 and binds from there.
+
+### What the clean break commits us to
+
+The shims stop being a question, but the communication does not. Nothing warns
+a consumer that a name moved, so the release notes carry the whole burden, and
+the substitution list has to be complete. Both surveyed projects will hit it:
+kg-sync on `getUnresolvedLinks` becoming `getUnresolvedLinkIdentifiers` and
+`postProcessInstances` becoming `postProcessDocuments`, the GUI on most of the
+internal names it uses.
+
+It also settles a smaller question by implication. `Node.isUnresolved` is the
+one deprecation shim in the toolbox, warning once per session and forwarding to
+`isReference`. A clean break at 1.0 is the moment to delete it rather than
+carry it into a version whose whole point is that the names are now fixed.
+
+## Still open
+
+- Placement of the introspection class, if `openminds.TypeInfo` is not right.
+- Whether generated mixed types move to `openminds.mixedtype`, or the rule
+  takes a second exception. Coupled to gap 1: promoting introspection without
+  this ships a public method that returns internal class names.
+- Whether store implementers traverse the graph through public `Node` methods
+  or a separate visitor-shaped API. This is gap 2 and is untouched by the four
+  decisions above.
