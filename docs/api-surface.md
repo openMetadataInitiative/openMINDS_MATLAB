@@ -136,10 +136,15 @@ public interface cannot require an internal name to implement.
 *Recommendation: promote it to `openminds.base.MixedTypeReference`, or add a
 public predicate that answers the same question.*
 
-**4. Instance events are load-bearing but marked for removal.** `Node` declares
-`InstanceChanged` and `PropertyWithLinkedInstanceChanged` under a
-`% Todo: Remove??` comment. The GUI listens to both to keep its graph view
-live. *Recommendation: keep them, document them as public, drop the TODO.*
+**4. Instance events carry an internal payload.** `Node` declares
+`InstanceChanged` and `PropertyWithLinkedInstanceChanged`. Nothing in the
+toolbox or its tests listens to either, which is why they had been marked
+`% Todo: Remove??`; the GUI listens to both to keep its graph view live. The
+TODO is now gone and both events are documented in place. What remains is that
+a listener receives an
+`openminds.internal.event.PropertyValueChangedEventData` — a public event
+delivering an internal type. *Recommendation: promote the event data class, or
+document its four properties as the stable payload contract.*
 
 **5. `Collection` is subclassed but has no subclassing contract.** The GUI
 extends it, overrides the protected `addNode`, relies on a protected
