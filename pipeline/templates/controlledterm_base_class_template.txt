@@ -17,11 +17,22 @@ classdef (Abstract) ControlledTerm < openminds.base.ControlledTermBase
     end
 
     methods
-        function obj = ControlledTerm(instanceSpec, propValues)
+        function obj = ControlledTerm(instanceSpec, name, value)
+            % Accept any name-value pairs, as openminds.Node does, so that a
+            % subclass can forward properties this class does not declare.
+            % instanceSpec is not validated here because a controlled term
+            % accepts a name, a file path or a struct, unlike a Node.
             arguments
                 instanceSpec = []
-                propValues.?openminds.base.ControlledTerm
-                propValues.id (1,1) string
+            end
+            arguments (Repeating)
+                name (1,1) string
+                value
+            end
+
+            propValues = struct();
+            for i = 1:numel(name)
+                propValues.(name{i}) = value{i};
             end
 
             obj = obj.initializeControlledTerm(instanceSpec, propValues);

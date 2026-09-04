@@ -29,6 +29,19 @@ classdef {{ class_name }} < openminds.base.ControlledTerm
         {%- endfor %}
         ]
     end
+
+    properties (Constant, Hidden)  {# List all properties with linked or embedded types #}
+        LINKED_PROPERTIES = struct(...
+            {%- for prop in linked_types %}
+            '{{prop["name"]}}', {{prop["types"]}} {%- if not loop.last %}, {% else %} {% endif -%} ...
+            {%- endfor %}
+        )
+        EMBEDDED_PROPERTIES = struct(...
+            {%- for prop in embedded_types %}
+            '{{prop["name"]}}', {{prop["types"]}} {%- if not loop.last %}, {% else %} {% endif -%} ...
+            {%- endfor %}
+        )
+    end
     {%- if additional_controlled_term_props %}
 
     properties
