@@ -31,12 +31,12 @@ classdef JsonLdSerializer < openminds.base.Serializer
     end
 
     methods (Access = protected)
-        function allStructs = postProcessInstances(obj, allStructs)
-        % postProcessInstances - Processes instances to apply vocabulary
+        function allStructs = postProcessDocuments(obj, allStructs)
+        % postProcessDocuments - Processes instances to apply vocabulary
         % mapping or semantic property naming based on the configuration settings.
         %
         % Syntax:
-        %   allStructs = postProcessInstances(obj, allStructs)
+        %   allStructs = postProcessDocuments(obj, allStructs)
         %   This function modifies 'allStructs' by adding vocabulary mapping or
         %   applying semantic property names depending on the object's serialization
         %   configuration.

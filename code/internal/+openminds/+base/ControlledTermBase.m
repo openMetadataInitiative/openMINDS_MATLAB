@@ -39,7 +39,7 @@ classdef (Abstract) ControlledTermBase < openminds.Node
                     % Check IRI first, because isfile will also check IRIs
                     % and that is expensive (we only want to check local
                     % files anyway)
-                    if startsWith(instanceSpec, openminds.constant.BaseURI)
+                    if startsWith(instanceSpec, openminds.constant.BaseIRI)
                         obj.deserializeFromName(instanceSpec);
                     elseif isfile( instanceSpec )
                         obj.load( instanceSpec ) % todo: Not implemented??
@@ -176,7 +176,7 @@ classdef (Abstract) ControlledTermBase < openminds.Node
 
     methods (Static, Access = private)
         function instanceIRI = createControlledInstanceIRI(schemaName, instanceName)
-            instanceIRI = openminds.constant.BaseURI + "/instances/" ...
+            instanceIRI = openminds.constant.BaseIRI + "/instances/" ...
                 + openminds.base.ControlledTermBase.getInstanceTypeName(schemaName) ...
                 + "/" + string(instanceName);
         end

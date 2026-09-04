@@ -1,5 +1,5 @@
 function propertyIRIPrefix = PropertyIRIPrefix()
-    baseIRI = openminds.constant.BaseURI();
+    baseIRI = openminds.constant.BaseIRI();
     if startsWith(baseIRI, "https://openminds.ebrains.eu")
         propertyIRIPrefix = sprintf("%s/vocab/", baseIRI);
     else

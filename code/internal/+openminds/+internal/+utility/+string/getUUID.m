@@ -1,7 +1,7 @@
-function uuid = getuuid()
-%getuuid Get a universal unique identifier.
+function uuid = getUUID()
+%getUUID Get a universal unique identifier.
 %
-%   uuid = getuuid() returns a universal unique identifier. This function
+%   uuid = getUUID() returns a universal unique identifier. This function
 %   uses matlab's builtin type if it is available (faster) or the Java
 %   Virtual Machine if not
 

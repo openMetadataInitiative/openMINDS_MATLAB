@@ -65,7 +65,7 @@ classdef (Abstract) Serializer < openminds.base.Transformer
     end
 
     methods (Access = protected) % Subclass can implement
-        function allStructs = postProcessInstances(obj, allStructs) %#ok<INUSD>
+        function allStructs = postProcessDocuments(obj, allStructs) %#ok<INUSD>
             % Subclass can implement
         end
     end
@@ -105,9 +105,9 @@ classdef (Abstract) Serializer < openminds.base.Transformer
             
             % Process instances to add openMINDS-specific fields and collect
             % linked instances
-            processedStructs = obj.processInstances(instances);
+            processedStructs = obj.buildDocuments(instances);
             
-            processedStructs = obj.postProcessInstances(processedStructs);
+            processedStructs = obj.postProcessDocuments(processedStructs);
             
             % Delegate to subclass for format-specific output
             result = obj.formatOutput(processedStructs);
@@ -292,7 +292,7 @@ classdef (Abstract) Serializer < openminds.base.Transformer
     end
 
     methods (Access = private)
-        function processedStructs = processInstances(obj, instances)
+        function processedStructs = buildDocuments(obj, instances)
         % Build a document for each instance, then for everything they
         % reference, as far as the configured recursion depth allows.
 
@@ -368,11 +368,11 @@ classdef (Abstract) Serializer < openminds.base.Transformer
 
     methods
         function iri = get.NamespaceIRI(~)
-            iri = openminds.constant.BaseURI();
+            iri = openminds.constant.BaseIRI();
         end
 
         function iri = get.DefaultVocabularyIRI(~)
-            baseIRI = openminds.constant.BaseURI();
+            baseIRI = openminds.constant.BaseIRI();
             if startsWith(baseIRI, "https://openminds.ebrains.eu")
                 iri = sprintf("%s/vocab/", baseIRI);
             else

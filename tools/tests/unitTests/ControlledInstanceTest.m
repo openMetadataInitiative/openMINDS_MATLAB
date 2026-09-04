@@ -16,7 +16,7 @@ classdef ControlledInstanceTest < matlab.unittest.TestCase
             jsonStr = openminds.internal.getControlledInstance(...
                 instanceSpecification{:}, versionNumber, "FileSource", "local");
             
-            expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseURI(versionNumber));
+            expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseIRI(versionNumber));
             testCase.assertTrue(contains(jsonStr.at_id, expectedIdUriPrefix));
         end
 
@@ -66,7 +66,7 @@ classdef ControlledInstanceTest < matlab.unittest.TestCase
             jsonStr = openminds.internal.getControlledInstance(...
                 instanceSpecification{:}, versionNumber, "FileSource", "github");
             
-            expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseURI(versionNumber));
+            expectedIdUriPrefix = sprintf("%s/instances", openminds.constant.BaseIRI(versionNumber));
             testCase.assertTrue(contains(jsonStr.at_id, expectedIdUriPrefix));
         end
     end

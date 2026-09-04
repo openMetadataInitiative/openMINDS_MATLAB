@@ -7,7 +7,7 @@ classdef ControlledTermTest < matlab.unittest.TestCase
 
             testCase.verifyEqual(term.name, "authoring")
             testCase.verifyEqual(term.id, ...
-                openminds.constant.BaseURI + "/instances/contributionType/authoring")
+                openminds.constant.BaseIRI + "/instances/contributionType/authoring")
         end
 
         function testUserDefinedTermSurvivesDeserialization(testCase)
