@@ -216,11 +216,11 @@ toolbox or its tests listens to either, which is why they had been marked
 TODO is now gone and both events are documented in place. What remains is that
 a listener receives an
 `openminds.internal.event.PropertyValueChangedEventData` — a public event
-delivering an internal type. *Recommendation: document its four properties —
-`NewValue`, `OldValue`, `IsLinkedProperty`, `IsPropertyOf` — in the help of the
-events themselves, and treat those as the payload contract.* A listener reads
-fields off the object and never names its class, so this is step 1: no
-promotion, only a written-down promise.
+delivering an internal type. *Done.* The four properties — `NewValue`, `OldValue`, `IsLinkedProperty`,
+`IsPropertyOf` — are documented in the help of the events themselves and are
+the contract, with a note to read the fields rather than test the class. A
+listener never names the payload class, so this was step 1: a written-down
+promise, no promotion.
 
 **5. `Collection` is extensible in fact but not in promise.** Nothing stops the
 GUI subclassing it: `Collection` is not sealed, so MATLAB lets a subclass
