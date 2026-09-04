@@ -10,6 +10,7 @@ from pipeline.translator import (
     MATLABSchemaBuilder,
     _find_controlled_term_schema,
     _get_controlled_term_base_properties,
+    _get_controlled_term_property_sets,
     save_controlled_term_base_class,
 )
 from pipeline.utils import initialise_jinja_templates
@@ -50,6 +51,11 @@ class ControlledTermBaseTestCase(unittest.TestCase):
         self.addCleanup(shutil.rmtree, self.root, ignore_errors=True)
         self.schema_folder = os.path.join(self.root, VERSION, "controlledTerms")
         os.makedirs(self.schema_folder)
+
+        # The controlled term schemas of a version are read once and cached,
+        # so a test must not see what an earlier one wrote.
+        _get_controlled_term_property_sets.cache_clear()
+        self.addCleanup(_get_controlled_term_property_sets.cache_clear)
 
         # The working directory is where the build writes its target folder.
         self.original_directory = os.getcwd()

@@ -8,6 +8,7 @@ import os
 import re
 from typing import List, Dict
 from collections import Counter
+from functools import lru_cache
 
 from jinja2 import Template
 
@@ -419,6 +420,33 @@ def save_controlled_term_base_class(version, schema_root_path, class_name_map, j
     return target_file_path
 
 
+@lru_cache(maxsize=None)
+def _get_controlled_term_property_sets(schema_root_path, version):
+    """The property set each controlled term schema of a version declares.
+
+    Returns a (schema file path, property name set) pair per schema, sorted by
+    path so that the outcome does not depend on the order the file system
+    happens to list them in. Cached because a version holds over a hundred
+    controlled terms and every one of them needs the whole set.
+    """
+    schema_file_paths = sorted(glob.glob(
+        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
+    ))
+
+    property_sets = []
+    for schema_file_path in schema_file_paths:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
+            schema_payload = json.load(schema_file)
+
+        property_names = frozenset(
+            _create_matlab_name(property_name)
+            for property_name in schema_payload.get("properties", {})
+        )
+        property_sets.append((schema_file_path, property_names))
+
+    return tuple(property_sets)
+
+
 def _find_controlled_term_schema(schema_root_path, version, property_names):
     """Return the controlled term schema whose properties are exactly the given set.
 
@@ -426,18 +454,8 @@ def _find_controlled_term_schema(schema_root_path, version, property_names):
     schema declares it and no more than its own properties are needed to render
     the base class.
     """
-    schema_file_paths = sorted(glob.glob(
-        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
-    ))
-
-    for schema_file_path in schema_file_paths:
-        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
-            schema_payload = json.load(schema_file)
-
-        schema_property_names = {
-            _create_matlab_name(property_name)
-            for property_name in schema_payload.get("properties", {})
-        }
+    for schema_file_path, schema_property_names in _get_controlled_term_property_sets(
+            schema_root_path, version):
         if schema_property_names == property_names:
             return schema_file_path
 
@@ -449,21 +467,10 @@ def _find_controlled_term_schema(schema_root_path, version, property_names):
 
 def _get_controlled_term_base_properties(schema_root_path, version):
     """Return the common controlled-term property set for a schema version."""
-    controlled_term_schema_paths = glob.glob(
-        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
+    property_sets = Counter(
+        property_names for _, property_names
+        in _get_controlled_term_property_sets(schema_root_path, version)
     )
-
-    property_sets = Counter()
-
-    for schema_file_path in controlled_term_schema_paths:
-        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
-            schema_payload = json.load(schema_file)
-
-        property_names = frozenset(
-            _create_matlab_name(property_name)
-            for property_name in schema_payload.get("properties", {})
-        )
-        property_sets[property_names] += 1
 
     if not property_sets:
         return set()
@@ -588,6 +595,20 @@ def _list_to_string_array(list_of_strings, do_sort=False):
     return string_array
 
 
+@lru_cache(maxsize=1)
+def _load_display_config():
+    """The display label configuration, read once.
+
+    It is consulted for every schema and does not change during a build. The
+    returned mapping is shared by all callers and must not be modified.
+    """
+    display_config_filepath = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
+
+    with open(display_config_filepath, 'r', encoding='utf-8') as config_file:
+        return json.load(config_file)
+
+
 def _get_display_label_method_expression(schema_short_name, property_names):
     """
         Create the display label expression to be added as a getDisplayLabel 
@@ -595,12 +616,9 @@ def _get_display_label_method_expression(schema_short_name, property_names):
     """
     property_names = [_create_matlab_name(name) for name in property_names]
 
-    display_config_filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
-
     # Todo: The json keys should match the schema name exactly, i.e capitalized
 
-    with open(display_config_filepath, 'r') as f:
-        config_json = json.load(f)
+    config_json = _load_display_config()
 
     is_camel_case_match = camel_case(schema_short_name) in config_json.keys()
     is_upper_case_match = schema_short_name.upper() in config_json.keys()  # Some schemas like DOI etc. are all uppercase

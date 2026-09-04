@@ -23,8 +23,12 @@ CONFIG_PATH = os.path.join(
 
 
 def display_label_for(schema_short_name, property_names, config):
-    """Generate the getDisplayLabel body for a schema against a given config."""
-    with mock.patch("pipeline.translator.json.load", return_value=config):
+    """Generate the getDisplayLabel body for a schema against a given config.
+
+    The loader is replaced rather than the file read, because the shipped
+    configuration is read once and cached for the rest of the process.
+    """
+    with mock.patch("pipeline.translator._load_display_config", return_value=config):
         return _get_display_label_method_expression(schema_short_name, property_names)
 
 

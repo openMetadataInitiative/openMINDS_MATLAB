@@ -3,6 +3,7 @@ import json
 import os
 import re
 import shutil
+from functools import lru_cache
 from typing import List
 
 from git import Repo
@@ -56,10 +57,17 @@ class InstanceLoader(object):
         return os.listdir(self.instances_sources)
 
     def find_instances(self, version:str, schema_name:str=None) -> List[str]:
+        instance_paths = _find_all_instances(self.instances_sources, version)
+
         if schema_name:
-            return glob.glob(os.path.join(self.instances_sources, version, f'**/{schema_name}/*.jsonld'), recursive=True)
-        else:
-            return glob.glob(os.path.join(self.instances_sources, version, f'**/*.jsonld'), recursive=True)
+            # An instance belongs to a schema when it sits directly in a folder
+            # named after that schema
+            return [
+                instance_path for instance_path in instance_paths
+                if os.path.basename(os.path.dirname(instance_path)) == schema_name
+            ]
+
+        return list(instance_paths)
 
     def get_instance_collection(self, version:str, schema_file_name:str) -> List[str]:
         
@@ -77,6 +85,19 @@ class InstanceLoader(object):
 
         return instance_list
     
+@lru_cache(maxsize=None)
+def _find_all_instances(instances_sources: str, version: str):
+    """Every instance file of a model version, as a tuple of paths.
+
+    Walking the instances of a version is the most expensive thing the build
+    does, and a version holds one folder of instances per controlled term, so
+    the walk is done once per version and the result filtered in memory.
+    """
+    return tuple(glob.glob(
+        os.path.join(instances_sources, version, "**", "*.jsonld"), recursive=True
+    ))
+
+
 def initialise_jinja_templates():
     """
     Initializes a Jinja2 environment and preloads templates into a dictionary for reuse.
