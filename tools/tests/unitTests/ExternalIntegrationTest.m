@@ -118,7 +118,7 @@ classdef ExternalIntegrationTest < matlab.unittest.TestCase
                 ommtest.helper.mock.MockGraphResolver(testCase.Database));
 
             personStub = openminds.core.Person( ...
-                'id', "https://graph.example/instances/person-002");
+                'id', "https://graph.example/instances/person-002", 'IsReference', true);
             personStub.resolve();
 
             testCase.verifyEqual(personStub.givenName, "Grace")

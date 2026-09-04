@@ -528,6 +528,87 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyFalse(contains(document, "MixedTypeReference"));
         end
 
+        function testTypedReferenceSurvivesRoundTrip(testCase)
+            % A reference whose type is known is still a reference, not a
+            % node with no properties. It gets no file of its own, so
+            % loading the folder again gives back a reference rather than
+            % an empty node that the reference silently turned into.
+            referenceIRI = "https://graph.example/instances/contact-001";
+            person = openminds.core.Person("givenName", "A");
+            person.contactInformation = openminds.core.ContactInformation( ...
+                "id", referenceIRI, "IsReference", true);
+
+            metadataStore = openminds.internal.FolderMetadataStore( ...
+                "typed-reference-folder-store");
+
+            outputPaths = metadataStore.save(person);
+            testCase.verifyEqual(numel(outputPaths), 1);
+            testCase.verifyTrue(contains(string(outputPaths{1}), "Person_"));
+
+            reloaded = metadataStore.load();
+            testCase.assertEqual(numel(reloaded), 1);
+            reloadedLink = reloaded{1}.contactInformation;
+            testCase.verifyTrue(reloadedLink.isReference());
+            testCase.verifyEqual(string(reloadedLink.id), referenceIRI);
+        end
+
+        function testReferenceIsCreatedExplicitly(testCase)
+            % A reference is made by asking for one. An id alone, whatever
+            % it looks like, makes a node.
+            iri = "https://graph.example/instances/person-001";
+
+            reference = openminds.core.Person("id", iri, "IsReference", true);
+            testCase.verifyTrue(reference.isReference());
+            testCase.verifyEqual(string(reference.id), iri);
+
+            node = openminds.core.Person("id", iri);
+            testCase.verifyFalse(node.isReference());
+
+            testCase.verifyError( ...
+                @() openminds.core.Person("id", iri, "givenName", "A", "IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+            testCase.verifyError( ...
+                @() openminds.core.Person("IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+        end
+
+        function testPopulatedNodeCannotBecomeReference(testCase)
+            % The flag can be set after construction, but a node that
+            % holds values is refused: marking it would make a collection
+            % skip it and the next save drop it silently. An id-only node
+            % may still become a reference, and a reference may become a
+            % node.
+            iri = "https://graph.example/instances/person-001";
+
+            populated = openminds.core.Person("id", iri, "givenName", "Ada");
+            testCase.verifyError(@() populated.set("IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+            testCase.verifyFalse(populated.isReference());
+
+            idOnly = openminds.core.Person("id", iri);
+            idOnly.set("IsReference", true);
+            testCase.verifyTrue(idOnly.isReference());
+
+            idOnly.set("IsReference", false);
+            testCase.verifyFalse(idOnly.isReference());
+        end
+
+        function testNodeCreatedWithAnIriIsSaved(testCase)
+            % Creating a node with a chosen IRI and filling it in afterwards
+            % is how instances bound for an external graph are made. Such
+            % a node must be counted and saved, not mistaken for a
+            % reference and dropped.
+            person = openminds.core.Person("id", "https://graph.example/instances/person-001");
+            person.givenName = "Ada";
+
+            collection = openminds.Collection(person);
+            testCase.verifyEqual(length(collection), 1);
+
+            filePath = "iri-node-collection.jsonld";
+            collection.save(filePath);
+            testCase.verifyTrue(contains(fileread(filePath), "Ada"));
+        end
+
         function testSaveEmptyCollection(testCase)
             % A collection with no nodes still saves, giving an empty
             % collection document.

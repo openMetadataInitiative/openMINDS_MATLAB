@@ -53,7 +53,7 @@ classdef ResolvingVisitor < openminds.abstract.BaseVisitor
 
             obj.ExpandedWithDepth(obj.nodeKey(node)) = obj.RemainingLinkDepth;
 
-            if ~node.isUnresolved()
+            if ~node.isReference()
                 return
             end
 

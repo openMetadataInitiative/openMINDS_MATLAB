@@ -70,7 +70,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
             
             % Create a Person reference (just ID, no data)
-            personRef = openminds.core.Person('id', 'https://mock.io/person_123');
+            personRef = openminds.core.Person('id', 'https://mock.io/person_123', 'IsReference', true);
             
             % Verify it starts as empty
             testCase.verifyEqual(personRef.givenName, "");
@@ -90,7 +90,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
             
             % Create author reference
-            authorRef = openminds.core.Person('id', 'https://mock.io/author_456');
+            authorRef = openminds.core.Person('id', 'https://mock.io/author_456', 'IsReference', true);
             
             % Create dataset with author reference
             dataset = ResolverTest.createDatasetWithAuthors( ...
@@ -173,7 +173,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
             
             % Create a dataset with an author reference
-            authorRef = openminds.core.Person('id', 'https://mock.io/author_789');
+            authorRef = openminds.core.Person('id', 'https://mock.io/author_789', 'IsReference', true);
             dataset = ResolverTest.createDatasetWithAuthors( ...
                 authorRef, "Test Dataset");
             
@@ -200,7 +200,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             resolvedPerson = openminds.core.Person();
             resolvedPerson.givenName = "Already";
 
-            referencePerson = openminds.core.Person('id', 'https://mock.io/person_after');
+            referencePerson = openminds.core.Person('id', 'https://mock.io/person_after', 'IsReference', true);
 
             instances = [resolvedPerson, referencePerson];
             instances.resolve();
@@ -220,10 +220,10 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
 
             firstDataset = ResolverTest.createDatasetWithAuthors( ...
-                openminds.core.Person('id', 'https://mock.io/author_first'), ...
+                openminds.core.Person('id', 'https://mock.io/author_first', 'IsReference', true), ...
                 "First Dataset");
             secondDataset = ResolverTest.createDatasetWithAuthors( ...
-                openminds.core.Person('id', 'https://mock.io/author_second'), ...
+                openminds.core.Person('id', 'https://mock.io/author_second', 'IsReference', true), ...
                 "Second Dataset");
 
             datasets = [firstDataset, secondDataset];
@@ -259,7 +259,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(replacingResolver);
 
             reference = openminds.core.Person( ...
-                'id', 'https://replacing.mock/unknown_type_1');
+                'id', 'https://replacing.mock/unknown_type_1', 'IsReference', true);
             dataset = ResolverTest.createDatasetWithAuthors(reference, "Replacing Dataset");
 
             dataset.resolve( ...
@@ -324,7 +324,8 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(ommtest.helper.mock.CyclicMockLinkResolver());
 
             first = openminds.core.data.ContentType('id', ...
-                ommtest.helper.mock.CyclicMockLinkResolver.IRIPrefix + "a");
+                ommtest.helper.mock.CyclicMockLinkResolver.IRIPrefix + "a", ...
+                'IsReference', true);
 
             first = first.resolve('NumLinksToResolve', 500);
 
@@ -395,7 +396,7 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(ommtest.helper.mock.ReplacingMockLinkResolver());
 
             referenceId = "https://replacing.mock/author-1";
-            author = openminds.core.Person('id', referenceId);
+            author = openminds.core.Person('id', referenceId, 'IsReference', true);
             dataset = ResolverTest.createDatasetWithAuthors(author, "Dataset");
 
             dataset = dataset.resolve( ...
@@ -413,7 +414,7 @@ classdef ResolverTest < matlab.unittest.TestCase
 
             openminds.registerLinkResolver(ommtest.helper.mock.IdentityDroppingMockLinkResolver());
 
-            author = openminds.core.Person('id', "https://dropping.mock/author-1");
+            author = openminds.core.Person('id', "https://dropping.mock/author-1", 'IsReference', true);
             dataset = ResolverTest.createDatasetWithAuthors(author, "Dataset");
 
             testCase.verifyError( ...
@@ -459,8 +460,8 @@ classdef ResolverTest < matlab.unittest.TestCase
             openminds.registerLinkResolver(mockResolver);
             
             % Create multiple author references
-            author1 = openminds.core.Person('id', 'https://mock.io/author1');
-            author2 = openminds.core.Person('id', 'https://mock.io/author2');
+            author1 = openminds.core.Person('id', 'https://mock.io/author1', 'IsReference', true);
+            author2 = openminds.core.Person('id', 'https://mock.io/author2', 'IsReference', true);
             
             % Create dataset with multiple authors
             dataset = ResolverTest.createDatasetWithAuthors( ...
@@ -487,7 +488,8 @@ classdef ResolverTest < matlab.unittest.TestCase
         function reference = contentTypeReference(name)
         % A ContentType reference that ContentTypeMockResolver can resolve.
             reference = openminds.core.data.ContentType('id', ...
-                ommtest.helper.mock.ContentTypeMockResolver.IRIPrefix + name);
+                ommtest.helper.mock.ContentTypeMockResolver.IRIPrefix + name, ...
+                'IsReference', true);
         end
 
         function dataset = createDatasetWithAuthors(authors, fullName)

@@ -30,7 +30,15 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         EMBEDDED_PROPERTIES struct
     end
 
-    properties (Access = private)
+    properties (Hidden)
+        % IsReference - Whether this instance stands for a node that is
+        % not here, rather than being a node.
+        %
+        %   Set at construction with IsReference=true together with an id
+        %   and nothing else, or by the deserializer for a stub read from
+        %   a document. Cleared when the reference is resolved. Hidden,
+        %   and public only so the generated type constructors accept it
+        %   as a name-value argument; it is not meant to be set afterwards.
         IsReference (1,1) logical = false
     end
     
@@ -52,15 +60,15 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             obj.id = obj.generateInstanceId();
 
             if isempty(instance)
+                % IsReference is not a property of the type. It marks the
+                % instance as standing for a node that is not here, and is
+                % only accepted with an id and nothing else.
+                [name, value, isReference] = extractIsReference(name, value);
                 nvPairs = [name; value];
                 if ~isempty(nvPairs)
                     obj.set(nvPairs{:});
                 end
-                if isscalar(name) && string(name) == "id" && startsWith(string(value), "https://")
-                    % Only IRI was set, assume this is a node reference
-                    % Todo: Should support general IRI
-                    obj.IsReference = true;
-                end
+                obj.IsReference = isReference;
             else
                 if ~isscalar(instance) % Preallocate object array
                     obj(1, numel(instance)) = feval( class(obj) );
@@ -194,7 +202,35 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             typeName = classNameSplit{end};
         end
 
+        function tf = isReference(obj)
+        % isReference - Whether this instance stands for a node rather than being one
+        %
+        %   A reference carries an identifier and nothing else, and names a
+        %   node that is not present: a stub read from a document, a
+        %   placeholder created with only an IRI, or a link that has not
+        %   been resolved. A node that merely has no properties set is not
+        %   a reference. A reference is never written as a document of its
+        %   own and is not counted as a node of a collection.
+
+            tf = false(1, numel(obj));
+            for i = 1:numel(obj)
+                tf(i) = obj(i).IsReference;
+            end
+        end
+
         function tf = isUnresolved(obj)
+        % isUnresolved - Deprecated, use isReference
+        %
+        %   Kept so existing callers keep working. Warns once per session.
+
+            persistent hasWarned
+            if isempty(hasWarned)
+                hasWarned = true;
+                warning('openMINDS:Schema:IsUnresolvedDeprecated', ...
+                    ['isUnresolved is deprecated and will be removed in a ', ...
+                    'future release. Use isReference instead.'])
+            end
+
             tf = obj.isReference();
         end
     end
@@ -269,9 +305,9 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             numInstances = numel(linkedInstances);
             isUnresolved = false(1, numInstances);
             for i = 1:numInstances
-                isUnresolved(i) = linkedInstances{i}.isUnresolved();
+                isUnresolved(i) = linkedInstances{i}.isReference();
             end
-        
+
             unresolvedInstances = linkedInstances(isUnresolved);
             numUnresolvedInstances = numel(unresolvedInstances);
             linkedIdentifiers = cell(1, numUnresolvedInstances);
@@ -798,12 +834,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods (Access = protected) % Methods related to object display
-        function tf = isReference(obj)
-            tf = false(1, numel(obj));
-            for i = 1:numel(obj)
-                tf(i) = obj(i).IsReference;
-            end
-        end
         
         function displayLabel = getDisplayLabel(obj)
             %schemaShortName = obj.getSchemaShortName(class(obj));
@@ -834,6 +864,37 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods (Access = ?openminds.internal.mixin.StructAdapter)
         function assignInstanceId(obj, id)
             obj.id = id;
+        end
+    end
+
+    methods % Property set methods
+        function set.IsReference(obj, value)
+            % A reference is an id and nothing else. Marking a populated
+            % node as a reference would make a collection skip it, so the
+            % next save would drop it without a word. That is refused.
+            if value && obj.hasPropertyValues()
+                error('openMINDS:Schema:ReferenceWithProperties', ...
+                    ['A populated instance cannot be marked as a reference. ', ...
+                    'A reference is an id and nothing else.'])
+            end
+            obj.IsReference = value;
+        end
+    end
+
+    methods (Access = private)
+        function tf = hasPropertyValues(obj)
+        % hasPropertyValues - Whether any property of the type holds a value
+        %
+        %   The id is not a property of the type and does not count.
+
+            tf = false;
+            propertyNames = setdiff(string(obj.PropertyNames), "id");
+            for i = 1:numel(propertyNames)
+                if hasValue(obj.(propertyNames(i)))
+                    tf = true;
+                    return
+                end
+            end
         end
     end
 
@@ -875,5 +936,53 @@ function x = row(x)
     assert(isrow(x) || iscolumn(x), 'Input must be a vector')
     if ~isrow(x)
         x = transpose(x);
+    end
+end
+
+function [name, value, isReference] = extractIsReference(name, value)
+% Split the IsReference flag from the property name-value pairs.
+%
+%   A reference carries an identifier and nothing else, so the flag is
+%   accepted only together with an id and no other property. Without the
+%   flag an instance is a node, whatever its id looks like.
+
+    isFlag = cellfun(@(n) n == "IsReference", name);
+    isReference = false;
+
+    if ~any(isFlag)
+        return
+    end
+
+    flagValue = value{isFlag};
+    if ~(islogical(flagValue) && isscalar(flagValue))
+        error('openMINDS:Schema:InvalidIsReference', ...
+            'IsReference must be a scalar logical.')
+    end
+    isReference = flagValue;
+    name(isFlag) = [];
+    value(isFlag) = [];
+
+    if isReference
+        isId = cellfun(@(n) n == "id", name);
+        if ~any(isId) || ~all(isId)
+            error('openMINDS:Schema:ReferenceWithProperties', ...
+                ['A reference is created from an id and nothing else. ', ...
+                'Give IsReference=true together with an id and no other property.'])
+        end
+    end
+end
+
+function tf = hasValue(propertyValue)
+% Whether a property value is set, by the same rule the serializer uses
+% to decide what to write.
+
+    if isempty(propertyValue)
+        tf = false;
+    elseif isstring(propertyValue) && isscalar(propertyValue)
+        tf = ~(propertyValue == "" || ismissing(propertyValue));
+    elseif isdatetime(propertyValue)
+        tf = ~all(isnat(propertyValue));
+    else
+        tf = true;
     end
 end

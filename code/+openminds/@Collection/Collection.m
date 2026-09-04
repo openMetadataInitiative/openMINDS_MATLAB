@@ -511,24 +511,29 @@ classdef Collection < handle
 
             wasAdded = false;
 
-            % An unresolved reference stands for a node that is not here.
-            % It is not a node itself: it stays a reference wherever it is
-            % linked, and has nothing that could be saved or listed.
-            if isa(instance, 'openminds.internal.MixedTypeReference')
-                return
-            end
-
             if isempty(instance.id)
                 instance.id = obj.getBlankNodeIdentifier();
             end
 
-            % Do not add openminds controlled term instances if disabled in
-            % preferences
-            if startsWith(instance.id, "https://openminds.ebrains.eu/instances/") ...
-                || startsWith(instance.id, "https://openminds.om-i.org/instances/")
+            isControlledInstance = ...
+                startsWith(instance.id, "https://openminds.ebrains.eu/instances/") ...
+                || startsWith(instance.id, "https://openminds.om-i.org/instances/");
+
+            if isControlledInstance
+                % A controlled instance is a reference into the instance
+                % library, which every reader has, so it can be a node of
+                % the collection. Whether it is one is a preference.
                 if ~openminds.getpref('AddControlledInstanceToCollection')
                     return
                 end
+            elseif instance.isReference()
+                % Any other reference stands for a node that is not here,
+                % whether its type is known or not. It is not a node
+                % itself: it stays a reference wherever it is linked, and
+                % has nothing that could be saved or listed. Adding it
+                % would turn it into a node the next time the collection
+                % is saved and loaded.
+                return
             end
 
             if obj.NumNodes > 0
