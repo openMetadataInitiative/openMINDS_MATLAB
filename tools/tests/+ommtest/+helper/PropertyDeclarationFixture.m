@@ -2,7 +2,7 @@ classdef PropertyDeclarationFixture
 %PropertyDeclarationFixture Property declarations for meta.Type tests
 %
 %   Exists only to be introspected. It carries one property of each
-%   declaration shape that openminds.internal.meta.Type has to interpret,
+%   declaration shape that openminds.meta.Type has to interpret,
 %   so those tests do not depend on a particular openMINDS model version
 %   happening to contain an example of each shape.
 

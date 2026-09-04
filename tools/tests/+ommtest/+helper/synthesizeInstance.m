@@ -43,7 +43,7 @@ function [instance, report] = synthesizeInstance(className, options)
 %   arbitrary pattern is out of scope; string round-tripping is covered by
 %   the many unconstrained string properties.
 %
-%   See also openminds.internal.meta.fromClassName
+%   See also openminds.meta.fromClassName
 
     arguments
         className (1,1) string
@@ -58,7 +58,7 @@ end
 function report = populateProperties(instance, className, linkDepth, report)
 % Populate every public property of instance with a synthesized value.
 
-    metaType = openminds.internal.meta.fromClassName(char(className));
+    metaType = openminds.meta.fromClassName(char(className));
 
     for propertyName = metaType.PropertyNames
         isLinked = metaType.isPropertyWithLinkedType(propertyName);

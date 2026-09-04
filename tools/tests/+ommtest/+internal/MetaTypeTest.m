@@ -71,7 +71,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % this, because every linked and embedded property is declared
         % that way.
 
-            metaType = openminds.internal.meta.Type( ...
+            metaType = openminds.meta.Type( ...
                 'ommtest.helper.PropertyDeclarationFixture');
 
             testCase.verifyTrue( metaType.isPropertyValueScalar('scalarByValidator') )
@@ -83,7 +83,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % The same check against a generated type, so the behaviour is
         % pinned for a real property and not only for the fixture.
 
-            metaType = openminds.internal.meta.fromClassName( ...
+            metaType = openminds.meta.fromClassName( ...
                 'openminds.core.miscellaneous.Membership');
 
             testCase.verifyTrue( metaType.isPropertyValueScalar('startDate') )
@@ -94,7 +94,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % question rather than error, and asking for its mixed type must
         % fail with an identified error.
 
-            metaType = openminds.internal.meta.Type( ...
+            metaType = openminds.meta.Type( ...
                 'ommtest.helper.PropertyDeclarationFixture');
 
             testCase.verifyFalse( metaType.isPropertyMixedType('withoutDeclaredClass') )
@@ -109,7 +109,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             openminds.version(5);
             testCase.addTeardown(@() openminds.version(previousVersion))
             
-            metaDSV = openminds.internal.meta.fromClassName('DatasetVersion');
+            metaDSV = openminds.meta.fromClassName('DatasetVersion');
 
             testCase.verifyTrue( metaDSV.isPropertyValueScalar('accessibility') )
             testCase.verifyFalse( metaDSV.isPropertyValueScalar('contribution') )

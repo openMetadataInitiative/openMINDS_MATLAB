@@ -1,12 +1,42 @@
 classdef Type < handle
-% Type - Provides information about a type derived from an openMINDS metadata schema.
+% Type - Describes the properties of an openMINDS metadata type.
 %
-%   Provides utility methods for checking various property attributes of a
-%   metadata type derived from an openMINDS metadata schema.
+%   Syntax:
+%       metaType = openminds.meta.Type(instance) describes the type of a
+%       metadata instance.
 %
-%   This class is meant to be used by internal/external applications that
-%   need to infer schema constraints that are implicitly coded into the
-%   generated type classes, but not necessarily explicitly expressed.
+%       metaType = openminds.meta.Type(className) describes the type named
+%       by a fully qualified MATLAB class name.
+%
+%   Description:
+%       A generated type class encodes the constraints of its schema in the
+%       validators and size declarations of its properties, where they are
+%       hard to read back. This class answers questions about them directly:
+%       whether a property holds one value or many, whether it links to
+%       another node, embeds one, or accepts several types, and which types
+%       those are. Tools that build interfaces or walk a graph need those
+%       answers and should not have to parse property declarations.
+%
+%   Input Arguments:
+%       instance  - Any openMINDS metadata instance.
+%       className - Fully qualified class name, char or string.
+%
+%   Properties:
+%       Name          - Short name of the type, such as "Subject"
+%       ClassName     - Fully qualified MATLAB class name
+%       PropertyNames - Public property names of the type
+%       NumProperties - How many properties the type has
+%
+%   Example:
+%       metaType = openminds.meta.Type("openminds.core.Subject");
+%       metaType.isPropertyMixedType("species")
+%
+%   Note on caching:
+%       This constructor builds a new object each time. Prefer
+%       openminds.meta.fromInstance or openminds.meta.fromClassName, which
+%       return cached objects and are cheaper when called repeatedly.
+%
+%   See also openminds.meta.fromInstance, openminds.meta.fromClassName
 
     properties (SetAccess = immutable)
         Name char                   % (Short) Name of openMINDS metadata type
@@ -232,7 +262,7 @@ classdef Type < handle
         % from any property of this type
 
             arguments
-                obj (1,1) openminds.internal.meta.Type
+                obj (1,1) openminds.meta.Type
                 type (1,1) openminds.enum.Types
             end
 
@@ -258,7 +288,7 @@ classdef Type < handle
             % Get property name which can be linked to given type
                     
             arguments
-                obj (1,1) openminds.internal.meta.Type
+                obj (1,1) openminds.meta.Type
                 type (1,1) openminds.enum.Types
             end
 

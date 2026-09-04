@@ -23,6 +23,10 @@ Folder layout follows the rule rather than defining it. Everything ships from
 `code/+openminds`, so the package path is the only boundary a reader has to
 learn.
 
+One corollary, since inheritance carries members across the line: **a public
+class must not inherit public or protected members from an internal class.**
+Four do today; see gap 11.
+
 ### The rule is not true yet: generated mixed types
 
 The 1520 generated mixed-type classes are emitted into
@@ -89,6 +93,8 @@ Two things sit outside this promise because they track an external source:
 | `openminds.fromTypeName` | Blank instance from a type name or IRI |
 | `openminds.instanceFromIRI` | Controlled-term instance from its IRI |
 | `openminds.enum.Types`, `openminds.enum.Modules` | Enumerations of the active model |
+| `openminds.meta.Type` | Describes a type's properties: scalar, linked, embedded, mixed |
+| `openminds.meta.fromInstance`, `openminds.meta.fromClassName` | Cached lookup of the above |
 
 ### Toolbox and model version
 
@@ -144,38 +150,18 @@ rather than a working dependency.
 Each of these is a place where the boundary above is not yet honest. Ordered by
 how much it matters.
 
-**1. Type introspection has no public equivalent.** Both consumers use
-`openminds.internal.meta.Type` — the GUI to decide whether a property renders
-as a dropdown, a list, or a type picker; kg-sync to walk a downloaded graph.
-Its public method set is already shaped like an API:
-`isPropertyValueScalar`, `isPropertyWithLinkedType`, `isPropertyWithEmbeddedType`,
-`isPropertyMixedType`, `getMixedTypeForProperty`, `listLinkedTypesForProperty`,
-`listEmbeddedTypesForProperty`, plus `NumProperties` and `PropertyNames`.
-**Decided: it becomes public.** Placement is the remaining question. Not
-`openminds.utility`: both consumers need this, which makes it a pillar of the
-extender API rather than a miscellaneous helper, and `utility` reads as the
-drawer you look in last.
+**1. Type introspection.** *Done.* `openminds.internal.meta.Type` is now
+`openminds.meta.Type`, with `fromInstance` and `fromClassName` alongside it.
+The two lookups came too because they are the cached path, not sugar: the
+constructor builds a fresh object each call, while they return one shared
+object per type, and the public `openminds.base.Serializer` already used
+`fromInstance` on every node it wrote. `MetaTypeRegistry` stayed behind as
+`openminds.internal.meta.MetaTypeRegistry`, since it is the cache rather than
+the interface to it.
 
-*Recommendation: promote the existing name, `openminds.meta.Type`.* It mirrors
-MATLAB's own `meta.class`, so the idiom is already familiar to the audience;
-the `meta.` prefix separates it from `enum.Types`, which otherwise competes for
-the word "type"; and promotion is then a one-segment move that costs kg-sync a
-find-and-replace rather than a rewrite.
-
-A `+meta` namespace does **not** shadow MATLAB's builtin `meta` package. MATLAB
-namespaces have no implicit relative resolution — a member is reachable only by
-its fully qualified name — so an unqualified `meta.` inside `+openminds` still
-finds the builtin. This toolbox already proves it: `internal/meta/Type.m` calls
-`meta.class.fromName` from inside a namespace named `meta`, and has always
-worked. Verified again on R2026a with a standalone namespace built for the
-purpose.
-
-Two notes for whoever implements it. The constructor already accepts either an
-instance or a class name, verified against both, so kg-sync's
-`meta.fromInstance` needs no public counterpart. And
-`getMixedTypeForProperty` returns an `openminds.internal.mixedtype.*` class
-name today, so promoting this class forces the mixed-type decision above; the
-two land together or the new public API returns internal names on day one.
+Still coupled to the mixed-type question above: `getMixedTypeForProperty`
+returns `openminds.internal.mixedtype.*` class names, so a public method
+returns internal names until those classes move.
 
 **2. `Node` hides members that extenders must call.** `isReference()`,
 `getLinkedInstances()`, `getEmbeddedInstances()` and the `id` property are all
@@ -269,10 +255,45 @@ not the GUI is current, this is a public name removed without a shim.
 introspection API of gap 1 and deprecate the old name properly.*
 
 **10. Label access is inconsistent.** `getDisplayLabel()` is `protected`, yet
-the GUI calls it from outside the class hierarchy, and also reads a
-`DisplayString` property that no longer exists.
-*Recommendation: settle on one public way to get an instance's display label
-and document it.*
+the GUI calls it from outside the class hierarchy. `DisplayString`, which the
+GUI also reads, does exist and is public — an earlier note here said otherwise
+and was wrong. It is inherited from an internal mixin; see gap 11.
+*Recommendation: document `string(instance)` as the one public way to get a
+display label, since it is already public and already returns it.*
+
+**11. Public classes inherit from internal ones.** Four do, and one of them is
+`Node`:
+
+| Public class | Internal superclass |
+|---|---|
+| `openminds.Node` | `internal.mixin.StructAdapter`, `internal.mixin.CustomInstanceDisplay` |
+| `openminds.base.Visitor` | `internal.graph.TraversalCore` |
+| `openminds.base.Transformer` (and `Serializer` through it) | `internal.graph.TraversalCore` |
+| `openminds.base.MixedTypeSet` | `internal.mixin.CustomInstanceDisplay` |
+
+This is not cosmetic, because those superclasses declare members that are
+public or protected on the subclass. `CustomInstanceDisplay` is where
+`DisplayString`, `char` and `string` come from, so the display API of every
+metadata type in the toolbox is declared in an internal class.
+`TraversalCore` contributes a public `reset` and eight protected traversal
+helpers — `getLinkedEdges`, `getEmbeddedEdges`, `setEdgeChildren`,
+`wasVisited`, `markVisited`, `visitedNode`, `unmarkVisited` and the static
+`nodeKey` — and the toolbox's own `ResolvingVisitor` calls `nodeKey`, so that
+surface is real rather than theoretical. Both internal classes also declare
+abstract members a subclass must implement, which puts the instructions for
+writing a public subclass inside `openminds.internal`.
+
+It does not break anyone's code: a subclass author writes
+`< openminds.base.Visitor` and never names the superclass. But it is
+observable through `superclasses` and `meta.class`, which the GUI already uses
+for type checks elsewhere, and it contradicts the promise above now that the
+promise covers protected members of extensible classes.
+
+*Recommendation: move these superclasses into `openminds.base`.* Each is
+abstract and meaningful only as a superclass, which is exactly why
+`ControlledTermBase` already sits in `base`. Alternatively fold each into its
+single public subclass, though `TraversalCore` has two and would be
+duplicated.
 
 ## Decisions
 

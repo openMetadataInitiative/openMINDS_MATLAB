@@ -11,7 +11,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
 %   % Access type information
 %   disp(personType.PropertyNames);
 %
-% See also: openminds.internal.meta.Type
+% See also: openminds.meta.Type
 
     properties (Constant, Access = private)
         % Name used to store the singleton instance in application data
@@ -168,7 +168,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 end
             else
                 % Create and cache a new object
-                metaType = openminds.internal.meta.Type(typeEnum.ClassName);
+                metaType = openminds.meta.Type(typeEnum.ClassName);
                 obj.Registry(keyName) = {metaType};
             end
             
