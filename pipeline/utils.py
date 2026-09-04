@@ -13,6 +13,20 @@ from jinja2 import Template
 # Every openMINDS schema source file carries this compound extension
 SCHEMA_FILE_EXTENSION = ".schema.omi.json"
 
+# Where the build writes, relative to the working directory
+TARGET_ROOT = "target"
+
+
+def target_folder(version: str, artifact_type: str) -> str:
+    """Folder that one kind of artifact of a model version is written to.
+
+    The build tree is model version first, then artifact type, mirroring
+    code/generated/resources in the MATLAB toolbox so that applying a build is
+    a single copy. The artifact types are "types", "mixedtypes",
+    "enumerations" and "base".
+    """
+    return os.path.join(TARGET_ROOT, version, artifact_type)
+
 def clone_sources():
 
     if os.path.exists("_sources"):
@@ -249,7 +263,7 @@ def save_resource_files(version, schema_path_list, schema_root_path):
     manifest.sort(key=lambda x: x["name"])
     alias_json = {'Aliases': alias_list}
 
-    target_directory = os.path.join("target", "types", version, "resources")
+    target_directory = os.path.join(target_folder(version, "types"), "resources")
     os.makedirs(target_directory, exist_ok=True)
 
     # Save manifest to file as json
@@ -321,8 +335,8 @@ def namespace_name(path_part: str) -> str:
 
 # Local functions
 def _create_enum_target_file_path(version, enum_type) -> str:
-        target_root_path = os.path.join("target", "enumerations", version, '+openminds', '+enum', f"{enum_type}.m")
-        return target_root_path
+        return os.path.join(
+            target_folder(version, "enumerations"), '+openminds', '+enum', f"{enum_type}.m")
 
 def _get_matlab_class_name(schema_info):
     """Fully qualified MATLAB class name for a parsed schema path"""

@@ -22,6 +22,7 @@ from pipeline.utils import (
     camel_case,
     namespace_name,
     parse_schema_file_path,
+    target_folder,
     InstanceLoader,
     SCHEMA_FILE_EXTENSION )
 
@@ -128,7 +129,7 @@ class MATLABSchemaBuilder(object):
         matlab_class_file_name = f"{self._schema_class_name}.{OUTPUT_FILE_FORMAT}"
 
         return os.path.join(
-            "target", "types", self.version, *package_parts, matlab_class_file_name
+            target_folder(self.version, "types"), *package_parts, matlab_class_file_name
         )
 
     def _extract_template_variables(self):
@@ -347,7 +348,7 @@ class MATLABSchemaBuilder(object):
         # Build package directory path and create directory if necessary
         package_name_list = _get_mixedtype_package_name_list(schema["class_name"])
         package_parts = ["+" + name for name in package_name_list]
-        path_parts = ["target", "mixedtypes", self.version] + package_parts
+        path_parts = [target_folder(self.version, "mixedtypes")] + package_parts
         os.makedirs(os.path.join(*path_parts), exist_ok=True)
 
         # Make first letter of property name uppercase
@@ -411,7 +412,7 @@ def save_controlled_term_base_class(version, schema_root_path, class_name_map, j
     classdef_str = _strip_trailing_whitespace(classdef_str)
 
     target_file_path = os.path.join(
-        "target", "base", version, "+openminds", "+base", "ControlledTerm.m"
+        target_folder(version, "base"), "+openminds", "+base", "ControlledTerm.m"
     )
     os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
     with open(target_file_path, "w", encoding="utf-8") as target_file:

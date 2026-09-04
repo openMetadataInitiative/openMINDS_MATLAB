@@ -127,7 +127,7 @@ class SaveControlledTermBaseClassTest(ControlledTermBaseTestCase):
         path = self.generate()
         self.assertEqual(
             path,
-            os.path.join("target", "base", VERSION, "+openminds", "+base", "ControlledTerm.m"),
+            os.path.join("target", VERSION, "base", "+openminds", "+base", "ControlledTerm.m"),
         )
         self.assertTrue(os.path.isfile(os.path.join(self.output_directory, path)))
 

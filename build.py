@@ -5,6 +5,7 @@ import sys
 from pipeline.translator import MATLABSchemaBuilder, save_controlled_term_base_class
 from pipeline.utils import (
     clone_sources,
+    TARGET_ROOT,
     SchemaLoader,
     initialise_jinja_templates,
     save_resource_files,
@@ -19,8 +20,8 @@ print("***************************************")
 # Step 1 - clone central repository in main branch to get the latest sources
 clone_sources()
 schema_loader = SchemaLoader()
-if os.path.exists("target"):
-    shutil.rmtree("target")
+if os.path.exists(TARGET_ROOT):
+    shutil.rmtree(TARGET_ROOT)
 
 # Step 2 - Initialise the jinja templates
 jinja_templates = initialise_jinja_templates()
