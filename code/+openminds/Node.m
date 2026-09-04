@@ -8,9 +8,10 @@ classdef Node < handle & matlab.mixin.SetGet & ...
 %   represent. Every generated type class derives from this.
 %
 %   Methods:
-%       resolve   - Replace unresolved references with the nodes they name
-%       serialize - Serialize this node and the graph below it
-%       save      - Write this node to a metadata store
+%       isReference - Whether this stands for a node rather than being one
+%       resolve     - Replace unresolved references with the nodes they name
+%       serialize   - Serialize this node and the graph below it
+%       save        - Write this node to a metadata store
 %
 %   Inherited, and no less part of this class:
 %       string, char  - The instance's display label
@@ -242,26 +243,37 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Access = public, Hidden)
-
-        function typeName = getTypeName(obj)
-            typeName = openminds.internal.utility.getTypeName(class(obj));
-        end
+    methods
 
         function tf = isReference(obj)
         % isReference - Whether this instance stands for a node rather than being one
         %
-        %   A reference carries an identifier and nothing else, and names a
-        %   node that is not present: a stub read from a document, a
-        %   placeholder created with only an IRI, or a link that has not
-        %   been resolved. A node that merely has no properties set is not
-        %   a reference. A reference is never written as a document of its
-        %   own and is not counted as a node of a collection.
+        %   Syntax:
+        %       tf = isReference(instance)
+        %
+        %   Description:
+        %       A reference carries an identifier and nothing else, and names
+        %       a node that is not present: a stub read from a document, a
+        %       placeholder created with only an IRI, or a link that has not
+        %       been resolved. A node that merely has no properties set is
+        %       not a reference. A reference is never written as a document
+        %       of its own and is not counted as a node of a collection.
+        %
+        %       Returns one logical per element, so it works on an array.
+        %
+        %   See also openminds.Node/resolve
 
             tf = false(1, numel(obj));
             for i = 1:numel(obj)
                 tf(i) = obj(i).IsReference;
             end
+        end
+    end
+
+    methods (Access = public, Hidden)
+
+        function typeName = getTypeName(obj)
+            typeName = openminds.internal.utility.getTypeName(class(obj));
         end
 
         function tf = isUnresolved(obj)
