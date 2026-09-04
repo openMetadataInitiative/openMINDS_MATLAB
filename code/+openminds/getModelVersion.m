@@ -13,7 +13,7 @@ function versionNum = getModelVersion(outputType)
     if isempty(lastTic); lastTic = uint64(0); end
 
     if toc(lastTic) > 1
-        typeFolder = fullfile(openminds.internal.rootpath, 'types/');
+        typeFolder = fullfile(openminds.toolboxdir(), 'types/');
         pathSplit = strsplit(path, pathsep);
     
         matchedIdx = find(contains(pathSplit, typeFolder));

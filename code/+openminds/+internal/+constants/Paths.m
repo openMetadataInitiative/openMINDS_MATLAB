@@ -9,7 +9,7 @@ classdef Paths < handle
         LocalInstanceFolder = fullfile(userpath, "openMINDS_MATLAB", "Repositories", "openMINDS_instances-main", "instances")
 
         % Generated type classes, one subfolder per model version
-        TypesFolder = fullfile(openminds.internal.rootpath(), 'types')
+        TypesFolder = fullfile(openminds.toolboxdir(), 'types')
 
         % Root of everything this toolbox stores under the user path
         UserPath = fullfile(userpath, "openMINDS_MATLAB")

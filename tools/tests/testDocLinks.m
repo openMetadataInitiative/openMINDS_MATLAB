@@ -3,7 +3,6 @@ function result = testDocLinks()
     projectDirectory = ommtools.getProjectRootDir();
 
     addpath( fullfile(projectDirectory, 'code') );
-    addpath( fullfile(projectDirectory, 'code', 'internal') );
     openminds.startup()
 
     testDirectoryPath = fullfile(projectDirectory, 'tools', 'tests');
