@@ -2,7 +2,7 @@ classdef TutorialTest <  matlab.unittest.TestCase
 % TutorialTest - Unit test for testing the openMINDS tutorials.
 
     properties
-        RootDirectory = openminds.internal.rootpath();
+        RootDirectory = openminds.toolboxdir();
     end
 
     properties (TestParameter)
@@ -44,7 +44,7 @@ end
 
 function tutorialFilePaths = listTutorialFiles()
 % listTutorialFiles - List names of all tutorial files (exclude skipped files)
-    rootPath = openminds.internal.rootpath();
+    rootPath = openminds.toolboxdir();
     L = dir(fullfile(rootPath, 'livescripts', '*.mlx'));
     tutorialNames = setdiff({L.name}, TutorialTest.SkippedTutorials);
 

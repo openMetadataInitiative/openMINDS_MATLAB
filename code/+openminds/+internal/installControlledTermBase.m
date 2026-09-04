@@ -13,8 +13,8 @@ function controlledTermVersion = installControlledTermBase(modelVersion)
 
     controlledTermVersion = getControlledTermVersion(modelVersion);
 
-    rootPath = openminds.internal.rootpath();
-    baseFolder = fullfile(rootPath, "internal", "+openminds", "+base");
+    rootPath = openminds.toolboxdir();
+    baseFolder = fullfile(rootPath, "+openminds", "+base");
     sourceFile = fullfile(baseFolder, "private", "controlledTerms", ...
         controlledTermVersion, "ControlledTerm.m");
     targetFile = fullfile(baseFolder, "ControlledTerm.m");
