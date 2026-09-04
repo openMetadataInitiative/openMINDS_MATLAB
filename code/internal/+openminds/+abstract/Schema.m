@@ -867,6 +867,37 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         end
     end
 
+    methods % Property set methods
+        function set.IsReference(obj, value)
+            % A reference is an id and nothing else. Marking a populated
+            % node as a reference would make a collection skip it, so the
+            % next save would drop it without a word. That is refused.
+            if value && obj.hasPropertyValues()
+                error('openMINDS:Schema:ReferenceWithProperties', ...
+                    ['A populated instance cannot be marked as a reference. ', ...
+                    'A reference is an id and nothing else.'])
+            end
+            obj.IsReference = value;
+        end
+    end
+
+    methods (Access = private)
+        function tf = hasPropertyValues(obj)
+        % hasPropertyValues - Whether any property of the type holds a value
+        %
+        %   The id is not a property of the type and does not count.
+
+            tf = false;
+            propertyNames = setdiff(string(obj.PropertyNames), "id");
+            for i = 1:numel(propertyNames)
+                if hasValue(obj.(propertyNames(i)))
+                    tf = true;
+                    return
+                end
+            end
+        end
+    end
+
     methods (Access = ?openminds.internal.resolver.ResolvingVisitor)
         function markResolved(obj)
         % markResolved - Record that this node is no longer a reference
@@ -938,5 +969,20 @@ function [name, value, isReference] = extractIsReference(name, value)
                 ['A reference is created from an id and nothing else. ', ...
                 'Give IsReference=true together with an id and no other property.'])
         end
+    end
+end
+
+function tf = hasValue(propertyValue)
+% Whether a property value is set, by the same rule the serializer uses
+% to decide what to write.
+
+    if isempty(propertyValue)
+        tf = false;
+    elseif isstring(propertyValue) && isscalar(propertyValue)
+        tf = ~(propertyValue == "" || ismissing(propertyValue));
+    elseif isdatetime(propertyValue)
+        tf = ~all(isnat(propertyValue));
+    else
+        tf = true;
     end
 end

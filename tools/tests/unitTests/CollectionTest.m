@@ -572,6 +572,27 @@ classdef CollectionTest < matlab.unittest.TestCase
                 'openMINDS:Schema:ReferenceWithProperties');
         end
 
+        function testPopulatedNodeCannotBecomeReference(testCase)
+            % The flag can be set after construction, but a node that
+            % holds values is refused: marking it would make a collection
+            % skip it and the next save drop it silently. An id-only node
+            % may still become a reference, and a reference may become a
+            % node.
+            iri = "https://graph.example/instances/person-001";
+
+            populated = openminds.core.Person("id", iri, "givenName", "Ada");
+            testCase.verifyError(@() populated.set("IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+            testCase.verifyFalse(populated.isReference());
+
+            idOnly = openminds.core.Person("id", iri);
+            idOnly.set("IsReference", true);
+            testCase.verifyTrue(idOnly.isReference());
+
+            idOnly.set("IsReference", false);
+            testCase.verifyFalse(idOnly.isReference());
+        end
+
         function testNodeCreatedWithAnIriIsSaved(testCase)
             % Creating a node with a chosen IRI and filling it in afterwards
             % is how instances bound for an external graph are made. Such
