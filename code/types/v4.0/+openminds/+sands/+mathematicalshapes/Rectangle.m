@@ -1,4 +1,4 @@
-classdef Rectangle < openminds.abstract.Schema
+classdef Rectangle < openminds.Node
 %Rectangle - No description available.
 %
 %   PROPERTIES:
@@ -46,7 +46,7 @@ classdef Rectangle < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

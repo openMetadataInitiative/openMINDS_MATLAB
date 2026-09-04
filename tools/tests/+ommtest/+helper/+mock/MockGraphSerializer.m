@@ -1,9 +1,9 @@
-classdef MockGraphSerializer < openminds.abstract.BaseSerializer
+classdef MockGraphSerializer < openminds.base.Serializer
 % MockGraphSerializer - Serializes instances into mock database records
 %
 %   A non-JSON-LD output format built on the shared serialization core:
 %   graph traversal, reference handling and embedding come from
-%   openminds.abstract.BaseSerializer; only the record format is here.
+%   openminds.base.Serializer; only the record format is here.
 
     properties (Constant)
         DefaultFileExtension = ".mockrecord"
@@ -16,7 +16,7 @@ classdef MockGraphSerializer < openminds.abstract.BaseSerializer
             end
             config.OutputMode = "multiple"; % one record per node
             nvPairs = namedargs2cell(config);
-            obj = obj@openminds.abstract.BaseSerializer(nvPairs{:});
+            obj = obj@openminds.base.Serializer(nvPairs{:});
         end
     end
 

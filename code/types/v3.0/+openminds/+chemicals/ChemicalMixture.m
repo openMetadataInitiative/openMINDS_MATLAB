@@ -1,4 +1,4 @@
-classdef ChemicalMixture < openminds.abstract.Schema
+classdef ChemicalMixture < openminds.Node
 %ChemicalMixture - Structured information about a mixture of chemical substances.
 %
 %   PROPERTIES:
@@ -66,7 +66,7 @@ classdef ChemicalMixture < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

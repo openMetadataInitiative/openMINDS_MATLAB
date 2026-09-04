@@ -1,4 +1,4 @@
-classdef LearningResource < openminds.abstract.Schema
+classdef LearningResource < openminds.Node
 %LearningResource - No description available.
 %
 %   PROPERTIES:
@@ -212,7 +212,7 @@ classdef LearningResource < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

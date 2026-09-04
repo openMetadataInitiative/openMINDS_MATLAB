@@ -1,4 +1,4 @@
-classdef Measurement < openminds.abstract.Schema
+classdef Measurement < openminds.Node
 %Measurement - Structured information about a measurement performed during a scientific experiment.
 %
 %   PROPERTIES:
@@ -67,7 +67,7 @@ classdef Measurement < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

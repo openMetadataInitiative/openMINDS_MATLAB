@@ -1,4 +1,4 @@
-classdef PatchClampVariation < openminds.abstract.ControlledTerm
+classdef PatchClampVariation < openminds.base.ControlledTerm
 %PatchClampVariation - No description available.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef PatchClampVariation < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

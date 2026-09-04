@@ -1,4 +1,4 @@
-classdef Square < openminds.abstract.Schema
+classdef Square < openminds.Node
 %Square - No description available.
 %
 %   PROPERTIES:
@@ -38,7 +38,7 @@ classdef Square < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

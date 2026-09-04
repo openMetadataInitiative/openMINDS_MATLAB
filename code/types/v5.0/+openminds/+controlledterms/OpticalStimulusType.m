@@ -1,4 +1,4 @@
-classdef OpticalStimulusType < openminds.abstract.ControlledTerm
+classdef OpticalStimulusType < openminds.base.ControlledTerm
 %OpticalStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef OpticalStimulusType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

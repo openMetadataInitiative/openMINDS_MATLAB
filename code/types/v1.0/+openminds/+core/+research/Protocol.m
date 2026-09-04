@@ -1,4 +1,4 @@
-classdef Protocol < openminds.abstract.Schema
+classdef Protocol < openminds.Node
 %Protocol - Structured information on a research project.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef Protocol < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

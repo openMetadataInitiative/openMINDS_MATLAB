@@ -1,4 +1,4 @@
-classdef MRIScannerUsage < openminds.abstract.Schema
+classdef MRIScannerUsage < openminds.Node
 %MRIScannerUsage - No description available.
 %
 %   PROPERTIES:
@@ -293,7 +293,7 @@ classdef MRIScannerUsage < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

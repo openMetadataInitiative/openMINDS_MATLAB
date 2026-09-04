@@ -4,8 +4,8 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 %
 %
 %   Known subclasses:
-%       - openminds.abstract.Schema
-%       - openminds.internal.abstract.MixedTypeSet
+%       - openminds.Node
+%       - openminds.base.MixedTypeSet
 
 % Todo:
 %  [ ] Add displayEmptyObject, displayScalarObject, displayNonScalarObject

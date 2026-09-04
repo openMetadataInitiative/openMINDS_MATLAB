@@ -1,4 +1,4 @@
-classdef Software < openminds.abstract.Schema
+classdef Software < openminds.Node
 %Software - Structured information on a software tool (concept level).
 %
 %   PROPERTIES:
@@ -96,7 +96,7 @@ classdef Software < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef DiseaseModel < openminds.abstract.ControlledTerm
+classdef DiseaseModel < openminds.base.ControlledTerm
 %DiseaseModel - No description available.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef DiseaseModel < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

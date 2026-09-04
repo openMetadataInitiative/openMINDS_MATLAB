@@ -1,4 +1,4 @@
-classdef Service < openminds.abstract.Schema
+classdef Service < openminds.Node
 %Service - No description available.
 %
 %   PROPERTIES:
@@ -101,7 +101,7 @@ classdef Service < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

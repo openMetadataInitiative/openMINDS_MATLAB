@@ -1,4 +1,4 @@
-classdef MockTextSerializer < openminds.abstract.BaseSerializer
+classdef MockTextSerializer < openminds.base.Serializer
 % MockTextSerializer - Serializes instances into a plain, non-JSON-LD text format
 %
 %   Stands for an external, non-JSON-LD serializer, such as one written
@@ -18,7 +18,7 @@ classdef MockTextSerializer < openminds.abstract.BaseSerializer
             end
             config.OutputMode = "multiple"; % one document per node
             nvPairs = namedargs2cell(config);
-            obj = obj@openminds.abstract.BaseSerializer(nvPairs{:});
+            obj = obj@openminds.base.Serializer(nvPairs{:});
         end
     end
 

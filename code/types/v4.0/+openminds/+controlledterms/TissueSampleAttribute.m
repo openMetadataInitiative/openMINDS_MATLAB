@@ -1,4 +1,4 @@
-classdef TissueSampleAttribute < openminds.abstract.ControlledTerm
+classdef TissueSampleAttribute < openminds.base.ControlledTerm
 %TissueSampleAttribute - No description available.
 %
 %   PROPERTIES:
@@ -51,7 +51,7 @@ classdef TissueSampleAttribute < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef ViewerSpecification < openminds.abstract.Schema
+classdef ViewerSpecification < openminds.Node
 %ViewerSpecification - No description available.
 %
 %   PROPERTIES:
@@ -60,7 +60,7 @@ classdef ViewerSpecification < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

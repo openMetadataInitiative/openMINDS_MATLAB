@@ -1,4 +1,4 @@
-classdef SubjectGroupState < openminds.abstract.Schema
+classdef SubjectGroupState < openminds.Node
 %SubjectGroupState - No description available.
 %
 %   PROPERTIES:
@@ -112,7 +112,7 @@ classdef SubjectGroupState < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

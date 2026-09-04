@@ -1,4 +1,4 @@
-classdef ResolvingVisitor < openminds.abstract.BaseVisitor
+classdef ResolvingVisitor < openminds.base.Visitor
 % ResolvingVisitor - Resolves the reference nodes of an instance graph
 %
 %   Walks an instance graph and replaces reference nodes, which carry an
@@ -82,7 +82,7 @@ classdef ResolvingVisitor < openminds.abstract.BaseVisitor
         % it was expanded with, so links skipped for lack of depth along
         % one path are followed when another path has depth to spare.
 
-            node = onRevisitNode@openminds.abstract.BaseVisitor(obj, node);
+            node = onRevisitNode@openminds.base.Visitor(obj, node);
 
             key = obj.nodeKey(node);
             if obj.RemainingLinkDepth > obj.ExpandedWithDepth(key)

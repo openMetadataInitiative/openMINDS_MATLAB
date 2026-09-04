@@ -1,8 +1,8 @@
-classdef Schema < handle & matlab.mixin.SetGet & ...
+classdef Node < handle & matlab.mixin.SetGet & ...
                   openminds.internal.mixin.StructAdapter & ...
                   openminds.internal.mixin.CustomInstanceDisplay
 
-% Schema Abstract base class shared by all concrete Schema classes
+% Node Abstract base class shared by all concrete Schema classes
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
@@ -48,7 +48,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods % Constructor
-        function obj = Schema(instance, name, value)
+        function obj = Node(instance, name, value)
             arguments
                 instance (1,:) {mustBeA(instance, "struct")} = struct.empty     % Use mustBeA instead of type specification (e.g., 'instance struct') to avoid MATLAB's forced conversion of input arguments to 'struct'. Using 'mustBeA' only validates the type without attempting conversion, which prevents unexpected behavior if a non-struct is passed.
             end
@@ -102,7 +102,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         %   instance = instance.resolve(Name, Value)
         %
         % Input Arguments:
-        %  - instance (openminds.abstract.Schema) - 
+        %  - instance (openminds.Node) - 
         %    an openMINDS typed metadata instance
         %
         % Output Arguments:
@@ -126,7 +126,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         % See also: openminds.registerLinkResolver
 
             arguments
-                obj (1,:) openminds.abstract.Schema
+                obj (1,:) openminds.Node
                 options.NumLinksToResolve = 0
                 options.LinkResolver openminds.interface.LinkResolver
                 % options.IsEmbedded = false - Todo?
@@ -181,7 +181,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     
         function savedIdentifier = save(obj, metadataStore, options)
             arguments
-                obj (1,:) openminds.abstract.Schema
+                obj (1,:) openminds.Node
                 metadataStore openminds.interface.MetadataStore
                 options.IsEmbedded (1,1) logical = false
             end
@@ -239,7 +239,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         % getLinkedInstances - Get all linked instances as a cell array
 
             arguments
-                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+                obj (1,1) openminds.Node % Currently only support scalar
             end
 
             linkedInstances = {};
@@ -262,7 +262,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         % getEmbeddedInstances - Get all embedded instances as a cell array
            
             arguments
-                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+                obj (1,1) openminds.Node % Currently only support scalar
             end
 
             embeddedInstances = {};
@@ -296,7 +296,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         %   unresolved linked instances.
 
             arguments
-                obj (1,1) openminds.abstract.Schema % Currently only support scalar
+                obj (1,1) openminds.Node % Currently only support scalar
             end
 
             linkedInstances = obj.getLinkedInstances();

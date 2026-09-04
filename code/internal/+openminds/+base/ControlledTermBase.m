@@ -1,4 +1,4 @@
-classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
+classdef (Abstract) ControlledTermBase < openminds.Node
 %ControlledTermBase Shared behavior for controlled term base classes.
 
     properties (Access = protected)
@@ -97,7 +97,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
 
             identifier = openminds.internal.utility.getStructIdentifier(structure);
 
-            if openminds.abstract.ControlledTermBase.isBareReference(structure)
+            if openminds.base.ControlledTermBase.isBareReference(structure)
                 obj.deserializeFromName(identifier);
                 return
             end
@@ -107,7 +107,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
             % fromStruct assigns the identifier from an at_id or x_id
             % field, but a document written without identifiers has
             % neither, and the constructor has already generated one.
-            if ~openminds.abstract.ControlledTermBase.isEmptyValue(identifier)
+            if ~openminds.base.ControlledTermBase.isEmptyValue(identifier)
                 obj.assignInstanceId(identifier);
             end
         end
@@ -177,7 +177,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
     methods (Static, Access = private)
         function instanceIRI = createControlledInstanceIRI(schemaName, instanceName)
             instanceIRI = openminds.constant.BaseURI + "/instances/" ...
-                + openminds.abstract.ControlledTermBase.getInstanceTypeName(schemaName) ...
+                + openminds.base.ControlledTermBase.getInstanceTypeName(schemaName) ...
                 + "/" + string(instanceName);
         end
 
@@ -202,7 +202,7 @@ classdef (Abstract) ControlledTermBase < openminds.abstract.Schema
             valueFields = setdiff(string(fieldnames(structure))', ...
                 openminds.internal.utility.jsonLdKeywordFields());
             hasValue = arrayfun(@(name) ...
-                ~openminds.abstract.ControlledTermBase.isEmptyValue(structure.(name)), valueFields);
+                ~openminds.base.ControlledTermBase.isEmptyValue(structure.(name)), valueFields);
             tf = ~any(hasValue);
         end
 

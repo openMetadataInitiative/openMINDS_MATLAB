@@ -1,4 +1,4 @@
-classdef BiologicalProcess < openminds.abstract.ControlledTerm
+classdef BiologicalProcess < openminds.base.ControlledTerm
 %BiologicalProcess - No description available.
 %
 %   PROPERTIES:
@@ -44,7 +44,7 @@ classdef BiologicalProcess < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

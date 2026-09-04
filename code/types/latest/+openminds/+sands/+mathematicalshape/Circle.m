@@ -1,4 +1,4 @@
-classdef Circle < openminds.abstract.Schema
+classdef Circle < openminds.Node
 %Circle - No description available.
 %
 %   PROPERTIES:
@@ -38,7 +38,7 @@ classdef Circle < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

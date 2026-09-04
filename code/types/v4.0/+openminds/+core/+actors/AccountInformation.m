@@ -1,4 +1,4 @@
-classdef AccountInformation < openminds.abstract.Schema
+classdef AccountInformation < openminds.Node
 %AccountInformation - Structured information about a user account for a web service.
 %
 %   PROPERTIES:
@@ -44,7 +44,7 @@ classdef AccountInformation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

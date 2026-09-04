@@ -3,7 +3,7 @@ function controlledTermVersion = installControlledTermBase(modelVersion)
 %
 %   The base class for controlled terms differs between model versions.
 %   The variant for the given version is copied over the tracked
-%   openminds.abstract.ControlledTerm file, so this writes to the source
+%   openminds.base.ControlledTerm file, so this writes to the source
 %   tree whenever the version changes.
 
     arguments
@@ -14,10 +14,10 @@ function controlledTermVersion = installControlledTermBase(modelVersion)
     controlledTermVersion = getControlledTermVersion(modelVersion);
 
     rootPath = openminds.internal.rootpath();
-    abstractFolder = fullfile(rootPath, "internal", "+openminds", "+abstract");
-    sourceFile = fullfile(abstractFolder, "private", "controlledTerms", ...
+    baseFolder = fullfile(rootPath, "internal", "+openminds", "+base");
+    sourceFile = fullfile(baseFolder, "private", "controlledTerms", ...
         controlledTermVersion, "ControlledTerm.m");
-    targetFile = fullfile(abstractFolder, "ControlledTerm.m");
+    targetFile = fullfile(baseFolder, "ControlledTerm.m");
 
     if ~isfile(sourceFile)
         error("openMINDS:ControlledTerm:MissingVersionedBase", ...

@@ -1,4 +1,4 @@
-classdef Optimization < openminds.abstract.Schema
+classdef Optimization < openminds.Node
 %Optimization - Structured information about a process of optimizing a model or a piece of code.
 %
 %   PROPERTIES:
@@ -167,7 +167,7 @@ classdef Optimization < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

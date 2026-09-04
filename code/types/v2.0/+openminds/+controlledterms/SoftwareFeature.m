@@ -1,4 +1,4 @@
-classdef SoftwareFeature < openminds.abstract.ControlledTerm
+classdef SoftwareFeature < openminds.base.ControlledTerm
 %SoftwareFeature - No description available.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef SoftwareFeature < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

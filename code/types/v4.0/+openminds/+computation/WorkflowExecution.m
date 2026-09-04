@@ -1,4 +1,4 @@
-classdef WorkflowExecution < openminds.abstract.Schema
+classdef WorkflowExecution < openminds.Node
 %WorkflowExecution - Structured information about an execution of a computational workflow.
 %
 %   PROPERTIES:
@@ -62,7 +62,7 @@ classdef WorkflowExecution < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

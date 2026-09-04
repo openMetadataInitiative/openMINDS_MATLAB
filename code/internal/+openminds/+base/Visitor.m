@@ -1,5 +1,5 @@
-classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
-% BaseVisitor - Walk an instance graph and act on each node
+classdef (Abstract) Visitor < openminds.internal.graph.TraversalCore
+% Visitor - Walk an instance graph and act on each node
 %
 %   Subclass this for operations that inspect or modify an instance graph
 %   in place: resolving references, wiring up links after deserialization,
@@ -13,7 +13,7 @@ classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
 %   name of the property the edge belongs to, and the child instances on
 %   it, and returns the child instances to keep:
 %
-%       classdef MyVisitor < openminds.abstract.BaseVisitor
+%       classdef MyVisitor < openminds.base.Visitor
 %           methods (Access = protected)
 %               function children = doForLinkedEdge(obj, parentNode, propertyName, children)
 %                   for i = 1:numel(children)
@@ -44,8 +44,8 @@ classdef (Abstract) BaseVisitor < openminds.internal.graph.TraversalCore
         %   property of a parent, has to take the returned value.
 
             arguments
-                obj (1,1) openminds.abstract.BaseVisitor
-                node (1,1) openminds.abstract.Schema
+                obj (1,1) openminds.base.Visitor
+                node (1,1) openminds.Node
             end
 
             if obj.wasVisited(node)

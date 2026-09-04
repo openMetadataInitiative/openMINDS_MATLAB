@@ -1,4 +1,4 @@
-classdef Person < openminds.abstract.Schema
+classdef Person < openminds.Node
 %Person - Structured information on a person.
 %
 %   PROPERTIES:
@@ -81,7 +81,7 @@ classdef Person < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef TissueSampleState < openminds.abstract.Schema
+classdef TissueSampleState < openminds.Node
 %TissueSampleState - Structured information on a temporary state of a tissue sample.
 %
 %   PROPERTIES:
@@ -96,7 +96,7 @@ classdef TissueSampleState < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

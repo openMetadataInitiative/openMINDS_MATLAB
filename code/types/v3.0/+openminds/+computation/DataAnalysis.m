@@ -1,4 +1,4 @@
-classdef DataAnalysis < openminds.abstract.Schema
+classdef DataAnalysis < openminds.Node
 %DataAnalysis - Structured information on inspecting, cleansing, transforming, and modelling data.
 %
 %   PROPERTIES:
@@ -167,7 +167,7 @@ classdef DataAnalysis < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef LaunchConfiguration < openminds.abstract.Schema
+classdef LaunchConfiguration < openminds.Node
 %LaunchConfiguration - Structured information about the launch of a computational process.
 %
 %   PROPERTIES:
@@ -63,7 +63,7 @@ classdef LaunchConfiguration < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

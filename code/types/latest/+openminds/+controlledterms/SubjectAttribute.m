@@ -1,4 +1,4 @@
-classdef SubjectAttribute < openminds.abstract.ControlledTerm
+classdef SubjectAttribute < openminds.base.ControlledTerm
 %SubjectAttribute - No description available.
 %
 %   PROPERTIES:
@@ -67,7 +67,7 @@ classdef SubjectAttribute < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

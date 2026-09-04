@@ -1,4 +1,4 @@
-classdef MixedTypeReference < openminds.abstract.Schema
+classdef MixedTypeReference < openminds.Node
 % MixedTypeReference - Reference type for when the actual type is not known
 
     properties (Access = protected)
@@ -23,7 +23,7 @@ classdef MixedTypeReference < openminds.abstract.Schema
             arguments
                 identifier (1,1) string {mustBeNonzeroLengthText}
             end
-            obj@openminds.abstract.Schema(struct.empty, 'id', identifier)
+            obj@openminds.Node(struct.empty, 'id', identifier)
         end
     end
 

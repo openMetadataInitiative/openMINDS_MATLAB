@@ -1,4 +1,4 @@
-classdef EthicsAssessment < openminds.abstract.ControlledTerm
+classdef EthicsAssessment < openminds.base.ControlledTerm
 %EthicsAssessment - Structured information on the ethics assessment of a dataset.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef EthicsAssessment < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

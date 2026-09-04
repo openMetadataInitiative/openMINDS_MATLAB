@@ -1,4 +1,4 @@
-classdef TissueSampleCollection < openminds.abstract.Schema
+classdef TissueSampleCollection < openminds.Node
 %TissueSampleCollection - No description available.
 %
 %   PROPERTIES:
@@ -111,7 +111,7 @@ classdef TissueSampleCollection < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef CustomPropertySet < openminds.abstract.Schema
+classdef CustomPropertySet < openminds.Node
 %CustomPropertySet - Structured information about properties of an entity that are not represented in an openMINDS schema.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef CustomPropertySet < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

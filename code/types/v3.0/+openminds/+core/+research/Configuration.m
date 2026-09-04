@@ -1,4 +1,4 @@
-classdef Configuration < openminds.abstract.Schema
+classdef Configuration < openminds.Node
 %Configuration - Structured information about the properties or parameters of an entity or process.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef Configuration < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef ISNI < openminds.abstract.Schema
+classdef ISNI < openminds.Node
 %ISNI - No description available.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef ISNI < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

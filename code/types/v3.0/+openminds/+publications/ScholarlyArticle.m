@@ -1,4 +1,4 @@
-classdef ScholarlyArticle < openminds.abstract.Schema
+classdef ScholarlyArticle < openminds.Node
 %ScholarlyArticle - No description available.
 %
 %   PROPERTIES:
@@ -169,7 +169,7 @@ classdef ScholarlyArticle < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

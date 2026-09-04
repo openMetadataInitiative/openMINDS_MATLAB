@@ -1,4 +1,4 @@
-classdef (Abstract) ControlledTerm < openminds.abstract.ControlledTermBase
+classdef (Abstract) ControlledTerm < openminds.base.ControlledTermBase
 %ControlledTerm Abstract base class for metadata types of the controlled terms module
 
     properties
@@ -31,7 +31,7 @@ classdef (Abstract) ControlledTerm < openminds.abstract.ControlledTermBase
         function obj = ControlledTerm(instanceSpec, propValues)
             arguments
                 instanceSpec = []
-                propValues.?openminds.abstract.ControlledTerm
+                propValues.?openminds.base.ControlledTerm
                 propValues.id (1,1) string
             end
 

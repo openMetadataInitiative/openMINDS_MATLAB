@@ -1,4 +1,4 @@
-classdef ModulesEnumerationBase
+classdef ModulesEnumeration
     methods
         function types = listTypes(obj)
         % listTypes - List types for this module

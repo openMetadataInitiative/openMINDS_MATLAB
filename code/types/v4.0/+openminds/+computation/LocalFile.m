@@ -1,4 +1,4 @@
-classdef LocalFile < openminds.abstract.Schema
+classdef LocalFile < openminds.Node
 %LocalFile - Structured information about a file that is not accessible via a URL.
 %
 %   PROPERTIES:
@@ -96,7 +96,7 @@ classdef LocalFile < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

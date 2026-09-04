@@ -1,4 +1,4 @@
-classdef MRICoil < openminds.abstract.Schema
+classdef MRICoil < openminds.Node
 %MRICoil - No description available.
 %
 %   PROPERTIES:
@@ -93,7 +93,7 @@ classdef MRICoil < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

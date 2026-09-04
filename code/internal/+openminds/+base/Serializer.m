@@ -1,5 +1,5 @@
-classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
-% BaseSerializer - Abstract base class for openMINDS serialization
+classdef (Abstract) Serializer < openminds.base.Transformer
+% Serializer - Abstract base class for openMINDS serialization
 %
 %   This class provides the core serialization logic for openMINDS
 %   instances, handling linked and embedded types according to openMINDS
@@ -8,7 +8,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 %   Serialization is a fold over the instance graph: each instance is
 %   mapped to a document representation, and the representations of its
 %   children are composed into it. That protocol lives in
-%   openminds.abstract.BaseTransformer; this class adds the openMINDS
+%   openminds.base.Transformer; this class adds the openMINDS
 %   rules on top of it.
 %
 %   Linked instances are always written as references and queued to be
@@ -18,7 +18,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 %   USAGE:
 %   ------
 %   % Subclass must implement formatOutput method
-%   classdef JsonLdSerializer < BaseSerializer
+%   classdef JsonLdSerializer < openminds.base.Serializer
 %       methods
 %           function result = formatOutput(obj, processedStruct, config)
 %               result = jsonencode(processedStruct);
@@ -71,7 +71,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
     end
     
     methods % Constructor
-        function obj = BaseSerializer(config)
+        function obj = Serializer(config)
             arguments
                 config.?openminds.internal.serializer.SerializationConfig
             end
@@ -90,7 +90,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
         %
         %   PARAMETERS:
         %   -----------
-        %   instances : openminds.abstract.Schema or cell array
+        %   instances : openminds.Node or cell array
         %       Instance(s) to serialize
         %
         %   RETURNS:
@@ -99,8 +99,8 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
         %       Serialized output in the format specified by the subclass
             
             arguments
-                obj (1,1) openminds.abstract.BaseSerializer
-                instances % openminds.abstract.Schema or cell array
+                obj (1,1) openminds.base.Serializer
+                instances % openminds.Node or cell array
             end
             
             % Process instances to add openMINDS-specific fields and collect
@@ -120,7 +120,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
             arguments
                 ~ % This method does not use obj
                 S (1,1) struct
-                instance (1,1) openminds.abstract.Schema
+                instance (1,1) openminds.Node
             end
             S.at_type = instance.X_TYPE; % Add @type (always required)
         end
@@ -130,7 +130,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
             arguments
                 ~ % This method does not use obj
                 S (1,1) struct
-                instance (1,1) openminds.abstract.Schema
+                instance (1,1) openminds.Node
             end
             S.at_id = instance.id;
         end
@@ -143,7 +143,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
 
             arguments
                 ~ % This method does not use obj
-                instances (1,:) openminds.abstract.Schema
+                instances (1,:) openminds.Node
             end
 
             references = arrayfun(@(instance) struct('at_id', instance.id), ...
@@ -181,7 +181,7 @@ classdef (Abstract) BaseSerializer < openminds.abstract.BaseTransformer
         CurrentDepth (1,1) double = 0
     end
 
-    methods (Access = protected) % BaseTransformer implementation
+    methods (Access = protected) % Transformer implementation
         function result = setPropertyValue(~, result, node, propertyName, values)
         % openMINDS writes a property by its cardinality: a property that
         % holds at most one value is written as a single object, and a

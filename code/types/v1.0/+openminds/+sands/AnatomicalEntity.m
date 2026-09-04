@@ -1,4 +1,4 @@
-classdef AnatomicalEntity < openminds.abstract.Schema
+classdef AnatomicalEntity < openminds.Node
 %AnatomicalEntity - Structured information on an anatomical entity.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef AnatomicalEntity < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

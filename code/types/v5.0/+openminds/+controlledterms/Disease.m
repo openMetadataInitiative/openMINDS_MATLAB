@@ -1,4 +1,4 @@
-classdef Disease < openminds.abstract.ControlledTerm
+classdef Disease < openminds.base.ControlledTerm
 %Disease - Structured information on a disease.
 %
 %   PROPERTIES:
@@ -69,7 +69,7 @@ classdef Disease < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

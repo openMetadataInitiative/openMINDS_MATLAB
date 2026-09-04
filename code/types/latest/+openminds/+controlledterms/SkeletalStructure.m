@@ -1,4 +1,4 @@
-classdef SkeletalStructure < openminds.abstract.ControlledTerm
+classdef SkeletalStructure < openminds.base.ControlledTerm
 %SkeletalStructure - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef SkeletalStructure < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

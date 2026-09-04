@@ -1,4 +1,4 @@
-classdef PublicationStatus < openminds.abstract.ControlledTerm
+classdef PublicationStatus < openminds.base.ControlledTerm
 %PublicationStatus - No description available.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef PublicationStatus < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef GRIDID < openminds.abstract.Schema
+classdef GRIDID < openminds.Node
 %GRIDID - A GRID (Global Research Identifier Database) identifier.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef GRIDID < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

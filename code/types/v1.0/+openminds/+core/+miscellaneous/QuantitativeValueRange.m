@@ -1,4 +1,4 @@
-classdef QuantitativeValueRange < openminds.abstract.Schema
+classdef QuantitativeValueRange < openminds.Node
 %QuantitativeValueRange - A representation of a range of quantitative values.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef QuantitativeValueRange < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef MolecularEntity < openminds.abstract.ControlledTerm
+classdef MolecularEntity < openminds.base.ControlledTerm
 %MolecularEntity - No description available.
 %
 %   PROPERTIES:
@@ -185,7 +185,7 @@ classdef MolecularEntity < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

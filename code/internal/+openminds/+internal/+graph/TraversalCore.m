@@ -11,8 +11,8 @@ classdef (Abstract) TraversalCore < handle
 %   handling of mixed types and only one of them with cycle detection.
 %
 %   Subclasses define the traversal protocol on top of these primitives.
-%   See openminds.abstract.BaseVisitor for the side-effecting protocol and
-%   openminds.abstract.BaseTransformer for the accumulating one.
+%   See openminds.base.Visitor for the side-effecting protocol and
+%   openminds.base.Transformer for the accumulating one.
 
     properties (Access = private)
         % The node seen for each identifier so far, keyed by identifier.
@@ -69,7 +69,7 @@ classdef (Abstract) TraversalCore < handle
 
             arguments
                 ~
-                node (1,1) openminds.abstract.Schema
+                node (1,1) openminds.Node
                 propertyName (1,1) string
                 children cell
             end

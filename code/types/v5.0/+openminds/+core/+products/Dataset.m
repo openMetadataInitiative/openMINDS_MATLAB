@@ -1,4 +1,4 @@
-classdef Dataset < openminds.abstract.Schema
+classdef Dataset < openminds.Node
 %Dataset - Structured information on data originating from human/animal studies or simulations (concept level).
 %
 %   PROPERTIES:
@@ -115,7 +115,7 @@ classdef Dataset < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

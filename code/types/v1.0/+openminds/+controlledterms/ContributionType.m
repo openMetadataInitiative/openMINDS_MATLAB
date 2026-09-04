@@ -1,4 +1,4 @@
-classdef ContributionType < openminds.abstract.ControlledTerm
+classdef ContributionType < openminds.base.ControlledTerm
 %ContributionType - Structured information on the type of contribution a person or organization performed.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef ContributionType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

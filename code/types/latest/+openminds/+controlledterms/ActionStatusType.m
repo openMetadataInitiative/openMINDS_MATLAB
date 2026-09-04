@@ -1,4 +1,4 @@
-classdef ActionStatusType < openminds.abstract.ControlledTerm
+classdef ActionStatusType < openminds.base.ControlledTerm
 %ActionStatusType - Structured information about the status of an action.
 %
 %   PROPERTIES:
@@ -54,7 +54,7 @@ classdef ActionStatusType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

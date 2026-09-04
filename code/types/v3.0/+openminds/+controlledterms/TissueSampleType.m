@@ -1,4 +1,4 @@
-classdef TissueSampleType < openminds.abstract.ControlledTerm
+classdef TissueSampleType < openminds.base.ControlledTerm
 %TissueSampleType - Structured information on the general type of the tissue sample.
 %
 %   PROPERTIES:
@@ -54,7 +54,7 @@ classdef TissueSampleType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef BehavioralTask < openminds.abstract.ControlledTerm
+classdef BehavioralTask < openminds.base.ControlledTerm
 %BehavioralTask - Structured information on the behavioral task that had to be performed by a subject.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef BehavioralTask < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

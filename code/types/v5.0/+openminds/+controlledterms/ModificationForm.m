@@ -1,4 +1,4 @@
-classdef ModificationForm < openminds.abstract.ControlledTerm
+classdef ModificationForm < openminds.base.ControlledTerm
 %ModificationForm - No description available.
 %
 %   PROPERTIES:
@@ -53,7 +53,7 @@ classdef ModificationForm < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef AnatomicalPlane < openminds.abstract.ControlledTerm
+classdef AnatomicalPlane < openminds.base.ControlledTerm
 %AnatomicalPlane - No description available.
 %
 %   PROPERTIES:
@@ -47,7 +47,7 @@ classdef AnatomicalPlane < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

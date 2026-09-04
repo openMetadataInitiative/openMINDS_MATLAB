@@ -1,4 +1,4 @@
-classdef ElectrodeUsage < openminds.abstract.Schema
+classdef ElectrodeUsage < openminds.Node
 %ElectrodeUsage - No description available.
 %
 %   PROPERTIES:
@@ -84,7 +84,7 @@ classdef ElectrodeUsage < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

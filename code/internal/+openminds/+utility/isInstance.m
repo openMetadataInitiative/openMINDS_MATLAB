@@ -4,5 +4,5 @@ function tf = isInstance(value)
 %   tf = openminds.utility.isInstance(value)
 
     % Todo: Should it work for arrays and cell arrays?
-    tf = isa(value, 'openminds.abstract.Schema');
+    tf = isa(value, 'openminds.Node');
 end

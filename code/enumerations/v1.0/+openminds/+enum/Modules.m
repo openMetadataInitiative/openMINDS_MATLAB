@@ -1,4 +1,4 @@
-classdef Modules < openminds.base.ModulesEnumerationBase
+classdef Modules < openminds.base.ModulesEnumeration
     enumeration
         SANDS
         controlledTerms

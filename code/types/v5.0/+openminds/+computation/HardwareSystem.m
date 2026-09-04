@@ -1,4 +1,4 @@
-classdef HardwareSystem < openminds.abstract.Schema
+classdef HardwareSystem < openminds.Node
 %HardwareSystem - Structured information about computing hardware.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef HardwareSystem < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

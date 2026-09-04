@@ -1,4 +1,4 @@
-classdef NumericalProperty < openminds.abstract.Schema
+classdef NumericalProperty < openminds.Node
 %NumericalProperty - Structured information about a property of some entity or process whose value is a number.
 %
 %   PROPERTIES:
@@ -44,7 +44,7 @@ classdef NumericalProperty < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

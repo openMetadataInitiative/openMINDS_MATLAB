@@ -1,4 +1,4 @@
-classdef AgeCategory < openminds.abstract.ControlledTerm
+classdef AgeCategory < openminds.base.ControlledTerm
 %AgeCategory - Structured information on the life cycle (semantic term) of a specific age group.
 %
 %   PROPERTIES:
@@ -57,7 +57,7 @@ classdef AgeCategory < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

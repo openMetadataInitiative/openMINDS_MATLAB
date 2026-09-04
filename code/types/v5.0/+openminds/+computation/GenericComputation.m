@@ -1,4 +1,4 @@
-classdef GenericComputation < openminds.abstract.Schema
+classdef GenericComputation < openminds.Node
 %GenericComputation - Structured information about a computation whose type is unknown or unspecified.
 %
 %   PROPERTIES:
@@ -167,7 +167,7 @@ classdef GenericComputation < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Environment < openminds.abstract.Schema
+classdef Environment < openminds.Node
 %Environment - Structured information on the computer system or set of systems in which a computation is deployed and executed.
 %
 %   PROPERTIES:
@@ -66,7 +66,7 @@ classdef Environment < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef QuantitativeValueArray < openminds.abstract.Schema
+classdef QuantitativeValueArray < openminds.Node
 %QuantitativeValueArray - A representation of an array of quantitative values, optionally with uncertainties.
 %
 %   PROPERTIES:
@@ -67,7 +67,7 @@ classdef QuantitativeValueArray < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

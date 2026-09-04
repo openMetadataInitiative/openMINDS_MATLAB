@@ -1,4 +1,4 @@
-classdef SovereignState < openminds.abstract.ControlledTerm
+classdef SovereignState < openminds.base.ControlledTerm
 %SovereignState - No description available.
 %
 %   PROPERTIES:
@@ -244,7 +244,7 @@ classdef SovereignState < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef MRIPulseSequence < openminds.abstract.ControlledTerm
+classdef MRIPulseSequence < openminds.base.ControlledTerm
 %MRIPulseSequence - No description available.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef MRIPulseSequence < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

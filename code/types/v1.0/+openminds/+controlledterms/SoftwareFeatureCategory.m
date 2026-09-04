@@ -1,4 +1,4 @@
-classdef SoftwareFeatureCategory < openminds.abstract.ControlledTerm
+classdef SoftwareFeatureCategory < openminds.base.ControlledTerm
 %SoftwareFeatureCategory - Structured information on the category of the software feature.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef SoftwareFeatureCategory < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

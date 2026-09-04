@@ -1,4 +1,4 @@
-classdef ORCID < openminds.abstract.Schema
+classdef ORCID < openminds.Node
 %ORCID - A persistent identifier for a researcher provided by Open Researcher and Contributor ID, Inc.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef ORCID < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

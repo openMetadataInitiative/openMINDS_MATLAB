@@ -1,4 +1,4 @@
-classdef ISSN < openminds.abstract.Schema
+classdef ISSN < openminds.Node
 %ISSN - An International Standard Serial Number of the ISSN International Centre.
 %
 %   PROPERTIES:
@@ -37,7 +37,7 @@ classdef ISSN < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

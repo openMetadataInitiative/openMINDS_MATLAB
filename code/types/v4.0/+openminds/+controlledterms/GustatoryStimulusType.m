@@ -1,4 +1,4 @@
-classdef GustatoryStimulusType < openminds.abstract.ControlledTerm
+classdef GustatoryStimulusType < openminds.base.ControlledTerm
 %GustatoryStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef GustatoryStimulusType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

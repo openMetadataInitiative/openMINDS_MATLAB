@@ -1,4 +1,4 @@
-classdef Book < openminds.abstract.Schema
+classdef Book < openminds.Node
 %Book - No description available.
 %
 %   PROPERTIES:
@@ -155,7 +155,7 @@ classdef Book < openminds.abstract.Schema
                 propValues.id (1,1) string
             end
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.Schema(structInstance, propValues{:})
+            obj@openminds.Node(structInstance, propValues{:})
         end
     end
 

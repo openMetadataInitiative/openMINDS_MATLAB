@@ -1,4 +1,4 @@
-classdef UBERONParcellation < openminds.abstract.ControlledTerm
+classdef UBERONParcellation < openminds.base.ControlledTerm
 %UBERONParcellation - No description available.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef UBERONParcellation < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

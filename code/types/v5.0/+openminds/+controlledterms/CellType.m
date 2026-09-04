@@ -1,4 +1,4 @@
-classdef CellType < openminds.abstract.ControlledTerm
+classdef CellType < openminds.base.ControlledTerm
 %CellType - No description available.
 %
 %   PROPERTIES:
@@ -107,7 +107,7 @@ classdef CellType < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

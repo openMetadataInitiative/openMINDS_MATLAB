@@ -1,4 +1,4 @@
-classdef Modality < openminds.abstract.ControlledTerm
+classdef Modality < openminds.base.ControlledTerm
 %Modality - Structured information on the modality.
 %
 %   PROPERTIES:
@@ -35,7 +35,7 @@ classdef Modality < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

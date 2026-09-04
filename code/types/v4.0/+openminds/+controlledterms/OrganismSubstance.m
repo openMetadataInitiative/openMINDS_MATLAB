@@ -1,4 +1,4 @@
-classdef OrganismSubstance < openminds.abstract.ControlledTerm
+classdef OrganismSubstance < openminds.base.ControlledTerm
 %OrganismSubstance - No description available.
 %
 %   PROPERTIES:
@@ -48,7 +48,7 @@ classdef OrganismSubstance < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

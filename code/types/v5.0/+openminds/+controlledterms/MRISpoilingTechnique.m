@@ -1,4 +1,4 @@
-classdef MRISpoilingTechnique < openminds.abstract.ControlledTerm
+classdef MRISpoilingTechnique < openminds.base.ControlledTerm
 %MRISpoilingTechnique - No description available.
 %
 %   PROPERTIES:
@@ -50,7 +50,7 @@ classdef MRISpoilingTechnique < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

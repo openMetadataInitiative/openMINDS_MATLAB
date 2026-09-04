@@ -13,7 +13,7 @@ function instances = loadInstances(filePath)
 %     filePath - One or more paths to metadata files.
 %
 %   Output Arguments:
-%     instances - Cell array of openminds.abstract.Schema instances.
+%     instances - Cell array of openminds.Node instances.
 %
 %   See also openminds.internal.serializer.JsonLdDeserializer
 
