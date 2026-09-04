@@ -62,6 +62,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update codemeta.json for ${{ steps.version.outputs.tag }}"
+            git commit -m "Update codemeta.json for ${{ steps.version.outputs.tag }} [skip actions]"
             git push
           fi
