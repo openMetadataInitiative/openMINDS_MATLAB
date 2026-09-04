@@ -143,11 +143,17 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
             % Get single line representation for each element
             repArray = arrayfun(@(o) o.compactRepresentationForSingleLine, obj, 'UniformOutput', false);
-            stringArray = cellfun(@(r) "    "+ r.PaddedDisplayOutput, repArray);
+            stringArray = cellfun(@(r) r.PaddedDisplayOutput, repArray);
             
             % Remove array brackets
             stringArray = strrep(stringArray, '[', '');
             stringArray = strrep(stringArray, ']', '');
+            
+            numInstances = numel(stringArray);
+
+            formatterWidth = floor( log10(numInstances) ) + 2;
+            formatStr = sprintf(" %% %dd: %%s", formatterWidth); % i.e " % 3d: %s"; 
+            stringArray = compose(formatStr, (1:numel(stringArray))', stringArray');
 
             % Display
             headerStr = obj.getHeader();
