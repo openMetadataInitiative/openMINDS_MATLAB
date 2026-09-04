@@ -62,10 +62,10 @@ there; moving them would add 1520 public class names to buy very little.
 - `isa(value, ...MixedTypeSet)` is step 1 too, because
   `openminds.utility.isMixedInstance` already answers it.
 - `getMixedTypeForProperty` returns one of these names, and that is the one to
-  watch. It is fine as a handle to pass back into the toolbox, and not fine as a
-  name to construct from. `listLinkedTypesForProperty` already answers the
-  question a caller usually has, in public type names. Document the difference
-  rather than moving the classes.
+  watch. Its help now says to treat the result as an opaque handle rather than
+  a name to construct from, and points at `listLinkedTypesForProperty` and
+  `listEmbeddedTypesForProperty`, which answer the question a caller usually
+  has in public type names. Documented rather than moved.
 
 ## Stability promise from v1.0.0
 
