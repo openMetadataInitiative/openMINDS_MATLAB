@@ -3,7 +3,14 @@ import shutil
 import sys
 
 from pipeline.translator import MATLABSchemaBuilder, save_controlled_term_base_class
-from pipeline.utils import clone_sources, SchemaLoader, initialise_jinja_templates, save_resource_files, save_enumeration_classes, get_class_name_map
+from pipeline.utils import (
+    clone_sources,
+    SchemaLoader,
+    initialise_jinja_templates,
+    save_resource_files,
+    save_enumeration_classes,
+    get_class_name_map,
+    SCHEMA_FILE_EXTENSION )
 
 print("***************************************")
 print(f"Triggering the generation of MATLAB-Classes for openMINDS")
@@ -23,7 +30,6 @@ for schema_version in schema_loader.get_schema_versions():
 
     # Step 3 - find all involved schemas for the current version
     schemas_file_paths = schema_loader.find_schemas(schema_version)
-    # schemas_file_paths = [path for path in schemas_file_paths if "person" in path] # testing
 
     class_name_map = get_class_name_map(schema_loader, schema_version)
 
@@ -44,10 +50,11 @@ for schema_version in schema_loader.get_schema_versions():
             # get relative path from schema_root_path to schema_file_path
             relative_path = os.path.relpath(schema_file_path, schema_root_path)
             schemaName = os.path.basename(schema_file_path)
-            schemaName = schemaName.replace(".schema.omi.json", "")
+            schemaName = schemaName.replace(SCHEMA_FILE_EXTENSION, "")
             print(f"::{annotation_type} file={relative_path},title=Error while building class for schema '{schemaName}' ({schema_version})::{e}")
 
-    save_resource_files(schema_version, schemas_file_paths)
+    save_resource_files(
+        schema_version, schemas_file_paths, schema_loader.schemas_sources)
 
     save_controlled_term_base_class(
         schema_version, schema_loader.schemas_sources, class_name_map, jinja_templates)

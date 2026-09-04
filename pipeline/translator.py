@@ -7,19 +7,22 @@ import json
 import os
 import re
 from typing import List, Dict
-from collections import Counter, defaultdict
-import warnings
+from collections import Counter
 
 from jinja2 import Template
 
 from pipeline.constants import (
     OPENMINDS_BASE_URI,
-    OPENMINDS_VOCAB_URI,
     SCHEMA_PROPERTY_TYPE,
     SCHEMA_PROPERTY_LINKED_TYPES,
     SCHEMA_PROPERTY_EMBEDDED_TYPES )
 
-from pipeline.utils import camel_case, InstanceLoader
+from pipeline.utils import (
+    camel_case,
+    namespace_name,
+    parse_schema_file_path,
+    InstanceLoader,
+    SCHEMA_FILE_EXTENSION )
 
 types_with_controlled_instances = [
     "BrainAtlasVersion",
@@ -55,8 +58,6 @@ PROPERTY_NAME_OVERRIDES = {
 }
 
 OUTPUT_FILE_FORMAT = "m"
-TEMPLATE_FILE_NAME = os.path.join("templates", "schema_class_template.txt")
-TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template.txt")
 
 
 class MATLABSchemaBuilder(object):
@@ -68,7 +69,7 @@ class MATLABSchemaBuilder(object):
         self._parse_source_file_path(schema_file_path, root_path)
         self._class_name_map = class_name_map
 
-        with open(schema_file_path, "r") as schema_file:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
             self._schema_payload = json.load(schema_file)
         
         if self._schema_module_name == "controlledTerms":
@@ -108,33 +109,26 @@ class MATLABSchemaBuilder(object):
         return self._template_variables["props"]
 
     def _parse_source_file_path(self, schema_file_path:str, root_path:str):
-        _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
-        
-        self.version = _relative_path_without_extension[0]
-        self._schema_module_name = _relative_path_without_extension[1]
-        if len(_relative_path_without_extension) == 3:
-            self._schema_group_name = []
-        else:
-            schema_group_name = _relative_path_without_extension[2]
-            # Remove all non alphanumeric characters
-            self._schema_group_name = re.sub(r'\W+', '', schema_group_name)
+        schema_info = parse_schema_file_path(schema_file_path, root_path)
 
-        self._schema_file_name = _relative_path_without_extension[-1]
-
-        # Create classname. Change file name, making sure first letter is uppercase
-        self._schema_class_name = self._schema_file_name[0].upper() + self._schema_file_name[1:]
-
+        self.version = schema_info["version"]
+        self._schema_module_name = schema_info["module_name"]
+        self._schema_group_name = schema_info["group_name"]
+        # The file name keeps the case of the path, because the instances of a
+        # controlled term are stored in a folder of the same name
+        self._schema_file_name = schema_info["file_name"]
+        self._schema_class_name = schema_info["type_name"]
 
     def _create_target_file_path(self) -> str:
-        target_root_path = os.path.join("target", "types", self.version)
+        package_parts = ["+openminds", f"+{namespace_name(self._schema_module_name)}"]
         if self._schema_group_name:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower(), f"+{self._schema_group_name}".lower())
-        else:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower())
-        matlab_class_file_name = f"{self._schema_file_name}.{OUTPUT_FILE_FORMAT}"
-        matlab_class_file_name = matlab_class_file_name[0].upper() + matlab_class_file_name[1:]
+            package_parts.append(f"+{namespace_name(self._schema_group_name)}")
 
-        return os.path.join(target_root_path, matlab_package_directory, matlab_class_file_name)
+        matlab_class_file_name = f"{self._schema_class_name}.{OUTPUT_FILE_FORMAT}"
+
+        return os.path.join(
+            "target", "types", self.version, *package_parts, matlab_class_file_name
+        )
 
     def _extract_template_variables(self):
         """Extract variables from the schema that are needed for the template"""
@@ -433,7 +427,7 @@ def _find_controlled_term_schema(schema_root_path, version, property_names):
     the base class.
     """
     schema_file_paths = sorted(glob.glob(
-        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
     ))
 
     for schema_file_path in schema_file_paths:
@@ -456,7 +450,7 @@ def _find_controlled_term_schema(schema_root_path, version, property_names):
 def _get_controlled_term_base_properties(schema_root_path, version):
     """Return the common controlled-term property set for a schema version."""
     controlled_term_schema_paths = glob.glob(
-        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
     )
 
     property_sets = Counter()
@@ -500,15 +494,7 @@ def _generate_class_name(iri, class_name_map):
 
     return class_name_map[type_name]
 
-    #for i in range(len(parts) - 1):
-    #    parts[i] = parts[i].lower()
-    #    return "openminds." + ".".join(parts)
 
-
-def _to_label(class_name_list):
-    # split on . and keep last
-    return [class_name.split(".")[-1] for class_name in class_name_list]
-    
 def _get_schema_display_label(schema_short_name):
     """
     Make a label for a schema from its name
@@ -610,7 +596,6 @@ def _get_display_label_method_expression(schema_short_name, property_names):
     property_names = [_create_matlab_name(name) for name in property_names]
 
     display_config_filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
-    #display_config_filepath = 'instanceDisplayConfig.json'
 
     # Todo: The json keys should match the schema name exactly, i.e capitalized
 
@@ -710,7 +695,6 @@ def _get_default_display_label_method_expression(schema_short_name, property_nam
     elif "name" in property_names:
         return "str = obj.name;"
     else:
-        #warnings.warn(f"No display label method found for {schema_short_name}.")
         print(f"No display label method found for {schema_short_name}.")
         return "str = obj.createLabelForMissingLabelDefinition();"
 
