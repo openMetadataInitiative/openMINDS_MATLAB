@@ -114,7 +114,7 @@ classdef ElectrodeArray < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.name;
+            str = sprintf('%s', obj.internalIdentifier);
         end
     end
 end

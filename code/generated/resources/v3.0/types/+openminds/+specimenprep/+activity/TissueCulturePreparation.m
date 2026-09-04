@@ -68,7 +68,7 @@ classdef TissueCulturePreparation < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.cultureType);
         end
     end
 end

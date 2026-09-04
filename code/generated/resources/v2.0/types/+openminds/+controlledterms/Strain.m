@@ -29,6 +29,13 @@ classdef Strain < openminds.base.ControlledTerm
         ]
     end
 
+    properties (Constant, Hidden)
+        LINKED_PROPERTIES = struct(...
+        )
+        EMBEDDED_PROPERTIES = struct(...
+        )
+    end
+
     properties
         % Enter other database identifiers for the given strain that are supported by the members of the Alliance of Genome Resources (https://www.alliancegenome.org/).
         identifier (1,:) string ...

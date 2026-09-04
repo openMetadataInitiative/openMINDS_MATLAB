@@ -90,7 +90,7 @@ classdef ParcellationTerminology < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.fullName;
+            str = sprintf('%s', obj.ontologyIdentifier);
         end
     end
 end

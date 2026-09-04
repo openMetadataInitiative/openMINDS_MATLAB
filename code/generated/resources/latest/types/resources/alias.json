@@ -385,6 +385,14 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.data.Channel",
+      "OldNames": [
+        "openminds.core.Channel",
+        "openminds.Channel"
+      ],
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.data.ContentType",
       "OldNames": [
         "openminds.core.ContentType",
@@ -465,6 +473,14 @@
       "WarnOnOldName": false
     },
     {
+      "NewName": "openminds.core.data.GridImageSequence",
+      "OldNames": [
+        "openminds.core.GridImageSequence",
+        "openminds.GridImageSequence"
+      ],
+      "WarnOnOldName": false
+    },
+    {
       "NewName": "openminds.core.data.GridImageStack",
       "OldNames": [
         "openminds.core.GridImageStack",
@@ -517,6 +533,14 @@
       "OldNames": [
         "openminds.core.Measurement",
         "openminds.Measurement"
+      ],
+      "WarnOnOldName": false
+    },
+    {
+      "NewName": "openminds.core.data.RegularTimeSeries",
+      "OldNames": [
+        "openminds.core.RegularTimeSeries",
+        "openminds.RegularTimeSeries"
       ],
       "WarnOnOldName": false
     },

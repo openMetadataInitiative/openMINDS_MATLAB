@@ -82,7 +82,7 @@ classdef Accessibility < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s (%s)', obj.form, obj.eligibility);
         end
     end
 end

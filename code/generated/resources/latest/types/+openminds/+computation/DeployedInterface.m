@@ -60,7 +60,7 @@ classdef DeployedInterface < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.interface);
         end
     end
 end

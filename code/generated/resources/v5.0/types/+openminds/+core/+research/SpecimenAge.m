@@ -52,7 +52,7 @@ classdef SpecimenAge < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s (%s)', obj.age, obj.reference);
         end
     end
 end

@@ -52,7 +52,7 @@ classdef RightPrism < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s (%s)', obj.baseShape, obj.baseDistance);
         end
     end
 end

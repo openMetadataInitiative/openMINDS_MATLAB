@@ -58,7 +58,7 @@ classdef Affiliation < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.organization);
         end
     end
 end

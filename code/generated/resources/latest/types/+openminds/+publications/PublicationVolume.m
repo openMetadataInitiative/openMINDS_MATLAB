@@ -50,7 +50,7 @@ classdef PublicationVolume < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s %s', obj.isPartOf, obj.volumeNumber);
         end
     end
 end

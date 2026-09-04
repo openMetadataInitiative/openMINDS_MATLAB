@@ -58,7 +58,7 @@ classdef CustomPropertySet < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s (%s)', obj.relevantFor, obj.context);
         end
     end
 end

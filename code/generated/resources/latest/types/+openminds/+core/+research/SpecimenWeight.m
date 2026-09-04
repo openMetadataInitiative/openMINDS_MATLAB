@@ -52,7 +52,7 @@ classdef SpecimenWeight < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s (%s)', obj.weight, obj.type);
         end
     end
 end

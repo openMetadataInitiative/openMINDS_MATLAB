@@ -150,7 +150,7 @@ classdef TissueSampleSlicing < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.lookupLabel;
+            str = sprintf('%s', obj.device);
         end
     end
 end

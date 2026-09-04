@@ -52,7 +52,7 @@ classdef Ellipse < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('ellipse(r1=%s, r2=%s)', obj.semiMajorAxis, obj.semiMinorAxis);
+            str = sprintf('%s x %s', obj.semiMajorAxis, obj.semiMinorAxis);
         end
     end
 end

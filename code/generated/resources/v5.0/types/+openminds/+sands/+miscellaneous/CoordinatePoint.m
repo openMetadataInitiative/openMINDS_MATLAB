@@ -52,7 +52,7 @@ classdef CoordinatePoint < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.coordinateFramework);
         end
     end
 end

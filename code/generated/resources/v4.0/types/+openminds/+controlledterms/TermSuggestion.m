@@ -41,6 +41,14 @@ classdef TermSuggestion < openminds.base.ControlledTerm
         ]
     end
 
+    properties (Constant, Hidden)
+        LINKED_PROPERTIES = struct(...
+            'addExistingTerminology', "openminds.controlledterms.Terminology" ...
+        )
+        EMBEDDED_PROPERTIES = struct(...
+        )
+    end
+
     properties
         % Add an existing terminology in which the suggested term should be integrated in.
         addExistingTerminology (1,:) openminds.controlledterms.Terminology ...

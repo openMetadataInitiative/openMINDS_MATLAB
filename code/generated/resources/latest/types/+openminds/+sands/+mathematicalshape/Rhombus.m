@@ -44,7 +44,7 @@ classdef Rhombus < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.diagonalLengths);
         end
     end
 end

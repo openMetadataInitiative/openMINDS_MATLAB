@@ -44,7 +44,7 @@ classdef Ellipse < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.diameters);
         end
     end
 end

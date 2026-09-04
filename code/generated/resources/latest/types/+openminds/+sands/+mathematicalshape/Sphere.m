@@ -44,7 +44,7 @@ classdef Sphere < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('r = %s', obj.radius);
         end
     end
 end

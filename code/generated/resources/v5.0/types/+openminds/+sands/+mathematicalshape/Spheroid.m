@@ -52,7 +52,7 @@ classdef Spheroid < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s x %s', obj.equatorialDiameter, obj.polarDiameter);
         end
     end
 end

@@ -26,6 +26,13 @@ classdef DiseaseModel < openminds.base.ControlledTerm
         ]
     end
 
+    properties (Constant, Hidden)
+        LINKED_PROPERTIES = struct(...
+        )
+        EMBEDDED_PROPERTIES = struct(...
+        )
+    end
+
     methods
         function obj = DiseaseModel(instanceSpec, propValues)
             arguments

@@ -56,7 +56,7 @@ classdef Electrode < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.lookupLabel;
+            str = sprintf('%s', obj.internalIdentifier);
         end
     end
 end

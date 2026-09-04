@@ -60,7 +60,7 @@ classdef QuantitativeRelationAssessment < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s %s', obj.quantitativeOverlap, obj.inRelationTo);
         end
     end
 end

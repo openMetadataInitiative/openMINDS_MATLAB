@@ -51,7 +51,7 @@ classdef RegularPolygon < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%d sides, r = %s', obj.numberOfSides, obj.circumradius);
         end
     end
 end

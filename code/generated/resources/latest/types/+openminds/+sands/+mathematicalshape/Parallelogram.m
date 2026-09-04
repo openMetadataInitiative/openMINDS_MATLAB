@@ -60,7 +60,7 @@ classdef Parallelogram < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s x %s', obj.baseLength, obj.baseDistance);
         end
     end
 end

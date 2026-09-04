@@ -270,6 +270,11 @@
         "group": "mathematicalShape"
     },
     {
+        "name": "channel",
+        "module": "core",
+        "group": "data"
+    },
+    {
         "name": "chapter",
         "module": "publications",
         "group": null
@@ -641,6 +646,11 @@
     },
     {
         "name": "gridImage",
+        "module": "core",
+        "group": "data"
+    },
+    {
+        "name": "gridImageSequence",
         "module": "core",
         "group": "data"
     },
@@ -1083,6 +1093,11 @@
         "name": "regularPolygon",
         "module": "SANDS",
         "group": "mathematicalShape"
+    },
+    {
+        "name": "regularTimeSeries",
+        "module": "core",
+        "group": "data"
     },
     {
         "name": "researchProductGroup",

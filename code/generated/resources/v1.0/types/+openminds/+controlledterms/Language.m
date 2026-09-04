@@ -26,6 +26,13 @@ classdef Language < openminds.base.ControlledTerm
         ]
     end
 
+    properties (Constant, Hidden)
+        LINKED_PROPERTIES = struct(...
+        )
+        EMBEDDED_PROPERTIES = struct(...
+        )
+    end
+
     methods
         function obj = Language(instanceSpec, propValues)
             arguments

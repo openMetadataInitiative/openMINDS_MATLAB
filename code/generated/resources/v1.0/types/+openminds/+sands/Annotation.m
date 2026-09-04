@@ -113,7 +113,7 @@ classdef Annotation < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.internalIdentifier);
         end
     end
 end

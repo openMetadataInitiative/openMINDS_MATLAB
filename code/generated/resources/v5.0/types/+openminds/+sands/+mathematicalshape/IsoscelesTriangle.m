@@ -52,7 +52,7 @@ classdef IsoscelesTriangle < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s, %s', obj.legLength, obj.apexAngle);
         end
     end
 end

@@ -44,7 +44,7 @@ classdef EquilateralTriangle < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.sideLength);
         end
     end
 end

@@ -52,7 +52,7 @@ classdef Kite < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.symmetryDiagonalLength);
         end
     end
 end

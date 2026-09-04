@@ -52,7 +52,7 @@ classdef CircularSector < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s, %s', obj.radius, obj.centralAngle);
         end
     end
 end

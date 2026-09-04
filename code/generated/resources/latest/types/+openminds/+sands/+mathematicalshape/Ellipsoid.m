@@ -60,7 +60,7 @@ classdef Ellipsoid < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s x %s x %s', obj.majorDiameter, obj.intermediateDiameter, obj.minorDiameter);
         end
     end
 end

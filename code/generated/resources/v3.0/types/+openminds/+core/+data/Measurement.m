@@ -73,7 +73,7 @@ classdef Measurement < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s: %s', obj.measuredQuantity, obj.value);
         end
     end
 end

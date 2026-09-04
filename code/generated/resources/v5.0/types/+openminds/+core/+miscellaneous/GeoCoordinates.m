@@ -54,7 +54,7 @@ classdef GeoCoordinates < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s, %s', obj.latitude, obj.longitude);
         end
     end
 end

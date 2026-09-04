@@ -73,7 +73,7 @@ classdef QuantitativeValueArray < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%d values (%s)', numel(obj.values), obj.unit);
         end
     end
 end

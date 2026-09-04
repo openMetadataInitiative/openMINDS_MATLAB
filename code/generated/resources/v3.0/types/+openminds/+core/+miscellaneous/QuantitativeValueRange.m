@@ -64,7 +64,7 @@ classdef QuantitativeValueRange < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = openminds.internal.display.getValueRangeString(obj.minValue, obj.maxValue, obj.minValueUnit, obj.maxValueUnit);
         end
     end
 end

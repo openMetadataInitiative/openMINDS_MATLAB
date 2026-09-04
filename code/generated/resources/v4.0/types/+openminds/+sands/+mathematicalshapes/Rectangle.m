@@ -52,7 +52,7 @@ classdef Rectangle < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('rectangle(L=%s, W=%s)', obj.length, obj.width);
+            str = sprintf('%s x %s', obj.length, obj.width);
         end
     end
 end

@@ -50,7 +50,7 @@ classdef ResearchProductGroup < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = obj.createLabelForMissingLabelDefinition();
+            str = sprintf('%s', obj.context);
         end
     end
 end
