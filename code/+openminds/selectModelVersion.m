@@ -44,10 +44,12 @@ function selectModelVersion(versionNumber)
             {openminds.mustBeValidModelVersion(versionNumber)} = "latest"
     end
 
-    rootPath = openminds.internal.rootpath();
-    
+    rootPath = openminds.toolboxdir();
+
     addpath(rootPath)
-    addpath( genpath( fullfile(rootPath, 'internal') ) )
+    % Property validators are unpackaged functions, so their folder needs to
+    % be on the path in its own right.
+    addpath( fullfile(rootPath, 'validators') )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
 
     openminds.internal.installControlledTermBase(versionNumber);

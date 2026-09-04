@@ -2,7 +2,7 @@ function exportTutorials()
     
     exportFormat = [".md", ".html"];
 
-    openmindsCodePath = openminds.internal.rootpath();
+    openmindsCodePath = openminds.toolboxdir();
     openmindsDocsPath = strrep(openmindsCodePath, 'code', 'docs');
 
     L = dir(fullfile(openmindsCodePath, 'livescripts', '*.mlx'));

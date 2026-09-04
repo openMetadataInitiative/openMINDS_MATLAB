@@ -3,6 +3,6 @@ function filePath = VocabFilepath(vocabType)
         vocabType (1,1) openminds.internal.vocab.enum.VocabType = "types"
     end
     
-    saveFolder = fullfile(openminds.internal.rootpath, 'resources', '.vocab');
+    saveFolder = fullfile(openminds.toolboxdir(), 'resources', '.vocab');
     filePath = fullfile(saveFolder, vocabType.FileName);
 end
