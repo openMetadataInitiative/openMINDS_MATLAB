@@ -147,7 +147,16 @@ class MATLABSchemaBuilder(object):
         property_name_map = []
         property_names = set()
 
-        for full_name, property_info in sorted(schema["properties"].items(), key=_property_name_sort_key):
+        # Properties are listed alphabetically by their openMINDS name.
+        # _property_name_sort_key would instead lead with the naming
+        # properties, but applying it would reorder the property block of
+        # every generated class, so that remains a separate decision.
+        sorted_properties = sorted(
+            schema["properties"].items(),
+            key=lambda item: _get_openminds_property_name(item[0]),
+        )
+
+        for full_name, property_info in sorted_properties:
 
             openminds_property_name = _get_openminds_property_name(full_name)
             property_name = _create_matlab_name(full_name)
@@ -541,15 +550,22 @@ def _generate_property_doc(property_info, schema_short_name):
     return doc
 
 def _property_name_sort_key(arg):
-    """Sort the name property to be first"""
-    name, property_info = arg
-    priorities = {
-        "name": "0",
-        "fullName": "1",
-        "shortName": "2",
-        "lookupLabel": "3",
-    }
-    return priorities.get(name, name)
+    """Order the properties that name an instance before the rest.
+
+    The schema keys this is applied to are full openMINDS property IRIs, so
+    the priority is looked up on the trailing property name.
+
+    Not currently applied: the generated classes list their properties
+    alphabetically, and adopting this order would rewrite the property block
+    of every class. See _extract_template_variables.
+    """
+    full_name, _property_info = arg
+    property_name = _get_openminds_property_name(full_name)
+    priorities = ["name", "fullName", "shortName", "lookupLabel"]
+
+    if property_name in priorities:
+        return (priorities.index(property_name), property_name)
+    return (len(priorities), property_name)
 
 def _strip_trailing_whitespace(s):
     return "\n".join([line.rstrip() for line in s.splitlines()]) + "\n" # Also add single newline at the end

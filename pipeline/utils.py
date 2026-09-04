@@ -142,6 +142,8 @@ def get_class_name_map(schema_loader, version):
 
     # Build a list for all the enumeration members
     class_name_map = {}
+    # Which schema claimed each type name, to report a name used by two schemas
+    schema_file_by_type_name = {}
 
     for schema_file in schema_files:
         schema_info = _parse_source_file_path(schema_file, root_path)
@@ -153,7 +155,23 @@ def get_class_name_map(schema_loader, version):
         if "_type" in schema_payload:
             class_name_map[schema_payload["_type"]] = matlab_class_name
 
-        class_name_map.setdefault(schema_info['type_name'], matlab_class_name)
+        type_name = schema_info['type_name']
+        # A type name is expected to be unique across modules, so resolving a
+        # type by name alone is ambiguous when two schemas share one. The first
+        # schema in sorted order wins; warn so the collision is not silent.
+        if type_name in schema_file_by_type_name:
+            print(
+                f"Warning: Type name '{type_name}' is declared by more than one schema "
+                f"in version '{version}'. Resolving it by name gives "
+                f"'{class_name_map[type_name]}' "
+                f"(from '{os.path.relpath(schema_file_by_type_name[type_name], root_path)}'), "
+                f"not '{matlab_class_name}' "
+                f"(from '{os.path.relpath(schema_file, root_path)}')."
+            )
+        else:
+            schema_file_by_type_name[type_name] = schema_file
+
+        class_name_map.setdefault(type_name, matlab_class_name)
 
     # Add some exceptions
     if version == "v2.0":
@@ -311,6 +329,8 @@ def _get_template_variables(enum_type, schema_files, root_path):
 
     # Build a list for all the enumeration members
     template_variable_list = []
+    # Class name already enumerated for each type name, to report a collision
+    class_name_by_type_name = {}
 
     for schema_file in schema_files:
         schema_info = _parse_source_file_path(schema_file, root_path)
@@ -320,11 +340,22 @@ def _get_template_variables(enum_type, schema_files, root_path):
 
         elif enum_type == "Types":
             matlab_class_name = _get_matlab_class_name(schema_info)
-            # Check if type name already exists 
-            if schema_info['type_name'] in [item['name'] for item in template_variable_list]:
-                # Skip if type name already exists
+            type_name = schema_info['type_name']
+
+            # An enumeration member is named after the type, so a name used by
+            # two schemas can only be represented once. Warn about the class
+            # left out rather than dropping it silently.
+            if type_name in class_name_by_type_name:
+                print(
+                    f"Warning: Type '{type_name}' is already in the Types enumeration for "
+                    f"version '{schema_info['version']}' as "
+                    f"'{class_name_by_type_name[type_name]}'. "
+                    f"'{matlab_class_name}' is left out."
+                )
                 continue
-            template_variable_list.append({'name': schema_info['type_name'], 'class_name': matlab_class_name})
+
+            class_name_by_type_name[type_name] = matlab_class_name
+            template_variable_list.append({'name': type_name, 'class_name': matlab_class_name})
         
     if enum_type == "Types":
         return {'types': template_variable_list }
