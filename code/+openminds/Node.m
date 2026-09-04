@@ -213,18 +213,53 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         end
 
         function str = serialize(obj, options)
-        % serialize - Serialize the object
+        % serialize - Serialize this node and the graph below it
+        %
+        %   Syntax:
+        %       str = serialize(instance)
+        %       str = serialize(instance, Name=Value)
+        %       str = serialize(instance, Serializer=serializer)
+        %
+        %   Description:
+        %       With no arguments the instance is serialized to JSON-LD with
+        %       default settings. Name-value arguments configure that default
+        %       serializer; the options are RecursionDepth, PropertyNameSyntax,
+        %       IncludeIdentifier, IncludeEmptyProperties, PropertyFilter,
+        %       EnableCaching, EnableValidation, OutputEncoding, PrettyPrint
+        %       and OutputMode.
+        %
+        %       Pass Serializer to use one built elsewhere, such as for a
+        %       different format. A serializer already carries its own
+        %       configuration, so it cannot be combined with the options
+        %       above.
+        %
+        %   Example:
+        %       % Emit only the properties being changed
+        %       str = subject.serialize(PropertyFilter=["lookupLabel" "species"]);
             arguments
                 obj
-                options.Serializer = openminds.internal.serializer.JsonLdSerializer()
-                options.RecursionDepth (1,1) uint8 = 1 % Todo: remove - should be defined in serializer - or the serializer should be created from options...
-                options.IncludeIdentifier (1,1) logical = true % Todo: remove - should be defined in serializer
+                options.Serializer openminds.base.Serializer {mustBeScalarOrEmpty} = ...
+                    openminds.internal.serializer.JsonLdSerializer.empty
+                options.?openminds.internal.serializer.SerializationConfig
             end
 
-            % Create default serializer if not provided.
-            % Accept more serializer options as inputs here.
+            configOptions = rmfield(options, "Serializer");
 
-            str = options.Serializer.serialize(obj);
+            if isempty(options.Serializer)
+                nvPairs = namedargs2cell(configOptions);
+                serializer = openminds.internal.serializer.JsonLdSerializer(nvPairs{:});
+            else
+                if ~isempty(fieldnames(configOptions))
+                    error("openMINDS:Node:SerializerAndOptions", ...
+                        ['A serializer carries its own configuration, so it ', ...
+                         'cannot be combined with serialization options. ', ...
+                         'Configure the serializer when constructing it, or ', ...
+                         'omit Serializer and pass the options here.'])
+                end
+                serializer = options.Serializer;
+            end
+
+            str = serializer.serialize(obj);
         end
     
         function savedIdentifier = save(obj, metadataStore, options)

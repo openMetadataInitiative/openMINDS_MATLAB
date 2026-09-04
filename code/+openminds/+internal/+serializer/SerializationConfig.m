@@ -59,6 +59,17 @@ classdef SerializationConfig < matlab.mixin.SetGet
         % OutputMode : Whether to output all metadata in a single document
         % or in multiple documents
         OutputMode (1,1) string {mustBeMember(OutputMode, ["single", "multiple"])} = "multiple" % single document / multiple documents
+
+        % PropertyFilter - Emit only these properties, if given
+        %
+        %   Names the properties to keep in each emitted document. The
+        %   identifier and type keys are always kept, so a filtered
+        %   document is still a valid reference to its node. Empty, the
+        %   default, emits every property.
+        %
+        %   Intended for partial writes, where a document carries only the
+        %   properties being changed.
+        PropertyFilter (1,:) string = string.empty
     end
 
     methods
