@@ -1,8 +1,31 @@
 classdef Node < handle & matlab.mixin.SetGet & ...
                   openminds.internal.mixin.StructAdapter & ...
                   openminds.internal.mixin.CustomInstanceDisplay
-
-% Node Abstract base class shared by all concrete Schema classes
+% Node - Base class shared by every openMINDS metadata type
+%
+%   A node of a metadata graph. It carries an identifier, the properties
+%   its type declares, and the edges to other nodes that those properties
+%   represent. Every generated type class derives from this.
+%
+%   Methods:
+%       resolve   - Replace unresolved references with the nodes they name
+%       serialize - Serialize this node and the graph below it
+%       save      - Write this node to a metadata store
+%
+%   Inherited, and no less part of this class:
+%       string, char  - The instance's display label
+%       DisplayString - The same label, as a property
+%       toStruct      - The instance as a struct
+%       fromStruct    - Populate the instance from a struct
+%       toTable       - The instance as a table
+%       fromTable     - Populate the instance from a table
+%
+%   Events:
+%       InstanceChanged                   - a plain property was assigned
+%       PropertyWithLinkedInstanceChanged - a linked property was assigned,
+%                                           or one of a linked instance
+%
+%   See also openminds.Collection, openminds.introspection.MetaType
 
 % Todo:
 %   [ ] Validate schema. I.e are all required variables filled out
