@@ -30,7 +30,15 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
         EMBEDDED_PROPERTIES struct
     end
 
-    properties (Access = private)
+    properties (Hidden)
+        % IsReference - Whether this instance stands for a node that is
+        % not here, rather than being a node.
+        %
+        %   Set at construction with IsReference=true together with an id
+        %   and nothing else, or by the deserializer for a stub read from
+        %   a document. Cleared when the reference is resolved. Hidden,
+        %   and public only so the generated type constructors accept it
+        %   as a name-value argument; it is not meant to be set afterwards.
         IsReference (1,1) logical = false
     end
     
@@ -52,15 +60,15 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
             obj.id = obj.generateInstanceId();
 
             if isempty(instance)
+                % IsReference is not a property of the type. It marks the
+                % instance as standing for a node that is not here, and is
+                % only accepted with an id and nothing else.
+                [name, value, isReference] = extractIsReference(name, value);
                 nvPairs = [name; value];
                 if ~isempty(nvPairs)
                     obj.set(nvPairs{:});
                 end
-                if isscalar(name) && string(name) == "id" && startsWith(string(value), "https://")
-                    % Only IRI was set, assume this is a node reference
-                    % Todo: Should support general IRI
-                    obj.IsReference = true;
-                end
+                obj.IsReference = isReference;
             else
                 if ~isscalar(instance) % Preallocate object array
                     obj(1, numel(instance)) = feval( class(obj) );
@@ -897,5 +905,38 @@ function x = row(x)
     assert(isrow(x) || iscolumn(x), 'Input must be a vector')
     if ~isrow(x)
         x = transpose(x);
+    end
+end
+
+function [name, value, isReference] = extractIsReference(name, value)
+% Split the IsReference flag from the property name-value pairs.
+%
+%   A reference carries an identifier and nothing else, so the flag is
+%   accepted only together with an id and no other property. Without the
+%   flag an instance is a node, whatever its id looks like.
+
+    isFlag = cellfun(@(n) n == "IsReference", name);
+    isReference = false;
+
+    if ~any(isFlag)
+        return
+    end
+
+    flagValue = value{isFlag};
+    if ~(islogical(flagValue) && isscalar(flagValue))
+        error('openMINDS:Schema:InvalidIsReference', ...
+            'IsReference must be a scalar logical.')
+    end
+    isReference = flagValue;
+    name(isFlag) = [];
+    value(isFlag) = [];
+
+    if isReference
+        isId = cellfun(@(n) n == "id", name);
+        if ~any(isId) || ~all(isId)
+            error('openMINDS:Schema:ReferenceWithProperties', ...
+                ['A reference is created from an id and nothing else. ', ...
+                'Give IsReference=true together with an id and no other property.'])
+        end
     end
 end

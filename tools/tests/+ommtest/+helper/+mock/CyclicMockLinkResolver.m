@@ -18,7 +18,7 @@ classdef CyclicMockLinkResolver < openminds.interface.LinkResolver
                 partner = "a";
             end
             instance.name = name;
-            instance.isBasedOn = openminds.core.data.ContentType('id', obj.IRIPrefix + partner);
+            instance.isBasedOn = openminds.core.data.ContentType('id', obj.IRIPrefix + partner, 'IsReference', true);
         end
 
         function tf = canResolve(obj, IRI)

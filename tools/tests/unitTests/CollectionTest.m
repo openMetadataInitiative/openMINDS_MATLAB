@@ -553,6 +553,42 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(string(reloadedLink.id), referenceIRI);
         end
 
+        function testReferenceIsCreatedExplicitly(testCase)
+            % A reference is made by asking for one. An id alone, whatever
+            % it looks like, makes a node.
+            iri = "https://graph.example/instances/person-001";
+
+            reference = openminds.core.Person("id", iri, "IsReference", true);
+            testCase.verifyTrue(reference.isReference());
+            testCase.verifyEqual(string(reference.id), iri);
+
+            node = openminds.core.Person("id", iri);
+            testCase.verifyFalse(node.isReference());
+
+            testCase.verifyError( ...
+                @() openminds.core.Person("id", iri, "givenName", "A", "IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+            testCase.verifyError( ...
+                @() openminds.core.Person("IsReference", true), ...
+                'openMINDS:Schema:ReferenceWithProperties');
+        end
+
+        function testNodeCreatedWithAnIriIsSaved(testCase)
+            % Creating a node with a chosen IRI and filling it in afterwards
+            % is how instances bound for an external graph are made. Such
+            % a node must be counted and saved, not mistaken for a
+            % reference and dropped.
+            person = openminds.core.Person("id", "https://graph.example/instances/person-001");
+            person.givenName = "Ada";
+
+            collection = openminds.Collection(person);
+            testCase.verifyEqual(length(collection), 1);
+
+            filePath = "iri-node-collection.jsonld";
+            collection.save(filePath);
+            testCase.verifyTrue(contains(fileread(filePath), "Ada"));
+        end
+
         function testSaveEmptyCollection(testCase)
             % A collection with no nodes still saves, giving an empty
             % collection document.
