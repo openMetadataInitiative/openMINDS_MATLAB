@@ -5,14 +5,23 @@ change. Written ahead of v1.0.0, when those promises start binding.
 
 ## The rule
 
-**A name is internal if any segment of its package path is `internal`.
-Every other name under `openminds` is public.**
+**A name is internal if reaching it means writing `internal`.** Every other name
+under `openminds` is public.
 
 The segment may sit at any depth. `openminds.internal.serializer.JsonLdSerializer`
 is internal, and so would be `openminds.graph.internal.Walker` if it existed.
-A subsystem can keep a private corner without inventing a second convention,
-and the test stays something you can apply by reading a call, with no list to
-consult.
+A subsystem can keep a private corner without inventing a second convention, and
+the test stays one you apply by reading a call.
+
+The test is about **reach, not about where a thing is declared.** A public class
+may inherit from an internal one. A public method may return or accept an
+internal type. Both are fine as long as the caller never has to name it. What is
+promised is the set of members reachable through public names, not the identity
+of the class that happens to declare them.
+
+That distinction is what keeps this surface small. Without it, every
+implementation detail that touches a public path has to be promoted to be
+honest, and the public surface grows until it is the whole codebase.
 
 There is one exception, called out because it cannot be expressed in a package
 name: the unpackaged property validators in `code/validators` are public,
@@ -23,36 +32,40 @@ Folder layout follows the rule rather than defining it. Everything ships from
 `code/+openminds`, so the package path is the only boundary a reader has to
 learn.
 
-One corollary, since inheritance carries members across the line: **a public
-class must not inherit public or protected members from an internal class.**
-Four do today; see gap 11.
+## Closing a gap without growing the surface
 
-### The rule is not true yet: generated mixed types
+When a consumer has to write an internal name, that is a gap. Close it with the
+smallest affordance that removes the need, preferring earlier options:
+
+1. **Nothing.** If the name is only observed — in `class` output, in a
+   `superclasses` listing, in a stack trace — leave it. Observation is not
+   dependence, and no promise is being asked for.
+2. **A member on something already public.** A predicate, a property, an
+   option, a documented protected hook.
+3. **A small function**, in `openminds.utility` if it fits nowhere better.
+4. **Promotion of the type itself.** Only when the consumer must name it: to
+   construct it, to subclass it, or to declare it in an `arguments` block.
+
+Type introspection reached step 4, because a caller constructs an
+`openminds.meta.Type` and names the class. Most of what follows does not.
+
+### Generated mixed types stay internal
 
 The 1520 generated mixed-type classes are emitted into
-`openminds.internal.mixedtype`, six model versions' worth. The rule therefore
-calls every one of them internal, and they are not internal in any sense a user
-would recognise:
+`openminds.internal.mixedtype`. Under the rule they are internal, and they stay
+there; moving them would add 1520 public class names to buy very little.
 
 - `class(subject.species)` returns
-  `openminds.internal.mixedtype.subject.Species` for any "one of" property that
-  has not been assigned yet.
-- `getMixedTypeForProperty` returns the same names, and that method is part of
-  the introspection API that is now to become public.
-- The GUI constructs them by name.
-
-Assignment errors do not leak the name — they list the allowed public types —
-so the exposure is narrower than it first looks, but it is real.
-
-Either the classes move to `openminds.mixedtype`, or the rule acquires a second
-exception. *Recommendation: move them.* A rule with an exception per accident
-stops being a rule, these classes are part of the model's surface rather than
-an implementation detail, and v1.0.0 is the moment to pay for it. The move is
-mechanical and shaped like the `Node` rename: 1520 generated files, one
-generator emission site, and four hand-written references that name the full
-prefix in `Node.m` and `internal/meta/Type.m`. Checks written as
-`contains(name, 'mixedtype')` keep working, since the `mixedtype` segment
-survives.
+  `openminds.internal.mixedtype.subject.Species` for an unassigned "one of"
+  property. That is step 1: observed, never written. Assignment errors already
+  name the allowed public types instead, which is the message that matters.
+- `isa(value, ...MixedTypeSet)` is step 1 too, because
+  `openminds.utility.isMixedInstance` already answers it.
+- `getMixedTypeForProperty` returns one of these names, and that is the one to
+  watch. It is fine as a handle to pass back into the toolbox, and not fine as a
+  name to construct from. `listLinkedTypesForProperty` already answers the
+  question a caller usually has, in public type names. Document the difference
+  rather than moving the classes.
 
 ## Stability promise from v1.0.0
 
@@ -168,11 +181,19 @@ returns internal names until those classes move.
 `Hidden`, and kg-sync calls every one of them from its store implementation.
 `isReference()` is the canonical predicate as of the merged decision to keep
 references as references, so hiding it contradicts its own documentation.
-*Recommendation: make `isReference()`, `getTypeName()` and reading `id` public.
-Decide whether store implementers get a public traversal API or whether
-`getLinkedInstances`/`getEmbeddedInstances` simply become public.*
-Related: kg-sync has a blocked TODO because a store cannot write back an
-identifier — `id` is `SetAccess = protected` with no public path for a store.
+`Hidden` is orthogonal to the rule: these members are already reachable without
+writing `internal`, so they are already public API in the sense that matters,
+and hiding them only keeps them out of tab completion and `methods` listings.
+Nothing here needs promoting. What is needed is a decision about which of them
+the promise covers, since a consumer calls all four.
+
+*Recommendation: keep them Hidden except `isReference`, which is documented as
+the canonical predicate and should be advertised, and state that the promise
+covers Hidden members that consumers call.* Hidden is then what it should be —
+public but not advertised — rather than a second, unstated boundary.
+Separately, kg-sync has a blocked TODO because a store cannot write back an
+identifier: `id` is `SetAccess = protected` with no public path for a store.
+That is a missing affordance, not a visibility question.
 
 **3. The `LinkResolver` contract leaks an internal type.** This is a different
 problem from gap 6 below, though the two share a shape. Here the *interface*
@@ -183,11 +204,13 @@ instance cannot change its class. The interface then offers no public way to
 tell the two apart, so kg-sync tests
 `isa(instance, 'openminds.internal.MixedTypeReference')`. An interface that
 documents a fork and hides the switch is incomplete.
-*Recommendation: promote `MixedTypeReference` to `openminds.base`, or add a
-public predicate that answers the same question.* While there, note that the
-interface's help text names `openminds.internal.resolver.ResolvingVisitor`
-twice, once in a `See also` — public documentation pointing at internal
-classes.
+*Recommendation: add a static predicate to the interface, not the class.* An
+implementer is already reading `openminds.interface.LinkResolver` to find out
+what to write, so a `LinkResolver.isTypeKnown(instance)` there is where they
+will look, adds no new top-level name, and keeps `MixedTypeReference` internal.
+That is step 2 rather than step 4. While there, note the interface's help text
+names `openminds.internal.resolver.ResolvingVisitor` twice, once in a
+`See also` — public documentation pointing at an internal class.
 
 **4. Instance events carry an internal payload.** `Node` declares
 `InstanceChanged` and `PropertyWithLinkedInstanceChanged`. Nothing in the
@@ -196,8 +219,11 @@ toolbox or its tests listens to either, which is why they had been marked
 TODO is now gone and both events are documented in place. What remains is that
 a listener receives an
 `openminds.internal.event.PropertyValueChangedEventData` — a public event
-delivering an internal type. *Recommendation: promote the event data class, or
-document its four properties as the stable payload contract.*
+delivering an internal type. *Recommendation: document its four properties —
+`NewValue`, `OldValue`, `IsLinkedProperty`, `IsPropertyOf` — in the help of the
+events themselves, and treat those as the payload contract.* A listener reads
+fields off the object and never names its class, so this is step 1: no
+promotion, only a written-down promise.
 
 **5. `Collection` is extensible in fact but not in promise.** Nothing stops the
 GUI subclassing it: `Collection` is not sealed, so MATLAB lets a subclass
@@ -225,13 +251,18 @@ post-processing hook to emit a KG-flavoured document. `openminds.base.Serializer
 is already public, so the extension point exists but the concrete class worth
 extending does not.
 
-**Decided: the JSON-LD serializer becomes public.** Subclassing the concrete
-serializer is the right way to vary one step of a format, and rebuilding
-JSON-LD from the abstract base to change a post-processing step would be
-absurd. Promotion brings its constructor name-value arguments and its
-protected hook into the promise, so both want documenting as part of the move.
-Note the hook was renamed to `postProcessDocuments` by the IRI branch, which
-breaks kg-sync's override; see the clean-break note below.
+This is the one place where step 4 may be unavoidable: subclassing requires
+naming the superclass, so if extending the concrete serializer is the supported
+story, the class has to be public. Rebuilding JSON-LD from the abstract base to
+change one post-processing step is not a real alternative.
+
+*Recommendation: check what kg-sync's override actually does before promoting.*
+If it only reshapes the emitted documents, a public post-processing option on
+the serializer — a function handle, or a documented hook on the already-public
+`openminds.base.Serializer` — serves the same need at step 2 and keeps the
+concrete class internal. Promote only if subclassing turns out to be doing more
+than that. Either way the hook was renamed to `postProcessDocuments` by the IRI
+branch, which breaks the current override; see the clean-break note below.
 
 **7. Type name, label and IRI conversion.** The GUI calls internal name helpers
 at roughly thirty sites. `openminds.enum.Types` already covers class name to
@@ -261,52 +292,59 @@ and was wrong. It is inherited from an internal mixin; see gap 11.
 *Recommendation: document `string(instance)` as the one public way to get a
 display label, since it is already public and already returns it.*
 
-**11. Public classes inherit from internal ones.** Four do, and one of them is
-`Node`:
+**11. Public classes inherit from internal ones.** Four do, `Node` included:
+it inherits `internal.mixin.StructAdapter` and
+`internal.mixin.CustomInstanceDisplay`, `Visitor` and `Transformer` inherit
+`internal.graph.TraversalCore`, and `MixedTypeSet` inherits the display mixin
+too.
 
-| Public class | Internal superclass |
-|---|---|
-| `openminds.Node` | `internal.mixin.StructAdapter`, `internal.mixin.CustomInstanceDisplay` |
-| `openminds.base.Visitor` | `internal.graph.TraversalCore` |
-| `openminds.base.Transformer` (and `Serializer` through it) | `internal.graph.TraversalCore` |
-| `openminds.base.MixedTypeSet` | `internal.mixin.CustomInstanceDisplay` |
+**Allowed, under the rule as now stated.** A subclass author writes
+`< openminds.base.Visitor` and never names the superclass, so nothing is being
+asked to promise a name it does not use. No moves needed.
 
-This is not cosmetic, because those superclasses declare members that are
-public or protected on the subclass. `CustomInstanceDisplay` is where
-`DisplayString`, `char` and `string` come from, so the display API of every
-metadata type in the toolbox is declared in an internal class.
-`TraversalCore` contributes a public `reset` and eight protected traversal
-helpers — `getLinkedEdges`, `getEmbeddedEdges`, `setEdgeChildren`,
-`wasVisited`, `markVisited`, `visitedNode`, `unmarkVisited` and the static
-`nodeKey` — and the toolbox's own `ResolvingVisitor` calls `nodeKey`, so that
-surface is real rather than theoretical. Both internal classes also declare
-abstract members a subclass must implement, which puts the instructions for
-writing a public subclass inside `openminds.internal`.
+What does need doing is smaller and is documentation. The promise attaches to
+members reachable through public names, so it already covers what these
+superclasses contribute, and today that contribution is invisible from the
+public side:
 
-It does not break anyone's code: a subclass author writes
-`< openminds.base.Visitor` and never names the superclass. But it is
-observable through `superclasses` and `meta.class`, which the GUI already uses
-for type checks elsewhere, and it contradicts the promise above now that the
-promise covers protected members of extensible classes.
+- `DisplayString`, `char` and `string` come from `CustomInstanceDisplay`. They
+  are public API of every metadata type and are documented nowhere a user would
+  look.
+- `TraversalCore` gives every `Visitor` a public `reset` and eight protected
+  traversal helpers — `getLinkedEdges`, `getEmbeddedEdges`, `setEdgeChildren`,
+  `wasVisited`, `markVisited`, `visitedNode`, `unmarkVisited`, static `nodeKey`.
+  The toolbox's own `ResolvingVisitor` calls `nodeKey`, so a subclass author
+  will want them.
+- Both declare abstract members a subclass must implement, so the instructions
+  for writing a public subclass currently live in `openminds.internal`.
 
-*Recommendation: move these superclasses into `openminds.base`.* Each is
-abstract and meaningful only as a superclass, which is exactly why
-`ControlledTermBase` already sits in `base`. Alternatively fold each into its
-single public subclass, though `TraversalCore` has two and would be
-duplicated.
+*Recommendation: document the inherited surface in the help of the public
+subclass, so `help openminds.base.Visitor` tells you what to implement and what
+you may call.* Treat any change to those members as a change to the public
+class.
+
 
 ## Decisions
 
 Settled 2026-09-04.
 
-1. **Type introspection is public.** Recommended as `openminds.meta.Type`, the
-   existing name minus the `internal` segment; see gap 1.
-2. **`Collection` is extensible**, and the stability promise covers the
-   protected members of classes declared extensible. See gap 5.
-3. **The JSON-LD serializer is public.** Gap 3 is a separate problem about the
-   `LinkResolver` contract and needs its own fix. See gaps 3 and 6.
-4. **v1.0.0 is the clean break.** No deprecation shims for anything the rename
-   series changed. The promise starts at 1.0 and binds from there.
+1. **The public surface is kept as small as it can be.** A name is internal if
+   reaching it means writing `internal`, and where a member is declared does not
+   enter into it. Gaps are closed with the smallest affordance that removes the
+   need to write an internal name; promotion is the last resort, not the first.
+2. **Type introspection is public**, as `openminds.meta.Type` with
+   `fromInstance` and `fromClassName`. Done. It earned step 4 because callers
+   construct it by name.
+3. **Generated mixed types stay internal.** All 1520 of them. What leaks is
+   observation, and `openminds.utility.isMixedInstance` already covers the one
+   real check.
+4. **Internal superclasses are allowed.** `Node`, `Visitor`, `Transformer` and
+   `MixedTypeSet` keep theirs. Their inherited members are covered by the
+   promise and want documenting on the public subclass.
+5. **`Collection` is extensible**, and the promise covers the protected members
+   of classes declared extensible.
+6. **v1.0.0 is the clean break.** No deprecation shims for anything the rename
+   series changed.
 
 ### What the clean break commits us to
 
@@ -324,10 +362,26 @@ carry it into a version whose whole point is that the names are now fixed.
 
 ## Still open
 
-- Placement of the introspection class, if `openminds.meta.Type` is not right.
-- Whether generated mixed types move to `openminds.mixedtype`, or the rule
-  takes a second exception. Coupled to gap 1: promoting introspection without
-  this ships a public method that returns internal class names.
+- **Whether the JSON-LD serializer has to be promoted**, or whether a public
+  post-processing hook serves kg-sync. Needs a look at what its override does.
+  This is the only remaining candidate for step 4.
 - Whether store implementers traverse the graph through public `Node` methods
-  or a separate visitor-shaped API. This is gap 2 and is untouched by the four
-  decisions above.
+  or a separate visitor-shaped API. Gap 2's second half.
+- Whether the promise covers Hidden members that consumers call. Recommended
+  yes, but it decides how `id`, `getLinkedInstances` and `getEmbeddedInstances`
+  are treated.
+
+## What this leaves to do
+
+Nothing on this list is a move. In rough order of value:
+
+1. Document the inherited surface on `Node`, `Visitor`, `Transformer` and
+   `MixedTypeSet`, including the abstract members a subclass must implement.
+2. Add `LinkResolver.isTypeKnown`, and stop the interface's help pointing at
+   internal classes.
+3. Document the event payload's four properties as the contract.
+4. Document `getMixedTypeForProperty`'s result as a handle, not a name to
+   construct from.
+5. Restore or replace `openminds.utility.isEmbeddedType`, removed while in use.
+6. Un-hide `isReference`.
+7. Settle the serializer question above.
