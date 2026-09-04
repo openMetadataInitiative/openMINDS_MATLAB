@@ -536,8 +536,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             referenceIRI = "https://graph.example/instances/contact-001";
             person = openminds.core.Person("givenName", "A");
             person.contactInformation = openminds.core.ContactInformation( ...
-                "id", referenceIRI);
-            testCase.assumeTrue(person.contactInformation.isReference());
+                "id", referenceIRI, "IsReference", true);
 
             metadataStore = openminds.internal.FolderMetadataStore( ...
                 "typed-reference-folder-store");
