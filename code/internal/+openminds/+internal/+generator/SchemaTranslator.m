@@ -173,9 +173,9 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function assignOutputFile(obj)
 
-            schemaDirectory = openminds.internal.constants.Paths.TypesFolder;
+            schemaDirectory = openminds.internal.constants.Paths.GeneratedFolder;
             versionAsString = sprintf("v%s", obj.VersionNumber);
-            mSchemaDirectory = fullfile( schemaDirectory, versionAsString);
+            mSchemaDirectory = fullfile( schemaDirectory, versionAsString, 'types');
             
 %             if isempty(obj.SchemaCategory)
 %                 schemaPackage = {'openminds', obj.MetadataModel};
@@ -191,7 +191,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         end
 
         function [pathStr, fullName] = getAliasFilePath(obj)
-            schemaDirectory = openminds.internal.constants.Paths.TypesFolder;
+            schemaDirectory = openminds.internal.constants.Paths.GeneratedFolder;
             mSchemaDirectory = fullfile( schemaDirectory, 'matlab-alias');
             if isempty(obj.SchemaCategory)
                 schemaPackage = {'openminds', obj.MetadataModel, obj.MetadataModel};

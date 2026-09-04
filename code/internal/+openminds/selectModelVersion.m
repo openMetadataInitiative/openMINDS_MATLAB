@@ -59,17 +59,19 @@ function selectModelVersion(versionNumber)
         versionAsString = string(versionNumber);
     end
 
-    % Remove the types/mixedtypes subdirectory for all versions
+    generatedFolder = openminds.internal.constants.Paths.GeneratedFolder;
+
+    % Remove every model version from the path. Classes of different versions
+    % share names, so two versions on the path would shadow one another.
     warning('off', 'MATLAB:rmpath:DirNotFound')
-    rmpath(genpath( fullfile(rootPath, "types") ))
-    rmpath(genpath( fullfile(rootPath, "mixedtypes") ))
-    rmpath(genpath( fullfile(rootPath, "enumerations") ))
+    for versionFolder = listModelVersionFolders(generatedFolder)
+        rmpath(genpath( versionFolder ))
+    end
     warning('on', 'MATLAB:rmpath:DirNotFound')
 
-    % Add the types/mixedtypes subdirectory for the selected version
-    addpath(genpath( fullfile(rootPath, "types", versionAsString) ))
-    addpath(genpath( fullfile(rootPath, "mixedtypes", versionAsString) ))
-    addpath(genpath( fullfile(rootPath, "enumerations", versionAsString) ))
+    % Add the selected version. One folder holds its types, mixedtypes,
+    % enumerations and the controlled term base class generated for it.
+    addpath(genpath( fullfile(generatedFolder, versionAsString) ))
 
     % Version selection can replace shared abstract class files.
     % Clear cached class definitions so MATLAB sees the active files.
@@ -77,4 +79,13 @@ function selectModelVersion(versionNumber)
 
     % Add a second pause for changes to take effect.
     pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
+end
+
+function versionFolders = listModelVersionFolders(generatedFolder)
+% listModelVersionFolders - Full path of every model version folder present
+    folderInfo = dir(generatedFolder);
+    folderInfo = folderInfo([folderInfo.isdir]);
+    folderNames = string({folderInfo.name});
+    folderNames = folderNames(~startsWith(folderNames, "."));
+    versionFolders = fullfile(generatedFolder, folderNames);
 end

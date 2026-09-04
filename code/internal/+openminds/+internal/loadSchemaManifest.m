@@ -24,8 +24,8 @@ function manifest = loadSchemaManifest(versionNumber)
         versionNumber (1,1) string = "latest"
     end
 
-    schemaRootFolder = openminds.internal.constants.Paths.TypesFolder;
-    manifestDirectory = fullfile(schemaRootFolder, versionNumber, "resources");
+    generatedFolder = openminds.internal.constants.Paths.GeneratedFolder;
+    manifestDirectory = fullfile(generatedFolder, versionNumber, "types", "resources");
 
     data = jsondecode( fileread( fullfile(manifestDirectory, "schema_manifest.json") ) );
 
