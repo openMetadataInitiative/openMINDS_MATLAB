@@ -204,13 +204,10 @@ instance cannot change its class. The interface then offers no public way to
 tell the two apart, so kg-sync tests
 `isa(instance, 'openminds.internal.MixedTypeReference')`. An interface that
 documents a fork and hides the switch is incomplete.
-*Recommendation: add a static predicate to the interface, not the class.* An
-implementer is already reading `openminds.interface.LinkResolver` to find out
-what to write, so a `LinkResolver.isTypeKnown(instance)` there is where they
-will look, adds no new top-level name, and keeps `MixedTypeReference` internal.
-That is step 2 rather than step 4. While there, note the interface's help text
-names `openminds.internal.resolver.ResolvingVisitor` twice, once in a
-`See also` — public documentation pointing at an internal class.
+*Done.* `openminds.interface.LinkResolver.isTypeKnown(instance)` is a static
+method on the interface an implementer is already reading, so it adds no new
+top-level name and keeps `MixedTypeReference` internal — step 2 rather than
+step 4. The interface's help no longer names internal classes.
 
 **4. Instance events carry an internal payload.** `Node` declares
 `InstanceChanged` and `PropertyWithLinkedInstanceChanged`. Nothing in the
