@@ -35,7 +35,7 @@ function instance = fromTypeName(typeNameIRI, instanceIdentifier, nvPairs)
 %    Required Properties: givenName
 
     arguments
-        typeNameIRI (1,1) string {openminds.mustBeValidOpenMINDSIRI}
+        typeNameIRI (1,1) string {openminds.mustBeOpenMINDSIRI}
         instanceIdentifier (1,1) string = ''
         nvPairs cell = {}
     end

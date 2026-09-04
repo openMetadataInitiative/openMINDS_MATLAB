@@ -31,7 +31,7 @@ function instance = instanceFromIRI(IRI)
 %    Required Properties: name
 
     arguments
-        IRI (1,1) string {openminds.mustBeValidOpenMINDSIRI}
+        IRI (1,1) string {openminds.mustBeOpenMINDSIRI}
     end
 
     [typeEnum, instanceName] = openminds.utility.parseInstanceIRI(IRI);

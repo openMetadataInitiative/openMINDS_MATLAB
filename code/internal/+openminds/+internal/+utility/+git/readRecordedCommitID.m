@@ -1,4 +1,5 @@
-function commitID = loadPreviousCommitID(options)
+function commitID = readRecordedCommitID(options)
+%readRecordedCommitID Commit ID recorded when a repository was last downloaded
 
     arguments
         options.RepositoryName = "openMINDS"

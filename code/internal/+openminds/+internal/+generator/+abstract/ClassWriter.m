@@ -386,8 +386,8 @@ classdef ClassWriter < handle
 
     % Utility methods
     methods (Static, Access = protected)
-        function str = cellArrayToTextString(cellArray)
-            str = openminds.internal.generator.utility.cellArrayToTextString(cellArray);
+        function str = cellArrayToCellLiteral(cellArray)
+            str = openminds.internal.generator.utility.cellArrayToCellLiteral(cellArray);
         end
     end
 end

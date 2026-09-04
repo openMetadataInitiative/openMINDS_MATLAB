@@ -198,8 +198,7 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     methods (Access = public, Hidden)
 
         function typeName = getTypeName(obj)
-            classNameSplit = split(class(obj), '.');
-            typeName = classNameSplit{end};
+            typeName = openminds.internal.utility.getSchemaShortName(class(obj));
         end
 
         function tf = isReference(obj)
@@ -766,14 +765,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
                 tf = any( strcmp(tempSubs.subs, propNames) );
             end
         end
-
-        function getLinkedPropertyInstance(obj, subs) %#ok<INUSD>
-            % Todo
-        end
-
-        function assignLinkedInstance(obj) %#ok<MANU>
-            % Todo: Use this from subsasgn
-        end
     end
 
     methods (Access = private)
@@ -834,7 +825,6 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods (Access = protected) % Methods related to object display
-        
         function displayLabel = getDisplayLabel(obj)
             %schemaShortName = obj.getSchemaShortName(class(obj));
 
@@ -906,30 +896,12 @@ classdef Schema < handle & matlab.mixin.SetGet & ...
     end
 
     methods (Access = ?openminds.internal.mixin.CustomInstanceDisplay)
-        function semanticName = getSemanticName(obj)
+        function semanticIRI = getSemanticIRI(obj)
             % Using eval to ensure it also works for empty objects:
-            semanticName = eval(sprintf('%s.X_TYPE', class(obj)));
+            semanticIRI = eval(sprintf('%s.X_TYPE', class(obj)));
         end
     end
     
-    methods (Static, Access = protected, Hidden)
-        
-        function shortSchemaName = getSchemaShortName(fullSchemaName)
-        %getSchemaShortName Get short schema name from full schema name
-        %
-        %   shortSchemaName = getSchemaShortName(fullSchemaName)
-        %
-        %   Example:
-        %   fullSchemaName = 'openminds.core.research.Subject';
-        %   shortSchemaName = openminds.abstract.Schema.getSchemaShortName(fullSchemaName)
-        %   shortSchemaName =
-        %
-        %     'Subject'
-
-            import openminds.internal.utility.getSchemaName
-            shortSchemaName = getSchemaName(fullSchemaName);
-        end
-    end
 end
 
 function x = row(x)

@@ -67,7 +67,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
     % Abstract - Subclasses must implement:
     methods (Abstract, Access = ?openminds.internal.mixin.CustomInstanceDisplay)
-        semanticName = getSemanticName(obj)
+        semanticIRI = getSemanticIRI(obj)
     end
 
     % CustomDisplay - Method implementations
@@ -83,7 +83,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             import openminds.internal.utility.getSchemaDocLink
             docLinkStr = getSchemaDocLink(class(obj));
 
-            semanticName = obj.getSemanticName();
+            semanticName = obj.getSemanticIRI();
             
             if numel(obj) == 0
                 docLinkStr = sprintf('Empty %s', docLinkStr);

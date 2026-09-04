@@ -1,4 +1,5 @@
-function tf = hasLatestCommit(options)
+function tf = isRecordedCommitCurrent(options)
+%isRecordedCommitCurrent True when the recorded commit is still the branch tip
 
     arguments
         options.RepositoryName = "openMINDS"
@@ -7,13 +8,13 @@ function tf = hasLatestCommit(options)
     end
 
     import openminds.internal.utility.git.getCurrentCommitID
-    import openminds.internal.utility.git.loadPreviousCommitID
+    import openminds.internal.utility.git.readRecordedCommitID
 
     commitID = getCurrentCommitID(options.RepositoryName, ...
         'BranchName', options.BranchName, 'Owner', options.Owner);
 
     nvPairs = namedargs2cell(options);
-    prevCommitID = loadPreviousCommitID(nvPairs{:});
+    recordedCommitID = readRecordedCommitID(nvPairs{:});
 
-    tf = strcmp(prevCommitID, commitID);
+    tf = strcmp(recordedCommitID, commitID);
 end

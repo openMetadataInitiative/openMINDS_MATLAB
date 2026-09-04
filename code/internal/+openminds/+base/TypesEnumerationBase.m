@@ -15,11 +15,6 @@ classdef TypesEnumerationBase
     end
 
     methods
-        function instance = create(obj)
-        % create - Create a new instance (same as createInstance)
-            instance = obj.createInstance();
-        end
-
         function instance = createInstance(obj)
         % createInstance - Create a new instance
             if isscalar(obj)

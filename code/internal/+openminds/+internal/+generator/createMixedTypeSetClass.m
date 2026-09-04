@@ -17,14 +17,14 @@ function className = createMixedTypeSetClass(schemaName, propertyName, allowedTy
 %
 % See also: openminds.abstract.MixedTypeSet
     
-    import openminds.internal.generator.utility.cellArrayToTextStringArray
+    import openminds.internal.generator.utility.cellArrayToStringArrayLiteral
     
     % Ensure property name is PascalCase
     propertyName(1) = upper(propertyName(1));
     
     % Convert the cell array of types to a string representing a string
     % array
-    allowedTypes = cellArrayToTextStringArray(allowedTypes);
+    allowedTypes = cellArrayToStringArrayLiteral(allowedTypes);
 
     packageNames = ["openminds", "internal", "mixedtype", lower(schemaName)];
     packageFolderNames = strcat("+", packageNames);
