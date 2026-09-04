@@ -9,11 +9,6 @@ classdef (Abstract) ControlledTermBase < openminds.Node
         at_id
     end
 
-    properties (Constant, Hidden)
-        LINKED_PROPERTIES = struct()
-        EMBEDDED_PROPERTIES = struct()
-    end
-
     properties (Abstract, Constant, Hidden)
         CONTROLLED_INSTANCES
     end

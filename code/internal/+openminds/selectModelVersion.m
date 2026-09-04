@@ -50,8 +50,6 @@ function selectModelVersion(versionNumber)
     addpath( genpath( fullfile(rootPath, 'internal') ) )
     addpath( genpath( fullfile(rootPath, 'livescripts') ) )
 
-    openminds.internal.installControlledTermBase(versionNumber);
-
     % Get version number as string matching version numbers of version folders
     if versionNumber == "latest"
         versionAsString = 'latest';
