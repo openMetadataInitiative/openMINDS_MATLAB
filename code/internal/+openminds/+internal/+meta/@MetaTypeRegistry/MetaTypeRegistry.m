@@ -32,7 +32,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
 
     properties (SetAccess = private)
         % AvailableVersions - List of available openMINDS model versions
-        AvailableVersions (1,:) string = openminds.internal.listValidVersions()
+        AvailableVersions (1,:) string = openminds.internal.listModelVersions()
     end
     
     properties (Access = private)
@@ -66,7 +66,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
             
             % Validate model version
             if ~strcmp(obj.ModelVersion, "latest")
-                openminds.mustBeValidVersion(obj.ModelVersion);
+                openminds.mustBeValidModelVersion(obj.ModelVersion);
             end
 
             % Cache available types and class names for performance

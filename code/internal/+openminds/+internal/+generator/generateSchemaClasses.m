@@ -19,7 +19,7 @@ function generateSchemaClasses(action, options)
         options.SchemaType (1,1) string ...
             {mustBeMember(options.SchemaType, "schema.tpl.json")} = "schema.tpl.json"
         options.VersionNumber (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(options.VersionNumber)} = "latest"
+            {openminds.mustBeValidModelVersion(options.VersionNumber)} = "latest"
     end
 
     versionNumber = string(options.VersionNumber);

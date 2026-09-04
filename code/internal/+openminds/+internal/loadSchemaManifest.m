@@ -24,7 +24,7 @@ function manifest = loadSchemaManifest(versionNumber)
         versionNumber (1,1) string = "latest"
     end
 
-    schemaRootFolder = openminds.internal.PathConstants.MatlabSchemaFolder;
+    schemaRootFolder = openminds.internal.constants.Paths.TypesFolder;
     manifestDirectory = fullfile(schemaRootFolder, versionNumber, "resources");
 
     data = jsondecode( fileread( fullfile(manifestDirectory, "schema_manifest.json") ) );

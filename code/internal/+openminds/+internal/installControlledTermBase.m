@@ -8,7 +8,7 @@ function controlledTermVersion = installControlledTermBase(modelVersion)
 
     arguments
         modelVersion (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(modelVersion)} = "latest"
+            {openminds.mustBeValidModelVersion(modelVersion)} = "latest"
     end
 
     controlledTermVersion = getControlledTermVersion(modelVersion);

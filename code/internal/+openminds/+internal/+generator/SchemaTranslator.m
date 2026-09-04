@@ -173,7 +173,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
 
         function assignOutputFile(obj)
 
-            schemaDirectory = openminds.internal.Constants.SchemaFolder;
+            schemaDirectory = openminds.internal.constants.Paths.TypesFolder;
             versionAsString = sprintf("v%s", obj.VersionNumber);
             mSchemaDirectory = fullfile( schemaDirectory, versionAsString);
             
@@ -191,7 +191,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         end
 
         function [pathStr, fullName] = getAliasFilePath(obj)
-            schemaDirectory = openminds.internal.Constants.SchemaFolder;
+            schemaDirectory = openminds.internal.constants.Paths.TypesFolder;
             mSchemaDirectory = fullfile( schemaDirectory, 'matlab-alias');
             if isempty(obj.SchemaCategory)
                 schemaPackage = {'openminds', obj.MetadataModel, obj.MetadataModel};
@@ -306,7 +306,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
         
         function writeClassDescription(obj)
             versionAsString = sprintf("v%s", obj.VersionNumber);
-            typeFilepath = fullfile(openminds.internal.PathConstants.SourceSchemaFolder, versionAsString, 'types.json');
+            typeFilepath = fullfile(openminds.internal.constants.Paths.SourceSchemaFolder, versionAsString, 'types.json');
             typeStr = fileread(typeFilepath);
             typeStr = strrep(typeStr, 'https://openminds.ebrains.eu/', '');
             typeStruct = jsondecode(typeStr);

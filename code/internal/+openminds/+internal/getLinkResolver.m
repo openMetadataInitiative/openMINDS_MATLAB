@@ -3,6 +3,6 @@ function resolver = getLinkResolver(IRI)
     arguments
         IRI (1,1) string
     end
-    resolverRegistry = openminds.internal.resolver.LinkResolverRegistry.instance();
+    resolverRegistry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
     resolver = resolverRegistry.getLinkResolver(IRI);
 end

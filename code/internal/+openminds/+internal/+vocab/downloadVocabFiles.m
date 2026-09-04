@@ -1,12 +1,12 @@
 function downloadVocabFiles()
 % downloadVocabFiles - Download openminds vocab files
 
-    typesUrl = openminds.internal.vocab.constants.VocabURL("TYPES");
-    propsUrl = openminds.internal.vocab.constants.VocabURL("PROPERTIES");
+    typesUrl = openminds.internal.constants.VocabURL("TYPES");
+    propsUrl = openminds.internal.constants.VocabURL("PROPERTIES");
 
-    saveFolder = fileparts(openminds.internal.vocab.constants.VocabFilepath);
+    saveFolder = fileparts(openminds.internal.constants.VocabFilepath);
     if ~isfolder(saveFolder); mkdir(saveFolder); end
 
-    websave(openminds.internal.vocab.constants.VocabFilepath("TYPES"), typesUrl);
-    websave(openminds.internal.vocab.constants.VocabFilepath("PROPERTIES"), propsUrl);
+    websave(openminds.internal.constants.VocabFilepath("TYPES"), typesUrl);
+    websave(openminds.internal.constants.VocabFilepath("PROPERTIES"), propsUrl);
 end

@@ -1,3 +1,3 @@
 function folderPath = getRepositoryTargetRootFolder()
-    folderPath = fullfile(openminds.internal.PathConstants.UserPath, 'Repositories');
+    folderPath = fullfile(openminds.internal.constants.Paths.UserPath, 'Repositories');
 end

@@ -1,12 +1,12 @@
 classdef testReadTheDocLinks < matlab.unittest.TestCase
 
     properties (TestParameter)
-        modelVersion = openminds.internal.listValidVersions()
+        modelVersion = openminds.internal.listModelVersions()
     end
 
     properties
         % BaseUrl - Base URL for the openMINDS oneline documentation
-        BaseUrl = openminds.internal.constants.url.OpenMindsDocumentation
+        BaseUrl = openminds.internal.constants.DocumentationURL
     end
 
     methods (Test)

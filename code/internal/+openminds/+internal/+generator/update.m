@@ -53,7 +53,7 @@ function update(mode)
         % openminds.internal.updateSchemas()
 
         % Temporary (openminds.internal.updateSchemas is not implemented yet)
-        schemaFolderPath = fullfile(openminds.internal.Constants.SchemaFolder, 'matlab', '+openminds');
+        schemaFolderPath = fullfile(openminds.internal.constants.Paths.TypesFolder, 'matlab', '+openminds');
         if isfolder(schemaFolderPath)
             rmdir(schemaFolderPath, 's' )
         end
@@ -67,8 +67,8 @@ function update(mode)
     % Check that the schemafolder in on path
     currentPathList = strsplit(path, pathsep);
 
-    if ~any(strcmp(currentPathList, openminds.internal.Constants.SchemaFolder))
-        addpath(genpath(openminds.internal.Constants.SchemaFolder))
+    if ~any(strcmp(currentPathList, openminds.internal.constants.Paths.TypesFolder))
+        addpath(genpath(openminds.internal.constants.Paths.TypesFolder))
     end
 end
 

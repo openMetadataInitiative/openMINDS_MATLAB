@@ -5,7 +5,7 @@ function data = getControlledInstance(instanceName, schemaName, moduleName, vers
         schemaName (1,1) string
         moduleName (1,1) string = "controlledTerms"
         versionNumber (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(versionNumber)} = missing
+            {openminds.mustBeValidModelVersion(versionNumber)} = missing
         options.FileSource (1,1) string ...
             {mustBeMember(options.FileSource, ["local", "github"])} = "local"
     end
@@ -73,7 +73,7 @@ function pathStr = getOnlineFilepath(instanceName, schemaName, moduleName, versi
 end
 
 function pathStr = getOfflineFilepath(instanceName, schemaName, moduleName, versionNumber)
-    rootPath = openminds.internal.PathConstants.LocalInstanceFolder;
+    rootPath = openminds.internal.constants.Paths.LocalInstanceFolder;
     fileParts = getRelativeInstanceFileParts(instanceName, schemaName, moduleName);
     
     pathStr = fullfile(rootPath, versionNumber, fileParts{:});

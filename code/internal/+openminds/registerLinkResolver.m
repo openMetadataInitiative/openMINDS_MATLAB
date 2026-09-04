@@ -20,6 +20,6 @@ function registerLinkResolver(linkResolver, options)
         options.Replace (1,1) logical = false
     end
 
-    resolverRegistry = openminds.internal.resolver.LinkResolverRegistry.instance();
+    resolverRegistry = openminds.internal.resolver.LinkResolverRegistry.getSingleton();
     resolverRegistry.addLinkResolver(linkResolver, "Replace", options.Replace);
 end

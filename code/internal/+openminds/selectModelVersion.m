@@ -1,5 +1,5 @@
-function selectOpenMindsVersion(versionNumber)
-% selectOpenMindsVersion - Select and "import" a specific version of the openMINDS model.
+function selectModelVersion(versionNumber)
+% selectModelVersion - Select and "import" a specific version of the openMINDS model.
 %
 % This function allows you to select a specific version of the openMINDS
 % metadata model and load its components (classes for metadata types and mixed
@@ -7,7 +7,7 @@ function selectOpenMindsVersion(versionNumber)
 % a version number or as "latest" to load the most recent version available.
 %
 % Usage:
-%   selectOpenMindsVersion(version)
+%   selectModelVersion(version)
 %
 % Arguments:
 %   - version (optional) : string (default: "latest")
@@ -22,13 +22,13 @@ function selectOpenMindsVersion(versionNumber)
 %
 % Example:
 %   % Load the latest version of openMINDS metadata model
-%   selectOpenMindsVersion();
+%   selectModelVersion();
 %
 %   % Load a specific version (e.g., v1.0) of openMINDS metadata model
-%   selectOpenMindsVersion(1);
+%   selectModelVersion(1);
 %
 %   % Load the latest version using version number
-%   selectOpenMindsVersion("latest");
+%   selectModelVersion("latest");
 %
 % See also: addpath, rmpath
 
@@ -41,7 +41,7 @@ function selectOpenMindsVersion(versionNumber)
 
     arguments
         versionNumber (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(versionNumber)} = "latest"
+            {openminds.mustBeValidModelVersion(versionNumber)} = "latest"
     end
 
     rootPath = openminds.internal.rootpath();

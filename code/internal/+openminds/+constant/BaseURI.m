@@ -29,7 +29,7 @@ function baseURI = BaseURI(version)
 
     arguments
         version (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(version)} = missing
+            {openminds.mustBeValidModelVersion(version)} = missing
     end
 
     if ismissing(version)

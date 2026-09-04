@@ -8,13 +8,13 @@ function schemaInfo = listSourceSchemas(options)
         options.SchemaType (1,1) string = "schema.omi.json";
         options.SchemaFileExtension = '*.omi.json';
         options.VersionNumber (1,1) openminds.internal.utility.VersionNumber ...
-            {openminds.mustBeValidVersion(options.VersionNumber)} = "latest"
+            {openminds.mustBeValidModelVersion(options.VersionNumber)} = "latest"
     end
 
     versionAsString = char(options.VersionNumber);
         
     % - Get path constant
-    sourceSchemaFolder = char(openminds.internal.PathConstants.SourceSchemaFolder);
+    sourceSchemaFolder = char(openminds.internal.constants.Paths.SourceSchemaFolder);
     schemaFolderPath = fullfile( sourceSchemaFolder, versionAsString);
     
     L = dir(fullfile(schemaFolderPath, '**', options.SchemaFileExtension));
