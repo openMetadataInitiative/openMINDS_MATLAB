@@ -246,23 +246,42 @@ misusing `addNode` for want of a public way to update node links, which is a
 missing method rather than a visibility question.
 
 **6. Serializer subclassing goes through an internal class.** kg-sync extends
-`openminds.internal.serializer.JsonLdSerializer` and overrides its protected
-post-processing hook to emit a KG-flavoured document. `openminds.base.Serializer`
-is already public, so the extension point exists but the concrete class worth
-extending does not.
+`openminds.internal.serializer.JsonLdSerializer`. Read on 2026-09-04, the
+subclass is about sixty lines and does two things, only one of which is
+behaviour.
 
-This is the one place where step 4 may be unavoidable: subclassing requires
-naming the superclass, so if extending the concrete serializer is the supported
-story, the class has to be public. Rebuilding JSON-LD from the abstract base to
-change one post-processing step is not a real alternative.
+The constructor is pure configuration. It pins five options that
+`SerializationConfig` already has: `PropertyNameSyntax` to `"expanded"` because
+the KG does not accept compact, `IncludeEmptyProperties` to false to keep
+payloads small, `OutputMode` to `"multiple"`, and defaults for `RecursionDepth`
+and `IncludeIdentifier`. Nothing there needs a subclass.
 
-*Recommendation: check what kg-sync's override actually does before promoting.*
-If it only reshapes the emitted documents, a public post-processing option on
-the serializer — a function handle, or a documented hook on the already-public
-`openminds.base.Serializer` — serves the same need at step 2 and keeps the
-concrete class internal. Promote only if subclassing turns out to be doing more
-than that. Either way the hook was renamed to `postProcessDocuments` by the IRI
-branch, which breaks the current override; see the clean-break note below.
+The override does exactly one thing: field projection. Given a list of property
+names, it deletes every other field from each emitted document, always keeping
+`at_id` and `at_type`, then delegates to the superclass. Its own comment says
+what it is for — "useful for targeted patch operations".
+
+**So promotion is not needed.** A whitelist over emitted fields is a general
+serialization capability, not a KG concept: any consumer writing partial or
+PATCH-style updates wants it. *Recommendation: add `PropertyFilter` to
+`SerializationConfig`, and let `openminds.Node.serialize` build its serializer
+from forwarded options.* kg-sync then deletes `KGSerializer` outright and
+passes options instead of an object, which is step 2 and removes a subclass
+rather than adding a public class.
+
+That second half is already the code's own intention. `serialize` accepts
+`RecursionDepth` and `IncludeIdentifier`, carries a comment reading "accept
+more serializer options as inputs here", and a Todo saying the serializer
+should be created from options. Note that today those two options are accepted
+and then silently ignored — the method passes neither to the serializer it
+calls. That is a live bug, not just an unfinished design.
+
+The residual, if anyone still wants to hold a serializer object rather than
+pass options: there is no public way to construct a configured JSON-LD
+serializer, since `openminds.base.Serializer` is abstract. `Node.serialize`
+names the internal class as its default argument, which is observation and so
+allowed, but it does mean the help shows a name a caller cannot use. A factory
+would close that at step 3 if it ever becomes a real need. It is not one today.
 
 **7. Type name, label and IRI conversion.** The GUI calls internal name helpers
 at roughly thirty sites. `openminds.enum.Types` already covers class name to
@@ -335,15 +354,18 @@ Settled 2026-09-04.
 2. **Type introspection is public**, as `openminds.meta.Type` with
    `fromInstance` and `fromClassName`. Done. It earned step 4 because callers
    construct it by name.
-3. **Generated mixed types stay internal.** All 1520 of them. What leaks is
+3. **The JSON-LD serializer stays internal.** Its only subclass adds a field
+   whitelist, which belongs in `SerializationConfig` as an option. Nothing is
+   left that needs promoting.
+4. **Generated mixed types stay internal.** All 1520 of them. What leaks is
    observation, and `openminds.utility.isMixedInstance` already covers the one
    real check.
-4. **Internal superclasses are allowed.** `Node`, `Visitor`, `Transformer` and
+5. **Internal superclasses are allowed.** `Node`, `Visitor`, `Transformer` and
    `MixedTypeSet` keep theirs. Their inherited members are covered by the
    promise and want documenting on the public subclass.
-5. **`Collection` is extensible**, and the promise covers the protected members
+6. **`Collection` is extensible**, and the promise covers the protected members
    of classes declared extensible.
-6. **v1.0.0 is the clean break.** No deprecation shims for anything the rename
+7. **v1.0.0 is the clean break.** No deprecation shims for anything the rename
    series changed.
 
 ### What the clean break commits us to
@@ -362,9 +384,6 @@ carry it into a version whose whole point is that the names are now fixed.
 
 ## Still open
 
-- **Whether the JSON-LD serializer has to be promoted**, or whether a public
-  post-processing hook serves kg-sync. Needs a look at what its override does.
-  This is the only remaining candidate for step 4.
 - Whether store implementers traverse the graph through public `Node` methods
   or a separate visitor-shaped API. Gap 2's second half.
 - Whether the promise covers Hidden members that consumers call. Recommended
@@ -384,4 +403,6 @@ Nothing on this list is a move. In rough order of value:
    construct from.
 5. Restore or replace `openminds.utility.isEmbeddedType`, removed while in use.
 6. Un-hide `isReference`.
-7. Settle the serializer question above.
+7. Add `PropertyFilter` to `SerializationConfig`, and make `serialize` build
+   its serializer from forwarded options. Fixes the ignored `RecursionDepth`
+   and `IncludeIdentifier` at the same time.
