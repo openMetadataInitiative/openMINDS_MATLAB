@@ -3,7 +3,7 @@ function singletonObject = getSingleton(options)
         options.Reset (1,1) logical = false
     end
 
-    import openminds.internal.meta.MetaTypeRegistry
+    import openminds.introspection.internal.MetaTypeRegistry
 
     SINGLETON_NAME = MetaTypeRegistry.SINGLETON_NAME;
     singletonObject = getappdata(0, SINGLETON_NAME);

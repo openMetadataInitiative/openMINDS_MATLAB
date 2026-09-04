@@ -2,10 +2,10 @@ classdef MetaTypeTest < matlab.unittest.TestCase
     
     methods (Test)
         function testRegistrySingleton(testCase)
-            import openminds.internal.meta.MetaTypeRegistry
+            import openminds.introspection.internal.MetaTypeRegistry
 
             registry = MetaTypeRegistry.getSingleton();
-            testCase.verifyClass(registry, 'openminds.internal.meta.MetaTypeRegistry');
+            testCase.verifyClass(registry, 'openminds.introspection.internal.MetaTypeRegistry');
             testCase.verifyEqual(registry.ModelVersion, "latest")
 
             % Verify that we get the same handle if we ask for the singleton again
@@ -17,7 +17,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             testCase.addTeardown(@() openminds.version("latest"))
 
             registry = MetaTypeRegistry.getSingleton();
-            testCase.verifyClass(registry, 'openminds.internal.meta.MetaTypeRegistry');
+            testCase.verifyClass(registry, 'openminds.introspection.internal.MetaTypeRegistry');
             testCase.verifyEqual(registry.ModelVersion, "v3.0")
 
             % Test that we get a new object if we reset the singleton
@@ -27,7 +27,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         end
 
         function testGetMetatypeFromRegistry(testCase)
-            import openminds.internal.meta.MetaTypeRegistry
+            import openminds.introspection.internal.MetaTypeRegistry
 
             registry = MetaTypeRegistry.getSingleton();
             metaPerson = registry("Person");
@@ -71,7 +71,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % this, because every linked and embedded property is declared
         % that way.
 
-            metaType = openminds.internal.meta.Type( ...
+            metaType = openminds.introspection.MetaType( ...
                 'ommtest.helper.PropertyDeclarationFixture');
 
             testCase.verifyTrue( metaType.isPropertyValueScalar('scalarByValidator') )
@@ -83,7 +83,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % The same check against a generated type, so the behaviour is
         % pinned for a real property and not only for the fixture.
 
-            metaType = openminds.internal.meta.fromClassName( ...
+            metaType = openminds.introspection.fromClassName( ...
                 'openminds.core.miscellaneous.Membership');
 
             testCase.verifyTrue( metaType.isPropertyValueScalar('startDate') )
@@ -94,7 +94,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         % question rather than error, and asking for its mixed type must
         % fail with an identified error.
 
-            metaType = openminds.internal.meta.Type( ...
+            metaType = openminds.introspection.MetaType( ...
                 'ommtest.helper.PropertyDeclarationFixture');
 
             testCase.verifyFalse( metaType.isPropertyMixedType('withoutDeclaredClass') )
@@ -109,7 +109,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             openminds.version(5);
             testCase.addTeardown(@() openminds.version(previousVersion))
             
-            metaDSV = openminds.internal.meta.fromClassName('DatasetVersion');
+            metaDSV = openminds.introspection.fromClassName('DatasetVersion');
 
             testCase.verifyTrue( metaDSV.isPropertyValueScalar('accessibility') )
             testCase.verifyFalse( metaDSV.isPropertyValueScalar('contribution') )
