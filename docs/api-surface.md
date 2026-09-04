@@ -295,11 +295,29 @@ exists but is not public.
 *Recommendation: promote it and add the mixed-type equivalent.*
 
 **9. `openminds.utility.isEmbeddedType` was removed while in use.** It was
-deleted as dead code, but `openminds.utility` is declared as the namespace
-"useful for external developers" and the GUI calls it at two sites. Whether or
-not the GUI is current, this is a public name removed without a shim.
-*Recommendation: restore it, or provide the equivalent through the
-introspection API of gap 1 and deprecate the old name properly.*
+deleted as dead code — it was not dead, the GUI calls it at two sites — from a
+namespace documented as useful to external developers.
+
+*Resolved without restoring it.* The removal note named
+`meta.Type.isPropertyWithEmbeddedType` as the supported way, which was sound
+except that the replacement was itself internal at the time. It is public now,
+so the replacement exists and the surface does not need to grow again. The two
+are exactly equivalent, checked across 62 properties of five types including
+all six that are genuinely embedded, with no disagreement:
+
+```matlab
+% was
+openminds.utility.isEmbeddedType(typeName, propertyName)
+% now
+openminds.meta.fromClassName(typeName).isPropertyWithEmbeddedType(propertyName)
+```
+
+The old name was also wrong about what it asked. It took a type and a property
+and answered a question about the property, not the type.
+
+The lesson generalises, and is the reason the promise in this document is
+worth having: the check before deleting a public name is whether a consumer
+uses it, not whether this repository does.
 
 **10. Label access is inconsistent.** `getDisplayLabel()` is `protected`, yet
 the GUI calls it from outside the class hierarchy. `DisplayString`, which the
@@ -374,6 +392,9 @@ kg-sync on `getUnresolvedLinks` becoming `getUnresolvedLinkIdentifiers` and
 `postProcessInstances` becoming `postProcessDocuments`, the GUI on most of the
 internal names it uses.
 
+Compiling that list across the five merged rename PRs is still to do, and is
+the one piece of release work this document does not yet carry.
+
 It also settles a smaller question by implication. `Node.isUnresolved` is the
 one deprecation shim in the toolbox, warning once per session and forwarding to
 `isReference`. A clean break at 1.0 is the moment to delete it rather than
@@ -398,8 +419,7 @@ Nothing on this list is a move. In rough order of value:
 3. Document the event payload's four properties as the contract.
 4. Document `getMixedTypeForProperty`'s result as a handle, not a name to
    construct from.
-5. Restore or replace `openminds.utility.isEmbeddedType`, removed while in use.
-6. Un-hide `isReference`.
-7. Add `PropertyFilter` to `SerializationConfig`, and make `serialize` build
+5. Un-hide `isReference`.
+6. Add `PropertyFilter` to `SerializationConfig`, and make `serialize` build
    its serializer from forwarded options. Fixes the ignored `RecursionDepth`
    and `IncludeIdentifier` at the same time.
