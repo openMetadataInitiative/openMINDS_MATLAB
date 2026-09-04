@@ -151,13 +151,24 @@ Its public method set is already shaped like an API:
 `isPropertyValueScalar`, `isPropertyWithLinkedType`, `isPropertyWithEmbeddedType`,
 `isPropertyMixedType`, `getMixedTypeForProperty`, `listLinkedTypesForProperty`,
 `listEmbeddedTypesForProperty`, plus `NumProperties` and `PropertyNames`.
-**Decided: it becomes public.** Placement is the remaining question, and the
-case for top level over `openminds.utility` is that this is a pillar of the
-extender API rather than a miscellaneous helper — both consumers need it, and
-`utility` reads as the drawer you look in last. *Recommendation:
-`openminds.TypeInfo` at top level, alongside `Node`, `Collection` and
-`enum.Types`.* Avoid a `+meta` subpackage: inside `+openminds` it would shadow
-MATLAB's own `meta` package for code in this toolbox.
+**Decided: it becomes public.** Placement is the remaining question. Not
+`openminds.utility`: both consumers need this, which makes it a pillar of the
+extender API rather than a miscellaneous helper, and `utility` reads as the
+drawer you look in last.
+
+*Recommendation: promote the existing name, `openminds.meta.Type`.* It mirrors
+MATLAB's own `meta.class`, so the idiom is already familiar to the audience;
+the `meta.` prefix separates it from `enum.Types`, which otherwise competes for
+the word "type"; and promotion is then a one-segment move that costs kg-sync a
+find-and-replace rather than a rewrite.
+
+A `+meta` namespace does **not** shadow MATLAB's builtin `meta` package. MATLAB
+namespaces have no implicit relative resolution — a member is reachable only by
+its fully qualified name — so an unqualified `meta.` inside `+openminds` still
+finds the builtin. This toolbox already proves it: `internal/meta/Type.m` calls
+`meta.class.fromName` from inside a namespace named `meta`, and has always
+worked. Verified again on R2026a with a standalone namespace built for the
+purpose.
 
 Two notes for whoever implements it. The constructor already accepts either an
 instance or a class name, verified against both, so kg-sync's
@@ -267,8 +278,8 @@ and document it.*
 
 Settled 2026-09-04.
 
-1. **Type introspection is public.** Recommended as `openminds.TypeInfo` at top
-   level; see gap 1 for why not `openminds.utility` and not a `+meta` package.
+1. **Type introspection is public.** Recommended as `openminds.meta.Type`, the
+   existing name minus the `internal` segment; see gap 1.
 2. **`Collection` is extensible**, and the stability promise covers the
    protected members of classes declared extensible. See gap 5.
 3. **The JSON-LD serializer is public.** Gap 3 is a separate problem about the
@@ -292,7 +303,7 @@ carry it into a version whose whole point is that the names are now fixed.
 
 ## Still open
 
-- Placement of the introspection class, if `openminds.TypeInfo` is not right.
+- Placement of the introspection class, if `openminds.meta.Type` is not right.
 - Whether generated mixed types move to `openminds.mixedtype`, or the rule
   takes a second exception. Coupled to gap 1: promoting introspection without
   this ships a public method that returns internal class names.
