@@ -1,5 +1,20 @@
 classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
-% MixedTypeSet - Abstract class representing a set of types that can mixed
+% MixedTypeSet - Holds a value whose type is one of several allowed types
+%
+%   Properties:
+%       Instance      - The instance held, of one of the allowed types
+%       ALLOWED_TYPES - Constant. The types this property accepts
+%       IS_SCALAR     - Constant. Whether the property holds a single value
+%
+%   Inherited, and no less part of this class:
+%       string, char  - The held instance's display label
+%       DisplayString - The same label, as a property
+%
+%   Use openminds.utility.isMixedInstance to test whether a value is one of
+%   these. The concrete subclasses are generated per property and are an
+%   implementation detail; do not name them.
+%
+%   See also openminds.utility.isMixedInstance, openminds.meta.Type
 
 % Many properties of openMINDS metadata schemas/types can hold linked or
 % embedded metadata instances of different types. This class acts as a
