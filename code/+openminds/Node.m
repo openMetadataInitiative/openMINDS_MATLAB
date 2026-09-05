@@ -71,6 +71,16 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         %   Raised on the instance that owns the property. Not raised for
         %   linked or embedded properties; those raise
         %   PropertyWithLinkedInstanceChanged instead.
+        %
+        %   The listener is passed event data carrying these four
+        %   properties, which are the contract:
+        %       NewValue         - the value assigned
+        %       OldValue         - the value it replaced
+        %       IsLinkedProperty - false for this event
+        %       IsPropertyOf     - the instance the property belongs to
+        %
+        %   Read the fields rather than testing the class of the event
+        %   data; the class itself is an implementation detail.
         InstanceChanged
 
         % PropertyWithLinkedInstanceChanged - A linked property was assigned,
@@ -78,6 +88,9 @@ classdef Node < handle & matlab.mixin.SetGet & ...
         %
         %   Raised on the instance the assignment was addressed to, not on
         %   the linked instance that ultimately changed.
+        %
+        %   Carries the same four properties as InstanceChanged, with
+        %   IsLinkedProperty true.
         PropertyWithLinkedInstanceChanged
     end
 
