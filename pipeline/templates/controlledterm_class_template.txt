@@ -1,4 +1,4 @@
-classdef {{ class_name }} < openminds.abstract.ControlledTerm
+classdef {{ class_name }} < openminds.controlledterms.ControlledTerm
 %{{ class_name }} - {{docstring}}
 %
 %   PROPERTIES: {# Create description for each property of schema #}
@@ -29,6 +29,19 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
         {%- endfor %}
         ]
     end
+
+    properties (Constant, Hidden)  {# List all properties with linked or embedded types #}
+        LINKED_PROPERTIES = struct(...
+            {%- for prop in linked_types %}
+            '{{prop["name"]}}', {{prop["types"]}} {%- if not loop.last %}, {% else %} {% endif -%} ...
+            {%- endfor %}
+        )
+        EMBEDDED_PROPERTIES = struct(...
+            {%- for prop in embedded_types %}
+            '{{prop["name"]}}', {{prop["types"]}} {%- if not loop.last %}, {% else %} {% endif -%} ...
+            {%- endfor %}
+        )
+    end
     {%- if additional_controlled_term_props %}
 
     properties
@@ -54,7 +67,7 @@ classdef {{ class_name }} < openminds.abstract.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.abstract.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

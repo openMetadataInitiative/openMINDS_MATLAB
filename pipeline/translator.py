@@ -7,19 +7,24 @@ import json
 import os
 import re
 from typing import List, Dict
-from collections import Counter, defaultdict
-import warnings
+from collections import Counter
+from functools import lru_cache
 
 from jinja2 import Template
 
 from pipeline.constants import (
     OPENMINDS_BASE_URI,
-    OPENMINDS_VOCAB_URI,
     SCHEMA_PROPERTY_TYPE,
     SCHEMA_PROPERTY_LINKED_TYPES,
     SCHEMA_PROPERTY_EMBEDDED_TYPES )
 
-from pipeline.utils import camel_case, InstanceLoader
+from pipeline.utils import (
+    camel_case,
+    namespace_name,
+    parse_schema_file_path,
+    target_folder,
+    InstanceLoader,
+    SCHEMA_FILE_EXTENSION )
 
 types_with_controlled_instances = [
     "BrainAtlasVersion",
@@ -55,8 +60,6 @@ PROPERTY_NAME_OVERRIDES = {
 }
 
 OUTPUT_FILE_FORMAT = "m"
-TEMPLATE_FILE_NAME = os.path.join("templates", "schema_class_template.txt")
-TEMPLATE_FILE_NAME_CT = os.path.join("templates", "controlledterm_class_template.txt")
 
 
 class MATLABSchemaBuilder(object):
@@ -68,7 +71,7 @@ class MATLABSchemaBuilder(object):
         self._parse_source_file_path(schema_file_path, root_path)
         self._class_name_map = class_name_map
 
-        with open(schema_file_path, "r") as schema_file:
+        with open(schema_file_path, "r", encoding="utf-8") as schema_file:
             self._schema_payload = json.load(schema_file)
         
         if self._schema_module_name == "controlledTerms":
@@ -97,34 +100,37 @@ class MATLABSchemaBuilder(object):
         schema_classdef_str = self._expand_schema_template()
         return schema_classdef_str
 
+    def get_property_definitions(self):
+        """Return the template property attributes for this schema's properties.
+
+        Exposes the rendered property definitions without writing any file, so
+        that a class assembled from a subset of them, such as the controlled
+        term base class, is rendered exactly like the generated classes.
+        """
+        self._extract_template_variables()
+        return self._template_variables["props"]
+
     def _parse_source_file_path(self, schema_file_path:str, root_path:str):
-        _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
-        
-        self.version = _relative_path_without_extension[0]
-        self._schema_module_name = _relative_path_without_extension[1]
-        if len(_relative_path_without_extension) == 3:
-            self._schema_group_name = []
-        else:
-            schema_group_name = _relative_path_without_extension[2]
-            # Remove all non alphanumeric characters
-            self._schema_group_name = re.sub(r'\W+', '', schema_group_name)
+        schema_info = parse_schema_file_path(schema_file_path, root_path)
 
-        self._schema_file_name = _relative_path_without_extension[-1]
-
-        # Create classname. Change file name, making sure first letter is uppercase
-        self._schema_class_name = self._schema_file_name[0].upper() + self._schema_file_name[1:]
-
+        self.version = schema_info["version"]
+        self._schema_module_name = schema_info["module_name"]
+        self._schema_group_name = schema_info["group_name"]
+        # The file name keeps the case of the path, because the instances of a
+        # controlled term are stored in a folder of the same name
+        self._schema_file_name = schema_info["file_name"]
+        self._schema_class_name = schema_info["type_name"]
 
     def _create_target_file_path(self) -> str:
-        target_root_path = os.path.join("target", "types", self.version)
+        package_parts = ["+openminds", f"+{namespace_name(self._schema_module_name)}"]
         if self._schema_group_name:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower(), f"+{self._schema_group_name}".lower())
-        else:
-            matlab_package_directory = os.path.join("+openminds", f"+{self._schema_module_name}".lower())
-        matlab_class_file_name = f"{self._schema_file_name}.{OUTPUT_FILE_FORMAT}"
-        matlab_class_file_name = matlab_class_file_name[0].upper() + matlab_class_file_name[1:]
+            package_parts.append(f"+{namespace_name(self._schema_group_name)}")
 
-        return os.path.join(target_root_path, matlab_package_directory, matlab_class_file_name)
+        matlab_class_file_name = f"{self._schema_class_name}.{OUTPUT_FILE_FORMAT}"
+
+        return os.path.join(
+            target_folder(self.version, "types"), *package_parts, matlab_class_file_name
+        )
 
     def _extract_template_variables(self):
         """Extract variables from the schema that are needed for the template"""
@@ -137,7 +143,16 @@ class MATLABSchemaBuilder(object):
         property_name_map = []
         property_names = set()
 
-        for full_name, property_info in sorted(schema["properties"].items(), key=_property_name_sort_key):
+        # Properties are listed alphabetically by their openMINDS name.
+        # _property_name_sort_key would instead lead with the naming
+        # properties, but applying it would reorder the property block of
+        # every generated class, so that remains a separate decision.
+        sorted_properties = sorted(
+            schema["properties"].items(),
+            key=lambda item: _get_openminds_property_name(item[0]),
+        )
+
+        for full_name, property_info in sorted_properties:
 
             openminds_property_name = _get_openminds_property_name(full_name)
             property_name = _create_matlab_name(full_name)
@@ -184,9 +199,10 @@ class MATLABSchemaBuilder(object):
                 size_attribute = "(1,1)"
             size_attribute_doc = size_attribute
 
-            # To work around not allowing empty scalars in matlab, the 
-            # actual size of of scalars is set to a list (Validators will
-            # ensure that only scalars are allowed)
+            # A MATLAB (1,1) property requires a value, so a scalar that maps a
+            # null is declared as a list and constrained to a scalar by a
+            # validator instead. The documented size keeps saying (1,1),
+            # because that is the cardinality the property actually holds.
             if property_info.get("type") == 'integer':
                 size_attribute = "(1,:)"
 
@@ -194,9 +210,9 @@ class MATLABSchemaBuilder(object):
             if _is_datetime_format(property_info):
                 size_attribute = "(1,:)"
 
+            # ...and for numbers constrained to a range
             if _is_scalar_number_with_range_validation(property_info):
                 size_attribute = "(1,:)"
-                size_attribute_doc = size_attribute
 
             # ...and for linked/embedded types
             if has_linked_type or has_embedded_type:
@@ -274,9 +290,9 @@ class MATLABSchemaBuilder(object):
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
         # Or; just remove this as it's not needed when using separate templates.
         if self._schema_module_name == "controlledTerms":
-            base_class = "openminds.abstract.ControlledTerm"
+            base_class = "openminds.controlledterms.ControlledTerm"
         else:
-            base_class = "openminds.abstract.Schema"
+            base_class = "openminds.Node"
 
         has_controlled_instance = class_name in types_with_controlled_instances
         if has_controlled_instance:
@@ -332,7 +348,7 @@ class MATLABSchemaBuilder(object):
         # Build package directory path and create directory if necessary
         package_name_list = _get_mixedtype_package_name_list(schema["class_name"])
         package_parts = ["+" + name for name in package_name_list]
-        path_parts = ["target", "mixedtypes", self.version] + package_parts
+        path_parts = [target_folder(self.version, "mixedtypes")] + package_parts
         os.makedirs(os.path.join(*path_parts), exist_ok=True)
 
         # Make first letter of property name uppercase
@@ -368,15 +384,59 @@ def _get_openminds_property_name(json_name):
     return json_name.split('/')[-1]
 
 
-def _get_controlled_term_base_properties(schema_root_path, version):
-    """Return the common controlled-term property set for a schema version."""
-    controlled_term_schema_paths = glob.glob(
-        os.path.join(schema_root_path, version, "controlledTerms", "*.schema.omi.json")
+def save_controlled_term_base_class(version, schema_root_path, class_name_map, jinja_templates):
+    """Generate the controlled term base class for a schema version.
+
+    The properties shared by the controlled term schemas of a model version
+    differ between versions, so the abstract class holding them is generated
+    per version rather than maintained by hand. It is written with the classes
+    of its own module, as openminds.controlledterms.ControlledTerm.
+    """
+    base_property_names = _get_controlled_term_base_properties(schema_root_path, version)
+    if not base_property_names:
+        # Model versions without a controlled terms module need no base class.
+        return None
+
+    schema_file_path = _find_controlled_term_schema(
+        schema_root_path, version, base_property_names
     )
 
-    property_sets = Counter()
+    builder = MATLABSchemaBuilder(
+        schema_file_path, schema_root_path, class_name_map, jinja_templates
+    )
+    props = [
+        prop for prop in builder.get_property_definitions()
+        if prop["name"] in base_property_names
+    ]
 
-    for schema_file_path in controlled_term_schema_paths:
+    classdef_str = jinja_templates["controlledterm_base_class"].render({"props": props})
+    classdef_str = _strip_trailing_whitespace(classdef_str)
+
+    target_file_path = os.path.join(
+        target_folder(version, "types"), "+openminds", "+controlledterms", "ControlledTerm.m"
+    )
+    os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
+    with open(target_file_path, "w", encoding="utf-8") as target_file:
+        target_file.write(classdef_str)
+
+    return target_file_path
+
+
+@lru_cache(maxsize=None)
+def _get_controlled_term_property_sets(schema_root_path, version):
+    """The property set each controlled term schema of a version declares.
+
+    Returns a (schema file path, property name set) pair per schema, sorted by
+    path so that the outcome does not depend on the order the file system
+    happens to list them in. Cached because a version holds over a hundred
+    controlled terms and every one of them needs the whole set.
+    """
+    schema_file_paths = sorted(glob.glob(
+        os.path.join(schema_root_path, version, "controlledTerms", f"*{SCHEMA_FILE_EXTENSION}")
+    ))
+
+    property_sets = []
+    for schema_file_path in schema_file_paths:
         with open(schema_file_path, "r", encoding="utf-8") as schema_file:
             schema_payload = json.load(schema_file)
 
@@ -384,7 +444,35 @@ def _get_controlled_term_base_properties(schema_root_path, version):
             _create_matlab_name(property_name)
             for property_name in schema_payload.get("properties", {})
         )
-        property_sets[property_names] += 1
+        property_sets.append((schema_file_path, property_names))
+
+    return tuple(property_sets)
+
+
+def _find_controlled_term_schema(schema_root_path, version, property_names):
+    """Return the controlled term schema whose properties are exactly the given set.
+
+    The base property set is taken from the schemas themselves, so at least one
+    schema declares it and no more than its own properties are needed to render
+    the base class.
+    """
+    for schema_file_path, schema_property_names in _get_controlled_term_property_sets(
+            schema_root_path, version):
+        if schema_property_names == property_names:
+            return schema_file_path
+
+    raise ValueError(
+        f"No controlled term schema in version '{version}' declares the base "
+        f"property set {sorted(property_names)}."
+    )
+
+
+def _get_controlled_term_base_properties(schema_root_path, version):
+    """Return the common controlled-term property set for a schema version."""
+    property_sets = Counter(
+        property_names for _, property_names
+        in _get_controlled_term_property_sets(schema_root_path, version)
+    )
 
     if not property_sets:
         return set()
@@ -415,15 +503,7 @@ def _generate_class_name(iri, class_name_map):
 
     return class_name_map[type_name]
 
-    #for i in range(len(parts) - 1):
-    #    parts[i] = parts[i].lower()
-    #    return "openminds." + ".".join(parts)
 
-
-def _to_label(class_name_list):
-    # split on . and keep last
-    return [class_name.split(".")[-1] for class_name in class_name_list]
-    
 def _get_schema_display_label(schema_short_name):
     """
     Make a label for a schema from its name
@@ -466,15 +546,22 @@ def _generate_property_doc(property_info, schema_short_name):
     return doc
 
 def _property_name_sort_key(arg):
-    """Sort the name property to be first"""
-    name, property_info = arg
-    priorities = {
-        "name": "0",
-        "fullName": "1",
-        "shortName": "2",
-        "lookupLabel": "3",
-    }
-    return priorities.get(name, name)
+    """Order the properties that name an instance before the rest.
+
+    The schema keys this is applied to are full openMINDS property IRIs, so
+    the priority is looked up on the trailing property name.
+
+    Not currently applied: the generated classes list their properties
+    alphabetically, and adopting this order would rewrite the property block
+    of every class. See _extract_template_variables.
+    """
+    full_name, _property_info = arg
+    property_name = _get_openminds_property_name(full_name)
+    priorities = ["name", "fullName", "shortName", "lookupLabel"]
+
+    if property_name in priorities:
+        return (priorities.index(property_name), property_name)
+    return (len(priorities), property_name)
 
 def _strip_trailing_whitespace(s):
     return "\n".join([line.rstrip() for line in s.splitlines()]) + "\n" # Also add single newline at the end
@@ -510,6 +597,20 @@ def _list_to_string_array(list_of_strings, do_sort=False):
     return string_array
 
 
+@lru_cache(maxsize=1)
+def _load_display_config():
+    """The display label configuration, read once.
+
+    It is consulted for every schema and does not change during a build. The
+    returned mapping is shared by all callers and must not be modified.
+    """
+    display_config_filepath = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
+
+    with open(display_config_filepath, 'r', encoding='utf-8') as config_file:
+        return json.load(config_file)
+
+
 def _get_display_label_method_expression(schema_short_name, property_names):
     """
         Create the display label expression to be added as a getDisplayLabel 
@@ -517,13 +618,9 @@ def _get_display_label_method_expression(schema_short_name, property_names):
     """
     property_names = [_create_matlab_name(name) for name in property_names]
 
-    display_config_filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instanceDisplayConfig.json')
-    #display_config_filepath = 'instanceDisplayConfig.json'
-
     # Todo: The json keys should match the schema name exactly, i.e capitalized
 
-    with open(display_config_filepath, 'r') as f:
-        config_json = json.load(f)
+    config_json = _load_display_config()
 
     is_camel_case_match = camel_case(schema_short_name) in config_json.keys()
     is_upper_case_match = schema_short_name.upper() in config_json.keys()  # Some schemas like DOI etc. are all uppercase
@@ -535,35 +632,75 @@ def _get_display_label_method_expression(schema_short_name, property_names):
         elif is_upper_case_match:
             schema_filename = schema_short_name.upper()
 
-        this_config = config_json[schema_filename]
+        # A schema may be configured with alternatives, to be tried in order,
+        # because a model version can rename the properties a label is built
+        # from. The first alternative whose properties the schema declares wins.
+        alternatives = config_json[schema_filename]
+        if not isinstance(alternatives, list):
+            alternatives = [alternatives]
 
-        prop_names = this_config['propertyName']
-        str_formatter = this_config['stringFormat']
+        this_config = None
+        for alternative in alternatives:
+            prop_names = alternative['propertyName']
+            if not prop_names:
+                return "str = obj.createLabelForMissingLabelDefinition();"
+            if not isinstance(prop_names, list):
+                prop_names = [prop_names]
+            if all(prop_name in property_names for prop_name in prop_names):
+                this_config = alternative
+                break
 
-        if not prop_names:
-            return "str = obj.createLabelForMissingLabelDefinition();"
-
-        if not isinstance(prop_names, list):
-            prop_names = [prop_names]
-
-        if not all(prop_name in property_names for prop_name in prop_names):
+        if this_config is None:
             return _get_default_display_label_method_expression(schema_short_name, property_names)
 
-        if not isinstance(str_formatter, list):
+        str_formatter = this_config['stringFormat']
+
+        # A scalar stringFormat holds a single expression, which is assigned to
+        # the output variable here. A list holds a block of statements, which
+        # must assign the output variable itself because control flow lines such
+        # as "if" cannot be assigned from.
+        is_expression = not isinstance(str_formatter, list)
+        if is_expression:
             str_formatter = [str_formatter]
 
-        for i in range(len(prop_names)):
-            str_formatter = [sf.replace(prop_names[i], f"obj.{prop_names[i]}") for sf in str_formatter]
+        str_formatter = [_qualify_property_names(line, prop_names) for line in str_formatter]
 
-        for i, this_line in enumerate(str_formatter):
-            if 'sprintf' in this_line:
-                this_line = this_line.replace('sprintf', 'str = sprintf')
-                this_line = f"{this_line};"
-                str_formatter[i] = this_line
-        # Join the lines with newline 
+        if is_expression:
+            return f"str = {str_formatter[0]};"
+
+        # Join the lines with newline
         return '\n            '.join(str_formatter)
     else:
         return _get_default_display_label_method_expression(schema_short_name, property_names)
+
+
+# A MATLAB character vector, allowing the doubled quote that escapes one.
+# The quote is also the transpose operator, which no display label expression
+# uses, so treating every quoted run as a literal is safe here.
+CHAR_LITERAL_PATTERN = re.compile(r"('(?:[^']|'')*')")
+
+
+def _qualify_property_names(expression, property_names):
+    """
+        Prefix every reference to a schema property in a display label
+        expression with "obj.", so that it resolves against the instance.
+
+        Matches are anchored on identifier boundaries and skip names preceded by
+        a dot. This keeps a short property name from being rewritten inside a
+        longer one ("minValue" within "minValueUnit") and leaves the namespace
+        segments of a qualified function call untouched. Character literals are
+        left alone, so that a format string may use a property name as text.
+    """
+    # Splitting on a capturing group alternates unquoted and quoted segments,
+    # so the even indices hold the code to rewrite.
+    segments = CHAR_LITERAL_PATTERN.split(expression)
+    for index in range(0, len(segments), 2):
+        for property_name in property_names:
+            pattern = r"(?<![\w.])" + re.escape(property_name) + r"(?!\w)"
+            segments[index] = re.sub(
+                pattern, f"obj.{property_name}", segments[index]
+            )
+    return "".join(segments)
 
 
 def _get_default_display_label_method_expression(schema_short_name, property_names):
@@ -578,7 +715,6 @@ def _get_default_display_label_method_expression(schema_short_name, property_nam
     elif "name" in property_names:
         return "str = obj.name;"
     else:
-        #warnings.warn(f"No display label method found for {schema_short_name}.")
         print(f"No display label method found for {schema_short_name}.")
         return "str = obj.createLabelForMissingLabelDefinition();"
 

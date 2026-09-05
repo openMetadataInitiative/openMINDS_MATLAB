@@ -3,11 +3,29 @@ import json
 import os
 import re
 import shutil
+from functools import lru_cache
 from typing import List
 
-from git import Repo, GitCommandError
-from jinja2 import Environment, select_autoescape, FileSystemLoader
+from git import Repo
+from jinja2 import Environment, FileSystemLoader
 from jinja2 import Template
+
+# Every openMINDS schema source file carries this compound extension
+SCHEMA_FILE_EXTENSION = ".schema.omi.json"
+
+# Where the build writes, relative to the working directory
+TARGET_ROOT = "target"
+
+
+def target_folder(version: str, artifact_type: str) -> str:
+    """Folder that one kind of artifact of a model version is written to.
+
+    The build tree is model version first, then artifact type, mirroring
+    code/generated/resources in the MATLAB toolbox so that applying a build is
+    a single copy. The artifact types are "types", "mixedtypes" and
+    "enumerations".
+    """
+    return os.path.join(TARGET_ROOT, version, artifact_type)
 
 def clone_sources():
 
@@ -38,7 +56,10 @@ class SchemaLoader(object):
         return os.listdir(self.schemas_sources)
 
     def find_schemas(self, version:str) -> List[str]:
-        return glob.glob(os.path.join(self.schemas_sources, version, f'**/*.schema.omi.json'), recursive=True)
+        return glob.glob(
+            os.path.join(self.schemas_sources, version, "**", f"*{SCHEMA_FILE_EXTENSION}"),
+            recursive=True,
+        )
 
 class InstanceLoader(object):
 
@@ -50,10 +71,17 @@ class InstanceLoader(object):
         return os.listdir(self.instances_sources)
 
     def find_instances(self, version:str, schema_name:str=None) -> List[str]:
+        instance_paths = _find_all_instances(self.instances_sources, version)
+
         if schema_name:
-            return glob.glob(os.path.join(self.instances_sources, version, f'**/{schema_name}/*.jsonld'), recursive=True)
-        else:
-            return glob.glob(os.path.join(self.instances_sources, version, f'**/*.jsonld'), recursive=True)
+            # An instance belongs to a schema when it sits directly in a folder
+            # named after that schema
+            return [
+                instance_path for instance_path in instance_paths
+                if os.path.basename(os.path.dirname(instance_path)) == schema_name
+            ]
+
+        return list(instance_paths)
 
     def get_instance_collection(self, version:str, schema_file_name:str) -> List[str]:
         
@@ -71,24 +99,28 @@ class InstanceLoader(object):
 
         return instance_list
     
-def initialise_jinja_templates(autoescape:bool=None):
+@lru_cache(maxsize=None)
+def _find_all_instances(instances_sources: str, version: str):
+    """Every instance file of a model version, as a tuple of paths.
+
+    Walking the instances of a version is the most expensive thing the build
+    does, and a version holds one folder of instances per controlled term, so
+    the walk is done once per version and the result filtered in memory.
+    """
+    return tuple(glob.glob(
+        os.path.join(instances_sources, version, "**", "*.jsonld"), recursive=True
+    ))
+
+
+def initialise_jinja_templates():
     """
     Initializes a Jinja2 environment and preloads templates into a dictionary for reuse.
 
-    This function sets up a Jinja2 `Environment` for loading templates from the `templates` 
-    subdirectory within the current script's directory. It then preloads a set of named templates 
-    into a dictionary, making them accessible by key for efficient repeated rendering. This 
-    approach avoids repeated environment initialization and template loading, optimizing 
+    This function sets up a Jinja2 `Environment` for loading templates from the `templates`
+    subdirectory within the current script's directory. It then preloads a set of named templates
+    into a dictionary, making them accessible by key for efficient repeated rendering. This
+    approach avoids repeated environment initialization and template loading, optimizing
     performance when rendering templates multiple times.
-
-    Parameters:
-    -----------
-    autoescape : bool, optional
-        Configures the autoescaping behavior for templates:
-        - `True` enables autoescaping for all templates.
-        - `False` disables autoescaping.
-        - `None` (default) uses Jinja2's `select_autoescape()` function to enable autoescaping for 
-          specific file types (e.g., `.html`, `.xml`).
 
     Returns:
     --------
@@ -98,32 +130,36 @@ def initialise_jinja_templates(autoescape:bool=None):
         - `"schema_class"`: Template for schema class generation.
         - `"controlledterm_class"`: Template for controlled term class generation.
         - `"mixedtype_class"`: Template for mixed type class generation.
+        - `"controlledterm_base_class"`: Template for the controlled term base class.
         - `"modules_enumeration"`: Template for modules enumeration generation.
         - `"types_enumeration"`: Template for types enumeration generation.
 
     Notes:
     ------
-    - The function uses `os.path.dirname(os.path.realpath(__file__))` to locate the directory of 
+    - The function uses `os.path.dirname(os.path.realpath(__file__))` to locate the directory of
       the current script, ensuring templates are loaded from the `templates` subdirectory.
-    - Autoescaping is configured to help prevent injection attacks for templates handling HTML or XML.
 
     Example Usage:
     --------------
-    templates = initialise_jinja_templates(autoescape=True)
+    templates = initialise_jinja_templates()
     rendered_schema = templates["schema_class"].render(data=schema_data)
     """
 
     module_directory = os.path.dirname(os.path.realpath(__file__))
     template_directory = os.path.join(module_directory, "templates")
-    
+
     jinja_environment = Environment(
         loader=FileSystemLoader(template_directory),
-        autoescape=select_autoescape(autoescape) if autoescape is not None else select_autoescape()
+        # Autoescaping is HTML escaping, which would corrupt the generated
+        # MATLAB: the "&" joining a base class to a mixin and the help links
+        # in property docstrings would come out as entities.
+        autoescape=False
     )
 
     jinja_templates = {
         "schema_class": jinja_environment.get_template("schema_class_template.txt"),
         "controlledterm_class": jinja_environment.get_template("controlledterm_class_template.txt"),
+        "controlledterm_base_class": jinja_environment.get_template("controlledterm_base_class_template.txt"),
         "mixedtype_class": jinja_environment.get_template("mixedtype_class_template.txt"),
         "modules_enumeration": jinja_environment.get_template("modules_enumeration_template.txt"),
         "types_enumeration": jinja_environment.get_template("types_enumeration_template.txt"),
@@ -140,9 +176,11 @@ def get_class_name_map(schema_loader, version):
 
     # Build a list for all the enumeration members
     class_name_map = {}
+    # Which schema claimed each type name, to report a name used by two schemas
+    schema_file_by_type_name = {}
 
     for schema_file in schema_files:
-        schema_info = _parse_source_file_path(schema_file, root_path)
+        schema_info = parse_schema_file_path(schema_file, root_path)
         matlab_class_name = _get_matlab_class_name(schema_info)
 
         with open(schema_file, "r", encoding="utf-8") as file:
@@ -151,7 +189,23 @@ def get_class_name_map(schema_loader, version):
         if "_type" in schema_payload:
             class_name_map[schema_payload["_type"]] = matlab_class_name
 
-        class_name_map.setdefault(schema_info['type_name'], matlab_class_name)
+        type_name = schema_info['type_name']
+        # A type name is expected to be unique across modules, so resolving a
+        # type by name alone is ambiguous when two schemas share one. The first
+        # schema in sorted order wins; warn so the collision is not silent.
+        if type_name in schema_file_by_type_name:
+            print(
+                f"Warning: Type name '{type_name}' is declared by more than one schema "
+                f"in version '{version}'. Resolving it by name gives "
+                f"'{class_name_map[type_name]}' "
+                f"(from '{os.path.relpath(schema_file_by_type_name[type_name], root_path)}'), "
+                f"not '{matlab_class_name}' "
+                f"(from '{os.path.relpath(schema_file, root_path)}')."
+            )
+        else:
+            schema_file_by_type_name[type_name] = schema_file
+
+        class_name_map.setdefault(type_name, matlab_class_name)
 
     # Add some exceptions
     if version == "v2.0":
@@ -164,82 +218,61 @@ def get_class_name_map(schema_loader, version):
 def camel_case(text_string: str):
     return text_string[0].lower() + text_string[1:]
 
-    #return ''.join(x.capitalize() or '_' for x in str.split('_'))
-    
 def extract_filename_without_extension(path):
     base_name = os.path.basename(path)  # Get the base name from the path
     if '.' in base_name:
         return base_name.rsplit('.', 1)[0]
     return base_name
 
-def save_resource_files(version, schema_path_list):
+def save_resource_files(version, schema_path_list, schema_root_path):
     """
         Creates:
             - manifest json file for the schemas
-            - alias json file with alias definitions (to support 
+            - alias json file with alias definitions (to support
               creation of MATLAB classes without group name)
     """
-
-    root_directory = os.path.realpath(".")
-    schema_path_list.sort()
 
     alias_list = []
     manifest = []
 
-    for schema_path in schema_path_list:
-        
-        # Remove redundant path information
-        schema_path = schema_path.replace(root_directory, "")
-        schema_path = schema_path.replace(f"/_sources/openMINDS/schemas/{version}/", "")
-        schema_path = schema_path.replace(".schema.omi.json", "")
-        if schema_path[0] == "/":
-            schema_path = schema_path[1:]
-
-        # Split remaining path into list
-        schema_path = schema_path.split("/")
+    for schema_path in sorted(schema_path_list):
+        schema_info = parse_schema_file_path(schema_path, schema_root_path)
 
         # Create meta dict for schema
         schema_meta = {}
-        schema_meta["name"] = schema_path.pop()
-        schema_meta["module"] = schema_path[0]
-
-        if len(schema_path) == 2:
-            schema_meta["group"] = schema_path[1]
-        else:    
-            schema_meta["group"] = None
+        schema_meta["name"] = schema_info["file_name"]
+        schema_meta["module"] = schema_info["module_name"]
+        schema_meta["group"] = schema_info["group_name"]
 
         if schema_meta["group"]: # Create alias definition for schema
             alias_def = {}
-            short_class_name = capitalize_first_letter( schema_meta["name"] )
-            module_name = schema_meta["module"].lower()
-            group_name = schema_meta["group"].lower()
-            group_name = re.sub(r'\W+', '', group_name) # Remove all non alphanumeric characters
+            short_class_name = schema_info["type_name"]
+            module_name = namespace_name(schema_meta["module"])
+            group_name = namespace_name(schema_meta["group"])
             alias_def["NewName"] = ".".join(["openminds", module_name, group_name, short_class_name])
             alias_def["OldNames"] = ".".join(["openminds", module_name, short_class_name])
             alias_def["WarnOnOldName"] = False
             if version not in ["v1.0", "v2.0", "v3.0"]:
-                alternative_old_name = ".".join(["openminds", short_class_name]) 
+                alternative_old_name = ".".join(["openminds", short_class_name])
                 # Append to old names where old names should be a list
                 alias_def["OldNames"] = [alias_def["OldNames"], alternative_old_name]
             alias_list.append(alias_def)
-        else:
-            pass
 
         manifest.append(schema_meta)
 
     manifest.sort(key=lambda x: x["name"])
     alias_json = {'Aliases': alias_list}
 
-    target_directory = f"target/types/{version}/resources"
+    target_directory = os.path.join(target_folder(version, "types"), "resources")
     os.makedirs(target_directory, exist_ok=True)
 
     # Save manifest to file as json
-    with open(os.path.join(target_directory, "schema_manifest.json"), "w") as f:
+    with open(os.path.join(target_directory, "schema_manifest.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=4)
         f.write("\n")
 
     # Save alias definitions to file as json
-    with open(os.path.join(target_directory, "alias.json"), "w") as f:
+    with open(os.path.join(target_directory, "alias.json"), "w", encoding="utf-8") as f:
         json.dump(alias_json, f, indent=2)
         f.write("\n")
 
@@ -266,42 +299,53 @@ def capitalize_first_letter(text_string: str):
     return text_string[0].upper() + text_string[1:]
 
 
+def parse_schema_file_path(schema_file_path: str, root_path: str) -> dict:
+    """Split a schema source path into the openMINDS parts it is built from.
+
+    A schema file lives at <version>/<module>/[<group>/]<name>.schema.omi.json
+    below the schemas root. The version, module, group and file name are
+    returned as they appear in the path. Use namespace_name to turn a module
+    or group into the MATLAB namespace segment for it.
+    """
+    relative_path = os.path.relpath(schema_file_path, root_path)
+    if relative_path.endswith(SCHEMA_FILE_EXTENSION):
+        relative_path = relative_path[:-len(SCHEMA_FILE_EXTENSION)]
+
+    path_parts = relative_path.split(os.sep)
+    file_name = path_parts[-1]
+    has_group = len(path_parts) > 3
+
+    return {
+        "version": path_parts[0],
+        "module_name": path_parts[1],
+        "group_name": path_parts[2] if has_group else None,
+        "file_name": file_name,
+        "type_name": capitalize_first_letter(file_name),
+    }
+
+
+def namespace_name(path_part: str) -> str:
+    """MATLAB namespace segment for a module or group name.
+
+    A group such as "non-atlas" is not a valid MATLAB identifier, so every
+    non-alphanumeric character is removed.
+    """
+    return re.sub(r'\W+', '', path_part).lower()
+
+
 # Local functions
 def _create_enum_target_file_path(version, enum_type) -> str:
-        target_root_path = os.path.join("target", "enumerations", version, '+openminds', '+enum', f"{enum_type}.m")
-        return target_root_path
-
-def _parse_source_file_path(schema_file_path:str, root_path:str):
-    _relative_path_without_extension = schema_file_path[len(root_path)+1:].replace(".schema.omi.json", "").split("/")
-    
-    schema_info = {}
-
-    schema_info["version"] = _relative_path_without_extension[0]
-    schema_info["module_name"] = _relative_path_without_extension[1]
-    if len(_relative_path_without_extension) == 3:
-        schema_info["group_name"] = None
-    else:
-        group_name = _relative_path_without_extension[2]
-        # Remove all non alphanumeric characters
-        schema_info["group_name"] = re.sub(r'\W+', '', group_name)
-
-    schema_info["type_name"] = _relative_path_without_extension[-1]
-    # Ensure first letter is capitalized
-    schema_info["type_name"] = capitalize_first_letter(schema_info["type_name"])
-
-    return schema_info
+        return os.path.join(
+            target_folder(version, "enumerations"), '+openminds', '+enum', f"{enum_type}.m")
 
 def _get_matlab_class_name(schema_info):
+    """Fully qualified MATLAB class name for a parsed schema path"""
 
-    # Combine the schema_info to get the full namespace name
+    namespace_parts = ["openminds", namespace_name(schema_info["module_name"])]
     if schema_info["group_name"]:
-        matlab_namespace_name = f"openminds.{schema_info['module_name']}.{schema_info['group_name']}"
-    else:
-        matlab_namespace_name = f"openminds.{schema_info['module_name']}"
+        namespace_parts.append(namespace_name(schema_info["group_name"]))
 
-    matlab_namespace_name = matlab_namespace_name.lower()
-
-    return f"{matlab_namespace_name}.{schema_info['type_name']}"
+    return ".".join(namespace_parts + [schema_info["type_name"]])
 
 
 def _get_template_variables(enum_type, schema_files, root_path):
@@ -309,20 +353,33 @@ def _get_template_variables(enum_type, schema_files, root_path):
 
     # Build a list for all the enumeration members
     template_variable_list = []
+    # Class name already enumerated for each type name, to report a collision
+    class_name_by_type_name = {}
 
     for schema_file in schema_files:
-        schema_info = _parse_source_file_path(schema_file, root_path)
+        schema_info = parse_schema_file_path(schema_file, root_path)
 
         if enum_type == "Modules":
             template_variable_list.append(schema_info['module_name'])
 
         elif enum_type == "Types":
             matlab_class_name = _get_matlab_class_name(schema_info)
-            # Check if type name already exists 
-            if schema_info['type_name'] in [item['name'] for item in template_variable_list]:
-                # Skip if type name already exists
+            type_name = schema_info['type_name']
+
+            # An enumeration member is named after the type, so a name used by
+            # two schemas can only be represented once. Warn about the class
+            # left out rather than dropping it silently.
+            if type_name in class_name_by_type_name:
+                print(
+                    f"Warning: Type '{type_name}' is already in the Types enumeration for "
+                    f"version '{schema_info['version']}' as "
+                    f"'{class_name_by_type_name[type_name]}'. "
+                    f"'{matlab_class_name}' is left out."
+                )
                 continue
-            template_variable_list.append({'name': schema_info['type_name'], 'class_name': matlab_class_name})
+
+            class_name_by_type_name[type_name] = matlab_class_name
+            template_variable_list.append({'name': type_name, 'class_name': matlab_class_name})
         
     if enum_type == "Types":
         return {'types': template_variable_list }
