@@ -76,7 +76,9 @@ classdef ControlledTermTest < matlab.unittest.TestCase
         end
 
         function testOlderControlledTermPropertiesAreAccepted(testCase)
-            sourceText = fileread(testCase.getControlledTermBasePath("v2"));
+            % v4.0 is a model version whose controlled terms carry the older
+            % property set. Its base class is generated with that version.
+            sourceText = fileread(testCase.getControlledTermBasePath("v4.0"));
 
             testCase.verifyTrue(contains(sourceText, "interlexIdentifier"))
             testCase.verifyTrue(contains(sourceText, "knowledgeSpaceLink"))
@@ -114,10 +116,11 @@ classdef ControlledTermTest < matlab.unittest.TestCase
     end
 
     methods (Access = private)
-        function filePath = getControlledTermBasePath(~, version)
-            rootPath = openminds.internal.rootpath();
-            filePath = fullfile(rootPath, "internal", "+openminds", ...
-                "+base", "private", "controlledTerms", version, ...
+        function filePath = getControlledTermBasePath(~, modelVersion)
+        % getControlledTermBasePath - Abstract class generated for a version
+            filePath = fullfile( ...
+                openminds.internal.constants.Paths.GeneratedFolder, ...
+                modelVersion, "types", "+openminds", "+controlledterms", ...
                 "ControlledTerm.m");
         end
     end

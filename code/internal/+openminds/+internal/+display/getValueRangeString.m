@@ -1,25 +1,47 @@
 function str = getValueRangeString(minValue, maxValue, minValueUnit, maxValueUnit)
 % getValueRangeString - Format a quantitative value range with units.
     
-    if isa(minValueUnit, 'openminds.controlledterms.UnitOfMeasurement')
-        minValueUnit = minValueUnit.name;
-    end
-    if isa(maxValueUnit, 'openminds.controlledterms.UnitOfMeasurement')
-        maxValueUnit = maxValueUnit.name;
-    end
-    
-    minValueUnit = string(minValueUnit); maxValueUnit = string(maxValueUnit);
+    minValueUnit = getUnitName(minValueUnit);
+    maxValueUnit = getUnitName(maxValueUnit);
 
     if minValueUnit == maxValueUnit
-        str = sprintf('%d-%d %s', minValue, maxValue, pluralizeUnit(minValueUnit));
+        if minValueUnit == ""
+            str = sprintf('%d-%d', minValue, maxValue);
+        else
+            str = sprintf('%d-%d %s', minValue, maxValue, pluralizeUnit(minValueUnit));
+        end
     else
-        if minValue ~= 1
-            minValueUnit = pluralizeUnit(minValueUnit);
+        str = sprintf('%s - %s', ...
+            formatValueWithUnit(minValue, minValueUnit), ...
+            formatValueWithUnit(maxValue, maxValueUnit));
+    end
+end
+
+function unitName = getUnitName(unit)
+% getUnitName - Name of a unit, empty when the property holds no unit
+    if isa(unit, 'openminds.controlledterms.UnitOfMeasurement')
+        if isempty(unit)
+            unitName = "";
+            return
         end
-        if maxValue ~= 1
-            maxValueUnit = pluralizeUnit(maxValueUnit);
+        unit = unit.name;
+    end
+
+    unitName = string(unit);
+    if ismissing(unitName)
+        unitName = "";
+    end
+end
+
+function str = formatValueWithUnit(value, unitName)
+% formatValueWithUnit - One end of the range, with its unit if it has one
+    if unitName == ""
+        str = sprintf('%d', value);
+    else
+        if value ~= 1
+            unitName = pluralizeUnit(unitName);
         end
-        str = sprintf('%d %s - %d %s', minValue, minValueUnit, maxValue, maxValueUnit);
+        str = sprintf('%d %s', value, unitName);
     end
 end
 
