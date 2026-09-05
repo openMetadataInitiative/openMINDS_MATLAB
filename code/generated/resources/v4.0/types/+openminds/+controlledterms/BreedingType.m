@@ -1,4 +1,4 @@
-classdef BreedingType < openminds.base.ControlledTerm
+classdef BreedingType < openminds.controlledterms.ControlledTerm
 %BreedingType - No description available.
 %
 %   PROPERTIES:
@@ -57,7 +57,7 @@ classdef BreedingType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

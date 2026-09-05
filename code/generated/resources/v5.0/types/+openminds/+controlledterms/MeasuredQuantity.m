@@ -1,4 +1,4 @@
-classdef MeasuredQuantity < openminds.base.ControlledTerm
+classdef MeasuredQuantity < openminds.controlledterms.ControlledTerm
 %MeasuredQuantity - No description available.
 %
 %   PROPERTIES:
@@ -62,7 +62,7 @@ classdef MeasuredQuantity < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

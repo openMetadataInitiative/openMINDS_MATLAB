@@ -1,4 +1,4 @@
-classdef DataType < openminds.base.ControlledTerm
+classdef DataType < openminds.controlledterms.ControlledTerm
 %DataType - No description available.
 %
 %   PROPERTIES:
@@ -65,7 +65,7 @@ classdef DataType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

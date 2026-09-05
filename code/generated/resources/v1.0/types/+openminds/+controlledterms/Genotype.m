@@ -1,4 +1,4 @@
-classdef Genotype < openminds.base.ControlledTerm
+classdef Genotype < openminds.controlledterms.ControlledTerm
 %Genotype - Structured information on the genotype of a subject.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef Genotype < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef ElectricalStimulusType < openminds.base.ControlledTerm
+classdef ElectricalStimulusType < openminds.controlledterms.ControlledTerm
 %ElectricalStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -52,7 +52,7 @@ classdef ElectricalStimulusType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

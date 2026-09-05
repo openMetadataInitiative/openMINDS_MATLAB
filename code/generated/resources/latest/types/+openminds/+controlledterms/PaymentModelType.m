@@ -1,4 +1,4 @@
-classdef PaymentModelType < openminds.base.ControlledTerm
+classdef PaymentModelType < openminds.controlledterms.ControlledTerm
 %PaymentModelType - No description available.
 %
 %   PROPERTIES:
@@ -66,7 +66,7 @@ classdef PaymentModelType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

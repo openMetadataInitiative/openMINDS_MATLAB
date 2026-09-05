@@ -1,4 +1,4 @@
-classdef SubcellularEntity < openminds.base.ControlledTerm
+classdef SubcellularEntity < openminds.controlledterms.ControlledTerm
 %SubcellularEntity - No description available.
 %
 %   PROPERTIES:
@@ -65,7 +65,7 @@ classdef SubcellularEntity < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

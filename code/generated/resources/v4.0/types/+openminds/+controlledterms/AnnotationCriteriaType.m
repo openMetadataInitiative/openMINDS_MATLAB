@@ -1,4 +1,4 @@
-classdef AnnotationCriteriaType < openminds.base.ControlledTerm
+classdef AnnotationCriteriaType < openminds.controlledterms.ControlledTerm
 %AnnotationCriteriaType - No description available.
 %
 %   PROPERTIES:
@@ -53,7 +53,7 @@ classdef AnnotationCriteriaType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

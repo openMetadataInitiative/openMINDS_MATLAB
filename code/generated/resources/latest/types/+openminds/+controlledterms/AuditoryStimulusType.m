@@ -1,4 +1,4 @@
-classdef AuditoryStimulusType < openminds.base.ControlledTerm
+classdef AuditoryStimulusType < openminds.controlledterms.ControlledTerm
 %AuditoryStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -55,7 +55,7 @@ classdef AuditoryStimulusType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

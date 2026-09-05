@@ -1,4 +1,4 @@
-classdef MeasuredSignalType < openminds.base.ControlledTerm
+classdef MeasuredSignalType < openminds.controlledterms.ControlledTerm
 %MeasuredSignalType - No description available.
 %
 %   PROPERTIES:
@@ -54,7 +54,7 @@ classdef MeasuredSignalType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

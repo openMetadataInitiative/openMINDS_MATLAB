@@ -1,4 +1,4 @@
-classdef Organ < openminds.base.ControlledTerm
+classdef Organ < openminds.controlledterms.ControlledTerm
 %Organ - No description available.
 %
 %   PROPERTIES:
@@ -64,7 +64,7 @@ classdef Organ < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

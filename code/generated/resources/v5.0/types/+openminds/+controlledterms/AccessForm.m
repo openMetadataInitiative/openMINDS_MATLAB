@@ -1,4 +1,4 @@
-classdef AccessForm < openminds.base.ControlledTerm
+classdef AccessForm < openminds.controlledterms.ControlledTerm
 %AccessForm - No description available.
 %
 %   PROPERTIES:
@@ -56,7 +56,7 @@ classdef AccessForm < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

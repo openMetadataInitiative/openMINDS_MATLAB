@@ -1,4 +1,4 @@
-classdef ExperimentalApproach < openminds.base.ControlledTerm
+classdef ExperimentalApproach < openminds.controlledterms.ControlledTerm
 %ExperimentalApproach - No description available.
 %
 %   PROPERTIES:
@@ -91,7 +91,7 @@ classdef ExperimentalApproach < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

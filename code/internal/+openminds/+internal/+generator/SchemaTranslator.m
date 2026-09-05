@@ -74,7 +74,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             hasMoreSuperclasses = isfield(obj.Schema, 'x_extends');
             
             if obj.IsControlledTerm
-                obj.addSuperclass('openminds.base.ControlledTerm')
+                obj.addSuperclass('openminds.controlledterms.ControlledTerm')
             else
                 % All schemas inherit from Schema.
                 obj.addSuperclass('openminds.Node')
@@ -728,7 +728,7 @@ classdef SchemaTranslator < openminds.internal.generator.abstract.ClassWriter
             obj.appendLine(2, sprintf('function obj = %s(varargin)', obj.SchemaClassName))
 
             if obj.IsControlledTerm
-                obj.appendLine(3, sprintf('obj@openminds.base.ControlledTerm(varargin{:})'))
+                obj.appendLine(3, sprintf('obj@openminds.controlledterms.ControlledTerm(varargin{:})'))
             else
                 obj.appendLine(3, sprintf('obj.assignPVPairs(varargin{:})'))
             end

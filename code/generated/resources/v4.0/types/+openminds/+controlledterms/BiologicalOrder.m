@@ -1,4 +1,4 @@
-classdef BiologicalOrder < openminds.base.ControlledTerm
+classdef BiologicalOrder < openminds.controlledterms.ControlledTerm
 %BiologicalOrder - No description available.
 %
 %   PROPERTIES:
@@ -57,7 +57,7 @@ classdef BiologicalOrder < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef Colormap < openminds.base.ControlledTerm
+classdef Colormap < openminds.controlledterms.ControlledTerm
 %Colormap - No description available.
 %
 %   PROPERTIES:
@@ -137,7 +137,7 @@ classdef Colormap < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

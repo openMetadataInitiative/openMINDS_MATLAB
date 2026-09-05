@@ -1,4 +1,4 @@
-classdef GeneticStrainType < openminds.base.ControlledTerm
+classdef GeneticStrainType < openminds.controlledterms.ControlledTerm
 %GeneticStrainType - No description available.
 %
 %   PROPERTIES:
@@ -61,7 +61,7 @@ classdef GeneticStrainType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

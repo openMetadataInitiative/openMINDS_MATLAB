@@ -1,4 +1,4 @@
-classdef Phenotype < openminds.base.ControlledTerm
+classdef Phenotype < openminds.controlledterms.ControlledTerm
 %Phenotype - Structured information on the phenotype of a subject.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef Phenotype < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

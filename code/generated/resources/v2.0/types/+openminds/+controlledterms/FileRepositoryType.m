@@ -1,4 +1,4 @@
-classdef FileRepositoryType < openminds.base.ControlledTerm
+classdef FileRepositoryType < openminds.controlledterms.ControlledTerm
 %FileRepositoryType - No description available.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef FileRepositoryType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

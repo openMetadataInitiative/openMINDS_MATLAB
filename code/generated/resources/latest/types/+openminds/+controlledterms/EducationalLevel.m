@@ -1,4 +1,4 @@
-classdef EducationalLevel < openminds.base.ControlledTerm
+classdef EducationalLevel < openminds.controlledterms.ControlledTerm
 %EducationalLevel - No description available.
 %
 %   PROPERTIES:
@@ -57,7 +57,7 @@ classdef EducationalLevel < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

@@ -1,4 +1,4 @@
-classdef AccessProcessType < openminds.base.ControlledTerm
+classdef AccessProcessType < openminds.controlledterms.ControlledTerm
 %AccessProcessType - No description available.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef AccessProcessType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

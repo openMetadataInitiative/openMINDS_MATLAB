@@ -1,4 +1,4 @@
-classdef MRIWeighting < openminds.base.ControlledTerm
+classdef MRIWeighting < openminds.controlledterms.ControlledTerm
 %MRIWeighting - No description available.
 %
 %   PROPERTIES:
@@ -61,7 +61,7 @@ classdef MRIWeighting < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

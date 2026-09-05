@@ -1,4 +1,4 @@
-classdef Service < openminds.base.ControlledTerm
+classdef Service < openminds.controlledterms.ControlledTerm
 %Service - No description available.
 %
 %   PROPERTIES:
@@ -66,7 +66,7 @@ classdef Service < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

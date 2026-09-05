@@ -1,4 +1,4 @@
-classdef LearningResourceType < openminds.base.ControlledTerm
+classdef LearningResourceType < openminds.controlledterms.ControlledTerm
 %LearningResourceType - No description available.
 %
 %   PROPERTIES:
@@ -60,7 +60,7 @@ classdef LearningResourceType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

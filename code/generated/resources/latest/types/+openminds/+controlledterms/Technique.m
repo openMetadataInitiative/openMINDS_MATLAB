@@ -1,4 +1,4 @@
-classdef Technique < openminds.base.ControlledTerm
+classdef Technique < openminds.controlledterms.ControlledTerm
 %Technique - Structured information on the technique.
 %
 %   PROPERTIES:
@@ -248,7 +248,7 @@ classdef Technique < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

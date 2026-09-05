@@ -1,4 +1,4 @@
-classdef DatasetType < openminds.base.ControlledTerm
+classdef DatasetType < openminds.controlledterms.ControlledTerm
 %DatasetType - Structured information on the provided data type.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef DatasetType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

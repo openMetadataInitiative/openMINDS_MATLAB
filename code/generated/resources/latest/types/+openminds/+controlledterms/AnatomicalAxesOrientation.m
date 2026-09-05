@@ -1,4 +1,4 @@
-classdef AnatomicalAxesOrientation < openminds.base.ControlledTerm
+classdef AnatomicalAxesOrientation < openminds.controlledterms.ControlledTerm
 %AnatomicalAxesOrientation - Structured information on the anatomical directions of the X, Y, and Z axis.
 %
 %   PROPERTIES:
@@ -102,7 +102,7 @@ classdef AnatomicalAxesOrientation < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

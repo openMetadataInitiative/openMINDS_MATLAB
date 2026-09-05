@@ -1,4 +1,4 @@
-classdef VascularStructure < openminds.base.ControlledTerm
+classdef VascularStructure < openminds.controlledterms.ControlledTerm
 %VascularStructure - No description available.
 %
 %   PROPERTIES:
@@ -114,7 +114,7 @@ classdef VascularStructure < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

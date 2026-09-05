@@ -1,4 +1,4 @@
-classdef OlfactoryStimulusType < openminds.base.ControlledTerm
+classdef OlfactoryStimulusType < openminds.controlledterms.ControlledTerm
 %OlfactoryStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -55,7 +55,7 @@ classdef OlfactoryStimulusType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

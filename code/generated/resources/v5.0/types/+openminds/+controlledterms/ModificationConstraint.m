@@ -1,4 +1,4 @@
-classdef ModificationConstraint < openminds.base.ControlledTerm
+classdef ModificationConstraint < openminds.controlledterms.ControlledTerm
 %ModificationConstraint - No description available.
 %
 %   PROPERTIES:
@@ -62,7 +62,7 @@ classdef ModificationConstraint < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

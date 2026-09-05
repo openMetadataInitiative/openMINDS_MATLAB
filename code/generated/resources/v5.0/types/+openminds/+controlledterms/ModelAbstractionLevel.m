@@ -1,4 +1,4 @@
-classdef ModelAbstractionLevel < openminds.base.ControlledTerm
+classdef ModelAbstractionLevel < openminds.controlledterms.ControlledTerm
 %ModelAbstractionLevel - Structured information on abstraction level of the computational model.
 %
 %   PROPERTIES:
@@ -69,7 +69,7 @@ classdef ModelAbstractionLevel < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

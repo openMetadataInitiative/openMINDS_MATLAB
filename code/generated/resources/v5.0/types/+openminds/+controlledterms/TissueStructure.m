@@ -1,4 +1,4 @@
-classdef TissueStructure < openminds.base.ControlledTerm
+classdef TissueStructure < openminds.controlledterms.ControlledTerm
 %TissueStructure - No description available.
 %
 %   PROPERTIES:
@@ -103,7 +103,7 @@ classdef TissueStructure < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

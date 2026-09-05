@@ -1,4 +1,4 @@
-classdef FileBundleGrouping < openminds.base.ControlledTerm
+classdef FileBundleGrouping < openminds.controlledterms.ControlledTerm
 %FileBundleGrouping - Structured information on the grouping mechanism of a file bundle.
 %
 %   PROPERTIES:
@@ -63,7 +63,7 @@ classdef FileBundleGrouping < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

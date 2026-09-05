@@ -1,4 +1,4 @@
-classdef CriteriaQualityType < openminds.base.ControlledTerm
+classdef CriteriaQualityType < openminds.controlledterms.ControlledTerm
 %CriteriaQualityType - Structured information on the quality type of the defined criteria for a measurement.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef CriteriaQualityType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

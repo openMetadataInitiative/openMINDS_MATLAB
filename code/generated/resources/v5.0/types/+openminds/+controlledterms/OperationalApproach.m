@@ -1,4 +1,4 @@
-classdef OperationalApproach < openminds.base.ControlledTerm
+classdef OperationalApproach < openminds.controlledterms.ControlledTerm
 %OperationalApproach - No description available.
 %
 %   PROPERTIES:
@@ -54,7 +54,7 @@ classdef OperationalApproach < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

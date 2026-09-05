@@ -1,4 +1,4 @@
-classdef CommunicationProtocol < openminds.base.ControlledTerm
+classdef CommunicationProtocol < openminds.controlledterms.ControlledTerm
 %CommunicationProtocol - No description available.
 %
 %   PROPERTIES:
@@ -59,7 +59,7 @@ classdef CommunicationProtocol < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

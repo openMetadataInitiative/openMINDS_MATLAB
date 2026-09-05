@@ -1,4 +1,4 @@
-classdef Language < openminds.base.ControlledTerm
+classdef Language < openminds.controlledterms.ControlledTerm
 %Language - Structured information on the available language setting.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef Language < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

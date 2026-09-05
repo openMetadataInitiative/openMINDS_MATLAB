@@ -1,4 +1,4 @@
-classdef TypeOfUncertainty < openminds.base.ControlledTerm
+classdef TypeOfUncertainty < openminds.controlledterms.ControlledTerm
 %TypeOfUncertainty - No description available.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef TypeOfUncertainty < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

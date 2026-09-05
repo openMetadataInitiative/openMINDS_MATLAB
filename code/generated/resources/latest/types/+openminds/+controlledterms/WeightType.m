@@ -1,4 +1,4 @@
-classdef WeightType < openminds.base.ControlledTerm
+classdef WeightType < openminds.controlledterms.ControlledTerm
 %WeightType - No description available.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef WeightType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

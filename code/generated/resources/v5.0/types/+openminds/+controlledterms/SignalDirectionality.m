@@ -1,4 +1,4 @@
-classdef SignalDirectionality < openminds.base.ControlledTerm
+classdef SignalDirectionality < openminds.controlledterms.ControlledTerm
 %SignalDirectionality - No description available.
 %
 %   PROPERTIES:
@@ -57,7 +57,7 @@ classdef SignalDirectionality < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

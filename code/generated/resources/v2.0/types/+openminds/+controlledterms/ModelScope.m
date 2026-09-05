@@ -1,4 +1,4 @@
-classdef ModelScope < openminds.base.ControlledTerm
+classdef ModelScope < openminds.controlledterms.ControlledTerm
 %ModelScope - Structured information on the scope of the computational model.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef ModelScope < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

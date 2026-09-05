@@ -1,4 +1,4 @@
-classdef OperatingDevice < openminds.base.ControlledTerm
+classdef OperatingDevice < openminds.controlledterms.ControlledTerm
 %OperatingDevice - Structured information on the operating device.
 %
 %   PROPERTIES:
@@ -61,7 +61,7 @@ classdef OperatingDevice < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

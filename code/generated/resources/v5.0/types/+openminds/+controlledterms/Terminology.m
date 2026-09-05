@@ -1,4 +1,4 @@
-classdef Terminology < openminds.base.ControlledTerm
+classdef Terminology < openminds.controlledterms.ControlledTerm
 %Terminology - No description available.
 %
 %   PROPERTIES:
@@ -157,7 +157,7 @@ classdef Terminology < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

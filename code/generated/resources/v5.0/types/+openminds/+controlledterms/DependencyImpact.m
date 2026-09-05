@@ -1,4 +1,4 @@
-classdef DependencyImpact < openminds.base.ControlledTerm
+classdef DependencyImpact < openminds.controlledterms.ControlledTerm
 %DependencyImpact - No description available.
 %
 %   PROPERTIES:
@@ -63,7 +63,7 @@ classdef DependencyImpact < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

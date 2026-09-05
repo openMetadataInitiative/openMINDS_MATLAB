@@ -1,4 +1,4 @@
-classdef ChemicalMixtureType < openminds.base.ControlledTerm
+classdef ChemicalMixtureType < openminds.controlledterms.ControlledTerm
 %ChemicalMixtureType - No description available.
 %
 %   PROPERTIES:
@@ -58,7 +58,7 @@ classdef ChemicalMixtureType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

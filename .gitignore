@@ -1,10 +1,6 @@
 # Vocab files
 code/resources/.vocab
 
-# Leftover from when the controlled term base was copied into place.
-# It is generated per model version now; see code/generated/README.md.
-code/internal/+openminds/+base/ControlledTerm.m
-
 # Downloaded files / temporary folders
 downloads/
 target/

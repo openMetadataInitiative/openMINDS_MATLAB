@@ -1,4 +1,4 @@
-classdef FileUsageRole < openminds.base.ControlledTerm
+classdef FileUsageRole < openminds.controlledterms.ControlledTerm
 %FileUsageRole - Structured information on the usage role of a file instance or bundle.
 %
 %   PROPERTIES:
@@ -42,7 +42,7 @@ classdef FileUsageRole < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

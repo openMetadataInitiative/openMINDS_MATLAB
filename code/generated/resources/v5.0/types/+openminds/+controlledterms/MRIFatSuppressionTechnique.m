@@ -1,4 +1,4 @@
-classdef MRIFatSuppressionTechnique < openminds.base.ControlledTerm
+classdef MRIFatSuppressionTechnique < openminds.controlledterms.ControlledTerm
 %MRIFatSuppressionTechnique - No description available.
 %
 %   PROPERTIES:
@@ -56,7 +56,7 @@ classdef MRIFatSuppressionTechnique < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

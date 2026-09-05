@@ -1,4 +1,4 @@
-classdef CellCultureType < openminds.base.ControlledTerm
+classdef CellCultureType < openminds.controlledterms.ControlledTerm
 %CellCultureType - No description available.
 %
 %   PROPERTIES:
@@ -53,7 +53,7 @@ classdef CellCultureType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

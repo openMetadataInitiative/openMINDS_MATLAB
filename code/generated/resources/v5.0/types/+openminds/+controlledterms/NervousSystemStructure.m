@@ -1,4 +1,4 @@
-classdef NervousSystemStructure < openminds.base.ControlledTerm
+classdef NervousSystemStructure < openminds.controlledterms.ControlledTerm
 %NervousSystemStructure - No description available.
 %
 %   PROPERTIES:
@@ -2575,7 +2575,7 @@ classdef NervousSystemStructure < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

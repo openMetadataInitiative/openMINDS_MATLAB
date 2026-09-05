@@ -1,4 +1,4 @@
-classdef VisualStimulusType < openminds.base.ControlledTerm
+classdef VisualStimulusType < openminds.controlledterms.ControlledTerm
 %VisualStimulusType - No description available.
 %
 %   PROPERTIES:
@@ -59,7 +59,7 @@ classdef VisualStimulusType < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 

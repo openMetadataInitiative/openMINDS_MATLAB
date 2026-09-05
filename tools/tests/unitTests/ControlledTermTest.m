@@ -117,10 +117,11 @@ classdef ControlledTermTest < matlab.unittest.TestCase
 
     methods (Access = private)
         function filePath = getControlledTermBasePath(~, modelVersion)
-        % getControlledTermBasePath - Base class generated for a model version
+        % getControlledTermBasePath - Abstract class generated for a version
             filePath = fullfile( ...
                 openminds.internal.constants.Paths.GeneratedFolder, ...
-                modelVersion, "base", "+openminds", "+base", "ControlledTerm.m");
+                modelVersion, "types", "+openminds", "+controlledterms", ...
+                "ControlledTerm.m");
         end
     end
 end

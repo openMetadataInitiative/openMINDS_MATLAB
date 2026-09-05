@@ -1,4 +1,4 @@
-classdef MuscularStructure < openminds.base.ControlledTerm
+classdef MuscularStructure < openminds.controlledterms.ControlledTerm
 %MuscularStructure - No description available.
 %
 %   PROPERTIES:
@@ -55,7 +55,7 @@ classdef MuscularStructure < openminds.base.ControlledTerm
             end
 
             propValues = namedargs2cell(propValues);
-            obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})
+            obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})
         end
     end
 
