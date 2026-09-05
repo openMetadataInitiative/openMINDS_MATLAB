@@ -290,7 +290,7 @@ class MATLABSchemaBuilder(object):
         # TODO: Specify base class. Implement template with configurable base class. Schema or ControlledTerm?
         # Or; just remove this as it's not needed when using separate templates.
         if self._schema_module_name == "controlledTerms":
-            base_class = "openminds.base.ControlledTerm"
+            base_class = "openminds.controlledterms.ControlledTerm"
         else:
             base_class = "openminds.Node"
 
@@ -388,8 +388,9 @@ def save_controlled_term_base_class(version, schema_root_path, class_name_map, j
     """Generate the controlled term base class for a schema version.
 
     The properties shared by the controlled term schemas of a model version
-    differ between versions, so the base class holding them is generated per
-    version alongside the types rather than maintained by hand.
+    differ between versions, so the abstract class holding them is generated
+    per version rather than maintained by hand. It is written with the classes
+    of its own module, as openminds.controlledterms.ControlledTerm.
     """
     base_property_names = _get_controlled_term_base_properties(schema_root_path, version)
     if not base_property_names:
@@ -412,7 +413,7 @@ def save_controlled_term_base_class(version, schema_root_path, class_name_map, j
     classdef_str = _strip_trailing_whitespace(classdef_str)
 
     target_file_path = os.path.join(
-        target_folder(version, "base"), "+openminds", "+base", "ControlledTerm.m"
+        target_folder(version, "types"), "+openminds", "+controlledterms", "ControlledTerm.m"
     )
     os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
     with open(target_file_path, "w", encoding="utf-8") as target_file:

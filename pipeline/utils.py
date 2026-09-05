@@ -22,8 +22,8 @@ def target_folder(version: str, artifact_type: str) -> str:
 
     The build tree is model version first, then artifact type, mirroring
     code/generated/resources in the MATLAB toolbox so that applying a build is
-    a single copy. The artifact types are "types", "mixedtypes",
-    "enumerations" and "base".
+    a single copy. The artifact types are "types", "mixedtypes" and
+    "enumerations".
     """
     return os.path.join(TARGET_ROOT, version, artifact_type)
 

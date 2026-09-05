@@ -1,4 +1,4 @@
-"""Tests for the per-version controlled term base class generation."""
+"""Tests for the per-version controlled term abstract class generation."""
 
 import json
 import os
@@ -121,13 +121,28 @@ class SaveControlledTermBaseClassTest(ControlledTermBaseTestCase):
         with open(os.path.join(self.output_directory, self.generate()), encoding="utf-8") as f:
             return f.read()
 
-    def test_writes_the_base_class_into_the_version_folder(self):
+    def test_extends_the_abstract_class_of_its_own_module(self):
+        # The concrete terms name the generated class in their own module, not
+        # the hand-written machinery it extends.
+        self.write_schema("alpha", ["definition", "name"])
+        os.chdir(self.output_directory)
+        generated = MATLABSchemaBuilder(
+            os.path.join(self.schema_folder, "alpha.schema.omi.json"),
+            self.root,
+            self.class_name_map,
+            initialise_jinja_templates(),
+        ).translate()
+        self.assertIn(
+            "classdef Alpha < openminds.controlledterms.ControlledTerm", generated)
+
+    def test_writes_the_abstract_class_beside_the_terms_of_its_module(self):
         self.write_schema("alpha", ["definition", "name"])
         self.write_schema("beta", ["definition", "name"])
         path = self.generate()
         self.assertEqual(
             path,
-            os.path.join("target", VERSION, "base", "+openminds", "+base", "ControlledTerm.m"),
+            os.path.join(
+                "target", VERSION, "types", "+openminds", "+controlledterms", "ControlledTerm.m"),
         )
         self.assertTrue(os.path.isfile(os.path.join(self.output_directory, path)))
 
@@ -139,7 +154,7 @@ class SaveControlledTermBaseClassTest(ControlledTermBaseTestCase):
 
         generated = self.generated_text()
 
-        self.assertIn("classdef (Abstract) ControlledTerm < openminds.base.ControlledTermBase", generated)
+        self.assertIn("classdef (Abstract) ControlledTerm < openminds.base.ControlledTerm", generated)
         for name in shared:
             self.assertRegex(generated, rf"(?m)^        {name} \(1,1\) string$")
         self.assertNotIn("extraProperty", generated)
@@ -208,14 +223,15 @@ class ControlledTermClassTest(ControlledTermBaseTestCase):
             # Shared properties come from the base class.
             self.assertNotRegex(generated, rf"(?m)^        {name} \(1,1\) string$")
 
-    def test_constructor_forwards_all_properties_to_the_base_class(self):
+    def test_constructor_forwards_all_properties_to_the_abstract_class(self):
         path = self.write_schema(
             "gamma", self.shared, linked_properties={"linkedTerm": ["alpha"]}
         )
         generated = self.translate(path)
         self.assertIn("propValues.?openminds.controlledterms.Gamma", generated)
         self.assertIn(
-            "obj@openminds.base.ControlledTerm(instanceSpec, propValues{:})", generated
+            "obj@openminds.controlledterms.ControlledTerm(instanceSpec, propValues{:})",
+            generated,
         )
 
     def test_required_stays_in_the_base_class(self):
