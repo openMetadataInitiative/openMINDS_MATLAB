@@ -54,6 +54,10 @@ classdef JsonLdSerializer < openminds.base.Serializer
                 allStructs (1,:) {mustBeCellOfStructs}
             end
         
+            % Drop unwanted properties before any renaming, while the
+            % field names are still plain property names.
+            allStructs = obj.applyPropertyFilter(allStructs);
+
             % Normalize empty values to ensure they get encoded to null
             if obj.SerializationConfiguration.IncludeEmptyProperties
                 for i = 1:numel(allStructs)
@@ -120,6 +124,26 @@ classdef JsonLdSerializer < openminds.base.Serializer
     end
 
     methods (Access = private)
+        function allStructs = applyPropertyFilter(obj, allStructs)
+        % applyPropertyFilter - Keep only the configured properties
+        %
+        %   The identifier and type keys are kept regardless, so a filtered
+        %   document still identifies the node it describes.
+
+            propertyFilter = obj.SerializationConfiguration.PropertyFilter;
+            if isempty(propertyFilter)
+                return
+            end
+
+            IDENTITY_FIELDS = ["at_id", "at_type"];
+            keep = unique([propertyFilter, IDENTITY_FIELDS]);
+
+            for i = 1:numel(allStructs)
+                presentFields = string( fieldnames(allStructs{i}) );
+                allStructs{i} = rmfield(allStructs{i}, setdiff(presentFields, keep));
+            end
+        end
+
         function S = addVocabularyMapping(obj, S)
         % addVocabularyMapping - Add vocabulary mapping to json-ld @context key
             arguments
