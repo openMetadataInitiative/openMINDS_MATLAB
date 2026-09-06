@@ -1,0 +1,7 @@
+% openMINDS metadata types - {{ version }}
+%   The types folder contains MATLAB classes for metadata types of the
+%   following openMINDS modules:
+%
+{%- for module in modules %}
+%{{ module.padded }} - openminds.{{ module.name }} is a module.
+{%- endfor %}

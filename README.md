@@ -28,6 +28,8 @@ target/
     └── enumerations/  +openminds/+enum/…      the model's types and modules as enumerations
 ```
 
+Each of the three folders also gets a `README.md`, and the types folder a `+openminds/Contents.m` listing the modules of that version. They describe generated content, so they are generated with it.
+
 The model version comes first because a version is the unit the toolbox selects: all of its folders are added to and removed from the MATLAB search path together. This mirrors `code/generated/resources` in the toolbox, so applying a build is a single copy.
 
 Each version also gets `types/+openminds/+controlledterms/ControlledTerm.m`, an abstract class holding the properties its controlled terms share. That set differs between model versions, which is why the class is generated per version rather than maintained by hand. The concrete controlled terms extend it, and it extends `openminds.base.ControlledTerm`, the hand-written class in the toolbox that holds the behaviour common to every version.
@@ -38,7 +40,7 @@ Each version also gets `types/+openminds/+controlledterms/ControlledTerm.m`, an 
 ./scripts/apply-new-build.sh <toolbox root>
 ```
 
-This replaces `code/generated/resources/` in a toolbox checkout with the contents of `target/`, then restores the hand-written readme and contents files that live among the generated classes. Every model version is replaced, so a version the model has dropped does not linger in the toolbox.
+This replaces `code/generated/resources/` in a toolbox checkout with the contents of `target/`. Every model version is replaced, so a version the model has dropped does not linger in the toolbox.
 
 ## Tests
 

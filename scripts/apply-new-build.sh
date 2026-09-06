@@ -4,8 +4,7 @@
 #
 # DESCRIPTION:
 #   Replaces the generated classes of the openMINDS MATLAB toolbox with the
-#   contents of the target/ directory, then restores the hand-written readme
-#   and contents files that live among them.
+#   contents of the target/ directory.
 #
 #   The build tree is shaped like its destination, model version first, so
 #   applying a build is one copy.
@@ -20,8 +19,6 @@
 # REQUIREMENTS:
 #   - target/ directory must exist in current working directory
 #   - ROOT_FOLDER/code/generated/resources/ must exist
-#   - ROOT_FOLDER/code/resources/ must hold the content_files and
-#     readme_files that are restored on top of the generated classes
 #
 set -euo pipefail
 
@@ -51,27 +48,13 @@ if [[ ! -d "target" ]]; then
 fi
 
 GENERATED_DIR="$ROOT/code/generated/resources"
-OVERLAY_DIR="$ROOT/code/resources"
 
 if [[ ! -d "$GENERATED_DIR" ]]; then
     echo "Error: expected the generated classes at '$GENERATED_DIR'." >&2
     exit 1
 fi
 
-for overlay in content_files readme_files; do
-    if [[ ! -d "$OVERLAY_DIR/$overlay" ]]; then
-        echo "Error: expected the '$overlay' overlay at '$OVERLAY_DIR'." >&2
-        exit 1
-    fi
-done
-
 # Every model version is replaced, so a version the model has dropped does not
 # linger in the toolbox
 rm -rf "${GENERATED_DIR:?}"/*
 cp -R target/. "$GENERATED_DIR"/
-
-# Restore the hand-written files that live among the generated classes. Both
-# overlays are laid out like their destination, so each is one copy.
-for overlay in content_files readme_files; do
-    cp -R "$OVERLAY_DIR/$overlay"/. "$GENERATED_DIR"/
-done

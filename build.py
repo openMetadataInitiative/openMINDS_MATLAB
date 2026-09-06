@@ -10,6 +10,7 @@ from pipeline.utils import (
     initialise_jinja_templates,
     save_resource_files,
     save_enumeration_classes,
+    save_overlay_files,
     get_class_name_map,
     SCHEMA_FILE_EXTENSION )
 
@@ -60,6 +61,8 @@ for schema_version in schema_loader.get_schema_versions():
     save_controlled_term_base_class(
         schema_version, schema_loader.schemas_sources, class_name_map, jinja_templates)
     
+    save_overlay_files(schema_version, schema_loader, jinja_templates)
+
     save_enumeration_classes("Types", schema_version, schema_loader, jinja_templates["types_enumeration"])
     save_enumeration_classes("Modules", schema_version, schema_loader, jinja_templates["modules_enumeration"])
 
