@@ -30,6 +30,11 @@
 %   mustBeOpenMINDSIRI      - Validate that a value is an openMINDS IRI
 %   mustBeValidModelVersion - Validate that a value names a model version
 %
+% Type introspection
+%   introspection.MetaType      - Describes the properties of a metadata type
+%   introspection.fromInstance  - Describe the type of an instance, cached
+%   introspection.fromClassName - Describe a type by name, cached
+%
 % Packages
 %   base                    - Base classes the generated types are built on
 %   interface               - Contracts implemented by toolbox extensions

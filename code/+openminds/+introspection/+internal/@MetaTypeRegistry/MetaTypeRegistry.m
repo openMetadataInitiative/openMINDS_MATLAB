@@ -6,12 +6,12 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
 % either type names or class names.
 %
 % Example:
-%   registry = openminds.internal.meta.MetaTypeRegistry.getSingleton();
+%   registry = openminds.introspection.internal.MetaTypeRegistry.getSingleton();
 %   personType = registry('Person');
 %   % Access type information
 %   disp(personType.PropertyNames);
 %
-% See also: openminds.internal.meta.Type
+% See also: openminds.introspection.MetaType
 
     properties (Constant, Access = private)
         % Name used to store the singleton instance in application data
@@ -109,7 +109,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         %   isValid - True if the key is valid, false otherwise
             
             arguments
-                obj (1,1) openminds.internal.meta.MetaTypeRegistry
+                obj (1,1) openminds.introspection.internal.MetaTypeRegistry
                 keyName (1,1) string
             end
 
@@ -123,7 +123,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         function validateKey(obj, keyName)
         % validateKey - Check if a registry key is valid and throw error if not
             arguments
-                obj (1,1) openminds.internal.meta.MetaTypeRegistry
+                obj (1,1) openminds.introspection.internal.MetaTypeRegistry
                 keyName (1,1) string
             end
 
@@ -168,7 +168,7 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
                 end
             else
                 % Create and cache a new object
-                metaType = openminds.internal.meta.Type(typeEnum.ClassName);
+                metaType = openminds.introspection.MetaType(typeEnum.ClassName);
                 obj.Registry(keyName) = {metaType};
             end
             

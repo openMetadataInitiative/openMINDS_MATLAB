@@ -190,7 +190,7 @@ classdef (Abstract) Serializer < openminds.base.Transformer
         % classes carry it as a scalar validator, and the reference
         % implementation and the official instance library both follow it.
 
-            metaType = openminds.internal.meta.fromInstance(node);
+            metaType = openminds.introspection.fromInstance(node);
 
             isSingleValue = metaType.isPropertyValueScalar(propertyName) ...
                 && isscalar(values);
@@ -226,7 +226,7 @@ classdef (Abstract) Serializer < openminds.base.Transformer
         % datetime display format, which the reference implementation
         % cannot read and which drops the time zone.
 
-            metaType = openminds.internal.meta.fromInstance(instance);
+            metaType = openminds.introspection.fromInstance(instance);
 
             for propertyName = string(fieldnames(S))'
                 value = S.(propertyName);
@@ -246,7 +246,7 @@ classdef (Abstract) Serializer < openminds.base.Transformer
         % setPropertyValue; a primitive value comes straight from the
         % instance and would otherwise encode as a scalar.
 
-            metaType = openminds.internal.meta.fromInstance(instance);
+            metaType = openminds.introspection.fromInstance(instance);
 
             for propertyName = string(fieldnames(S))'
                 value = S.(propertyName);
