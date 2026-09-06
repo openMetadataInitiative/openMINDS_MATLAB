@@ -35,7 +35,7 @@ MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.
 ## Requirements and Installation
 [(Back to top)](#openminds-metadata-models-for-matlab)
 
-openMINDS for MATLAB requires **MATLAB R2022b** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
+openMINDS for MATLAB requires **MATLAB R2022a** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
 
 ### Cloning the repository
 ```matlab
@@ -53,7 +53,7 @@ disp( openminds.toolboxversion )
 ```
 
 ```TextOutput
-Version 0.9.1
+Version 0.10.0
 ```
 
 If you have installed **openMINDS_MATLAB** and the above command does not work, most likely **openMINDS_MATLAB** is <u>not</u> added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html).
