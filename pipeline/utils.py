@@ -133,6 +133,8 @@ def initialise_jinja_templates():
         - `"controlledterm_base_class"`: Template for the controlled term base class.
         - `"modules_enumeration"`: Template for modules enumeration generation.
         - `"types_enumeration"`: Template for types enumeration generation.
+        - `"contents_file"`: Template for the Contents.m of a version's types.
+        - `"readme_file"`: Template for the readme of a generated folder.
 
     Notes:
     ------
@@ -163,6 +165,8 @@ def initialise_jinja_templates():
         "mixedtype_class": jinja_environment.get_template("mixedtype_class_template.txt"),
         "modules_enumeration": jinja_environment.get_template("modules_enumeration_template.txt"),
         "types_enumeration": jinja_environment.get_template("types_enumeration_template.txt"),
+        "contents_file": jinja_environment.get_template("contents_file_template.txt"),
+        "readme_file": jinja_environment.get_template("readme_file_template.txt"),
     }
 
     return jinja_templates
@@ -275,6 +279,71 @@ def save_resource_files(version, schema_path_list, schema_root_path):
     with open(os.path.join(target_directory, "alias.json"), "w", encoding="utf-8") as f:
         json.dump(alias_json, f, indent=2)
         f.write("\n")
+
+# What each generated folder holds, for the readme of that folder
+GENERATED_FOLDER_DESCRIPTIONS = {
+    "types": (
+        "Types",
+        "The folder contains classes for all metadata types of the {version} "
+        "version of the openMINDS metadata framework."),
+    "mixedtypes": (
+        "Mixed types",
+        "It contains wrapper classes for linked or embedded properties that "
+        "can be of different / mixed types."),
+    "enumerations": (
+        "Enumerations",
+        "It contains enumeration classes for the modules and metadata types of "
+        "the openMINDS metadata framework."),
+}
+
+
+def save_overlay_files(version, schema_loader, jinja_templates):
+    """Write the readme of each generated folder and the Contents.m of a version.
+
+    These describe generated content and were maintained by hand, which meant
+    they were forgotten whenever a model version was added: the newest versions
+    had no Contents.m at all, and the one for the latest version had been
+    missing a module since that module was introduced.
+    """
+    module_names = _get_module_names(schema_loader, version)
+    padding_width = max(len(name) for name in module_names) + 5
+
+    contents = jinja_templates["contents_file"].render({
+        "version": version,
+        "modules": [
+            {"name": name, "padded": name.rjust(padding_width)}
+            for name in module_names
+        ],
+    })
+    _write_generated_file(
+        os.path.join(target_folder(version, "types"), "+openminds", "Contents.m"),
+        contents)
+
+    for artifact_type, (title, description) in GENERATED_FOLDER_DESCRIPTIONS.items():
+        readme = jinja_templates["readme_file"].render({
+            "title": title,
+            "version": version,
+            "description": description.format(version=version),
+        })
+        _write_generated_file(
+            os.path.join(target_folder(version, artifact_type), "README.md"), readme)
+
+
+def _get_module_names(schema_loader, version):
+    """The MATLAB namespace name of every module a version defines, sorted."""
+    root_path = schema_loader.schemas_sources
+    module_names = {
+        namespace_name(parse_schema_file_path(schema_file, root_path)["module_name"])
+        for schema_file in schema_loader.find_schemas(version)
+    }
+    return sorted(module_names)
+
+
+def _write_generated_file(target_file_path, text):
+    os.makedirs(os.path.dirname(target_file_path), exist_ok=True)
+    with open(target_file_path, "w", encoding="utf-8") as target_file:
+        target_file.write(_strip_trailing_whitespace(text))
+
 
 def save_enumeration_classes(enum_type, version, schema_loader, enumeration_template:Template):
 
