@@ -12,13 +12,18 @@ generated/
     └── <model version>/
         ├── types/         +openminds/…            classes for the metadata types
         ├── mixedtypes/    +openminds/…            wrappers for properties that accept several types
-        ├── enumerations/  +openminds/+enum/…      the model's types and modules as enumerations
-        └── base/          +openminds/+base/…      the controlled term base class of this version
+        └── enumerations/  +openminds/+enum/…      the model's types and modules as enumerations
 ```
 
-The model version comes first, because a version is the unit you select. All
-four folders of one version belong together, and folders of different versions
-are never on the path at the same time.
+The model version comes first, because a version is the unit you select. The
+three folders of one version belong together, and folders of different
+versions are never on the path at the same time.
+
+`types/+openminds/+controlledterms/ControlledTerm.m` is the abstract class the
+controlled terms of that version extend. It holds the properties they share,
+which differ between model versions, so it is generated with them rather than
+maintained by hand. It extends `openminds.base.ControlledTerm`, the hand-written
+class that holds what every controlled term shares whatever the version.
 
 ## Why "resources"
 
@@ -34,5 +39,5 @@ Selecting a version is therefore deliberate, and `openminds.startup` and
 openminds.startup("v4.0")
 ```
 
-They add the four folders of the requested version and remove any other
-version's, so exactly one model version is ever reachable.
+They add the folders of the requested version and remove any other version's,
+so exactly one model version is ever reachable.
