@@ -71,10 +71,6 @@ function selectModelVersion(versionNumber)
     % enumerations and the controlled term base class generated for it.
     addpath(genpath( fullfile(generatedFolder, versionAsString) ))
 
-    % Version selection can replace shared abstract class files.
-    % Clear cached class definitions so MATLAB sees the active files.
-    clear classes;
-
     % Add a second pause for changes to take effect.
     pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
 end
