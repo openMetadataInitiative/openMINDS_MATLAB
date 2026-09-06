@@ -246,7 +246,22 @@ classdef MetaType < handle
         end
 
         function className = getMixedTypeForProperty(obj, propertyName)
-        % getMixedTypeForProperty - Get class name of MixedTypeSet for given property
+        % getMixedTypeForProperty - Class name of the mixed-type container
+        %
+        %   Returns the name of the generated container class that holds the
+        %   value of a property accepting more than one type.
+        %
+        %   Treat the result as an opaque handle to hand back to the toolbox,
+        %   not as a name to construct from or to write into your own code.
+        %   These classes are generated per property, they live in an
+        %   internal namespace, and they are not part of the public API.
+        %
+        %   To ask which types a property accepts, which is usually the real
+        %   question, use listLinkedTypesForProperty or
+        %   listEmbeddedTypesForProperty. Both answer in public type names.
+        %
+        %   See also listLinkedTypesForProperty, listEmbeddedTypesForProperty,
+        %   isPropertyMixedType, openminds.utility.isMixedInstance
             metaProperty = obj.getMetaProperty(propertyName);
             className = obj.getDeclaredClassName(metaProperty);
 
