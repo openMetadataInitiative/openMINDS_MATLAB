@@ -9,9 +9,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  test-pipeline:
+    name: Test pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.11
+
+      - name: Run tests
+        run: |
+          pip install -r requirements.txt
+          python -m unittest discover -s tests -v
+
   build:
     name: Build classes
     runs-on: ubuntu-latest
+    needs: test-pipeline
     outputs:
       build_updated: ${{ steps.check_changes.outputs.changes_detected }}
     steps:

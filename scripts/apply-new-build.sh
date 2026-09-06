@@ -40,6 +40,6 @@ if [[ "$ROOT" == "" || "$ROOT" == "/" ]]; then
     exit 1
 fi
 
-rm -rf "$ROOT"/code/{types,mixedtypes,enumerations}/*
+rm -rf "$ROOT"/code/{types,mixedtypes,enumerations,base}/*
 cp -R target/* "$ROOT"/code/
 cp -R "$ROOT"/code/internal/resources/{content_files,readme_files}/* "$ROOT"/code/
