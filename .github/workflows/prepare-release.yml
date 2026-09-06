@@ -46,8 +46,13 @@ jobs:
             echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
           fi
 
+      # v3 so the cache key matches the one the test and export workflows
+      # create on main; with no release given this resolves to latest, the
+      # same install those workflows cache.
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v2
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          cache: true
 
       - name: Update codemeta.json
         uses: matlab-actions/run-command@v2
