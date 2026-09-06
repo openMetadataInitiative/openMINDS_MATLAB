@@ -13,17 +13,27 @@ function versionNum = getModelVersion(outputType)
     if isempty(lastTic); lastTic = uint64(0); end
 
     if toc(lastTic) > 1
-        typeFolder = fullfile(openminds.internal.rootpath, 'types/');
-        pathSplit = strsplit(path, pathsep);
-    
-        matchedIdx = find(contains(pathSplit, typeFolder));
-    
-        if numel(matchedIdx) > 1
+        % The selected version is the one whose generated folders are on the
+        % search path. A version contributes several entries, so the version
+        % names are reduced to the distinct ones before they are counted.
+        generatedFolder = string(openminds.internal.constants.Paths.GeneratedFolder) + filesep;
+        pathEntries = string( strsplit(path, pathsep) );
+
+        pathEntries = pathEntries(startsWith(pathEntries, generatedFolder));
+        versionNames = extractAfter(pathEntries, strlength(generatedFolder));
+        versionNames = unique( extractBefore(versionNames + filesep, filesep) );
+
+        if isempty(versionNames)
+            error('openMINDS:NoModelVersionOnPath', ...
+                ['No openMINDS model version is on the search path. ', ...
+                 'Call openminds.startup to select one.'])
+        end
+
+        if numel(versionNames) > 1
             warning('Multiple openMINDS model versions are present on the search path.');
         end
-    
-        versionName = strrep(pathSplit{matchedIdx(1)}, typeFolder, '');
-        cachedVersionNumber = openminds.internal.utility.VersionNumber(versionName);
+
+        cachedVersionNumber = openminds.internal.utility.VersionNumber(versionNames(1));
         cachedVersionNumber.Format = "vX.Y";
         lastTic = tic();
     end

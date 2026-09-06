@@ -1,4 +1,4 @@
-classdef MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
+classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
 % MixedTypeSet - Abstract class representing a set of types that can mixed
 
 % Many properties of openMINDS metadata schemas/types can hold linked or

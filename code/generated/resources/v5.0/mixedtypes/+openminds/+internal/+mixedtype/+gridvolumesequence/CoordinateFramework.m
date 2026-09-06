@@ -1,0 +1,9 @@
+classdef CoordinateFramework < openminds.base.MixedTypeSet
+    properties (Constant, Hidden)
+        ALLOWED_TYPES = [ ...
+            "openminds.sands.atlas.CommonCoordinateFrameworkVersion", ...
+            "openminds.sands.nonatlas.CustomCoordinateFramework" ...
+        ]
+        IS_SCALAR = true
+    end
+end

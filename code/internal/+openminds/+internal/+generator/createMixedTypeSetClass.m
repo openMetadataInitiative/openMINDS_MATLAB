@@ -31,7 +31,8 @@ function className = createMixedTypeSetClass(schemaName, propertyName, allowedTy
     
     % Define directory and file paths
     templateDirectory = fullfile(openminds.internal.rootpath(), 'internal', 'resources', 'templates');
-    rootTargetDirectory = fullfile(openminds.internal.rootpath(), 'mixedtypes', packageFolderNames{:});
+    rootTargetDirectory = fullfile(openminds.internal.constants.Paths.GeneratedFolder, ...
+        openminds.getModelVersion(), 'mixedtypes', packageFolderNames{:});
     
     templateFilepath = fullfile(templateDirectory, 'MixedTypeTemplate.m');
     saveFilepath = fullfile(rootTargetDirectory, sprintf('%s.m', propertyName));

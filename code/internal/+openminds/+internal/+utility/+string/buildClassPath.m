@@ -16,7 +16,8 @@ function filePath = buildClassPath(schemaClassName, schemaCategory, schemaModule
     schemaCategory = strrep( schemaCategory, 'schemas', ''); % Todo ??
     schemaCategory = lower( schemaCategory );
     schemaModule = lower(schemaModule);
-    rootPath = openminds.internal.constants.Paths.TypesFolder;
+    rootPath = fullfile( openminds.internal.constants.Paths.GeneratedFolder, ...
+        openminds.getModelVersion(), 'types' );
     folderPath = fullfile( rootPath, '+openminds', ['+', schemaModule] );
 
     if ~isempty(schemaCategory) % Append schema category subfolder if relevant
