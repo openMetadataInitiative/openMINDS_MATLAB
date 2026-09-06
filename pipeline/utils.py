@@ -284,16 +284,16 @@ def save_resource_files(version, schema_path_list, schema_root_path):
 GENERATED_FOLDER_DESCRIPTIONS = {
     "types": (
         "Types",
-        "The folder contains classes for all metadata types of the "
-        "{version} version of the openMINDS metadata model."),
+        "The folder contains classes for all metadata types of the {version} "
+        "version of the openMINDS metadata framework."),
     "mixedtypes": (
         "Mixed types",
         "It contains wrapper classes for linked or embedded properties that "
         "can be of different / mixed types."),
     "enumerations": (
         "Enumerations",
-        "It contains enumeration classes for the openMINDS models and "
-        "metadata types"),
+        "It contains enumeration classes for the modules and metadata types of "
+        "the openMINDS metadata framework."),
 }
 
 
