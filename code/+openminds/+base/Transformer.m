@@ -36,7 +36,32 @@ classdef (Abstract) Transformer < openminds.internal.graph.TraversalCore
 %   node once; a transformer has to produce a value everywhere a node
 %   appears.
 %
-%   See also openminds.base.Visitor, openminds.internal.graph.TraversalCore
+%
+%   INHERITED:
+%   ----------
+%   Traversal bookkeeping is shared with the other graph walkers and is no
+%   less part of this class's contract:
+%
+%       reset                Public. Clear the visited set so the object can
+%                            be used for another traversal.
+%       wasVisited           Protected. Whether an identifier has been seen
+%       markVisited          in this traversal, and the operations that
+%       unmarkVisited        record or forget it.
+%       visitedNode          Protected. The object already visited for a
+%                            node's identifier.
+%       getLinkedEdges       Protected. The linked and embedded edges of a
+%       getEmbeddedEdges     node.
+%       setEdgeChildren      Protected. Write children back to a property.
+%       nodeKey              Static, protected. The key an identifier is
+%                            tracked under.
+%
+%   OVERRIDABLE DEFAULTS:
+%   ---------------------
+%       endNode           finish a node once its children are composed
+%       representRevisit  represent a node met again inside its own subtree
+%       setPropertyValue  place a property's values into the result
+%
+%   See also openminds.base.Visitor, openminds.Node
 
     methods (Sealed)
         function result = transform(obj, node)
