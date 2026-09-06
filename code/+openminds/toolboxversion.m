@@ -1,7 +1,7 @@
 function versionStr = toolboxversion()
 % toolboxversion - Get the version identifier for the openMINDS toolbox
 
-    rootPath = openminds.internal.rootpath();
+    rootPath = openminds.toolboxdir();
     contentsFile = fullfile(rootPath, 'Contents.m');
 
     fileStr = fileread(contentsFile);

@@ -11,7 +11,7 @@ classdef Paths < handle
         % Everything written by the openMINDS pipeline, one subfolder per
         % model version. Named "resources" so that genpath skips it and no
         % addpath can put two model versions on the path at once.
-        GeneratedFolder = fullfile(openminds.internal.rootpath(), 'generated', 'resources')
+        GeneratedFolder = fullfile(openminds.toolboxdir(), 'generated', 'resources')
 
         % Root of everything this toolbox stores under the user path
         UserPath = fullfile(userpath, "openMINDS_MATLAB")
