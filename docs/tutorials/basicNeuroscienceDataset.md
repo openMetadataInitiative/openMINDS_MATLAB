@@ -1,73 +1,72 @@
+<a id="T_1bb4"></a>
 
 # Creating openMINDS Metadata: A Basic Introduction
 
 This tutorial demonstrates how to create, link, and save metadata using the openMINDS MATLAB toolbox. We will create a simplified neuroscience dataset with subjects, contributors, organizations, and experimental details.
 
-
 The openMINDS (Open Metadata Initiative for Neuroscience Data Structures) provides standardized metadata models for neuroscience data. This standardization facilitates data sharing, discovery, and reuse.
-
 
 Please refer to the [openMINDS documentation](https://openminds-documentation.readthedocs.io/en/latest/schema_specifications.html) to learn more about the available metadata types.
 
-
 This tutorial covers: 
 
-<a name="beginToc"></a>
+<!-- Begin Toc -->
 
 ## Table of Contents
-&emsp;[1. Creating a Metadata Collection](#1-creating-a-metadata-collection)
+&#8195;[1. Creating a Metadata Collection](#H_589e)
  
-&emsp;[2. Creating Basic Metadata Instances](#2-creating-basic-metadata-instances)
+&#8195;[2. Creating Basic Metadata Instances](#H_9d10)
  
-&emsp;&emsp;[2.1 Create organization instances](#2-1-create-organization-instances)
+&#8195;&#8195;[2.1 Create organization instances](#H_37a5)
  
-&emsp;&emsp;[2.2 Create contact information instances](#2-2-create-contact-information-instances)
+&#8195;&#8195;[2.2 Create contact information instances](#H_5d03)
  
-&emsp;&emsp;[2.3 Create person and affiliation instances](#2-3-create-person-and-affiliation-instances)
+&#8195;&#8195;[2.3 Create person and affiliation instances](#H_500c)
  
-&emsp;[3. Creating Dataset Metadata](#3-creating-dataset-metadata)
+&#8195;[3. Creating Dataset Metadata](#H_72ef)
  
-&emsp;&emsp;[3.1 Create a DOI (Digital Object Identifier)](#3-1-create-a-doi-digital-object-identifier-)
+&#8195;&#8195;[3.1 Create a DOI (Digital Object Identifier)](#H_704f)
  
-&emsp;&emsp;[3.2 Create a license](#3-2-create-a-license)
+&#8195;&#8195;[3.2 Create a license](#H_151d)
  
-&emsp;&emsp;[3.3 Create a file repository](#3-3-create-a-file-repository)
+&#8195;&#8195;[3.3 Create a file repository](#H_25ed)
  
-&emsp;&emsp;[3.4 Create a behavioral protocol](#3-4-create-a-behavioral-protocol)
+&#8195;&#8195;[3.4 Create a behavioral protocol](#H_3615)
  
-&emsp;&emsp;[3.5 Create controlled terms](#3-5-create-controlled-terms)
+&#8195;&#8195;[3.5 Create controlled terms](#H_727f)
  
-&emsp;&emsp;[3.6 Create a custom term suggestion (for keywords that don't exist in controlled vocabularies)](#3-6-create-a-custom-term-suggestion-for-keywords-that-don-t-exist-in-controlled-vocabularies-)
+&#8195;&#8195;[3.6 Create a custom term suggestion (for keywords that don't exist in controlled vocabularies)](#H_7923)
  
-&emsp;&emsp;[3.7 Create dataset and dataset version](#3-7-create-dataset-and-dataset-version)
+&#8195;&#8195;[3.7 Create dataset and dataset version](#H_99d7)
  
-&emsp;[4. Creating Subject Metadata](#4-creating-subject-metadata)
+&#8195;[4. Creating Subject Metadata](#H_9f96)
  
-&emsp;&emsp;[4.1 Create a species (strain)](#4-1-create-a-species-strain-)
+&#8195;&#8195;[4.1 Create a species (strain)](#H_1f72)
  
-&emsp;&emsp;[4.2 Create biological sex controlled term](#4-2-create-biological-sex-controlled-term)
+&#8195;&#8195;[4.2 Create biological sex controlled term](#H_72ab)
  
-&emsp;&emsp;[4.3 Create subject state attributes](#4-3-create-subject-state-attributes)
+&#8195;&#8195;[4.3 Create subject state attributes](#H_9593)
  
-&emsp;&emsp;[4.4 Create a subject](#4-4-create-a-subject)
+&#8195;&#8195;[4.4 Create a subject](#H_40d7)
  
-&emsp;&emsp;[4.5 Create another subject](#4-5-create-another-subject)
+&#8195;&#8195;[4.5 Create another subject](#H_6998)
  
-&emsp;&emsp;[4.6 Create and add subject states for each of the subjects](#4-6-create-and-add-subject-states-for-each-of-the-subjects)
+&#8195;&#8195;[4.6 Create and add subject states for each of the subjects](#H_61c0)
  
-&emsp;&emsp;[4.7 Link subjects to the dataset](#4-7-link-subjects-to-the-dataset)
+&#8195;&#8195;[4.7 Link subjects to the dataset](#H_189d)
  
-&emsp;[5. Adding Instances to Collection and Saving](#5-adding-instances-to-collection-and-saving)
+&#8195;[5. Adding Instances to Collection and Saving](#H_5378)
  
-&emsp;&emsp;[5.1 Add the dataset version to the collection](#5-1-add-the-dataset-version-to-the-collection)
+&#8195;&#8195;[5.1 Add the dataset version to the collection](#H_75d6)
  
-&emsp;&emsp;[5.2 Save the collection to a JSON\-LD file](#5-2-save-the-collection-to-a-json-ld-file)
+&#8195;&#8195;[5.2 Save the collection to a JSON\-LD file](#H_28a1)
  
-&emsp;&emsp;[5.3 Display the saved JSON\-LD content](#5-3-display-the-saved-json-ld-content)
+&#8195;&#8195;[5.3 Display the saved JSON\-LD content](#H_0727)
  
-&emsp;[6. Summary](#6-summary)
+&#8195;[6. Summary](#H_3f72)
  
-<a name="endToc"></a>
+<!-- End Toc -->
+<a id="H_589e"></a>
 
 # 1. Creating a Metadata Collection
 
@@ -79,18 +78,21 @@ collection = openminds.Collection(...
     "Name", "Neuroscience Dataset Example", ...
     "Description", "A tutorial dataset for learning openMINDS metadata creation");
 
+
 disp(collection)
 ```
 
 ```matlabTextOutput
   Collection with properties:
 
+
              Name: "Neuroscience Dataset Example"
       Description: "A tutorial dataset for learning openMINDS metadata creation"
             Nodes: dictionary with unset key and value types
-     LinkResolver: []
     MetadataStore: [0x0 openminds.internal.FileMetadataStore]
 ```
+
+<a id="H_9d10"></a>
 
 # 2. Creating Basic Metadata Instances
 
@@ -100,6 +102,8 @@ Let us create instances for researchers, their contact information, and their or
 % Define a utility function for creating instance IDs
 createId = @(str) lower(sprintf('_:%s', replace(str, ' ', '-')));
 ```
+
+<a id="H_37a5"></a>
 
 ## 2.1 Create organization instances
 ```matlab
@@ -111,6 +115,7 @@ university = openminds.core.actors.Organization(...
     "countryOfFormation", openminds.controlledterms.SovereignState("Germany"), ...
     "type", openminds.controlledterms.OrganizationType("legalEntity"));
 
+
 % Second approach: Create empty instance and set properties
 researchCenter = openminds.core.actors.Organization();
 researchCenter.id = createId("Brain Research Center");
@@ -119,6 +124,7 @@ researchCenter.acronym = "BRC";
 researchCenter.countryOfFormation = openminds.controlledterms.SovereignState("Germany");
 researchCenter.type = openminds.controlledterms.OrganizationType("organizationalUnit");
 researchCenter.hasParent = university;
+
 
 % Display selected Organization fields:
 fprintf("%s (%s)\n", university.name, university.acronym)
@@ -136,6 +142,8 @@ fprintf("%s (%s)\n", researchCenter.name, researchCenter.acronym)
 Brain Research Center (BRC)
 ```
 
+<a id="H_5d03"></a>
+
 ## 2.2 Create contact information instances
 ```matlab
 contactPI = openminds.core.actors.ContactInformation(...
@@ -150,7 +158,9 @@ disp(contactPI)
 ```matlabTextOutput
   ContactInformation (_:contact-pi) with properties:
 
+
     email: "pi@neuroscience.edu"
+
 
   Required Properties: email
 ```
@@ -162,16 +172,20 @@ disp(contactPostdoc)
 ```matlabTextOutput
   ContactInformation (_:contact-postdoc) with properties:
 
+
     email: "postdoc@neuroscience.edu"
+
 
   Required Properties: email
 ```
+
+<a id="H_500c"></a>
 
 ## 2.3 Create person and affiliation instances
 
 A **`Person`** describes an individual. The affiliation is represented as a separate **`Affiliation`** instance linking that person to an organization.
 
-
+<a id="H_21D87695"></a>
 ```matlab
 % Principal Investigator
 pi = openminds.core.actors.Person(...
@@ -181,6 +195,7 @@ pi = openminds.core.actors.Person(...
     "preferredName", "Jane Doe", ...
     "contactInformation", contactPI);
 
+
 % Postdoc
 postdoc = openminds.core.actors.Person(...
     "id", createId("john-smith"), ...
@@ -189,14 +204,17 @@ postdoc = openminds.core.actors.Person(...
     "preferredName", "John Smith", ...
     "contactInformation", contactPostdoc);
 
+
 % Affiliations are represented separately from the Person instances
 piAffiliation = openminds.core.actors.Affiliation(...
     "person", pi, ...
     "organization", university);
 
+
 postdocAffiliation = openminds.core.actors.Affiliation(...
     "person", postdoc, ...
     "organization", researchCenter);
+
 
 % Display the Person metadata instances:
 disp(pi)
@@ -205,13 +223,15 @@ disp(pi)
 ```matlabTextOutput
   Person (_:jane-doe) with properties:
 
+
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: pi@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
+     digitalIdentifier: [1x0 DigitalIdentifier]
             familyName: "Doe"
              givenName: "Jane"
          preferredName: "Jane Doe"
+
 
   Required Properties: preferredName
 ```
@@ -223,20 +243,26 @@ disp(postdoc)
 ```matlabTextOutput
   Person (_:john-smith) with properties:
 
+
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: postdoc@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
+     digitalIdentifier: [1x0 DigitalIdentifier]
             familyName: "Smith"
              givenName: "John"
          preferredName: "John Smith"
 
+
   Required Properties: preferredName
 ```
+
+<a id="H_72ef"></a>
 
 # 3. Creating Dataset Metadata
 
 Next we create metadata for the dataset and for one concrete dataset version. Contributor roles are represented with Contribution instances. Contributor affiliations are represented separately with Affiliation instances that link people to organizations.
+
+<a id="H_704f"></a>
 
 ## 3.1 Create a DOI (Digital Object Identifier)
 ```matlab
@@ -244,6 +270,8 @@ doi = openminds.core.digitalidentifier.DOI(...
     'id', createId('dataset-doi'), ...
     'identifier', 'https://doi.org/10.1234/example.2023.001');
 ```
+
+<a id="H_151d"></a>
 
 ## 3.2 Create a license
 
@@ -258,16 +286,19 @@ license = openminds.core.data.License(...
     "legalCode", "https://creativecommons.org/licenses/by/4.0/legalcode", ...
     "webpage", "https://creativecommons.org/licenses/by/4.0");
 
+
 disp(license)
 ```
 
 ```matlabTextOutput
   License (_:cc-by-4) with properties:
 
+
      fullName: "Creative Commons Attribution 4.0 International"
     legalCode: "https://creativecommons.org/licenses/by/4.0/legalcode"
     shortName: "CC-BY-4.0"
       webpage: "https://creativecommons.org/licenses/by/4.0"
+
 
   Required Properties: fullName, legalCode, shortName
 ```
@@ -276,8 +307,10 @@ disp(license)
 % The variable "license" now holds the reusable License instance.
 ```
 
-## 3.3 Create a file repository
+<a id="H_25ed"></a>
 
+## 3.3 Create a file repository
+<a id="H_20CDEE8F"></a>
 Note: This is only relevant if data is stored in external repository. If a dataset is submitted via EBRAINS, the file repository is created and added as part of the curation process
 
 ```matlab
@@ -288,6 +321,8 @@ repository = openminds.core.data.FileRepository(...
     'hostedBy', university);
 ```
 
+<a id="H_3615"></a>
+
 ## 3.4 Create a behavioral protocol
 ```matlab
 protocol = openminds.core.research.BehavioralProtocol(...
@@ -297,13 +332,13 @@ protocol = openminds.core.research.BehavioralProtocol(...
     'Each stimulus was associated with a specific outcome (reward, nothing, or punishment).']);
 ```
 
+<a id="H_727f"></a>
+
 ## 3.5 Create controlled terms
 
 Controlled terms are metadata types with a corresponding terminology developed by the Open Metadata Initiative, available here: [https://github.com/openMetadataInitiative/openMINDS\_instances](https://github.com/openMetadataInitiative/openMINDS_instances)
 
-
 To see a list of available instances, use the **`listInstances`**. 
-
 
 **Note**: ControlledTerm types accept the instance names as an input to the class constructor directly (See below for examples).
 
@@ -320,20 +355,26 @@ ans = 6x1 string
 "inVitro"   
 "inVivo"    
 
+
 ```
 
 ```matlab
 % These are predefined terms from controlled vocabularies
 preparationType = openminds.controlledterms.PreparationType("inVivo");
 
+
 dataType = openminds.controlledterms.SemanticDataType("experimentalData");
+
 
 experimentalApproach1 = openminds.controlledterms.ExperimentalApproach("behavior");
 experimentalApproach2 = openminds.controlledterms.ExperimentalApproach("electrophysiology");
 
+
 technique = openminds.controlledterms.Technique("extracellularElectrophysiology");
 
+
 ethicsJurisdiction = openminds.controlledterms.SovereignState("Germany");
+
 
 accessibility = openminds.core.miscellaneous.Accessibility(...
     "channel", openminds.controlledterms.AccessChannel("virtualAccess"), ...
@@ -342,9 +383,12 @@ accessibility = openminds.core.miscellaneous.Accessibility(...
     "paymentModel", openminds.controlledterms.PaymentModelType("zero-costPaymentModel"), ...
     "process", openminds.controlledterms.AccessProcessType("immediateAccess"));
 
+
 contributionTypeAuthor = openminds.controlledterms.ContributionType("authoring");
 contributionTypeCustodian = openminds.controlledterms.ContributionType("custodianship");
 ```
+
+<a id="H_7923"></a>
 
 ## 3.6 Create a custom term suggestion (for keywords that don't exist in controlled vocabularies)
 ```matlab
@@ -352,6 +396,8 @@ customKeyword = openminds.controlledterms.TermSuggestion(...
     'id', createId('custom-brain-region'), ...
     'name', 'visual cortex');
 ```
+
+<a id="H_99d7"></a>
 
 ## 3.7 Create dataset and dataset version
 
@@ -362,16 +408,20 @@ documentation = openminds.core.miscellaneous.WebResource(...
     "id", createId("dataset-documentation"), ...
     "IRI", "https://example-repository.org/datasets/123/documentation");
 
+
 authorContribution = openminds.core.actors.Contribution(...
     "contributor", [pi, postdoc], ...
     "type", contributionTypeAuthor);
+
 
 custodianContribution = openminds.core.actors.Contribution(...
     "contributor", pi, ...
     "type", contributionTypeCustodian);
 
+
 contributions = [authorContribution, custodianContribution];
 contributorAffiliations = [piAffiliation, postdocAffiliation];
+
 
 dataset = openminds.core.products.Dataset(...
     "id", createId("example-dataset"), ...
@@ -381,6 +431,7 @@ dataset = openminds.core.products.Dataset(...
     "performing a visual discrimination task.", ...
     "contribution", contributions, ...
     "contributorAffiliation", contributorAffiliations);
+
 
 datasetVersion = openminds.core.products.DatasetVersion(...
     "id", createId("example-dataset-v1"), ...
@@ -407,6 +458,7 @@ datasetVersion = openminds.core.products.DatasetVersion(...
     "releaseDate", datetime(2023, 1, 1), ...
     "versionSpecification", "This is the first version of this dataset.");
 
+
 fprintf("Created dataset version: %s (%s)\n", ...
     datasetVersion.fullName, datasetVersion.versionIdentifier)
 ```
@@ -415,9 +467,13 @@ fprintf("Created dataset version: %s (%s)\n", ...
 Created dataset version: Neural activity during visual discrimination task (v1)
 ```
 
+<a id="H_9f96"></a>
+
 # 4. Creating Subject Metadata
 
 Next we create subjects and their states, then link the studied specimens to the dataset version.
+
+<a id="H_1f72"></a>
 
 ## 4.1 Create a species (strain)
 ```matlab
@@ -427,18 +483,25 @@ strain = openminds.core.research.Strain(...
     'species', openminds.controlledterms.Species('musMusculus'));
 ```
 
+<a id="H_72ab"></a>
+
 ## 4.2 Create biological sex controlled term
 ```matlab
 biologicalSex = openminds.controlledterms.BiologicalSex('male');
 ```
+
+<a id="H_9593"></a>
 
 ## 4.3 Create subject state attributes
 ```matlab
 subjectAttribute1 = openminds.controlledterms.SubjectAttribute('alive');
 subjectAttribute2 = openminds.controlledterms.SubjectAttribute('awake');
 
+
 ageCategory = openminds.controlledterms.AgeCategory('adult');
 ```
+
+<a id="H_40d7"></a>
 
 ## 4.4 Create a subject
 ```matlab
@@ -450,6 +513,8 @@ subject1 = openminds.core.research.Subject(...
     'internalIdentifier', 'S1');
 ```
 
+<a id="H_6998"></a>
+
 ## 4.5 Create another subject
 ```matlab
 subject2 = openminds.core.research.Subject(...
@@ -459,6 +524,8 @@ subject2 = openminds.core.research.Subject(...
     'species', strain, ...
     'internalIdentifier', 'S2');
 ```
+
+<a id="H_61c0"></a>
 
 ## 4.6 Create and add subject states for each of the subjects
 ```matlab
@@ -470,6 +537,7 @@ subjectState1 = openminds.core.research.SubjectState(...
     'internalIdentifier', 'Subject1-state-01');
 subject1.studiedState = subjectState1;
 
+
 subjectState2 = openminds.core.research.SubjectState(...
     'id', createId('subject2-state'), ...
     'lookupLabel', 'Subject2-state', ...
@@ -478,6 +546,7 @@ subjectState2 = openminds.core.research.SubjectState(...
     'internalIdentifier', 'Subject2-state-01');
 subject2.studiedState = subjectState2;
 
+
 % Display the Subject metadata
 disp(subject1);
 ```
@@ -485,12 +554,14 @@ disp(subject1);
 ```matlabTextOutput
   Subject (_:subject1) with properties:
 
+
          biologicalSex: male (BiologicalSex)
     internalIdentifier: "S1"
               isPartOf: [None] (SubjectGroup)
            lookupLabel: "Subject1"
                species: C57BL/6J (Strain)
           studiedState: Subject1-state (SubjectState)
+
 
   Required Properties: species, studiedState
 ```
@@ -502,6 +573,7 @@ disp(subject2);
 ```matlabTextOutput
   Subject (_:subject2) with properties:
 
+
          biologicalSex: male (BiologicalSex)
     internalIdentifier: "S2"
               isPartOf: [None] (SubjectGroup)
@@ -509,12 +581,16 @@ disp(subject2);
                species: C57BL/6J (Strain)
           studiedState: Subject2-state (SubjectState)
 
+
   Required Properties: species, studiedState
 ```
+
+<a id="H_189d"></a>
 
 ## 4.7 Link subjects to the dataset
 ```matlab
 datasetVersion.studiedSpecimen = [subject1, subject2];
+
 
 % Display a short confirmation for the updated dataset version:
 fprintf("Dataset version now links to %d studied specimens.\n", ...
@@ -525,14 +601,19 @@ fprintf("Dataset version now links to %d studied specimens.\n", ...
 Dataset version now links to 2 studied specimens.
 ```
 
+<a id="H_5378"></a>
+
 # 5. Adding Instances to Collection and Saving
 
 Finally, we add the dataset version to the collection and save the detected metadata graph to a file.
+
+<a id="H_75d6"></a>
 
 ## 5.1 Add the dataset version to the collection
 ```matlab
 % Note: The collection will automatically include all linked instances
 collection.add(datasetVersion);
+
 
 disp(collection);
 ```
@@ -540,12 +621,14 @@ disp(collection);
 ```matlabTextOutput
   Collection with properties:
 
+
              Name: "Neuroscience Dataset Example"
       Description: "A tutorial dataset for learning openMINDS metadata creation"
-            Nodes: dictionary (string ⟼ cell) with 41 entries
-     LinkResolver: []
+            Nodes: dictionary (string --> cell) with 41 entries
     MetadataStore: [0x0 openminds.internal.FileMetadataStore]
 ```
+
+<a id="H_28a1"></a>
 
 ## 5.2 Save the collection to a JSON\-LD file
 ```matlab
@@ -553,12 +636,15 @@ disp(collection);
 savePath = fullfile(pwd, 'example_metadata.jsonld');
 collection.save(savePath);
 
+
 disp(['Saved metadata to: ', savePath]);
 ```
 
 ```matlabTextOutput
-Saved metadata to: /Users/eivind/Code/MATLAB/Neuroscience/Repositories/openMetadataInitiative/openMINDS_MATLAB/example_metadata.jsonld
+Saved metadata to: /Users/eivind/Code/MATLAB/Neuroscience/Repositories/openMetadataInitiative/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
 ```
+
+<a id="H_0727"></a>
 
 ## 5.3 Display the saved JSON\-LD content
 ```matlab
@@ -572,6 +658,407 @@ disp(jsonContent);
     "@vocab": "https://openminds.om-i.org/props/"
   },
   "@graph": [
+    {
+      "@id": "_:1",
+      "@type": "https://openminds.om-i.org/types/Accessibility",
+      "channel": {
+        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
+      },
+      "eligibility": {
+        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
+      },
+      "form": {
+        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
+      },
+      "paymentModel": [
+        {
+          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
+        }
+      ],
+      "process": {
+        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
+      }
+    },
+    {
+      "@id": "_:brain-research-center",
+      "@type": "https://openminds.om-i.org/types/Organization",
+      "acronym": "BRC",
+      "countryOfFormation": {
+        "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
+      },
+      "hasParent": [
+        {
+          "@id": "_:university-of-neuroscience"
+        }
+      ],
+      "name": "Brain Research Center",
+      "type": {
+        "@id": "https://openminds.om-i.org/instances/organizationType/organizationalUnit"
+      }
+    },
+    {
+      "@id": "_:c57bl6j-strain",
+      "@type": "https://openminds.om-i.org/types/Strain",
+      "name": "C57BL/6J",
+      "species": {
+        "@id": "https://openminds.om-i.org/instances/species/musMusculus"
+      }
+    },
+    {
+      "@id": "_:cc-by-4",
+      "@type": "https://openminds.om-i.org/types/License",
+      "fullName": "Creative Commons Attribution 4.0 International",
+      "legalCode": "https://creativecommons.org/licenses/by/4.0/legalcode",
+      "shortName": "CC-BY-4.0",
+      "webpage": [
+        "https://creativecommons.org/licenses/by/4.0"
+      ]
+    },
+    {
+      "@id": "_:contact-pi",
+      "@type": "https://openminds.om-i.org/types/ContactInformation",
+      "email": [
+        "pi@neuroscience.edu"
+      ]
+    },
+    {
+      "@id": "_:contact-postdoc",
+      "@type": "https://openminds.om-i.org/types/ContactInformation",
+      "email": [
+        "postdoc@neuroscience.edu"
+      ]
+    },
+    {
+      "@id": "_:custom-brain-region",
+      "@type": "https://openminds.om-i.org/types/TermSuggestion",
+      "name": "visual cortex"
+    },
+    {
+      "@id": "_:dataset-documentation",
+      "@type": "https://openminds.om-i.org/types/WebResource",
+      "IRI": "https://example-repository.org/datasets/123/documentation"
+    },
+    {
+      "@id": "_:dataset-doi",
+      "@type": "https://openminds.om-i.org/types/DOI",
+      "identifier": "https://doi.org/10.1234/example.2023.001"
+    },
+    {
+      "@id": "_:dataset-repository",
+      "@type": "https://openminds.om-i.org/types/FileRepository",
+      "IRI": "https://example-repository.org/datasets/123",
+      "hostedBy": {
+        "@id": "_:university-of-neuroscience"
+      },
+      "name": "Example Dataset Repository"
+    },
+    {
+      "@id": "_:example-dataset",
+      "@type": "https://openminds.om-i.org/types/Dataset",
+      "contribution": [
+        {
+          "contributor": [
+            {
+              "@id": "_:jane-doe"
+            },
+            {
+              "@id": "_:john-smith"
+            }
+          ],
+          "type": {
+            "@id": "https://openminds.om-i.org/instances/contributionType/authoring"
+          },
+          "@type": "https://openminds.om-i.org/types/Contribution"
+        },
+        {
+          "contributor": [
+            {
+              "@id": "_:jane-doe"
+            }
+          ],
+          "type": {
+            "@id": "https://openminds.om-i.org/instances/contributionType/custodianship"
+          },
+          "@type": "https://openminds.om-i.org/types/Contribution"
+        }
+      ],
+      "contributorAffiliation": [
+        {
+          "organization": [
+            {
+              "@id": "_:university-of-neuroscience"
+            }
+          ],
+          "person": {
+            "@id": "_:jane-doe"
+          },
+          "@type": "https://openminds.om-i.org/types/Affiliation"
+        },
+        {
+          "organization": [
+            {
+              "@id": "_:brain-research-center"
+            }
+          ],
+          "person": {
+            "@id": "_:john-smith"
+          },
+          "@type": "https://openminds.om-i.org/types/Affiliation"
+        }
+      ],
+      "description": "This dataset contains neural recordings from mice performing a visual discrimination task.",
+      "fullName": "Neural activity during visual discrimination task",
+      "shortName": "Visual Task Dataset"
+    },
+    {
+      "@id": "_:example-dataset-v1",
+      "@type": "https://openminds.om-i.org/types/DatasetVersion",
+      "accessibility": {
+        "@id": "_:1"
+      },
+      "contribution": [
+        {
+          "contributor": [
+            {
+              "@id": "_:jane-doe"
+            },
+            {
+              "@id": "_:john-smith"
+            }
+          ],
+          "type": {
+            "@id": "https://openminds.om-i.org/instances/contributionType/authoring"
+          },
+          "@type": "https://openminds.om-i.org/types/Contribution"
+        },
+        {
+          "contributor": [
+            {
+              "@id": "_:jane-doe"
+            }
+          ],
+          "type": {
+            "@id": "https://openminds.om-i.org/instances/contributionType/custodianship"
+          },
+          "@type": "https://openminds.om-i.org/types/Contribution"
+        }
+      ],
+      "contributorAffiliation": [
+        {
+          "organization": [
+            {
+              "@id": "_:university-of-neuroscience"
+            }
+          ],
+          "person": {
+            "@id": "_:jane-doe"
+          },
+          "@type": "https://openminds.om-i.org/types/Affiliation"
+        },
+        {
+          "organization": [
+            {
+              "@id": "_:brain-research-center"
+            }
+          ],
+          "person": {
+            "@id": "_:john-smith"
+          },
+          "@type": "https://openminds.om-i.org/types/Affiliation"
+        }
+      ],
+      "dataType": [
+        {
+          "@id": "https://openminds.om-i.org/instances/semanticDataType/experimentalData"
+        }
+      ],
+      "description": "This dataset contains neural recordings from mice performing a visual discrimination task.",
+      "digitalIdentifier": {
+        "@id": "_:dataset-doi"
+      },
+      "documentation": {
+        "@id": "_:dataset-documentation"
+      },
+      "ethicsJurisdiction": {
+        "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
+      },
+      "experimentalApproach": [
+        {
+          "@id": "https://openminds.om-i.org/instances/experimentalApproach/behavior"
+        },
+        {
+          "@id": "https://openminds.om-i.org/instances/experimentalApproach/electrophysiology"
+        }
+      ],
+      "fullName": "Neural activity during visual discrimination task",
+      "isVersionOf": {
+        "@id": "_:example-dataset"
+      },
+      "keyword": [
+        {
+          "@id": "_:custom-brain-region"
+        }
+      ],
+      "preparationType": [
+        {
+          "@id": "https://openminds.om-i.org/instances/preparationType/inVivo"
+        }
+      ],
+      "protocol": [
+        {
+          "@id": "_:visual-task-protocol"
+        }
+      ],
+      "releaseDate": "2023-01-01",
+      "repository": {
+        "@id": "_:dataset-repository"
+      },
+      "shortName": "Visual Task Dataset",
+      "studiedSpecimen": [
+        {
+          "@id": "_:subject1"
+        },
+        {
+          "@id": "_:subject2"
+        }
+      ],
+      "technique": [
+        {
+          "@id": "https://openminds.om-i.org/instances/technique/extracellularElectrophysiology"
+        }
+      ],
+      "usageCondition": [
+        {
+          "@id": "_:cc-by-4"
+        }
+      ],
+      "versionIdentifier": "v1",
+      "versionSpecification": "This is the first version of this dataset."
+    },
+    {
+      "@id": "_:jane-doe",
+      "@type": "https://openminds.om-i.org/types/Person",
+      "contactInformation": {
+        "@id": "_:contact-pi"
+      },
+      "familyName": "Doe",
+      "givenName": "Jane",
+      "preferredName": "Jane Doe"
+    },
+    {
+      "@id": "_:john-smith",
+      "@type": "https://openminds.om-i.org/types/Person",
+      "contactInformation": {
+        "@id": "_:contact-postdoc"
+      },
+      "familyName": "Smith",
+      "givenName": "John",
+      "preferredName": "John Smith"
+    },
+    {
+      "@id": "_:subject1",
+      "@type": "https://openminds.om-i.org/types/Subject",
+      "biologicalSex": {
+        "@id": "https://openminds.om-i.org/instances/biologicalSex/male"
+      },
+      "internalIdentifier": "S1",
+      "lookupLabel": "Subject1",
+      "species": {
+        "@id": "_:c57bl6j-strain"
+      },
+      "studiedState": [
+        {
+          "@id": "_:subject1-state"
+        }
+      ]
+    },
+    {
+      "@id": "_:subject1-state",
+      "@type": "https://openminds.om-i.org/types/SubjectState",
+      "ageCategory": {
+        "@id": "https://openminds.om-i.org/instances/ageCategory/adult"
+      },
+      "attribute": [
+        {
+          "@id": "https://openminds.om-i.org/instances/subjectAttribute/alive"
+        },
+        {
+          "@id": "https://openminds.om-i.org/instances/subjectAttribute/awake"
+        }
+      ],
+      "internalIdentifier": "Subject1-state-01",
+      "lookupLabel": "Subject1-state"
+    },
+    {
+      "@id": "_:subject2",
+      "@type": "https://openminds.om-i.org/types/Subject",
+      "biologicalSex": {
+        "@id": "https://openminds.om-i.org/instances/biologicalSex/male"
+      },
+      "internalIdentifier": "S2",
+      "lookupLabel": "Subject2",
+      "species": {
+        "@id": "_:c57bl6j-strain"
+      },
+      "studiedState": [
+        {
+          "@id": "_:subject2-state"
+        }
+      ]
+    },
+    {
+      "@id": "_:subject2-state",
+      "@type": "https://openminds.om-i.org/types/SubjectState",
+      "ageCategory": {
+        "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent"
+      },
+      "attribute": [
+        {
+          "@id": "https://openminds.om-i.org/instances/subjectAttribute/alive"
+        },
+        {
+          "@id": "https://openminds.om-i.org/instances/subjectAttribute/awake"
+        }
+      ],
+      "internalIdentifier": "Subject2-state-01",
+      "lookupLabel": "Subject2-state"
+    },
+    {
+      "@id": "_:university-of-neuroscience",
+      "@type": "https://openminds.om-i.org/types/Organization",
+      "acronym": "UNS",
+      "countryOfFormation": {
+        "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
+      },
+      "name": "University of Neuroscience",
+      "type": {
+        "@id": "https://openminds.om-i.org/instances/organizationType/legalEntity"
+      }
+    },
+    {
+      "@id": "_:visual-task-protocol",
+      "@type": "https://openminds.om-i.org/types/BehavioralProtocol",
+      "description": "Mice were trained to discriminate visual stimuli. Each stimulus was associated with a specific outcome (reward, nothing, or punishment).",
+      "name": "Visual Go/NoGo Task"
+    },
+    {
+      "@id": "https://openminds.om-i.org/instances/SovereignState/Germany",
+      "@type": "https://openminds.om-i.org/types/SovereignState",
+      "definition": "Country in Central Europe. [auto-generated from 'schema:description' property of the [Wikidata entity](http://www.wikidata.org/entity/Q183)]",
+      "name": "Germany",
+      "preferredCrossReference": "http://www.wikidata.org/entity/Q183",
+      "synonym": [
+        "BR Deutschland",
+        "BRD",
+        "Bundesrepublik Deutschland",
+        "DE",
+        "de",
+        "DEU",
+        "Deutschland",
+        "Federal Republic of Germany",
+        "GER"
+      ]
+    },
     {
       "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess",
       "@type": "https://openminds.om-i.org/types/AccessChannel",
@@ -595,129 +1082,45 @@ disp(jsonContent);
       "name": "direct access"
     },
     {
-      "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel",
-      "@type": "https://openminds.om-i.org/types/PaymentModelType",
-      "definition": "No payment is required for any billable units (entitlement, consumption, event, monetary value, outcome, or capacity units).",
-      "name": "zero-cost payment model"
-    },
-    {
       "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess",
       "@type": "https://openminds.om-i.org/types/AccessProcessType",
       "definition": "Automatic access upon acceptance of the applicable terms.",
       "name": "immediate access"
     },
     {
-      "@id": "_:2f1d8cef-f64a-4795-9a9a-c3e237236085",
-      "@type": "https://openminds.om-i.org/types/Accessibility",
-      "channel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
-        }
-      ],
-      "eligibility": [
-        {
-          "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
-        }
-      ],
-      "form": [
-        {
-          "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
-        }
-      ],
-      "paymentModel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
-        }
-      ],
-      "process": [
-        {
-          "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
-        }
-      ]
-    },
-    {
-      "@id": "https://openminds.om-i.org/instances/semanticDataType/experimentalData",
-      "@type": "https://openminds.om-i.org/types/SemanticDataType",
-      "name": "experimental data"
-    },
-    {
-      "@id": "_:dataset-doi",
-      "@type": "https://openminds.om-i.org/types/DOI",
-      "identifier": "https://doi.org/10.1234/example.2023.001"
-    },
-    {
-      "@id": "_:dataset-documentation",
-      "@type": "https://openminds.om-i.org/types/WebResource",
-      "IRI": "https://example-repository.org/datasets/123/documentation"
-    },
-    {
-      "@id": "https://openminds.om-i.org/instances/SovereignState/Germany",
-      "@type": "https://openminds.om-i.org/types/SovereignState",
-      "definition": "Country in Central Europe. [auto-generated from ''schema:description'' property of the [Wikidata entity](http://www.wikidata.org/entity/Q183)]",
-      "name": "Germany",
-      "preferredCrossReference": "http://www.wikidata.org/entity/Q183",
+      "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent",
+      "@type": "https://openminds.om-i.org/types/AgeCategory",
+      "definition": "'Adolescent' categorizes a transitional life cycle stage of growth and development between childhood and adulthood, often described as 'puberty'.",
+      "name": "adolescent",
       "synonym": [
-        "BR Deutschland",
-        "BRD",
-        "Bundesrepublik Deutschland",
-        "DE",
-        "de",
-        "DEU",
-        "Deutschland",
-        "Federal Republic of Germany",
-        "GER"
+        "puberty"
       ]
     },
     {
-      "@id": "https://openminds.om-i.org/instances/experimentalApproach/behavior",
-      "@type": "https://openminds.om-i.org/types/ExperimentalApproach",
-      "definition": "Any experimental approach focused on the mechanical activity or cognitive processes underlying mechanical activity of living organisms often in response to external sensory stimuli.",
-      "name": "behavior",
-      "otherOntologyIdentifier": "http://uri.interlex.org/tgbugs/uris/readable/modality/Behavior",
-      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0739413",
-      "synonym": "behavioral approach"
-    },
-    {
-      "@id": "https://openminds.om-i.org/instances/experimentalApproach/electrophysiology",
-      "@type": "https://openminds.om-i.org/types/ExperimentalApproach",
-      "definition": "Any experimental approach focused on electrical phenomena associated with living systems, most notably the nervous system, cardiac system, and musculoskeletal system.",
-      "name": "electrophysiology",
-      "otherOntologyIdentifier": "http://uri.interlex.org/tgbugs/uris/readable/modality/Electrophysiology",
-      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202"
-    },
-    {
-      "@id": "_:contact-pi",
-      "@type": "https://openminds.om-i.org/types/ContactInformation",
-      "email": "pi@neuroscience.edu"
-    },
-    {
-      "@id": "_:jane-doe",
-      "@type": "https://openminds.om-i.org/types/Person",
-      "contactInformation": [
-        {
-          "@id": "_:contact-pi"
-        }
+      "@id": "https://openminds.om-i.org/instances/ageCategory/adult",
+      "@type": "https://openminds.om-i.org/types/AgeCategory",
+      "definition": "'Adult' categorizes the life cycle stage of an animal or human that reached sexual maturity.",
+      "name": "adult",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/base/ilx_0729043"
       ],
-      "familyName": "Doe",
-      "givenName": "Jane",
-      "preferredName": "Jane Doe"
+      "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/UBERON_0000113",
+      "synonym": [
+        "adult stage",
+        "post-juvenile adult",
+        "post-juvenile adult stage"
+      ]
     },
     {
-      "@id": "_:contact-postdoc",
-      "@type": "https://openminds.om-i.org/types/ContactInformation",
-      "email": "postdoc@neuroscience.edu"
-    },
-    {
-      "@id": "_:john-smith",
-      "@type": "https://openminds.om-i.org/types/Person",
-      "contactInformation": [
-        {
-          "@id": "_:contact-postdoc"
-        }
+      "@id": "https://openminds.om-i.org/instances/biologicalSex/male",
+      "@type": "https://openminds.om-i.org/types/BiologicalSex",
+      "definition": "Biological sex that produces sperm cells (spermatozoa).",
+      "description": "A male organism typically has the capacity to produce relatively small, usually mobile gametes (reproductive cells), called sperm cells (or spermatozoa). In the process of fertilization, these sperm cells fuse with a larger, usually immobile female gamete, called egg cell (or ovum).",
+      "name": "male",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/base/ilx_0106489"
       ],
-      "familyName": "Smith",
-      "givenName": "John",
-      "preferredName": "John Smith"
+      "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/PATO_0000384"
     },
     {
       "@id": "https://openminds.om-i.org/instances/contributionType/authoring",
@@ -732,27 +1135,34 @@ disp(jsonContent);
       "name": "custodianship"
     },
     {
+      "@id": "https://openminds.om-i.org/instances/experimentalApproach/behavior",
+      "@type": "https://openminds.om-i.org/types/ExperimentalApproach",
+      "definition": "Any experimental approach focused on the mechanical activity or cognitive processes underlying mechanical activity of living organisms often in response to external sensory stimuli.",
+      "name": "behavior",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/tgbugs/uris/readable/modality/Behavior"
+      ],
+      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0739413",
+      "synonym": [
+        "behavioral approach"
+      ]
+    },
+    {
+      "@id": "https://openminds.om-i.org/instances/experimentalApproach/electrophysiology",
+      "@type": "https://openminds.om-i.org/types/ExperimentalApproach",
+      "definition": "Any experimental approach focused on electrical phenomena associated with living systems, most notably the nervous system, cardiac system, and musculoskeletal system.",
+      "name": "electrophysiology",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/tgbugs/uris/readable/modality/Electrophysiology"
+      ],
+      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202"
+    },
+    {
       "@id": "https://openminds.om-i.org/instances/organizationType/legalEntity",
       "@type": "https://openminds.om-i.org/types/OrganizationType",
       "definition": "An organization classified as a type of legal entity recognized within a specific legal system.",
       "name": "legal entity",
       "preferredCrossReference": "https://www.wikidata.org/entity/Q10541491"
-    },
-    {
-      "@id": "_:university-of-neuroscience",
-      "@type": "https://openminds.om-i.org/types/Organization",
-      "acronym": "UNS",
-      "countryOfFormation": [
-        {
-          "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
-        }
-      ],
-      "name": "University of Neuroscience",
-      "type": [
-        {
-          "@id": "https://openminds.om-i.org/instances/organizationType/legalEntity"
-        }
-      ]
     },
     {
       "@id": "https://openminds.om-i.org/instances/organizationType/organizationalUnit",
@@ -761,166 +1171,42 @@ disp(jsonContent);
       "name": "organizational unit"
     },
     {
-      "@id": "_:brain-research-center",
-      "@type": "https://openminds.om-i.org/types/Organization",
-      "acronym": "BRC",
-      "countryOfFormation": [
-        {
-          "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
-        }
-      ],
-      "hasParent": [
-        {
-          "@id": "_:university-of-neuroscience"
-        }
-      ],
-      "name": "Brain Research Center",
-      "type": [
-        {
-          "@id": "https://openminds.om-i.org/instances/organizationType/organizationalUnit"
-        }
-      ]
-    },
-    {
-      "@id": "_:example-dataset",
-      "@type": "https://openminds.om-i.org/types/Dataset",
-      "contribution": [
-        {
-          "contributor": [
-            {
-              "@id": "_:jane-doe"
-            },
-            {
-              "@id": "_:john-smith"
-            }
-          ],
-          "type": [
-            {
-              "@id": "https://openminds.om-i.org/instances/contributionType/authoring"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Contribution"
-        },
-        {
-          "contributor": [
-            {
-              "@id": "_:jane-doe"
-            }
-          ],
-          "type": [
-            {
-              "@id": "https://openminds.om-i.org/instances/contributionType/custodianship"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Contribution"
-        }
-      ],
-      "contributorAffiliation": [
-        {
-          "organization": [
-            {
-              "@id": "_:university-of-neuroscience"
-            }
-          ],
-          "person": [
-            {
-              "@id": "_:jane-doe"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Affiliation"
-        },
-        {
-          "organization": [
-            {
-              "@id": "_:brain-research-center"
-            }
-          ],
-          "person": [
-            {
-              "@id": "_:john-smith"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Affiliation"
-        }
-      ],
-      "description": "This dataset contains neural recordings from mice performing a visual discrimination task.",
-      "fullName": "Neural activity during visual discrimination task",
-      "shortName": "Visual Task Dataset"
-    },
-    {
-      "@id": "_:custom-brain-region",
-      "@type": "https://openminds.om-i.org/types/TermSuggestion",
-      "name": "visual cortex"
+      "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel",
+      "@type": "https://openminds.om-i.org/types/PaymentModelType",
+      "definition": "No payment is required for any billable units (entitlement, consumption, event, monetary value, outcome, or capacity units).",
+      "name": "zero-cost payment model"
     },
     {
       "@id": "https://openminds.om-i.org/instances/preparationType/inVivo",
       "@type": "https://openminds.om-i.org/types/PreparationType",
       "definition": "Something happening or existing inside a living body.",
       "name": "in vivo",
-      "otherOntologyIdentifier": "http://uri.interlex.org/tgbugs/uris/indexes/ontologies/methods/89",
-      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0739622",
-      "synonym": "in vivo technique"
-    },
-    {
-      "@id": "_:visual-task-protocol",
-      "@type": "https://openminds.om-i.org/types/BehavioralProtocol",
-      "description": "Mice were trained to discriminate visual stimuli. Each stimulus was associated with a specific outcome (reward, nothing, or punishment).",
-      "name": "Visual Go/NoGo Task"
-    },
-    {
-      "@id": "_:dataset-repository",
-      "@type": "https://openminds.om-i.org/types/FileRepository",
-      "IRI": "https://example-repository.org/datasets/123",
-      "hostedBy": [
-        {
-          "@id": "_:university-of-neuroscience"
-        }
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/tgbugs/uris/indexes/ontologies/methods/89"
       ],
-      "name": "Example Dataset Repository"
+      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0739622",
+      "synonym": [
+        "in vivo technique"
+      ]
     },
     {
-      "@id": "https://openminds.om-i.org/instances/biologicalSex/male",
-      "@type": "https://openminds.om-i.org/types/BiologicalSex",
-      "definition": "Biological sex that produces sperm cells (spermatozoa).",
-      "description": "A male organism typically has the capacity to produce relatively small, usually mobile gametes (reproductive cells), called sperm cells (or spermatozoa). In the process of fertilization, these sperm cells fuse with a larger, usually immobile female gamete, called egg cell (or ovum).",
-      "name": "male",
-      "otherOntologyIdentifier": "http://uri.interlex.org/base/ilx_0106489",
-      "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/PATO_0000384"
+      "@id": "https://openminds.om-i.org/instances/semanticDataType/experimentalData",
+      "@type": "https://openminds.om-i.org/types/SemanticDataType",
+      "name": "experimental data"
     },
     {
       "@id": "https://openminds.om-i.org/instances/species/musMusculus",
       "@type": "https://openminds.om-i.org/types/Species",
       "definition": "The species *Mus musculus* (house mouse) belongs to the family of *muridae* (murids).",
       "name": "Mus musculus",
-      "otherOntologyIdentifier": "http://uri.interlex.org/base/ilx_0107134",
+      "otherOntologyIdentifier": [
+        "http://uri.interlex.org/base/ilx_0107134"
+      ],
       "preferredCrossReference": "https://knowledge-space.org/wiki/NCBITaxon:10090#mouse",
       "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/NCBITaxon_10090",
       "synonym": [
         "house mouse",
         "mouse"
-      ]
-    },
-    {
-      "@id": "_:c57bl6j-strain",
-      "@type": "https://openminds.om-i.org/types/Strain",
-      "name": "C57BL/6J",
-      "species": [
-        {
-          "@id": "https://openminds.om-i.org/instances/species/musMusculus"
-        }
-      ]
-    },
-    {
-      "@id": "https://openminds.om-i.org/instances/ageCategory/adult",
-      "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "''Adult'' categorizes the life cycle stage of an animal or human that reached sexual maturity.",
-      "name": "adult",
-      "otherOntologyIdentifier": "http://uri.interlex.org/base/ilx_0729043",
-      "preferredOntologyIdentifier": "http://purl.obolibrary.org/obo/UBERON_0000113",
-      "synonym": [
-        "adult stage",
-        "post-juvenile adult",
-        "post-juvenile adult stage"
       ]
     },
     {
@@ -936,260 +1222,22 @@ disp(jsonContent);
       "name": "awake"
     },
     {
-      "@id": "_:subject1-state",
-      "@type": "https://openminds.om-i.org/types/SubjectState",
-      "ageCategory": [
-        {
-          "@id": "https://openminds.om-i.org/instances/ageCategory/adult"
-        }
-      ],
-      "attribute": [
-        {
-          "@id": "https://openminds.om-i.org/instances/subjectAttribute/alive"
-        },
-        {
-          "@id": "https://openminds.om-i.org/instances/subjectAttribute/awake"
-        }
-      ],
-      "internalIdentifier": "Subject1-state-01",
-      "lookupLabel": "Subject1-state"
-    },
-    {
-      "@id": "_:subject1",
-      "@type": "https://openminds.om-i.org/types/Subject",
-      "biologicalSex": [
-        {
-          "@id": "https://openminds.om-i.org/instances/biologicalSex/male"
-        }
-      ],
-      "internalIdentifier": "S1",
-      "lookupLabel": "Subject1",
-      "species": [
-        {
-          "@id": "_:c57bl6j-strain"
-        }
-      ],
-      "studiedState": [
-        {
-          "@id": "_:subject1-state"
-        }
-      ]
-    },
-    {
-      "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent",
-      "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "''Adolescent'' categorizes a transitional life cycle stage of growth and development between childhood and adulthood, often described as ''puberty''.",
-      "name": "adolescent",
-      "synonym": "puberty"
-    },
-    {
-      "@id": "_:subject2-state",
-      "@type": "https://openminds.om-i.org/types/SubjectState",
-      "ageCategory": [
-        {
-          "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent"
-        }
-      ],
-      "attribute": [
-        {
-          "@id": "https://openminds.om-i.org/instances/subjectAttribute/alive"
-        },
-        {
-          "@id": "https://openminds.om-i.org/instances/subjectAttribute/awake"
-        }
-      ],
-      "internalIdentifier": "Subject2-state-01",
-      "lookupLabel": "Subject2-state"
-    },
-    {
-      "@id": "_:subject2",
-      "@type": "https://openminds.om-i.org/types/Subject",
-      "biologicalSex": [
-        {
-          "@id": "https://openminds.om-i.org/instances/biologicalSex/male"
-        }
-      ],
-      "internalIdentifier": "S2",
-      "lookupLabel": "Subject2",
-      "species": [
-        {
-          "@id": "_:c57bl6j-strain"
-        }
-      ],
-      "studiedState": [
-        {
-          "@id": "_:subject2-state"
-        }
-      ]
-    },
-    {
       "@id": "https://openminds.om-i.org/instances/technique/extracellularElectrophysiology",
       "@type": "https://openminds.om-i.org/types/Technique",
-      "definition": "In ''extracellular electrophysiology'' electrodes are inserted into living tissue, but remain outside the cells in the extracellular environment to measure or stimulate electrical activity coming from adjacent cells, usually neurons.",
+      "definition": "In 'extracellular electrophysiology' electrodes are inserted into living tissue, but remain outside the cells in the extracellular environment to measure or stimulate electrical activity coming from adjacent cells, usually neurons.",
       "name": "extracellular electrophysiology"
-    },
-    {
-      "@id": "_:cc-by-4",
-      "@type": "https://openminds.om-i.org/types/License",
-      "fullName": "Creative Commons Attribution 4.0 International",
-      "legalCode": "https://creativecommons.org/licenses/by/4.0/legalcode",
-      "shortName": "CC-BY-4.0",
-      "webpage": "https://creativecommons.org/licenses/by/4.0"
-    },
-    {
-      "@id": "_:example-dataset-v1",
-      "@type": "https://openminds.om-i.org/types/DatasetVersion",
-      "accessibility": [
-        {
-          "@id": "_:2f1d8cef-f64a-4795-9a9a-c3e237236085"
-        }
-      ],
-      "contribution": [
-        {
-          "contributor": [
-            {
-              "@id": "_:jane-doe"
-            },
-            {
-              "@id": "_:john-smith"
-            }
-          ],
-          "type": [
-            {
-              "@id": "https://openminds.om-i.org/instances/contributionType/authoring"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Contribution"
-        },
-        {
-          "contributor": [
-            {
-              "@id": "_:jane-doe"
-            }
-          ],
-          "type": [
-            {
-              "@id": "https://openminds.om-i.org/instances/contributionType/custodianship"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Contribution"
-        }
-      ],
-      "contributorAffiliation": [
-        {
-          "organization": [
-            {
-              "@id": "_:university-of-neuroscience"
-            }
-          ],
-          "person": [
-            {
-              "@id": "_:jane-doe"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Affiliation"
-        },
-        {
-          "organization": [
-            {
-              "@id": "_:brain-research-center"
-            }
-          ],
-          "person": [
-            {
-              "@id": "_:john-smith"
-            }
-          ],
-          "@type": "https://openminds.om-i.org/types/Affiliation"
-        }
-      ],
-      "dataType": [
-        {
-          "@id": "https://openminds.om-i.org/instances/semanticDataType/experimentalData"
-        }
-      ],
-      "description": "This dataset contains neural recordings from mice performing a visual discrimination task.",
-      "digitalIdentifier": [
-        {
-          "@id": "_:dataset-doi"
-        }
-      ],
-      "documentation": [
-        {
-          "@id": "_:dataset-documentation"
-        }
-      ],
-      "ethicsJurisdiction": [
-        {
-          "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
-        }
-      ],
-      "experimentalApproach": [
-        {
-          "@id": "https://openminds.om-i.org/instances/experimentalApproach/behavior"
-        },
-        {
-          "@id": "https://openminds.om-i.org/instances/experimentalApproach/electrophysiology"
-        }
-      ],
-      "fullName": "Neural activity during visual discrimination task",
-      "isVersionOf": [
-        {
-          "@id": "_:example-dataset"
-        }
-      ],
-      "keyword": [
-        {
-          "@id": "_:custom-brain-region"
-        }
-      ],
-      "preparationType": [
-        {
-          "@id": "https://openminds.om-i.org/instances/preparationType/inVivo"
-        }
-      ],
-      "protocol": [
-        {
-          "@id": "_:visual-task-protocol"
-        }
-      ],
-      "releaseDate": "01-Jan-2023",
-      "repository": [
-        {
-          "@id": "_:dataset-repository"
-        }
-      ],
-      "shortName": "Visual Task Dataset",
-      "studiedSpecimen": [
-        {
-          "@id": "_:subject1"
-        },
-        {
-          "@id": "_:subject2"
-        }
-      ],
-      "technique": [
-        {
-          "@id": "https://openminds.om-i.org/instances/technique/extracellularElectrophysiology"
-        }
-      ],
-      "usageCondition": [
-        {
-          "@id": "_:cc-by-4"
-        }
-      ],
-      "versionIdentifier": "v1",
-      "versionSpecification": "This is the first version of this dataset."
     }
   ]
 }
 ```
 
+<a id="H_3f72"></a>
+
 # 6. Summary
 
 In this tutorial, we've learned how to: 
 
-1.  Create a metadata collection
+1. Create a metadata collection
 2. Create various metadata instances (people, organizations, etc.)
 3. Link people, organizations, contributions, affiliations, and dataset metadata
 4. Use controlled terms from predefined vocabularies
@@ -1198,4 +1246,3 @@ In this tutorial, we've learned how to:
 7. Save the collection to a JSON\-LD file
 
 This provides a foundation for creating more complex metadata for neuroscience datasets using the openMINDS MATLAB toolbox.
-

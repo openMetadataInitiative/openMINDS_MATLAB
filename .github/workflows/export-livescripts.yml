@@ -1,0 +1,81 @@
+name: Export live scripts
+
+# Keeps the documentation that is generated from live scripts in step with
+# the live scripts: the tutorials under docs/tutorials, and the Getting
+# Started section of the README, which is spliced in from
+# code/gettingStarted.mlx between two marker comments.
+#
+# The export itself is not a check. `export` with Run=true embeds an error
+# as ordinary output and returns normally, which is how an exported tutorial
+# once sat broken for several releases. So the live scripts are run as tests
+# first, and nothing is exported unless they pass.
+#
+# Runs on push to main only, so the commit it makes lands on main and never
+# on a pull request head, where it would rewrite the branch under a stack.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'code/gettingStarted.mlx'
+      - 'code/livescripts/**'
+      - 'code/+openminds/**'
+      - 'code/generated/**'
+      - 'tools/+ommtools/**'
+      - '.github/workflows/export-livescripts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  export:
+    name: Run the live scripts, then export them
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v3
+        with:
+          cache: true
+
+      # The gate. TutorialTest runs every live script; an error fails here
+      # and nothing below runs.
+      - name: Run the live scripts as tests
+        uses: matlab-actions/run-command@v3
+        with:
+          command: |
+            addpath(genpath("tools"));
+            run(fullfile("code", "startup.m"));
+            results = runtests("TutorialTest");
+            assertSuccess(results);
+
+      - name: Export the live scripts and update the README
+        uses: matlab-actions/run-command@v3
+        with:
+          command: |
+            addpath(genpath("tools"));
+            run(fullfile("code", "startup.m"));
+            ommtools.exportTutorials();
+            ommtools.updateReadmeLiveSection("README.md", ...
+                fullfile("docs", "tutorials", "gettingStarted.md"));
+
+      - name: Commit exported documentation if changed
+        run: |
+          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
+          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
+          git fetch
+
+          if [[ $(git add README.md docs/tutorials --dry-run | wc -l) -gt 0 ]]; then
+            git add README.md docs/tutorials
+            git commit -m "docs: export live scripts to markdown [skip actions]"
+            git push
+          else
+            echo "Nothing to commit"
+          fi
