@@ -20,7 +20,7 @@
 # REQUIREMENTS:
 #   - target/ directory must exist in current working directory
 #   - ROOT_FOLDER/code/generated/resources/ must exist
-#   - ROOT_FOLDER/code/internal/resources/ must hold the content_files and
+#   - ROOT_FOLDER/code/resources/ must hold the content_files and
 #     readme_files that are restored on top of the generated classes
 #
 set -euo pipefail
@@ -51,7 +51,7 @@ if [[ ! -d "target" ]]; then
 fi
 
 GENERATED_DIR="$ROOT/code/generated/resources"
-OVERLAY_DIR="$ROOT/code/internal/resources"
+OVERLAY_DIR="$ROOT/code/resources"
 
 if [[ ! -d "$GENERATED_DIR" ]]; then
     echo "Error: expected the generated classes at '$GENERATED_DIR'." >&2
