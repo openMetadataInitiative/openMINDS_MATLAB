@@ -1,4 +1,4 @@
-% openMINDS metadata types - latest
+% openMINDS metadata types - v4.0
 %   The types folder contains MATLAB classes for metadata types of the
 %   following openMINDS modules:
 %
@@ -7,7 +7,6 @@
 %     controlledterms - openminds.controlledterms is a module.
 %                core - openminds.core is a module.
 %               ephys - openminds.ephys is a module.
-%        neuroimaging - openminds.neuroimaging is a module.
 %        publications - openminds.publications is a module.
 %               sands - openminds.sands is a module.
 %        specimenprep - openminds.specimenprep is a module.

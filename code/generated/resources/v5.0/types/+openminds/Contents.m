@@ -1,4 +1,4 @@
-% openMINDS metadata types - latest
+% openMINDS metadata types - v5.0
 %   The types folder contains MATLAB classes for metadata types of the
 %   following openMINDS modules:
 %
