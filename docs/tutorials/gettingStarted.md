@@ -1,73 +1,130 @@
+# Before you start
 
-## Before you start
+Check that openMINDS\_MATLAB is installed and on the search path.
+
 ```matlab
-% Verify that openMINDS_MATLAB is installed
 disp( openminds.toolboxversion )
 ```
 
 ```matlabTextOutput
-Version 0.9.7
+Version 0.10.0
 ```
 
-If you have installed **openMINDS\_MATLAB** and the above command does not work, most likely **openMINDS\_MATLAB** is not added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html).
+# Choose a version of the metadata model
 
-
-If you opened this file in MATLAB Online from the GitHub Demo link, the following steps should add **openMINDS\_MATLAB** to the search path:
-
-
-1) Open the `code` folder from the `Files` panel on the left sidebar.
-
-
-2) Open and run the `startup.m` file. Select "Add to Path" if prompted from a popup dialog.
-
-
-See also: [Crew Member Collection Tutorial](./livescripts/crewMemberCollection.mlx)
-
-## Configure MATLAB's search path to use the latest model versions
-
-Note: The following is only relevant if you have cloned or downloaded openMINDS\_MATLAB from GitHub. If you installed the Matlab toolbox, you can skip this part.
-
-
-The openMINDS\_MATLAB toolbox comes packaged with schema classes for all versions of the openMINDS models. Therefore is important to use the [`openminds.startup`](+openminds/startup.m) function to ensure that the search path only contains schema classes for a specific openMINDS version. Provide the version number as an input, i.e "latest", or "v2.0"
+The toolbox ships the types of every version of the openMINDS metadata model, and only one version can be on the search path at a time. If you installed the toolbox, the latest version is already selected and you can skip this. If you cloned the repository, select one:
 
 ```matlab
-openminds.startup("latest") % Add schema classes for the latest version to the search path
+openminds.startup("latest")
 ```
 
 ```matlabTextOutput
 Initializing openMINDS_MATLAB...
 Added classes for version "latest" of the openMINDS metadata model to the search path.
 ```
-## Import schemas from the core model
+
+# Describe a subject
+
+Every openMINDS type is a MATLAB class, and its properties are validated against the schema as you assign them. Here is an adult female mouse. The species and sex are controlled terms and can be given by name.
+
 ```matlab
 import openminds.core.*
-```
-## Create a Subject
-```matlab
-% Create a new demo subject
-subject1 = Subject('species', 'musMusculus', 'biologicalSex', 'male', 'lookupLabel', 'demo_subject1');
+mouse = Subject( ...
+    'lookupLabel', 'mouse_01', ...
+    'species', 'musMusculus', ...
+    'biologicalSex', 'female');
+disp(mouse)
 ```
 
 ```matlabTextOutput
-Error using openminds.core.research.Subject (line 73)
-Invalid value for 'biologicalSex' argument. Value must be openminds.controlledterms.BiologicalSex or be convertible to openminds.controlledterms.BiologicalSex.
+  Subject (_:1) with properties:
+
+
+         biologicalSex: female (BiologicalSex)
+    internalIdentifier: ""
+           lookupLabel: "mouse_01"
+               species: Mus musculus (Species)
+
+
+  Required Properties: species, studiedState
 ```
 
-```matlab
-disp(subject1)
-```
-## Create a Subject State
-```matlab
-subjectState = openminds.core.SubjectState('lookupLabel', 'demo_state')
-% Add subject state to subject
-subject1.studiedState = subjectState;
-disp(subject1)
-% Update the value of the lookup label
-subjectState.lookupLabel = "demo_subjectstate_pre_recording";
+# Describe the subject at the time of recording
 
-% Create a new subject state
-subjectStatePost = openminds.core.SubjectState('lookupLabel', 'demo_subjectstate_post_recording')
-% Append the new subject state to the subject's studiedState property
-subject1.studiedState(end+1) = subjectStatePost;
-disp(subject1)
+Age and weight belong to a subject state rather than to the subject, because they change. Each is a quantity with a unit, and an age also says what it is counted from.
+
+```matlab
+age = SpecimenAge( ...
+    'age', QuantitativeValue('value', 12, 'unit', 'week'), ...
+    'reference', 'birth');
+weight = SpecimenWeight( ...
+    'weight', QuantitativeValue('value', 24, 'unit', 'gram'), ...
+    'type', 'bodyWeight');
+recordingState = SubjectState( ...
+    'lookupLabel', 'mouse_01_recording', ...
+    'ageCategory', 'adult', ...
+    'age', age, ...
+    'weight', weight);
+disp(recordingState)
+```
+
+```matlabTextOutput
+  SubjectState (_:2) with properties:
+
+
+     additionalRemarks: ""
+                   age: 12 weeks (birth) (SpecimenAge)
+           ageCategory: adult (AgeCategory)
+    internalIdentifier: ""
+           lookupLabel: "mouse_01_recording"
+                weight: 24 grams (body weight) (SpecimenWeight)
+
+
+  Required Properties: ageCategory
+```
+
+# Link the state to the subject
+
+Assigning an instance to a property links the two. A linked property can hold several instances, so a subject can have a state per session.
+
+```matlab
+mouse.studiedState = recordingState;
+disp(mouse)
+```
+
+```matlabTextOutput
+  Subject (_:1) with properties:
+
+
+         biologicalSex: female (BiologicalSex)
+    internalIdentifier: ""
+           lookupLabel: "mouse_01"
+               species: Mus musculus (Species)
+          studiedState: mouse_01_recording (SubjectState)
+
+
+  Required Properties: species, studiedState
+```
+
+# Save the metadata as JSON\-LD
+
+A collection holds a set of instances and writes them as JSON\-LD documents. Adding the mouse brings everything it links to along with it.
+
+```matlab
+collection = openminds.Collection(mouse);
+jsonldFile = fullfile(tempdir, "mouse_01.jsonld");
+collection.save(jsonldFile);
+```
+
+# Load it back
+
+Loading from the file rebuilds the instances and the links between them.
+
+```matlab
+loaded = openminds.Collection(jsonldFile);
+fprintf("Loaded %d instances\n", numel(loaded.getAll()))
+```
+
+```matlabTextOutput
+Loaded 9 instances
 ```

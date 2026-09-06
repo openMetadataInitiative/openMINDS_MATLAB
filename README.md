@@ -8,169 +8,206 @@
 
 # openMINDS Metadata Models for MATLAB
 [![Version Number](https://img.shields.io/github/v/release/openMetadataInitiative/openMINDS_MATLAB?label=version)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest)
-[![Open in MATLAB Online](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/fileexchange/v1?id=134212) 
+[![Open in MATLAB Online](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/fileexchange/v1?id=134212)
 [![View openMINDS_MATLAB on File Exchange](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
-[![MATLAB Tests](.github/badges/tests.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/update.yml)
+[![MATLAB Tests](.github/badges/tests.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml)
 [![codecov](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB/graph/badge.svg?token=FTD5FHZSFA)](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
 [![MATLAB Code Issues](.github/badges/code_issues.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/security/code-scanning)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://gitHub.com/openMetadataInitiative/openMINDS_MATLAB/graphs/commit-activity)
 
 <p align="center">
-  <a href="#requirements-and-installation">Requirements and Installation</a> •
-  <a href="#before-you-start">Before you start</a> •
+  <a href="#installation">Installation</a> •
   <a href="#getting-started">Getting Started</a> •
+  <a href="#tutorials">Tutorials</a> •
+  <a href="#extending-the-toolbox">Extending</a> •
+  <a href="#upgrading">Upgrading</a> •
   <a href="#acknowledgements">Acknowledgements</a>
 </p>
 
 ---
 
-MATLAB toolbox for creating openMINDS compliant linked metadata, supporting import and export of metadata instances in JSON-LD format.
+A MATLAB toolbox for creating [openMINDS](https://openminds-documentation.readthedocs.io) metadata: typed classes for every openMINDS metadata type, linked into a graph, and read from or written to JSON-LD.
 
-To learn more about the openMINDS metadata framework please go to :arrow_right: [**ReadTheDocs**](https://openminds-documentation.readthedocs.io).  
-You can test and learn how to use openMINDS in MATLAB by going through a small :arrow_right: [**DEMO**](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) on MATLAB Online.  
+Every openMINDS type is a MATLAB class. Properties are validated against the schema as you assign them, links between instances are real object references, and a collection of instances serializes to JSON-LD documents that any openMINDS tool can read. Every version of the metadata model ships in the toolbox; you choose which one is active.
 
-MathWorks provides a free basic version of [MATLAB Online](https://uk.mathworks.com/products/matlab-online.html), but you need to register for a [MathWorks Account](https://www.mathworks.com/mwaccount/register?uri=https%3A%2F%2Fwww.mathworks.com%2Fproducts%2Fmatlab.html).
-<p align="right">
+Try it without installing anything: open the [getting-started live script](https://matlab.mathworks.com/open/github/v1?repo=openMetadataInitiative/openMINDS_MATLAB&file=code/gettingStarted.mlx) in MATLAB Online.
 
-## Requirements and Installation
-[(Back to top)](#openminds-metadata-models-for-matlab)
+## Installation
 
-openMINDS for MATLAB requires **MATLAB R2022a** or later. The toolbox can be installed from MATLAB's [Add-On Explorer](https://se.mathworks.com/help/matlab/matlab_env/get-add-ons.html) (recommended). It is also possible to download the MATLAB toolbox from [FileExchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) or from the [Releases](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) page of this repository and install it manually. If you are new to MATLAB, see the detailed [installation instructions](#Detailed-Installation-Instructions)
+Requires **MATLAB R2022a** or later.
 
-### Cloning the repository
+**From the Add-On Explorer** (recommended) — in MATLAB, open *Home → Add-Ons → Get Add-Ons*, search for `openminds`, and add *openMINDS Metadata Models for MATLAB*. Step-by-step screenshots are [below](#detailed-installation-instructions).
+
+**From a release** — download the `.mltbx` from the [latest release](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest) or [File Exchange](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab) and open it in MATLAB.
+
+**From source** — clone and run the setup script, which adds the toolbox to your path and saves it:
+
 ```matlab
-% This will install openMINDS_MATLAB in your current working directory
 !git clone https://github.com/openMetadataInitiative/openMINDS_MATLAB
-run(fullfile('openMINDS_MATLAB', 'code', 'setup.m'))
+run(fullfile("openMINDS_MATLAB", "code", "setup.m"))
 ```
 
-## Before you start
-[(Back to top)](#openminds-metadata-models-for-matlab)
+Check the installation with `openminds.toolboxversion`.
+
+## Getting Started
+
+<!-- The section between the markers is generated from code/gettingStarted.mlx by
+     the "Export live scripts" workflow. Edit the live script, not this text. -->
+<!-- livescript:start -->
+### Before you start
+
+Check that openMINDS\_MATLAB is installed and on the search path.
 
 ```matlab
-% Verify that openMINDS_MATLAB is installed
 disp( openminds.toolboxversion )
 ```
 
-```TextOutput
+```matlabTextOutput
 Version 0.10.0
 ```
 
-If you have installed **openMINDS_MATLAB** and the above command does not work, most likely **openMINDS_MATLAB** is <u>not</u> added to MATLAB's [search path](https://se.mathworks.com/help/matlab/matlab_env/what-is-the-matlab-search-path.html).
+### Choose a version of the metadata model
 
+The toolbox ships the types of every version of the openMINDS metadata model, and only one version can be on the search path at a time. If you installed the toolbox, the latest version is already selected and you can skip this. If you cloned the repository, select one:
 
-## Getting Started
-[(Back to top)](#openminds-metadata-models-for-matlab)
-
-See also: [Crew Member Collection Tutorial](./docs/tutorials/crewMemberCollection.md)
-
-### Configure MATLAB's path to use the latest model versions
 ```matlab
-% Schema classes for all the openMINDS model versions are available in this
-% toolbox. To ensure the latest version is used, run the following command:
-openminds.version("latest")
+openminds.startup("latest")
 ```
-### Import schemas from the core model
+
+```matlabTextOutput
+Initializing openMINDS_MATLAB...
+Added classes for version "latest" of the openMINDS metadata model to the search path.
+```
+
+### Describe a subject
+
+Every openMINDS type is a MATLAB class, and its properties are validated against the schema as you assign them. Here is an adult female mouse. The species and sex are controlled terms and can be given by name.
+
 ```matlab
 import openminds.core.*
-```
-### Create a Subject
-```matlab
-% Create a new demo subject
-subject1 = Subject('species', 'musMusculus', 'biologicalSex', 'male', 'lookupLabel', 'demo_subject1');
-disp(subject1)
+mouse = Subject( ...
+    'lookupLabel', 'mouse_01', ...
+    'species', 'musMusculus', ...
+    'biologicalSex', 'female');
+disp(mouse)
 ```
 
-```TextOutput
-  Subject (https://openminds.ebrains.eu/core/Subject) with properties:
-         biologicalSex: male  (BiologicalSex)
+```matlabTextOutput
+  Subject (_:1) with properties:
+
+
+         biologicalSex: female (BiologicalSex)
     internalIdentifier: ""
-              isPartOf: [None]  (SubjectGroup)
-           lookupLabel: "demo_subject1"
-               species: Mus musculus  (One of: Species, Strain)
-          studiedState: [None]  (SubjectState)
+           lookupLabel: "mouse_01"
+               species: Mus musculus (Species)
+
+
   Required Properties: species, studiedState
 ```
-### Create a Subject State
+
+### Describe the subject at the time of recording
+
+Age and weight belong to a subject state rather than to the subject, because they change. Each is a quantity with a unit, and an age also says what it is counted from.
+
 ```matlab
-subjectState = openminds.core.SubjectState('lookupLabel', 'demo_state')
+age = SpecimenAge( ...
+    'age', QuantitativeValue('value', 12, 'unit', 'week'), ...
+    'reference', 'birth');
+weight = SpecimenWeight( ...
+    'weight', QuantitativeValue('value', 24, 'unit', 'gram'), ...
+    'type', 'bodyWeight');
+recordingState = SubjectState( ...
+    'lookupLabel', 'mouse_01_recording', ...
+    'ageCategory', 'adult', ...
+    'age', age, ...
+    'weight', weight);
+disp(recordingState)
 ```
 
-```TextOutput
-subjectState = 
-  SubjectState (https://openminds.ebrains.eu/core/SubjectState) with properties:
-         additionalRemarks: ""
-                       age: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
-               ageCategory: [None]  (AgeCategory)
-                 attribute: [None]  (SubjectAttribute)
-             descendedFrom: [None]  (SubjectState)
-                handedness: [None]  (Handedness)
-        internalIdentifier: ""
-               lookupLabel: "demo_state"
-                 pathology: [None]  (Any of: Disease, DiseaseModel)
-    relativeTimeIndication: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
-                    weight: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
+```matlabTextOutput
+  SubjectState (_:2) with properties:
+
+
+     additionalRemarks: ""
+                   age: 12 weeks (birth) (SpecimenAge)
+           ageCategory: adult (AgeCategory)
+    internalIdentifier: ""
+           lookupLabel: "mouse_01_recording"
+                weight: 24 grams (body weight) (SpecimenWeight)
+
+
   Required Properties: ageCategory
 ```
 
+### Link the state to the subject
+
+Assigning an instance to a property links the two. A linked property can hold several instances, so a subject can have a state per session.
+
 ```matlab
-% Add subject state to subject
-subject1.studiedState = subjectState;
-disp(subject1)
+mouse.studiedState = recordingState;
+disp(mouse)
 ```
 
-```TextOutput
-  Subject (https://openminds.ebrains.eu/core/Subject) with properties:
-         biologicalSex: male  (BiologicalSex)
+```matlabTextOutput
+  Subject (_:1) with properties:
+
+
+         biologicalSex: female (BiologicalSex)
     internalIdentifier: ""
-              isPartOf: [None]  (SubjectGroup)
-           lookupLabel: "demo_subject1"
-               species: Mus musculus  (One of: Species, Strain)
-          studiedState: demo_state  (SubjectState)
+           lookupLabel: "mouse_01"
+               species: Mus musculus (Species)
+          studiedState: mouse_01_recording (SubjectState)
+
+
   Required Properties: species, studiedState
 ```
 
-```matlab
-% Update the value of the lookup label
-subjectState.lookupLabel = "demo_subjectstate_pre_recording";
+### Save the metadata as JSON\-LD
 
-% Create a new subject state
-subjectStatePost = openminds.core.SubjectState('lookupLabel', 'demo_subjectstate_post_recording')
-```
-
-```TextOutput
-subjectStatePost = 
-  SubjectState (https://openminds.ebrains.eu/core/SubjectState) with properties:
-         additionalRemarks: ""
-                       age: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
-               ageCategory: [None]  (AgeCategory)
-                 attribute: [None]  (SubjectAttribute)
-             descendedFrom: [None]  (SubjectState)
-                handedness: [None]  (Handedness)
-        internalIdentifier: ""
-               lookupLabel: "demo_subjectstate_post_recording"
-                 pathology: [None]  (Any of: Disease, DiseaseModel)
-    relativeTimeIndication: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
-                    weight: [None]  (One of: QuantitativeValue, QuantitativeValueRange)
-  Required Properties: ageCategory
-```
+A collection holds a set of instances and writes them as JSON\-LD documents. Adding the mouse brings everything it links to along with it.
 
 ```matlab
-% Append the new subject state to the subject's studiedState property
-subject1.studiedState(end+1) = subjectStatePost;
-disp(subject1)
+collection = openminds.Collection(mouse);
+jsonldFile = fullfile(tempdir, "mouse_01.jsonld");
+collection.save(jsonldFile);
 ```
 
-```TextOutput
-  Subject (https://openminds.ebrains.eu/core/Subject) with properties:
-         biologicalSex: male  (BiologicalSex)
-    internalIdentifier: ""
-              isPartOf: [None]  (SubjectGroup)
-           lookupLabel: "demo_subject1"
-               species: Mus musculus  (One of: Species, Strain)
-          studiedState: [demo_subjectstate_pre_recording    demo_subjectstate_post_recording]  (SubjectState)
-  Required Properties: species, studiedState
+### Load it back
+
+Loading from the file rebuilds the instances and the links between them.
+
+```matlab
+loaded = openminds.Collection(jsonldFile);
+fprintf("Loaded %d instances\n", numel(loaded.getAll()))
 ```
+
+```matlabTextOutput
+Loaded 9 instances
+```
+<!-- livescript:end -->
+
+## Tutorials
+
+Longer worked examples, exported from the live scripts in `code/livescripts`:
+
+- [Crew member collection](docs/tutorials/crewMemberCollection.md) — build a small linked collection from a table, save it, and load it back.
+- [Basic neuroscience dataset](docs/tutorials/basicNeuroscienceDataset.md) — describe a dataset, its subjects and their states the way a data repository expects.
+
+Each is also available to run directly in MATLAB Online from the links inside.
+
+## Extending the toolbox
+
+Two extension points are public and stable:
+
+- **Link resolvers.** Implement `openminds.interface.LinkResolver` and register it with `openminds.registerLinkResolver` to resolve references to instances that live somewhere else — a knowledge graph, a local store, an archive.
+- **Metadata stores.** Implement `openminds.interface.MetadataStore` to read and write collections to a backend of your own.
+
+To ask what a type looks like — which properties are links, which are embedded, which accept several types — use `openminds.introspection`. It is what the toolbox's own serializers use.
+
+Names under `openminds.internal` are implementation details and may change between releases.
+
+## Upgrading
+
+Releases before 1.0.0 may rename public names. Each release with renames ships a migration guide under [`docs/migration`](docs/migration), listing every old name and its replacement; the guide is linked from the release notes.
 
 ## Detailed Installation Instructions
 [(Back to top)](#openminds-metadata-models-for-matlab)
