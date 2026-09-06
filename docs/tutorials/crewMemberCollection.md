@@ -95,9 +95,11 @@ disp(consortia("Heart of Gold Spacecraft Crew"))
   Consortium (_:heart-of-gold-spacecraft-crew) with properties:
 
 
-     fullName: "Heart of Gold Spacecraft Crew"
-     homepage: ""
-    shortName: ""
+    contactInformation: [None] (ContactInformation)
+              fullName: "Heart of Gold Spacecraft Crew"
+              homepage: ""
+           memberships: [None] (Membership)
+             shortName: ""
 
 
   Required Properties: fullName, memberships
@@ -115,9 +117,11 @@ consortium =
   Consortium (_:1) with properties:
 
 
-     fullName: "Heart of Gold Spacecraft Crew"
-     homepage: ""
-    shortName: ""
+    contactInformation: [None] (ContactInformation)
+              fullName: "Heart of Gold Spacecraft Crew"
+              homepage: ""
+           memberships: [None] (Membership)
+             shortName: ""
 
 
   Required Properties: fullName, memberships
@@ -247,7 +251,9 @@ personRow =
 
 
          alternateName: <missing>
+     associatedAccount: [None] (AccountInformation)
     contactInformation: arthur-dent@hitchhikers-guide.galaxy (ContactInformation)
+     digitalIdentifier: [1x0 DigitalIdentifier]
             familyName: "Dent"
              givenName: "Arthur"
          preferredName: "Arthur Dent"

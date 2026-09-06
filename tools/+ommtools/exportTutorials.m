@@ -6,8 +6,19 @@ function exportTutorials()
 %   was last saved inside the live script. Blank-node ids in the output are
 %   then normalised, so exporting twice from the same code gives the same
 %   file and a commit only records a real change.
+%
+%   Instance displays are exported with every property listed, whatever the
+%   caller's PropertyDisplayMode preference is, so the output does not depend
+%   on who runs the export. The caller's preference is restored on exit.
 
     exportFormat = [".md", ".html"];
+
+    % Preferences persist to prefdir, so restore the caller's value rather
+    % than leaving the export's choice behind.
+    previousDisplayMode = openminds.getpref("PropertyDisplayMode");
+    openminds.setpref(PropertyDisplayMode="all");
+    restoreDisplayMode = onCleanup(@() ...
+        openminds.setpref(PropertyDisplayMode=previousDisplayMode));
 
     openmindsCodePath = openminds.toolboxdir();
     openmindsDocsPath = strrep(openmindsCodePath, 'code', 'docs');

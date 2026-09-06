@@ -224,7 +224,10 @@ disp(pi)
   Person (_:jane-doe) with properties:
 
 
+         alternateName: [1x0 string]
+     associatedAccount: [None] (AccountInformation)
     contactInformation: pi@neuroscience.edu (ContactInformation)
+     digitalIdentifier: [1x0 DigitalIdentifier]
             familyName: "Doe"
              givenName: "Jane"
          preferredName: "Jane Doe"
@@ -241,7 +244,10 @@ disp(postdoc)
   Person (_:john-smith) with properties:
 
 
+         alternateName: [1x0 string]
+     associatedAccount: [None] (AccountInformation)
     contactInformation: postdoc@neuroscience.edu (ContactInformation)
+     digitalIdentifier: [1x0 DigitalIdentifier]
             familyName: "Smith"
              givenName: "John"
          preferredName: "John Smith"
@@ -551,6 +557,7 @@ disp(subject1);
 
          biologicalSex: male (BiologicalSex)
     internalIdentifier: "S1"
+              isPartOf: [None] (SubjectGroup)
            lookupLabel: "Subject1"
                species: C57BL/6J (Strain)
           studiedState: Subject1-state (SubjectState)
@@ -569,6 +576,7 @@ disp(subject2);
 
          biologicalSex: male (BiologicalSex)
     internalIdentifier: "S2"
+              isPartOf: [None] (SubjectGroup)
            lookupLabel: "Subject2"
                species: C57BL/6J (Strain)
           studiedState: Subject2-state (SubjectState)

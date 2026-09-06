@@ -97,8 +97,10 @@ disp(mouse)
 
          biologicalSex: female (BiologicalSex)
     internalIdentifier: ""
+              isPartOf: [None] (SubjectGroup)
            lookupLabel: "mouse_01"
                species: Mus musculus (Species)
+          studiedState: [None] (SubjectState)
 
 
   Required Properties: species, studiedState
@@ -127,12 +129,18 @@ disp(recordingState)
   SubjectState (_:2) with properties:
 
 
-     additionalRemarks: ""
-                   age: 12 weeks (birth) (SpecimenAge)
-           ageCategory: adult (AgeCategory)
-    internalIdentifier: ""
-           lookupLabel: "mouse_01_recording"
-                weight: 24 grams (body weight) (SpecimenWeight)
+         additionalRemarks: ""
+                       age: 12 weeks (birth) (SpecimenAge)
+               ageCategory: adult (AgeCategory)
+        associatedProtocol: [None] (Any of: BehavioralProtocol, Protocol)
+                 attribute: [None] (SubjectAttribute)
+             descendedFrom: [None] (SubjectState)
+                handedness: [None] (Handedness)
+        internalIdentifier: ""
+               lookupLabel: "mouse_01_recording"
+                 pathology: [None] (Any of: Disease, DiseaseModel)
+    relativeTimeIndication: [1x0 RelativeTimeIndication]
+                    weight: 24 grams (body weight) (SpecimenWeight)
 
 
   Required Properties: ageCategory
@@ -153,6 +161,7 @@ disp(mouse)
 
          biologicalSex: female (BiologicalSex)
     internalIdentifier: ""
+              isPartOf: [None] (SubjectGroup)
            lookupLabel: "mouse_01"
                species: Mus musculus (Species)
           studiedState: mouse_01_recording (SubjectState)
