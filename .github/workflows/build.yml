@@ -146,6 +146,9 @@ jobs:
         with:
           ref: main
           ssh-key: ${{ secrets.DEPLOY_KEY }}
+          # Full history, so the push below can rebase if main moves while
+          # this run is building
+          fetch-depth: 0
 
       - name: Download build (target) artifact
         uses: actions/download-artifact@v7
@@ -187,7 +190,28 @@ jobs:
           if [[ $(git add . --dry-run | wc -l) -gt 0 ]]; then
             git add .
             git commit -m "$commit_message"
-            git push -f
+
+            # A run takes minutes, and main can gain commits in that time.
+            # Replay the generated changes on top of whatever landed instead
+            # of overwriting it, and give up loudly rather than force it.
+            pushed=false
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                pushed=true
+                break
+              fi
+
+              echo "::notice::main moved during this build, rebasing onto it (attempt $attempt)"
+              if ! git pull --rebase origin main; then
+                echo "::error::Could not replay the build onto main. Generated files may have been edited by hand."
+                exit 1
+              fi
+            done
+
+            if [ "$pushed" != true ]; then
+              echo "::error::Could not push the build to main after 3 attempts."
+              exit 1
+            fi
           else
             echo "Nothing to commit"
           fi
