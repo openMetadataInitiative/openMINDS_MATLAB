@@ -183,7 +183,7 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
 
             if numObjects == 0
                 str = openminds.internal.mixin.CustomInstanceDisplay.NULLVALUE_DISPLAY_LABEL;
-                annotation = obj.getAnnotation(width);
+                annotation = plainWhenHotlinksOff(obj.getAnnotation(width));
                 % displayConfiguration.DataDelimiters=["<", ">"];
 
                 rep = matlab.display.PlainTextRepresentation(...
@@ -195,14 +195,14 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
                     'StringArray', obj.DisplayString);
                 
                 widthForAnnotation = width - rep.CharacterWidth - 3; % 3 = annotation padding " ()"
-                annotation = obj.getAnnotation(widthForAnnotation);
+                annotation = plainWhenHotlinksOff(obj.getAnnotation(widthForAnnotation));
                 
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
                     'StringArray', obj.DisplayString, ...
                     'Annotation', annotation);
             else
                 stringArray = obj.getStringArrayForSingleLine(displayConfiguration, width);
-                annotation = obj.getAnnotation(width);
+                annotation = plainWhenHotlinksOff(obj.getAnnotation(width));
 
                 rep = fullDataRepresentation(obj, displayConfiguration, ...
                     'StringArray', stringArray, ...
@@ -282,4 +282,22 @@ classdef CustomInstanceDisplay < handle & matlab.mixin.CustomDisplay & ...
             % should return a string array...
         end
     end
+end
+
+function text = plainWhenHotlinksOff(text)
+% plainWhenHotlinksOff - Reduce hyperlinks to their visible label when
+% hotlinks are off
+%
+%   Annotations are built with <a href="matlab:..."> hyperlinks so a type
+%   name in a display is clickable. When hotlinks are on MATLAB measures
+%   the visible text, and the annotation fits. When they are off, as in a
+%   headless session or an exported live script, MATLAB counts the markup
+%   too, the annotation is several times wider than it looks, and the
+%   compact display falls back to the default "[1x0 ClassName]" form. Strip
+%   the markup in that case so the annotation measures what it shows.
+
+    if feature("hotlinks")
+        return
+    end
+    text = regexprep(text, "<a [^>]*>(.*?)</a>", "$1");
 end
