@@ -641,7 +641,7 @@ disp(['Saved metadata to: ', savePath]);
 ```
 
 ```matlabTextOutput
-Saved metadata to: /Users/eivind/Code/MATLAB/Neuroscience/Repositories/openMetadataInitiative/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
+Saved metadata to: /home/runner/work/openMINDS_MATLAB/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
 ```
 
 <a id="H_0727"></a>
@@ -658,27 +658,6 @@ disp(jsonContent);
     "@vocab": "https://openminds.om-i.org/props/"
   },
   "@graph": [
-    {
-      "@id": "_:1",
-      "@type": "https://openminds.om-i.org/types/Accessibility",
-      "channel": {
-        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
-      },
-      "eligibility": {
-        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
-      },
-      "form": {
-        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
-      },
-      "paymentModel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
-        }
-      ],
-      "process": {
-        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
-      }
-    },
     {
       "@id": "_:brain-research-center",
       "@type": "https://openminds.om-i.org/types/Organization",
@@ -702,6 +681,27 @@ disp(jsonContent);
       "name": "C57BL/6J",
       "species": {
         "@id": "https://openminds.om-i.org/instances/species/musMusculus"
+      }
+    },
+    {
+      "@id": "_:1",
+      "@type": "https://openminds.om-i.org/types/Accessibility",
+      "channel": {
+        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
+      },
+      "eligibility": {
+        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
+      },
+      "form": {
+        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
+      },
+      "paymentModel": [
+        {
+          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
+        }
+      ],
+      "process": {
+        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
       }
     },
     {
