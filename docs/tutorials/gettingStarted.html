@@ -49,14 +49,14 @@ Added classes for version "latest" of the openMINDS metadata model to the search
          additionalRemarks: ""
                        age: 12 weeks (birth) (SpecimenAge)
                ageCategory: adult (AgeCategory)
-        associatedProtocol: [1×0 AssociatedProtocol]
+        associatedProtocol: [None] (Any of: BehavioralProtocol, Protocol)
                  attribute: [None] (SubjectAttribute)
              descendedFrom: [None] (SubjectState)
                 handedness: [None] (Handedness)
         internalIdentifier: ""
                lookupLabel: "mouse_01_recording"
-                 pathology: [1×0 Pathology]
-    relativeTimeIndication: [1×0 RelativeTimeIndication]
+                 pathology: [None] (Any of: Disease, DiseaseModel)
+    relativeTimeIndication: [None] (One of: QuantitativeValue, QuantitativeValueRange)
                     weight: 24 grams (body weight) (SpecimenWeight)
 
   Required Properties: <strong style="white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;">ageCategory</strong></div></div></div></div></div><h2  class = 'S4'><span class="_richTextNode">Link the state to the subject</span></h2><div  class = 'S1'><span class="_richTextNode">Assigning an instance to a property links the two. A linked property can hold several instances, so a subject can have a state per session.</span></div><div class="CodeBlock"><div class="inlineWrapper"><div  class = 'S5'><span style="white-space: pre"><span >mouse.studiedState = recordingState;</span></span></div></div><div class="inlineWrapper outputs"><div  class = 'S7'><span style="white-space: pre"><span >disp(mouse)</span></span></div><div  class = 'S3'><div class="inlineElement eoOutputWrapper disableDefaultGestureHandling embeddedOutputsTextElement" prevent-scroll="true" data-testid="output_4" tabindex="-1" style="width: 1145px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;"><div class="textElement eoOutputContent" tabindex="-1" data-previous-available-width="1108" data-previous-scroll-height="150" data-hashorizontaloverflow="false" style="max-height: 261px; white-space: pre; font-style: normal; color: rgb(33, 33, 33); font-size: 12px;" role="article" aria-roledescription="Use Browse Mode to explore " aria-description="text output ">  Subject (_:1) with properties:

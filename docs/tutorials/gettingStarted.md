@@ -77,14 +77,14 @@ disp(recordingState)
          additionalRemarks: ""
                        age: 12 weeks (birth) (SpecimenAge)
                ageCategory: adult (AgeCategory)
-        associatedProtocol: [1x0 AssociatedProtocol]
+        associatedProtocol: [None] (Any of: BehavioralProtocol, Protocol)
                  attribute: [None] (SubjectAttribute)
              descendedFrom: [None] (SubjectState)
                 handedness: [None] (Handedness)
         internalIdentifier: ""
                lookupLabel: "mouse_01_recording"
-                 pathology: [1x0 Pathology]
-    relativeTimeIndication: [1x0 RelativeTimeIndication]
+                 pathology: [None] (Any of: Disease, DiseaseModel)
+    relativeTimeIndication: [None] (One of: QuantitativeValue, QuantitativeValueRange)
                     weight: 24 grams (body weight) (SpecimenWeight)
 
 

@@ -227,7 +227,7 @@ disp(pi)
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: pi@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
+     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
             familyName: "Doe"
              givenName: "Jane"
          preferredName: "Jane Doe"
@@ -247,7 +247,7 @@ disp(postdoc)
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: postdoc@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
+     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
             familyName: "Smith"
              givenName: "John"
          preferredName: "John Smith"
@@ -659,6 +659,27 @@ disp(jsonContent);
   },
   "@graph": [
     {
+      "@id": "_:1",
+      "@type": "https://openminds.om-i.org/types/Accessibility",
+      "channel": {
+        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
+      },
+      "eligibility": {
+        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
+      },
+      "form": {
+        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
+      },
+      "paymentModel": [
+        {
+          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
+        }
+      ],
+      "process": {
+        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
+      }
+    },
+    {
       "@id": "_:brain-research-center",
       "@type": "https://openminds.om-i.org/types/Organization",
       "acronym": "BRC",
@@ -681,27 +702,6 @@ disp(jsonContent);
       "name": "C57BL/6J",
       "species": {
         "@id": "https://openminds.om-i.org/instances/species/musMusculus"
-      }
-    },
-    {
-      "@id": "_:1",
-      "@type": "https://openminds.om-i.org/types/Accessibility",
-      "channel": {
-        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
-      },
-      "eligibility": {
-        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
-      },
-      "form": {
-        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
-      },
-      "paymentModel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
-        }
-      ],
-      "process": {
-        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
       }
     },
     {
