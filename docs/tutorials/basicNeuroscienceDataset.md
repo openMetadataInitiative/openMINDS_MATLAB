@@ -61,7 +61,7 @@ This tutorial covers:
  
 &#8195;&#8195;[5.2 Save the collection to a JSON\-LD file](#H_28a1)
  
-&#8195;&#8195;[5.3 Display the saved JSON\-LD content](#H_0727)
+&#8195;&#8195;[5.3 Display the saved JSON-LD content](#H_0727)
  
 &#8195;[6. Summary](#H_3f72)
  
@@ -114,16 +114,115 @@ university = openminds.core.actors.Organization(...
     "acronym", "UNS", ...
     "countryOfFormation", openminds.controlledterms.SovereignState("Germany"), ...
     "type", openminds.controlledterms.OrganizationType("legalEntity"));
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Second approach: Create empty instance and set properties
 researchCenter = openminds.core.actors.Organization();
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.id = createId("Brain Research Center");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.name = "Brain Research Center";
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.acronym = "BRC";
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.countryOfFormation = openminds.controlledterms.SovereignState("Germany");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.type = openminds.controlledterms.OrganizationType("organizationalUnit");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 researchCenter.hasParent = university;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Display selected Organization fields:
@@ -131,7 +230,17 @@ fprintf("%s (%s)\n", university.name, university.acronym)
 ```
 
 ```matlabTextOutput
-University of Neuroscience (UNS)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+University of Neuroscience
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+ (UNS)
 ```
 
 ```matlab
@@ -139,6 +248,9 @@ fprintf("%s (%s)\n", researchCenter.name, researchCenter.acronym)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 Brain Research Center (BRC)
 ```
 
@@ -149,20 +261,67 @@ Brain Research Center (BRC)
 contactPI = openminds.core.actors.ContactInformation(...
     'id', createId('contact-pi'), ...
     'email', 'pi@neuroscience.edu');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 contactPostdoc = openminds.core.actors.ContactInformation(...
     'id', createId('contact-postdoc'), ...
     'email', 'postdoc@neuroscience.edu');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 disp(contactPI)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   ContactInformation (_:contact-pi) with properties:
-
-
-    email: "pi@neuroscience.edu"
-
-
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+    
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+email
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"pi@neuroscience.edu"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Required Properties: email
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 ```matlab
@@ -170,11 +329,12 @@ disp(contactPostdoc)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   ContactInformation (_:contact-postdoc) with properties:
 
-
     email: "postdoc@neuroscience.edu"
-
 
   Required Properties: email
 ```
@@ -194,6 +354,15 @@ pi = openminds.core.actors.Person(...
     "familyName", "Doe", ...
     "preferredName", "Jane Doe", ...
     "contactInformation", contactPI);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Postdoc
@@ -203,17 +372,53 @@ postdoc = openminds.core.actors.Person(...
     "familyName", "Smith", ...
     "preferredName", "John Smith", ...
     "contactInformation", contactPostdoc);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Affiliations are represented separately from the Person instances
 piAffiliation = openminds.core.actors.Affiliation(...
     "person", pi, ...
     "organization", university);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 postdocAffiliation = openminds.core.actors.Affiliation(...
     "person", postdoc, ...
     "organization", researchCenter);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Display the Person metadata instances:
@@ -221,17 +426,71 @@ disp(pi)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Person (_:jane-doe) with properties:
-
-
-         alternateName: [1x0 string]
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+         
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+alternateName
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+[1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: pi@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
-            familyName: "Doe"
+     
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+digitalIdentifier
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+[1x0 DigitalIdentifier]
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+            
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+familyName
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"Doe"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
              givenName: "Jane"
          preferredName: "Jane Doe"
-
 
   Required Properties: preferredName
 ```
@@ -241,17 +500,51 @@ disp(postdoc)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Person (_:john-smith) with properties:
-
 
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: postdoc@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
-            familyName: "Smith"
+     
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+digitalIdentifier
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+[1x0 DigitalIdentifier]
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+            
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+familyName
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"Smith"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
              givenName: "John"
          preferredName: "John Smith"
-
 
   Required Properties: preferredName
 ```
@@ -271,6 +564,12 @@ doi = openminds.core.digitalidentifier.DOI(...
     'identifier', 'https://doi.org/10.1234/example.2023.001');
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_151d"></a>
 
 ## 3.2 Create a license
@@ -285,20 +584,60 @@ license = openminds.core.data.License(...
     "shortName", "CC-BY-4.0", ...
     "legalCode", "https://creativecommons.org/licenses/by/4.0/legalcode", ...
     "webpage", "https://creativecommons.org/licenses/by/4.0");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 disp(license)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   License (_:cc-by-4) with properties:
-
-
-     fullName: "Creative Commons Attribution 4.0 International"
-    legalCode: "https://creativecommons.org/licenses/by/4.0/legalcode"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+     
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+fullName
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"Creative Commons Attribution 4.0 International"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+    
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+legalCode: "https://creativecommons.org/licenses/by/4.0/legalcode"
     shortName: "CC-BY-4.0"
       webpage: "https://creativecommons.org/licenses/by/4.0"
-
 
   Required Properties: fullName, legalCode, shortName
 ```
@@ -321,6 +660,12 @@ repository = openminds.core.data.FileRepository(...
     'hostedBy', university);
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_3615"></a>
 
 ## 3.4 Create a behavioral protocol
@@ -330,6 +675,15 @@ protocol = openminds.core.research.BehavioralProtocol(...
     'name', 'Visual Go/NoGo Task', ...
     'description', ['Mice were trained to discriminate visual stimuli. ', ...
     'Each stimulus was associated with a specific outcome (reward, nothing, or punishment).']);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_727f"></a>
@@ -347,6 +701,12 @@ openminds.controlledterms.PreparationType.listInstances()
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ans = 6x1 string
 "exVivo"    
 "inSilico"  
@@ -355,25 +715,99 @@ ans = 6x1 string
 "inVitro"   
 "inVivo"    
 
-
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 ```matlab
 % These are predefined terms from controlled vocabularies
 preparationType = openminds.controlledterms.PreparationType("inVivo");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 dataType = openminds.controlledterms.SemanticDataType("experimentalData");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 experimentalApproach1 = openminds.controlledterms.ExperimentalApproach("behavior");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 experimentalApproach2 = openminds.controlledterms.ExperimentalApproach("electrophysiology");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 technique = openminds.controlledterms.Technique("extracellularElectrophysiology");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 ethicsJurisdiction = openminds.controlledterms.SovereignState("Germany");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 accessibility = openminds.core.miscellaneous.Accessibility(...
@@ -382,10 +816,40 @@ accessibility = openminds.core.miscellaneous.Accessibility(...
     "form", openminds.controlledterms.AccessForm("directAccess"), ...
     "paymentModel", openminds.controlledterms.PaymentModelType("zero-costPaymentModel"), ...
     "process", openminds.controlledterms.AccessProcessType("immediateAccess"));
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 contributionTypeAuthor = openminds.controlledterms.ContributionType("authoring");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 contributionTypeCustodian = openminds.controlledterms.ContributionType("custodianship");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_7923"></a>
@@ -395,6 +859,15 @@ contributionTypeCustodian = openminds.controlledterms.ContributionType("custodia
 customKeyword = openminds.controlledterms.TermSuggestion(...
     'id', createId('custom-brain-region'), ...
     'name', 'visual cortex');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_99d7"></a>
@@ -407,20 +880,80 @@ The **`Dataset`** instance stores version\-independent metadata. The **`DatasetV
 documentation = openminds.core.miscellaneous.WebResource(...
     "id", createId("dataset-documentation"), ...
     "IRI", "https://example-repository.org/datasets/123/documentation");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 authorContribution = openminds.core.actors.Contribution(...
     "contributor", [pi, postdoc], ...
     "type", contributionTypeAuthor);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 custodianContribution = openminds.core.actors.Contribution(...
     "contributor", pi, ...
     "type", contributionTypeCustodian);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 contributions = [authorContribution, custodianContribution];
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 contributorAffiliations = [piAffiliation, postdocAffiliation];
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 dataset = openminds.core.products.Dataset(...
@@ -431,6 +964,18 @@ dataset = openminds.core.products.Dataset(...
     "performing a visual discrimination task.", ...
     "contribution", contributions, ...
     "contributorAffiliation", contributorAffiliations);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 datasetVersion = openminds.core.products.DatasetVersion(...
@@ -457,6 +1002,18 @@ datasetVersion = openminds.core.products.DatasetVersion(...
     "isVersionOf", dataset, ...
     "releaseDate", datetime(2023, 1, 1), ...
     "versionSpecification", "This is the first version of this dataset.");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 fprintf("Created dataset version: %s (%s)\n", ...
@@ -464,7 +1021,35 @@ fprintf("Created dataset version: %s (%s)\n", ...
 ```
 
 ```matlabTextOutput
-Created dataset version: Neural activity during visual discrimination task (v1)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Created dataset version: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Neural activity during visual discrimination task
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+ (
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+v1
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_9f96"></a>
@@ -483,6 +1068,15 @@ strain = openminds.core.research.Strain(...
     'species', openminds.controlledterms.Species('musMusculus'));
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_72ab"></a>
 
 ## 4.2 Create biological sex controlled term
@@ -490,15 +1084,57 @@ strain = openminds.core.research.Strain(...
 biologicalSex = openminds.controlledterms.BiologicalSex('male');
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_9593"></a>
 
 ## 4.3 Create subject state attributes
 ```matlab
 subjectAttribute1 = openminds.controlledterms.SubjectAttribute('alive');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 subjectAttribute2 = openminds.controlledterms.SubjectAttribute('awake');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 ageCategory = openminds.controlledterms.AgeCategory('adult');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_40d7"></a>
@@ -513,6 +1149,15 @@ subject1 = openminds.core.research.Subject(...
     'internalIdentifier', 'S1');
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_6998"></a>
 
 ## 4.5 Create another subject
@@ -525,6 +1170,15 @@ subject2 = openminds.core.research.Subject(...
     'internalIdentifier', 'S2');
 ```
 
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
 <a id="H_61c0"></a>
 
 ## 4.6 Create and add subject states for each of the subjects
@@ -535,7 +1189,31 @@ subjectState1 = openminds.core.research.SubjectState(...
     'ageCategory', ageCategory, ...
     'attribute', [subjectAttribute1, subjectAttribute2], ...
     'internalIdentifier', 'Subject1-state-01');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 subject1.studiedState = subjectState1;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 subjectState2 = openminds.core.research.SubjectState(...
@@ -544,7 +1222,31 @@ subjectState2 = openminds.core.research.SubjectState(...
     'ageCategory', "adolescent", ...
     'attribute', [subjectAttribute1, subjectAttribute2], ...
     'internalIdentifier', 'Subject2-state-01');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 subject2.studiedState = subjectState2;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Display the Subject metadata
@@ -552,16 +1254,37 @@ disp(subject1);
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Subject (_:subject1) with properties:
-
-
-         biologicalSex: male (BiologicalSex)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+         
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+biologicalSex
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+male (BiologicalSex)
     internalIdentifier: "S1"
               isPartOf: [None] (SubjectGroup)
            lookupLabel: "Subject1"
                species: C57BL/6J (Strain)
           studiedState: Subject1-state (SubjectState)
-
 
   Required Properties: species, studiedState
 ```
@@ -571,16 +1294,50 @@ disp(subject2);
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Subject (_:subject2) with properties:
 
-
-         biologicalSex: male (BiologicalSex)
-    internalIdentifier: "S2"
+         
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+biologicalSex
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+male (BiologicalSex)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+    
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+internalIdentifier
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"S2"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
               isPartOf: [None] (SubjectGroup)
            lookupLabel: "Subject2"
                species: C57BL/6J (Strain)
           studiedState: Subject2-state (SubjectState)
-
 
   Required Properties: species, studiedState
 ```
@@ -590,6 +1347,15 @@ disp(subject2);
 ## 4.7 Link subjects to the dataset
 ```matlab
 datasetVersion.studiedSpecimen = [subject1, subject2];
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Display a short confirmation for the updated dataset version:
@@ -598,6 +1364,9 @@ fprintf("Dataset version now links to %d studied specimens.\n", ...
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 Dataset version now links to 2 studied specimens.
 ```
 
@@ -613,16 +1382,56 @@ Finally, we add the dataset version to the collection and save the detected meta
 ```matlab
 % Note: The collection will automatically include all linked instances
 collection.add(datasetVersion);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 disp(collection);
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Collection with properties:
-
-
-             Name: "Neuroscience Dataset Example"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+             
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Name
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"Neuroscience Dataset Example"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
       Description: "A tutorial dataset for learning openMINDS metadata creation"
             Nodes: dictionary (string --> cell) with 41 entries
     MetadataStore: [0x0 openminds.internal.FileMetadataStore]
@@ -634,30 +1443,92 @@ disp(collection);
 ```matlab
 % Define the save path (in the current directory)
 savePath = fullfile(pwd, 'example_metadata.jsonld');
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 collection.save(savePath);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 disp(['Saved metadata to: ', savePath]);
 ```
 
 ```matlabTextOutput
-Saved metadata to: /Users/eivind/Code/MATLAB/Neuroscience/Repositories/openMetadataInitiative/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Saved metadata to: /home/runner/work/openMINDS_MATLAB/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_0727"></a>
 
-## 5.3 Display the saved JSON\-LD content
+## 5.3 Display the saved JSON-LD content
 ```matlab
 jsonContent = fileread(savePath);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 disp(jsonContent);
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 {
   "@context": {
     "@vocab": "https://openminds.om-i.org/props/"
   },
   "@graph": [
+    {
+      "@id": "_:brain-research-center",
+      "@type": "https://openminds.om-i.org/types/Organization",
+      "acronym": "BRC",
+      "countryOfFormation": {
+        "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
+      },
+      "hasParent": [
+        {
+          "@id": "_:university-of-neuroscience"
+        }
+      ],
+      "name": "Brain Research Center",
+      "type": {
+        "@id": "https://openminds.om-i.org/instances/organizationType/organizationalUnit"
+      }
+    },
     {
       "@id": "_:1",
       "@type": "https://openminds.om-i.org/types/Accessibility",
@@ -677,23 +1548,6 @@ disp(jsonContent);
       ],
       "process": {
         "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
-      }
-    },
-    {
-      "@id": "_:brain-research-center",
-      "@type": "https://openminds.om-i.org/types/Organization",
-      "acronym": "BRC",
-      "countryOfFormation": {
-        "@id": "https://openminds.om-i.org/instances/SovereignState/Germany"
-      },
-      "hasParent": [
-        {
-          "@id": "_:university-of-neuroscience"
-        }
-      ],
-      "name": "Brain Research Center",
-      "type": {
-        "@id": "https://openminds.om-i.org/instances/organizationType/organizationalUnit"
       }
     },
     {
@@ -1229,6 +2083,19 @@ disp(jsonContent);
     }
   ]
 }
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 <a id="H_3f72"></a>

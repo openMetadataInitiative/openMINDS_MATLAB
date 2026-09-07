@@ -78,9 +78,17 @@ disp(consortia)
 
 ```matlabTextOutput
   dictionary (string --> openminds.core.actors.Consortium) with 1 entry:
-
-
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "Heart of Gold Spacecraft Crew" --> [Heart of Gold Spacecraft Crew] (Consortium)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 We have now created a dictionary that holds the `Consortium` instances. Since all the persons in this example belong to the same consortium, this dictionary only holds one instance.
@@ -92,10 +100,35 @@ disp(consortia("Heart of Gold Spacecraft Crew"))
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Consortium (_:heart-of-gold-spacecraft-crew) with properties:
-
-
-    contactInformation: [None] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+    
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+contactInformation
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+[None] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
               fullName: "Heart of Gold Spacecraft Crew"
               homepage: ""
            memberships: [None] (Membership)
@@ -109,13 +142,24 @@ The `Consortium` instance has five properties, and we have filled out `fullName`
 
 ```matlab
 consortium = openminds.core.Consortium();
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 consortium.fullName = "Heart of Gold Spacecraft Crew"
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 consortium = 
   Consortium (_:1) with properties:
-
 
     contactInformation: [None] (ContactInformation)
               fullName: "Heart of Gold Spacecraft Crew"
@@ -123,9 +167,7 @@ consortium =
            memberships: [None] (Membership)
              shortName: ""
 
-
   Required Properties: fullName, memberships
-
 
 ```
 
@@ -136,6 +178,15 @@ The consortium in this example does not have contact information, but we will mo
 ```matlab
 % Create a dictionary to hold "ContactInformation" instances
 try contacts = dictionary; catch; contacts = containers.Map; end
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 for email = crewMembers.email'
@@ -143,17 +194,51 @@ for email = crewMembers.email'
            'id', createId(email), ...
         'email', email );
 end
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 disp(contacts)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   dictionary (string --> openminds.core.actors.ContactInformation) with 4 entries:
-
-
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "arthur-dent@hitchhikers-guide.galaxy"       --> [arthur-dent@hitchhikers-guide.galaxy] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "ford-prefect@hitchhikers-guide.galaxy"      --> [ford-prefect@hitchhikers-guide.galaxy] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "trillian-astra@hitchhikers-guide.galaxy"    --> [trillian-astra@hitchhikers-guide.galaxy] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "zaphod-beeblebrox@hitchhikers-guide.galaxy" --> [zaphod-beeblebrox@hitchhikers-guide.galaxy] (ContactInformation)
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 This gave us four **`ContactInformation`** instances. Next we create **`Person`** instances and link each one to its **`ContactInformation`** instance. Finally we create one **`Membership`** instance per person and assign those memberships to the consortium.
@@ -164,6 +249,18 @@ This gave us four **`ContactInformation`** instances. Next we create **`Person`*
 
 
 persons = openminds.core.Person.empty;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 for iRow = 1:height(crewMembers)
@@ -179,19 +276,73 @@ for iRow = 1:height(crewMembers)
         "alternateName", personRow.alternateName, ...
         "contactInformation", contacts(personRow.email)); %#ok<SAGROW>
 end
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Create memberships for each person / crew member
 memberships = openminds.core.miscellaneous.Membership.empty;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 for i = 1:numel(persons)
     memberships(end+1) = openminds.core.miscellaneous.Membership( ...
         "member", persons(i)); %#ok<SAGROW>
 end
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Add crew members to the crew
 crew = consortia("Heart of Gold Spacecraft Crew");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 crew.memberships = memberships;
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 # Add instances to collection and export collection
@@ -200,14 +351,57 @@ Now that we have all the instances, we can add them to the `collection`. It is s
 
 ```matlab
 collection.add(crew)
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 disp(collection)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   Collection with properties:
-
-
-             Name: "Crew Members"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+             
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Name
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+: 
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+"Crew Members"
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
       Description: "Crew members of the 'Heart of Gold' spacecraft"
             Nodes: dictionary (string --> cell) with 9 entries
     MetadataStore: [0x0 openminds.internal.FileMetadataStore]
@@ -220,18 +414,47 @@ disp(collection.Nodes)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
   dictionary (string --> cell) with 9 entries:
-
 
     "_:arthur-dent@hitchhikers-guide.galaxy"       --> {[arthur-dent@hitchhikers-guide.galaxy] (ContactInformation)}
     "_:arthur-dent"                                --> {[Dent, Arthur] (Person)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:ford-prefect@hitchhikers-guide.galaxy"      --> {[ford-prefect@hitchhikers-guide.galaxy] (ContactInformation)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:ford-prefect"                               --> {[Prefect, Ford] (Person)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:trillian-astra@hitchhikers-guide.galaxy"    --> {[trillian-astra@hitchhikers-guide.galaxy] (ContactInformation)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:tricia-marie-mcmillan"                      --> {[McMillan, Tricia Marie] (Person)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:zaphod-beeblebrox@hitchhikers-guide.galaxy" --> {[zaphod-beeblebrox@hitchhikers-guide.galaxy] (ContactInformation)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:zaphod-beeblebrox"                          --> {[Beeblebrox, Zaphod] (Person)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
     "_:heart-of-gold-spacecraft-crew"              --> {[Heart of Gold Spacecraft Crew] (Consortium)}
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
 
 A note here: Since the collection holds a mix of different types, each type is inside a cell (as indicated by the curly brackets). In order to get an instance from the `Nodes`, we need to index into a cell object:
@@ -246,9 +469,11 @@ end
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 personRow = 
   Person (_:arthur-dent) with properties:
-
 
          alternateName: <missing>
      associatedAccount: [None] (AccountInformation)
@@ -258,9 +483,7 @@ personRow =
              givenName: "Arthur"
          preferredName: "Arthur Dent"
 
-
   Required Properties: preferredName
-
 
 ```
 
@@ -269,15 +492,65 @@ Finally, we can save the collection
 ```matlab
 % Save the instances to the openMINDS userdata folder:
 savePath = fullfile(userpath, "openMINDS_MATLAB", "demo", "crew_members.jsonld");
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 collection.save(savePath)
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 
 
 % Check out the saved metadata:
 str = fileread(savePath);
+```
+
+```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+```
+
+```matlab
 disp(str)
 ```
 
 ```matlabTextOutput
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 {
   "@context": {
     "@vocab": "https://openminds.om-i.org/props/"
@@ -396,4 +669,25 @@ disp(str)
     }
   ]
 }
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
+Warning: Unable to locate a personal folder for $documents/MATLAB.
 ```
