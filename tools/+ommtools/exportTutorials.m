@@ -10,8 +10,12 @@ function exportTutorials()
 %   Instance displays are exported with every property listed, whatever the
 %   caller's PropertyDisplayMode preference is, so the output does not depend
 %   on who runs the export. The caller's preference is restored on exit.
+%
+%   Only markdown is exported. MATLAB's HTML export embeds identifiers that
+%   differ on every export, so an HTML file changed on every run whether or
+%   not anything had, and nothing links to the HTML files.
 
-    exportFormat = [".md", ".html"];
+    EXPORT_EXTENSION = ".md";
 
     % Preferences persist to prefdir, so restore the caller's value rather
     % than leaving the export's choice behind.
@@ -30,14 +34,9 @@ function exportTutorials()
         sourcePath = fullfile(L(i).folder, L(i).name);
         targetPath = fullfile(openmindsDocsPath, 'tutorials', L(i).name);
 
-        for j = 1:numel(exportFormat)
-            exportedPath = strrep(targetPath, '.mlx', exportFormat(j));
-            export(sourcePath, exportedPath, Run=true);
-            if exportFormat(j) == ".html"
-                postProcessLivescriptHtml(exportedPath)
-            end
-            finalizeExportedFile(exportedPath)
-        end
+        exportedPath = strrep(targetPath, '.mlx', EXPORT_EXTENSION);
+        export(sourcePath, exportedPath, Run=true);
+        finalizeExportedFile(exportedPath)
     end
 end
 
