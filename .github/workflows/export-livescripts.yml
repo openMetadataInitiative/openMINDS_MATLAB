@@ -12,6 +12,11 @@ name: Export live scripts
 #
 # Runs on push to main only, so the commit it makes lands on main and never
 # on a pull request head, where it would rewrite the branch under a stack.
+#
+# The runner has no MATLAB user folder, and the toolbox resolves its instance
+# library under userpath, so without one every controlled-term lookup warns
+# and the export captures the warning into the documentation. Each MATLAB
+# step therefore gives MATLAB a user folder first.
 
 on:
   push:
@@ -58,6 +63,7 @@ jobs:
         uses: matlab-actions/run-command@v3
         with:
           command: |
+            run(fullfile("tools", "tasks", "ensureUserpath.m"));
             addpath(genpath("tools"));
             run(fullfile("code", "startup.m"));
             results = runtests("TutorialTest");
@@ -67,6 +73,7 @@ jobs:
         uses: matlab-actions/run-command@v3
         with:
           command: |
+            run(fullfile("tools", "tasks", "ensureUserpath.m"));
             addpath(genpath("tools"));
             run(fullfile("code", "startup.m"));
             ommtools.exportTutorials();
