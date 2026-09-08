@@ -18,7 +18,7 @@ classdef Dependency < openminds.Node
 
         % Enter the resource that fulfils this dependency.
         fulfilledBy (1,:) openminds.internal.mixedtype.dependency.FulfilledBy ...
-            {mustBeScalarOrEmpty(fulfilledBy)}
+            {mustBeScalarOrEmpty(fulfilledBy)} = openminds.internal.mixedtype.dependency.FulfilledBy()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef Dependency < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.fulfilledBy, obj.failureImpact);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.fulfilledBy(obj)
-            value = obj.fulfilledBy.unwrap();
         end
     end
 end

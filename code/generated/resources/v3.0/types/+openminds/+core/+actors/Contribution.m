@@ -14,7 +14,7 @@ classdef Contribution < openminds.Node
     properties (SetObservable)
         % Add all types of contribution made by the stated 'contributor'.
         contributor (1,:) openminds.internal.mixedtype.contribution.Contributor ...
-            {mustBeScalarOrEmpty(contributor)}
+            {mustBeScalarOrEmpty(contributor)} = openminds.internal.mixedtype.contribution.Contributor()
 
         % Add the party that performed the contribution.
         type (1,:) openminds.controlledterms.ContributionType ...
@@ -53,12 +53,6 @@ classdef Contribution < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', strjoin(string(arrayfun(@(x) string(x), obj.contributor)), '; '), obj.type);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.contributor(obj)
-            value = obj.contributor.unwrap();
         end
     end
 end

@@ -38,7 +38,7 @@ classdef FileBundle < openminds.Node
 
         % Add all entities that played a role in the production of this file bundle (must be true for all grouped files).
         descendedFrom (1,:) openminds.internal.mixedtype.filebundle.DescendedFrom ...
-            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)}
+            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)} = openminds.internal.mixedtype.filebundle.DescendedFrom()
 
         % If file instances within this bundle are organized and formatted according to a formal data structure use the appropriate contentType. Leave blank otherwise.
         format (1,:) openminds.core.data.ContentType ...
@@ -54,7 +54,7 @@ classdef FileBundle < openminds.Node
 
         % Add the file bundle or file repository this file bundle is a part of.
         isPartOf (1,:) openminds.internal.mixedtype.filebundle.IsPartOf ...
-            {mustBeScalarOrEmpty(isPartOf)}
+            {mustBeScalarOrEmpty(isPartOf)} = openminds.internal.mixedtype.filebundle.IsPartOf()
 
         % Enter the name of this file bundle.
         name (1,1) string
@@ -103,15 +103,6 @@ classdef FileBundle < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.name, obj.groupedBy);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.descendedFrom(obj)
-            value = obj.descendedFrom.unwrap();
-        end
-        function value = get.isPartOf(obj)
-            value = obj.isPartOf.unwrap();
         end
     end
 end

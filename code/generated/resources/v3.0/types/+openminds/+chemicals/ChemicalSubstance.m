@@ -37,7 +37,7 @@ classdef ChemicalSubstance < openminds.Node
 
         % Enter the purity of this chemical substance.
         purity (1,:) openminds.internal.mixedtype.chemicalsubstance.Purity ...
-            {mustBeScalarOrEmpty(purity)}
+            {mustBeScalarOrEmpty(purity)} = openminds.internal.mixedtype.chemicalsubstance.Purity()
     end
 
     properties (Access = protected)
@@ -73,12 +73,6 @@ classdef ChemicalSubstance < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.purity(obj)
-            value = obj.purity.unwrap();
         end
     end
 end

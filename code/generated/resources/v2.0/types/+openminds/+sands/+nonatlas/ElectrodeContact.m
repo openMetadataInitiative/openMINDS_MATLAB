@@ -43,11 +43,11 @@ classdef ElectrodeContact < openminds.Node
 
         % Add one or several files in which the recordings from this electrode contact were stored.
         relatedRecording (1,:) openminds.internal.mixedtype.electrodecontact.RelatedRecording ...
-            {mustBeMinLength(relatedRecording, 1), mustBeListOfUniqueItems(relatedRecording)}
+            {mustBeMinLength(relatedRecording, 1), mustBeListOfUniqueItems(relatedRecording)} = openminds.internal.mixedtype.electrodecontact.RelatedRecording()
 
         % Add one or several files in which the stimulations applied via this electrode contact were stored.
         relatedStimulation (1,:) openminds.internal.mixedtype.electrodecontact.RelatedStimulation ...
-            {mustBeMinLength(relatedStimulation, 1), mustBeListOfUniqueItems(relatedStimulation)}
+            {mustBeMinLength(relatedStimulation, 1), mustBeListOfUniqueItems(relatedStimulation)} = openminds.internal.mixedtype.electrodecontact.RelatedStimulation()
 
         % Add one or several image files in which the electrode contact is visualized in.
         visualizedIn (1,:) openminds.core.data.File ...
@@ -89,15 +89,6 @@ classdef ElectrodeContact < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.internalIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relatedRecording(obj)
-            value = obj.relatedRecording.unwrap();
-        end
-        function value = get.relatedStimulation(obj)
-            value = obj.relatedStimulation.unwrap();
         end
     end
 end

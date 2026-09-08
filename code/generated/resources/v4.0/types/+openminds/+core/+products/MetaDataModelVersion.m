@@ -94,22 +94,22 @@ classdef MetaDataModelVersion < openminds.Node
 
         % Add all parties that fulfill the role of a custodian for the research product version (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product version.
         custodian (1,:) openminds.internal.mixedtype.metadatamodelversion.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.metadatamodelversion.Custodian()
 
         % Enter a description (or abstract) of this research product version. Note that this version specific description will overwrite the description for the overarching dataset.
         description (1,1) string
 
         % Add all parties that developed this (meta)data model version. Note that these developers will overwrite the developer list provided for the overarching (meta)data model.
         developer (1,:) openminds.internal.mixedtype.metadatamodelversion.Developer ...
-            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)} = openminds.internal.mixedtype.metadatamodelversion.Developer()
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.metadatamodelversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.metadatamodelversion.DigitalIdentifier()
 
         % Add the publication or file that acts as the full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.metadatamodelversion.FullDocumentation ...
-            {mustBeScalarOrEmpty(fullDocumentation)}
+            {mustBeScalarOrEmpty(fullDocumentation)} = openminds.internal.mixedtype.metadatamodelversion.FullDocumentation()
 
         % Enter a descriptive full name (or title) for this research product version. Note that this version specific full name will overwrite the full name for the overarching dataset.
         fullName (1,1) string
@@ -134,7 +134,7 @@ classdef MetaDataModelVersion < openminds.Node
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.metadatamodelversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.metadatamodelversion.Keyword()
 
         % Add the license of this (meta)data model version.
         license (1,:) openminds.core.data.License ...
@@ -146,7 +146,7 @@ classdef MetaDataModelVersion < openminds.Node
 
         % Add all further publications besides the full documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version).
         relatedPublication (1,:) openminds.internal.mixedtype.metadatamodelversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.metadatamodelversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -229,27 +229,6 @@ classdef MetaDataModelVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.developer(obj)
-            value = obj.developer.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.fullDocumentation(obj)
-            value = obj.fullDocumentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
         end
     end
 end

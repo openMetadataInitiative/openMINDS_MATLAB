@@ -23,7 +23,7 @@ classdef Organization < openminds.Node
     properties (SetObservable)
         % Add one or several globally unique and persistent digital identifier for this organization.
         digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
-            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)} = openminds.internal.mixedtype.organization.DigitalIdentifier()
 
         % Enter the full name of the organization.
         fullName (1,1) string
@@ -73,12 +73,6 @@ classdef Organization < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
         end
     end
 end

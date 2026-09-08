@@ -135,11 +135,11 @@ classdef CommonCoordinateFrameworkVersion < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.DigitalIdentifier()
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.Documentation()
 
         % Enter a descriptive full name (or title) for this research product version. This value overrides the inherited value from the version-independent product.
         fullName (1,1) string
@@ -168,7 +168,7 @@ classdef CommonCoordinateFrameworkVersion < openminds.Node
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.Keyword()
 
         % Add the native unit that is used for this common coordinate framework version.
         nativeUnit (1,:) openminds.controlledterms.UnitOfMeasurement ...
@@ -184,7 +184,7 @@ classdef CommonCoordinateFrameworkVersion < openminds.Node
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -203,11 +203,11 @@ classdef CommonCoordinateFrameworkVersion < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.UsageCondition()
 
         % Add the specimen(s) that were used in the creation of this common coordinate framework version.
         usedSpecimen (1,:) openminds.internal.mixedtype.commoncoordinateframeworkversion.UsedSpecimen ...
-            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)}
+            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)} = openminds.internal.mixedtype.commoncoordinateframeworkversion.UsedSpecimen()
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string
@@ -266,27 +266,6 @@ classdef CommonCoordinateFrameworkVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
-        end
-        function value = get.usedSpecimen(obj)
-            value = obj.usedSpecimen.unwrap();
         end
     end
 end

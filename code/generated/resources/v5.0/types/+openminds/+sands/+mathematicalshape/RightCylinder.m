@@ -18,7 +18,7 @@ classdef RightCylinder < openminds.Node
 
         % Enter the two-dimensional elliptic base shape of the two planes of this right cylinder.
         baseShape (1,:) openminds.internal.mixedtype.rightcylinder.BaseShape ...
-            {mustBeScalarOrEmpty(baseShape)}
+            {mustBeScalarOrEmpty(baseShape)} = openminds.internal.mixedtype.rightcylinder.BaseShape()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef RightCylinder < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.baseShape, obj.baseDistance);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.baseShape(obj)
-            value = obj.baseShape.unwrap();
         end
     end
 end

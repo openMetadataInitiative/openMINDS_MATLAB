@@ -61,7 +61,7 @@ classdef TissueSampleCollection < openminds.Node
 
         % Add the biogical origin (organ or cell type) of all tissue samples in this collection.
         origin (1,:) openminds.internal.mixedtype.tissuesamplecollection.Origin ...
-            {mustBeMinLength(origin, 1), mustBeListOfUniqueItems(origin)}
+            {mustBeMinLength(origin, 1), mustBeListOfUniqueItems(origin)} = openminds.internal.mixedtype.tissuesamplecollection.Origin()
 
         % Add the phenotype of all specimen in this set.
         phenotype (1,:) openminds.controlledterms.Phenotype ...
@@ -126,12 +126,6 @@ classdef TissueSampleCollection < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.origin(obj)
-            value = obj.origin.unwrap();
         end
     end
 end

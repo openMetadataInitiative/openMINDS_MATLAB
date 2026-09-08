@@ -99,7 +99,7 @@ classdef ModelVersion < openminds.Node
 
         % Add the configuration information for this model version.
         configuration (1,:) openminds.internal.mixedtype.modelversion.Configuration ...
-            {mustBeScalarOrEmpty(configuration)}
+            {mustBeScalarOrEmpty(configuration)} = openminds.internal.mixedtype.modelversion.Configuration()
 
         % Add all individual, organisational, or consortial contributions to this research product version. These values override the inherited values from the version-independent product.
         contribution (1,:) openminds.core.actors.Contribution ...
@@ -118,11 +118,11 @@ classdef ModelVersion < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.modelversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.modelversion.DigitalIdentifier()
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.modelversion.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.modelversion.Documentation()
 
         % Add the entry point for this model version (for example, the path of the main script file within the repository).
         entryPoint (1,1) string
@@ -146,7 +146,7 @@ classdef ModelVersion < openminds.Node
 
         % Add the data that was used as input for this computational model version.
         inputData (1,:) openminds.internal.mixedtype.modelversion.InputData ...
-            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)}
+            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)} = openminds.internal.mixedtype.modelversion.InputData()
 
         % Add the model version preceding this model version.
         isPrecededBy (1,:) openminds.core.products.ModelVersion ...
@@ -162,11 +162,11 @@ classdef ModelVersion < openminds.Node
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.modelversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.modelversion.Keyword()
 
         % Add the data that was generated as output by this computational model version.
         outputData (1,:) openminds.internal.mixedtype.modelversion.OutputData ...
-            {mustBeMinLength(outputData, 1), mustBeListOfUniqueItems(outputData)}
+            {mustBeMinLength(outputData, 1), mustBeListOfUniqueItems(outputData)} = openminds.internal.mixedtype.modelversion.OutputData()
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
@@ -174,7 +174,7 @@ classdef ModelVersion < openminds.Node
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.modelversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.modelversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -193,7 +193,7 @@ classdef ModelVersion < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.modelversion.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.modelversion.UsageCondition()
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string
@@ -251,33 +251,6 @@ classdef ModelVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.configuration(obj)
-            value = obj.configuration.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.inputData(obj)
-            value = obj.inputData.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.outputData(obj)
-            value = obj.outputData.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

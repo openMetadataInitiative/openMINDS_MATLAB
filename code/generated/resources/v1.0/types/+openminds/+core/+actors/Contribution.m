@@ -18,7 +18,7 @@ classdef Contribution < openminds.Node
 
         % Add the contributing person or organization.
         contributor (1,:) openminds.internal.mixedtype.contribution.Contributor ...
-            {mustBeScalarOrEmpty(contributor)}
+            {mustBeScalarOrEmpty(contributor)} = openminds.internal.mixedtype.contribution.Contributor()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef Contribution < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.contributor, obj.contributionType);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.contributor(obj)
-            value = obj.contributor.unwrap();
         end
     end
 end

@@ -14,7 +14,7 @@ classdef SpecimenAge < openminds.Node
     properties (SetObservable)
         % Enter the age value.
         age (1,:) openminds.internal.mixedtype.specimenage.Age ...
-            {mustBeScalarOrEmpty(age)}
+            {mustBeScalarOrEmpty(age)} = openminds.internal.mixedtype.specimenage.Age()
 
         % Enter the age reference for the specified age value.
         reference (1,:) openminds.controlledterms.AgeReference ...
@@ -53,12 +53,6 @@ classdef SpecimenAge < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.age, obj.reference);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.age(obj)
-            value = obj.age.unwrap();
         end
     end
 end

@@ -45,7 +45,7 @@ classdef TissueSampleCollectionState < openminds.Node
 
         % Add all technical and/or behavioral protocols associated with this specimen state.
         associatedProtocol (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.AssociatedProtocol ...
-            {mustBeMinLength(associatedProtocol, 1), mustBeListOfUniqueItems(associatedProtocol)}
+            {mustBeMinLength(associatedProtocol, 1), mustBeListOfUniqueItems(associatedProtocol)} = openminds.internal.mixedtype.tissuesamplecollectionstate.AssociatedProtocol()
 
         % Add all attributes that can be ascribed to this tissue sample collection state.
         attribute (1,:) openminds.controlledterms.TissueSampleAttribute ...
@@ -53,7 +53,7 @@ classdef TissueSampleCollectionState < openminds.Node
 
         % Add all specimen states used to produce or obtain this tissue sample collection state.
         descendedFrom (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.DescendedFrom ...
-            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)}
+            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)} = openminds.internal.mixedtype.tissuesamplecollectionstate.DescendedFrom()
 
         % Enter the identifier (or label) of this specimen (set) state that is used within the corresponding data files to identify this specimen (set) state.
         internalIdentifier (1,1) string
@@ -63,11 +63,11 @@ classdef TissueSampleCollectionState < openminds.Node
 
         % Add all (human) diseases and/or conditions that the specimen (set) in this state has and/or is a model for.
         pathology (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.Pathology ...
-            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)} = openminds.internal.mixedtype.tissuesamplecollectionstate.Pathology()
 
         % If there is a temporal relation between the states of a specimen (set), enter the relative time that has passed between this and the preceding specimen (set) state referenced under 'descendedFrom'.
         relativeTimeIndication (1,:) openminds.internal.mixedtype.tissuesamplecollectionstate.RelativeTimeIndication ...
-            {mustBeScalarOrEmpty(relativeTimeIndication)}
+            {mustBeScalarOrEmpty(relativeTimeIndication)} = openminds.internal.mixedtype.tissuesamplecollectionstate.RelativeTimeIndication()
 
         % Enter the weight and weight type of the specimen (set) in this state.
         weight (1,:) openminds.core.research.SpecimenWeight ...
@@ -111,21 +111,6 @@ classdef TissueSampleCollectionState < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.associatedProtocol(obj)
-            value = obj.associatedProtocol.unwrap();
-        end
-        function value = get.descendedFrom(obj)
-            value = obj.descendedFrom.unwrap();
-        end
-        function value = get.pathology(obj)
-            value = obj.pathology.unwrap();
-        end
-        function value = get.relativeTimeIndication(obj)
-            value = obj.relativeTimeIndication.unwrap();
         end
     end
 end

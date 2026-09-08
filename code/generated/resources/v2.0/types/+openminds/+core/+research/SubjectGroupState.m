@@ -32,7 +32,7 @@ classdef SubjectGroupState < openminds.Node
 
         % Add the age of the specimen (set) in this state.
         age (1,:) openminds.internal.mixedtype.subjectgroupstate.Age ...
-            {mustBeScalarOrEmpty(age)}
+            {mustBeScalarOrEmpty(age)} = openminds.internal.mixedtype.subjectgroupstate.Age()
 
         % Add the age category of the subject in this state.
         ageCategory (1,:) openminds.controlledterms.AgeCategory ...
@@ -47,11 +47,11 @@ classdef SubjectGroupState < openminds.Node
 
         % Add the pathology of the specimen (set) in this state.
         pathology (1,:) openminds.internal.mixedtype.subjectgroupstate.Pathology ...
-            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)} = openminds.internal.mixedtype.subjectgroupstate.Pathology()
 
         % Add the weight of the specimen (set) in this state.
         weight (1,:) openminds.internal.mixedtype.subjectgroupstate.Weight ...
-            {mustBeScalarOrEmpty(weight)}
+            {mustBeScalarOrEmpty(weight)} = openminds.internal.mixedtype.subjectgroupstate.Weight()
     end
 
     properties (Access = protected)
@@ -89,18 +89,6 @@ classdef SubjectGroupState < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.age(obj)
-            value = obj.age.unwrap();
-        end
-        function value = get.pathology(obj)
-            value = obj.pathology.unwrap();
-        end
-        function value = get.weight(obj)
-            value = obj.weight.unwrap();
         end
     end
 end

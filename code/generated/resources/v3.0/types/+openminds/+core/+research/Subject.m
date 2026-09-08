@@ -40,7 +40,7 @@ classdef Subject < openminds.Node
 
         % Add the species or strain (a sub-type of a genetic variant of species) of this specimen.
         species (1,:) openminds.internal.mixedtype.subject.Species ...
-            {mustBeScalarOrEmpty(species)}
+            {mustBeScalarOrEmpty(species)} = openminds.internal.mixedtype.subject.Species()
 
         % Add all states in which this subject was studied.
         studiedState (1,:) openminds.core.research.SubjectState ...
@@ -81,12 +81,6 @@ classdef Subject < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.species(obj)
-            value = obj.species.unwrap();
         end
     end
 end

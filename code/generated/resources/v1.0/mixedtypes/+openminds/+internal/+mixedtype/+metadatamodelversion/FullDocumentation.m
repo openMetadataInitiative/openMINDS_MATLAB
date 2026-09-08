@@ -7,4 +7,10 @@ classdef FullDocumentation < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.metadatamodelversion.FullDocumentation();
+        end
+    end
 end

@@ -47,7 +47,7 @@ classdef TissueSampleCollection < openminds.Node
 
         % Add all anatomical entities that describe the anatomical location of this tissue sample collection.
         anatomicalLocation (1,:) openminds.internal.mixedtype.tissuesamplecollection.AnatomicalLocation ...
-            {mustBeMinLength(anatomicalLocation, 1), mustBeListOfUniqueItems(anatomicalLocation)}
+            {mustBeMinLength(anatomicalLocation, 1), mustBeListOfUniqueItems(anatomicalLocation)} = openminds.internal.mixedtype.tissuesamplecollection.AnatomicalLocation()
 
         % Add the biological sex of all specimen in this set.
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
@@ -73,11 +73,11 @@ classdef TissueSampleCollection < openminds.Node
 
         % Add the biogical origin of all tissue samples in this collection.
         origin (1,:) openminds.internal.mixedtype.tissuesamplecollection.Origin ...
-            {mustBeMinLength(origin, 1), mustBeListOfUniqueItems(origin)}
+            {mustBeMinLength(origin, 1), mustBeListOfUniqueItems(origin)} = openminds.internal.mixedtype.tissuesamplecollection.Origin()
 
         % Add the species and/or strain (a sub-type of a genetic variant of species) of all specimen in this set.
         species (1,:) openminds.internal.mixedtype.tissuesamplecollection.Species ...
-            {mustBeMinLength(species, 1), mustBeListOfUniqueItems(species)}
+            {mustBeMinLength(species, 1), mustBeListOfUniqueItems(species)} = openminds.internal.mixedtype.tissuesamplecollection.Species()
 
         % Add all states in which this tissue sample collection was studied.
         studiedState (1,:) openminds.core.research.TissueSampleCollectionState ...
@@ -126,18 +126,6 @@ classdef TissueSampleCollection < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.anatomicalLocation(obj)
-            value = obj.anatomicalLocation.unwrap();
-        end
-        function value = get.origin(obj)
-            value = obj.origin.unwrap();
-        end
-        function value = get.species(obj)
-            value = obj.species.unwrap();
         end
     end
 end

@@ -64,7 +64,7 @@ classdef CranialWindowPreparation < openminds.Node
 
         % Enter the dimension of the cranial window by defining its mathematical shape.
         dimension (1,:) openminds.internal.mixedtype.cranialwindowpreparation.Dimension ...
-            {mustBeScalarOrEmpty(dimension)}
+            {mustBeScalarOrEmpty(dimension)} = openminds.internal.mixedtype.cranialwindowpreparation.Dimension()
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         endTime (1,:) datetime ...
@@ -87,7 +87,7 @@ classdef CranialWindowPreparation < openminds.Node
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.cranialwindowpreparation.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.cranialwindowpreparation.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -107,7 +107,7 @@ classdef CranialWindowPreparation < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.cranialwindowpreparation.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.cranialwindowpreparation.StudyTarget()
     end
 
     properties (Access = protected)
@@ -151,18 +151,6 @@ classdef CranialWindowPreparation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dimension(obj)
-            value = obj.dimension.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

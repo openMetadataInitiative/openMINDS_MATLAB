@@ -21,7 +21,7 @@ classdef Frustum < openminds.Node
 
         % Enter the major two-dimensional base shape of this frustum.
         majorBaseShape (1,:) openminds.internal.mixedtype.frustum.MajorBaseShape ...
-            {mustBeScalarOrEmpty(majorBaseShape)}
+            {mustBeScalarOrEmpty(majorBaseShape)} = openminds.internal.mixedtype.frustum.MajorBaseShape()
 
         % Enter the ratio of the smaller to the larger base size of this frustum.
         minorBaseScale (1,:) double ...
@@ -60,12 +60,6 @@ classdef Frustum < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.majorBaseShape, obj.baseDistance);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.majorBaseShape(obj)
-            value = obj.majorBaseShape.unwrap();
         end
     end
 end

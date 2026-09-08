@@ -28,7 +28,7 @@ classdef TissueCulturePreparation < openminds.Node
 
         % Add the state of the specimen before it was prepared as culture in this activity.
         input (1,:) openminds.internal.mixedtype.tissueculturepreparation.Input ...
-            {mustBeScalarOrEmpty(input)}
+            {mustBeScalarOrEmpty(input)} = openminds.internal.mixedtype.tissueculturepreparation.Input()
 
         % Add the state of the prepared tissue sample culture that resulted from this activity.
         output (1,:) openminds.core.research.TissueSampleState ...
@@ -69,12 +69,6 @@ classdef TissueCulturePreparation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.cultureType);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
         end
     end
 end

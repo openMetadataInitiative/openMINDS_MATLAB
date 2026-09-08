@@ -99,7 +99,7 @@ classdef DatasetVersion < openminds.Node
 
         % If necessary, add one or several authors (person or organization) that contributed to the production and publication of this dataset version. Note that these authors will overwrite the once provided in the dataset product this version belongs to.
         author (1,:) openminds.internal.mixedtype.datasetversion.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.datasetversion.Author()
 
         % Add the copyright information of this research product version.
         copyright (1,:) openminds.core.data.Copyright ...
@@ -107,7 +107,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add one or several custodians (person or organization) that are responsible for this research product version.
         custodian (1,:) openminds.internal.mixedtype.datasetversion.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.datasetversion.Custodian()
 
         % If necessary, enter a version specific description (abstract) for this research product version (max. 2000 characters, incl. spaces; no references). If left blank, the research product version will inherit the 'description' of it's corresponding research product.
         description (1,1) string ...
@@ -127,7 +127,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add the DOI, file or URL that points to a full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.datasetversion.FullDocumentation ...
-            {mustBeScalarOrEmpty(fullDocumentation)}
+            {mustBeScalarOrEmpty(fullDocumentation)} = openminds.internal.mixedtype.datasetversion.FullDocumentation()
 
         % If necessary, enter a version specific descriptive full name (title) for this research product version. If left blank, the research product version will inherit the 'fullName' of it's corresponding research product.
         fullName (1,1) string
@@ -145,7 +145,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add the data that was used as input for this dataset version.
         inputData (1,:) openminds.internal.mixedtype.datasetversion.InputData ...
-            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)}
+            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)} = openminds.internal.mixedtype.datasetversion.InputData()
 
         % Add all dataset versions that can be used alternatively to this dataset version.
         isAlternativeVersionOf (1,:) openminds.core.products.DatasetVersion ...
@@ -173,7 +173,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add further publications besides the documentation (e.g. an original research article) providing the original context for the production of this research product version.
         relatedPublication (1,:) openminds.internal.mixedtype.datasetversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.datasetversion.RelatedPublication()
 
         % Enter the date (actual or intended) of the first broadcast/publication of this research product version.
         releaseDate (1,:) datetime ...
@@ -189,7 +189,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add one or several specimen (subjects and/or tissue samples) or specimen sets (subject groups and/or tissue sample collections) that were studied in this dataset.
         studiedSpecimen (1,:) openminds.internal.mixedtype.datasetversion.StudiedSpecimen ...
-            {mustBeMinLength(studiedSpecimen, 1), mustBeListOfUniqueItems(studiedSpecimen)}
+            {mustBeMinLength(studiedSpecimen, 1), mustBeListOfUniqueItems(studiedSpecimen)} = openminds.internal.mixedtype.datasetversion.StudiedSpecimen()
 
         % Enter all channels through which a user can receive support for handling this research product.
         supportChannel (1,:) string ...
@@ -256,27 +256,6 @@ classdef DatasetVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.shortName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.fullDocumentation(obj)
-            value = obj.fullDocumentation.unwrap();
-        end
-        function value = get.inputData(obj)
-            value = obj.inputData.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.studiedSpecimen(obj)
-            value = obj.studiedSpecimen.unwrap();
         end
     end
 end

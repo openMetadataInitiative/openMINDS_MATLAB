@@ -23,7 +23,7 @@ classdef NumericalProperty < openminds.Node
 
         % Enter all quantitative values that are described by this numerical property.
         value (1,:) openminds.internal.mixedtype.numericalproperty.Value ...
-            {mustBeMinLength(value, 1)}
+            {mustBeMinLength(value, 1)} = openminds.internal.mixedtype.numericalproperty.Value()
     end
 
     properties (Access = protected)
@@ -57,12 +57,6 @@ classdef NumericalProperty < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.value(obj)
-            value = obj.value.unwrap();
         end
     end
 end

@@ -38,11 +38,11 @@ classdef GridImageStack < openminds.Node
 
         % Add the coordinate space in which this grid image stack exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridimagestack.CoordinateFramework ...
-            {mustBeScalarOrEmpty(coordinateFramework)}
+            {mustBeScalarOrEmpty(coordinateFramework)} = openminds.internal.mixedtype.gridimagestack.CoordinateFramework()
 
         % Add a reference to the file to which this grid image stack information applies. If the information applies uniformly to a grid image stack file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridimagestack.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.gridimagestack.DataLocation()
 
         % Enter the common dimension of the consecutive grid image planes (optical sections) in pixels.
         dimension (1,:) int64 ...
@@ -57,7 +57,7 @@ classdef GridImageStack < openminds.Node
 
         % Add the used device for obtaining this grid image stack.
         obtainedWith (1,:) openminds.internal.mixedtype.gridimagestack.ObtainedWith ...
-            {mustBeScalarOrEmpty(obtainedWith)}
+            {mustBeScalarOrEmpty(obtainedWith)} = openminds.internal.mixedtype.gridimagestack.ObtainedWith()
 
         % Enter the common physical pixel size for the consecutive grid image planes (optical sections) (in x,y order).
         pixelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -109,18 +109,6 @@ classdef GridImageStack < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateFramework(obj)
-            value = obj.coordinateFramework.unwrap();
-        end
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.obtainedWith(obj)
-            value = obj.obtainedWith.unwrap();
         end
     end
 end

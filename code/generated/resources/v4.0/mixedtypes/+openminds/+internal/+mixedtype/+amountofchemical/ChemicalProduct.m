@@ -7,4 +7,10 @@ classdef ChemicalProduct < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.amountofchemical.ChemicalProduct();
+        end
+    end
 end

@@ -39,7 +39,7 @@ classdef Recording < openminds.Node
 
         % Add the location of the file or file bundle in which the recorded data is stored.
         dataLocation (1,:) openminds.internal.mixedtype.recording.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.recording.DataLocation()
 
         % Enter the identifier (or label) of this recording that is used within the corresponding data files to identify this recording.
         internalIdentifier (1,1) string
@@ -53,7 +53,7 @@ classdef Recording < openminds.Node
 
         % Add the device used to generate this recording.
         recordedWith (1,:) openminds.internal.mixedtype.recording.RecordedWith ...
-            {mustBeScalarOrEmpty(recordedWith)}
+            {mustBeScalarOrEmpty(recordedWith)} = openminds.internal.mixedtype.recording.RecordedWith()
 
         % Enter the sampling frequency of this recording.
         samplingFrequency (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -95,15 +95,6 @@ classdef Recording < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.recordedWith(obj)
-            value = obj.recordedWith.unwrap();
         end
     end
 end

@@ -99,7 +99,7 @@ classdef InterfaceVersion < openminds.Node
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.interfaceversion.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.interfaceversion.Documentation()
 
         % Enter a descriptive full name (or title) for this research product version. This value overrides the inherited value from the version-independent product.
         fullName (1,1) string
@@ -128,7 +128,7 @@ classdef InterfaceVersion < openminds.Node
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.interfaceversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.interfaceversion.Keyword()
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
@@ -136,7 +136,7 @@ classdef InterfaceVersion < openminds.Node
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.interfaceversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.interfaceversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -151,7 +151,7 @@ classdef InterfaceVersion < openminds.Node
 
         % Enter the specification document for this interface version.
         specification (1,:) openminds.internal.mixedtype.interfaceversion.Specification ...
-            {mustBeScalarOrEmpty(specification)}
+            {mustBeScalarOrEmpty(specification)} = openminds.internal.mixedtype.interfaceversion.Specification()
 
         % Enter all channels through which a user can receive support for handling this research product version. This value overrides the inherited value from the version-independent product.
         supportChannel (1,:) string ...
@@ -159,7 +159,7 @@ classdef InterfaceVersion < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.interfaceversion.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.interfaceversion.UsageCondition()
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string
@@ -213,24 +213,6 @@ classdef InterfaceVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.specification(obj)
-            value = obj.specification.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

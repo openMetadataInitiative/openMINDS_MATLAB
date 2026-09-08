@@ -57,7 +57,7 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
 
         % Add one or several relations of this parcellation entity to parcellation entities of other parcellation terminologies.
         relationAssessment (1,:) openminds.internal.mixedtype.parcellationentity.RelationAssessment ...
-            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)} = openminds.internal.mixedtype.parcellationentity.RelationAssessment()
 
         % Enter the version identifier of this parcellation entity.
         versionIdentifier (1,1) string
@@ -101,12 +101,6 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relationAssessment(obj)
-            value = obj.relationAssessment.unwrap();
         end
     end
 

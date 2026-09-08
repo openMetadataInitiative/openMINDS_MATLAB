@@ -50,7 +50,7 @@ classdef ElectrodeArray < openminds.Node
     properties (SetObservable)
         % Add the conductor material of this electrode array.
         conductorMaterial (1,:) openminds.internal.mixedtype.electrodearray.ConductorMaterial ...
-            {mustBeScalarOrEmpty(conductorMaterial)}
+            {mustBeScalarOrEmpty(conductorMaterial)} = openminds.internal.mixedtype.electrodearray.ConductorMaterial()
 
         % Enter a short text describing this device.
         description (1,1) string
@@ -61,7 +61,7 @@ classdef ElectrodeArray < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this device.
         digitalIdentifier (1,:) openminds.internal.mixedtype.electrodearray.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.electrodearray.DigitalIdentifier()
 
         % Enter the identifiers for each electrode of this electrode array. Note that the number of identifiers should match the number of electrodes of the array as stated under 'numberOfElectrodes'.
         electrodeIdentifier (1,:) string ...
@@ -69,21 +69,21 @@ classdef ElectrodeArray < openminds.Node
 
         % Add the insulator material of this electrode array.
         insulatorMaterial (1,:) openminds.internal.mixedtype.electrodearray.InsulatorMaterial ...
-            {mustBeScalarOrEmpty(insulatorMaterial)}
+            {mustBeScalarOrEmpty(insulatorMaterial)} = openminds.internal.mixedtype.electrodearray.InsulatorMaterial()
 
         % Enter the identifier (or label) of this electrode array that is used within the corresponding data files to identify this electrode array.
         internalIdentifier (1,1) string
 
         % Enter the intrinsic resistance of this electrode array.
         intrinsicResistance (1,:) openminds.internal.mixedtype.electrodearray.IntrinsicResistance ...
-            {mustBeScalarOrEmpty(intrinsicResistance)}
+            {mustBeScalarOrEmpty(intrinsicResistance)} = openminds.internal.mixedtype.electrodearray.IntrinsicResistance()
 
         % Enter a lookup label for this device that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the manufacturer (private or industrial) that constructed this device.
         manufacturer (1,:) openminds.internal.mixedtype.electrodearray.Manufacturer ...
-            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)} = openminds.internal.mixedtype.electrodearray.Manufacturer()
 
         % Enter a descriptive name for this device, preferably including the model name as defined by the manufacturer.
         name (1,1) string
@@ -94,7 +94,7 @@ classdef ElectrodeArray < openminds.Node
 
         % Add all parties that legally own this device.
         owner (1,:) openminds.internal.mixedtype.electrodearray.Owner ...
-            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)}
+            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)} = openminds.internal.mixedtype.electrodearray.Owner()
 
         % Enter the serial number of this device.
         serialNumber (1,1) string
@@ -137,27 +137,6 @@ classdef ElectrodeArray < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.internalIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.conductorMaterial(obj)
-            value = obj.conductorMaterial.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.insulatorMaterial(obj)
-            value = obj.insulatorMaterial.unwrap();
-        end
-        function value = get.intrinsicResistance(obj)
-            value = obj.intrinsicResistance.unwrap();
-        end
-        function value = get.manufacturer(obj)
-            value = obj.manufacturer.unwrap();
-        end
-        function value = get.owner(obj)
-            value = obj.owner.unwrap();
         end
     end
 end

@@ -39,7 +39,7 @@ classdef RegularTimeSeries < openminds.Node
 
         % Add the location of the file or file bundle in which the recorded data is stored.
         dataLocation (1,:) openminds.internal.mixedtype.regulartimeseries.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.regulartimeseries.DataLocation()
 
         % Enter the identifier (or label) of this regular time series that is used within the corresponding data files to identify this regular time series.
         internalIdentifier (1,1) string
@@ -49,7 +49,7 @@ classdef RegularTimeSeries < openminds.Node
 
         % Add the used device for obtaining this regular time series.
         obtainedWith (1,:) openminds.internal.mixedtype.regulartimeseries.ObtainedWith ...
-            {mustBeScalarOrEmpty(obtainedWith)}
+            {mustBeScalarOrEmpty(obtainedWith)} = openminds.internal.mixedtype.regulartimeseries.ObtainedWith()
 
         % If this regular time series is part of a sequence of regular time seriess (e.g., multiple repetitions or sweeps), add the regular time series preceding this regular time series.
         previousRegularTimeSeries (1,:) openminds.core.data.RegularTimeSeries ...
@@ -95,15 +95,6 @@ classdef RegularTimeSeries < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.obtainedWith(obj)
-            value = obj.obtainedWith.unwrap();
         end
     end
 end

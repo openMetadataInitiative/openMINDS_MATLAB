@@ -24,7 +24,7 @@ classdef CustomAnatomicalEntity < openminds.Node
 
         % Add one or several relations of this custom anatomical entity to parcellation entities used in defined parcellation terminologies.
         relationAssessment (1,:) openminds.internal.mixedtype.customanatomicalentity.RelationAssessment ...
-            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)} = openminds.internal.mixedtype.customanatomicalentity.RelationAssessment()
     end
 
     properties (Access = protected)
@@ -59,12 +59,6 @@ classdef CustomAnatomicalEntity < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relationAssessment(obj)
-            value = obj.relationAssessment.unwrap();
         end
     end
 end

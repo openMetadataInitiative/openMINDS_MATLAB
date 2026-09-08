@@ -8,4 +8,10 @@ classdef DescendedFrom < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.tissuesamplestate.DescendedFrom();
+        end
+    end
 end

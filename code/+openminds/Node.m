@@ -90,10 +90,12 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
         % PropertyWithLinkedInstanceChanged - A linked or embedded property
         % of this instance was assigned.
         %
-        %   Raised only when the property itself is assigned. An
-        %   assignment made through it to a linked instance, such as
-        %   dataset.author.givenName = "...", is raised as InstanceChanged
-        %   by that linked instance, not by this one.
+        %   An assignment made through the property to a linked instance,
+        %   such as dataset.author.givenName = "...", is raised as
+        %   InstanceChanged by that linked instance. MATLAB then assigns
+        %   the mixed type set back to the property, so this event is
+        %   raised here as well, with the set as both OldValue and
+        %   NewValue.
         %
         %   Carries the same four properties as InstanceChanged, with
         %   IsLinkedProperty true.
@@ -350,7 +352,7 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
                 if ~isempty( propValue ) % Todo: Add method for checking if node is empty
                     % Concatenate instances in a cell array
                     if openminds.utility.isMixedInstance(propValue)
-                        linkedInstances = [linkedInstances, {propValue.Instance}]; %#ok<AGROW>
+                        linkedInstances = [linkedInstances, propValue.Instances]; %#ok<AGROW>
                     elseif openminds.utility.isInstance(propValue)
                         linkedInstances = [linkedInstances, num2cell(propValue)]; %#ok<AGROW>
                     end
@@ -372,7 +374,7 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
                 propValue = obj.(propName);
                 if ~isempty( propValue )
                     if openminds.utility.isMixedInstance(propValue)
-                        embeddedInstances = [embeddedInstances, {propValue.Instance}]; %#ok<AGROW>
+                        embeddedInstances = [embeddedInstances, propValue.Instances]; %#ok<AGROW>
                     elseif openminds.utility.isInstance(propValue)
                         embeddedInstances = [embeddedInstances, num2cell(propValue)]; %#ok<AGROW>
                     end

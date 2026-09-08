@@ -39,7 +39,7 @@ classdef FileBundle < openminds.Node
 
         % Add all entities that defined which files were grouped into this file bundle. Note that the schema types of the instances stated here, need to match the ones stated under 'groupingType'.
         groupedBy (1,:) openminds.internal.mixedtype.filebundle.GroupedBy ...
-            {mustBeMinLength(groupedBy, 1), mustBeListOfUniqueItems(groupedBy)}
+            {mustBeMinLength(groupedBy, 1), mustBeListOfUniqueItems(groupedBy)} = openminds.internal.mixedtype.filebundle.GroupedBy()
 
         % Add all grouping types that were used to define this file bundle. Note that the grouping types define the possible schema type of the instances stated under 'groupedBy'.
         groupingType (1,:) openminds.controlledterms.FileBundleGrouping ...
@@ -51,7 +51,7 @@ classdef FileBundle < openminds.Node
 
         % Add the file bundle or file repository this file bundle is part of.
         isPartOf (1,:) openminds.internal.mixedtype.filebundle.IsPartOf ...
-            {mustBeScalarOrEmpty(isPartOf)}
+            {mustBeScalarOrEmpty(isPartOf)} = openminds.internal.mixedtype.filebundle.IsPartOf()
 
         % Enter the name of this file bundle.
         name (1,1) string
@@ -97,15 +97,6 @@ classdef FileBundle < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.name, obj.groupedBy);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.groupedBy(obj)
-            value = obj.groupedBy.unwrap();
-        end
-        function value = get.isPartOf(obj)
-            value = obj.isPartOf.unwrap();
         end
     end
 end

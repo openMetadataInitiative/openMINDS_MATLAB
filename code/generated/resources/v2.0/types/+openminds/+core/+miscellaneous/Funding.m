@@ -29,7 +29,7 @@ classdef Funding < openminds.Node
 
         % Add the organization that provided this funding.
         funder (1,:) openminds.internal.mixedtype.funding.Funder ...
-            {mustBeScalarOrEmpty(funder)}
+            {mustBeScalarOrEmpty(funder)} = openminds.internal.mixedtype.funding.Funder()
     end
 
     properties (Access = protected)
@@ -63,12 +63,6 @@ classdef Funding < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.funder, obj.awardNumber);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.funder(obj)
-            value = obj.funder.unwrap();
         end
     end
 end

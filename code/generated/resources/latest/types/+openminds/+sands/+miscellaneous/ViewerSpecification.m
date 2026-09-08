@@ -31,7 +31,7 @@ classdef ViewerSpecification < openminds.Node
 
         % Add the preferred color that a viewer should display.
         preferredDisplayColor (1,:) openminds.internal.mixedtype.viewerspecification.PreferredDisplayColor ...
-            {mustBeScalarOrEmpty(preferredDisplayColor)}
+            {mustBeScalarOrEmpty(preferredDisplayColor)} = openminds.internal.mixedtype.viewerspecification.PreferredDisplayColor()
     end
 
     properties (Access = protected)
@@ -67,12 +67,6 @@ classdef ViewerSpecification < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.cameraPosition);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.preferredDisplayColor(obj)
-            value = obj.preferredDisplayColor.unwrap();
         end
     end
 end

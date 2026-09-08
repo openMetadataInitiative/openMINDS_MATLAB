@@ -38,7 +38,7 @@ classdef TissueSample < openminds.Node
     properties (SetObservable)
         % Add all anatomical entities that describe the anatomical location of this tissue sample.
         anatomicalLocation (1,:) openminds.internal.mixedtype.tissuesample.AnatomicalLocation ...
-            {mustBeMinLength(anatomicalLocation, 1), mustBeListOfUniqueItems(anatomicalLocation)}
+            {mustBeMinLength(anatomicalLocation, 1), mustBeListOfUniqueItems(anatomicalLocation)} = openminds.internal.mixedtype.tissuesample.AnatomicalLocation()
 
         % Add the biological sex of this specimen.
         biologicalSex (1,:) openminds.controlledterms.BiologicalSex ...
@@ -60,11 +60,11 @@ classdef TissueSample < openminds.Node
 
         % Add the biogical origin of this tissue sample.
         origin (1,:) openminds.internal.mixedtype.tissuesample.Origin ...
-            {mustBeScalarOrEmpty(origin)}
+            {mustBeScalarOrEmpty(origin)} = openminds.internal.mixedtype.tissuesample.Origin()
 
         % Add the species or strain (a sub-type of a genetic variant of species) of this specimen.
         species (1,:) openminds.internal.mixedtype.tissuesample.Species ...
-            {mustBeScalarOrEmpty(species)}
+            {mustBeScalarOrEmpty(species)} = openminds.internal.mixedtype.tissuesample.Species()
 
         % Add all states in which this tissue sample was studied.
         studiedState (1,:) openminds.core.research.TissueSampleState ...
@@ -113,18 +113,6 @@ classdef TissueSample < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.anatomicalLocation(obj)
-            value = obj.anatomicalLocation.unwrap();
-        end
-        function value = get.origin(obj)
-            value = obj.origin.unwrap();
-        end
-        function value = get.species(obj)
-            value = obj.species.unwrap();
         end
     end
 end

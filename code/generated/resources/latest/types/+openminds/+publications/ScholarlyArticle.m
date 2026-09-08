@@ -65,7 +65,7 @@ classdef ScholarlyArticle < openminds.Node
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.scholarlyarticle.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.scholarlyarticle.CitedPublication()
 
         % Add all individual, organisational, or consortial contributions to this creative work.
         contribution (1,:) openminds.core.actors.Contribution ...
@@ -93,11 +93,11 @@ classdef ScholarlyArticle < openminds.Node
 
         % Add the publication issue or volume this scholarly article is part of.
         isPartOf (1,:) openminds.internal.mixedtype.scholarlyarticle.IsPartOf ...
-            {mustBeScalarOrEmpty(isPartOf)}
+            {mustBeScalarOrEmpty(isPartOf)} = openminds.internal.mixedtype.scholarlyarticle.IsPartOf()
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.scholarlyarticle.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.scholarlyarticle.Keyword()
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
@@ -115,7 +115,7 @@ classdef ScholarlyArticle < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this creative work.
         usageCondition (1,:) openminds.internal.mixedtype.scholarlyarticle.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.scholarlyarticle.UsageCondition()
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string
@@ -160,21 +160,6 @@ classdef ScholarlyArticle < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.isPartOf(obj)
-            value = obj.isPartOf.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

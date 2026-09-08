@@ -35,7 +35,7 @@ classdef Software < openminds.Node
     properties (SetObservable)
         % Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.software.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.software.Custodian()
 
         % Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
         description (1,1) string ...
@@ -43,11 +43,11 @@ classdef Software < openminds.Node
 
         % Add one or several developers (person or organization) that contributed to the code implementation of this software.
         developer (1,:) openminds.internal.mixedtype.software.Developer ...
-            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)} = openminds.internal.mixedtype.software.Developer()
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.software.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.software.DigitalIdentifier()
 
         % Enter a descriptive full name (title) for this research product.  Note that this full name should be fitting for all attached research product versions.
         fullName (1,1) string
@@ -103,18 +103,6 @@ classdef Software < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.developer(obj)
-            value = obj.developer.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
         end
     end
 end

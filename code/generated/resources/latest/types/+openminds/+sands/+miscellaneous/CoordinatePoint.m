@@ -14,7 +14,7 @@ classdef CoordinatePoint < openminds.Node
     properties (SetObservable)
         % Add the coordinate framework in which this coordinate point exists in.
         coordinateFramework (1,:) openminds.internal.mixedtype.coordinatepoint.CoordinateFramework ...
-            {mustBeScalarOrEmpty(coordinateFramework)}
+            {mustBeScalarOrEmpty(coordinateFramework)} = openminds.internal.mixedtype.coordinatepoint.CoordinateFramework()
 
         % Enter the coordinates of this point within the stated coordinate space for two-dimensonal spaces as [x, y] or for three-dimensional space as [x, y, z].
         coordinates (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -53,12 +53,6 @@ classdef CoordinatePoint < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.coordinateFramework);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateFramework(obj)
-            value = obj.coordinateFramework.unwrap();
         end
     end
 end

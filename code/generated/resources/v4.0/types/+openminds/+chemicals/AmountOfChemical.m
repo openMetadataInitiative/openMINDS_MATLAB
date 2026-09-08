@@ -18,7 +18,7 @@ classdef AmountOfChemical < openminds.Node
 
         % Add the chemical product that was used.
         chemicalProduct (1,:) openminds.internal.mixedtype.amountofchemical.ChemicalProduct ...
-            {mustBeScalarOrEmpty(chemicalProduct)}
+            {mustBeScalarOrEmpty(chemicalProduct)} = openminds.internal.mixedtype.amountofchemical.ChemicalProduct()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef AmountOfChemical < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s [%s]', obj.amount, obj.chemicalProduct);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.chemicalProduct(obj)
-            value = obj.chemicalProduct.unwrap();
         end
     end
 end

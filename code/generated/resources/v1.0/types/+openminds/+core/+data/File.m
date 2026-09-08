@@ -44,7 +44,7 @@ classdef File < openminds.Node
 
         % Add all entities that played a role in the production of this single file.
         descendedFrom (1,:) openminds.internal.mixedtype.file.DescendedFrom ...
-            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)}
+            {mustBeMinLength(descendedFrom, 1), mustBeListOfUniqueItems(descendedFrom)} = openminds.internal.mixedtype.file.DescendedFrom()
 
         % Add the over all repository to which this single file belongs.
         fileRepository (1,:) openminds.core.data.FileRepository ...
@@ -111,12 +111,6 @@ classdef File < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.descendedFrom(obj)
-            value = obj.descendedFrom.unwrap();
         end
     end
 end

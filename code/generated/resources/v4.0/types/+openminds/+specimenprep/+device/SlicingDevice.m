@@ -39,21 +39,21 @@ classdef SlicingDevice < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this device.
         digitalIdentifier (1,:) openminds.internal.mixedtype.slicingdevice.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.slicingdevice.DigitalIdentifier()
 
         % Enter a lookup label for this device that may help you to find this instance more easily.
         lookupLabel (1,1) string
 
         % Add the manufacturer (private or industrial) that constructed this device.
         manufacturer (1,:) openminds.internal.mixedtype.slicingdevice.Manufacturer ...
-            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)} = openminds.internal.mixedtype.slicingdevice.Manufacturer()
 
         % Enter a descriptive name for this device, preferably including the model name as defined by the manufacturer.
         name (1,1) string
 
         % Add all parties that legally own this device.
         owner (1,:) openminds.internal.mixedtype.slicingdevice.Owner ...
-            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)}
+            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)} = openminds.internal.mixedtype.slicingdevice.Owner()
 
         % Enter the serial number of this device.
         serialNumber (1,1) string
@@ -93,18 +93,6 @@ classdef SlicingDevice < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.manufacturer(obj)
-            value = obj.manufacturer.unwrap();
-        end
-        function value = get.owner(obj)
-            value = obj.owner.unwrap();
         end
     end
 end

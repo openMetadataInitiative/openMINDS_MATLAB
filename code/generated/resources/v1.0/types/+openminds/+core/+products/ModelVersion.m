@@ -94,7 +94,7 @@ classdef ModelVersion < openminds.Node
 
         % Add one or several custodians (person or organization) that are responsible for this research product version.
         custodian (1,:) openminds.internal.mixedtype.modelversion.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.modelversion.Custodian()
 
         % If necessary, enter a version specific description (abstract) for this research product version (max. 2000 characters, incl. spaces; no references). If left blank, the research product version will inherit the 'description' of it's corresponding research product.
         description (1,1) string ...
@@ -102,11 +102,11 @@ classdef ModelVersion < openminds.Node
 
         % If necessary, add one or several developers (person or organization) that contributed to the code implementation of this model version. Note that these developers will overwrite the once provided in the model product this version belongs to.
         developer (1,:) openminds.internal.mixedtype.modelversion.Developer ...
-            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)} = openminds.internal.mixedtype.modelversion.Developer()
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.modelversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.modelversion.DigitalIdentifier()
 
         % Add the used content type of this model version.
         format (1,:) openminds.core.data.ContentType ...
@@ -114,7 +114,7 @@ classdef ModelVersion < openminds.Node
 
         % Add the DOI, file or URL that points to a full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.modelversion.FullDocumentation ...
-            {mustBeScalarOrEmpty(fullDocumentation)}
+            {mustBeScalarOrEmpty(fullDocumentation)} = openminds.internal.mixedtype.modelversion.FullDocumentation()
 
         % If necessary, enter a version specific descriptive full name (title) for this research product version. If left blank, the research product version will inherit the 'fullName' of it's corresponding research product.
         fullName (1,1) string
@@ -132,7 +132,7 @@ classdef ModelVersion < openminds.Node
 
         % Add the data that was used as input for this model version.
         inputData (1,:) openminds.internal.mixedtype.modelversion.InputData ...
-            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)}
+            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)} = openminds.internal.mixedtype.modelversion.InputData()
 
         % Add all model versions that can be used alternatively to this model version.
         isAlternativeVersionOf (1,:) openminds.core.products.ModelVersion ...
@@ -156,11 +156,11 @@ classdef ModelVersion < openminds.Node
 
         % Add the data that was generated as output of this model version.
         outputData (1,:) openminds.internal.mixedtype.modelversion.OutputData ...
-            {mustBeMinLength(outputData, 1), mustBeListOfUniqueItems(outputData)}
+            {mustBeMinLength(outputData, 1), mustBeListOfUniqueItems(outputData)} = openminds.internal.mixedtype.modelversion.OutputData()
 
         % Add further publications besides the documentation (e.g. an original research article) providing the original context for the production of this research product version.
         relatedPublication (1,:) openminds.internal.mixedtype.modelversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.modelversion.RelatedPublication()
 
         % Enter the date (actual or intended) of the first broadcast/publication of this research product version.
         releaseDate (1,:) datetime ...
@@ -232,30 +232,6 @@ classdef ModelVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.developer(obj)
-            value = obj.developer.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.fullDocumentation(obj)
-            value = obj.fullDocumentation.unwrap();
-        end
-        function value = get.inputData(obj)
-            value = obj.inputData.unwrap();
-        end
-        function value = get.outputData(obj)
-            value = obj.outputData.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
         end
     end
 end

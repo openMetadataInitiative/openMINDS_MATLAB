@@ -35,25 +35,25 @@ classdef Electrode < openminds.Node
     properties (SetObservable)
         % Add the conductor material of this electrode.
         conductorMaterial (1,:) openminds.internal.mixedtype.electrode.ConductorMaterial ...
-            {mustBeScalarOrEmpty(conductorMaterial)}
+            {mustBeScalarOrEmpty(conductorMaterial)} = openminds.internal.mixedtype.electrode.ConductorMaterial()
 
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.electrode.Contribution ...
-            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)} = openminds.internal.mixedtype.electrode.Contribution()
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
 
         % Add the insulator material of this electrode.
         insulatorMaterial (1,:) openminds.internal.mixedtype.electrode.InsulatorMaterial ...
-            {mustBeScalarOrEmpty(insulatorMaterial)}
+            {mustBeScalarOrEmpty(insulatorMaterial)} = openminds.internal.mixedtype.electrode.InsulatorMaterial()
 
         % Enter the identifier (or label) of this electrode that is used within the corresponding data files to identify this electrode.
         internalIdentifier (1,1) string
 
         % Enter the intrinsic resistance of this electrode.
         intrinsicResistance (1,:) openminds.internal.mixedtype.electrode.IntrinsicResistance ...
-            {mustBeScalarOrEmpty(intrinsicResistance)}
+            {mustBeScalarOrEmpty(intrinsicResistance)} = openminds.internal.mixedtype.electrode.IntrinsicResistance()
 
         % Enter a descriptive name for this device, preferably defined by the owner.
         name (1,1) string
@@ -63,7 +63,7 @@ classdef Electrode < openminds.Node
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.electrode.Type ...
-            {mustBeScalarOrEmpty(type)}
+            {mustBeScalarOrEmpty(type)} = openminds.internal.mixedtype.electrode.Type()
     end
 
     properties (Access = protected)
@@ -101,24 +101,6 @@ classdef Electrode < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.internalIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.conductorMaterial(obj)
-            value = obj.conductorMaterial.unwrap();
-        end
-        function value = get.contribution(obj)
-            value = obj.contribution.unwrap();
-        end
-        function value = get.insulatorMaterial(obj)
-            value = obj.insulatorMaterial.unwrap();
-        end
-        function value = get.intrinsicResistance(obj)
-            value = obj.intrinsicResistance.unwrap();
-        end
-        function value = get.type(obj)
-            value = obj.type.unwrap();
         end
     end
 end

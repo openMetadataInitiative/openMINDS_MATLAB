@@ -80,14 +80,14 @@ classdef LearningResource < openminds.Node
 
         % Add all research product (versions) this learning resource are about. Note that the learning resource should supplement the usage of the research product (versions) with e.g., instructions on their usage or additional information.
         about (1,:) openminds.internal.mixedtype.learningresource.About ...
-            {mustBeMinLength(about, 1), mustBeListOfUniqueItems(about)}
+            {mustBeMinLength(about, 1), mustBeListOfUniqueItems(about)} = openminds.internal.mixedtype.learningresource.About()
 
         % Enter the abstract or a short description of the creative work.
         abstract (1,1) string
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.learningresource.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.learningresource.CitedPublication()
 
         % Add all individual, organisational, or consortial contributions to this creative work.
         contribution (1,:) openminds.core.actors.Contribution ...
@@ -119,7 +119,7 @@ classdef LearningResource < openminds.Node
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.learningresource.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.learningresource.Keyword()
 
         % Enter a description for the expected learning outcomes of this learning resource.
         learningOutcome (1,1) string
@@ -144,7 +144,7 @@ classdef LearningResource < openminds.Node
 
         % Enter the time that is required to complete this learning resource.
         requiredTime (1,:) openminds.internal.mixedtype.learningresource.RequiredTime ...
-            {mustBeScalarOrEmpty(requiredTime)}
+            {mustBeScalarOrEmpty(requiredTime)} = openminds.internal.mixedtype.learningresource.RequiredTime()
 
         % Enter the name or a short description of the aspect of the research product that is covered by this tutorial
         topic (1,1) string
@@ -155,7 +155,7 @@ classdef LearningResource < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this creative work.
         usageCondition (1,:) openminds.internal.mixedtype.learningresource.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.learningresource.UsageCondition()
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string
@@ -203,24 +203,6 @@ classdef LearningResource < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.about(obj)
-            value = obj.about.unwrap();
-        end
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.requiredTime(obj)
-            value = obj.requiredTime.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

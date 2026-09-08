@@ -59,7 +59,7 @@ classdef WorkflowRecipe < openminds.Node
 
         % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
         documentation (1,:) openminds.internal.mixedtype.workflowrecipe.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.workflowrecipe.Documentation()
 
         % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
         fullName (1,1) string
@@ -72,11 +72,11 @@ classdef WorkflowRecipe < openminds.Node
 
         % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
         keyword (1,:) openminds.internal.mixedtype.workflowrecipe.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.workflowrecipe.Keyword()
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
         relatedPublication (1,:) openminds.internal.mixedtype.workflowrecipe.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.workflowrecipe.RelatedPublication()
 
         % Enter a short name (or alias) for this research product that could be used as a shortened display title (e.g., for web services with too little space to display the full name). Inherited by all product versions unless overridden at the version level.
         shortName (1,1) string
@@ -122,18 +122,6 @@ classdef WorkflowRecipe < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
         end
     end
 end

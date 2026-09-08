@@ -26,7 +26,7 @@ classdef BehavioralProtocol < openminds.Node
     properties (SetObservable)
         % Add all sources in which this behavioral protocol is described in detail.
         describedIn (1,:) openminds.internal.mixedtype.behavioralprotocol.DescribedIn ...
-            {mustBeMinLength(describedIn, 1), mustBeListOfUniqueItems(describedIn)}
+            {mustBeMinLength(describedIn, 1), mustBeListOfUniqueItems(describedIn)} = openminds.internal.mixedtype.behavioralprotocol.DescribedIn()
 
         % Enter a description of this behavioral protocol.
         description (1,1) string
@@ -39,11 +39,11 @@ classdef BehavioralProtocol < openminds.Node
 
         % Add all stimulation approaches and/or techniques used within this behavioral protocol.
         stimulation (1,:) openminds.internal.mixedtype.behavioralprotocol.Stimulation ...
-            {mustBeMinLength(stimulation, 1), mustBeListOfUniqueItems(stimulation)}
+            {mustBeMinLength(stimulation, 1), mustBeListOfUniqueItems(stimulation)} = openminds.internal.mixedtype.behavioralprotocol.Stimulation()
 
         % Add all stimulus types used within this behavioral protocol.
         stimulusType (1,:) openminds.internal.mixedtype.behavioralprotocol.StimulusType ...
-            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)}
+            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)} = openminds.internal.mixedtype.behavioralprotocol.StimulusType()
     end
 
     properties (Access = protected)
@@ -79,18 +79,6 @@ classdef BehavioralProtocol < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.describedIn(obj)
-            value = obj.describedIn.unwrap();
-        end
-        function value = get.stimulation(obj)
-            value = obj.stimulation.unwrap();
-        end
-        function value = get.stimulusType(obj)
-            value = obj.stimulusType.unwrap();
         end
     end
 end

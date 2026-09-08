@@ -59,7 +59,7 @@ classdef TissueSample < openminds.Node
 
         % Add the biogical origin (organ or cell type) of this tissue sample.
         origin (1,:) openminds.internal.mixedtype.tissuesample.Origin ...
-            {mustBeScalarOrEmpty(origin)}
+            {mustBeScalarOrEmpty(origin)} = openminds.internal.mixedtype.tissuesample.Origin()
 
         % Add the phenotype of this specimen.
         phenotype (1,:) openminds.controlledterms.Phenotype ...
@@ -121,12 +121,6 @@ classdef TissueSample < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.origin(obj)
-            value = obj.origin.unwrap();
         end
     end
 end

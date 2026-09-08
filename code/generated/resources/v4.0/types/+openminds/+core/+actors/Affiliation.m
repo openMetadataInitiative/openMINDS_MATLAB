@@ -21,7 +21,7 @@ classdef Affiliation < openminds.Node
 
         % Add the organization or consortium another party was or still is a member of.
         memberOf (1,:) openminds.internal.mixedtype.affiliation.MemberOf ...
-            {mustBeScalarOrEmpty(memberOf)}
+            {mustBeScalarOrEmpty(memberOf)} = openminds.internal.mixedtype.affiliation.MemberOf()
 
         % Enter the start date of this affiliation, formatted as 'YYYY-MM-DD'.
         startDate (1,:) datetime ...
@@ -59,12 +59,6 @@ classdef Affiliation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.memberOf);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.memberOf(obj)
-            value = obj.memberOf.unwrap();
         end
     end
 end

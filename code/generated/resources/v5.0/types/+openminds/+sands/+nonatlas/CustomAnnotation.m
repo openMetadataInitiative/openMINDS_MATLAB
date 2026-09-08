@@ -38,7 +38,7 @@ classdef CustomAnnotation < openminds.Node
     properties (SetObservable)
         % Add the coordinate framework for this custom annotation.
         coordinateFramework (1,:) openminds.internal.mixedtype.customannotation.CoordinateFramework ...
-            {mustBeScalarOrEmpty(coordinateFramework)}
+            {mustBeScalarOrEmpty(coordinateFramework)} = openminds.internal.mixedtype.customannotation.CoordinateFramework()
 
         % Add the protocol execution defining the criteria that were applied to produce this annotation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
@@ -69,7 +69,7 @@ classdef CustomAnnotation < openminds.Node
 
         % Add the non-parametric or parametric specification of this annotation.
         specification (1,:) openminds.internal.mixedtype.customannotation.Specification ...
-            {mustBeScalarOrEmpty(specification)}
+            {mustBeScalarOrEmpty(specification)} = openminds.internal.mixedtype.customannotation.Specification()
 
         % Add the geometry type of this annotation.
         type (1,:) openminds.controlledterms.AnnotationType ...
@@ -115,15 +115,6 @@ classdef CustomAnnotation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.internalIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateFramework(obj)
-            value = obj.coordinateFramework.unwrap();
-        end
-        function value = get.specification(obj)
-            value = obj.specification.unwrap();
         end
     end
 end

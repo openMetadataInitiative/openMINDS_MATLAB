@@ -6,4 +6,10 @@ classdef RelatedStimulation < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrodecontact.RelatedStimulation();
+        end
+    end
 end

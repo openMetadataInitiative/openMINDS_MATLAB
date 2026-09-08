@@ -59,7 +59,7 @@ classdef Book < openminds.Node
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.book.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.book.CitedPublication()
 
         % Add all individual, organisational, or consortial contributions to this creative work.
         contribution (1,:) openminds.core.actors.Contribution ...
@@ -79,7 +79,7 @@ classdef Book < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.internal.mixedtype.book.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.book.DigitalIdentifier()
 
         % Add all funding information of this creative work.
         funding (1,:) openminds.core.miscellaneous.Funding ...
@@ -87,7 +87,7 @@ classdef Book < openminds.Node
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.book.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.book.Keyword()
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
@@ -102,7 +102,7 @@ classdef Book < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this creative work.
         usageCondition (1,:) openminds.internal.mixedtype.book.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.book.UsageCondition()
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string
@@ -146,21 +146,6 @@ classdef Book < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

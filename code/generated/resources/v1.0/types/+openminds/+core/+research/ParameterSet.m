@@ -20,11 +20,11 @@ classdef ParameterSet < openminds.Node
 
         % Add all numerical and string parameters that belong to this parameter set.
         parameter (1,:) openminds.internal.mixedtype.parameterset.Parameter ...
-            {mustBeMinLength(parameter, 1), mustBeListOfUniqueItems(parameter)}
+            {mustBeMinLength(parameter, 1), mustBeListOfUniqueItems(parameter)} = openminds.internal.mixedtype.parameterset.Parameter()
 
         % Add the technique or behavioral task where this set of parameters is used in.
         relevantFor (1,:) openminds.internal.mixedtype.parameterset.RelevantFor ...
-            {mustBeScalarOrEmpty(relevantFor)}
+            {mustBeScalarOrEmpty(relevantFor)} = openminds.internal.mixedtype.parameterset.RelevantFor()
     end
 
     properties (Access = protected)
@@ -59,15 +59,6 @@ classdef ParameterSet < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.relevantFor, obj.context);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.parameter(obj)
-            value = obj.parameter.unwrap();
-        end
-        function value = get.relevantFor(obj)
-            value = obj.relevantFor.unwrap();
         end
     end
 end

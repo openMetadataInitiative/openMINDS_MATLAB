@@ -48,18 +48,18 @@ classdef Model < openminds.Node
 
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.model.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.model.Custodian()
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add all parties that developed this computational model.
         developer (1,:) openminds.internal.mixedtype.model.Developer ...
-            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)}
+            {mustBeMinLength(developer, 1), mustBeListOfUniqueItems(developer)} = openminds.internal.mixedtype.model.Developer()
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.model.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.model.DigitalIdentifier()
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
@@ -83,7 +83,7 @@ classdef Model < openminds.Node
 
         % Add all study targets of this computational model.
         studyTarget (1,:) openminds.internal.mixedtype.model.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.model.StudyTarget()
     end
 
     properties (Access = protected)
@@ -123,21 +123,6 @@ classdef Model < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.developer(obj)
-            value = obj.developer.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

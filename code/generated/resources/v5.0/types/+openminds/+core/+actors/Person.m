@@ -41,7 +41,7 @@ classdef Person < openminds.Node
 
         % Add all globally unique and persistent digital identifier of this person.
         digitalIdentifier (1,:) openminds.internal.mixedtype.person.DigitalIdentifier ...
-            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)} = openminds.internal.mixedtype.person.DigitalIdentifier()
 
         % Enter the family name, surname, or equivalent of this person.
         familyName (1,1) string
@@ -86,12 +86,6 @@ classdef Person < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s, %s', obj.familyName, obj.givenName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
         end
     end
 end

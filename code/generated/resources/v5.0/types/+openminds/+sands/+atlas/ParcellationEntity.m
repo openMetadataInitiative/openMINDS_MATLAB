@@ -56,7 +56,7 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
 
         % Add the corresponding cross-species anatomical entity from the UBERON-derived terminologies that represents the generic anatomical concept underlying the atlas parcellation entity.
         relatedInterspeciesAnatomy (1,:) openminds.internal.mixedtype.parcellationentity.RelatedInterspeciesAnatomy ...
-            {mustBeScalarOrEmpty(relatedInterspeciesAnatomy)}
+            {mustBeScalarOrEmpty(relatedInterspeciesAnatomy)} = openminds.internal.mixedtype.parcellationentity.RelatedInterspeciesAnatomy()
     end
 
     properties (Access = protected)
@@ -91,12 +91,6 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relatedInterspeciesAnatomy(obj)
-            value = obj.relatedInterspeciesAnatomy.unwrap();
         end
     end
 

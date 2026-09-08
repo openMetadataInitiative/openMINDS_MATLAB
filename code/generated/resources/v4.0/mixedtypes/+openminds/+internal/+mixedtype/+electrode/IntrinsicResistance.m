@@ -6,4 +6,10 @@ classdef IntrinsicResistance < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrode.IntrinsicResistance();
+        end
+    end
 end

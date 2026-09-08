@@ -71,7 +71,7 @@ classdef ValidationTest < openminds.Node
 
         % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
         documentation (1,:) openminds.internal.mixedtype.validationtest.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.validationtest.Documentation()
 
         % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
         fullName (1,1) string
@@ -84,7 +84,7 @@ classdef ValidationTest < openminds.Node
 
         % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
         keyword (1,:) openminds.internal.mixedtype.validationtest.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.validationtest.Keyword()
 
         % Add all acquisition techniques that were used to obtain the reference data for this validation test.
         referenceDataAcquisition (1,:) openminds.controlledterms.Technique ...
@@ -92,7 +92,7 @@ classdef ValidationTest < openminds.Node
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
         relatedPublication (1,:) openminds.internal.mixedtype.validationtest.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.validationtest.RelatedPublication()
 
         % Add the scope of this validation test.
         scope (1,:) openminds.controlledterms.ModelScope ...
@@ -107,7 +107,7 @@ classdef ValidationTest < openminds.Node
 
         % Add all study targets of this validation test.
         studyTarget (1,:) openminds.internal.mixedtype.validationtest.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.validationtest.StudyTarget()
 
         % Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
         supportChannel (1,:) string ...
@@ -154,21 +154,6 @@ classdef ValidationTest < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

@@ -25,7 +25,7 @@ classdef QuantitativeRelationAssessment < openminds.Node
 
         % Add the quantitative overlap between the two anatomical entities preferably expressed in percentage.
         quantitativeOverlap (1,:) openminds.internal.mixedtype.quantitativerelationassessment.QuantitativeOverlap ...
-            {mustBeScalarOrEmpty(quantitativeOverlap)}
+            {mustBeScalarOrEmpty(quantitativeOverlap)} = openminds.internal.mixedtype.quantitativerelationassessment.QuantitativeOverlap()
     end
 
     properties (Access = protected)
@@ -61,12 +61,6 @@ classdef QuantitativeRelationAssessment < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s %s', obj.quantitativeOverlap, obj.inRelationTo);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.quantitativeOverlap(obj)
-            value = obj.quantitativeOverlap.unwrap();
         end
     end
 end

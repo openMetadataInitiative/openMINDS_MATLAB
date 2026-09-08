@@ -14,7 +14,7 @@ classdef Copyright < openminds.Node
     properties (SetObservable)
         % Add all parties that hold this copyright.
         holder (1,:) openminds.internal.mixedtype.copyright.Holder ...
-            {mustBeMinLength(holder, 1), mustBeListOfUniqueItems(holder)}
+            {mustBeMinLength(holder, 1), mustBeListOfUniqueItems(holder)} = openminds.internal.mixedtype.copyright.Holder()
 
         % Enter the year during which the copyright was first asserted and, optionally, later years during which updated versions were published.
         year (1,:) string ...
@@ -52,12 +52,6 @@ classdef Copyright < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.holder, obj.year);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.holder(obj)
-            value = obj.holder.unwrap();
         end
     end
 end

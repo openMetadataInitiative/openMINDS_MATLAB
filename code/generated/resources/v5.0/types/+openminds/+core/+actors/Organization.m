@@ -52,7 +52,7 @@ classdef Organization < openminds.Node
 
         % Add all globally unique and persistent digital identifier of this organization.
         digitalIdentifier (1,:) openminds.internal.mixedtype.organization.DigitalIdentifier ...
-            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)}
+            {mustBeMinLength(digitalIdentifier, 1), mustBeListOfUniqueItems(digitalIdentifier)} = openminds.internal.mixedtype.organization.DigitalIdentifier()
 
         % Add all parent organizations of this organization.
         hasParent (1,:) openminds.core.actors.Organization ...
@@ -63,7 +63,7 @@ classdef Organization < openminds.Node
 
         % Add the jurisdiction under which the organization operates.
         jurisdiction (1,:) openminds.internal.mixedtype.organization.Jurisdiction ...
-            {mustBeScalarOrEmpty(jurisdiction)}
+            {mustBeScalarOrEmpty(jurisdiction)} = openminds.internal.mixedtype.organization.Jurisdiction()
 
         % Add the headquarters location of this organization.
         location (1,:) openminds.core.miscellaneous.Location ...
@@ -118,15 +118,6 @@ classdef Organization < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.jurisdiction(obj)
-            value = obj.jurisdiction.unwrap();
         end
     end
 end

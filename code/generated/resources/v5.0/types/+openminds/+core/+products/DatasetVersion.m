@@ -130,15 +130,15 @@ classdef DatasetVersion < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.datasetversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.datasetversion.DigitalIdentifier()
 
         % Add the publication or file that acts as the documentation of this research product version. This value overrides the inherited value from the version-independent product.
         documentation (1,:) openminds.internal.mixedtype.datasetversion.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.datasetversion.Documentation()
 
         % Add the jurisdiction under which the ethics assessment of this dataset version was conducted.
         ethicsJurisdiction (1,:) openminds.internal.mixedtype.datasetversion.EthicsJurisdiction ...
-            {mustBeScalarOrEmpty(ethicsJurisdiction)}
+            {mustBeScalarOrEmpty(ethicsJurisdiction)} = openminds.internal.mixedtype.datasetversion.EthicsJurisdiction()
 
         % Add all experimental approaches which this dataset version has deployed.
         experimentalApproach (1,:) openminds.controlledterms.ExperimentalApproach ...
@@ -159,7 +159,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add the data that was used as input for this dataset version.
         inputData (1,:) openminds.internal.mixedtype.datasetversion.InputData ...
-            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)}
+            {mustBeMinLength(inputData, 1), mustBeListOfUniqueItems(inputData)} = openminds.internal.mixedtype.datasetversion.InputData()
 
         % Add the dataset version preceding this dataset version.
         isPrecededBy (1,:) openminds.core.products.DatasetVersion ...
@@ -175,7 +175,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms. This value overrides the inherited value from the version-independent product.
         keyword (1,:) openminds.internal.mixedtype.datasetversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.datasetversion.Keyword()
 
         % Add all preparation types used in this dataset version.
         preparationType (1,:) openminds.controlledterms.PreparationType ...
@@ -183,7 +183,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add all protocols that were performed in this dataset version.
         protocol (1,:) openminds.internal.mixedtype.datasetversion.Protocol ...
-            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)}
+            {mustBeMinLength(protocol, 1), mustBeListOfUniqueItems(protocol)} = openminds.internal.mixedtype.datasetversion.Protocol()
 
         % Add the relevant publication status indicating the current lifecycle state of the resource (published, embargoed, disposed, retracted, etc.).
         publicationStatus (1,:) openminds.controlledterms.PublicationStatus ...
@@ -191,7 +191,7 @@ classdef DatasetVersion < openminds.Node
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version). This value overrides the inherited value from the version-independent product.
         relatedPublication (1,:) openminds.internal.mixedtype.datasetversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.datasetversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -206,11 +206,11 @@ classdef DatasetVersion < openminds.Node
 
         % Add all specimens, sets of specimen or states that were studied in this dataset.
         studiedSpecimen (1,:) openminds.internal.mixedtype.datasetversion.StudiedSpecimen ...
-            {mustBeMinLength(studiedSpecimen, 1), mustBeListOfUniqueItems(studiedSpecimen)}
+            {mustBeMinLength(studiedSpecimen, 1), mustBeListOfUniqueItems(studiedSpecimen)} = openminds.internal.mixedtype.datasetversion.StudiedSpecimen()
 
         % Add all study targets of this dataset version.
         studyTarget (1,:) openminds.internal.mixedtype.datasetversion.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.datasetversion.StudyTarget()
 
         % Enter all channels through which a user can receive support for handling this research product version. This value overrides the inherited value from the version-independent product.
         supportChannel (1,:) string ...
@@ -218,11 +218,11 @@ classdef DatasetVersion < openminds.Node
 
         % Add all techniques that were used in this dataset version.
         technique (1,:) openminds.internal.mixedtype.datasetversion.Technique ...
-            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)}
+            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)} = openminds.internal.mixedtype.datasetversion.Technique()
 
         % Add all licenses and available data usage agreements applicable to this product version.
         usageCondition (1,:) openminds.internal.mixedtype.datasetversion.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.datasetversion.UsageCondition()
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string
@@ -285,42 +285,6 @@ classdef DatasetVersion < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.shortName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.ethicsJurisdiction(obj)
-            value = obj.ethicsJurisdiction.unwrap();
-        end
-        function value = get.inputData(obj)
-            value = obj.inputData.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.protocol(obj)
-            value = obj.protocol.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.studiedSpecimen(obj)
-            value = obj.studiedSpecimen.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
-        end
-        function value = get.technique(obj)
-            value = obj.technique.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end

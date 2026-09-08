@@ -55,7 +55,7 @@ classdef SubjectGroupState < openminds.Node
 
         % Add all technical and/or behavioral protocols associated with this specimen state.
         associatedProtocol (1,:) openminds.internal.mixedtype.subjectgroupstate.AssociatedProtocol ...
-            {mustBeMinLength(associatedProtocol, 1), mustBeListOfUniqueItems(associatedProtocol)}
+            {mustBeMinLength(associatedProtocol, 1), mustBeListOfUniqueItems(associatedProtocol)} = openminds.internal.mixedtype.subjectgroupstate.AssociatedProtocol()
 
         % Add all attributes that can be ascribed to this subject group state.
         attribute (1,:) openminds.controlledterms.SubjectAttribute ...
@@ -77,11 +77,11 @@ classdef SubjectGroupState < openminds.Node
 
         % Add all (human) diseases and/or conditions that the specimen (set) in this state has and/or is a model for.
         pathology (1,:) openminds.internal.mixedtype.subjectgroupstate.Pathology ...
-            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)}
+            {mustBeMinLength(pathology, 1), mustBeListOfUniqueItems(pathology)} = openminds.internal.mixedtype.subjectgroupstate.Pathology()
 
         % If there is a temporal relation between the states of a specimen (set), enter the relative time that has passed between this and the preceding specimen (set) state referenced under 'descendedFrom'.
         relativeTimeIndication (1,:) openminds.internal.mixedtype.subjectgroupstate.RelativeTimeIndication ...
-            {mustBeScalarOrEmpty(relativeTimeIndication)}
+            {mustBeScalarOrEmpty(relativeTimeIndication)} = openminds.internal.mixedtype.subjectgroupstate.RelativeTimeIndication()
 
         % Enter the weight and weight type of the specimen (set) in this state.
         weight (1,:) openminds.core.research.SpecimenWeight ...
@@ -127,18 +127,6 @@ classdef SubjectGroupState < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.associatedProtocol(obj)
-            value = obj.associatedProtocol.unwrap();
-        end
-        function value = get.pathology(obj)
-            value = obj.pathology.unwrap();
-        end
-        function value = get.relativeTimeIndication(obj)
-            value = obj.relativeTimeIndication.unwrap();
         end
     end
 end

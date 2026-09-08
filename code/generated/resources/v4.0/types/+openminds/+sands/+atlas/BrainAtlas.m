@@ -50,18 +50,18 @@ classdef BrainAtlas < openminds.Node & openminds.internal.mixin.HasControlledIns
 
         % Add all parties that contributed to this brain atlas as authors.
         author (1,:) openminds.internal.mixedtype.brainatlas.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.brainatlas.Author()
 
         % Add all parties that fulfill the role of a custodian for this research product (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product. Unless specified differently, this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.brainatlas.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.brainatlas.Custodian()
 
         % Enter a description (or abstract) of this research product. Note that this should be a suitable description for all attached research product versions.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.brainatlas.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.brainatlas.DigitalIdentifier()
 
         % Enter a descriptive full name (or title) for this research product. Note that this should be a suitable full name for all attached research product versions.
         fullName (1,1) string
@@ -127,18 +127,6 @@ classdef BrainAtlas < openminds.Node & openminds.internal.mixin.HasControlledIns
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
         end
     end
 

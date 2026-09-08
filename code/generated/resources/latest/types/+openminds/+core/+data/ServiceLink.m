@@ -23,7 +23,7 @@ classdef ServiceLink < openminds.Node
     properties (SetObservable)
         % Add the location of the data that are linked to this specific service (e.g., stored as file (bundles) or registered as other entities such as atlas annotations).
         dataLocation (1,:) openminds.internal.mixedtype.servicelink.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.servicelink.DataLocation()
 
         % Enter a display label for this service link.
         displayLabel (1,1) string
@@ -37,7 +37,7 @@ classdef ServiceLink < openminds.Node
 
         % Add all services in which the specified data can be opened by linking to each service’s interface (group of versions), specific interface version, or web resource.
         service (1,:) openminds.internal.mixedtype.servicelink.Service ...
-            {mustBeMinLength(service, 1), mustBeListOfUniqueItems(service)}
+            {mustBeMinLength(service, 1), mustBeListOfUniqueItems(service)} = openminds.internal.mixedtype.servicelink.Service()
     end
 
     properties (Access = protected)
@@ -73,15 +73,6 @@ classdef ServiceLink < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.displayLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.service(obj)
-            value = obj.service.unwrap();
         end
     end
 end

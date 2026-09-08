@@ -105,7 +105,7 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
 
         % Add all parties that contributed to this brain atlas version as authors. Note that these authors will overwrite the author list provided for the overarching brain atlas.
         author (1,:) openminds.internal.mixedtype.brainatlasversion.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.brainatlasversion.Author()
 
         % Add the specific common coordinate space in which this brain atlas version exists.
         coordinateSpace (1,:) openminds.sands.atlas.CommonCoordinateSpaceVersion ...
@@ -117,18 +117,18 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
 
         % Add all parties that fulfill the role of a custodian for the research product version (e.g., a research group leader or principle investigator). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the data, metadata, and/or code of the research product version.
         custodian (1,:) openminds.internal.mixedtype.brainatlasversion.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.brainatlasversion.Custodian()
 
         % Enter a description (or abstract) of this research product version. Note that this version specific description will overwrite the description for the overarching dataset.
         description (1,1) string
 
         % Add the globally unique and persistent digital identifier of this research product version.
         digitalIdentifier (1,:) openminds.internal.mixedtype.brainatlasversion.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.brainatlasversion.DigitalIdentifier()
 
         % Add the publication or file that acts as the full documentation of this research product version.
         fullDocumentation (1,:) openminds.internal.mixedtype.brainatlasversion.FullDocumentation ...
-            {mustBeScalarOrEmpty(fullDocumentation)}
+            {mustBeScalarOrEmpty(fullDocumentation)} = openminds.internal.mixedtype.brainatlasversion.FullDocumentation()
 
         % Enter a descriptive full name (or title) for this research product version. Note that this version specific full name will overwrite the full name for the overarching dataset.
         fullName (1,1) string
@@ -157,7 +157,7 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
 
         % Add all relevant keywords to this research product version either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.brainatlasversion.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.brainatlasversion.Keyword()
 
         % Add the license of this brain atlas version.
         license (1,:) openminds.core.data.License ...
@@ -175,7 +175,7 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
 
         % Add all further publications besides the full documentation that provide the original context for the production of this research product version (e.g., an original research article that used or produced the data of this research product version).
         relatedPublication (1,:) openminds.internal.mixedtype.brainatlasversion.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.brainatlasversion.RelatedPublication()
 
         % Enter the date (actual or intended) on which this research product version was first release, formatted as 'YYYY-MM-DD'.
         releaseDate (1,:) datetime ...
@@ -198,7 +198,7 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
 
         % Add the specimen that was used for the creation of this brain atlas version.
         usedSpecimen (1,:) openminds.internal.mixedtype.brainatlasversion.UsedSpecimen ...
-            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)}
+            {mustBeMinLength(usedSpecimen, 1), mustBeListOfUniqueItems(usedSpecimen)} = openminds.internal.mixedtype.brainatlasversion.UsedSpecimen()
 
         % Enter the version identifier of this research product version.
         versionIdentifier (1,1) string
@@ -255,30 +255,6 @@ classdef BrainAtlasVersion < openminds.Node & openminds.internal.mixin.HasContro
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.fullDocumentation(obj)
-            value = obj.fullDocumentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.usedSpecimen(obj)
-            value = obj.usedSpecimen.unwrap();
         end
     end
 

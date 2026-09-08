@@ -20,11 +20,11 @@ classdef ParcellationTerminology < openminds.Node
     properties (SetObservable)
         % Add the location of all files in which this parcellation terminology is stored.
         dataLocation (1,:) openminds.internal.mixedtype.parcellationterminology.DataLocation ...
-            {mustBeMinLength(dataLocation, 1), mustBeListOfUniqueItems(dataLocation)}
+            {mustBeMinLength(dataLocation, 1), mustBeListOfUniqueItems(dataLocation)} = openminds.internal.mixedtype.parcellationterminology.DataLocation()
 
         % Add the globally unique and persistent digital identifier of this parcellation terminology.
         digitalIdentifier (1,:) openminds.internal.mixedtype.parcellationterminology.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.parcellationterminology.DigitalIdentifier()
 
         % Add all parcellation entities which belong to this parcellation terminology.
         hasEntity (1,:) openminds.sands.atlas.ParcellationEntity ...
@@ -68,15 +68,6 @@ classdef ParcellationTerminology < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.ontologyIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
         end
     end
 end

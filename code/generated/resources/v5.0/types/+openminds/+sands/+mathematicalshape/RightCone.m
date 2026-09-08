@@ -18,7 +18,7 @@ classdef RightCone < openminds.Node
 
         % Enter the two-dimensional elliptic base shape of this right cone.
         baseShape (1,:) openminds.internal.mixedtype.rightcone.BaseShape ...
-            {mustBeScalarOrEmpty(baseShape)}
+            {mustBeScalarOrEmpty(baseShape)} = openminds.internal.mixedtype.rightcone.BaseShape()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef RightCone < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.baseShape, obj.apexBaseDistance);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.baseShape(obj)
-            value = obj.baseShape.unwrap();
         end
     end
 end

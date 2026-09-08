@@ -33,7 +33,7 @@ classdef Protocol < openminds.Node
 
         % Add all study options this protocol offers.
         studyOption (1,:) openminds.internal.mixedtype.protocol.StudyOption ...
-            {mustBeMinLength(studyOption, 1), mustBeListOfUniqueItems(studyOption)}
+            {mustBeMinLength(studyOption, 1), mustBeListOfUniqueItems(studyOption)} = openminds.internal.mixedtype.protocol.StudyOption()
 
         % Add all techniques that were used in this protocol.
         technique (1,:) openminds.controlledterms.Technique ...
@@ -73,12 +73,6 @@ classdef Protocol < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.studyOption(obj)
-            value = obj.studyOption.unwrap();
         end
     end
 end

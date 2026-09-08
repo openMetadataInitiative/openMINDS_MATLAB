@@ -32,7 +32,7 @@ classdef ServiceDeployment < openminds.Node
     properties (SetObservable)
         % Add the software version and any other relevant research product version that was deployed.
         dependsOn (1,:) openminds.internal.mixedtype.servicedeployment.DependsOn ...
-            {mustBeMinLength(dependsOn, 1), mustBeListOfUniqueItems(dependsOn)}
+            {mustBeMinLength(dependsOn, 1), mustBeListOfUniqueItems(dependsOn)} = openminds.internal.mixedtype.servicedeployment.DependsOn()
 
         % Enter the type of deployment environment, for example, 'production' or 'integration'.
         deploymentType (1,:) openminds.controlledterms.DeploymentEnvironmentType ...
@@ -59,7 +59,7 @@ classdef ServiceDeployment < openminds.Node
 
         % Add the deployed interfaces and any other relevant research product versions that are used by this deployment.
         uses (1,:) openminds.internal.mixedtype.servicedeployment.Uses ...
-            {mustBeMinLength(uses, 1), mustBeListOfUniqueItems(uses)}
+            {mustBeMinLength(uses, 1), mustBeListOfUniqueItems(uses)} = openminds.internal.mixedtype.servicedeployment.Uses()
     end
 
     properties (Access = protected)
@@ -97,15 +97,6 @@ classdef ServiceDeployment < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dependsOn(obj)
-            value = obj.dependsOn.unwrap();
-        end
-        function value = get.uses(obj)
-            value = obj.uses.unwrap();
         end
     end
 end

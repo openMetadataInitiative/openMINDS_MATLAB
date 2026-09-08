@@ -64,7 +64,7 @@ classdef ParcellationEntityVersion < openminds.Node & openminds.internal.mixin.H
 
         % Add all anatomical parent structures (or version of the structures) for this parcellation entity as defined within corresponding anatomical atlas version.
         hasParent (1,:) openminds.internal.mixedtype.parcellationentityversion.HasParent ...
-            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)}
+            {mustBeMinLength(hasParent, 1), mustBeListOfUniqueItems(hasParent)} = openminds.internal.mixedtype.parcellationentityversion.HasParent()
 
         % Add the version-independent information about this parcellation entity.
         isVersionOf (1,:) openminds.sands.atlas.ParcellationEntity ...
@@ -82,7 +82,7 @@ classdef ParcellationEntityVersion < openminds.Node & openminds.internal.mixin.H
 
         % Add all relations (qualitative or quantitative) of this parcellation entity version to other anatomical entities.
         relationAssessment (1,:) openminds.internal.mixedtype.parcellationentityversion.RelationAssessment ...
-            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)} = openminds.internal.mixedtype.parcellationentityversion.RelationAssessment()
 
         % Enter the version identifier of this parcellation entity version.
         versionIdentifier (1,1) string
@@ -125,15 +125,6 @@ classdef ParcellationEntityVersion < openminds.Node & openminds.internal.mixin.H
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.hasParent(obj)
-            value = obj.hasParent.unwrap();
-        end
-        function value = get.relationAssessment(obj)
-            value = obj.relationAssessment.unwrap();
         end
     end
 

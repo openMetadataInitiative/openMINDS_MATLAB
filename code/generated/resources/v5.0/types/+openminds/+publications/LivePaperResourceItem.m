@@ -23,7 +23,7 @@ classdef LivePaperResourceItem < openminds.Node
 
         % Add the web service or organization that hosts this live paper resource item.
         hostedBy (1,:) openminds.internal.mixedtype.livepaperresourceitem.HostedBy ...
-            {mustBeScalarOrEmpty(hostedBy)}
+            {mustBeScalarOrEmpty(hostedBy)} = openminds.internal.mixedtype.livepaperresourceitem.HostedBy()
 
         % Add the live paper section this live paper resource item is part of.
         isPartOf (1,:) openminds.publications.LivePaperSection ...
@@ -65,12 +65,6 @@ classdef LivePaperResourceItem < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.hostedBy(obj)
-            value = obj.hostedBy.unwrap();
         end
     end
 end

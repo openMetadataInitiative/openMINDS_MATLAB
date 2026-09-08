@@ -23,7 +23,7 @@ classdef Protocol < openminds.Node
     properties (SetObservable)
         % Add a publication or file in which this protocol is (originally) described in detail.
         describedIn (1,:) openminds.internal.mixedtype.protocol.DescribedIn ...
-            {mustBeScalarOrEmpty(describedIn)}
+            {mustBeScalarOrEmpty(describedIn)} = openminds.internal.mixedtype.protocol.DescribedIn()
 
         % Enter a description of this protocol.
         description (1,1) string
@@ -33,11 +33,11 @@ classdef Protocol < openminds.Node
 
         % Add all stimulus types used with this protocol.
         stimulusType (1,:) openminds.internal.mixedtype.protocol.StimulusType ...
-            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)}
+            {mustBeMinLength(stimulusType, 1), mustBeListOfUniqueItems(stimulusType)} = openminds.internal.mixedtype.protocol.StimulusType()
 
         % Add all techniques (including stimulation approaches and/or techniques) that were used in this protocol.
         technique (1,:) openminds.internal.mixedtype.protocol.Technique ...
-            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)}
+            {mustBeMinLength(technique, 1), mustBeListOfUniqueItems(technique)} = openminds.internal.mixedtype.protocol.Technique()
     end
 
     properties (Access = protected)
@@ -73,18 +73,6 @@ classdef Protocol < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.describedIn(obj)
-            value = obj.describedIn.unwrap();
-        end
-        function value = get.stimulusType(obj)
-            value = obj.stimulusType.unwrap();
-        end
-        function value = get.technique(obj)
-            value = obj.technique.unwrap();
         end
     end
 end

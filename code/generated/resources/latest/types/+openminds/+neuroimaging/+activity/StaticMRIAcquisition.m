@@ -88,7 +88,7 @@ classdef StaticMRIAcquisition < openminds.Node
 
         % Add the specimen (subject or tissue sample) in the physical and biological state in which it was scanned, referencing the corresponding specimen record at the time of imaging.
         input (1,:) openminds.internal.mixedtype.staticmriacquisition.Input ...
-            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)} = openminds.internal.mixedtype.staticmriacquisition.Input()
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
@@ -107,7 +107,7 @@ classdef StaticMRIAcquisition < openminds.Node
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.staticmriacquisition.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.staticmriacquisition.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -131,11 +131,11 @@ classdef StaticMRIAcquisition < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.staticmriacquisition.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.staticmriacquisition.StudyTarget()
 
         % Add the target anatomy, indicating the primary anatomical structure or region intended to be imaged in this acquisition. This field describes the imaging objective (for example, organ, tissue, or structure) and may be derived from the acquisition protocol description.
         targetAnatomy (1,:) openminds.internal.mixedtype.staticmriacquisition.TargetAnatomy ...
-            {mustBeScalarOrEmpty(targetAnatomy)}
+            {mustBeScalarOrEmpty(targetAnatomy)} = openminds.internal.mixedtype.staticmriacquisition.TargetAnatomy()
     end
 
     properties (Access = protected)
@@ -183,21 +183,6 @@ classdef StaticMRIAcquisition < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
-        end
-        function value = get.targetAnatomy(obj)
-            value = obj.targetAnatomy.unwrap();
         end
     end
 end

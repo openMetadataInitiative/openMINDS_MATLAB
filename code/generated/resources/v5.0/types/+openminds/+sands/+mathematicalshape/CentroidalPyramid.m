@@ -18,7 +18,7 @@ classdef CentroidalPyramid < openminds.Node
 
         % Enter the two-dimensional base shape of this centroidal pyramid.
         baseShape (1,:) openminds.internal.mixedtype.centroidalpyramid.BaseShape ...
-            {mustBeScalarOrEmpty(baseShape)}
+            {mustBeScalarOrEmpty(baseShape)} = openminds.internal.mixedtype.centroidalpyramid.BaseShape()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef CentroidalPyramid < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.baseShape, obj.apexBaseDistance);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.baseShape(obj)
-            value = obj.baseShape.unwrap();
         end
     end
 end

@@ -17,7 +17,7 @@ classdef PropertyValueList < openminds.Node
 
         % Enter all numerical and string property-value pairs that belong to this property-value list.
         propertyValuePair (1,:) openminds.internal.mixedtype.propertyvaluelist.PropertyValuePair ...
-            {mustBeMinLength(propertyValuePair, 1), mustBeListOfUniqueItems(propertyValuePair)}
+            {mustBeMinLength(propertyValuePair, 1), mustBeListOfUniqueItems(propertyValuePair)} = openminds.internal.mixedtype.propertyvaluelist.PropertyValuePair()
     end
 
     properties (Access = protected)
@@ -51,12 +51,6 @@ classdef PropertyValueList < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.lookupLabel);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.propertyValuePair(obj)
-            value = obj.propertyValuePair.unwrap();
         end
     end
 end

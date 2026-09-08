@@ -57,7 +57,7 @@ classdef ElectrodePlacement < openminds.Node
 
         % Add all electrodes placed during this activity.
         device (1,:) openminds.internal.mixedtype.electrodeplacement.Device ...
-            {mustBeMinLength(device, 1), mustBeListOfUniqueItems(device)}
+            {mustBeMinLength(device, 1), mustBeListOfUniqueItems(device)} = openminds.internal.mixedtype.electrodeplacement.Device()
 
         % Enter the date and/or time on when this activity ended, formatted as either '2023-02-07T16:00:00+00:00' (date-time) or '16:00:00+00:00' (time).
         endTime (1,:) datetime ...
@@ -65,7 +65,7 @@ classdef ElectrodePlacement < openminds.Node
 
         % Add the state of the specimen that the device is being placed in or on during this activity.
         input (1,:) openminds.internal.mixedtype.electrodeplacement.Input ...
-            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)} = openminds.internal.mixedtype.electrodeplacement.Input()
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
@@ -76,11 +76,11 @@ classdef ElectrodePlacement < openminds.Node
 
         % Add all states of the specimen(s) that the device was placed in or on as a result of this activity.
         output (1,:) openminds.internal.mixedtype.electrodeplacement.Output ...
-            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)} = openminds.internal.mixedtype.electrodeplacement.Output()
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.electrodeplacement.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.electrodeplacement.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -96,7 +96,7 @@ classdef ElectrodePlacement < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.electrodeplacement.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.electrodeplacement.StudyTarget()
 
         % Enter the anatomical target position for the placement of the device.
         targetPosition (1,:) openminds.sands.miscellaneous.AnatomicalTargetPosition ...
@@ -143,24 +143,6 @@ classdef ElectrodePlacement < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.device(obj)
-            value = obj.device.unwrap();
-        end
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.output(obj)
-            value = obj.output.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

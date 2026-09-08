@@ -21,7 +21,7 @@ classdef QualitativeRelationAssessment < openminds.Node
 
         % Add the anatomical entity to which the relation is described.
         inRelationTo (1,:) openminds.internal.mixedtype.qualitativerelationassessment.InRelationTo ...
-            {mustBeScalarOrEmpty(inRelationTo)}
+            {mustBeScalarOrEmpty(inRelationTo)} = openminds.internal.mixedtype.qualitativerelationassessment.InRelationTo()
 
         % Add the qualitative overlap that best describes the relation between the two anatomical entities.
         qualitativeOverlap (1,:) openminds.controlledterms.QualitativeOverlap ...
@@ -61,12 +61,6 @@ classdef QualitativeRelationAssessment < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s %s', obj.qualitativeOverlap, obj.inRelationTo);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.inRelationTo(obj)
-            value = obj.inRelationTo.unwrap();
         end
     end
 end

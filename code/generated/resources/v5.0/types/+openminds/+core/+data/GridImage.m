@@ -32,11 +32,11 @@ classdef GridImage < openminds.Node
 
         % Add the coordinate space in which this grid image exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridimage.CoordinateFramework ...
-            {mustBeScalarOrEmpty(coordinateFramework)}
+            {mustBeScalarOrEmpty(coordinateFramework)} = openminds.internal.mixedtype.gridimage.CoordinateFramework()
 
         % Add a reference to the file to which this grid image information applies. If the information applies uniformly to a grid image file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridimage.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.gridimage.DataLocation()
 
         % Enter the dimension of this grid image in pixels.
         dimension (1,:) int64 ...
@@ -47,7 +47,7 @@ classdef GridImage < openminds.Node
 
         % Add the used device for obtaining this grid image.
         obtainedWith (1,:) openminds.internal.mixedtype.gridimage.ObtainedWith ...
-            {mustBeScalarOrEmpty(obtainedWith)}
+            {mustBeScalarOrEmpty(obtainedWith)} = openminds.internal.mixedtype.gridimage.ObtainedWith()
 
         % Enter the physical pixel size for this grid image (in x,y order).
         pixelSize (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -88,18 +88,6 @@ classdef GridImage < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateFramework(obj)
-            value = obj.coordinateFramework.unwrap();
-        end
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.obtainedWith(obj)
-            value = obj.obtainedWith.unwrap();
         end
     end
 end

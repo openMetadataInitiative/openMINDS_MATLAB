@@ -41,11 +41,11 @@ classdef GridVolumeSequence < openminds.Node
 
         % Add the coordinate space in which this grid volume sequence exists.
         coordinateFramework (1,:) openminds.internal.mixedtype.gridvolumesequence.CoordinateFramework ...
-            {mustBeScalarOrEmpty(coordinateFramework)}
+            {mustBeScalarOrEmpty(coordinateFramework)} = openminds.internal.mixedtype.gridvolumesequence.CoordinateFramework()
 
         % Add a reference to the file to which this grid volume sequence information applies. If the information applies uniformly to a grid volume sequence file series, a reference to the corresponding file bundle may be provided instead.
         dataLocation (1,:) openminds.internal.mixedtype.gridvolumesequence.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.gridvolumesequence.DataLocation()
 
         % Enter the dimension of grid volumes.
         dimension (1,:) int64 ...
@@ -64,7 +64,7 @@ classdef GridVolumeSequence < openminds.Node
 
         % Add the used device for obtaining this grid volume sequence.
         obtainedWith (1,:) openminds.internal.mixedtype.gridvolumesequence.ObtainedWith ...
-            {mustBeScalarOrEmpty(obtainedWith)}
+            {mustBeScalarOrEmpty(obtainedWith)} = openminds.internal.mixedtype.gridvolumesequence.ObtainedWith()
 
         % Enter the rate at which consecutive grid volume are captured in a sequence, preferably measured in Hertz (Hz).
         temporalSamplingFrequency (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -110,18 +110,6 @@ classdef GridVolumeSequence < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateFramework(obj)
-            value = obj.coordinateFramework.unwrap();
-        end
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.obtainedWith(obj)
-            value = obj.obtainedWith.unwrap();
         end
     end
 end

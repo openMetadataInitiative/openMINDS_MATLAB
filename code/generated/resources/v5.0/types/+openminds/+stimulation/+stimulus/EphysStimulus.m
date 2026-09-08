@@ -32,7 +32,7 @@ classdef EphysStimulus < openminds.Node
     properties (SetObservable)
         % Add the device used to deliver this stimulus.
         deliveredBy (1,:) openminds.internal.mixedtype.ephysstimulus.DeliveredBy ...
-            {mustBeScalarOrEmpty(deliveredBy)}
+            {mustBeScalarOrEmpty(deliveredBy)} = openminds.internal.mixedtype.ephysstimulus.DeliveredBy()
 
         % Enter a short text describing this stimulus.
         description (1,1) string
@@ -43,7 +43,7 @@ classdef EphysStimulus < openminds.Node
 
         % Add the device used to generate this stimulus.
         generatedBy (1,:) openminds.internal.mixedtype.ephysstimulus.GeneratedBy ...
-            {mustBeScalarOrEmpty(generatedBy)}
+            {mustBeScalarOrEmpty(generatedBy)} = openminds.internal.mixedtype.ephysstimulus.GeneratedBy()
 
         % Enter the identifier (or label) of this stimulus that is used within the corresponding data files to identify this stimulus.
         internalIdentifier (1,1) string
@@ -53,7 +53,7 @@ classdef EphysStimulus < openminds.Node
 
         % Add the specification information for this stimulus.
         specification (1,:) openminds.internal.mixedtype.ephysstimulus.Specification ...
-            {mustBeMinLength(specification, 1), mustBeListOfUniqueItems(specification)}
+            {mustBeMinLength(specification, 1), mustBeListOfUniqueItems(specification)} = openminds.internal.mixedtype.ephysstimulus.Specification()
 
         % Add the type that describe this electrical stimulus.
         type (1,:) openminds.controlledterms.ElectricalStimulusType ...
@@ -95,18 +95,6 @@ classdef EphysStimulus < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.deliveredBy(obj)
-            value = obj.deliveredBy.unwrap();
-        end
-        function value = get.generatedBy(obj)
-            value = obj.generatedBy.unwrap();
-        end
-        function value = get.specification(obj)
-            value = obj.specification.unwrap();
         end
     end
 end

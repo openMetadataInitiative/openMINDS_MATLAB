@@ -32,25 +32,25 @@ classdef UsageAgreement < openminds.Node
     properties (SetObservable)
         % Add all natural persons and legal entities (in display order) responsible for creating and establishing this usage agreement.
         authoringParty (1,:) openminds.internal.mixedtype.usageagreement.AuthoringParty ...
-            {mustBeMinLength(authoringParty, 1), mustBeListOfUniqueItems(authoringParty)}
+            {mustBeMinLength(authoringParty, 1), mustBeListOfUniqueItems(authoringParty)} = openminds.internal.mixedtype.usageagreement.AuthoringParty()
 
         % Enter the full name of this usage agreement.
         fullName (1,1) string
 
         % Enter the jurisdiction in which this usage agreement was issued.
         jurisdiction (1,:) openminds.internal.mixedtype.usageagreement.Jurisdiction ...
-            {mustBeScalarOrEmpty(jurisdiction)}
+            {mustBeScalarOrEmpty(jurisdiction)} = openminds.internal.mixedtype.usageagreement.Jurisdiction()
 
         % Add all the types of modifications that are allowed under this usage agreement.
         modificationProfile (1,:) openminds.internal.mixedtype.usageagreement.ModificationProfile ...
-            {mustBeMinLength(modificationProfile, 1), mustBeListOfUniqueItems(modificationProfile)}
+            {mustBeMinLength(modificationProfile, 1), mustBeListOfUniqueItems(modificationProfile)} = openminds.internal.mixedtype.usageagreement.ModificationProfile()
 
         % Enter a short name (or alias) for this usage agreement that could be used as a shortened display title (e.g., for web services with too little space to display the full name).
         shortName (1,1) string
 
         % Add all licenses or usage agreements that served as references in the creation of this usage agreement.
         source (1,:) openminds.internal.mixedtype.usageagreement.Source ...
-            {mustBeMinLength(source, 1), mustBeListOfUniqueItems(source)}
+            {mustBeMinLength(source, 1), mustBeListOfUniqueItems(source)} = openminds.internal.mixedtype.usageagreement.Source()
 
         % Enter all channels through which users can obtain support and initiate negotiations regarding this usage agreement with the authoring party.
         supportChannel (1,:) string ...
@@ -96,21 +96,6 @@ classdef UsageAgreement < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.authoringParty(obj)
-            value = obj.authoringParty.unwrap();
-        end
-        function value = get.jurisdiction(obj)
-            value = obj.jurisdiction.unwrap();
-        end
-        function value = get.modificationProfile(obj)
-            value = obj.modificationProfile.unwrap();
-        end
-        function value = get.source(obj)
-            value = obj.source.unwrap();
         end
     end
 end

@@ -20,11 +20,11 @@ classdef CustomPropertySet < openminds.Node
 
         % Add the location of the data that define the custom property set for the given context (e.g., stored as file or other entities such as property-value lists).
         dataLocation (1,:) openminds.internal.mixedtype.custompropertyset.DataLocation ...
-            {mustBeScalarOrEmpty(dataLocation)}
+            {mustBeScalarOrEmpty(dataLocation)} = openminds.internal.mixedtype.custompropertyset.DataLocation()
 
         % Add the technique for which this custom property set is relevant.
         relevantFor (1,:) openminds.internal.mixedtype.custompropertyset.RelevantFor ...
-            {mustBeScalarOrEmpty(relevantFor)}
+            {mustBeScalarOrEmpty(relevantFor)} = openminds.internal.mixedtype.custompropertyset.RelevantFor()
     end
 
     properties (Access = protected)
@@ -59,15 +59,6 @@ classdef CustomPropertySet < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.relevantFor, obj.context);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.dataLocation(obj)
-            value = obj.dataLocation.unwrap();
-        end
-        function value = get.relevantFor(obj)
-            value = obj.relevantFor.unwrap();
         end
     end
 end

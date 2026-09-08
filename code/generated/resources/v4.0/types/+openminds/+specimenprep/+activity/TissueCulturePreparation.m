@@ -69,7 +69,7 @@ classdef TissueCulturePreparation < openminds.Node
 
         % Add the state of the specimen before it was prepared as culture in this activity.
         input (1,:) openminds.internal.mixedtype.tissueculturepreparation.Input ...
-            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)} = openminds.internal.mixedtype.tissueculturepreparation.Input()
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
@@ -84,7 +84,7 @@ classdef TissueCulturePreparation < openminds.Node
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.tissueculturepreparation.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.tissueculturepreparation.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -100,7 +100,7 @@ classdef TissueCulturePreparation < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.tissueculturepreparation.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.tissueculturepreparation.StudyTarget()
     end
 
     properties (Access = protected)
@@ -143,18 +143,6 @@ classdef TissueCulturePreparation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.cultureType);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

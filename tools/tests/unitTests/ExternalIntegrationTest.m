@@ -97,7 +97,9 @@ classdef ExternalIntegrationTest < matlab.unittest.TestCase
 
             dataset.resolve('NumLinksToResolve', 1);
 
-            resolved = dataset.digitalIdentifier;
+            % The property holds a mixed type set; indexing it hands out the
+            % instance that replaced the reference.
+            resolved = dataset.digitalIdentifier(1);
             testCase.verifyClass(resolved, 'openminds.core.digitalidentifier.GenericIdentifier')
             testCase.verifyEqual(resolved.identifier, "external-thing")
         end

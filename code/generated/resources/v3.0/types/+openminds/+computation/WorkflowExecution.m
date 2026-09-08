@@ -20,7 +20,7 @@ classdef WorkflowExecution < openminds.Node
     properties (SetObservable)
         % Add the configuration information for this workflow execution.
         configuration (1,:) openminds.internal.mixedtype.workflowexecution.Configuration ...
-            {mustBeScalarOrEmpty(configuration)}
+            {mustBeScalarOrEmpty(configuration)} = openminds.internal.mixedtype.workflowexecution.Configuration()
 
         % Add the workflow recipe version used for this workflow execution.
         recipe (1,:) openminds.computation.WorkflowRecipeVersion ...
@@ -28,11 +28,11 @@ classdef WorkflowExecution < openminds.Node
 
         % Add all stages that were performed in this workflow execution.
         stage (1,:) openminds.internal.mixedtype.workflowexecution.Stage ...
-            {mustBeMinLength(stage, 1), mustBeListOfUniqueItems(stage)}
+            {mustBeMinLength(stage, 1), mustBeListOfUniqueItems(stage)} = openminds.internal.mixedtype.workflowexecution.Stage()
 
         % Add the agent that started this workflow execution.
         startedBy (1,:) openminds.internal.mixedtype.workflowexecution.StartedBy ...
-            {mustBeScalarOrEmpty(startedBy)}
+            {mustBeScalarOrEmpty(startedBy)} = openminds.internal.mixedtype.workflowexecution.StartedBy()
     end
 
     properties (Access = protected)
@@ -69,18 +69,6 @@ classdef WorkflowExecution < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.recipe);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.configuration(obj)
-            value = obj.configuration.unwrap();
-        end
-        function value = get.stage(obj)
-            value = obj.stage.unwrap();
-        end
-        function value = get.startedBy(obj)
-            value = obj.startedBy.unwrap();
         end
     end
 end

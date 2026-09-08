@@ -39,7 +39,7 @@ classdef Project < openminds.Node
 
         % Add all research product (versions) that are part of this project.
         hasPart (1,:) openminds.internal.mixedtype.project.HasPart ...
-            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)} = openminds.internal.mixedtype.project.HasPart()
 
         % Enter the internationalized resource identifier (IRI) to the homepage of this project.
         homepage (1,1) string
@@ -85,12 +85,6 @@ classdef Project < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.hasPart(obj)
-            value = obj.hasPart.unwrap();
         end
     end
 end

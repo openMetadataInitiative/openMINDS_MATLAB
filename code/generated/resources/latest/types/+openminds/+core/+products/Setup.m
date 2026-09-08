@@ -29,14 +29,14 @@ classdef Setup < openminds.Node
 
         % Add all components, including other setups, that are part of this setup. Note that a setup should not be only composed of software.
         hasPart (1,:) openminds.internal.mixedtype.setup.HasPart ...
-            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 2), mustBeListOfUniqueItems(hasPart)} = openminds.internal.mixedtype.setup.HasPart()
 
         % Enter the geographic location of this setup. This may include room number, building, institution and/or city.
         location (1,1) string
 
         % Add the manufacturer (private or industrial) that constructed this setup.
         manufacturer (1,:) openminds.internal.mixedtype.setup.Manufacturer ...
-            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)} = openminds.internal.mixedtype.setup.Manufacturer()
 
         % Enter a descriptive name for this setup.
         name (1,1) string
@@ -79,15 +79,6 @@ classdef Setup < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.hasPart(obj)
-            value = obj.hasPart.unwrap();
-        end
-        function value = get.manufacturer(obj)
-            value = obj.manufacturer.unwrap();
         end
     end
 end

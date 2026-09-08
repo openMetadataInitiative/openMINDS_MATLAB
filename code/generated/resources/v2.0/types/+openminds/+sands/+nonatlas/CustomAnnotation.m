@@ -45,7 +45,7 @@ classdef CustomAnnotation < openminds.Node
 
         % Add the coordinate space in which this custom annotation exists.
         coordinateSpace (1,:) openminds.internal.mixedtype.customannotation.CoordinateSpace ...
-            {mustBeScalarOrEmpty(coordinateSpace)}
+            {mustBeScalarOrEmpty(coordinateSpace)} = openminds.internal.mixedtype.customannotation.CoordinateSpace()
 
         % Add the protocol execution defining the criteria that were applied to produce this custom annotation.
         criteria (1,:) openminds.core.research.ProtocolExecution ...
@@ -118,12 +118,6 @@ classdef CustomAnnotation < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.internalIdentifier);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.coordinateSpace(obj)
-            value = obj.coordinateSpace.unwrap();
         end
     end
 end

@@ -17,7 +17,7 @@ classdef ResearchProductGroup < openminds.Node
 
         % Add all research products (research product versions) that should be grouped under the given 'context'.
         hasPart (1,:) openminds.internal.mixedtype.researchproductgroup.HasPart ...
-            {mustBeMinLength(hasPart, 1), mustBeListOfUniqueItems(hasPart)}
+            {mustBeMinLength(hasPart, 1), mustBeListOfUniqueItems(hasPart)} = openminds.internal.mixedtype.researchproductgroup.HasPart()
     end
 
     properties (Access = protected)
@@ -51,12 +51,6 @@ classdef ResearchProductGroup < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.context);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.hasPart(obj)
-            value = obj.hasPart.unwrap();
         end
     end
 end

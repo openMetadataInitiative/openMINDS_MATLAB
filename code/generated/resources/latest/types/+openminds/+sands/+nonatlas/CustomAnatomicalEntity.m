@@ -27,11 +27,11 @@ classdef CustomAnatomicalEntity < openminds.Node
 
         % Add the corresponding cross-species anatomical entity from the UBERON-derived terminologies that represents the generic anatomical concept underlying the custom anatomical entity.
         relatedInterspeciesAnatomy (1,:) openminds.internal.mixedtype.customanatomicalentity.RelatedInterspeciesAnatomy ...
-            {mustBeScalarOrEmpty(relatedInterspeciesAnatomy)}
+            {mustBeScalarOrEmpty(relatedInterspeciesAnatomy)} = openminds.internal.mixedtype.customanatomicalentity.RelatedInterspeciesAnatomy()
 
         % Add all relations (qualitative or quantitative) of this custom anatomical entity to other anatomical entities.
         relationAssessment (1,:) openminds.internal.mixedtype.customanatomicalentity.RelationAssessment ...
-            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)} = openminds.internal.mixedtype.customanatomicalentity.RelationAssessment()
     end
 
     properties (Access = protected)
@@ -67,15 +67,6 @@ classdef CustomAnatomicalEntity < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relatedInterspeciesAnatomy(obj)
-            value = obj.relatedInterspeciesAnatomy.unwrap();
-        end
-        function value = get.relationAssessment(obj)
-            value = obj.relationAssessment.unwrap();
         end
     end
 end

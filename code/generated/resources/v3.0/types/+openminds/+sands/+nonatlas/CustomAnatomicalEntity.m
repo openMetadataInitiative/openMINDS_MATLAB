@@ -27,11 +27,11 @@ classdef CustomAnatomicalEntity < openminds.Node
 
         % Add the related anatomical entity as defined by the UBERON ontology.
         relatedUBERONTerm (1,:) openminds.internal.mixedtype.customanatomicalentity.RelatedUBERONTerm ...
-            {mustBeScalarOrEmpty(relatedUBERONTerm)}
+            {mustBeScalarOrEmpty(relatedUBERONTerm)} = openminds.internal.mixedtype.customanatomicalentity.RelatedUBERONTerm()
 
         % Add all relations (qualitative or quantitative) of this custom anatomical entity to other anatomical entities.
         relationAssessment (1,:) openminds.internal.mixedtype.customanatomicalentity.RelationAssessment ...
-            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)}
+            {mustBeMinLength(relationAssessment, 1), mustBeListOfUniqueItems(relationAssessment)} = openminds.internal.mixedtype.customanatomicalentity.RelationAssessment()
     end
 
     properties (Access = protected)
@@ -67,15 +67,6 @@ classdef CustomAnatomicalEntity < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relatedUBERONTerm(obj)
-            value = obj.relatedUBERONTerm.unwrap();
-        end
-        function value = get.relationAssessment(obj)
-            value = obj.relationAssessment.unwrap();
         end
     end
 end

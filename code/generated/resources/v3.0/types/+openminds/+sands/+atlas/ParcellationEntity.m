@@ -63,7 +63,7 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
 
         % Add the related anatomical entity as defined by the UBERON ontology.
         relatedUBERONTerm (1,:) openminds.internal.mixedtype.parcellationentity.RelatedUBERONTerm ...
-            {mustBeScalarOrEmpty(relatedUBERONTerm)}
+            {mustBeScalarOrEmpty(relatedUBERONTerm)} = openminds.internal.mixedtype.parcellationentity.RelatedUBERONTerm()
     end
 
     properties (Access = protected)
@@ -99,12 +99,6 @@ classdef ParcellationEntity < openminds.Node & openminds.internal.mixin.HasContr
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.relatedUBERONTerm(obj)
-            value = obj.relatedUBERONTerm.unwrap();
         end
     end
 

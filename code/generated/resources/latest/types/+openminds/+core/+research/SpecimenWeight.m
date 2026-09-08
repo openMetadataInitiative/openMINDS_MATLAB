@@ -18,7 +18,7 @@ classdef SpecimenWeight < openminds.Node
 
         % Enter the weight value.
         weight (1,:) openminds.internal.mixedtype.specimenweight.Weight ...
-            {mustBeScalarOrEmpty(weight)}
+            {mustBeScalarOrEmpty(weight)} = openminds.internal.mixedtype.specimenweight.Weight()
     end
 
     properties (Access = protected)
@@ -53,12 +53,6 @@ classdef SpecimenWeight < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.weight, obj.type);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.weight(obj)
-            value = obj.weight.unwrap();
         end
     end
 end

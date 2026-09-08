@@ -30,7 +30,7 @@ classdef Measurement < openminds.Node
 
         % Add the used device for obtaining this measurement.
         obtainedWith (1,:) openminds.internal.mixedtype.measurement.ObtainedWith ...
-            {mustBeScalarOrEmpty(obtainedWith)}
+            {mustBeScalarOrEmpty(obtainedWith)} = openminds.internal.mixedtype.measurement.ObtainedWith()
 
         % Enter the date and time on which this measurement was made, formatted as '2023-02-07T16:00:00+00:00'.
         timestamp (1,:) datetime ...
@@ -38,7 +38,7 @@ classdef Measurement < openminds.Node
 
         % Enter all values that were measured at the same time and are of the same measured quantity.
         value (1,:) openminds.internal.mixedtype.measurement.Value ...
-            {mustBeMinLength(value, 1), mustBeListOfUniqueItems(value)}
+            {mustBeMinLength(value, 1), mustBeListOfUniqueItems(value)} = openminds.internal.mixedtype.measurement.Value()
     end
 
     properties (Access = protected)
@@ -74,15 +74,6 @@ classdef Measurement < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s: %s', obj.measuredQuantity, obj.value);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.obtainedWith(obj)
-            value = obj.obtainedWith.unwrap();
-        end
-        function value = get.value(obj)
-            value = obj.value.unwrap();
         end
     end
 end

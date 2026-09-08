@@ -68,7 +68,7 @@ classdef TissueSampleSlicing < openminds.Node
 
         % Add the state of the specimen that was sliced during this activity.
         input (1,:) openminds.internal.mixedtype.tissuesampleslicing.Input ...
-            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)} = openminds.internal.mixedtype.tissuesampleslicing.Input()
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
@@ -79,11 +79,11 @@ classdef TissueSampleSlicing < openminds.Node
 
         % Add the state of the tissue sample slice or collection of slices that resulted from this activity.
         output (1,:) openminds.internal.mixedtype.tissuesampleslicing.Output ...
-            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)} = openminds.internal.mixedtype.tissuesampleslicing.Output()
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.tissuesampleslicing.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.tissuesampleslicing.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -99,11 +99,11 @@ classdef TissueSampleSlicing < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.tissuesampleslicing.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.tissuesampleslicing.StudyTarget()
 
         % Enter the temperature at which the tissue sample was sliced during the activity.
         temperature (1,:) openminds.internal.mixedtype.tissuesampleslicing.Temperature ...
-            {mustBeScalarOrEmpty(temperature)}
+            {mustBeScalarOrEmpty(temperature)} = openminds.internal.mixedtype.tissuesampleslicing.Temperature()
 
         % Add the chemical mixture used as bath solution during this activity.
         tissueBathSolution (1,:) openminds.chemicals.ChemicalMixture ...
@@ -151,24 +151,6 @@ classdef TissueSampleSlicing < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.device);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.output(obj)
-            value = obj.output.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
-        end
-        function value = get.temperature(obj)
-            value = obj.temperature.unwrap();
         end
     end
 end

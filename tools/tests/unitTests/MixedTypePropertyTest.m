@@ -1,11 +1,11 @@
 classdef MixedTypePropertyTest < matlab.unittest.TestCase
-% MixedTypePropertyTest - What a mixed type property hands out, and how it
-% takes assignments and raises change events, without indexing overrides
+% MixedTypePropertyTest - How a mixed type property reads, takes assignments
+% and raises change events, without indexing overrides on Node
 %
-%   A property that allows several types stores a mixed type set. The
-%   generated get method hands out the held instances as one array when
-%   they share a type, and the set itself otherwise. The set forwards dot
-%   indexing to the instances, so both cases index the same way.
+%   A property that allows several types holds a mixed type set. Indexing
+%   the set hands out the instances themselves, as one array when they
+%   share a type, and dot indexing forwards to them, so the property reads
+%   and writes like an array of its instances whatever types it holds.
 
     properties (Constant)
         PersonClass = "openminds.core.actors.Person"
@@ -13,13 +13,19 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
     end
 
     methods (Test) % Reading
-        function testHomogeneousListIsHandedOutAsInstances(testCase)
+        function testPropertyHoldsASet(testCase)
             contribution = testCase.contributionWith(testCase.twoPersons());
 
-            contributors = contribution.contributor;
-            testCase.verifyClass(contributors, testCase.PersonClass)
-            testCase.verifyLength(contributors, 2)
-            testCase.verifyEqual([contributors.givenName], ["Ada", "Alan"])
+            testCase.verifyTrue(openminds.utility.isMixedInstance(contribution.contributor))
+            testCase.verifyLength(contribution.contributor, 2)
+        end
+
+        function testHomogeneousListIndexesAsAnArray(testCase)
+            contribution = testCase.contributionWith(testCase.twoPersons());
+
+            testCase.verifyClass(contribution.contributor(:), testCase.PersonClass)
+            testCase.verifyClass(contribution.contributor(1), testCase.PersonClass)
+            testCase.verifyEqual([contribution.contributor.givenName], ["Ada", "Alan"])
         end
 
         function testEmptyListIsTheEmptySet(testCase)
@@ -29,39 +35,75 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
             testCase.verifyTrue(openminds.utility.isMixedInstance(contribution.contributor))
         end
 
-        function testHeterogeneousListStaysASet(testCase)
+        function testHeterogeneousElementIsTheInstance(testCase)
             contribution = testCase.contributionWith(testCase.personAndOrganization());
 
-            testCase.verifyTrue(openminds.utility.isMixedInstance(contribution.contributor))
-            testCase.verifyLength(contribution.contributor, 2)
-        end
-
-        function testHeterogeneousElementForwardsProperties(testCase)
-            contribution = testCase.contributionWith(testCase.personAndOrganization());
-
+            testCase.verifyClass(contribution.contributor(1), testCase.PersonClass)
+            testCase.verifyClass(contribution.contributor(2), testCase.OrganizationClass)
             testCase.verifyEqual(contribution.contributor(1).givenName, "Ada")
             testCase.verifyEqual(contribution.contributor(2).name, "Bletchley Park")
         end
 
-        function testHeterogeneousElementForwardsMethods(testCase)
+        function testHeterogeneousSelectionStaysASet(testCase)
+            contribution = testCase.contributionWith(testCase.personAndOrganization());
+
+            testCase.verifyTrue(openminds.utility.isMixedInstance(contribution.contributor(1:2)))
+            testCase.verifyLength(contribution.contributor(1:2), 2)
+        end
+
+        function testHeterogeneousElementMethodIsTheInstanceMethod(testCase)
             contribution = testCase.contributionWith(testCase.personAndOrganization());
 
             testCase.verifyEqual(contribution.contributor(2).getTypeIRI(), ...
                 openminds.core.Organization.X_TYPE)
         end
 
-        function testScalarPropertyIsHandedOutAsInstance(testCase)
+        function testScalarPropertyIndexesAsTheInstance(testCase)
             datasetVersion = openminds.core.DatasetVersion();
             datasetVersion.digitalIdentifier = openminds.core.DOI( ...
                 "identifier", "https://doi.org/10.1234/abc");
 
-            testCase.verifyClass(datasetVersion.digitalIdentifier, "openminds.core.digitalidentifier.DOI")
+            testCase.verifyClass(datasetVersion.digitalIdentifier(1), "openminds.core.digitalidentifier.DOI")
             testCase.verifyEqual(datasetVersion.digitalIdentifier.identifier, ...
                 "https://doi.org/10.1234/abc")
+        end
+
+        function testForLoopYieldsInstances(testCase)
+            contribution = testCase.contributionWith(testCase.personAndOrganization());
+
+            classes = strings(1, 0);
+            for instance = contribution.contributor
+                classes(end+1) = class(instance); %#ok<AGROW>
+            end
+            testCase.verifyEqual(classes, [testCase.PersonClass, testCase.OrganizationClass])
         end
     end
 
     methods (Test) % Assigning
+        function testAppendingAnotherTypeToHomogeneousList(testCase)
+            contribution = testCase.contributionWith(testCase.twoPersons());
+
+            contribution.contributor(end+1) = openminds.core.Organization("name", "Bletchley Park");
+            testCase.verifyLength(contribution.contributor, 3)
+            testCase.verifyClass(contribution.contributor(3), testCase.OrganizationClass)
+        end
+
+        function testAppendingToEmptyProperty(testCase)
+            contribution = openminds.core.Contribution();
+
+            contribution.contributor(end+1) = openminds.core.Person("givenName", "Ada");
+            testCase.verifyLength(contribution.contributor, 1)
+            testCase.verifyClass(contribution.contributor(1), testCase.PersonClass)
+        end
+
+        function testConcatenatingSetAndInstance(testCase)
+            contribution = testCase.contributionWith(testCase.twoPersons());
+
+            contribution.contributor = [contribution.contributor, ...
+                openminds.core.Organization("name", "Bletchley Park")];
+            testCase.verifyLength(contribution.contributor, 3)
+        end
+
         function testAssignmentThroughElementReachesInstance(testCase)
             persons = testCase.twoPersons();
             contribution = testCase.contributionWith(persons);
@@ -78,12 +120,12 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
             testCase.verifyEqual(instances{2}.name, "Changed")
         end
 
-        function testIndexedAssignmentGrowsHeterogeneousList(testCase)
-            contribution = testCase.contributionWith(testCase.personAndOrganization());
+        function testDeletingAnElement(testCase)
+            contribution = testCase.contributionWith(testCase.twoPersons());
 
-            contribution.contributor(3) = openminds.core.Person("givenName", "Grace");
-            testCase.verifyLength(contribution.contributor, 3)
-            testCase.verifyEqual(contribution.contributor(3).givenName, "Grace")
+            contribution.contributor(1) = [];
+            testCase.verifyLength(contribution.contributor, 1)
+            testCase.verifyEqual(contribution.contributor.givenName, "Alan")
         end
 
         function testElementOfOneSetIsAcceptedByAnother(testCase)
@@ -91,7 +133,21 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
             target = openminds.core.Contribution();
 
             target.contributor = source.contributor(2);
-            testCase.verifyClass(target.contributor, testCase.OrganizationClass)
+            testCase.verifyClass(target.contributor(1), testCase.OrganizationClass)
+        end
+
+        function testTypeNotAllowedIsRefused(testCase)
+            contribution = openminds.core.Contribution();
+
+            testCase.verifyError(@() assignAt(contribution, 1, openminds.core.Subject()), ...
+                ?MException)
+        end
+
+        function testGapInListIsRefused(testCase)
+            contribution = testCase.contributionWith(testCase.twoPersons());
+
+            testCase.verifyError(@() assignAt(contribution, 5, openminds.core.Person("givenName", "Grace")), ...
+                'openMINDS:MixedTypeSet:GapInList')
         end
 
         function testListOfMixedTypesRefusesDeeperIndexing(testCase)
@@ -129,20 +185,21 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
             eventData = received();
             testCase.assertNotEmpty(eventData)
             testCase.verifyTrue(eventData.IsLinkedProperty)
-            testCase.verifySameHandle(eventData.NewValue, person)
+            testCase.verifySameHandle(eventData.NewValue(1), person)
             testCase.verifySameHandle(eventData.IsPropertyOf, contribution)
         end
 
         function testAssignmentThroughLinkReportedByLinkedInstance(testCase)
             person = openminds.core.Person("givenName", "Ada");
             contribution = testCase.contributionWith(person);
-            receivedByParent = testCase.listenTo(contribution, 'PropertyWithLinkedInstanceChanged');
             receivedByPerson = testCase.listenTo(person, 'InstanceChanged');
 
             contribution.contributor.givenName = "Grace";
 
-            testCase.verifyEmpty(receivedByParent())
-            testCase.verifyEqual(receivedByPerson().NewValue, "Grace")
+            eventData = receivedByPerson();
+            testCase.assertNotEmpty(eventData)
+            testCase.verifyEqual(eventData.OldValue, "Ada")
+            testCase.verifyEqual(eventData.NewValue, "Grace")
         end
 
         function testNoEventWithoutListenerLeavesNoTrace(testCase)
@@ -183,6 +240,10 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
             received = @() lastOrEmpty(store);
         end
     end
+end
+
+function assignAt(contribution, index, instance)
+    contribution.contributor(index) = instance;
 end
 
 function recordLast(store, eventData)

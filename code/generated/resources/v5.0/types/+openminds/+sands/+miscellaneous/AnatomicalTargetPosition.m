@@ -23,7 +23,7 @@ classdef AnatomicalTargetPosition < openminds.Node
 
         % Add all anatomical entities that describe the target position(s).
         anatomicalTarget (1,:) openminds.internal.mixedtype.anatomicaltargetposition.AnatomicalTarget ...
-            {mustBeMinLength(anatomicalTarget, 1), mustBeListOfUniqueItems(anatomicalTarget)}
+            {mustBeMinLength(anatomicalTarget, 1), mustBeListOfUniqueItems(anatomicalTarget)} = openminds.internal.mixedtype.anatomicaltargetposition.AnatomicalTarget()
 
         % Add all coordinate points that describe the spatial location of the anatomical target structure(s).
         spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
@@ -67,12 +67,6 @@ classdef AnatomicalTargetPosition < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.anatomicalTarget);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.anatomicalTarget(obj)
-            value = obj.anatomicalTarget.unwrap();
         end
     end
 end

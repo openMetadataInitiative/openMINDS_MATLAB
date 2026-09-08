@@ -35,11 +35,11 @@ classdef Dataset < openminds.Node
     properties (SetObservable)
         % Add one or several authors (person or organization) that contributed to the production and publication of this dataset.
         author (1,:) openminds.internal.mixedtype.dataset.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.dataset.Author()
 
         % Add one or several custodians (person or organization) that are responsible for this research product. Note that this custodian will be responsible for all attached research product versions.
         custodian (1,:) openminds.internal.mixedtype.dataset.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.dataset.Custodian()
 
         % Enter a description (abstract) for this research product (max. 2000 characters, incl. spaces; no references). Note that this description should be fitting for all attached research product versions.
         description (1,1) string ...
@@ -103,15 +103,6 @@ classdef Dataset < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
         end
     end
 end

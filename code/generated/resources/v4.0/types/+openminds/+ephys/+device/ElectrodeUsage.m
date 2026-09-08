@@ -29,11 +29,11 @@ classdef ElectrodeUsage < openminds.Node
     properties (SetObservable)
         % Add the anatomical entity that semantically best describes the anatomical location of the electrode contact.
         anatomicalLocation (1,:) openminds.internal.mixedtype.electrodeusage.AnatomicalLocation ...
-            {mustBeScalarOrEmpty(anatomicalLocation)}
+            {mustBeScalarOrEmpty(anatomicalLocation)} = openminds.internal.mixedtype.electrodeusage.AnatomicalLocation()
 
         % Enter the contact resistance of this electrode during its use.
         contactResistance (1,:) openminds.internal.mixedtype.electrodeusage.ContactResistance ...
-            {mustBeScalarOrEmpty(contactResistance)}
+            {mustBeScalarOrEmpty(contactResistance)} = openminds.internal.mixedtype.electrodeusage.ContactResistance()
 
         % Add the electrode used.
         device (1,:) openminds.ephys.device.Electrode ...
@@ -44,7 +44,7 @@ classdef ElectrodeUsage < openminds.Node
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.electrodeusage.MetadataLocation ...
-            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)} = openminds.internal.mixedtype.electrodeusage.MetadataLocation()
 
         % Add the coordinate point that best describes the spatial location of the electrode contact during its use.
         spatialLocation (1,:) openminds.sands.miscellaneous.CoordinatePoint ...
@@ -52,7 +52,7 @@ classdef ElectrodeUsage < openminds.Node
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.electrodeusage.UsedSpecimen ...
-            {mustBeScalarOrEmpty(usedSpecimen)}
+            {mustBeScalarOrEmpty(usedSpecimen)} = openminds.internal.mixedtype.electrodeusage.UsedSpecimen()
     end
 
     properties (Access = protected)
@@ -91,21 +91,6 @@ classdef ElectrodeUsage < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.anatomicalLocation(obj)
-            value = obj.anatomicalLocation.unwrap();
-        end
-        function value = get.contactResistance(obj)
-            value = obj.contactResistance.unwrap();
-        end
-        function value = get.metadataLocation(obj)
-            value = obj.metadataLocation.unwrap();
-        end
-        function value = get.usedSpecimen(obj)
-            value = obj.usedSpecimen.unwrap();
         end
     end
 end

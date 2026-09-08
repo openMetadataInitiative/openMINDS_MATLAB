@@ -69,7 +69,7 @@ classdef Strain < openminds.Node
 
         % Add all (human) diseases and/or conditions that this strain is a model for.
         diseaseModel (1,:) openminds.internal.mixedtype.strain.DiseaseModel ...
-            {mustBeMinLength(diseaseModel, 1), mustBeListOfUniqueItems(diseaseModel)}
+            {mustBeMinLength(diseaseModel, 1), mustBeListOfUniqueItems(diseaseModel)} = openminds.internal.mixedtype.strain.DiseaseModel()
 
         % Add the genetic background type of this strain.
         geneticStrainType (1,:) openminds.controlledterms.GeneticStrainType ...
@@ -139,12 +139,6 @@ classdef Strain < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.name);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.diseaseModel(obj)
-            value = obj.diseaseModel.unwrap();
         end
     end
 end

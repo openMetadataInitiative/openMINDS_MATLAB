@@ -29,7 +29,7 @@ classdef MRIScanner < openminds.Node
     properties (SetObservable)
         % Add all relevant contributions (e.g., ownership, maintenance) for this device.
         contribution (1,:) openminds.internal.mixedtype.mriscanner.Contribution ...
-            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)}
+            {mustBeMinLength(contribution, 1), mustBeListOfUniqueItems(contribution)} = openminds.internal.mixedtype.mriscanner.Contribution()
 
         % Enter a short description of the device. Describe the device itself for a custom-built device or note device-specific peculiarities or deviations from the standard product for a manufacturer-defined device.
         description (1,1) string
@@ -49,7 +49,7 @@ classdef MRIScanner < openminds.Node
 
         % Add the device classification reference. Identify a device type for a custom-built device, or a hardware product for a device corresponding to a manufacturer-defined product model.
         type (1,:) openminds.internal.mixedtype.mriscanner.Type ...
-            {mustBeScalarOrEmpty(type)}
+            {mustBeScalarOrEmpty(type)} = openminds.internal.mixedtype.mriscanner.Type()
     end
 
     properties (Access = protected)
@@ -85,15 +85,6 @@ classdef MRIScanner < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.contribution(obj)
-            value = obj.contribution.unwrap();
-        end
-        function value = get.type(obj)
-            value = obj.type.unwrap();
         end
     end
 end

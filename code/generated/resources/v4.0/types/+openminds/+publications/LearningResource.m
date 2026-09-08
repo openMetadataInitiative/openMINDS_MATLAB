@@ -86,18 +86,18 @@ classdef LearningResource < openminds.Node
 
         % Add all research product (versions) this learning resource are about. Note that the learning resource should supplement the usage of the research product (versions) with e.g., instructions on their usage or additional information.
         about (1,:) openminds.internal.mixedtype.learningresource.About ...
-            {mustBeMinLength(about, 1), mustBeListOfUniqueItems(about)}
+            {mustBeMinLength(about, 1), mustBeListOfUniqueItems(about)} = openminds.internal.mixedtype.learningresource.About()
 
         % Enter the abstract or a short description of the creative work.
         abstract (1,1) string
 
         % Add all parties that contributed to this creative work as authors.
         author (1,:) openminds.internal.mixedtype.learningresource.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.learningresource.Author()
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.learningresource.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.learningresource.CitedPublication()
 
         % Enter the copyright information of this creative work.
         copyright (1,:) openminds.core.data.Copyright ...
@@ -109,7 +109,7 @@ classdef LearningResource < openminds.Node
 
         % Add all parties that fulfill the role of a custodian for this creative work (e.g., a corresponding author). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the creative work.
         custodian (1,:) openminds.internal.mixedtype.learningresource.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.learningresource.Custodian()
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
@@ -129,7 +129,7 @@ classdef LearningResource < openminds.Node
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.learningresource.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.learningresource.Keyword()
 
         % Enter a description for the expected learning outcomes of this learning resource.
         learningOutcome (1,1) string
@@ -158,11 +158,11 @@ classdef LearningResource < openminds.Node
 
         % Add the party (private or commercial) that published this creative work.
         publisher (1,:) openminds.internal.mixedtype.learningresource.Publisher ...
-            {mustBeScalarOrEmpty(publisher)}
+            {mustBeScalarOrEmpty(publisher)} = openminds.internal.mixedtype.learningresource.Publisher()
 
         % Enter the time that is required to complete this learning resource.
         requiredTime (1,:) openminds.internal.mixedtype.learningresource.RequiredTime ...
-            {mustBeScalarOrEmpty(requiredTime)}
+            {mustBeScalarOrEmpty(requiredTime)} = openminds.internal.mixedtype.learningresource.RequiredTime()
 
         % Enter the name or a short description of the aspect of the research product that is covered by this tutorial
         topic (1,1) string
@@ -219,30 +219,6 @@ classdef LearningResource < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.about(obj)
-            value = obj.about.unwrap();
-        end
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.publisher(obj)
-            value = obj.publisher.unwrap();
-        end
-        function value = get.requiredTime(obj)
-            value = obj.requiredTime.unwrap();
         end
     end
 end

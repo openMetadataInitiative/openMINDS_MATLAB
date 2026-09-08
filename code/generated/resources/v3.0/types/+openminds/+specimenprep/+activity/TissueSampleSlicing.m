@@ -27,15 +27,15 @@ classdef TissueSampleSlicing < openminds.Node
 
         % Add the state of the specimen that was sliced during this activity.
         input (1,:) openminds.internal.mixedtype.tissuesampleslicing.Input ...
-            {mustBeScalarOrEmpty(input)}
+            {mustBeScalarOrEmpty(input)} = openminds.internal.mixedtype.tissuesampleslicing.Input()
 
         % Add the state of the tissue sample slice or collection of slices that resulted from this activity.
         output (1,:) openminds.internal.mixedtype.tissuesampleslicing.Output ...
-            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)} = openminds.internal.mixedtype.tissuesampleslicing.Output()
 
         % Enter the temperature at which the tissue sample was sliced during the activity.
         temperature (1,:) openminds.internal.mixedtype.tissuesampleslicing.Temperature ...
-            {mustBeScalarOrEmpty(temperature)}
+            {mustBeScalarOrEmpty(temperature)} = openminds.internal.mixedtype.tissuesampleslicing.Temperature()
 
         % Add the chemical mixture used as bath solution during this activity.
         tissueBathSolution (1,:) openminds.chemicals.ChemicalMixture ...
@@ -77,18 +77,6 @@ classdef TissueSampleSlicing < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.device);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.output(obj)
-            value = obj.output.unwrap();
-        end
-        function value = get.temperature(obj)
-            value = obj.temperature.unwrap();
         end
     end
 end

@@ -68,11 +68,11 @@ classdef Model < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this research product. Note that this digital identifier will be used to reference all attached research product versions.
         digitalIdentifier (1,:) openminds.internal.mixedtype.model.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.model.DigitalIdentifier()
 
         % Add the publication or file that acts as the documentation of this research product. Inherited by all product versions unless overridden at the version level.
         documentation (1,:) openminds.internal.mixedtype.model.Documentation ...
-            {mustBeScalarOrEmpty(documentation)}
+            {mustBeScalarOrEmpty(documentation)} = openminds.internal.mixedtype.model.Documentation()
 
         % Enter a descriptive full name (or title) for this research product. Inherited by all product versions unless overridden at the version level.
         fullName (1,1) string
@@ -85,11 +85,11 @@ classdef Model < openminds.Node
 
         % Add all relevant keywords to this research product either by adding controlled terms or by suggesting new terms. Inherited by all product versions unless overridden at the version level.
         keyword (1,:) openminds.internal.mixedtype.model.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.model.Keyword()
 
         % Add all further publications besides the documentation that provide the original context for the production of this research product (e.g., an original research article that used or produced the data of this research product). Inherited by all product versions unless overridden at the version level.
         relatedPublication (1,:) openminds.internal.mixedtype.model.RelatedPublication ...
-            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)}
+            {mustBeMinLength(relatedPublication, 1), mustBeListOfUniqueItems(relatedPublication)} = openminds.internal.mixedtype.model.RelatedPublication()
 
         % Add the scope of this computational model.
         scope (1,:) openminds.controlledterms.ModelScope ...
@@ -100,7 +100,7 @@ classdef Model < openminds.Node
 
         % Add all study targets of this computational model.
         studyTarget (1,:) openminds.internal.mixedtype.model.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.model.StudyTarget()
 
         % Enter all channels through which a user can receive support for handling this research product. Inherited by all product versions unless overridden at the version level.
         supportChannel (1,:) string ...
@@ -146,24 +146,6 @@ classdef Model < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.fullName);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.documentation(obj)
-            value = obj.documentation.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.relatedPublication(obj)
-            value = obj.relatedPublication.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

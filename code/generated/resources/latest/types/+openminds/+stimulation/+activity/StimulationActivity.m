@@ -61,7 +61,7 @@ classdef StimulationActivity < openminds.Node
 
         % Add all states of the specimen(s) that are being stimulated during this activity.
         input (1,:) openminds.internal.mixedtype.stimulationactivity.Input ...
-            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)}
+            {mustBeMinLength(input, 1), mustBeListOfUniqueItems(input)} = openminds.internal.mixedtype.stimulationactivity.Input()
 
         % Add the dataset version in which this activity was conducted.
         isPartOf (1,:) openminds.core.products.DatasetVersion ...
@@ -72,11 +72,11 @@ classdef StimulationActivity < openminds.Node
 
         % Add all states of the specimen(s) that were stimulated as a result of this activity, and all files or file bundles generated.
         output (1,:) openminds.internal.mixedtype.stimulationactivity.Output ...
-            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)}
+            {mustBeMinLength(output, 1), mustBeListOfUniqueItems(output)} = openminds.internal.mixedtype.stimulationactivity.Output()
 
         % Add all agents that performed this activity.
         performedBy (1,:) openminds.internal.mixedtype.stimulationactivity.PerformedBy ...
-            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)}
+            {mustBeMinLength(performedBy, 1), mustBeListOfUniqueItems(performedBy)} = openminds.internal.mixedtype.stimulationactivity.PerformedBy()
 
         % Add the initial preparation type for this activity.
         preparationDesign (1,:) openminds.controlledterms.PreparationType ...
@@ -100,7 +100,7 @@ classdef StimulationActivity < openminds.Node
 
         % Add all study targets of this activity.
         studyTarget (1,:) openminds.internal.mixedtype.stimulationactivity.StudyTarget ...
-            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)}
+            {mustBeMinLength(studyTarget, 1), mustBeListOfUniqueItems(studyTarget)} = openminds.internal.mixedtype.stimulationactivity.StudyTarget()
     end
 
     properties (Access = protected)
@@ -143,21 +143,6 @@ classdef StimulationActivity < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.input(obj)
-            value = obj.input.unwrap();
-        end
-        function value = get.output(obj)
-            value = obj.output.unwrap();
-        end
-        function value = get.performedBy(obj)
-            value = obj.performedBy.unwrap();
-        end
-        function value = get.studyTarget(obj)
-            value = obj.studyTarget.unwrap();
         end
     end
 end

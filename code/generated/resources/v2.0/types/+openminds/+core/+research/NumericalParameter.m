@@ -17,7 +17,7 @@ classdef NumericalParameter < openminds.Node
 
         % Add at least one quantitative value for this parameter.
         value (1,:) openminds.internal.mixedtype.numericalparameter.Value ...
-            {mustBeMinLength(value, 1)}
+            {mustBeMinLength(value, 1)} = openminds.internal.mixedtype.numericalparameter.Value()
     end
 
     properties (Access = protected)
@@ -51,12 +51,6 @@ classdef NumericalParameter < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.value(obj)
-            value = obj.value.unwrap();
         end
     end
 end

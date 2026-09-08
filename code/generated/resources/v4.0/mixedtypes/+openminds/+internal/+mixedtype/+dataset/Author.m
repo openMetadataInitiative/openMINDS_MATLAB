@@ -7,4 +7,10 @@ classdef Author < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.dataset.Author();
+        end
+    end
 end

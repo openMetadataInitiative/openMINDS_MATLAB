@@ -33,11 +33,11 @@ classdef ProductSource < openminds.Node
 
         % Add the party (private, commercial or industrial) that provided this product.
         provider (1,:) openminds.internal.mixedtype.productsource.Provider ...
-            {mustBeScalarOrEmpty(provider)}
+            {mustBeScalarOrEmpty(provider)} = openminds.internal.mixedtype.productsource.Provider()
 
         % Enter the purity of the product as stated by the 'provider'.
         purity (1,:) openminds.internal.mixedtype.productsource.Purity ...
-            {mustBeScalarOrEmpty(purity)}
+            {mustBeScalarOrEmpty(purity)} = openminds.internal.mixedtype.productsource.Purity()
     end
 
     properties (Access = protected)
@@ -73,15 +73,6 @@ classdef ProductSource < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.identifier;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.provider(obj)
-            value = obj.provider.unwrap();
-        end
-        function value = get.purity(obj)
-            value = obj.purity.unwrap();
         end
     end
 end

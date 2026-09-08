@@ -71,11 +71,11 @@ classdef Chapter < openminds.Node
 
         % Add all parties that contributed to this creative work as authors.
         author (1,:) openminds.internal.mixedtype.chapter.Author ...
-            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)}
+            {mustBeMinLength(author, 1), mustBeListOfUniqueItems(author)} = openminds.internal.mixedtype.chapter.Author()
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.chapter.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.chapter.CitedPublication()
 
         % Enter the copyright information of this creative work.
         copyright (1,:) openminds.core.data.Copyright ...
@@ -87,7 +87,7 @@ classdef Chapter < openminds.Node
 
         % Add all parties that fulfill the role of a custodian for this creative work (e.g., a corresponding author). Custodians are typically the main contact in case of misconduct, obtain permission from the contributors to publish personal information, and maintain the content and quality of the creative work.
         custodian (1,:) openminds.internal.mixedtype.chapter.Custodian ...
-            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)}
+            {mustBeMinLength(custodian, 1), mustBeListOfUniqueItems(custodian)} = openminds.internal.mixedtype.chapter.Custodian()
 
         % Add the globally unique and persistent digital identifier of this creative work.
         digitalIdentifier (1,:) openminds.core.digitalidentifier.DOI ...
@@ -107,7 +107,7 @@ classdef Chapter < openminds.Node
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.chapter.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.chapter.Keyword()
 
         % Add the license of this creative work.
         license (1,:) openminds.core.data.License ...
@@ -129,7 +129,7 @@ classdef Chapter < openminds.Node
 
         % Add the party (private or commercial) that published this creative work.
         publisher (1,:) openminds.internal.mixedtype.chapter.Publisher ...
-            {mustBeScalarOrEmpty(publisher)}
+            {mustBeScalarOrEmpty(publisher)} = openminds.internal.mixedtype.chapter.Publisher()
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string
@@ -176,24 +176,6 @@ classdef Chapter < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.author(obj)
-            value = obj.author.unwrap();
-        end
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.custodian(obj)
-            value = obj.custodian.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.publisher(obj)
-            value = obj.publisher.unwrap();
         end
     end
 end

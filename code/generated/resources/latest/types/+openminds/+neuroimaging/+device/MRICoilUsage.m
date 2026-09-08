@@ -40,7 +40,7 @@ classdef MRICoilUsage < openminds.Node
 
         % Add all files or file bundles containing additional information about the usage of this device.
         metadataLocation (1,:) openminds.internal.mixedtype.mricoilusage.MetadataLocation ...
-            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)}
+            {mustBeMinLength(metadataLocation, 1), mustBeListOfUniqueItems(metadataLocation)} = openminds.internal.mixedtype.mricoilusage.MetadataLocation()
 
         % Add the anatomical mounting location of the coil, indicating where the coil was positioned on or around the subject (for example, head, neck, knee, or torso). This information is typically applicable to radiofrequency (RF) coils and may be omitted for gradient or shim systems.
         mountingLocation (1,:) openminds.controlledterms.ExternalBodyRegion ...
@@ -52,7 +52,7 @@ classdef MRICoilUsage < openminds.Node
 
         % Add the state of the tissue sample or subject that this device was used on.
         usedSpecimen (1,:) openminds.internal.mixedtype.mricoilusage.UsedSpecimen ...
-            {mustBeScalarOrEmpty(usedSpecimen)}
+            {mustBeScalarOrEmpty(usedSpecimen)} = openminds.internal.mixedtype.mricoilusage.UsedSpecimen()
     end
 
     properties (Access = protected)
@@ -90,15 +90,6 @@ classdef MRICoilUsage < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.metadataLocation(obj)
-            value = obj.metadataLocation.unwrap();
-        end
-        function value = get.usedSpecimen(obj)
-            value = obj.usedSpecimen.unwrap();
         end
     end
 end

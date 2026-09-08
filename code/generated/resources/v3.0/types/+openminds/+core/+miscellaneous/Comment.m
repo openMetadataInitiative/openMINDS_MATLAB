@@ -20,7 +20,7 @@ classdef Comment < openminds.Node
     properties (SetObservable)
         % Add the research product (version) that this comment is about.
         about (1,:) openminds.internal.mixedtype.comment.About ...
-            {mustBeScalarOrEmpty(about)}
+            {mustBeScalarOrEmpty(about)} = openminds.internal.mixedtype.comment.About()
 
         % Enter the comment about the research product (version) stated under 'about'.
         comment (1,1) string
@@ -66,12 +66,6 @@ classdef Comment < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.comment);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.about(obj)
-            value = obj.about.unwrap();
         end
     end
 end

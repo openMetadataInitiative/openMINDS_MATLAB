@@ -41,7 +41,7 @@ classdef FileBundle < openminds.Node
 
         % Add the file bundle or file repository this file bundle is a part of.
         isPartOf (1,:) openminds.internal.mixedtype.filebundle.IsPartOf ...
-            {mustBeScalarOrEmpty(isPartOf)}
+            {mustBeScalarOrEmpty(isPartOf)} = openminds.internal.mixedtype.filebundle.IsPartOf()
 
         % Enter the name of this file bundle.
         name (1,1) string
@@ -89,12 +89,6 @@ classdef FileBundle < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.name, obj.groupedBy);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.isPartOf(obj)
-            value = obj.isPartOf.unwrap();
         end
     end
 end

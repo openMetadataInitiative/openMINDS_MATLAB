@@ -21,7 +21,7 @@ classdef Membership < openminds.Node
 
         % Add the actor associated with this membership.
         member (1,:) openminds.internal.mixedtype.membership.Member ...
-            {mustBeScalarOrEmpty(member)}
+            {mustBeScalarOrEmpty(member)} = openminds.internal.mixedtype.membership.Member()
 
         % Enter the start date of this membership, formatted as 'YYYY-MM-DD'.
         startDate (1,:) datetime ...
@@ -59,12 +59,6 @@ classdef Membership < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s', obj.member);
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.member(obj)
-            value = obj.member.unwrap();
         end
     end
 end

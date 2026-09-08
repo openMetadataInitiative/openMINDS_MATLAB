@@ -51,7 +51,7 @@ classdef Pipette < openminds.Node
 
         % Add the globally unique and persistent digital identifier of this device.
         digitalIdentifier (1,:) openminds.internal.mixedtype.pipette.DigitalIdentifier ...
-            {mustBeScalarOrEmpty(digitalIdentifier)}
+            {mustBeScalarOrEmpty(digitalIdentifier)} = openminds.internal.mixedtype.pipette.DigitalIdentifier()
 
         % Enter the external diameter of the pipette.
         externalDiameter (1,:) openminds.core.miscellaneous.QuantitativeValue ...
@@ -69,18 +69,18 @@ classdef Pipette < openminds.Node
 
         % Add the manufacturer (private or industrial) that constructed this device.
         manufacturer (1,:) openminds.internal.mixedtype.pipette.Manufacturer ...
-            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)}
+            {mustBeMinLength(manufacturer, 1), mustBeListOfUniqueItems(manufacturer)} = openminds.internal.mixedtype.pipette.Manufacturer()
 
         % Add the material that the pipette is made of.
         material (1,:) openminds.internal.mixedtype.pipette.Material ...
-            {mustBeScalarOrEmpty(material)}
+            {mustBeScalarOrEmpty(material)} = openminds.internal.mixedtype.pipette.Material()
 
         % Enter a descriptive name for this device, preferably including the model name as defined by the manufacturer.
         name (1,1) string
 
         % Add all parties that legally own this device.
         owner (1,:) openminds.internal.mixedtype.pipette.Owner ...
-            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)}
+            {mustBeMinLength(owner, 1), mustBeListOfUniqueItems(owner)} = openminds.internal.mixedtype.pipette.Owner()
 
         % Enter the serial number of this device.
         serialNumber (1,1) string
@@ -123,21 +123,6 @@ classdef Pipette < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.lookupLabel;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.digitalIdentifier(obj)
-            value = obj.digitalIdentifier.unwrap();
-        end
-        function value = get.manufacturer(obj)
-            value = obj.manufacturer.unwrap();
-        end
-        function value = get.material(obj)
-            value = obj.material.unwrap();
-        end
-        function value = get.owner(obj)
-            value = obj.owner.unwrap();
         end
     end
 end

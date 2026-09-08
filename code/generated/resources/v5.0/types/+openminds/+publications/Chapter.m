@@ -65,7 +65,7 @@ classdef Chapter < openminds.Node
 
         % Add all references this creative work cites.
         citedPublication (1,:) openminds.internal.mixedtype.chapter.CitedPublication ...
-            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)}
+            {mustBeMinLength(citedPublication, 1), mustBeListOfUniqueItems(citedPublication)} = openminds.internal.mixedtype.chapter.CitedPublication()
 
         % Add all individual, organisational, or consortial contributions to this creative work.
         contribution (1,:) openminds.core.actors.Contribution ...
@@ -97,7 +97,7 @@ classdef Chapter < openminds.Node
 
         % Add all relevant keywords to this creative work either by adding controlled terms or by suggesting new terms.
         keyword (1,:) openminds.internal.mixedtype.chapter.Keyword ...
-            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)}
+            {mustBeMinLength(keyword, 1), mustBeListOfUniqueItems(keyword)} = openminds.internal.mixedtype.chapter.Keyword()
 
         % Enter the date on which this creative work was last modified, formatted as '2023-02-07'.
         modificationDate (1,:) datetime ...
@@ -115,7 +115,7 @@ classdef Chapter < openminds.Node
 
         % Add all licenses and available data usage agreements applicable to this creative work.
         usageCondition (1,:) openminds.internal.mixedtype.chapter.UsageCondition ...
-            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)}
+            {mustBeMinLength(usageCondition, 1), mustBeListOfUniqueItems(usageCondition)} = openminds.internal.mixedtype.chapter.UsageCondition()
 
         % Enter the version identifier of this creative work.
         versionIdentifier (1,1) string
@@ -160,18 +160,6 @@ classdef Chapter < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods % Hand out the instances a mixed type set holds, not the set
-        function value = get.citedPublication(obj)
-            value = obj.citedPublication.unwrap();
-        end
-        function value = get.keyword(obj)
-            value = obj.keyword.unwrap();
-        end
-        function value = get.usageCondition(obj)
-            value = obj.usageCondition.unwrap();
         end
     end
 end
