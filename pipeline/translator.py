@@ -225,6 +225,9 @@ class MATLABSchemaBuilder(object):
             validators = _create_property_validator_functions(property_name, property_info)
 
             mixed_types_list = sorted(possible_types)
+            # More than one allowed type means the property is declared with
+            # a generated mixed type set class
+            is_mixed_type = len(possible_types) > 1
 
             if len(possible_types) == 0:
                 possible_types = ''
@@ -261,6 +264,7 @@ class MATLABSchemaBuilder(object):
                 "required": full_name in schema.get("required", []),
                 "is_linked": SCHEMA_PROPERTY_LINKED_TYPES in property_info,
                 "is_embedded": SCHEMA_PROPERTY_EMBEDDED_TYPES in property_info,
+                "is_mixed_type": is_mixed_type,
                 "doc": _generate_property_doc(property_info, schema_short_name)
             }
             props.append(template_property_attributes)
@@ -363,6 +367,7 @@ class MATLABSchemaBuilder(object):
             "class_name": property_name,
             "allowed_types_list": prop['mixed_type_list'],
             "is_scalar": str(not(prop['allow_multiple'])).lower(),
+            "full_class_name": ".".join(package_name_list + [property_name]),
         }
 
         mixedtype_classdef_str = self.mixedtype_class_template.render(template_variables)

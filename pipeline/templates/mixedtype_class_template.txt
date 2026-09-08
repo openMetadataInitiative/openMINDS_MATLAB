@@ -12,4 +12,10 @@ classdef {{ class_name }} < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = {{is_scalar}}
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = {{ full_class_name }}();
+        end
+    end
 end
