@@ -1,4 +1,5 @@
-classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle
+classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDisplay & handle & ...
+        matlab.mixin.indexing.RedefinesDot
 % MixedTypeSet - Holds a value whose type is one of several allowed types
 %
 %   Properties:
@@ -13,6 +14,12 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
 %   Use openminds.utility.isMixedInstance to test whether a value is one of
 %   these. The concrete subclasses are generated per property and are an
 %   implementation detail; do not name them.
+%
+%   Indexing:
+%       A dot reference the set does not declare is forwarded to the held
+%       instances, so dataset.author(2).givenName works whether or not the
+%       authors share a type. A generated type hands out the held instances
+%       in place of the set where they share a type; see unwrap.
 %
 %   See also openminds.utility.isMixedInstance, openminds.introspection.MetaType
 
@@ -53,8 +60,6 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
 % This class is internal and should not be exposed to users.
 
 % TODO:
-%  - [ ] Implement subsref in order to get instances out.
-%  - [ ] If all requested instances are the same, return an object array
 %  - [ ] Consider if we need to define intersect, union etc.
 %  - [ ] Any other builtins needed???
 
@@ -112,6 +117,14 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
                 
                 if isstring(sourceValue{i}) || ischar(sourceValue{i})
                     sourceValue{i} = obj(i).preprocessFromString(sourceValue{i});
+                end
+
+                % An element taken out of a set of another mixed type class
+                % arrives wrapped. Unwrap it, then validate its type like
+                % any other instance.
+                if openminds.utility.isMixedInstance(sourceValue{i}) ...
+                        && ~isa(sourceValue{i}, class(obj))
+                    sourceValue{i} = sourceValue{i}.Instance;
                 end
 
                 if isstruct(sourceValue{i}) % Linked or embedded instance
@@ -211,6 +224,61 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
         end
     end
 
+    methods (Hidden)
+        function value = unwrap(obj)
+        % unwrap - The held instances, as one array when they share a type
+        %
+        %   Returns the set itself when the instances are of different
+        %   types, or when the set is empty, since no array of one type
+        %   can hold them. The generated type classes call this from the
+        %   get method of every mixed type property.
+
+            if obj.isHomogeneous()
+                value = [obj.Instance];
+            else
+                value = obj;
+            end
+        end
+    end
+
+    methods (Access = protected) % Forward dot indexing to the held instances
+        function varargout = dotReference(obj, indexOp)
+            if isscalar(obj)
+                [varargout{1:nargout}] = obj.Instance.(indexOp);
+            else
+                % A list yields one value per element, as an array of
+                % instances does. Indexing deeper into each of them is
+                % refused, as MATLAB refuses it for arrays.
+                if ~isscalar(indexOp)
+                    error('openMINDS:MixedTypeSet:IndexingIntoList', ...
+                        ['Indexing into a list of %d instances is not ', ...
+                        'supported. Index one instance at a time.'], numel(obj))
+                end
+                varargout = cell(1, numel(obj));
+                for i = 1:numel(obj)
+                    varargout{i} = obj(i).Instance.(indexOp);
+                end
+            end
+        end
+
+        function obj = dotAssign(obj, indexOp, varargin)
+            if ~isscalar(obj)
+                error('openMINDS:MixedTypeSet:AssigningIntoList', ...
+                    ['Assigning through a list of %d instances is not ', ...
+                    'supported. Index one instance at a time.'], numel(obj))
+            end
+            obj.Instance.(indexOp) = varargin{:};
+        end
+
+        function n = dotListLength(obj, indexOp, indexContext)
+            if isscalar(obj)
+                n = listLength(obj.Instance, indexOp, indexContext);
+            else
+                n = numel(obj);
+            end
+        end
+    end
+
     methods (Access = private) % Internal utilities
         function tf = isHomogeneous(obj)
             classNames = strings(1, numel(obj));
@@ -219,14 +287,6 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
             end
             uniqueClassNames = unique(classNames);
             tf = isscalar(uniqueClassNames);
-        end
-
-        function instances = getInstances(obj)
-            if obj.isHomogeneous()
-                instances = [obj.Instance];
-            else
-                instances = obj;
-            end
         end
     end
 
@@ -352,9 +412,9 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
         end
 
         function displayScalarObject(obj)
-            % This should not happen...
+            % One element of a list of mixed types, reached by indexing
+            % into the list. Show the instance it holds.
             disp(obj.Instance)
-            warning('Displaying scalar mixed type object. This is a non-critical bug.')
         end
 
         function displayNonScalarObject(obj)
