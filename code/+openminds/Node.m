@@ -90,12 +90,10 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
         % PropertyWithLinkedInstanceChanged - A linked or embedded property
         % of this instance was assigned.
         %
-        %   An assignment made through the property to a linked instance,
-        %   such as dataset.author.givenName = "...", is raised as
-        %   InstanceChanged by that linked instance. MATLAB then assigns
-        %   the mixed type set back to the property, so this event is
-        %   raised here as well, with the set as both OldValue and
-        %   NewValue.
+        %   Raised only when the property comes to hold other instances.
+        %   An assignment made through it to a linked instance, such as
+        %   dataset.author.givenName = "...", is raised as InstanceChanged
+        %   by that linked instance, not by this one.
         %
         %   Carries the same four properties as InstanceChanged, with
         %   IsLinkedProperty true.
@@ -479,9 +477,20 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
                 eventName = 'InstanceChanged';
             end
 
-            eventData = PropertyValueChangedEventData( ...
-                obj.(propertyName), obj.ValueBeforeAssignment, isLinkedProperty, obj);
+            newValue = obj.(propertyName);
+            oldValue = obj.ValueBeforeAssignment;
             obj.ValueBeforeAssignment = [];
+
+            % An assignment through a linked property, such as
+            % dataset.author.givenName = x, changes the linked instance and
+            % then assigns the same instances back to the property. The
+            % linked instance raises its own event for that; this one is
+            % for the property coming to hold other instances.
+            if isLinkedProperty && holdsSameInstances(oldValue, newValue)
+                return
+            end
+
+            eventData = PropertyValueChangedEventData(newValue, oldValue, isLinkedProperty, obj);
             obj.notify(eventName, eventData)
         end
 
@@ -658,6 +667,30 @@ function [name, value, isReference] = extractIsReference(name, value)
                 ['A reference is created from an id and nothing else. ', ...
                 'Give IsReference=true together with an id and no other property.'])
         end
+    end
+end
+
+function tf = holdsSameInstances(oldValue, newValue)
+% Whether two linked property values hold the same instances, compared
+% by handle identity, so that a change inside an instance does not
+% count as the property changing.
+
+    oldInstances = instancesOf(oldValue);
+    newInstances = instancesOf(newValue);
+    tf = ~isempty(oldInstances) && numel(oldInstances) == numel(newInstances) ...
+        && all(cellfun(@(a, b) a == b, oldInstances, newInstances));
+end
+
+function instances = instancesOf(value)
+% A linked property value as a cell array of instances, or an empty
+% cell for anything else.
+
+    if openminds.utility.isMixedInstance(value)
+        instances = value.Instances;
+    elseif openminds.utility.isInstance(value)
+        instances = num2cell(value);
+    else
+        instances = {};
     end
 end
 

@@ -192,10 +192,12 @@ classdef MixedTypePropertyTest < matlab.unittest.TestCase
         function testAssignmentThroughLinkReportedByLinkedInstance(testCase)
             person = openminds.core.Person("givenName", "Ada");
             contribution = testCase.contributionWith(person);
+            receivedByParent = testCase.listenTo(contribution, 'PropertyWithLinkedInstanceChanged');
             receivedByPerson = testCase.listenTo(person, 'InstanceChanged');
 
             contribution.contributor.givenName = "Grace";
 
+            testCase.verifyEmpty(receivedByParent())
             eventData = receivedByPerson();
             testCase.assertNotEmpty(eventData)
             testCase.verifyEqual(eventData.OldValue, "Ada")
