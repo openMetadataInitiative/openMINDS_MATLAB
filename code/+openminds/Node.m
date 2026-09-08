@@ -23,8 +23,8 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
 %
 %   Events:
 %       InstanceChanged                   - a plain property was assigned
-%       PropertyWithLinkedInstanceChanged - a linked property was assigned,
-%                                           or one of a linked instance
+%       PropertyWithLinkedInstanceChanged - a linked or embedded property
+%                                           was assigned
 %
 %   See also openminds.Collection, openminds.introspection.MetaType
 
@@ -37,7 +37,10 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
         VOCAB = "https://openminds.ebrains.eu/vocab/"
     end
 
-    properties (SetAccess = protected, Hidden) % Todo: SetAccess = immutable
+    properties (Hidden)
+        % id - The identifier of the node. Settable after construction,
+        % as the tutorials do, because the constructor's id argument is
+        % the only other way to give a node an identifier of your own.
         id string = ""
     end
 
@@ -67,15 +70,15 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
     end
     
     events
-        % InstanceChanged - A plain property of this instance was assigned.
+        % InstanceChanged - A property of this instance was assigned.
         %
-        %   Raised on the instance that owns the property. Not raised for
-        %   linked or embedded properties; those raise
-        %   PropertyWithLinkedInstanceChanged instead.
+        %   Raised after the assignment, on the instance that owns the
+        %   property. Not raised for linked or embedded properties; those
+        %   raise PropertyWithLinkedInstanceChanged instead.
         %
         %   The listener is passed event data carrying these four
         %   properties, which are the contract:
-        %       NewValue         - the value assigned
+        %       NewValue         - the value the property now holds
         %       OldValue         - the value it replaced
         %       IsLinkedProperty - false for this event
         %       IsPropertyOf     - the instance the property belongs to
@@ -84,11 +87,13 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
         %   data; the class itself is an implementation detail.
         InstanceChanged
 
-        % PropertyWithLinkedInstanceChanged - A linked property was assigned,
-        % or a property of a linked instance was assigned through this one.
+        % PropertyWithLinkedInstanceChanged - A linked or embedded property
+        % of this instance was assigned.
         %
-        %   Raised on the instance the assignment was addressed to, not on
-        %   the linked instance that ultimately changed.
+        %   Raised only when the property itself is assigned. An
+        %   assignment made through it to a linked instance, such as
+        %   dataset.author.givenName = "...", is raised as InstanceChanged
+        %   by that linked instance, not by this one.
         %
         %   Carries the same four properties as InstanceChanged, with
         %   IsLinkedProperty true.
@@ -106,6 +111,7 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
             end
 
             obj.id = obj.generateInstanceId();
+            obj.listenForPropertyChanges()
 
             if isempty(instance)
                 % IsReference is not a property of the type. It marks the
@@ -417,478 +423,85 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
         end
     end
 
-    methods (Hidden) % Overrides subsref & subsasgn (seal?)
+    properties (Access = private, Transient, Hidden)
+        % ValueBeforeAssignment - What a property held before the assignment
+        % in progress, recorded by the PreSet listener for the PostSet
+        % listener to report as OldValue.
+        ValueBeforeAssignment
+    end
 
-        function obj = subsasgn(obj, subs, value)
-            
+    methods (Access = private) % Change events
+        function listenForPropertyChanges(obj)
+        % listenForPropertyChanges - Raise a change event when a property
+        % of the type is assigned
+        %
+        %   The generated properties are SetObservable. One PreSet listener
+        %   records the value being replaced and one PostSet listener
+        %   raises the event with both values. The callbacks reach the
+        %   instance through the event rather than by capturing it, so the
+        %   listeners do not keep the instance alive.
+
+            observableProperties = obj.getObservableProperties();
+            if isempty(observableProperties)
+                return
+            end
+            addlistener(obj, observableProperties, 'PreSet', ...
+                @(metaProperty, eventData) ...
+                eventData.AffectedObject.recordValueBeforeAssignment(metaProperty));
+            addlistener(obj, observableProperties, 'PostSet', ...
+                @(metaProperty, eventData) ...
+                eventData.AffectedObject.raisePropertyChangedEvent(metaProperty));
+        end
+
+        function recordValueBeforeAssignment(obj, metaProperty)
+            % Reading a mixed type property is not free, so the value is
+            % only recorded when someone is listening.
+            if obj.hasChangeListener()
+                obj.ValueBeforeAssignment = obj.(metaProperty.Name);
+            end
+        end
+
+        function raisePropertyChangedEvent(obj, metaProperty)
             import openminds.internal.event.PropertyValueChangedEventData
-            import openminds.internal.utility.getTypeDocLink
 
-            if isequal(obj, [])
-                % As far as I understand, this only occurs during property
-                % initialization of properties with a defined class, in
-                % which case the obj has to be assigned with an instance of
-                % the correct class.
-                obj = eval(sprintf('%s.empty', class(value)));
+            if ~obj.hasChangeListener()
+                return
             end
 
-            if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
-                propName = subs(1).subs;
-
-                if isscalar(subs)
-                    propName = subs(1).subs;
-                    className = class(obj.(propName));
-                
-                    % Get the actual instance from a MixedTypeSet subclass.
-                    if contains(className, 'openminds.internal.mixedtype')
-                        try
-                            % Place the openMINDS instance object in a
-                            % MixedTypeSet wrapper class
-                            classFcn = str2func(className);
-                            value = classFcn(value);
-                        catch MECause
-                            msg = sprintf("Error setting instance of linked type '%s' of class '%s'. ", propName, class(obj));
-                            errorStruct.identifier = 'LinkedProperty:CouldNotRetrieveInstance';
-                            errorStruct.message = msg + MECause.message;
-                            errorStruct.stack = struct('file', '', 'name', class(obj), 'line', 0);
-                            error(errorStruct)
-                        end
-                    end
-                elseif numel(subs) > 1
-                    % Pass for now.
-                    % This case should be handled below? What if multiple
-                    % instances should be placed in the mixedtype wrapper?
-                end
-
-                try
-                    if isscalar(subs)
-                        % Assigning a linked property
-                        oldValue = obj.subsref(subs);
-
-                        obj = builtin('subsasgn', obj, subs, value);
-
-                        % Assign new value and trigger event
-                        evtData = PropertyValueChangedEventData(value, oldValue, true, obj); % true for linked prop
-                        obj.notify('PropertyWithLinkedInstanceChanged', evtData)
-
-                    elseif numel(subs) > 1 && strcmp(subs(2).type, '.')
-                        % Modifying a linked property
-                        
-                        linkedObj = obj.subsref(subs(1));
-                        if isa(linkedObj, 'cell')
-                            className = class(obj.(subs(1).subs));
-                            if contains(className, 'openminds.internal.mixedtype')
-                                % Todo: Check if instances in cell array
-                                % are of different types.
-                                error('Can not use indexing assignment for instances of different types')
-                            else
-                                error('Unexpected error occurred, please report')
-                            end
-                        end
-                        oldValue = linkedObj.subsref(subs(2:end));
-
-                        % Assign new value and trigger event
-                        linkedObj.subsasgn(subs(2:end), value);
-                        evtData = PropertyValueChangedEventData(value, oldValue, true, obj); % true for linked prop
-                        obj.notify('PropertyWithLinkedInstanceChanged', evtData)
-
-                    elseif numel(subs) > 1 && strcmp(subs(2).type, '()')
-                        try
-                            % linkedObj = obj.subsref(subs(1:2));
-                            obj = builtin('subsasgn', obj, subs, value);
-
-                        catch MECause
-
-                            switch MECause.identifier
-                                case 'MATLAB:badsubscript'
-                                    % Bad subscript might occur when
-                                    % someone tries to assign a value to a
-                                    % part of the array that does not exist
-                                    % yet. Use builtin subasgn to deal with
-                                    % this... This should be improved, as
-                                    % empty values default to empty double,
-                                    % but should be empty object of correct
-                                    % instance type.
-                                    try
-                                        if obj.isSubsForMixedTypePropertyValue(subs)
-                                            className = class( obj.(subs(1).subs) );
-                                            value = feval(className, value);
-                                        end
-                                        obj = builtin('subsasgn', obj, subs, value);
-                                    catch ME
-                                        errorStruct.identifier = ME.identifier;
-                                        errorStruct.message = ME.message;
-                                        errorStruct.stack = struct('file', '', 'name', class(obj), 'line', 0);
-                                        error(errorStruct)
-                                    end
-
-                                    % obj.subsasgn(subs, value);
-                                otherwise
-                                    ME = MException('OPENMINDS_MATLAB:UnhandledIndexAssignment', ...
-                                        'Unhandled index assignment, please report');
-                                    ME.addCause(MECause)
-                                    throw(ME)
-                            end
-                        end
-
-                    else
-                        error('Unhandled indexing assignment')
-                    end
-                catch ME
-                    errorStruct.identifier = 'LinkedProperty:InvalidType';
-                    if contains(ME.message, 'Error setting property')
-                        errorStruct.message = ME.message;
-                    else
-                        classDocLink = getTypeDocLink(class(obj), 'Help popup'); % Todo: Dataset or openminds.core.Dataset?
-                        msg = sprintf("Error setting property '%s' of class '%s'. ", propName, classDocLink);
-                        errorStruct.message = msg + ME.message;
-                    end
-                    errorStruct.stack = struct('file', '', 'name', class(obj), 'line', 0);
-                    error(errorStruct)
-                end
-                
-                % fprintf('set linked property of %s\n', class(obj))
+            propertyName = metaProperty.Name;
+            isLinkedProperty = isfield(obj.LINKED_PROPERTIES, propertyName) ...
+                || isfield(obj.EMBEDDED_PROPERTIES, propertyName);
+            if isLinkedProperty
+                eventName = 'PropertyWithLinkedInstanceChanged';
             else
-                if ~isempty(obj)
-                    try
-                        oldValue = builtin('subsref', obj, subs);
-                    catch MECause
-                        switch MECause.identifier
-                            case 'MATLAB:badsubscript'
-                                % Old value was not assigned, expanding array
-                                obj = builtin('subsasgn', obj, subs, value);
-                        end
-                    end
-                else
-                    oldValue = [];
-                end
-                
-                obj = builtin('subsasgn', obj, subs, value);
-
-                if ~isempty(obj)
-                    if obj.isSubsForPublicPropertyValue(subs)
-                        if isscalar(obj)
-                            evtSource = obj;
-                        else
-                            if strcmp(subs(1).type, '()')
-                                evtSource = builtin('subsref', obj, subs(1));
-                            else
-                                error('Unexpected error. Please report')
-                            end
-                        end
-                        evtData = PropertyValueChangedEventData(value, oldValue, false, evtSource); % false for property which is not embedded or linked
-                        evtSource.notify('InstanceChanged', evtData)
-                        % fprintf('Set "primitive" property type of %s\n', class(obj))
-                    end
-                end
+                eventName = 'InstanceChanged';
             end
 
-            if ~nargout
-                clear obj
-            end
+            eventData = PropertyValueChangedEventData( ...
+                obj.(propertyName), obj.ValueBeforeAssignment, isLinkedProperty, obj);
+            obj.ValueBeforeAssignment = [];
+            obj.notify(eventName, eventData)
         end
 
-        function varargout = subsref(obj, subs)
-        % subsref - Overrides subsref for customized indexing on properties
-
-            numOutputs = nargout;
-            varargout = cell(1, numOutputs);
-                            
-% %             if numel(obj) > 1
-% %                 if obj.isSubsForProperty(subs)
-% %                     varargout = cell(numel(obj), 1);
-% %                     for i = 1:numel(obj)
-% %                         varargout{i} = obj(i).subsref(subs);
-% %                     end
-% %                     return
-% %                 end
-% %             end
-
-            if obj.isSubsForLinkedProperty(subs) || obj.isSubsForEmbeddedProperty(subs)
-                
-                if numel(obj) > 1
-                    linkedTypeValues = cell(size(obj));
-                    for ii = 1:numel(obj)
-                        linkedTypeValues{ii} = builtin('subsref', obj(ii), subs(1));
-                    end
-                    try
-                        linkedTypeValues = [linkedTypeValues{:}];
-                    catch
-                        assert(isa(resolvedInstances, 'cell'), ...
-                            'Expected linked instances to be a cell array')
-                    end
-                else
-                    linkedTypeValues = builtin('subsref', obj, subs(1));
-                end
-
-                if openminds.utility.isMixedInstance(linkedTypeValues)
-
-                    % Specify special handling when calling methods of a
-                    % mixed type instance.
-
-                    % method fallback
-                    if numel(subs) >= 2
-                        if strcmp( subs(2).type, '.' ) && ismethod(linkedTypeValues, subs(2).subs)
-                            if nargout == 0
-                                % Todo: need try/catch in case method does not return
-                                res = builtin('subsref', linkedTypeValues, subs(2:end));
-                                varargout = {res};
-                            else
-                                [varargout{:}] = builtin('subsref', linkedTypeValues, subs(2:end));
-                            end
-                            return
-                        end
-                    end
-
-                    % Todo: Is this necessary, resolve is a method, and this
-                    % should not be reached. Is there any situation, where we
-                    % call resolve and should moved on with further subsref of
-                    % resolved instances, i.e support chained indexing?
-                    if strcmp( subs(end).subs, 'resolve')
-                        if numel(subs) == 2
-                            if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
-                                linkedTypeValues.resolve()
-                                subs(end) = [];
-                                % return
-                            end
-                        elseif numel(subs) == 3
-                            if strcmp(subs(end).type, '.') && strcmp(subs(end).subs, 'resolve')
-                                linkedTypeValues = builtin('subsref', linkedTypeValues, subs(2));
-                                linkedTypeValues.resolve()
-                                subs(end) = [];
-                                % return
-                            end
-                        elseif numel(subs) == 4
-                            error('Internal error: Not implemented')
-                        end
-                    end
-
-                    % linkedTypeValues is an array of mixed types. The
-                    % actual object(s) need to be retrieved from an
-                    % "Instance" property.
-                    mixedTypeCellArray = {linkedTypeValues.Instance};
-                    instanceType = cellfun(@(c) class(c), mixedTypeCellArray, 'uni', false);
-
-                    if numel(subs) > 1 && numel( unique(instanceType) ) > 1
-                        % If nested indexing is performed, proceed with the
-                        % cell array of mixed types.
-                        values = mixedTypeCellArray;
-                    else
-                        % Otherwise, resolve "unmixed" or "mixed" type
-                        % output now.
-                        mixedTypeClassName = class(linkedTypeValues);
-                        values = obj.resolveMixedTypeOutput(mixedTypeCellArray, mixedTypeClassName);
-                    end
-                else
-                    values = linkedTypeValues;
-                end
-                
-                if numel(subs) > 1
-                    % Todo: Remove as this appears to be unused
-                    if strcmp( subs(2).type, '()' ) && iscell(values)
-                        % subs(2).type = '{}';
-                    end
-
-                    if numOutputs > 0
-% % %                         if isequal(subs(2).type, '()') || isequal(subs(2).type, '{}')
-% % %                             numInstances = numel(values);
-% % %                             if ~ismember([subs(2).subs{:}], 1:numInstances)
-% % %                                 [varargout{:}] = deal([]);
-% % %                             else
-% % %                                 [varargout{:}] = builtin('subsref', values, subs(2:end));
-% % %                             end
-% % %                         else
-% % %
-% % %                         end
-                        if openminds.utility.isInstance(values)
-                            % TODO: Does this work if values is an array.
-                            if numel(values) == numOutputs
-                                for i = 1:numel(values)
-                                    varargout{i} = values(i).subsref(subs(2:end));
-                                end
-                            else
-                                varargout = cell(1, numOutputs);
-                                [varargout{:}] = values.subsref(subs(2:end));
-                            end
-                        else
-                            varargout = cell(1, numOutputs);
-                            [varargout{:}] = builtin('subsref', values, subs(2:end));
-                        end
-                    else
-                        if openminds.utility.isMixedInstance(linkedTypeValues)
-                            % Takes care of nested indexing into a property
-                            % with mixed types.
-                            res = builtin('subsref', values, subs(2:end));
-                            outValue = obj.resolveMixedTypeOutput(res, class(linkedTypeValues));
-                            varargout = {outValue};
-                        else
-                            builtin('subsref', values, subs(2:end))
-                        end
-                    end
-                else
-                    if numOutputs > 0
-                        if numel(values) == numOutputs
-                            for i = 1:numel(values)
-                                varargout{i} = values(i);
-                            end
-                        else
-                            varargout = cell(1, numOutputs);
-                            [varargout{:}] = values;
-                        end
-                    else
-                        varargout = values;
-                    end
-                end
-            else
-                if numOutputs > 0
-                    varargout = cell(1, numOutputs);
-                    [varargout{:}] = builtin('subsref', obj, subs);
-                else
-                    try
-                        % First we try to collect output(s) using builtin assign
-                        varargout = builtin('subsref', obj, subs);
-                        if ~iscell(varargout)
-                            varargout = {varargout};
-                        end
-                    catch ME
-                        % If the assignment/method does not have any return
-                        % arguments, we fall back to using builtin without
-                        % collecting / requiring any outputs.
-                        if strcmp(ME.identifier, 'MATLAB:TooManyOutputs')
-                            builtin('subsref', obj, subs);
-                        else
-                            % If assignment failed for any other reason, we
-                            % rethrow the exception.
-                            rethrow(ME)
-                        end
-                    end
-                end
-            end
+        function tf = hasChangeListener(obj)
+            tf = event.hasListener(obj, 'InstanceChanged') ...
+                || event.hasListener(obj, 'PropertyWithLinkedInstanceChanged');
         end
 
-        function n = numArgumentsFromSubscript(obj, s, indexingContext)
-            if (obj(1).isSubsForLinkedProperty(s) || obj(1).isSubsForEmbeddedProperty(s)) && numel(s) > 1
-                
-                % if strcmp(s(1).type, '.') && strcmp(s(2).type, '()')
-                %     %linkedTypeValues = builtin('subsref', obj, s(1:2));
-                %     linkedTypeValues = obj.subsref(s(1:2));
-                %
-                % elseif strcmp(s(1).type, '.')
-                %     linkedTypeValues = builtin('subsref', obj, s(1));
-                % end
-
-                linkedTypeValues = builtin('subsref', obj, s(1));
-
-                if openminds.utility.isMixedInstance(linkedTypeValues)
-                    linkedTypeValues = {linkedTypeValues.Instance};
-                end
-
-                if strcmp( s(2).type, '()' ) && iscell(linkedTypeValues)
-                    s(2).type = '{}';
-                end
-                try
-                    n = builtin('numArgumentsFromSubscript', [linkedTypeValues{:}], s(2:end), indexingContext);
-                catch
-                    n = builtin('numArgumentsFromSubscript', linkedTypeValues, s(2:end), indexingContext);
-                end
-            else
-                n = builtin('numArgumentsFromSubscript', obj, s, indexingContext);
-            end
-        end
-    end
-
-    methods (Access = private) % Introspective utility methods
-        
-        function tf = isSubsForProperty(obj, subs)
-            tf = strcmp( subs(1).type, '.' ) && isprop(obj(1), subs(1).subs);
-        end
-
-        function tf = isSubsForLinkedProperty(obj, subs)
-        % Return true if subs represent dot-indexing on a linked property
-            
-            if numel(obj) >= 1
-                tf = strcmp( subs(1).type, '.' ) && isfield(obj(1).LINKED_PROPERTIES, subs(1).subs);
-            else
-                linkedProps = eval( sprintf( '%s.LINKED_PROPERTIES', class(obj) ));
-                tf = strcmp( subs(1).type, '.' ) && isfield(linkedProps, subs(1).subs);
-            end
-        end
-
-        function tf = isSubsForEmbeddedProperty(obj, subs)
-        % Return true if subs represent dot-indexing on a linked property
-            
-            if numel(obj)>=1
-                tf = strcmp( subs(1).type, '.' ) && isfield(obj(1).EMBEDDED_PROPERTIES, subs(1).subs);
-            else
-                embeddedProps = eval( sprintf( '%s.EMBEDDED_PROPERTIES', class(obj) ));
-                tf = strcmp( subs(1).type, '.' ) && isfield(embeddedProps, subs(1).subs);
-            end
-        end
-
-        function tf = isSubsForMixedTypePropertyValue(obj, subs)
-            
-            tf = false;
-            if strcmp( subs(1).type, '.' )
-                if contains( class( obj.(subs(1).subs) ), 'mixedtype' )
-                    tf = true;
-                end
-            end
-        end
-
-        function tf = isSubsForPublicPropertyValue(obj, subs)
-        % Return true if subs represent dot-indexing on a public property
-            
-            tf = false;
-
-            tempSubs = subs;
-
-            % If we are indexing into a subset of the objects, lets strip
-            % of the first subs element.
-            if strcmp( tempSubs(1).type, '()' )
-                if isscalar(tempSubs) % i.e instance() or instance(2) 
-                    return
-                else
-                    tempSubs = tempSubs(2:end);
-                end
-            end
-    
-            % If subs represent dot-indexing, check if it is for a public
-            % property
-            if strcmp( tempSubs(1).type, '.' )
-                propNames = properties(obj);
-                tf = any( strcmp(tempSubs.subs, propNames) );
-            end
-        end
-    end
-
-    methods (Access = private)
-                      
-        function outValues = resolveMixedTypeOutput(~, values, mixedTypeClassName)
-        % resolveMixedTypeOutput - Resolve how to output mixed type array
+        function observableProperties = getObservableProperties(obj)
+        % getObservableProperties - The SetObservable properties of the
+        % class, as meta.property objects
         %
-        %   Inputs:
-        %       values             : cell array of instances
-        %       mixedTypeClassName : name of the mixed type class for
-        %                            elements of values
-        %
-        %   If all instances have the same type, the output will be an
-        %   array of objects of that type, otherwise return instances as a
-        %   mixed type array
+        %   Handing addlistener the meta.property objects rather than
+        %   names makes attaching the listeners an order of magnitude
+        %   cheaper, which matters when a collection of thousands of
+        %   nodes is built. They are looked up afresh for every instance:
+        %   the lookup is cheap, and a cached meta.property goes stale
+        %   when the class is reloaded, as happens when the toolbox is
+        %   started again.
 
-            if isa(values, 'cell')
-                instanceType = cellfun(@(c) class(c), values, 'uni', false);
-            else
-                instanceType = string(class(values));
-            end
-            if isscalar( unique(instanceType) )
-                if iscell(values)
-                    outValues = [values{:}];
-                else
-                    outValues = values;
-                end
-            else
-                outValues = feval(mixedTypeClassName, values);
-            end
+            propertyList = metaclass(obj).PropertyList;
+            observableProperties = propertyList([propertyList.SetObservable]);
         end
     end
 
