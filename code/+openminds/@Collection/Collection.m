@@ -458,7 +458,9 @@ classdef Collection < handle
                 if openminds.utility.isInstance(instances{i})
                     obj.addNode(instances{i});
                 else
-                    warning('todo')
+                    warning('openminds:Collection:SkippedNonInstance', ...
+                        ['Skipped item %d of %d loaded items because it is a %s, ', ...
+                        'not an openMINDS instance.'], i, numel(instances), class(instances{i}))
                 end
             end
         end
