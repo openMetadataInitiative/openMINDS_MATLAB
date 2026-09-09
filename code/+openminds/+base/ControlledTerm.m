@@ -31,13 +31,21 @@ classdef (Abstract) ControlledTerm < openminds.Node
                 end
 
                 if isstring( instanceSpec ) && ~ismissing(instanceSpec)
-                    % Check IRI first, because isfile will also check IRIs
-                    % and that is expensive (we only want to check local
-                    % files anyway)
-                    if startsWith(instanceSpec, openminds.constant.BaseIRI)
+                    % An instance IRI of another schema version names the
+                    % same instance, so isInstanceIRI, which accepts either
+                    % namespace, is consulted as well. The prefix test is
+                    % kept alongside it rather than replaced: it also
+                    % covers openMINDS IRIs that do not name an instance,
+                    % and dropping it would send those to the file check
+                    % below.
+                    isOpenMindsIRI = ...
+                        startsWith(instanceSpec, openminds.constant.BaseIRI) ...
+                        || openminds.utility.isInstanceIRI(instanceSpec);
+
+                    if isOpenMindsIRI
                         obj.deserializeFromName(instanceSpec);
-                    elseif isfile( instanceSpec )
-                        obj.load( instanceSpec ) % todo: Not implemented??
+                    elseif openminds.base.ControlledTerm.isLocalFile(instanceSpec)
+                        obj.load(instanceSpec)
                     else
                         % Deserialize from name of controlled instance
                         obj.deserializeFromName(instanceSpec);
@@ -107,18 +115,51 @@ classdef (Abstract) ControlledTerm < openminds.Node
             end
         end
 
+        function load(obj, filePath)
+        % load - Populate this term from a JSON-LD document
+        %
+        %   A controlled term document describes one term and, apart from
+        %   a term suggestion, holds no links, so it reads into a single
+        %   instance. Reading is left to the deserializer, which is what
+        %   parses the document, dispatches on its @type and wires up any
+        %   links; only the values are taken from what it returns, because
+        %   a constructor has to populate the object it was called on.
+        %
+        %   A document holding more than one instance is a collection's
+        %   job: see openminds.Collection.load.
+
+            instances = openminds.internal.store.loadInstances(filePath);
+
+            if ~isscalar(instances)
+                error('openMINDS:ControlledTerm:MultipleInstancesInDocument', ...
+                    ['"%s" holds %d instances. A term is a single instance, ', ...
+                     'so use openminds.Collection to read a document that ', ...
+                     'holds more than one.'], filePath, numel(instances))
+            end
+
+            loadedInstance = instances{1};
+            if ~isa(loadedInstance, class(obj))
+                error('openMINDS:ControlledTerm:TypeMismatch', ...
+                    '"%s" describes a %s, but a %s was asked for.', ...
+                    filePath, class(loadedInstance), class(obj))
+            end
+
+            for propertyName = string(obj.PropertyNames)
+                obj.(propertyName) = loadedInstance.(propertyName);
+            end
+            obj.id = loadedInstance.id;
+        end
+
         function deserializeFromName(obj, instanceName)
 
             import openminds.internal.getControlledInstance
             import openminds.internal.utility.getTypeName
 
             instanceName = char(instanceName);
-            instanceIRI = "";
             schemaName = getTypeName(class(obj));
 
             if openminds.utility.isIRI(instanceName)
                 if openminds.utility.isInstanceIRI(instanceName)
-                     instanceIRI = string(instanceName);
                      [~, instanceName] = openminds.utility.parseInstanceIRI(instanceName);
                 else
                     obj.id = instanceName;
@@ -137,11 +178,15 @@ classdef (Abstract) ControlledTerm < openminds.Node
             if any(isMatchingInstance)
                 instanceName = obj.CONTROLLED_INSTANCES(find(isMatchingInstance, 1, 'first'));
                 obj.name = instanceName;
-                if instanceIRI == ""
-                    obj.id = obj.createControlledInstanceIRI(schemaName, instanceName);
-                else
-                    obj.id = instanceIRI;
-                end
+
+                % A term found in the library takes the library's identity.
+                % An IRI given by the caller only located it: one from
+                % another schema version, or differing in case, names the
+                % same instance and must not give it a different
+                % identifier. This is the fallback for when the instance
+                % file cannot be read; otherwise the file's own @id wins
+                % below.
+                obj.id = obj.createControlledInstanceIRI(schemaName, instanceName);
 
                 try
                     data = getControlledInstance(instanceName, schemaName, 'controlledTerms');
@@ -163,7 +208,7 @@ classdef (Abstract) ControlledTerm < openminds.Node
                 end
             end
 
-            if instanceIRI == "" && ~obj.isEmptyValue(obj.at_id)
+            if ~obj.isEmptyValue(obj.at_id)
                 obj.id = obj.at_id;
             end
         end
@@ -182,6 +227,26 @@ classdef (Abstract) ControlledTerm < openminds.Node
                 typeName(1) = lower(typeName(1));
             end
             typeName = string(typeName);
+        end
+
+        function tf = isLocalFile(instanceSpec)
+        % isLocalFile - True when a spec names a JSON-LD document on this machine
+        %
+        %   isfile resolves a URL over the network, which is slow and
+        %   depends on the machine being online, so a URL is ruled out
+        %   before the file system is consulted at all.
+        %
+        %   An extension is required so that the file system cannot decide
+        %   what a name means. Without it, a file called "male" in the
+        %   working directory would change what ControlledTerm("male")
+        %   returns, silently and only on that machine.
+
+            if startsWith(instanceSpec, ["http://", "https://"])
+                tf = false;
+            else
+                tf = endsWith(instanceSpec, [".jsonld", ".json"], 'IgnoreCase', true) ...
+                    && isfile(instanceSpec);
+            end
         end
 
         function tf = isBareReference(structure)

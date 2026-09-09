@@ -36,11 +36,19 @@ function varargout = parseInstanceIRI(instanceIRI)
 
     URI = matlab.net.URI(instanceIRI);
     
-    URIPath = URI.Path;
+    % Path is an empty double, not a string, for an IRI with a host and
+    % nothing else, so it is converted before being compared or indexed,
+    % as isInstanceIRI does. The error carries an identifier because a
+    % caller holding an arbitrary IRI has to be able to tell this apart
+    % from a genuine failure.
+    URIPath = string(URI.Path);
     URIPath(URIPath=="")=[];
 
-    assert( URIPath(1) == "instances", ...
-        'Provided value "%s" is not a valid @id', instanceIRI)
+    if isempty(URIPath) || URIPath(1) ~= "instances"
+        error('openMINDS:ParseInstanceIRI:NotAnInstanceIRI', ...
+            'Provided value "%s" is not an openMINDS instance IRI.', instanceIRI)
+    end
+
     
     splitIRI = split(instanceIRI, "/");
 
