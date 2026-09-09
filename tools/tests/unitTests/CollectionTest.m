@@ -637,6 +637,32 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyEqual(reloaded{1}.givenName, givenName);
         end
 
+        function testFileStoreSavesEveryLinkedNode(testCase)
+            % Saving an instance to a file also saves everything it links
+            % to, as nodes of the same file, so the references in the
+            % saved document can be followed when the file is loaded again.
+            identifier = openminds.core.ORCID( ...
+                "identifier", "https://orcid.org/0000-0000-0000-0000");
+            contact = openminds.core.ContactInformation( ...
+                "email", "linked@example.org");
+            person = openminds.core.Person( ...
+                "digitalIdentifier", identifier, ...
+                "contactInformation", contact);
+
+            metadataStore = openminds.internal.FileMetadataStore("linked-file-store.jsonld");
+
+            metadataStore.save(person);
+            reloaded = metadataStore.load();
+
+            testCase.verifyEqual(numel(reloaded), 3);
+            isPerson = cellfun(@(x) isa(x, 'openminds.core.Person'), reloaded);
+            reloadedPerson = reloaded{isPerson};
+            testCase.verifyEqual(reloadedPerson.contactInformation.email, contact.email, ...
+                'The saved link was not followed on load.');
+            testCase.verifyClass(reloadedPerson.digitalIdentifier, 'openminds.core.ORCID', ...
+                'The saved mixed-type link was not followed on load.');
+        end
+
         function testSaveInstances(testCase)
             % Tests saving instances with MetadataStore
             person = personWithOneAffiliation();
@@ -646,7 +672,7 @@ classdef CollectionTest < matlab.unittest.TestCase
             
             % Save instances to a file
             filePath = 'instances.jsonld';
-            metadataStore = openminds.internal.FileMetadataStore(filePath, "RecursionDepth", 999);
+            metadataStore = openminds.internal.FileMetadataStore(filePath);
             metadataStore.save({person, org});
             
             testCase.verifyTrue(isfile(filePath));

@@ -701,7 +701,6 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
 % % %
 % % %                         end
                         if openminds.utility.isInstance(values)
-                            % TODO: Does this work if values is an array.
                             if numel(values) == numOutputs
                                 for i = 1:numel(values)
                                     varargout{i} = values(i).subsref(subs(2:end));
