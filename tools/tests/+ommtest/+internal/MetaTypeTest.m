@@ -4,6 +4,10 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         function testRegistrySingleton(testCase)
             import openminds.introspection.internal.MetaTypeRegistry
 
+            % Selected rather than assumed: the active version is global to
+            % the session, so whatever ran before decides it otherwise.
+            testCase.applyFixture(ommtest.helper.ModelVersionFixture("latest"))
+
             registry = MetaTypeRegistry.getSingleton();
             testCase.verifyClass(registry, 'openminds.introspection.internal.MetaTypeRegistry');
             testCase.verifyEqual(registry.ModelVersion, "latest")
@@ -13,8 +17,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             testCase.verifySameHandle(registry, newRegistry)
 
             % Change model version
-            openminds.version(3);
-            testCase.addTeardown(@() openminds.version("latest"))
+            testCase.applyFixture(ommtest.helper.ModelVersionFixture(3))
 
             registry = MetaTypeRegistry.getSingleton();
             testCase.verifyClass(registry, 'openminds.introspection.internal.MetaTypeRegistry');
@@ -105,9 +108,7 @@ classdef MetaTypeTest < matlab.unittest.TestCase
         end
 
         function testMetaType(testCase)
-            previousVersion = openminds.version();
-            openminds.version(5);
-            testCase.addTeardown(@() openminds.version(previousVersion))
+            testCase.applyFixture(ommtest.helper.ModelVersionFixture(5))
             
             metaDSV = openminds.introspection.fromClassName('DatasetVersion');
 
