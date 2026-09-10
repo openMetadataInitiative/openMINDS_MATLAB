@@ -103,7 +103,7 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
     methods % Set/get
         function set.InstanceLibraryLocation(obj, value)
-            obj.InstanceLibraryLocation = value;
+            obj.InstanceLibraryLocation = resolveAbsolutePath(value);
             obj.postSetInstanceLibraryLocation()
         end
         function instanceRootFolder = get.InstanceRootFolder(obj)
@@ -404,6 +404,33 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             iriSegmentIndex = unique( ...
                 folderInfo(isResolved, ["IRISegment", "TypeName"]) );
         end
+    end
+end
+
+function absolutePath = resolveAbsolutePath(pathString)
+% resolveAbsolutePath - Resolve a path against the working directory
+%
+%   The library location is read again every time the library is rebuilt,
+%   which now happens whenever the model version changes. A relative
+%   location stops naming the same folder as soon as anything changes the
+%   working directory, and the location is relative whenever it is built
+%   under userpath while userpath is empty, as it is on a fresh CI runner.
+
+    if isAbsolutePath(pathString)
+        absolutePath = pathString;
+    else
+        absolutePath = string(fullfile(pwd, pathString));
+    end
+end
+
+function tf = isAbsolutePath(pathString)
+% isAbsolutePath - Whether a path names a folder without a starting point
+
+    if ispc
+        % A drive letter, or the leading pair of separators of a UNC path
+        tf = ~isempty( regexp(pathString, '^([A-Za-z]:[\\/]|\\\\)', 'once') );
+    else
+        tf = startsWith(pathString, filesep);
     end
 end
 

@@ -172,6 +172,23 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
                 ["InstanceName", "Type", "Module", "Subgroup", "Filepath"])
         end
 
+        function testLibraryLocationSurvivesAWorkingDirectoryChange(testCase)
+        % The location is built under userpath, and userpath is empty on a
+        % runner whose default user folder does not exist, which leaves the
+        % location relative. A relative location stops naming the library
+        % as soon as anything changes the working directory, and the
+        % library is read again on every model version change.
+
+            library = testCase.InstanceLibrary;
+            testCase.assumeTrue(isfolder(library.InstanceLibraryLocation))
+
+            testCase.applyFixture( ...
+                matlab.unittest.fixtures.WorkingFolderFixture)
+
+            testCase.verifyTrue(isfolder(library.InstanceLibraryLocation), ...
+                'The location must still name the library from another folder.')
+        end
+
         function testUnknownIRISegmentIsRejected(testCase)
             testCase.verifyError( ...
                 @() testCase.InstanceLibrary.getTypeFromIRISegment("notASegment"), ...
