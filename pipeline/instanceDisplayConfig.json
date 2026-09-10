@@ -28,8 +28,7 @@
   "contribution": [
     {
       "propertyName": ["contributor", "type"],
-      "stringFormat": "sprintf('%s (%s)', strjoin(arrayfun(@(x) string(x), obj.contributor), '; '), obj.type)"
-      "stringFormat": ["if ~isempty(contributor)", "    sprintf('%s (%s)', strjoin(arrayfun(@(x) string(x), obj.contributor), '; '), obj.type)", "else", "    str = 'None'", "end"]
+      "stringFormat": "sprintf('%s (%s)', strjoin(string(arrayfun(@(x) string(x), obj.contributor)), '; '), obj.type)"
     },
     {
       "propertyName": ["contributor", "contributionType"],
