@@ -196,9 +196,14 @@ classdef (Abstract) ControlledTerm < openminds.Node
                     return
                 end
             else
-                warning('No matching instances were found for name "%s"', instanceName)
+                % Deliberately let through: a term a user defined has no
+                % library instance to find, and takes its values from the
+                % document instead. The identifier is what lets a caller
+                % holding only an IRI tell this apart from a term that
+                % resolved, without parsing the message.
+                warning('openMINDS:ControlledTerm:UnknownInstanceName', ...
+                    'No matching instances were found for name "%s".', instanceName)
                 return
-                % error('Deserialization from user instance is not implemented yet')
             end
 
             propNames = [{'at_id'}, properties(obj)'];
