@@ -5,10 +5,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         SINGLETON_NAME = "InstanceLibrarySingleton"
     end
 
-    properties
-        LibraryVersion (1,1) string = "latest"
-    end
-
     properties (SetAccess = private)
         InstanceLibraryLocation (1,1) string
         InstanceTable table
@@ -18,6 +14,14 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         % meaningful for the model version that declares it, so the table
         % has to be rebuilt when another version is put on the path.
         ModelVersion (1,1) string = ""
+
+        % LibraryVersion - Version of the instance library that was read.
+        % It follows the model version and is not selected on its own: the
+        % library publishes one set of instances per model version, and
+        % reading one version's instances against another's types is what
+        % leaves instances untyped. It is missing for a model version the
+        % library publishes no instances for.
+        LibraryVersion (1,1) string = missing
     end
 
     properties (SetAccess = private)
@@ -78,10 +82,9 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             arguments
                 folderPath (1,1) string {mustBeFolder}
                 options.UseGit (1,1) logical = false
-                options.LibraryVersion (1,1) string = "latest"
             end
 
-            obj.set(options)
+            obj.UseGit = options.UseGit;
             obj.InstanceLibraryLocation = folderPath;
         end
     end
@@ -90,11 +93,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         function set.InstanceLibraryLocation(obj, value)
             obj.InstanceLibraryLocation = value;
             obj.postSetInstanceLibraryLocation()
-        end
-        function set.LibraryVersion(obj, value)
-            obj.validateLibraryVersion(value)
-            obj.LibraryVersion = value;
-            obj.postSetLibraryVersion()
         end
         function instanceRootFolder = get.InstanceRootFolder(obj)
             instanceRootFolder = fullfile(...
@@ -131,7 +129,8 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             if ~any(isMatch)
                 error("OPENMINDS:InstanceLibrary:UnknownIRISegment", ...
                     ['"%s" does not name a type in the openMINDS instance ', ...
-                    'library at version "%s".'], iriSegment, obj.LibraryVersion)
+                    'library read for model version "%s".'], ...
+                    iriSegment, obj.ModelVersion)
             end
 
             typeName = obj.IRISegmentIndex.TypeName(find(isMatch, 1));
@@ -151,20 +150,48 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 modelVersion (1,1) string = openminds.version()
             end
 
-            if isfolder(obj.InstanceLibraryLocation)
-                instanceFilePaths = obj.listInstanceFiles();
-                [obj.InstanceTable, obj.IRISegmentIndex] = ...
-                    obj.createInstanceTable(instanceFilePaths);
-                obj.ModelVersion = modelVersion;
+            obj.ModelVersion = modelVersion;
+            obj.LibraryVersion = obj.resolveLibraryVersion(modelVersion);
+
+            if ismissing(obj.LibraryVersion) || ~isfolder(obj.InstanceLibraryLocation)
+                [obj.InstanceTable, obj.IRISegmentIndex] = emptyInstanceTables();
+                return
             end
+
+            instanceFilePaths = obj.listInstanceFiles();
+            [obj.InstanceTable, obj.IRISegmentIndex] = ...
+                obj.createInstanceTable(instanceFilePaths);
         end
 
-        function validateLibraryVersion(obj, value)
-            if ~isempty(obj.AvailableVersions)
-                assert(ismember(value, obj.AvailableVersions), ...
-                    'Version should be a member of available versions: %s', ...
-                    strjoin(obj.AvailableVersions, ', '))
+        function libraryVersion = resolveLibraryVersion(obj, modelVersion)
+        % resolveLibraryVersion - Pick the library version for a model version
+        %
+        %   Instances are typed against the metadata model, so the library
+        %   version follows the model version. The library publishes no
+        %   instances for every model version: versions 1 and 2 of the
+        %   model predate the type names the library is written against,
+        %   and no other version of the library can stand in for them.
+
+            if ismember(modelVersion, obj.AvailableVersions)
+                libraryVersion = modelVersion;
+                return
             end
+
+            libraryVersion = missing;
+
+            if isempty(obj.AvailableVersions)
+                % The library is not on disk at all. Retrieving it has
+                % already reported why, and the versions it publishes
+                % cannot be named from here.
+                return
+            end
+
+            warning('OPENMINDS:InstanceLibrary:NoInstancesForModelVersion', ...
+                ['The openMINDS instance library publishes no instances ', ...
+                'for version "%s" of the metadata model, so no controlled ', ...
+                'instances are available. Select one of the model versions ', ...
+                'it does publish instances for: %s.'], ...
+                modelVersion, strjoin(obj.AvailableVersions, ', '))
         end
 
         function detectAvailableVersions(obj)
@@ -215,10 +242,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             obj.detectAvailableVersions()
             obj.updateInstanceTable()
         end
-
-        function postSetLibraryVersion(obj)
-            obj.updateInstanceTable()
-        end
     end
 
     methods (Access = private)
@@ -245,14 +268,13 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
             subGroups = obj.resolveSubgroups(uniqueFolderPaths, folderInfo.TypeName);
 
-            variableNames = ["InstanceName", "Type", "Module", "Subgroup", "Filepath"];
             instanceTable = table(...
                 instanceNames, ...
                 folderInfo.TypeName(folderIndex), ...
                 folderInfo.ModuleName(folderIndex), ...
                 subGroups(folderIndex), ...
                 filePaths, ...
-                'VariableNames', variableNames);
+                'VariableNames', instanceTableVariableNames());
 
             iriSegmentIndex = obj.createIRISegmentIndex(folderInfo);
         end
@@ -356,6 +378,26 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 folderInfo(isResolved, ["IRISegment", "TypeName"]) );
         end
     end
+end
+
+function variableNames = instanceTableVariableNames()
+% instanceTableVariableNames - Columns of the instance table
+    variableNames = ["InstanceName", "Type", "Module", "Subgroup", "Filepath"];
+end
+
+function [instanceTable, iriSegmentIndex] = emptyInstanceTables()
+% emptyInstanceTables - The tables of a library with no instances to read
+%
+%   A model version the library publishes no instances for still leaves
+%   tables that can be filtered and looked up in, rather than tables with
+%   no columns to filter on.
+
+    numColumns = numel(instanceTableVariableNames());
+    instanceTable = array2table(strings(0, numColumns), ...
+        'VariableNames', instanceTableVariableNames());
+
+    iriSegmentIndex = array2table(strings(0, 2), ...
+        'VariableNames', ["IRISegment", "TypeName"]);
 end
 
 function versionString = normalizeModelVersion(modelVersion)
