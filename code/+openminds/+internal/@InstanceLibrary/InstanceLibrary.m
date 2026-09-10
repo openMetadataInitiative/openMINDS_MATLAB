@@ -103,7 +103,8 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
     methods % Set/get
         function set.InstanceLibraryLocation(obj, value)
-            obj.InstanceLibraryLocation = resolveAbsolutePath(value);
+            obj.InstanceLibraryLocation = ...
+                openminds.internal.InstanceLibrary.resolveAbsolutePath(value);
             obj.postSetInstanceLibraryLocation()
         end
         function instanceRootFolder = get.InstanceRootFolder(obj)
@@ -147,6 +148,31 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
             typeName = obj.IRISegmentIndex.TypeName(find(isMatch, 1));
             typeEnum = openminds.enum.Types(typeName);
+        end
+    end
+
+    methods (Static, Access = private)
+        function absolutePath = resolveAbsolutePath(pathString)
+        % resolveAbsolutePath - Resolve a path against the working directory
+        %
+        %   The location is read again every time the library is rebuilt,
+        %   which happens whenever the model version changes, and it is
+        %   compared against the location a caller asks for. A relative
+        %   location stops naming the same folder as soon as anything
+        %   changes the working directory, and two spellings of one folder
+        %   read as two different libraries. The location is relative
+        %   whenever it is built under userpath while userpath is empty, as
+        %   it is on a runner whose user folder does not exist.
+
+            arguments
+                pathString (1,1) string
+            end
+
+            if isAbsolutePath(pathString)
+                absolutePath = pathString;
+            else
+                absolutePath = string(fullfile(pwd, pathString));
+            end
         end
     end
 
@@ -404,22 +430,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             iriSegmentIndex = unique( ...
                 folderInfo(isResolved, ["IRISegment", "TypeName"]) );
         end
-    end
-end
-
-function absolutePath = resolveAbsolutePath(pathString)
-% resolveAbsolutePath - Resolve a path against the working directory
-%
-%   The library location is read again every time the library is rebuilt,
-%   which now happens whenever the model version changes. A relative
-%   location stops naming the same folder as soon as anything changes the
-%   working directory, and the location is relative whenever it is built
-%   under userpath while userpath is empty, as it is on a fresh CI runner.
-
-    if isAbsolutePath(pathString)
-        absolutePath = pathString;
-    else
-        absolutePath = string(fullfile(pwd, pathString));
     end
 end
 
