@@ -93,12 +93,9 @@ jobs:
       # on push to main, which is where the openMINDS pipeline lands
       # regenerated type classes, and on the weekly schedule.
       #
-      # MATLAB's default user folder does not exist on a runner, which
-      # leaves the folders the toolbox keeps under it relative. Giving
-      # MATLAB one has to happen here, before anything else runs: those
-      # folders are read from constant properties, which MATLAB evaluates
-      # once when the class is first loaded, and the validation of an
-      # argument to openminds.startup already reads one.
+      # MATLAB's default user folder does not exist on a runner, so
+      # testToolbox gives it one before the toolbox picks a folder of its
+      # own, which the toolbox does under the temporary folder.
       - name: Run tests
         if: always()
         uses: matlab-actions/run-command@v3
@@ -108,7 +105,6 @@ jobs:
           OPENMINDS_PYTHON: ${{ runner.temp }}/openminds-python/bin/python
         with:
           command: |
-            addpath("code"); openminds.internal.setup.ensureUserpath();
             addpath(genpath("tools"));
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
             testToolbox("CreateBadge", doCreateBadge)

@@ -63,8 +63,8 @@ jobs:
         uses: matlab-actions/run-command@v3
         with:
           command: |
-            addpath("code"); openminds.internal.setup.ensureUserpath();
             addpath(genpath("tools"));
+            ensureUserpath();
             run(fullfile("code", "startup.m"));
             results = runtests("TutorialTest");
             assertSuccess(results);
@@ -73,8 +73,8 @@ jobs:
         uses: matlab-actions/run-command@v3
         with:
           command: |
-            addpath("code"); openminds.internal.setup.ensureUserpath();
             addpath(genpath("tools"));
+            ensureUserpath();
             run(fullfile("code", "startup.m"));
             ommtools.exportTutorials();
             ommtools.updateReadmeLiveSection("README.md", ...

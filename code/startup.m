@@ -40,9 +40,5 @@ function startup(version)
     codeFolder = fileparts( mfilename('fullpath') );
     addpath(codeFolder)
 
-    % Before openminds.startup, which reads a path built under the user
-    % folder and freezes it for the rest of the session
-    openminds.internal.setup.ensureUserpath()
-
     openminds.startup(version)
 end

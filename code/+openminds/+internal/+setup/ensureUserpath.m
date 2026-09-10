@@ -51,24 +51,15 @@ end
 function userFolder = fallbackUserFolder()
 % fallbackUserFolder - A folder that exists and can be written to
 %
-%   A GitHub Actions runner names a folder for this, which is removed with
-%   the job and lies outside the checked out repository.
+%   The temporary folder, rather than the working directory. Neither is a
+%   folder anyone asked for, but the working directory is as often as not a
+%   repository or a project folder, and writing tens of megabytes into one
+%   of those is a worse surprise than writing them somewhere that may be
+%   cleared. It would also be recorded as the user folder for good, naming
+%   a directory that was only ever where MATLAB happened to be standing.
 %
-%   Anywhere else the temporary folder is used, rather than the working
-%   directory. Neither is a folder anyone asked for, but the working
-%   directory is as often as not a repository or a project folder, and
-%   writing tens of megabytes into one of those is a worse surprise than
-%   writing them somewhere that may be cleared. It would also be recorded
-%   as the user folder for good, naming a directory that was only ever
-%   where MATLAB happened to be standing.
-
-    if strcmp(getenv('GITHUB_ACTIONS'), 'true')
-        userFolder = string( getenv("RUNNER_TEMP") );
-
-        if userFolder ~= "" && isfolder(userFolder)
-            return
-        end
-    end
+%   Somewhere that knows better can set a user folder before the toolbox is
+%   used, and this then leaves it alone.
 
     userFolder = string( tempdir() );
 end
