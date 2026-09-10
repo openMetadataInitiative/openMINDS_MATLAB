@@ -95,6 +95,27 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
             testCase.verifyEqual(typeEnum, openminds.enum.Types("ParcellationEntity"))
         end
 
+        function testSelectingAModelVersionRebuildsTheLibrary(testCase)
+        % Instances are typed against the model version that was on the
+        % path when the library was read, so selecting another version has
+        % to rebuild the library that is already in memory, in place, for
+        % the sake of code holding on to it.
+
+            library = testCase.InstanceLibrary;
+            testCase.assertEqual(library.ModelVersion, openminds.version())
+
+            testCase.applyFixture(ommtest.helper.ModelVersionFixture("v3.0"))
+
+            testCase.verifyEqual(library.ModelVersion, "v3.0", ...
+                'Selecting a model version must rebuild the library in memory.')
+
+            % The version is recorded the way openminds.version reports it,
+            % so the next use recognizes the library as current instead of
+            % rebuilding it a second time.
+            testCase.verifySameHandle( ...
+                openminds.internal.InstanceLibrary.getSingleton(), library)
+        end
+
         function testUnknownIRISegmentIsRejected(testCase)
             testCase.verifyError( ...
                 @() testCase.InstanceLibrary.getTypeFromIRISegment("notASegment"), ...

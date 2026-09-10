@@ -75,6 +75,12 @@ function selectModelVersion(versionNumber)
 
     % Add a second pause for changes to take effect.
     pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
+
+    % Instances are typed against the model version that was on the path
+    % when the instance library was read, so a library already in memory has
+    % to be rebuilt for the version selected here. This runs after the pause
+    % above so that the types resolve against the classes just added.
+    openminds.internal.InstanceLibrary.notifyModelVersionChanged(versionAsString)
 end
 
 function versionFolders = listModelVersionFolders(generatedFolder)

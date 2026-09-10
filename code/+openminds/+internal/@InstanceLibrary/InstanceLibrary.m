@@ -43,6 +43,34 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
     methods (Static)
         % Method for retrieving singleton object. Defined in class folder
         singletonObject = getSingleton(folderPath, options)
+
+        function notifyModelVersionChanged(modelVersion)
+        % notifyModelVersionChanged - Rebuild the library for a model version
+        %
+        %   Syntax:
+        %       openminds.internal.InstanceLibrary.notifyModelVersionChanged(modelVersion)
+        %
+        %   Input:
+        %       modelVersion : The model version that was just selected
+        %
+        %   Instances are typed against the model version that was on the
+        %   search path when the table was built, so selecting another
+        %   version invalidates the table. Only a library that already
+        %   exists is rebuilt: creating one here would download the
+        %   instance repository as a side effect of selecting a version.
+
+            arguments
+                modelVersion (1,1) string
+            end
+
+            singletonObject = getappdata(0, ...
+                openminds.internal.InstanceLibrary.SINGLETON_NAME);
+
+            if ~isempty(singletonObject) && isvalid(singletonObject)
+                singletonObject.updateInstanceTable( ...
+                    normalizeModelVersion(modelVersion))
+            end
+        end
     end
 
     methods (Access = private)
@@ -112,12 +140,22 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
     end
 
     methods (Access = private) % Internal updating and validation
-        function updateInstanceTable(obj)
+        function updateInstanceTable(obj, modelVersion)
+            arguments
+                obj (1,1) openminds.internal.InstanceLibrary
+
+                % The version the instances are typed against. It is passed
+                % in when the model version has just changed, because the
+                % version derived from the search path is briefly cached
+                % and may still name the previous one.
+                modelVersion (1,1) string = openminds.version()
+            end
+
             if isfolder(obj.InstanceLibraryLocation)
                 instanceFilePaths = obj.listInstanceFiles();
                 [obj.InstanceTable, obj.IRISegmentIndex] = ...
                     obj.createInstanceTable(instanceFilePaths);
-                obj.ModelVersion = openminds.version();
+                obj.ModelVersion = modelVersion;
             end
         end
 
@@ -318,6 +356,19 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 folderInfo(isResolved, ["IRISegment", "TypeName"]) );
         end
     end
+end
+
+function versionString = normalizeModelVersion(modelVersion)
+% normalizeModelVersion - Name a model version the way openminds.version does
+%
+%   The version is stored to be compared against openminds.version, so it
+%   has to be written the same way. Formatting the selected version here,
+%   rather than reading the active one back from the search path, keeps the
+%   comparison correct while that lookup still holds its cached value.
+
+    versionNumber = openminds.internal.utility.VersionNumber(modelVersion);
+    versionNumber.Format = "vX.Y";
+    versionString = string(versionNumber);
 end
 
 function typeList = summarizeTypeNames(typeIRIs)
