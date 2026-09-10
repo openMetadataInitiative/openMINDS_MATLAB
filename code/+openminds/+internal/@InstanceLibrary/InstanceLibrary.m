@@ -86,7 +86,9 @@ classdef InstanceLibrary < handle
     methods (Access = private)
         function obj = InstanceLibrary(folderPath, options)
             arguments
-                folderPath (1,1) string {mustBeFolder}
+                % Need not exist yet. Setting the location downloads the
+                % library into it when it is the default location.
+                folderPath (1,1) string
                 options.UseGit (1,1) logical = false
             end
 
