@@ -129,6 +129,12 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
 
             testCase.verifyEqual(library.LibraryVersion, "v3.0")
 
+            % The library is downloaded, so a copy that is incomplete for
+            % this version leaves nothing to check rather than something to
+            % fail on.
+            testCase.assumeNotEmpty(library.InstanceTable, ...
+                'The instance library holds no instances for this version.')
+
             % Read from that version's instances, not merely labelled with
             % it. Whether every one of them then resolves to a type also
             % depends on the model classes having been reloaded, which a

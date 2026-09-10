@@ -70,9 +70,21 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             singletonObject = getappdata(0, ...
                 openminds.internal.InstanceLibrary.SINGLETON_NAME);
 
-            if ~isempty(singletonObject) && isvalid(singletonObject)
+            if isempty(singletonObject) || ~isvalid(singletonObject)
+                return
+            end
+
+            try
                 singletonObject.updateInstanceTable( ...
                     normalizeModelVersion(modelVersion))
+            catch ME
+                % Selecting a model version is a change to the search path.
+                % The instance library is a separate resource that may be
+                % absent or incomplete, and failing to read it is not a
+                % reason for the version not to be selected.
+                warning('OPENMINDS:InstanceLibrary:RebuildFailed', ...
+                    ['Failed to read the openMINDS instance library for ', ...
+                    'model version "%s". Reason: %s'], modelVersion, ME.message)
             end
         end
     end
@@ -159,6 +171,18 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             end
 
             instanceFilePaths = obj.listInstanceFiles();
+
+            if isempty(instanceFilePaths)
+                [obj.InstanceTable, obj.IRISegmentIndex] = emptyInstanceTables();
+
+                warning('OPENMINDS:InstanceLibrary:InstancesNotFound', ...
+                    ['No instance files were found for version "%s" of the ', ...
+                    'openMINDS instance library, so no controlled instances ', ...
+                    'are available. The library at "%s" may be incomplete.'], ...
+                    obj.LibraryVersion, obj.InstanceLibraryLocation)
+                return
+            end
+
             [obj.InstanceTable, obj.IRISegmentIndex] = ...
                 obj.createInstanceTable(instanceFilePaths);
         end
@@ -203,19 +227,22 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
         function instanceFilePaths = listInstanceFiles(obj)
         % listInstanceFiles - List instance files for current library version
-            
+        %
+        %   Returns empty when the library holds no instances for the
+        %   version. The caller reports that, because a library that cannot
+        %   be read is not a reason for selecting a model version to fail.
+
             instanceFileFormat = ".jsonld";
 
             L = dir(fullfile(obj.InstanceRootFolder, "**", "*"+instanceFileFormat));
+
+            if isempty(L)
+                instanceFilePaths = strings(0, 1);
+                return
+            end
+
             instanceFilePaths = join([{L.folder}', {L.name}'], filesep);
             instanceFilePaths = string(instanceFilePaths);
-        
-            if isempty(instanceFilePaths)
-                error(...
-                    "openMINDS:InstanceLibrary:InstancesNotFound", ...
-                    'Could not find instance files for openMINDS %s', ...
-                    obj.LibraryVersion)
-            end
         end
     end
 
