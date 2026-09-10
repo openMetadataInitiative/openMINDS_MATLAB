@@ -62,7 +62,7 @@ disp( openminds.toolboxversion )
 ```
 
 ```matlabTextOutput
-Version 0.10.0
+Version 0.11.0
 ```
 
 ### Choose a version of the metadata model
