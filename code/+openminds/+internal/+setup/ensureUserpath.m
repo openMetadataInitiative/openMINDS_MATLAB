@@ -30,20 +30,37 @@ function userFolder = ensureUserpath()
         return
     end
 
-    userFolder = fallbackUserFolder();
-    userpath( char(userFolder) )
+    userpath( char(fallbackUserFolder()) )
 
-    fprintf(['MATLAB has no user folder. openMINDS will keep the files it ', ...
-        'downloads in "%s".\n'], userFolder)
+    % Read back rather than kept: MATLAB normalizes what it stores, and a
+    % folder named one way now and another way on the next call reads as
+    % two different folders.
+    userFolder = string( userpath() );
+
+    % Said out loud, and with an identifier, because this decides where
+    % tens of megabytes are written on someone's machine. It is said once:
+    % the folders built on it are resolved once per session.
+    warning('OPENMINDS:Setup:NoUserFolder', ...
+        ['MATLAB has no user folder, so openMINDS will keep the files it ', ...
+        'downloads in "%s". That folder is temporary and may be cleared, ', ...
+        'which means downloading them again. To keep them somewhere ', ...
+        'permanent, call userpath(folder) with a folder of your choosing ', ...
+        'before using openMINDS.'], userFolder)
 end
 
 function userFolder = fallbackUserFolder()
 % fallbackUserFolder - A folder that exists and can be written to
 %
 %   A GitHub Actions runner names a folder for this, which is removed with
-%   the job and lies outside the checked out repository. Anywhere else the
-%   working directory is used, which keeps the files where whoever ran the
-%   setup can find them.
+%   the job and lies outside the checked out repository.
+%
+%   Anywhere else the temporary folder is used, rather than the working
+%   directory. Neither is a folder anyone asked for, but the working
+%   directory is as often as not a repository or a project folder, and
+%   writing tens of megabytes into one of those is a worse surprise than
+%   writing them somewhere that may be cleared. It would also be recorded
+%   as the user folder for good, naming a directory that was only ever
+%   where MATLAB happened to be standing.
 
     if strcmp(getenv('GITHUB_ACTIONS'), 'true')
         userFolder = string( getenv("RUNNER_TEMP") );
@@ -53,5 +70,5 @@ function userFolder = fallbackUserFolder()
         end
     end
 
-    userFolder = string( pwd );
+    userFolder = string( tempdir() );
 end
