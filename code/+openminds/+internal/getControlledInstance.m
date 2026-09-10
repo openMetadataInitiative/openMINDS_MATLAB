@@ -3,7 +3,12 @@ function data = getControlledInstance(instanceName, schemaName, moduleName, vers
     arguments
         instanceName (1,1) string
         schemaName (1,1) string
-        moduleName (1,1) string = "controlledTerms"
+        % Only controlled terms are stored in a folder that can be named
+        % from the type. Instances of other modules are stored under
+        % pluralized type names that upstream renames, and are found
+        % through the InstanceLibrary instead.
+        moduleName (1,1) string ...
+            {mustBeMember(moduleName, "controlledTerms")} = "controlledTerms"
         versionNumber (1,1) openminds.internal.utility.VersionNumber ...
             {openminds.mustBeValidModelVersion(versionNumber)} = missing
         options.FileSource (1,1) string ...
@@ -79,21 +84,12 @@ function pathStr = getOfflineFilepath(instanceName, schemaName, moduleName, vers
     pathStr = fullfile(rootPath, versionNumber, fileParts{:});
 end
 
-function fileParts = getRelativeInstanceFileParts(instanceName, schemaName, moduleName)
-    
-    % Initialize the folder list with foldername determined by the module name
-    switch moduleName
-        case 'controlledTerms'
-            folderList = "terminologies";
-        case 'sands'
-            folderList = "graphStructures";
-        case 'core'
-            folderList = [];
-            schemaName = schemaName + "s"; % Make plural
-    end
+function fileParts = getRelativeInstanceFileParts(instanceName, schemaName, ~)
+% getRelativeInstanceFileParts - Path of a controlled term's file within a version
+%
+%   Controlled terms are stored one type per folder under "terminologies",
+%   which is the one layout a path can be built for from a type name.
 
     fileName = instanceName + ".jsonld";
-
-    % Add all relative file parts to a list
-    fileParts = [folderList, schemaName, fileName];
+    fileParts = ["terminologies", schemaName, fileName];
 end
