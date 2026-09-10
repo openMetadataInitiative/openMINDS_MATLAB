@@ -73,6 +73,9 @@ function type = resolveTypeSegment(typeSegment, instanceIRI)
 %   An IRI carrying a plural segment always refers to a library instance,
 %   so the lookup covers every case the direct match does not.
 
+    % Membership is tested by construction rather than looked up, because
+    % the enumeration matches names ignoring case and offers no cheaper way
+    % to ask whether a name matches.
     try
         type = openminds.enum.Types(typeSegment);
         return

@@ -56,9 +56,7 @@ classdef PathsTest < matlab.unittest.TestCase
 end
 
 function tf = isAbsolutePath(pathString)
-    if ispc
-        tf = ~isempty( regexp(pathString, '^([A-Za-z]:[\\/]|\\\\)', 'once') );
-    else
-        tf = startsWith(pathString, filesep);
-    end
+% An implementation independent of the one under test, so that the two
+% cannot share a mistake.
+    tf = java.io.File(char(pathString)).isAbsolute();
 end

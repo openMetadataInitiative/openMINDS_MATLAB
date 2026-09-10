@@ -10,15 +10,14 @@ function userFolder = ensureUserpath()
 %       userFolder - The user folder in use once this has run
 %
 %   The toolbox keeps the schemas and the instance library it downloads
-%   under MATLAB's user folder. That folder does not exist on a fresh
-%   continuous integration runner, which leaves userpath empty and every
-%   path built under it relative. A relative path stops naming the same
-%   folder as soon as anything changes the working directory.
+%   under MATLAB's user folder. MATLAB has none when its default user
+%   folder does not exist, which leaves userpath empty and every path built
+%   under it relative, and a relative path stops naming the same folder as
+%   soon as anything changes the working directory.
 %
-%   Call this before anything reads one of those paths. They are constant
-%   properties, and MATLAB evaluates those once, when the class is first
-%   loaded, so a path read before this has run keeps the value it resolved
-%   to then for the rest of the session.
+%   The toolbox calls this itself the first time it needs one of those
+%   paths. Anything that knows a better folder than the temporary one can
+%   set userpath before then, and this leaves it alone.
 %
 %   See also openminds.internal.constants.Paths
 

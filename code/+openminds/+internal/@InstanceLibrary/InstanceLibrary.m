@@ -1,4 +1,4 @@
-classdef InstanceLibrary < handle & matlab.mixin.SetGet
+classdef InstanceLibrary < handle
 % InstanceLibrary - Singleton class representing the openMINDS instance library
 
     properties (Constant, Access = private)
@@ -40,10 +40,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         IRISegmentIndex table
     end
 
-    properties (Dependent, Access = private)
-        InstanceRootFolder
-    end
-    
     methods (Static)
         % Method for retrieving singleton object. Defined in class folder
         singletonObject = getSingleton(folderPath, options)
@@ -107,10 +103,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 openminds.internal.InstanceLibrary.resolveAbsolutePath(value);
             obj.postSetInstanceLibraryLocation()
         end
-        function instanceRootFolder = get.InstanceRootFolder(obj)
-            instanceRootFolder = fullfile(...
-                obj.InstanceLibraryLocation, obj.LibraryVersion);
-        end
     end
 
     methods
@@ -155,14 +147,10 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         function absolutePath = resolveAbsolutePath(pathString)
         % resolveAbsolutePath - Resolve a path against the working directory
         %
-        %   The location is read again every time the library is rebuilt,
-        %   which happens whenever the model version changes, and it is
-        %   compared against the location a caller asks for. A relative
-        %   location stops naming the same folder as soon as anything
-        %   changes the working directory, and two spellings of one folder
-        %   read as two different libraries. The location is relative
-        %   whenever it is built under userpath while userpath is empty, as
-        %   it is on a runner whose user folder does not exist.
+        %   The location is kept for the life of the library and read again
+        %   on every rebuild, so it must not depend on where MATLAB is
+        %   standing. It is also compared against the location a caller
+        %   asks for, so both have to be spelled the same way.
 
             arguments
                 pathString (1,1) string
@@ -188,39 +176,55 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 modelVersion (1,1) string = openminds.version()
             end
 
-            obj.ModelVersion = modelVersion;
-            obj.LibraryVersion = obj.resolveLibraryVersion(modelVersion);
+            libraryVersion = obj.resolveLibraryVersion(modelVersion);
 
-            if ismissing(obj.LibraryVersion) || ~isfolder(obj.InstanceLibraryLocation)
-                [obj.InstanceTable, obj.IRISegmentIndex] = emptyInstanceTables();
-                return
+            if ismissing(libraryVersion)
+                [instanceTable, iriSegmentIndex] = emptyInstanceTables();
+            else
+                rootFolder = fullfile(obj.InstanceLibraryLocation, libraryVersion);
+                [instanceTable, iriSegmentIndex] = ...
+                    obj.readInstanceLibrary(rootFolder, libraryVersion, modelVersion);
             end
 
-            instanceFilePaths = obj.listInstanceFiles();
+            % Assigned last, and together. A read that fails part way must
+            % not leave the version saying one thing and the table another,
+            % because the version is what tells getSingleton the table is
+            % current.
+            obj.ModelVersion = modelVersion;
+            obj.LibraryVersion = libraryVersion;
+            obj.InstanceTable = instanceTable;
+            obj.IRISegmentIndex = iriSegmentIndex;
+        end
+
+        function [instanceTable, iriSegmentIndex] = readInstanceLibrary(obj, rootFolder, libraryVersion, modelVersion)
+        % readInstanceLibrary - Read the instances of one library version
+
+            instanceFilePaths = listInstanceFiles(rootFolder);
 
             if isempty(instanceFilePaths)
-                [obj.InstanceTable, obj.IRISegmentIndex] = emptyInstanceTables();
+                [instanceTable, iriSegmentIndex] = emptyInstanceTables();
 
                 warning('OPENMINDS:InstanceLibrary:InstancesNotFound', ...
                     ['No instance files were found for version "%s" of the ', ...
                     'openMINDS instance library, so no controlled instances ', ...
                     'are available. The library at "%s" may be incomplete.'], ...
-                    obj.LibraryVersion, obj.InstanceLibraryLocation)
+                    libraryVersion, obj.InstanceLibraryLocation)
                 return
             end
 
-            [obj.InstanceTable, obj.IRISegmentIndex] = ...
-                obj.createInstanceTable(instanceFilePaths);
+            [instanceTable, iriSegmentIndex] = obj.createInstanceTable( ...
+                instanceFilePaths, rootFolder, libraryVersion, modelVersion);
         end
 
         function libraryVersion = resolveLibraryVersion(obj, modelVersion)
         % resolveLibraryVersion - Pick the library version for a model version
         %
         %   Instances are typed against the metadata model, so the library
-        %   version follows the model version. The library publishes no
+        %   version follows the model version. The library does not publish
         %   instances for every model version: versions 1 and 2 of the
         %   model predate the type names the library is written against,
-        %   and no other version of the library can stand in for them.
+        %   and no other version of the library can stand in for them. A
+        %   version without instances is reported here and returned missing.
 
             if ismember(modelVersion, obj.AvailableVersions)
                 libraryVersion = modelVersion;
@@ -250,26 +254,6 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             names = names(~startsWith(names, '.') & [L.isdir]);
             obj.AvailableVersions = names;
         end
-
-        function instanceFilePaths = listInstanceFiles(obj)
-        % listInstanceFiles - List instance files for current library version
-        %
-        %   Returns empty when the library holds no instances for the
-        %   version. The caller reports that, because a library that cannot
-        %   be read is not a reason for selecting a model version to fail.
-
-            instanceFileFormat = ".jsonld";
-
-            L = dir(fullfile(obj.InstanceRootFolder, "**", "*"+instanceFileFormat));
-
-            if isempty(L)
-                instanceFilePaths = strings(0, 1);
-                return
-            end
-
-            instanceFilePaths = join([{L.folder}', {L.name}'], filesep);
-            instanceFilePaths = string(instanceFilePaths);
-        end
     end
 
     methods (Access = private)
@@ -298,7 +282,8 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
     end
 
     methods (Access = private)
-        function [instanceTable, iriSegmentIndex] = createInstanceTable(obj, filePaths)
+        function [instanceTable, iriSegmentIndex] = createInstanceTable( ...
+                obj, filePaths, rootFolder, libraryVersion, modelVersion)
         % createInstanceTable - Build the instance table for a set of files
         %
         %   The openMINDS type of an instance is taken from the "@type" the
@@ -306,10 +291,16 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         %   document is stored in. Folder names are pluralized type names
         %   and upstream renames them whenever a type is renamed, so they
         %   are not a source that stays correct across model versions.
+        %
+        %   The versions are passed in rather than read from the object,
+        %   which is not updated until the table has been built.
 
             arguments
                 obj (1,1) openminds.internal.InstanceLibrary
                 filePaths (:,1) string
+                rootFolder (1,1) string
+                libraryVersion (1,1) string
+                modelVersion (1,1) string
             end
 
             [folderPaths, instanceNames] = fileparts(filePaths);
@@ -317,9 +308,11 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             % All instances in a folder share one type, so one document per
             % folder is enough to type the whole library.
             [uniqueFolderPaths, firstInFolder, folderIndex] = unique(folderPaths);
-            folderInfo = obj.resolveFolderInfo(filePaths(firstInFolder));
+            folderInfo = obj.resolveFolderInfo( ...
+                filePaths(firstInFolder), libraryVersion, modelVersion);
 
-            subGroups = obj.resolveSubgroups(uniqueFolderPaths, folderInfo.TypeName);
+            subGroups = resolveSubgroups( ...
+                uniqueFolderPaths, folderInfo.TypeName, rootFolder);
 
             instanceTable = table(...
                 instanceNames, ...
@@ -332,25 +325,30 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
             iriSegmentIndex = obj.createIRISegmentIndex(folderInfo);
         end
 
-        function folderInfo = resolveFolderInfo(obj, representativeFilePaths)
+        function folderInfo = resolveFolderInfo(~, representativeFilePaths, libraryVersion, modelVersion)
         % resolveFolderInfo - Resolve the type each instance folder holds
         %
         %   Input:
         %       representativeFilePaths : One instance file per folder
+        %       libraryVersion, modelVersion : Named in what is reported
         %
         %   Output:
         %       folderInfo : Table with the type name, module name and IRI
-        %       path segment for each folder. A type the active model does
-        %       not declare leaves the row empty and is reported once.
+        %       path segment for each folder. A folder whose document
+        %       cannot be read, or whose type the model does not declare,
+        %       leaves its row empty. Each is reported once.
 
             arguments
-                obj (1,1) openminds.internal.InstanceLibrary
+                ~
                 representativeFilePaths (:,1) string
+                libraryVersion (1,1) string
+                modelVersion (1,1) string
             end
 
             numFolders = numel(representativeFilePaths);
             [typeNames, moduleNames, iriSegments] = deal(repmat("", numFolders, 1));
 
+            unreadableFilePaths = strings(0, 1);
             unresolvedTypeIRIs = strings(0, 1);
 
             for i = 1:numFolders
@@ -359,6 +357,7 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
 
                 typeIRI = readTypeIRI(header);
                 if ismissing(typeIRI)
+                    unreadableFilePaths(end+1) = representativeFilePaths(i); %#ok<AGROW>
                     continue
                 end
 
@@ -373,51 +372,32 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
                 moduleNames(i) = string(typeEnum.getModule());
             end
 
+            if ~isempty(unreadableFilePaths)
+                warning('OPENMINDS:InstanceLibrary:UnreadableInstance', ...
+                    ['No "@type" could be read from %d instance document(s) ', ...
+                    'of the openMINDS instance library, so the instances ', ...
+                    'stored with them are listed without a type. The library ', ...
+                    'may be damaged. First of them: "%s".'], ...
+                    numel(unreadableFilePaths), unreadableFilePaths(1))
+            end
+
+            % The library version follows the model version, so the two
+            % naming different types means either the library is ahead of
+            % the model, or the model classes still in memory belong to a
+            % version selected earlier in this session.
             if ~isempty(unresolvedTypeIRIs)
                 warning('OPENMINDS:InstanceLibrary:UnresolvedInstanceType', ...
-                    ['The instance library at version "%s" holds instances of ', ...
-                    'type(s) that version "%s" of the openMINDS model does not ', ...
-                    'declare: %s. These instances are listed without a type. ', ...
-                    'Select a model version that matches the instance library, ', ...
-                    'or set the LibraryVersion of the instance library to match ', ...
-                    'the model version.'], ...
-                    obj.LibraryVersion, openminds.version(), ...
+                    ['Version "%s" of the openMINDS instance library holds ', ...
+                    'instances of type(s) that version "%s" of the openMINDS ', ...
+                    'model does not declare: %s. These instances are listed ', ...
+                    'without a type. If another model version was selected ', ...
+                    'earlier in this session, restart MATLAB.'], ...
+                    libraryVersion, modelVersion, ...
                     summarizeTypeNames(unresolvedTypeIRIs))
             end
 
             folderInfo = table(typeNames, moduleNames, iriSegments, ...
                 'VariableNames', ["TypeName", "ModuleName", "IRISegment"]);
-        end
-
-        function subGroups = resolveSubgroups(obj, folderPaths, typeNames)
-        % resolveSubgroups - Resolve the subgroup name for each folder
-        %
-        %   Instances of one type are sometimes grouped in a subfolder, as
-        %   in parcellationEntities/BA-human. Such a subfolder is
-        %   recognized by its siblings holding the same type, which sets it
-        %   apart from a folder that groups several types, as terminologies
-        %   does. Neither shape is declared anywhere, so it is derived from
-        %   the types resolved above rather than from folder names.
-
-            arguments
-                obj (1,1) openminds.internal.InstanceLibrary
-                folderPaths (:,1) string
-                typeNames (:,1) string
-            end
-
-            subGroups = strings(numel(folderPaths), 1);
-            subGroups(:) = missing;
-
-            relativePaths = replace(folderPaths, obj.InstanceRootFolder, "");
-            relativePaths = strip(relativePaths, "left", filesep);
-            [parentPaths, folderNames] = fileparts(relativePaths);
-
-            for parentPath = unique(parentPaths(parentPaths ~= ""))'
-                isChild = parentPaths == parentPath;
-                if isscalar(unique(typeNames(isChild)))
-                    subGroups(isChild) = folderNames(isChild);
-                end
-            end
         end
 
         function iriSegmentIndex = createIRISegmentIndex(~, folderInfo)
@@ -426,9 +406,60 @@ classdef InstanceLibrary < handle & matlab.mixin.SetGet
         %   Several folders can share one type, and a folder whose type
         %   could not be resolved contributes nothing to resolve with.
 
-            isResolved = folderInfo.TypeName ~= "" & folderInfo.IRISegment ~= "";
+            isResolved = folderInfo.TypeName ~= "" & ~ismissing(folderInfo.IRISegment);
             iriSegmentIndex = unique( ...
                 folderInfo(isResolved, ["IRISegment", "TypeName"]) );
+        end
+    end
+end
+
+function instanceFilePaths = listInstanceFiles(rootFolder)
+% listInstanceFiles - List the instance files under a library version folder
+%
+%   Returns empty when there are none. The caller reports that, because a
+%   library that cannot be read is not a reason for selecting a model
+%   version to fail.
+
+    instanceFileFormat = ".jsonld";
+
+    L = dir(fullfile(rootFolder, "**", "*"+instanceFileFormat));
+
+    if isempty(L)
+        instanceFilePaths = strings(0, 1);
+        return
+    end
+
+    instanceFilePaths = join([{L.folder}', {L.name}'], filesep);
+    instanceFilePaths = string(instanceFilePaths);
+end
+
+function subGroups = resolveSubgroups(folderPaths, typeNames, rootFolder)
+% resolveSubgroups - Resolve the subgroup name for each folder
+%
+%   Instances of one type are sometimes grouped in a subfolder, as in
+%   parcellationEntities/BA-human. Such a subfolder is recognized by its
+%   siblings holding the same type, which sets it apart from a folder that
+%   groups several types, as terminologies does. Neither shape is declared
+%   anywhere, so it is derived from the types resolved above rather than
+%   from folder names.
+
+    arguments
+        folderPaths (:,1) string
+        typeNames (:,1) string
+        rootFolder (1,1) string
+    end
+
+    subGroups = strings(numel(folderPaths), 1);
+    subGroups(:) = missing;
+
+    relativePaths = replace(folderPaths, rootFolder, "");
+    relativePaths = strip(relativePaths, "left", filesep);
+    [parentPaths, folderNames] = fileparts(relativePaths);
+
+    for parentPath = unique(parentPaths(parentPaths ~= ""))'
+        isChild = parentPaths == parentPath;
+        if isscalar(unique(typeNames(isChild)))
+            subGroups(isChild) = folderNames(isChild);
         end
     end
 end
@@ -537,7 +568,7 @@ function iriSegment = readIRISegment(header)
         '"@id"\s*:\s*"[^"]*?/instances/(?<segment>[^"/]+)/', 'names', 'once');
 
     if isempty(match)
-        iriSegment = "";
+        iriSegment = missing;
     else
         iriSegment = match.segment;
     end

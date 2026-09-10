@@ -152,6 +152,10 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
         % library is written against, so no version of the library can
         % stand in for them. That has to be said rather than left to look
         % like a library that happens to be empty.
+        %
+        % The version is switched by hand rather than through the fixture
+        % the other tests use, because the warning is raised by the switch
+        % itself and verifyWarning has to wrap that call.
 
             previousModelVersion = openminds.version();
             testCase.addTeardown(@openminds.version, previousModelVersion);
@@ -190,6 +194,9 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
         end
 
         function testUnknownIRISegmentIsRejected(testCase)
+        % A segment that names no type the library holds has to be reported
+        % as such, so that a caller can tell a bad IRI from a missing library.
+
             testCase.verifyError( ...
                 @() testCase.InstanceLibrary.getTypeFromIRISegment("notASegment"), ...
                 'OPENMINDS:InstanceLibrary:UnknownIRISegment')
