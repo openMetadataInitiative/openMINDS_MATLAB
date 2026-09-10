@@ -1,6 +1,14 @@
 classdef ValidatorsTest < matlab.unittest.TestCase
     % ValidatorsTest - Unit tests for validator functions
-    
+
+    properties (TestParameter)
+        % Instance IRIs whose type segment is plural, with the type each
+        % one names.
+        pluralIRI = { ...
+            {"https://openminds.om-i.org/instances/licenses/MIT", "License"}, ...
+            {"https://openminds.om-i.org/instances/contentTypes/text_plain", "ContentType"} }
+    end
+
     methods (Test)
         function testMustBeOpenMINDSIRI(testCase)
             % Verify that validation of valid IRI succeeds
@@ -31,6 +39,39 @@ classdef ValidatorsTest < matlab.unittest.TestCase
             testCase.verifyError(...
                 @() openminds.utility.parseInstanceIRI("https://openminds.om-i.org"), ...
                 'openMINDS:ParseInstanceIRI:NotAnInstanceIRI')
+        end
+
+        function testParseInstanceIRIResolvesASingularTypeSegment(testCase)
+        % Nearly every instance IRI names its type in the singular, which
+        % resolves without consulting the instance library.
+
+            S = openminds.utility.parseInstanceIRI( ...
+                "https://openminds.om-i.org/instances/biologicalSex/male");
+
+            testCase.verifyEqual(S.Type, openminds.enum.Types("BiologicalSex"))
+            testCase.verifyEqual(S.Name, "male")
+        end
+
+        function testParseInstanceIRIResolvesAPluralTypeSegment(testCase, pluralIRI)
+        % A few instance IRIs name their type in the plural. openMINDS
+        % publishes no plural to singular mapping, so these are resolved
+        % through the instance library, which reads the type each instance
+        % declares. Splitting the IRI alone used to fail here.
+
+            S = openminds.utility.parseInstanceIRI(pluralIRI{1});
+
+            testCase.verifyEqual(S.Type, openminds.enum.Types(pluralIRI{2}))
+        end
+
+        function testParseInstanceIRIRejectsAnUnknownTypeSegment(testCase)
+        % A segment that names neither a type nor a folder of the instance
+        % library has to be reported as such, rather than as a failure to
+        % reach the library.
+
+            testCase.verifyError(...
+                @() openminds.utility.parseInstanceIRI( ...
+                    "https://openminds.om-i.org/instances/notAType/anInstance"), ...
+                'openMINDS:ParseInstanceIRI:UnresolvedType')
         end
     end
 end

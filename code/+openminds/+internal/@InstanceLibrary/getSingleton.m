@@ -11,9 +11,17 @@ function singletonObject = getSingleton(folderPath, options)
 
     SINGLETON_NAME = InstanceLibrary.SINGLETON_NAME;
     singletonObject = getappdata(0, SINGLETON_NAME);
-    
+
+    currentModelVersion = openminds.version();
+
     if ~isempty(singletonObject) && isvalid(singletonObject)
         if ~strcmp(folderPath, singletonObject.InstanceLibraryLocation)
+            delete(singletonObject) % Reset singleton
+            singletonObject = [];
+        elseif ~strcmp(currentModelVersion, singletonObject.ModelVersion)
+            % Instances are typed against the model version that was on the
+            % path when the table was built, so selecting another version
+            % invalidates it.
             delete(singletonObject) % Reset singleton
             singletonObject = [];
         elseif options.Reset
