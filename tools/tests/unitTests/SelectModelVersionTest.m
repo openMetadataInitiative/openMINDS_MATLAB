@@ -14,16 +14,18 @@ classdef SelectModelVersionTest < matlab.unittest.TestCase
         % then resolved the selected version's instances against it: every
         % type the two versions do not share came out untyped.
         %
-        % The two versions are chosen for what tells them apart: latest
-        % declares AnatomicalAtlas, which v3.0 calls BrainAtlas. The first
-        % is selected here rather than assumed, so that the test does not
-        % pass for nothing in a session that is on v3.0 or v4.0 already.
+        % The two versions are numbered ones, which are pinned to a schema
+        % commit and do not change, unlike latest. They are chosen for
+        % what tells them apart: v5.0 declares AnatomicalAtlas, which v3.0
+        % calls BrainAtlas. The first is selected here rather than assumed,
+        % so that the test does not pass for nothing in a session that is
+        % on v3.0 or v4.0 already.
 
             import ommtest.helper.ModelVersionFixture
 
-            testCase.applyFixture(ModelVersionFixture("latest"))
-            testCase.assumeTrue(ismember("AnatomicalAtlas", typesInMemory()), ...
-                'latest is expected to declare AnatomicalAtlas.')
+            testCase.applyFixture(ModelVersionFixture("v5.0"))
+            testCase.assertTrue(ismember("AnatomicalAtlas", typesInMemory()), ...
+                'v5.0 is pinned and declares AnatomicalAtlas; something changed it.')
 
             % Held, as a session that has looked any type up holds it.
             openminds.introspection.internal.MetaTypeRegistry.getSingleton();
