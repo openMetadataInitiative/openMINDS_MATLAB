@@ -189,18 +189,16 @@ classdef (Abstract) ControlledTerm < openminds.Node
                 obj.id = obj.createControlledInstanceIRI(schemaName, instanceName);
 
                 try
-                    data = getControlledInstance(instanceName, schemaName, 'controlledTerms');
+                    data = getControlledInstance(instanceName, schemaName);
                 catch
                     % Known instance names are sufficient identifiers. The
                     % JSON-LD instance file is only used to enrich metadata.
                     return
                 end
             else
-                % Deliberately let through: a term a user defined has no
-                % library instance to find, and takes its values from the
-                % document instead. The identifier is what lets a caller
-                % holding only an IRI tell this apart from a term that
-                % resolved, without parsing the message.
+                % A warning rather than an error: a term a user defined
+                % matches no library instance, and takes its values from
+                % the document instead.
                 warning('openMINDS:ControlledTerm:UnknownInstanceName', ...
                     'No matching instances were found for name "%s".', instanceName)
                 return

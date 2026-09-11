@@ -13,12 +13,9 @@ function singletonObject = getSingleton(folderPath, options)
     % requested path is made absolute before the two are compared.
     folderPath = openminds.internal.utility.resolveAbsolutePath(folderPath);
 
-    % The default location need not exist yet: the library is downloaded
-    % into it when it is constructed. A location a caller names has to
-    % exist already, because nothing is downloaded anywhere else. It is
-    % checked before the library in use is touched, so that a location
-    % that names nothing leaves a working library alone.
-    defaultLocation = InstanceLibrary.resolveAbsolutePath( ...
+    % Only the default location is downloaded into, so any other location
+    % has to exist already.
+    defaultLocation = openminds.internal.utility.resolveAbsolutePath( ...
         openminds.internal.constants.Paths.LocalInstanceFolder);
 
     if ~isfolder(folderPath) && folderPath ~= defaultLocation
