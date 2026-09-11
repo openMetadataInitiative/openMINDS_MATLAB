@@ -193,7 +193,7 @@ classdef InstanceLibrary < handle
                 return
             end
 
-            [instanceTable, iriSegmentIndex] = obj.createInstanceTable( ...
+            [instanceTable, iriSegmentIndex] = createInstanceTable( ...
                 instanceFilePaths, rootFolder, libraryVersion, modelVersion);
         end
 
@@ -269,142 +269,6 @@ classdef InstanceLibrary < handle
             obj.updateInstanceTable()
         end
     end
-
-    methods (Access = private)
-        function [instanceTable, iriSegmentIndex] = createInstanceTable( ...
-                obj, filePaths, rootFolder, libraryVersion, modelVersion)
-        % createInstanceTable - Build the instance table for a set of files
-        %
-        %   The type of an instance is read from the "@type" the instance
-        %   document declares, not derived from the folder name. Folder
-        %   names are pluralized type names that upstream renames whenever
-        %   a type is renamed, so typing by folder name goes stale.
-        %
-        %   The versions are passed in rather than read from the object,
-        %   because the object is not updated until the table is built.
-
-            arguments
-                obj (1,1) openminds.internal.InstanceLibrary
-                filePaths (:,1) string
-                rootFolder (1,1) string
-                libraryVersion (1,1) string
-                modelVersion (1,1) string
-            end
-
-            [folderPaths, instanceNames] = fileparts(filePaths);
-
-            % All instances in a folder have the same type, so reading one
-            % document per folder types the whole library.
-            [uniqueFolderPaths, firstInFolder, folderIndex] = unique(folderPaths);
-            folderInfo = obj.resolveFolderInfo( ...
-                filePaths(firstInFolder), libraryVersion, modelVersion);
-
-            subGroups = resolveSubgroups( ...
-                uniqueFolderPaths, folderInfo.TypeName, rootFolder);
-
-            instanceTable = table(...
-                instanceNames, ...
-                folderInfo.TypeName(folderIndex), ...
-                folderInfo.ModuleName(folderIndex), ...
-                subGroups(folderIndex), ...
-                filePaths, ...
-                'VariableNames', instanceTableVariableNames());
-
-            iriSegmentIndex = obj.createIRISegmentIndex(folderInfo);
-        end
-
-        function folderInfo = resolveFolderInfo(~, representativeFilePaths, libraryVersion, modelVersion)
-        % resolveFolderInfo - Resolve the type each instance folder holds
-        %
-        %   Input:
-        %       representativeFilePaths : One instance file per folder
-        %       libraryVersion, modelVersion : Named in what is reported
-        %
-        %   Output:
-        %       folderInfo : Table with the type name, module name and IRI
-        %       path segment for each folder. The row is empty for a folder
-        %       whose document cannot be read or whose type the loaded
-        %       model classes do not declare. Each case is reported in one
-        %       warning.
-
-            arguments
-                ~
-                representativeFilePaths (:,1) string
-                libraryVersion (1,1) string
-                modelVersion (1,1) string
-            end
-
-            numFolders = numel(representativeFilePaths);
-            [typeNames, moduleNames, iriSegments] = deal(repmat("", numFolders, 1));
-
-            unreadableFilePaths = strings(0, 1);
-            unresolvedTypeIRIs = strings(0, 1);
-
-            for i = 1:numFolders
-                header = readInstanceHeader(representativeFilePaths(i));
-                iriSegments(i) = readIRISegment(header);
-
-                typeIRI = readTypeIRI(header);
-                if ismissing(typeIRI)
-                    unreadableFilePaths(end+1) = representativeFilePaths(i); %#ok<AGROW>
-                    continue
-                end
-
-                try
-                    typeEnum = openminds.enum.Types.fromAtType(typeIRI);
-                catch
-                    unresolvedTypeIRIs(end+1) = typeIRI; %#ok<AGROW>
-                    continue
-                end
-
-                typeNames(i) = string(typeEnum);
-                moduleNames(i) = string(typeEnum.getModule());
-            end
-
-            if ~isempty(unreadableFilePaths)
-                warning('OPENMINDS:InstanceLibrary:UnreadableInstance', ...
-                    ['No "@type" could be read from %d instance document(s) ', ...
-                    'of the openMINDS instance library, so the instances ', ...
-                    'stored with them are listed without a type. The library ', ...
-                    'may be damaged. First of them: "%s".'], ...
-                    numel(unreadableFilePaths), unreadableFilePaths(1))
-            end
-
-            % The library version equals the model version, so a type that
-            % the library holds but the loaded classes do not declare has
-            % one of two causes: the library is newer than the generated
-            % model classes, or MATLAB still holds the classes of a
-            % previously selected model version because something in the
-            % session references them. The two cannot be told apart here.
-            if ~isempty(unresolvedTypeIRIs)
-                warning('OPENMINDS:InstanceLibrary:UnresolvedInstanceType', ...
-                    ['Version "%s" of the openMINDS instance library holds ', ...
-                    'instances of type(s) that the openMINDS model classes ', ...
-                    'loaded in this session do not declare: %s. These ', ...
-                    'instances are listed without a type. Either the library ', ...
-                    'is ahead of model version "%s", or something in the ', ...
-                    'session still holds the classes of a model version ', ...
-                    'selected earlier; clear what holds them, or restart ', ...
-                    'MATLAB.'], ...
-                    libraryVersion, summarizeTypeNames(unresolvedTypeIRIs), ...
-                    modelVersion)
-            end
-
-            folderInfo = table(typeNames, moduleNames, iriSegments, ...
-                'VariableNames', ["TypeName", "ModuleName", "IRISegment"]);
-        end
-
-        function iriSegmentIndex = createIRISegmentIndex(~, folderInfo)
-        % createIRISegmentIndex - Index IRI path segments by type name
-        %
-        %   Several folders can hold the same type, so the rows are made
-        %   unique. Folders whose type could not be resolved are left out.
-
-            isResolved = folderInfo.TypeName ~= "" & ~ismissing(folderInfo.IRISegment);
-            iriSegmentIndex = unique( ...
-                folderInfo(isResolved, ["IRISegment", "TypeName"]) );
-        end
-    end
 end
 
 function instanceFilePaths = listInstanceFiles(rootFolder)
@@ -425,6 +289,138 @@ function instanceFilePaths = listInstanceFiles(rootFolder)
 
     instanceFilePaths = join([{L.folder}', {L.name}'], filesep);
     instanceFilePaths = string(instanceFilePaths);
+end
+
+function [instanceTable, iriSegmentIndex] = createInstanceTable( ...
+        filePaths, rootFolder, libraryVersion, modelVersion)
+% createInstanceTable - Build the instance table for a set of files
+%
+%   The type of an instance is read from the "@type" the instance
+%   document declares, not derived from the folder name. Folder
+%   names are pluralized type names that upstream renames whenever
+%   a type is renamed, so typing by folder name goes stale.
+%
+%   The versions are passed in rather than read from the object,
+%   because the object is not updated until the table is built.
+
+    arguments
+        filePaths (:,1) string
+        rootFolder (1,1) string
+        libraryVersion (1,1) string
+        modelVersion (1,1) string
+    end
+
+    [folderPaths, instanceNames] = fileparts(filePaths);
+
+    % All instances in a folder have the same type, so reading one
+    % document per folder types the whole library.
+    [uniqueFolderPaths, firstInFolder, folderIndex] = unique(folderPaths);
+    folderInfo = resolveFolderInfo( ...
+        filePaths(firstInFolder), libraryVersion, modelVersion);
+
+    subGroups = resolveSubgroups( ...
+        uniqueFolderPaths, folderInfo.TypeName, rootFolder);
+
+    instanceTable = table(...
+        instanceNames, ...
+        folderInfo.TypeName(folderIndex), ...
+        folderInfo.ModuleName(folderIndex), ...
+        subGroups(folderIndex), ...
+        filePaths, ...
+        'VariableNames', instanceTableVariableNames());
+
+    iriSegmentIndex = createIRISegmentIndex(folderInfo);
+end
+
+function folderInfo = resolveFolderInfo(representativeFilePaths, libraryVersion, modelVersion)
+% resolveFolderInfo - Resolve the type each instance folder holds
+%
+%   Input:
+%       representativeFilePaths : One instance file per folder
+%       libraryVersion, modelVersion : Used only in the warnings
+%
+%   Output:
+%       folderInfo : Table with the type name, module name and IRI
+%       path segment for each folder. The row is empty for a folder
+%       whose document cannot be read or whose type the loaded
+%       model classes do not declare. Each case is reported in one
+%       warning.
+
+    arguments
+        representativeFilePaths (:,1) string
+        libraryVersion (1,1) string
+        modelVersion (1,1) string
+    end
+
+    numFolders = numel(representativeFilePaths);
+    [typeNames, moduleNames, iriSegments] = deal(repmat("", numFolders, 1));
+
+    unreadableFilePaths = strings(0, 1);
+    unresolvedTypeIRIs = strings(0, 1);
+
+    for i = 1:numFolders
+        header = readInstanceHeader(representativeFilePaths(i));
+        iriSegments(i) = readIRISegment(header);
+
+        typeIRI = readTypeIRI(header);
+        if ismissing(typeIRI)
+            unreadableFilePaths(end+1) = representativeFilePaths(i); %#ok<AGROW>
+            continue
+        end
+
+        try
+            typeEnum = openminds.enum.Types.fromAtType(typeIRI);
+        catch
+            unresolvedTypeIRIs(end+1) = typeIRI; %#ok<AGROW>
+            continue
+        end
+
+        typeNames(i) = string(typeEnum);
+        moduleNames(i) = string(typeEnum.getModule());
+    end
+
+    if ~isempty(unreadableFilePaths)
+        warning('OPENMINDS:InstanceLibrary:UnreadableInstance', ...
+            ['No "@type" could be read from %d instance document(s) ', ...
+            'of the openMINDS instance library, so the instances ', ...
+            'stored with them are listed without a type. The library ', ...
+            'may be damaged. First of them: "%s".'], ...
+            numel(unreadableFilePaths), unreadableFilePaths(1))
+    end
+
+    % The library version equals the model version, so a type that
+    % the library holds but the loaded classes do not declare has
+    % one of two causes: the library is newer than the generated
+    % model classes, or MATLAB still holds the classes of a
+    % previously selected model version because something in the
+    % session references them. The two cannot be told apart here.
+    if ~isempty(unresolvedTypeIRIs)
+        warning('OPENMINDS:InstanceLibrary:UnresolvedInstanceType', ...
+            ['Version "%s" of the openMINDS instance library holds ', ...
+            'instances of type(s) that the openMINDS model classes ', ...
+            'loaded in this session do not declare: %s. These ', ...
+            'instances are listed without a type. Either the library ', ...
+            'is ahead of model version "%s", or something in the ', ...
+            'session still holds the classes of a model version ', ...
+            'selected earlier; clear what holds them, or restart ', ...
+            'MATLAB.'], ...
+            libraryVersion, summarizeTypeNames(unresolvedTypeIRIs), ...
+            modelVersion)
+    end
+
+    folderInfo = table(typeNames, moduleNames, iriSegments, ...
+        'VariableNames', ["TypeName", "ModuleName", "IRISegment"]);
+end
+
+function iriSegmentIndex = createIRISegmentIndex(folderInfo)
+% createIRISegmentIndex - Index IRI path segments by type name
+%
+%   Several folders can hold the same type, so the rows are made
+%   unique. Folders whose type could not be resolved are left out.
+
+    isResolved = folderInfo.TypeName ~= "" & ~ismissing(folderInfo.IRISegment);
+    iriSegmentIndex = unique( ...
+        folderInfo(isResolved, iriSegmentIndexVariableNames()) );
 end
 
 function subGroups = resolveSubgroups(folderPaths, typeNames, rootFolder)
@@ -464,6 +460,11 @@ function variableNames = instanceTableVariableNames()
     variableNames = ["InstanceName", "Type", "Module", "Subgroup", "Filepath"];
 end
 
+function variableNames = iriSegmentIndexVariableNames()
+% iriSegmentIndexVariableNames - Columns of the IRI segment index
+    variableNames = ["IRISegment", "TypeName"];
+end
+
 function [instanceTable, iriSegmentIndex] = emptyInstanceTables()
 % emptyInstanceTables - The tables of a library with no instances to read
 %
@@ -476,7 +477,7 @@ function [instanceTable, iriSegmentIndex] = emptyInstanceTables()
         'VariableNames', instanceTableVariableNames());
 
     iriSegmentIndex = array2table(strings(0, 2), ...
-        'VariableNames', ["IRISegment", "TypeName"]);
+        'VariableNames', iriSegmentIndexVariableNames());
 end
 
 function versionString = normalizeModelVersion(modelVersion)

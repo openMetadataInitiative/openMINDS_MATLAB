@@ -19,16 +19,14 @@ function singletonObject = getSingleton(folderPath, options)
     currentModelVersion = openminds.version();
 
     if ~isempty(singletonObject) && isvalid(singletonObject)
-        if ~strcmp(folderPath, singletonObject.InstanceLibraryLocation)
-            delete(singletonObject) % Reset singleton
-            singletonObject = [];
-        elseif ~strcmp(currentModelVersion, singletonObject.ModelVersion)
-            % The table was typed against another model version, so it is
-            % stale.
-            delete(singletonObject) % Reset singleton
-            singletonObject = [];
-        elseif options.Reset
-            delete(singletonObject) % Reset singleton
+        % Replaced when another location is asked for, when the table was
+        % typed against another model version, or when asked to.
+        isStale = ~strcmp(folderPath, singletonObject.InstanceLibraryLocation) ...
+            || ~strcmp(currentModelVersion, singletonObject.ModelVersion) ...
+            || options.Reset;
+
+        if isStale
+            delete(singletonObject)
             singletonObject = [];
         end
     end

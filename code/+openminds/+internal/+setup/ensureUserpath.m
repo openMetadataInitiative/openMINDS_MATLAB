@@ -41,8 +41,8 @@ function userFolder = ensureUserpath()
     userFolder = string( userpath() );
 
     % Warn, with an identifier, because this decides where tens of
-    % megabytes are downloaded. The warning fires once per session: the
-    % folders built on the user folder are resolved once and cached.
+    % megabytes are downloaded. It fires once: userpath has been set above,
+    % so every later call returns early.
     warning('OPENMINDS:Setup:NoUserFolder', ...
         ['MATLAB''s userpath is empty or names a folder that does not ', ...
         'exist, so openMINDS will keep the files it downloads in "%s". ', ...
