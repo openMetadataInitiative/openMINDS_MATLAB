@@ -99,8 +99,10 @@ classdef InstanceLibrary < handle
 
     methods % Set/get
         function set.InstanceLibraryLocation(obj, value)
+            % Kept for the life of the library and read again on every
+            % rebuild, so it must not depend on the working directory.
             obj.InstanceLibraryLocation = ...
-                openminds.internal.InstanceLibrary.resolveAbsolutePath(value);
+                openminds.internal.utility.resolveAbsolutePath(value);
             obj.postSetInstanceLibraryLocation()
         end
     end
@@ -140,27 +142,6 @@ classdef InstanceLibrary < handle
 
             typeName = obj.IRISegmentIndex.TypeName(find(isMatch, 1));
             typeEnum = openminds.enum.Types(typeName);
-        end
-    end
-
-    methods (Static, Access = private)
-        function absolutePath = resolveAbsolutePath(pathString)
-        % resolveAbsolutePath - Resolve a path against the working directory
-        %
-        %   The location is kept for the life of the library and read again
-        %   on every rebuild, so it must not depend on where MATLAB is
-        %   standing. It is also compared against the location a caller
-        %   asks for, so both have to be spelled the same way.
-
-            arguments
-                pathString (1,1) string
-            end
-
-            if isAbsolutePath(pathString)
-                absolutePath = pathString;
-            else
-                absolutePath = string(fullfile(pwd, pathString));
-            end
         end
     end
 
@@ -461,17 +442,6 @@ function subGroups = resolveSubgroups(folderPaths, typeNames, rootFolder)
         if isscalar(unique(typeNames(isChild)))
             subGroups(isChild) = folderNames(isChild);
         end
-    end
-end
-
-function tf = isAbsolutePath(pathString)
-% isAbsolutePath - Whether a path names a folder without a starting point
-
-    if ispc
-        % A drive letter, or the leading pair of separators of a UNC path
-        tf = ~isempty( regexp(pathString, '^([A-Za-z]:[\\/]|\\\\)', 'once') );
-    else
-        tf = startsWith(pathString, filesep);
     end
 end
 

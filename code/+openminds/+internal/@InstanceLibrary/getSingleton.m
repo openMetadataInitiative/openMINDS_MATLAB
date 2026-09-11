@@ -9,11 +9,9 @@ function singletonObject = getSingleton(folderPath, options)
 
     import openminds.internal.InstanceLibrary
 
-    % The library stores its location resolved, so the location asked for
-    % has to be resolved the same way. Comparing the two as given would
-    % read one folder named two ways as two libraries, and rebuild the
-    % library on every call.
-    folderPath = InstanceLibrary.resolveAbsolutePath(folderPath);
+    % Resolved the way the library stores its location, so that the two
+    % compare equal below.
+    folderPath = openminds.internal.utility.resolveAbsolutePath(folderPath);
 
     SINGLETON_NAME = InstanceLibrary.SINGLETON_NAME;
     singletonObject = getappdata(0, SINGLETON_NAME);
