@@ -214,9 +214,18 @@ classdef InstanceLibrary < handle
             libraryVersion = missing;
 
             if isempty(obj.AvailableVersions)
-                % No library versions are on disk, so there is nothing to
-                % list in a warning. postSetInstanceLibraryLocation has
-                % already warned that the download failed.
+                % Nothing is on disk to list. A folder that does not exist
+                % is a failed download, which postSetInstanceLibraryLocation
+                % has warned about. A folder that exists but holds no
+                % version is an incomplete download that the recorded
+                % commit did not notice, and nothing else warns about it.
+                if isfolder(obj.InstanceLibraryLocation)
+                    warning('OPENMINDS:InstanceLibrary:NoVersionsFound', ...
+                        ['The openMINDS instance library at "%s" holds no ', ...
+                        'version folder, so no controlled instances are ', ...
+                        'available. The library may be incomplete.'], ...
+                        obj.InstanceLibraryLocation)
+                end
                 return
             end
 
