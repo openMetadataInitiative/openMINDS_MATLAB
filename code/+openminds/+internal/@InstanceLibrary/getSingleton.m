@@ -10,8 +10,8 @@ function singletonObject = getSingleton(folderPath, options)
 %
 %       library = getSingleton(folderPath) reads the library at
 %       folderPath instead. That folder has to hold a copy of the
-%       library already, because only the default location is
-%       downloaded into.
+%       library already, one subfolder per version such as "latest",
+%       because only the default location is downloaded into.
 %
 %       library = getSingleton(..., Reset=true) discards the library in
 %       use and reads it again.
@@ -51,13 +51,15 @@ function singletonObject = getSingleton(folderPath, options)
     folderPath = openminds.internal.utility.resolveAbsolutePath(folderPath);
 
     % Only the default location is downloaded into, so any other location
-    % has to exist already.
+    % has to hold a library already: at least one version folder.
     defaultLocation = openminds.internal.utility.resolveAbsolutePath( ...
         openminds.internal.constants.Paths.LocalInstanceFolder);
 
-    if ~isfolder(folderPath) && folderPath ~= defaultLocation
+    if folderPath ~= defaultLocation ...
+            && isempty(InstanceLibrary.listVersionFolders(folderPath))
         error("OPENMINDS:InstanceLibrary:LocationNotFound", ...
-            ['The folder "%s" does not exist. The instance library is only ', ...
+            ['No instance library at "%s": the folder does not exist, or ', ...
+            'holds no version folder such as "latest". The library is only ', ...
             'downloaded into its default location, "%s". Another location ', ...
             'has to hold a copy of the library already.'], ...
             folderPath, defaultLocation)

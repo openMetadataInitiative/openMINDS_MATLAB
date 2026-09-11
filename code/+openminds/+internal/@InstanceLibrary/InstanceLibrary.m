@@ -145,6 +145,20 @@ classdef InstanceLibrary < handle
         end
     end
 
+    methods (Static, Access = private)
+        function versionNames = listVersionFolders(folderPath)
+        % listVersionFolders - The library versions a folder holds
+        %
+        %   A library holds one subfolder per version, named as the version
+        %   is: "v3.0", "latest". Empty for a folder that holds none, and
+        %   for one that does not exist.
+
+            L = dir(folderPath);
+            names = string({L.name});
+            versionNames = names(~startsWith(names, '.') & [L.isdir]);
+        end
+    end
+
     methods (Access = private) % Internal updating and validation
         function updateInstanceTable(obj, modelVersion)
             arguments
@@ -240,10 +254,8 @@ classdef InstanceLibrary < handle
         end
 
         function detectAvailableVersions(obj)
-            L = dir(obj.InstanceLibraryLocation);
-            names = string({L.name});
-            names = names(~startsWith(names, '.') & [L.isdir]);
-            obj.AvailableVersions = names;
+            obj.AvailableVersions = openminds.internal.InstanceLibrary ...
+                .listVersionFolders(obj.InstanceLibraryLocation);
         end
     end
 

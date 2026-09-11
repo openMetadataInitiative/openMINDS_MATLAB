@@ -210,6 +210,24 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
                 openminds.internal.InstanceLibrary.getSingleton(), library)
         end
 
+        function testAFolderWithoutVersionsIsRejectedByName(testCase)
+        % A folder that exists but holds no version folder is not a
+        % library. Accepting it would replace the library in use with an
+        % empty one, silently, and delete the handle the caller had.
+
+            import matlab.unittest.fixtures.TemporaryFolderFixture
+
+            library = testCase.InstanceLibrary;
+            emptyFolder = testCase.applyFixture(TemporaryFolderFixture).Folder;
+
+            testCase.verifyError( ...
+                @() openminds.internal.InstanceLibrary.getSingleton(emptyFolder), ...
+                'OPENMINDS:InstanceLibrary:LocationNotFound')
+
+            testCase.verifySameHandle( ...
+                openminds.internal.InstanceLibrary.getSingleton(), library)
+        end
+
         function testUnknownIRISegmentIsRejected(testCase)
         % A segment that names no type in the library must raise this
         % specific error, so that a caller can tell a bad IRI from a
