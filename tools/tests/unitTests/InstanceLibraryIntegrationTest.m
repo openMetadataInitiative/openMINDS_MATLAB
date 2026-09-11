@@ -25,12 +25,12 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
 
     methods (Test)
         function testEveryInstanceIsTyped(testCase)
-        % Instance folders are named after pluralized type names, which
-        % upstream renames whenever a type is renamed. Typing instances by
-        % folder name therefore went stale silently and left whole modules
-        % of the library untyped, so no instance may be left without one.
-        % Only the downloaded library can say whether that holds for what
-        % upstream ships today.
+        % Instances used to be typed by folder name. Folder names are
+        % pluralized type names that upstream renames whenever a type is
+        % renamed, so that typing went stale silently and left whole
+        % modules of the library untyped. Every instance must have a type,
+        % and only the downloaded library can show that this holds for
+        % what upstream ships today.
 
             untyped = testCase.InstanceTable(testCase.InstanceTable.Type == "", :);
 
@@ -41,18 +41,18 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
         end
 
         function testModuleIsResolvedForEveryInstance(testCase)
-        % The module used to be assigned alongside the type from the same
-        % folder classification, so it went stale for the same reason.
+        % The module used to be derived from the folder name together with
+        % the type, so it went stale for the same reason.
 
             testCase.verifyEmpty( ...
                 testCase.InstanceTable(testCase.InstanceTable.Module == "", :))
         end
 
         function testSelectingAModelVersionRebuildsTheLibrary(testCase)
-        % Instances are typed against the model version that was on the
-        % path when the library was read, so selecting another version has
-        % to rebuild the library that is already in memory, in place, for
-        % the sake of code holding on to it.
+        % The instance table is typed against the model version on the path
+        % when it was built, so selecting another version must rebuild the
+        % library object already in memory. It must be rebuilt in place,
+        % because other code may hold a reference to the object.
 
             library = testCase.InstanceLibrary;
             testCase.assertEqual(library.ModelVersion, openminds.version())
@@ -62,18 +62,19 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
             testCase.verifyEqual(library.ModelVersion, "v3.0", ...
                 'Selecting a model version must rebuild the library in memory.')
 
-            % The version is recorded the way openminds.version reports it,
-            % so the next use recognizes the library as current instead of
-            % rebuilding it a second time.
+            % ModelVersion is stored in the format openminds.version
+            % reports, so getSingleton must recognize the rebuilt library
+            % as current and return the same handle instead of creating a
+            % new one.
             testCase.verifySameHandle( ...
                 openminds.internal.InstanceLibrary.getSingleton(), library)
         end
 
         function testLibraryVersionFollowsTheModelVersion(testCase)
         % The library publishes one set of instances per model version, and
-        % reading one version's instances against another version's types
-        % is what leaves instances untyped. The two are therefore not
-        % chosen separately.
+        % reading one version's instances against another version's classes
+        % leaves instances untyped, so the library version must equal the
+        % model version.
 
             library = testCase.InstanceLibrary;
             testCase.assumeTrue(ismember("v3.0", library.AvailableVersions))
@@ -82,17 +83,17 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
 
             testCase.verifyEqual(library.LibraryVersion, "v3.0")
 
-            % The library is downloaded, so a copy that is incomplete for
-            % this version leaves nothing to check rather than something to
-            % fail on.
+            % The library is downloaded, and a copy may hold no instances
+            % for this version. That is not a failure of the code under
+            % test.
             testCase.assumeNotEmpty(library.InstanceTable, ...
                 'The instance library holds no instances for this version.')
 
-            % Read from that version's instances, not merely labelled with
-            % it. Whether every one of them then resolves to a type also
-            % depends on the model classes having been reloaded, which a
-            % session that still holds instances of them cannot do, so it
-            % is not what is checked here.
+            % Check that the instances were read from the v3.0 folder, not
+            % merely labelled v3.0. Whether every instance then resolves to
+            % a type depends on the model classes having been reloaded,
+            % which MATLAB cannot do while objects of those classes exist
+            % in the session, so that is not checked here.
             readFromVersion = contains(library.InstanceTable.Filepath, ...
                 fullfile(filesep, "v3.0", filesep));
 
@@ -101,14 +102,14 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
         end
 
         function testModelVersionWithoutInstancesIsReported(testCase)
-        % Versions 1 and 2 of the model predate the type names the instance
-        % library is written against, so no version of the library can
-        % stand in for them. That has to be said rather than left to look
-        % like a library that happens to be empty.
+        % Model versions 1 and 2 predate the type names the instance library
+        % uses, so no library version can serve them. This must be reported
+        % as a warning rather than look like a library that happens to be
+        % empty.
         %
-        % The version is switched by hand rather than through the fixture
-        % the other tests use, because the warning is raised by the switch
-        % itself and verifyWarning has to wrap that call.
+        % The version is switched directly rather than through
+        % ModelVersionFixture because verifyWarning has to wrap the call
+        % that raises the warning.
 
             previousModelVersion = openminds.version();
             testCase.addTeardown(@openminds.version, previousModelVersion);
@@ -120,9 +121,8 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
             testCase.verifyTrue(ismissing(library.LibraryVersion), ...
                 'No library version can be read for this model version.')
 
-            % The table keeps its columns with nothing in it, so filtering
-            % it answers with no instances rather than erroring on a table
-            % that has nothing to filter on.
+            % The table keeps its columns, so filtering it returns no rows
+            % instead of erroring.
             testCase.verifyEqual(height(library.InstanceTable), 0)
             testCase.verifyEqual( ...
                 string(library.InstanceTable.Properties.VariableNames), ...
