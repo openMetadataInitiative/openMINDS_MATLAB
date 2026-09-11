@@ -1,196 +1,138 @@
 classdef InstanceLibraryTest < matlab.unittest.TestCase
 % InstanceLibraryTest - Unit tests for the openMINDS instance library
+%
+%   These read a small library kept with the tests, through
+%   ommtest.helper.InstanceLibraryFixture, so they need no download and
+%   check known instances. What can only be checked against the
+%   downloaded library is in InstanceLibraryIntegrationTest.
 
     properties
-        InstanceLibrary
-        InstanceTable table
+        Fixture
     end
 
-    methods (TestClassSetup)
-        function setupClass(testCase)
-            testCase.InstanceLibrary = ...
-                openminds.internal.InstanceLibrary.getSingleton();
-            testCase.InstanceTable = testCase.InstanceLibrary.InstanceTable;
-
-            testCase.assumeNotEmpty(testCase.InstanceTable, ...
-                'The instance library is not available locally.')
+    methods (TestMethodSetup)
+        function readTheTestLibrary(testCase)
+            testCase.Fixture = ...
+                testCase.applyFixture(ommtest.helper.InstanceLibraryFixture);
         end
     end
 
     methods (Test)
-        function testEveryInstanceIsTyped(testCase)
-        % Instances used to be typed by folder name. Folder names are
-        % pluralized type names that upstream renames whenever a type is
-        % renamed, so that typing went stale silently and left whole
-        % modules of the library untyped. Every instance must have a type.
+        function testInstancesAreTypedByWhatTheyDeclare(testCase)
+        % Every instance in the test library is typed by the "@type" its
+        % document declares, and its module follows from the type. The
+        % folder names differ from the type names, in the plural and in
+        % case, so nothing here can be read off a folder.
 
-            untyped = testCase.InstanceTable(testCase.InstanceTable.Type == "", :);
+            expected = table( ...
+                ["adult"; "youngAdult"; "male"; "MIT"; "text_plain"; "BA-human_BA32"], ...
+                ["AgeCategory"; "AgeCategory"; "BiologicalSex"; "License"; ...
+                    "ContentType"; "ParcellationEntity"], ...
+                ["controlledTerms"; "controlledTerms"; "controlledTerms"; "core"; ...
+                    "core"; "SANDS"], ...
+                'VariableNames', ["InstanceName", "Type", "Module"]);
 
-            testCase.verifyEmpty(untyped, sprintf( ...
-                'Instances of %d folder(s) were left without a type, e.g. "%s".', ...
-                numel(unique(fileparts(untyped.Filepath))), ...
-                strjoin(unique(fileparts(untyped.Filepath))', '", "')))
-        end
+            actual = testCase.Fixture.Library.InstanceTable( ...
+                :, ["InstanceName", "Type", "Module"]);
 
-        function testTypeIsTakenFromTheInstanceAndNotTheFolderName(testCase)
-        % License instances are stored in a folder named "licenses". No
-        % capitalization of that folder name gives the type name "License",
-        % so the type must come from the "@type" the instance declares.
-
-            licenses = testCase.instancesOfType("License");
-            testCase.assumeNotEmpty(licenses)
-
-            [~, folderNames] = fileparts(fileparts(licenses.Filepath));
-
-            testCase.verifyTrue(all(folderNames == "licenses"), ...
-                'Expected License instances to be stored in the "licenses" folder.')
-        end
-
-        function testModuleIsResolvedForEveryInstance(testCase)
-        % The module used to be derived from the folder name together with
-        % the type, so it went stale for the same reason.
-
-            testCase.verifyEmpty( ...
-                testCase.InstanceTable(testCase.InstanceTable.Module == "", :))
+            testCase.verifyEqual(sortrows(actual), sortrows(expected))
         end
 
         function testInstancesGroupedInASubfolderCarryTheSubgroup(testCase)
-        % Parcellation entities are split into one subfolder per atlas,
-        % e.g. parcellationEntities/BA-human. The subfolder is the subgroup.
+        % Parcellation entities are grouped per atlas, here in
+        % parcellationEntities/BA-human. That grouping is the subgroup.
 
-            entities = testCase.instancesOfType("ParcellationEntity");
-            testCase.assumeNotEmpty(entities)
+            entity = testCase.instanceNamed("BA-human_BA32");
 
-            testCase.verifyFalse(any(ismissing(entities.Subgroup)), ...
-                'Instances grouped in a subfolder must carry that subgroup.')
+            testCase.verifyEqual(entity.Subgroup, "BA-human")
         end
 
         function testATypeFolderIsNotReportedAsASubgroup(testCase)
-        % Controlled terms are stored one type per subfolder under
-        % terminologies, e.g. terminologies/ageCategory. That subfolder
-        % names a type, not a subgroup. The two cases are told apart by
-        % whether sibling folders hold the same type.
+        % Controlled terms are stored one type per folder under
+        % terminologies. That folder names the type, not a subgroup, and
+        % the two are told apart by whether sibling folders share a type:
+        % ageCategory and biologicalSex do not.
 
-            ageCategories = testCase.instancesOfType("AgeCategory");
-            testCase.assumeNotEmpty(ageCategories)
+            term = testCase.instanceNamed("adult");
 
-            testCase.verifyTrue(all(ismissing(ageCategories.Subgroup)), ...
+            testCase.verifyTrue(ismissing(term.Subgroup), ...
                 'A folder that names a type must not be read as a subgroup.')
         end
 
         function testPluralIRISegmentResolvesToItsType(testCase)
         % A few instance IRIs name their type in the plural. openMINDS
-        % publishes no plural-to-singular mapping, so the library reads the
-        % mapping from the instance documents.
+        % publishes no plural to singular mapping, so the segments are
+        % collected from the instances themselves.
 
-            typeEnum = testCase.InstanceLibrary.getTypeFromIRISegment("licenses");
+            library = testCase.Fixture.Library;
 
-            testCase.verifyEqual(typeEnum, openminds.enum.Types("License"))
+            testCase.verifyEqual(library.getTypeFromIRISegment("licenses"), ...
+                openminds.enum.Types("License"))
+            testCase.verifyEqual(library.getTypeFromIRISegment("contentTypes"), ...
+                openminds.enum.Types("ContentType"))
         end
 
         function testSingularIRISegmentResolvesToItsType(testCase)
-            typeEnum = ...
-                testCase.InstanceLibrary.getTypeFromIRISegment("parcellationEntity");
+            library = testCase.Fixture.Library;
 
-            testCase.verifyEqual(typeEnum, openminds.enum.Types("ParcellationEntity"))
+            testCase.verifyEqual(library.getTypeFromIRISegment("ageCategory"), ...
+                openminds.enum.Types("AgeCategory"))
+            testCase.verifyEqual(library.getTypeFromIRISegment("parcellationEntity"), ...
+                openminds.enum.Types("ParcellationEntity"))
         end
 
-        function testSelectingAModelVersionRebuildsTheLibrary(testCase)
-        % The instance table is typed against the model version on the path
-        % when it was built, so selecting another version must rebuild the
-        % library object already in memory. It must be rebuilt in place,
-        % because other code may hold a reference to the object.
+        function testUnknownIRISegmentIsRejected(testCase)
+        % A segment that names no type in the library must raise this
+        % specific error, so that a caller can tell a bad IRI from a
+        % missing library.
 
-            library = testCase.InstanceLibrary;
-            testCase.assertEqual(library.ModelVersion, openminds.version())
-
-            testCase.applyFixture(ommtest.helper.ModelVersionFixture("v3.0"))
-
-            testCase.verifyEqual(library.ModelVersion, "v3.0", ...
-                'Selecting a model version must rebuild the library in memory.')
-
-            % ModelVersion is stored in the format openminds.version
-            % reports, so getSingleton must recognize the rebuilt library
-            % as current and return the same handle instead of creating a
-            % new one.
-            testCase.verifySameHandle( ...
-                openminds.internal.InstanceLibrary.getSingleton(), library)
+            testCase.verifyError( ...
+                @() testCase.Fixture.Library.getTypeFromIRISegment("notASegment"), ...
+                'OPENMINDS:InstanceLibrary:UnknownIRISegment')
         end
 
-        function testLibraryVersionFollowsTheModelVersion(testCase)
-        % The library publishes one set of instances per model version, and
-        % reading one version's instances against another version's classes
-        % leaves instances untyped, so the library version must equal the
-        % model version.
+        function testADocumentWithoutATypeIsReported(testCase)
+        % A document whose "@type" cannot be read leaves its folder
+        % untyped. That is reported, naming the document, rather than
+        % skipped in silence like a folder that was never there.
 
-            library = testCase.InstanceLibrary;
-            testCase.assumeTrue(ismember("v3.0", library.AvailableVersions))
+            folder = testCase.Fixture.Folder;
+            damagedFolder = fullfile(folder, "latest", "damaged");
+            mkdir(damagedFolder)
+            fileId = fopen(fullfile(damagedFolder, "broken.jsonld"), "w");
+            fprintf(fileId, "{ not a document");
+            fclose(fileId);
 
-            testCase.applyFixture(ommtest.helper.ModelVersionFixture("v3.0"))
+            library = testCase.verifyWarning( ...
+                @() openminds.internal.InstanceLibrary.getSingleton(folder, "Reset", true), ...
+                'OPENMINDS:InstanceLibrary:UnreadableInstance');
 
-            testCase.verifyEqual(library.LibraryVersion, "v3.0")
-
-            % The library is downloaded, and a copy may hold no instances
-            % for this version. That is not a failure of the code under
-            % test.
-            testCase.assumeNotEmpty(library.InstanceTable, ...
-                'The instance library holds no instances for this version.')
-
-            % Check that the instances were read from the v3.0 folder, not
-            % merely labelled v3.0. Whether every instance then resolves to
-            % a type depends on the model classes having been reloaded,
-            % which MATLAB cannot do while objects of those classes exist
-            % in the session, so that is not checked here.
-            readFromVersion = contains(library.InstanceTable.Filepath, ...
-                fullfile(filesep, "v3.0", filesep));
-
-            testCase.verifyTrue(all(readFromVersion), ...
-                'The library must read the instances of the selected version.')
+            broken = library.InstanceTable(library.InstanceTable.InstanceName == "broken", :);
+            testCase.verifyEqual(broken.Type, "", ...
+                'The damaged document must be listed without a type.')
+            testCase.verifyEqual(nnz(library.InstanceTable.Type ~= ""), 6, ...
+                'The other documents must be typed as before.')
         end
 
-        function testModelVersionWithoutInstancesIsReported(testCase)
-        % Model versions 1 and 2 predate the type names the instance library
-        % uses, so no library version can serve them. This must be reported
-        % as a warning rather than look like a library that happens to be
-        % empty.
-        %
-        % The version is switched directly rather than through
-        % ModelVersionFixture because verifyWarning has to wrap the call
-        % that raises the warning.
+        function testAVersionWithoutInstancesIsReported(testCase)
+        % A version folder that holds no instance files reads as an empty
+        % library, with its columns in place, and warns rather than
+        % errors. Selecting a model version rebuilds the library the same
+        % way, and a library that cannot be read must not stop the
+        % selection.
 
-            previousModelVersion = openminds.version();
-            testCase.addTeardown(@openminds.version, previousModelVersion);
+            folder = testCase.Fixture.Folder;
+            rmdir(fullfile(folder, "latest"), "s")
+            mkdir(fullfile(folder, "latest"))
 
-            testCase.verifyWarning(@() openminds.version("v1.0"), ...
-                'OPENMINDS:InstanceLibrary:NoInstancesForModelVersion')
+            library = testCase.verifyWarning( ...
+                @() openminds.internal.InstanceLibrary.getSingleton(folder, "Reset", true), ...
+                'OPENMINDS:InstanceLibrary:InstancesNotFound');
 
-            library = testCase.InstanceLibrary;
-            testCase.verifyTrue(ismissing(library.LibraryVersion), ...
-                'No library version can be read for this model version.')
-
-            % The table keeps its columns, so filtering it returns no rows
-            % instead of erroring.
             testCase.verifyEqual(height(library.InstanceTable), 0)
             testCase.verifyEqual( ...
                 string(library.InstanceTable.Properties.VariableNames), ...
                 ["InstanceName", "Type", "Module", "Subgroup", "Filepath"])
-        end
-
-        function testLibraryLocationSurvivesAWorkingDirectoryChange(testCase)
-        % The location is built under userpath. On a CI runner userpath is
-        % empty, because $HOME/Documents does not exist, and a path built
-        % under an empty userpath is relative. The library is read again on
-        % every model version change, so the location must stay valid after
-        % the working directory changes.
-
-            library = testCase.InstanceLibrary;
-            testCase.assumeTrue(isfolder(library.InstanceLibraryLocation))
-
-            testCase.applyFixture( ...
-                matlab.unittest.fixtures.WorkingFolderFixture)
-
-            testCase.verifyTrue(isfolder(library.InstanceLibraryLocation), ...
-                'The location must still name the library from another folder.')
         end
 
         function testAMissingLocationIsRejectedByName(testCase)
@@ -199,7 +141,7 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
         % before the library in use is touched, so that library survives
         % the mistake.
 
-            library = testCase.InstanceLibrary;
+            fixture = testCase.Fixture;
 
             testCase.verifyError( ...
                 @() openminds.internal.InstanceLibrary.getSingleton( ...
@@ -207,7 +149,8 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
                 'OPENMINDS:InstanceLibrary:LocationNotFound')
 
             testCase.verifySameHandle( ...
-                openminds.internal.InstanceLibrary.getSingleton(), library)
+                openminds.internal.InstanceLibrary.getSingleton(fixture.Folder), ...
+                fixture.Library)
         end
 
         function testAFolderWithoutVersionsIsRejectedByName(testCase)
@@ -217,7 +160,7 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
 
             import matlab.unittest.fixtures.TemporaryFolderFixture
 
-            library = testCase.InstanceLibrary;
+            fixture = testCase.Fixture;
             emptyFolder = testCase.applyFixture(TemporaryFolderFixture).Folder;
 
             testCase.verifyError( ...
@@ -225,24 +168,34 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
                 'OPENMINDS:InstanceLibrary:LocationNotFound')
 
             testCase.verifySameHandle( ...
-                openminds.internal.InstanceLibrary.getSingleton(), library)
+                openminds.internal.InstanceLibrary.getSingleton(fixture.Folder), ...
+                fixture.Library)
         end
 
-        function testUnknownIRISegmentIsRejected(testCase)
-        % A segment that names no type in the library must raise this
-        % specific error, so that a caller can tell a bad IRI from a
-        % missing library.
+        function testLibraryLocationSurvivesAWorkingDirectoryChange(testCase)
+        % The location is built under userpath. On a CI runner userpath is
+        % empty, because $HOME/Documents does not exist, and a path built
+        % under an empty userpath is relative. The library is read again on
+        % every model version change, so the location must stay valid after
+        % the working directory changes.
 
-            testCase.verifyError( ...
-                @() testCase.InstanceLibrary.getTypeFromIRISegment("notASegment"), ...
-                'OPENMINDS:InstanceLibrary:UnknownIRISegment')
+            library = testCase.Fixture.Library;
+            testCase.assertTrue(isfolder(library.InstanceLibraryLocation))
+
+            testCase.applyFixture( ...
+                matlab.unittest.fixtures.WorkingFolderFixture)
+
+            testCase.verifyTrue(isfolder(library.InstanceLibraryLocation), ...
+                'The location must still name the library from another folder.')
         end
     end
 
     methods (Access = private)
-        function instances = instancesOfType(testCase, typeName)
-            instances = testCase.InstanceTable( ...
-                testCase.InstanceTable.Type == typeName, :);
+        function row = instanceNamed(testCase, instanceName)
+            instanceTable = testCase.Fixture.Library.InstanceTable;
+            row = instanceTable(instanceTable.InstanceName == instanceName, :);
+            testCase.assertEqual(height(row), 1, ...
+                sprintf('Expected one instance named "%s" in the test library.', instanceName))
         end
     end
 end
