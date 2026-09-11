@@ -141,15 +141,26 @@ classdef TypesEnumeration
             % does not have is dropped by fromStruct and reported by the
             % deserializer; a property whose declaration changed fails on
             % assignment and is reported as an unreadable node.
-            knownBaseIRIs = openminds.constant.BaseIRI("v1") + "/" | ...
-                            openminds.constant.BaseIRI("v4") + "/";
+            %
+            % The base IRI of each namespace is fixed and does not depend
+            % on the active model version, so both are resolved once and
+            % kept in persistent variables. Resolving them on every call
+            % dominated the cost of this function, which runs once per
+            % node of every document read: openminds.constant.BaseIRI
+            % validates its version argument by listing the installed
+            % model versions from disk.
+            persistent knownBaseIRIs knownNamespace
+            if isempty(knownBaseIRIs)
+                knownBaseIRIs = [openminds.constant.BaseIRI("v1"), ...
+                                 openminds.constant.BaseIRI("v4")];
+                knownNamespace = knownBaseIRIs(1) + "/" | knownBaseIRIs(2) + "/";
+            end
 
-            isKnownNamespace = startsWith(typeName, knownBaseIRIs);
+            isKnownNamespace = startsWith(typeName, knownNamespace);
             if ~all(isKnownNamespace)
                 error('OPENMINDS_MATLAB:Types:InvalidAtType', ...
                     'Expected @type to start with "%s" or "%s". Got "%s".', ...
-                    openminds.constant.BaseIRI("v1"), ...
-                    openminds.constant.BaseIRI("v4"), ...
+                    knownBaseIRIs(1), knownBaseIRIs(2), ...
                     typeName(find(~isKnownNamespace, 1)))
             end
 

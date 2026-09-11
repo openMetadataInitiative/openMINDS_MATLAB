@@ -101,8 +101,9 @@ jobs:
           OPENMINDS_PYTHON: ${{ runner.temp }}/openminds-python/bin/python
         with:
           command: |
+            addpath(genpath("tools"));
             doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
-            addpath(genpath("tools")); testToolbox("CreateBadge", doCreateBadge)
+            testToolbox("CreateBadge", doCreateBadge)
 
       # Commit updated SVG badges for the issues and tests (if changed).
       # Push events only, so badge commits land on main and nowhere else:

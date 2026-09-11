@@ -23,12 +23,6 @@ function setup(options)
     end
     
     % Todo: Install dependencies
-    
-    if isunix && strcmp(getenv('GITHUB_ACTIONS'), 'true')
-        if isempty(userpath)
-            userpath(pwd)
-        end
-    end
 
     % Download latest version of the openMINDS controlled instances library
     openminds.internal.setup.downloadControlledInstances()

@@ -66,5 +66,45 @@ classdef EnumerationTest < matlab.unittest.TestCase
             testCase.verifyError(@() openminds.enum.Types.fromAtType("invalid://uri"), ...
                 'OPENMINDS_MATLAB:Types:InvalidAtType');
         end
+
+        function testFromAtTypeAcceptsBothNamespaces(testCase)
+        % Documents written for an older model use the EBRAINS namespace
+        % and newer ones use the om-i namespace. Both name the type in
+        % their last segment, and both must resolve against the active
+        % model version.
+
+            for baseIRI = [openminds.constant.BaseIRI("v1"), ...
+                           openminds.constant.BaseIRI("v4")]
+                testCase.verifyEqual( ...
+                    openminds.enum.Types.fromAtType(baseIRI + "/Person"), ...
+                    openminds.enum.Types.Person, ...
+                    sprintf('Expected "%s" to be an accepted namespace.', baseIRI))
+            end
+        end
+
+        function testFromAtTypeDoesNotRereadTheModelVersionsPerCall(testCase)
+        % fromAtType runs once per node of every document read. It used to
+        % call openminds.constant.BaseIRI for both namespaces on every
+        % call, and each of those calls listed the installed model versions
+        % from disk, which cost more than the rest of the function. The
+        % bound is far above what 1000 calls need with the base IRIs cached
+        % and far below what re-reading the versions 1000 times costs.
+
+            MAX_SECONDS_FOR_1000_CALLS = 2;
+
+            atType = openminds.constant.BaseIRI("v4") + "/Person";
+            openminds.enum.Types.fromAtType(atType); % Exclude any warm-up
+
+            elapsed = timeit(@() callFromAtType(atType, 1000));
+
+            testCase.verifyLessThan(elapsed, MAX_SECONDS_FOR_1000_CALLS, ...
+                'fromAtType is resolving the base IRIs on every call again.')
+        end
+    end
+end
+
+function callFromAtType(atType, numCalls)
+    for i = 1:numCalls
+        openminds.enum.Types.fromAtType(atType);
     end
 end
