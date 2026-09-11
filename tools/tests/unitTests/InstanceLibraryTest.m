@@ -116,9 +116,10 @@ classdef InstanceLibraryTest < matlab.unittest.TestCase
 
         function testAVersionWithoutInstancesIsReported(testCase)
         % A version folder that holds no instance files reads as an empty
-        % library, with its columns in place, and says so. Nothing here
-        % may fail: selecting a model version rebuilds the library, and a
-        % library that cannot be read is no reason for that to fail.
+        % library, with its columns in place, and warns rather than
+        % errors. Selecting a model version rebuilds the library the same
+        % way, and a library that cannot be read must not stop the
+        % selection.
 
             folder = testCase.Fixture.Folder;
             rmdir(fullfile(folder, "latest"), "s")
