@@ -1,4 +1,41 @@
 function singletonObject = getSingleton(folderPath, options)
+% getSingleton - Get the instance library of this session
+%
+%   Syntax:
+%       library = openminds.internal.InstanceLibrary.getSingleton()
+%       returns the one instance library of the session, read from its
+%       default location under the user folder. The library is created
+%       on first use, and that first use downloads it if it is not there
+%       yet.
+%
+%       library = getSingleton(folderPath) reads the library at
+%       folderPath instead. That folder has to hold a copy of the
+%       library already, because only the default location is
+%       downloaded into.
+%
+%       library = getSingleton(..., Reset=true) discards the library in
+%       use and reads it again.
+%
+%       library = getSingleton(..., UseGit=true) leaves retrieving the
+%       library to the caller: nothing is downloaded. The git pull the
+%       name refers to is not implemented.
+%
+%   Input Arguments:
+%       folderPath - Folder holding one subfolder per library version,
+%       such as "v3.0" and "latest". Defaults to the instance folder
+%       under the user folder.
+%
+%   Output Arguments:
+%       singletonObject - The openminds.internal.InstanceLibrary of the
+%       session. The same handle is returned on every call while the
+%       library stays current. It is replaced, and the previous handle
+%       deleted, when the location asked for differs from the one in
+%       use, when the model version is found to have changed since the
+%       library was read, or on Reset=true.
+%
+%   See also InstanceLibrary, notifyModelVersionChanged,
+%   openminds.internal.listControlledInstances
+
     arguments
         folderPath (1,1) string = ...
             openminds.internal.constants.Paths.LocalInstanceFolder;
