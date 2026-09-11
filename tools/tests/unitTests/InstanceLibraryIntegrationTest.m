@@ -90,15 +90,19 @@ classdef InstanceLibraryIntegrationTest < matlab.unittest.TestCase
                 'The instance library holds no instances for this version.')
 
             % Check that the instances were read from the v3.0 folder, not
-            % merely labelled v3.0. Whether every instance then resolves to
-            % a type depends on the model classes having been reloaded,
-            % which MATLAB cannot do while objects of those classes exist
-            % in the session, so that is not checked here.
+            % merely labelled v3.0.
             readFromVersion = contains(library.InstanceTable.Filepath, ...
                 fullfile(filesep, "v3.0", filesep));
 
             testCase.verifyTrue(all(readFromVersion), ...
                 'The library must read the instances of the selected version.')
+
+            % The instances must also be typed against that version's
+            % classes. Selecting a version releases the type registry, so
+            % the classes reload and every instance resolves to a type.
+            testCase.verifyEmpty( ...
+                library.InstanceTable(library.InstanceTable.Type == "", :), ...
+                'Every instance of the selected version must resolve to a type.')
         end
 
         function testModelVersionWithoutInstancesIsReported(testCase)
