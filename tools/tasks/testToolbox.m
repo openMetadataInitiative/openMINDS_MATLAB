@@ -5,9 +5,11 @@ function testToolbox(varargin)
     ommtools.installMatBox("commit")
     projectRootDirectory = ommtools.projectdir();
 
-    % Before the toolbox picks a folder of its own. A runner has a better
-    % one to offer, and this is the last point that knows we are on one.
+    % The test suite needs the userpath to be set. The function below sets
+    % the userpath if this is run on a GitHub runner where userpath is
+    % empty by default
     ensureUserpath()
+    
     % matbox.installRequirements(projectRootDirectory) % No requirements...
 
     % Use the openMINDS_MATLAB setup to download controlled instances

@@ -54,9 +54,10 @@ classdef ValidatorsTest < matlab.unittest.TestCase
 
         function testParseInstanceIRIResolvesAPluralTypeSegment(testCase, pluralIRI)
         % A few instance IRIs name their type in the plural. openMINDS
-        % publishes no plural to singular mapping, so these are resolved
+        % publishes no plural-to-singular mapping, so these are resolved
         % through the instance library, which reads the type each instance
-        % declares. Splitting the IRI alone used to fail here.
+        % declares. Resolving the segment as a type name alone used to fail
+        % here.
 
             S = openminds.utility.parseInstanceIRI(pluralIRI{1});
 
@@ -65,8 +66,8 @@ classdef ValidatorsTest < matlab.unittest.TestCase
 
         function testParseInstanceIRIRejectsAnUnknownTypeSegment(testCase)
         % A segment that names neither a type nor a folder of the instance
-        % library has to be reported as such, rather than as a failure to
-        % reach the library.
+        % library must raise this specific error, not an error about
+        % reaching the library.
 
             testCase.verifyError(...
                 @() openminds.utility.parseInstanceIRI( ...

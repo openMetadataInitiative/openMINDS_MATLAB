@@ -9,8 +9,8 @@ function singletonObject = getSingleton(folderPath, options)
 
     import openminds.internal.InstanceLibrary
 
-    % Resolved the way the library stores its location, so that the two
-    % compare equal below.
+    % InstanceLibraryLocation is stored as an absolute path, so the
+    % requested path is made absolute before the two are compared.
     folderPath = openminds.internal.utility.resolveAbsolutePath(folderPath);
 
     SINGLETON_NAME = InstanceLibrary.SINGLETON_NAME;
@@ -23,9 +23,8 @@ function singletonObject = getSingleton(folderPath, options)
             delete(singletonObject) % Reset singleton
             singletonObject = [];
         elseif ~strcmp(currentModelVersion, singletonObject.ModelVersion)
-            % Instances are typed against the model version that was on the
-            % path when the table was built, so selecting another version
-            % invalidates it.
+            % The table was typed against another model version, so it is
+            % stale.
             delete(singletonObject) % Reset singleton
             singletonObject = [];
         elseif options.Reset

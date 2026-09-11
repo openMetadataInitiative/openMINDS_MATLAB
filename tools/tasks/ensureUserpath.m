@@ -1,5 +1,5 @@
 function userFolder = ensureUserpath()
-% ensureUserpath - Give MATLAB a user folder suited to where this is running
+% ensureUserpath - Set userpath to the runner's temporary folder on GitHub Actions
 %
 %   Syntax:
 %       ensureUserpath()
@@ -7,20 +7,20 @@ function userFolder = ensureUserpath()
 %       userFolder = ensureUserpath()
 %
 %   Output Arguments:
-%       userFolder - The user folder in use once this has run
+%       userFolder - The user folder in use after this call
 %
-%   The toolbox keeps the schemas and the instance library it downloads
-%   under MATLAB's user folder, and picks a temporary folder when MATLAB
-%   has none. On a continuous integration runner there is a better answer
-%   than that, and it is one only the runner knows: a folder of its own,
-%   removed with the job and outside the checked out repository. Knowing
-%   which runner we are on is not the toolbox's business, so it lives here
-%   rather than shipping with it.
+%   The toolbox stores the schemas and the instance library it downloads
+%   under userpath, and falls back to the system temporary folder when
+%   userpath is empty. On a GitHub Actions runner userpath is empty because
+%   $HOME/Documents does not exist, and RUNNER_TEMP is a better fallback
+%   than the system temporary folder: it belongs to the job, is removed
+%   when the job ends, and is outside the checked out repository.
+%   Detecting the runner is a CI concern, so this lives in tools rather
+%   than in the toolbox.
 %
-%   Anywhere else it does nothing and leaves the choice to the toolbox,
-%   which makes it when it first needs somewhere to write. This runs before
-%   the toolbox is on the search path, so it cannot ask the toolbox
-%   anything, and has nothing better to tell it either.
+%   This function does nothing when userpath is already usable, or when
+%   not running on GitHub Actions. It runs before the toolbox is on the
+%   search path, so it must not call toolbox functions.
 %
 %   See also openminds.internal.setup.ensureUserpath
 
@@ -36,14 +36,17 @@ function userFolder = ensureUserpath()
         return
     end
 
+    % An empty userpath on a GitHub runner triggers this warning when
+    % userpath is called. That is the situation this function exists for,
+    % so the warning is silenced around the call.
     oldWarningState = warning('off', 'MATLAB:mpath:UnableToLocatePersonalFolder');
     warningCleanup = onCleanup(@() warning(oldWarningState));
 
     userpath( char(runnerFolder) )
 
-    % Read back rather than kept: MATLAB normalizes what it stores, and a
-    % folder named one way now and another way on the next call reads as
-    % two different folders.
+    % Read the folder back instead of returning runnerFolder. MATLAB
+    % normalizes the path it stores, and every call must return the same
+    % string for the same folder.
     userFolder = string( userpath() );
 
     if ~nargout
@@ -52,10 +55,10 @@ function userFolder = ensureUserpath()
 end
 
 function folderPath = runnerUserFolder()
-% runnerUserFolder - The folder a GitHub Actions runner offers, if any
+% runnerUserFolder - The RUNNER_TEMP folder of a GitHub Actions runner
 %
-%   Missing when this is not running on a runner, or when the runner did
-%   not name a folder after all.
+%   Returns missing when not running on GitHub Actions, or when
+%   RUNNER_TEMP is unset or names a folder that does not exist.
 
     folderPath = missing;
 

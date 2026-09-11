@@ -141,12 +141,14 @@ classdef TypesEnumeration
             % does not have is dropped by fromStruct and reported by the
             % deserializer; a property whose declaration changed fails on
             % assignment and is reported as an unreadable node.
-            % The base IRI a version maps to is fixed, and does not depend
-            % on which model version is active, so it is looked up once.
-            % Looking it up per call dominated the cost of this function,
-            % which runs once per node of every document read: each lookup
-            % validates its version argument by listing the installed model
-            % versions from disk.
+            %
+            % The base IRI of each namespace is fixed and does not depend
+            % on the active model version, so both are resolved once and
+            % kept in persistent variables. Resolving them on every call
+            % dominated the cost of this function, which runs once per
+            % node of every document read: openminds.constant.BaseIRI
+            % validates its version argument by listing the installed
+            % model versions from disk.
             persistent knownBaseIRIs knownNamespace
             if isempty(knownBaseIRIs)
                 knownBaseIRIs = [openminds.constant.BaseIRI("v1"), ...

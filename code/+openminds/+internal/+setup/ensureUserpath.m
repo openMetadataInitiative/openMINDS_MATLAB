@@ -1,5 +1,5 @@
 function userFolder = ensureUserpath()
-% ensureUserpath - Give MATLAB a user folder when it has none
+% ensureUserpath - Set userpath to the temporary folder if it is unusable
 %
 %   Syntax:
 %       openminds.internal.setup.ensureUserpath()
@@ -7,58 +7,60 @@ function userFolder = ensureUserpath()
 %       userFolder = openminds.internal.setup.ensureUserpath()
 %
 %   Output Arguments:
-%       userFolder - The user folder in use once this has run
+%       userFolder - The user folder in use after this call
 %
-%   The toolbox keeps the schemas and the instance library it downloads
-%   under MATLAB's user folder. MATLAB has none when its default user
-%   folder does not exist, which leaves userpath empty and every path built
-%   under it relative, and a relative path stops naming the same folder as
-%   soon as anything changes the working directory.
+%   The toolbox stores the schemas and the instance library it downloads
+%   under MATLAB's user folder, which userpath returns. userpath is empty
+%   on Linux when $HOME/Documents does not exist, which is the case on CI
+%   runners. A path built under an empty userpath is relative, and a
+%   relative path points somewhere else as soon as the working directory
+%   changes.
 %
-%   The toolbox calls this itself the first time it needs one of those
-%   paths. Anything that knows a better folder than the temporary one can
-%   set userpath before then, and this leaves it alone.
+%   If userpath is empty or names a folder that does not exist, this
+%   function sets it to the system temporary folder and warns. Otherwise
+%   it does nothing. The toolbox calls it the first time it resolves one
+%   of its download folders. Code that has a better folder to offer, such
+%   as a CI task, can set userpath before then.
 %
 %   See also openminds.internal.constants.Paths
 
     userFolder = string( userpath() );
 
-    % A user folder that is set but absent leaves the paths built under it
-    % just as unusable as an empty userpath does.
+    % A userpath that names a folder that does not exist is as unusable as
+    % an empty one: nothing can be written under it.
     if userFolder ~= "" && isfolder(userFolder)
         return
     end
 
     userpath( char(fallbackUserFolder()) )
 
-    % Read back rather than kept: MATLAB normalizes what it stores, and a
-    % folder named one way now and another way on the next call reads as
-    % two different folders.
+    % Read the folder back instead of returning the fallback as given.
+    % MATLAB normalizes the path it stores (tempdir ends in a separator,
+    % the stored value does not), and every call must return the same
+    % string for the same folder.
     userFolder = string( userpath() );
 
-    % Said out loud, and with an identifier, because this decides where
-    % tens of megabytes are written on someone's machine. It is said once:
-    % the folders built on it are resolved once per session.
+    % Warn, with an identifier, because this decides where tens of
+    % megabytes are downloaded. The warning fires once per session: the
+    % folders built on the user folder are resolved once and cached.
     warning('OPENMINDS:Setup:NoUserFolder', ...
-        ['MATLAB has no user folder, so openMINDS will keep the files it ', ...
-        'downloads in "%s". That folder is temporary and may be cleared, ', ...
-        'which means downloading them again. To keep them somewhere ', ...
-        'permanent, call userpath(folder) with a folder of your choosing ', ...
-        'before using openMINDS.'], userFolder)
+        ['MATLAB''s userpath is empty or names a folder that does not ', ...
+        'exist, so openMINDS will keep the files it downloads in "%s". ', ...
+        'That folder is temporary and may be cleared, which means ', ...
+        'downloading them again. To keep them somewhere permanent, call ', ...
+        'userpath(folder) with a folder of your choosing before using ', ...
+        'openMINDS.'], userFolder)
 end
 
 function userFolder = fallbackUserFolder()
-% fallbackUserFolder - A folder that exists and can be written to
+% fallbackUserFolder - Folder to use when userpath is unusable
 %
-%   The temporary folder, rather than the working directory. Neither is a
-%   folder anyone asked for, but the working directory is as often as not a
-%   repository or a project folder, and writing tens of megabytes into one
-%   of those is a worse surprise than writing them somewhere that may be
-%   cleared. It would also be recorded as the user folder for good, naming
-%   a directory that was only ever where MATLAB happened to be standing.
-%
-%   Somewhere that knows better can set a user folder before the toolbox is
-%   used, and this then leaves it alone.
+%   The system temporary folder, not the working directory. The working
+%   directory is often a repository or a project folder, and downloading
+%   tens of megabytes into one of those is worse than downloading into a
+%   folder that may be cleared. Setting userpath also persists across
+%   sessions, so the working directory would stay the user folder for
+%   good.
 
     userFolder = string( tempdir() );
 end

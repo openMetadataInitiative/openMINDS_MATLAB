@@ -92,10 +92,6 @@ jobs:
       # requests run a representative sample instead. The full sweep runs
       # on push to main, which is where the openMINDS pipeline lands
       # regenerated type classes, and on the weekly schedule.
-      #
-      # MATLAB's default user folder does not exist on a runner, so
-      # testToolbox gives it one before the toolbox picks a folder of its
-      # own, which the toolbox does under the temporary folder.
       - name: Run tests
         if: always()
         uses: matlab-actions/run-command@v3

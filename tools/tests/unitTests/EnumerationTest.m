@@ -70,8 +70,8 @@ classdef EnumerationTest < matlab.unittest.TestCase
         function testFromAtTypeAcceptsBothNamespaces(testCase)
         % Documents written for an older model use the EBRAINS namespace
         % and newer ones use the om-i namespace. Both name the type in
-        % their last segment, and both have to resolve whichever model
-        % version is active.
+        % their last segment, and both must resolve against the active
+        % model version.
 
             for baseIRI = [openminds.constant.BaseIRI("v1"), ...
                            openminds.constant.BaseIRI("v4")]
@@ -84,11 +84,11 @@ classdef EnumerationTest < matlab.unittest.TestCase
 
         function testFromAtTypeDoesNotRereadTheModelVersionsPerCall(testCase)
         % fromAtType runs once per node of every document read. It used to
-        % resolve the base IRI of both namespaces on every call, and each
-        % of those listed the installed model versions from disk, which
-        % cost more than everything else the function did together. The
-        % bound is far above what the function needs and far below what
-        % re-reading the versions would cost.
+        % call openminds.constant.BaseIRI for both namespaces on every
+        % call, and each of those calls listed the installed model versions
+        % from disk, which cost more than the rest of the function. The
+        % bound is far above what 1000 calls need with the base IRIs cached
+        % and far below what re-reading the versions 1000 times costs.
 
             MAX_SECONDS_FOR_1000_CALLS = 2;
 

@@ -9,18 +9,18 @@ classdef InstanceLibrary < handle
         InstanceLibraryLocation (1,1) string
         InstanceTable table
 
-        % ModelVersion - Model version the instance table was resolved
-        % against. Instances name their type, and a type is only
-        % meaningful for the model version that declares it, so the table
-        % has to be rebuilt when another version is put on the path.
+        % ModelVersion - Model version the instance table was built
+        % against. Instance types are resolved against the model classes
+        % on the search path, so the table must be rebuilt when another
+        % model version is selected.
         ModelVersion (1,1) string = ""
 
         % LibraryVersion - Version of the instance library that was read.
-        % It follows the model version and is not selected on its own: the
-        % library publishes one set of instances per model version, and
-        % reading one version's instances against another's types is what
-        % leaves instances untyped. It is missing for a model version the
-        % library publishes no instances for.
+        % The library publishes one set of instances per model version, so
+        % this equals ModelVersion when the library has instances for that
+        % version and is missing otherwise. It is never chosen on its own:
+        % reading one version's instances against another version's
+        % classes leaves instances untyped.
         LibraryVersion (1,1) string = missing
     end
 
@@ -32,11 +32,10 @@ classdef InstanceLibrary < handle
         UseGit (1,1) logical = false
         GitRepo
 
-        % Index from the IRI path segment that names a type, e.g.
-        % "licenses" or "biologicalSex", to the name of that type. Most
-        % segments name the type directly, but a few are plural and
-        % openMINDS publishes no plural to singular mapping, so the
-        % segments are collected from the instance documents themselves.
+        % Maps the IRI path segment that names a type, e.g. "licenses" or
+        % "biologicalSex", to the type name. A few segments are plural and
+        % openMINDS publishes no plural-to-singular mapping, so the mapping
+        % is read from the "@id" and "@type" of the instance documents.
         IRISegmentIndex table
     end
 
@@ -53,11 +52,11 @@ classdef InstanceLibrary < handle
         %   Input:
         %       modelVersion : The model version that was just selected
         %
-        %   Instances are typed against the model version that was on the
-        %   search path when the table was built, so selecting another
-        %   version invalidates the table. Only a library that already
-        %   exists is rebuilt: creating one here would download the
-        %   instance repository as a side effect of selecting a version.
+        %   The instance table is typed against the model classes on the
+        %   search path when it was built, so selecting another model
+        %   version makes it stale. Only a library that already exists is
+        %   rebuilt. Creating one here would download the instance
+        %   repository as a side effect of selecting a version.
 
             arguments
                 modelVersion (1,1) string
@@ -74,10 +73,9 @@ classdef InstanceLibrary < handle
                 singletonObject.updateInstanceTable( ...
                     normalizeModelVersion(modelVersion))
             catch ME
-                % Selecting a model version is a change to the search path.
-                % The instance library is a separate resource that may be
-                % absent or incomplete, and failing to read it is not a
-                % reason for the version not to be selected.
+                % The instance library may be absent or incomplete. That
+                % must not stop the model version from being selected, so
+                % the failure is reported as a warning instead of an error.
                 warning('OPENMINDS:InstanceLibrary:RebuildFailed', ...
                     ['Failed to read the openMINDS instance library for ', ...
                     'model version "%s". Reason: %s'], modelVersion, ME.message)
@@ -99,8 +97,8 @@ classdef InstanceLibrary < handle
 
     methods % Set/get
         function set.InstanceLibraryLocation(obj, value)
-            % Kept for the life of the library and read again on every
-            % rebuild, so it must not depend on the working directory.
+            % Stored as an absolute path. The location is read again on
+            % every rebuild, so it must not depend on the working directory.
             obj.InstanceLibraryLocation = ...
                 openminds.internal.utility.resolveAbsolutePath(value);
             obj.postSetInstanceLibraryLocation()
@@ -122,9 +120,9 @@ classdef InstanceLibrary < handle
         %   Output:
         %       typeEnum : The openminds.enum.Types member for that segment
         %
-        %   Most segments name their type directly and do not need this
-        %   lookup. It exists for the few that are plural, which openMINDS
-        %   publishes no mapping for.
+        %   Most segments are the singular type name and resolve without
+        %   this lookup. It exists for the few plural segments, for which
+        %   openMINDS publishes no mapping.
 
             arguments
                 obj (1,1) openminds.internal.InstanceLibrary
@@ -150,10 +148,11 @@ classdef InstanceLibrary < handle
             arguments
                 obj (1,1) openminds.internal.InstanceLibrary
 
-                % The version the instances are typed against. It is passed
-                % in when the model version has just changed, because the
-                % version derived from the search path is briefly cached
-                % and may still name the previous one.
+                % The model version to type the instances against.
+                % notifyModelVersionChanged passes it explicitly because
+                % openminds.version caches its result for one second and
+                % may still return the previous version right after a
+                % switch.
                 modelVersion (1,1) string = openminds.version()
             end
 
@@ -167,10 +166,11 @@ classdef InstanceLibrary < handle
                     obj.readInstanceLibrary(rootFolder, libraryVersion, modelVersion);
             end
 
-            % Assigned last, and together. A read that fails part way must
-            % not leave the version saying one thing and the table another,
-            % because the version is what tells getSingleton the table is
-            % current.
+            % All four are assigned after the read has succeeded, so that a
+            % read that errors part way leaves the previous version and
+            % table in place together. getSingleton compares ModelVersion
+            % to decide whether the table is current, so the version must
+            % never be updated ahead of the table.
             obj.ModelVersion = modelVersion;
             obj.LibraryVersion = libraryVersion;
             obj.InstanceTable = instanceTable;
@@ -200,12 +200,11 @@ classdef InstanceLibrary < handle
         function libraryVersion = resolveLibraryVersion(obj, modelVersion)
         % resolveLibraryVersion - Pick the library version for a model version
         %
-        %   Instances are typed against the metadata model, so the library
-        %   version follows the model version. The library does not publish
-        %   instances for every model version: versions 1 and 2 of the
-        %   model predate the type names the library is written against,
-        %   and no other version of the library can stand in for them. A
-        %   version without instances is reported here and returned missing.
+        %   The library version equals the model version. The library
+        %   publishes no instances for model versions 1 and 2, which predate
+        %   the type names the library uses, and no other library version
+        %   can substitute for them. For such a version this warns and
+        %   returns missing.
 
             if ismember(modelVersion, obj.AvailableVersions)
                 libraryVersion = modelVersion;
@@ -215,9 +214,9 @@ classdef InstanceLibrary < handle
             libraryVersion = missing;
 
             if isempty(obj.AvailableVersions)
-                % The library is not on disk at all. Retrieving it has
-                % already reported why, and the versions it publishes
-                % cannot be named from here.
+                % No library versions are on disk, so there is nothing to
+                % list in a warning. postSetInstanceLibraryLocation has
+                % already warned that the download failed.
                 return
             end
 
@@ -267,14 +266,13 @@ classdef InstanceLibrary < handle
                 obj, filePaths, rootFolder, libraryVersion, modelVersion)
         % createInstanceTable - Build the instance table for a set of files
         %
-        %   The openMINDS type of an instance is taken from the "@type" the
-        %   instance document declares, not from the name of the folder the
-        %   document is stored in. Folder names are pluralized type names
-        %   and upstream renames them whenever a type is renamed, so they
-        %   are not a source that stays correct across model versions.
+        %   The type of an instance is read from the "@type" the instance
+        %   document declares, not derived from the folder name. Folder
+        %   names are pluralized type names that upstream renames whenever
+        %   a type is renamed, so typing by folder name goes stale.
         %
         %   The versions are passed in rather than read from the object,
-        %   which is not updated until the table has been built.
+        %   because the object is not updated until the table is built.
 
             arguments
                 obj (1,1) openminds.internal.InstanceLibrary
@@ -286,8 +284,8 @@ classdef InstanceLibrary < handle
 
             [folderPaths, instanceNames] = fileparts(filePaths);
 
-            % All instances in a folder share one type, so one document per
-            % folder is enough to type the whole library.
+            % All instances in a folder have the same type, so reading one
+            % document per folder types the whole library.
             [uniqueFolderPaths, firstInFolder, folderIndex] = unique(folderPaths);
             folderInfo = obj.resolveFolderInfo( ...
                 filePaths(firstInFolder), libraryVersion, modelVersion);
@@ -315,9 +313,10 @@ classdef InstanceLibrary < handle
         %
         %   Output:
         %       folderInfo : Table with the type name, module name and IRI
-        %       path segment for each folder. A folder whose document
-        %       cannot be read, or whose type the model does not declare,
-        %       leaves its row empty. Each is reported once.
+        %       path segment for each folder. The row is empty for a folder
+        %       whose document cannot be read or whose type the loaded
+        %       model classes do not declare. Each case is reported in one
+        %       warning.
 
             arguments
                 ~
@@ -362,11 +361,12 @@ classdef InstanceLibrary < handle
                     numel(unreadableFilePaths), unreadableFilePaths(1))
             end
 
-            % The library version follows the model version, so a type the
-            % library holds and the classes in memory do not declare means
-            % either the library is ahead of the model, or the classes in
-            % memory belong to a version selected earlier and something
-            % still holds them. Which of the two cannot be told from here.
+            % The library version equals the model version, so a type that
+            % the library holds but the loaded classes do not declare has
+            % one of two causes: the library is newer than the generated
+            % model classes, or MATLAB still holds the classes of a
+            % previously selected model version because something in the
+            % session references them. The two cannot be told apart here.
             if ~isempty(unresolvedTypeIRIs)
                 warning('OPENMINDS:InstanceLibrary:UnresolvedInstanceType', ...
                     ['Version "%s" of the openMINDS instance library holds ', ...
@@ -388,8 +388,8 @@ classdef InstanceLibrary < handle
         function iriSegmentIndex = createIRISegmentIndex(~, folderInfo)
         % createIRISegmentIndex - Index IRI path segments by type name
         %
-        %   Several folders can share one type, and a folder whose type
-        %   could not be resolved contributes nothing to resolve with.
+        %   Several folders can hold the same type, so the rows are made
+        %   unique. Folders whose type could not be resolved are left out.
 
             isResolved = folderInfo.TypeName ~= "" & ~ismissing(folderInfo.IRISegment);
             iriSegmentIndex = unique( ...
@@ -401,9 +401,9 @@ end
 function instanceFilePaths = listInstanceFiles(rootFolder)
 % listInstanceFiles - List the instance files under a library version folder
 %
-%   Returns empty when there are none. The caller reports that, because a
-%   library that cannot be read is not a reason for selecting a model
-%   version to fail.
+%   Returns an empty string array when there are none. The caller warns
+%   rather than errors in that case, so that an unreadable library does
+%   not stop a model version from being selected.
 
     instanceFileFormat = ".jsonld";
 
@@ -421,12 +421,13 @@ end
 function subGroups = resolveSubgroups(folderPaths, typeNames, rootFolder)
 % resolveSubgroups - Resolve the subgroup name for each folder
 %
-%   Instances of one type are sometimes grouped in a subfolder, as in
-%   parcellationEntities/BA-human. Such a subfolder is recognized by its
-%   siblings holding the same type, which sets it apart from a folder that
-%   groups several types, as terminologies does. Neither shape is declared
-%   anywhere, so it is derived from the types resolved above rather than
-%   from folder names.
+%   Instances of one type are sometimes split into subfolders, e.g.
+%   parcellationEntities/BA-human, where BA-human is a subgroup. Other
+%   folders hold one type per subfolder, e.g. terminologies/ageCategory,
+%   where ageCategory is a type and not a subgroup. Neither layout is
+%   declared anywhere, so the two are told apart by the resolved types: a
+%   subfolder is a subgroup when all its sibling folders hold the same
+%   type.
 
     arguments
         folderPaths (:,1) string
@@ -457,9 +458,9 @@ end
 function [instanceTable, iriSegmentIndex] = emptyInstanceTables()
 % emptyInstanceTables - The tables of a library with no instances to read
 %
-%   A model version the library publishes no instances for still leaves
-%   tables that can be filtered and looked up in, rather than tables with
-%   no columns to filter on.
+%   Returned when a model version has no instances. The tables have their
+%   columns and no rows, so callers can filter and index them without
+%   special-casing an empty library.
 
     numColumns = numel(instanceTableVariableNames());
     instanceTable = array2table(strings(0, numColumns), ...
@@ -472,10 +473,12 @@ end
 function versionString = normalizeModelVersion(modelVersion)
 % normalizeModelVersion - Name a model version the way openminds.version does
 %
-%   The version is stored to be compared against openminds.version, so it
-%   has to be written the same way. Formatting the selected version here,
-%   rather than reading the active one back from the search path, keeps the
-%   comparison correct while that lookup still holds its cached value.
+%   Formats a model version as openminds.version does, e.g. "v3.0".
+%   getSingleton compares ModelVersion against openminds.version, so the
+%   stored value must use the same format. The selected version is
+%   formatted here rather than read back from openminds.version because
+%   that lookup caches its result for one second and may still return the
+%   previous version.
 
     versionNumber = openminds.internal.utility.VersionNumber(modelVersion);
     versionNumber.Format = "vX.Y";
@@ -485,8 +488,8 @@ end
 function typeList = summarizeTypeNames(typeIRIs)
 % summarizeTypeNames - Name the types of a set of type IRIs for a message
 %
-%   A version mismatch leaves every type of a module unresolved, which is
-%   more names than a warning can carry, so the list is capped.
+%   A version mismatch typically leaves every type of a module unresolved,
+%   which is too many names for one warning, so the list is capped.
 
     MAX_LISTED_TYPES = 10;
 
@@ -503,9 +506,9 @@ end
 function header = readInstanceHeader(filePath)
 % readInstanceHeader - Read the head of an instance document
 %
-%   "@id" and "@type" are declared at the top of every openMINDS instance
-%   document, so reading a document in full to recover two lines is not
-%   worth the cost across a library of thousands of instances.
+%   Reads the first HEADER_NUM_BYTES bytes only. "@id" and "@type" are at
+%   the top of every openMINDS instance document, and reading thousands of
+%   documents in full to recover two lines each would be slow.
 
     HEADER_NUM_BYTES = 1024;
 

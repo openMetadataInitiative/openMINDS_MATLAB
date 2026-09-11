@@ -8,11 +8,10 @@ classdef PathsTest < matlab.unittest.TestCase
 
     methods (Test)
         function testUserFolderPathIsAbsolute(testCase, userFolderPath)
-        % A folder built under an empty userpath comes out relative, and a
-        % relative folder stops naming the same place as soon as anything
-        % changes the working directory. These are resolved when they are
-        % first asked for, by which point there is a user folder to build
-        % them under.
+        % A folder built under an empty userpath is a relative path, which
+        % points somewhere else once the working directory changes. The
+        % folders are resolved on first call, after ensureUserpath has set
+        % a user folder, so they must come out absolute.
 
             folderPath = openminds.internal.constants.Paths.(userFolderPath);
 
@@ -22,8 +21,8 @@ classdef PathsTest < matlab.unittest.TestCase
         end
 
         function testUserFolderPathsAgreeOnTheirRoot(testCase)
-        % The downloads live under one root, so that pointing the toolbox
-        % somewhere else moves all of them together.
+        % All downloads live under UserPath, so that changing the user
+        % folder moves all of them together.
 
             import openminds.internal.constants.Paths
 
@@ -34,9 +33,9 @@ classdef PathsTest < matlab.unittest.TestCase
         end
 
         function testUserFolderPathIsResolvedOnce(testCase, userFolderPath)
-        % Resolved once and kept, rather than on every call: a folder that
-        % answered differently later would move the instance library out
-        % from under whoever was reading it.
+        % The folders are resolved once and cached. A folder that changed
+        % between calls would move the instance library out from under code
+        % that is reading it.
 
             first = openminds.internal.constants.Paths.(userFolderPath);
             second = openminds.internal.constants.Paths.(userFolderPath);
@@ -45,8 +44,8 @@ classdef PathsTest < matlab.unittest.TestCase
         end
 
         function testGeneratedFolderIsInsideTheToolbox(testCase)
-        % This one does not depend on the user folder. It is where the
-        % generated type classes were written, inside the toolbox itself.
+        % GeneratedFolder does not depend on the user folder. The generated
+        % type classes are written inside the toolbox.
 
             testCase.verifyTrue(startsWith( ...
                 openminds.internal.constants.Paths.GeneratedFolder, ...
@@ -56,7 +55,7 @@ classdef PathsTest < matlab.unittest.TestCase
 end
 
 function tf = isAbsolutePath(pathString)
-% An implementation independent of the one under test, so that the two
-% cannot share a mistake.
+% Independent of the implementation under test, so that the two cannot
+% share a mistake.
     tf = java.io.File(char(pathString)).isAbsolute();
 end

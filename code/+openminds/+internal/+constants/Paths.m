@@ -1,20 +1,28 @@
 classdef Paths < handle
 %Paths Folders the toolbox reads from and writes to
 %
-%   The folders the toolbox keeps its downloads in sit under MATLAB's user
-%   folder, which is not known until MATLAB can tell us. Asking for it as a
-%   constant asks too early: MATLAB evaluates a constant property once,
-%   when the class is first loaded, and a user folder that does not exist
-%   yet leaves userpath empty and every folder built under it relative.
-%   Validating an argument to openminds.startup already loads this class,
-%   so there is no point inside the toolbox early enough to get ahead of
-%   that.
+%   GeneratedFolder is a Constant property. UserPath, SourceSchemaFolder
+%   and LocalInstanceFolder are static methods that resolve their folder
+%   on the first call and cache it for the rest of the session. They are
+%   not Constant properties, for two reasons:
 %
-%   These are resolved when they are first asked for instead, which is
-%   always late enough because it is the moment the answer is needed, and
-%   then kept for the rest of the session. Resolving them on every call
-%   would answer differently once userpath changed, and move the library
-%   out from under whoever was reading it.
+%   1. They are built under userpath, and userpath can be empty. MATLAB
+%      leaves it empty on Linux when $HOME/Documents does not exist, which
+%      is the case on CI runners. A path built under an empty userpath is
+%      relative. MATLAB evaluates a Constant property once, when the class
+%      is first loaded, so a Constant property built at that point would
+%      hold the relative path for the rest of the session.
+%      openminds.internal.setup.ensureUserpath sets a user folder when
+%      userpath is empty, but it cannot run before this class is loaded:
+%      validating the arguments of openminds.startup loads the class, and
+%      openminds.startup is the first toolbox function a user calls.
+%
+%   2. The resolved folders are cached instead of rebuilt on every call so
+%      that changing userpath later in the session does not change where
+%      the toolbox reads from. The instance library is read again on every
+%      model version change and must read from the same location each
+%      time. Caching also avoids calling fullfile on every lookup, which
+%      LocalInstanceFolder does once per controlled instance read.
 %
 %   See also openminds.internal.setup.ensureUserpath
 
@@ -23,9 +31,9 @@ classdef Paths < handle
         % model version. Named "resources" so that genpath skips it and no
         % addpath can put two model versions on the path at once.
         %
-        % Constant because it sits inside the toolbox, which cannot move
-        % while MATLAB is running, and because it is read on paths that run
-        % often.
+        % A Constant property, unlike the folders below, because it is
+        % inside the toolbox and does not depend on userpath, and because
+        % it is read on code paths that run often.
         GeneratedFolder = fullfile(openminds.toolboxdir(), 'generated', 'resources')
     end
 
@@ -51,16 +59,17 @@ classdef Paths < handle
 end
 
 function folderPaths = resolvedFolderPaths()
-% resolvedFolderPaths - The folders under the user folder, resolved once
+% resolvedFolderPaths - Resolve the folders under the user folder once
 %
-%   Resolving these gives MATLAB a user folder when it has none, because
-%   this is the point where an answer is actually needed and the toolbox
-%   has nowhere else to put what it downloads. That sets a MATLAB
-%   preference, so it happens once, and only when userpath is unusable.
+%   The first call runs ensureUserpath, which sets userpath if it is empty
+%   or names a folder that does not exist. Setting userpath writes a
+%   MATLAB preference that persists across sessions, so it is done here
+%   once, and only when userpath is unusable.
 %
-%   They are built together and kept, rather than built per call: fullfile
-%   costs enough to be worth avoiding on a lookup that runs once per
-%   controlled instance read.
+%   The folders are built together and cached because fullfile is slow
+%   for a lookup that runs once per controlled instance read: resolving
+%   LocalInstanceFolder took about 1 ms per call when rebuilt, against
+%   about 8 us when cached.
 
     persistent cachedFolderPaths
 

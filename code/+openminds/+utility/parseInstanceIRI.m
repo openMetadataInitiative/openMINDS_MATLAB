@@ -65,17 +65,18 @@ end
 function type = resolveTypeSegment(typeSegment, instanceIRI)
 % resolveTypeSegment - Resolve the type named by the segment of an instance IRI
 %
-%   Nearly every instance IRI names its type in the singular, which the
-%   Types enumeration matches directly, ignoring case. A few name it in the
-%   plural instead, as .../instances/licenses/MIT does, and openMINDS
-%   publishes no plural to singular mapping. Those are resolved through the
-%   instance library, which reads the type each instance document declares.
-%   An IRI carrying a plural segment always refers to a library instance,
-%   so the lookup covers every case the direct match does not.
+%   Nearly every instance IRI names its type in the singular, e.g.
+%   .../instances/biologicalSex/male, which the Types enumeration resolves
+%   directly, ignoring case. A few name it in the plural, e.g.
+%   .../instances/licenses/MIT, and openMINDS publishes no
+%   plural-to-singular mapping. Those are resolved through the instance
+%   library, which reads the type each instance document declares. A
+%   plural segment always belongs to a library instance, so the library
+%   lookup covers every case the direct match does not.
 
-    % Membership is tested by construction rather than looked up, because
-    % the enumeration matches names ignoring case and offers no cheaper way
-    % to ask whether a name matches.
+    % try/catch on construction is the membership test. The enumeration
+    % matches names case-insensitively and offers no cheaper way to check
+    % whether a name is a member.
     try
         type = openminds.enum.Types(typeSegment);
         return
