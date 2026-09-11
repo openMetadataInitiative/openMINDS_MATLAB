@@ -13,17 +13,24 @@ classdef SelectModelVersionTest < matlab.unittest.TestCase
         % version's Types enumeration in memory, and the instance library
         % then resolved the selected version's instances against it: every
         % type the two versions do not share came out untyped.
+        %
+        % The two versions are chosen for what tells them apart: latest
+        % declares AnatomicalAtlas, which v3.0 calls BrainAtlas. The first
+        % is selected here rather than assumed, so that the test does not
+        % pass for nothing in a session that is on v3.0 or v4.0 already.
+
+            import ommtest.helper.ModelVersionFixture
+
+            testCase.applyFixture(ModelVersionFixture("latest"))
+            testCase.assumeTrue(ismember("AnatomicalAtlas", typesInMemory()), ...
+                'latest is expected to declare AnatomicalAtlas.')
 
             % Held, as a session that has looked any type up holds it.
             openminds.introspection.internal.MetaTypeRegistry.getSingleton();
 
-            testCase.applyFixture(ommtest.helper.ModelVersionFixture("v3.0"))
+            testCase.applyFixture(ModelVersionFixture("v3.0"))
 
-            % BrainAtlas is declared by v3.0 and not by v5.0 or latest,
-            % where it became AnatomicalAtlas. meta.class reports the
-            % enumeration in memory, not the one on the path.
-            membersInMemory = string({ ...
-                meta.class.fromName("openminds.enum.Types").EnumerationMemberList.Name});
+            membersInMemory = typesInMemory();
 
             testCase.verifyTrue(ismember("BrainAtlas", membersInMemory), ...
                 'The Types enumeration in memory must be the selected version''s.')
@@ -31,4 +38,10 @@ classdef SelectModelVersionTest < matlab.unittest.TestCase
                 'The previous version''s Types enumeration must not stay in memory.')
         end
     end
+end
+
+function names = typesInMemory()
+% typesInMemory - The Types enumeration as loaded, not as on the path
+    names = string({ ...
+        meta.class.fromName("openminds.enum.Types").EnumerationMemberList.Name});
 end
