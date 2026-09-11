@@ -54,13 +54,14 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         %   Syntax:
         %       openminds.introspection.internal.MetaTypeRegistry.notifyModelVersionChanged()
         %
-        %   The registry holds enumeration values of the model version it
-        %   was built for. MATLAB reads the classes of a newly selected
-        %   version from the path only once nothing holds those of the
-        %   previous one, so a registry left in place across a switch keeps
-        %   the previous version's types in memory. It is deleted here and
-        %   rebuilt by its next use, as getSingleton does when it finds
-        %   none.
+        %   The registry holds (persistent) enumeration values 
+        %   (openminds.enum.Types, openminds.enum.Modules) of the model 
+        %   version it was built for, and a registry left in place across a 
+        %   version switch keeps the previous version's types in memory.
+        %   This method deletes the registry, and will be rebuilt on next
+        %   use. It is called from openminds.selectModelVersion.
+        %
+        %   See also openminds.selectModelVersion
 
             singletonObject = getappdata(0, ...
                 openminds.introspection.internal.MetaTypeRegistry.SINGLETON_NAME);
