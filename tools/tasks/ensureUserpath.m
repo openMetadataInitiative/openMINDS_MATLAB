@@ -36,12 +36,19 @@ function userFolder = ensureUserpath()
         return
     end
 
+    oldWarningState = warning('off', 'MATLAB:mpath:UnableToLocatePersonalFolder');
+    warningCleanup = onCleanup(@() warning(oldWarningState));
+
     userpath( char(runnerFolder) )
 
     % Read back rather than kept: MATLAB normalizes what it stores, and a
     % folder named one way now and another way on the next call reads as
     % two different folders.
     userFolder = string( userpath() );
+
+    if ~nargout
+        clear('userFolder')
+    end
 end
 
 function folderPath = runnerUserFolder()
