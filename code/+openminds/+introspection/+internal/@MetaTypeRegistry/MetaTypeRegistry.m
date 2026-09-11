@@ -54,12 +54,12 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         %   Syntax:
         %       openminds.introspection.internal.MetaTypeRegistry.notifyModelVersionChanged()
         %
-        %   The registry holds (persistent) enumeration values 
-        %   (openminds.enum.Types, openminds.enum.Modules) of the model 
-        %   version it was built for, and a registry left in place across a 
-        %   version switch keeps the previous version's types in memory.
-        %   This method deletes the registry, and will be rebuilt on next
-        %   use. It is called from openminds.selectModelVersion.
+        %   The registry holds enumeration values (openminds.enum.Types)
+        %   of the model version it was built for, and a registry left in
+        %   place across a version switch keeps the previous version's
+        %   types in memory. This method deletes the registry; it is
+        %   rebuilt on its next use. It is called from
+        %   openminds.selectModelVersion.
         %
         %   See also openminds.selectModelVersion
 
