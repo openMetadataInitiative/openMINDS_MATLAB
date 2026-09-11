@@ -160,6 +160,16 @@ classdef ControlledTermTest < matlab.unittest.TestCase
             testCase.verifyEqual(string(term.id), "_:a-user-defined-term")
         end
 
+        function testUnknownNameWarnsWithAnIdentifier(testCase)
+        % A name that matches no instance is allowed, so that a user defined
+        % term can be read from a document. The warning that says so has an
+        % identifier, so that a caller can detect it.
+
+            testCase.verifyWarning( ...
+                @() openminds.controlledterms.Species("notARealInstance"), ...
+                'openMINDS:ControlledTerm:UnknownInstanceName')
+        end
+
         function testStructArrayProducesOneTermPerElement(testCase)
         % A multi-valued property deserializes to a struct array of
         % references. Each element must become its own term, or every

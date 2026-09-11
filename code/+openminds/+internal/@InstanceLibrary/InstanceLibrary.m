@@ -86,7 +86,9 @@ classdef InstanceLibrary < handle
     methods (Access = private)
         function obj = InstanceLibrary(folderPath, options)
             arguments
-                folderPath (1,1) string {mustBeFolder}
+                % Need not exist yet. Setting the location downloads the
+                % library into it when it is the default location.
+                folderPath (1,1) string
                 options.UseGit (1,1) logical = false
             end
 
@@ -140,6 +142,20 @@ classdef InstanceLibrary < handle
 
             typeName = obj.IRISegmentIndex.TypeName(find(isMatch, 1));
             typeEnum = openminds.enum.Types(typeName);
+        end
+    end
+
+    methods (Static, Access = private)
+        function versionNames = listVersionFolders(folderPath)
+        % listVersionFolders - The library versions a folder holds
+        %
+        %   A library holds one subfolder per version, named as the version
+        %   is: "v3.0", "latest". Empty for a folder that holds none, and
+        %   for one that does not exist.
+
+            L = dir(folderPath);
+            names = string({L.name});
+            versionNames = names(~startsWith(names, '.') & [L.isdir]);
         end
     end
 
@@ -238,10 +254,8 @@ classdef InstanceLibrary < handle
         end
 
         function detectAvailableVersions(obj)
-            L = dir(obj.InstanceLibraryLocation);
-            names = string({L.name});
-            names = names(~startsWith(names, '.') & [L.isdir]);
-            obj.AvailableVersions = names;
+            obj.AvailableVersions = openminds.internal.InstanceLibrary ...
+                .listVersionFolders(obj.InstanceLibraryLocation);
         end
     end
 
