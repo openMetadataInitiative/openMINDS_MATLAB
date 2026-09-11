@@ -161,11 +161,9 @@ classdef ControlledTermTest < matlab.unittest.TestCase
         end
 
         function testUnknownNameWarnsWithAnIdentifier(testCase)
-        % A name that matches no instance is let through, for the sake of
-        % the user defined terms above, but a caller holding only an IRI
-        % has to be able to tell that from a term that resolved. The
-        % identifier is what makes the warning detectable without parsing
-        % its text.
+        % A name that matches no instance is allowed, so that a user defined
+        % term can be read from a document. The warning that says so has an
+        % identifier, so that a caller can detect it.
 
             testCase.verifyWarning( ...
                 @() openminds.controlledterms.Species("notARealInstance"), ...
