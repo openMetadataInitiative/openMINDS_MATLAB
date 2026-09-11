@@ -6,4 +6,10 @@ classdef RelatedRecording < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrodecontact.RelatedRecording();
+        end
+    end
 end

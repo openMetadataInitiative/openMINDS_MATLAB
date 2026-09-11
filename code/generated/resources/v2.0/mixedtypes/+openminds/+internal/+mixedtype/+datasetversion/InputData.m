@@ -7,4 +7,10 @@ classdef InputData < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.datasetversion.InputData();
+        end
+    end
 end

@@ -20,4 +20,10 @@ classdef AnatomicalLocationOfElectrodes < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrodearrayusage.AnatomicalLocationOfElectrodes();
+        end
+    end
 end

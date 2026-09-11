@@ -6,4 +6,10 @@ classdef QuantitativeOverlap < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.quantitativerelationassessment.QuantitativeOverlap();
+        end
+    end
 end

@@ -116,4 +116,10 @@ classdef Keyword < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.dataset.Keyword();
+        end
+    end
 end

@@ -10,4 +10,10 @@ classdef ObtainedWith < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.gridvolume.ObtainedWith();
+        end
+    end
 end
