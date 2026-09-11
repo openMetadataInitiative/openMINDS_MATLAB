@@ -7,6 +7,11 @@ function downloadRepository(repositoryName, options)
 %   Optional parameters:
 %       BranchName - Name of branch
 %       Owner - Name of repository owner
+%       TargetDirectory - Folder the repository folder is placed in
+%
+%   The commit is recorded only once the repository is in place, so a
+%   download that failed is retried on the next call rather than taken
+%   for the current commit.
 
     arguments
         repositoryName = "openMINDS"
@@ -17,8 +22,9 @@ function downloadRepository(repositoryName, options)
 
     % Todo: Should be a preference.
     targetDirectory = options.TargetDirectory;
-    
+
     import openminds.internal.extern.fex.filedownload.downloadFile
+    import openminds.internal.utility.git.extractRepositoryArchive
     import openminds.internal.utility.git.getCurrentCommitID
     import openminds.internal.utility.git.writeRecordedCommitID
     import openminds.internal.utility.git.isRecordedCommitCurrent
@@ -37,40 +43,16 @@ function downloadRepository(repositoryName, options)
     % - Create path for saving and download types
     zipFileName = webURI.Path(end);
     tempZipFilepath = tempname + "-" + zipFileName;
-    C1 = onCleanup(@(pathStr) delete(tempZipFilepath) );
-   
+    zipCleanup = onCleanup(@() delete(tempZipFilepath));
+
     fprintf('Downloading repository "%s" from "%s"... ', ...
         repositoryName, options.Owner)
     downloadFile(tempZipFilepath, webURI.EncodedURI, 'ShowFilename', true);
     fprintf('Done.\n')
 
-    directoryForUnzip = tempname;
-    if ~isfolder(directoryForUnzip)
-        mkdir(directoryForUnzip)
-    end
-
-    C2 = onCleanup(@(pathStr, mode) rmdir(directoryForUnzip, "s") );
-
-    fprintf('Unzipping repository file (%s)... ', repositoryName)
-    unzip(tempZipFilepath, directoryForUnzip)
-    fprintf('Done.\n')
-
-    sourceDirectory = directoryForUnzip;
-
-    if ~isfolder(targetDirectory)
-        mkdir(targetDirectory)
-    end
-
-    % Get repository folder name
-    L = dir(sourceDirectory); L(startsWith({L.name}, '.')) = [];
-    assert(isscalar(L), "Expected temporary folder to contain one downloaded item")
-    folderName = strtrim( L.name );
-    if isfolder( fullfile(targetDirectory, folderName) )
-        rmdir(fullfile(targetDirectory, folderName), "s")
-    end
-
-    fprintf('Copying repository "%s" to local directory:\n%s... ', repositoryName, targetDirectory)
-    copyfile(sourceDirectory, targetDirectory)
+    fprintf('Extracting repository "%s" into local directory:\n%s... ', ...
+        repositoryName, targetDirectory)
+    extractRepositoryArchive(tempZipFilepath, targetDirectory);
     fprintf('Done.\n')
 
     % Save current commit ID and repository details
