@@ -13,7 +13,9 @@ classdef (Abstract) Serializer < openminds.base.Transformer
 %
 %   Linked instances are always written as references and queued to be
 %   emitted as documents of their own, subject to the configured recursion
-%   depth. Embedded instances are written inline and carry no identifier.
+%   depth. A linked instance that is itself a reference is written as one
+%   and not queued. Embedded instances are written inline and carry no
+%   identifier.
 %
 %   USAGE:
 %   ------
@@ -338,6 +340,13 @@ classdef (Abstract) Serializer < openminds.base.Transformer
 
         function enqueueDocument(obj, instance)
         % Queue a referenced instance for emission as its own document.
+        %
+        %   A reference stands for a node that is not here and carries
+        %   nothing to write, so it is never a document of its own.
+
+            if instance.isReference()
+                return
+            end
 
             childDepth = obj.CurrentDepth + 1;
             if childDepth > obj.SerializationConfiguration.RecursionDepth

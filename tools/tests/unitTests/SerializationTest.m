@@ -214,6 +214,27 @@ classdef SerializationTest < matlab.unittest.TestCase
                 'Each node should appear exactly once, as its own document.')
         end
 
+        function testReferenceInLinkedPropertyGetsNoDocument(testCase)
+        % A linked value that is a reference stands for a node that is not
+        % here. It is written as a reference in the linking document and
+        % gets no document of its own, whether or not its type is known,
+        % however deep the serializer is allowed to recurse.
+
+            dataset = openminds.core.Dataset("fullName", "Referencing dataset");
+            dataset.digitalIdentifier = openminds.internal.MixedTypeReference( ...
+                "https://graph.example/instances/doi-001");
+            dataset.documentation = openminds.core.DOI( ...
+                "id", "https://graph.example/instances/doi-002", "IsReference", true);
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                'RecursionDepth', 2);
+            documents = string(serializer.serialize(dataset));
+
+            testCase.assertNumElements(documents, 1)
+            testCase.verifySubstring(documents, 'instances/doi-001')
+            testCase.verifySubstring(documents, 'instances/doi-002')
+        end
+
         function testPropertyHoldingSeveralTypesSerializes(testCase)
         % A property that accepts several types may hold instances of more
         % than one of them at once. Those instances cannot be concatenated
