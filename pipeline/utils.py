@@ -98,7 +98,19 @@ class InstanceLoader(object):
             return []
 
         return instance_list
-    
+
+    def get_types_with_instances(self, version:str) -> frozenset:
+        """Names of the types the instance library holds instances of, for a version.
+
+        Which types have instances differs between model versions: v5.0 renamed
+        BrainAtlas to AnatomicalAtlas and CommonCoordinateSpace to
+        CommonCoordinateFramework, and added instances of Accessibility. The
+        library stores the instances of one type per folder, and folder names
+        are pluralized type names that upstream renames along with the type,
+        so the type is read from the "@type" the documents declare instead.
+        """
+        return _find_instance_types(self.instances_sources, version)
+
 @lru_cache(maxsize=None)
 def _find_all_instances(instances_sources: str, version: str):
     """Every instance file of a model version, as a tuple of paths.
@@ -110,6 +122,28 @@ def _find_all_instances(instances_sources: str, version: str):
     return tuple(glob.glob(
         os.path.join(instances_sources, version, "**", "*.jsonld"), recursive=True
     ))
+
+
+@lru_cache(maxsize=None)
+def _find_instance_types(instances_sources: str, version: str) -> frozenset:
+    """The type names declared by the instances of a model version, as a frozenset.
+
+    All instances in a folder share one type, so one document per folder is
+    read. The type name is the last segment of the type IRI, which holds for
+    both the v3 and the v4 IRI forms.
+    """
+    first_document_by_folder = {}
+    for instance_path in _find_all_instances(instances_sources, version):
+        first_document_by_folder.setdefault(os.path.dirname(instance_path), instance_path)
+
+    type_names = set()
+    for instance_path in first_document_by_folder.values():
+        with open(instance_path, "r", encoding="utf-8") as instance_file:
+            instance = json.load(instance_file)
+        if "@type" not in instance:
+            raise ValueError(f"Instance '{instance_path}' declares no @type.")
+        type_names.add(instance["@type"].rsplit("/", 1)[-1])
+    return frozenset(type_names)
 
 
 def initialise_jinja_templates():

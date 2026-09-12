@@ -26,17 +26,6 @@ from pipeline.utils import (
     InstanceLoader,
     SCHEMA_FILE_EXTENSION )
 
-types_with_controlled_instances = [
-    "BrainAtlasVersion",
-    "BrainAtlas",
-    "CommonCoordinateSpaceVersion",
-    "CommonCoordinateSpace",
-    "ContentType",
-    "License",
-    "ParcellationEntity",
-    "ParcellationEntityVersion"
-]
-
 type_name_map = {
     "string": "string",
     "integer": "int64",
@@ -294,18 +283,23 @@ class MATLABSchemaBuilder(object):
         else:
             base_class = "openminds.Node"
 
-        has_controlled_instance = class_name in types_with_controlled_instances
-        if has_controlled_instance:
-            # Add the controlled instance mixin to the base class
-            base_class = base_class + " & openminds.internal.mixin.HasControlledInstance"
-
+        instance_loader = InstanceLoader()
         if self._schema_module_name == "controlledTerms":
-            instance_loader = InstanceLoader()
+            # A controlled term lists its instances in the class itself, so it
+            # does not take the controlled instance mixin.
+            has_controlled_instance = False
             # Pass the schema's filename as this should match the foldername where instances are stored
             known_instance_list = instance_loader.get_instance_collection(self.version, self._schema_file_name)
             known_instance_list.sort()
         else:
+            # The mixin resolves instances through the instance library at run
+            # time, so a class takes it when the library of this model version
+            # holds instances of its type.
+            has_controlled_instance = class_name in instance_loader.get_types_with_instances(self.version)
             known_instance_list = []
+
+        if has_controlled_instance:
+            base_class = base_class + " & openminds.internal.mixin.HasControlledInstance"
 
         self._template_variables = {
             "class_name": class_name,
