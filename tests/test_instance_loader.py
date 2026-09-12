@@ -1,11 +1,12 @@
 """Tests for locating the instance files that belong to a controlled term."""
 
+import json
 import os
 import shutil
 import tempfile
 import unittest
 
-from pipeline.utils import InstanceLoader, _find_all_instances
+from pipeline.utils import InstanceLoader, _find_all_instances, _find_instance_types
 
 VERSION = "v9.0"
 
@@ -26,18 +27,24 @@ class InstanceLoaderTest(unittest.TestCase):
         # earlier one built at the same path.
         _find_all_instances.cache_clear()
         self.addCleanup(_find_all_instances.cache_clear)
+        _find_instance_types.cache_clear()
+        self.addCleanup(_find_instance_types.cache_clear)
 
         self.instances_root = os.path.join(
             self.root, "_sources", "openMINDS_instances", "instances", VERSION
         )
         self.loader = InstanceLoader()
 
-    def write_instance(self, *path_parts):
-        """Create an instance file at the given path below the version folder."""
+    def write_instance(self, *path_parts, type_iri=None):
+        """Create an instance file at the given path below the version folder.
+
+        The document declares the given type, or nothing when no type is given.
+        """
         path = os.path.join(self.instances_root, *path_parts)
         os.makedirs(os.path.dirname(path), exist_ok=True)
+        document = {} if type_iri is None else {"@type": type_iri}
         with open(path, "w", encoding="utf-8") as instance_file:
-            instance_file.write("{}")
+            json.dump(document, instance_file)
         return path
 
     def test_finds_the_instances_of_one_schema(self):
@@ -84,6 +91,66 @@ class InstanceLoaderTest(unittest.TestCase):
             sorted(self.loader.get_instance_collection(VERSION, "ageCategory")),
             ["adult", "juvenile"],
         )
+
+    def test_the_types_with_instances_are_read_from_the_documents(self):
+        # Both IRI forms the library uses, a folder whose plural name does not
+        # match its type, a nested folder and a controlled term.
+        self.write_instance(
+            "brainAtlases", "aal.jsonld",
+            type_iri="https://openminds.om-i.org/types/AnatomicalAtlas",
+        )
+        self.write_instance(
+            "brainAtlasVersions", "AAL1", "aal1.jsonld",
+            type_iri="https://openminds.ebrains.eu/sands/BrainAtlasVersion",
+        )
+        self.write_instance(
+            "accessibilities", "free.jsonld",
+            type_iri="https://openminds.om-i.org/types/Accessibility",
+        )
+        self.write_instance(
+            "terminologies", "ageCategory", "adult.jsonld",
+            type_iri="https://openminds.om-i.org/types/AgeCategory",
+        )
+
+        self.assertEqual(
+            self.loader.get_types_with_instances(VERSION),
+            {"AnatomicalAtlas", "BrainAtlasVersion", "Accessibility", "AgeCategory"},
+        )
+
+    def test_one_document_per_folder_types_the_folder(self):
+        # The second document of a folder is never opened, so a document
+        # without a type there does not fail the read.
+        self.write_instance(
+            "licenses", "a.jsonld", type_iri="https://openminds.om-i.org/types/License"
+        )
+        self.write_instance("licenses", "b.jsonld")
+
+        self.assertEqual(self.loader.get_types_with_instances(VERSION), {"License"})
+
+    def test_a_folder_without_instance_files_contributes_no_type(self):
+        # Types come from the instance files, so a folder holding none, or only
+        # other files, is as good as absent.
+        os.makedirs(os.path.join(self.instances_root, "singleColors"))
+        readme = os.path.join(self.instances_root, "licenses", "README.md")
+        os.makedirs(os.path.dirname(readme))
+        with open(readme, "w", encoding="utf-8") as readme_file:
+            readme_file.write("no instances here")
+
+        self.assertEqual(self.loader.get_types_with_instances(VERSION), frozenset())
+
+    def test_a_version_without_instances_has_no_types(self):
+        self.write_instance(
+            "licenses", "a.jsonld", type_iri="https://openminds.om-i.org/types/License"
+        )
+
+        self.assertEqual(self.loader.get_types_with_instances("v8.0"), frozenset())
+
+    def test_an_instance_without_a_type_is_reported(self):
+        path = self.write_instance("licenses", "a.jsonld")
+
+        with self.assertRaises(ValueError) as context:
+            self.loader.get_types_with_instances(VERSION)
+        self.assertIn(path, str(context.exception))
 
 
 if __name__ == "__main__":
