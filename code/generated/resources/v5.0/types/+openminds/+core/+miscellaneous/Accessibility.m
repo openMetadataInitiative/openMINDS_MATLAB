@@ -1,4 +1,4 @@
-classdef Accessibility < openminds.Node
+classdef Accessibility < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %Accessibility - No description available.
 %
 %   PROPERTIES:
@@ -83,6 +83,17 @@ classdef Accessibility < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = sprintf('%s (%s)', obj.form, obj.eligibility);
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end
