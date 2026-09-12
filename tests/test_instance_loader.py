@@ -127,6 +127,17 @@ class InstanceLoaderTest(unittest.TestCase):
 
         self.assertEqual(self.loader.get_types_with_instances(VERSION), {"License"})
 
+    def test_a_folder_without_instance_files_contributes_no_type(self):
+        # Types come from the instance files, so a folder holding none, or only
+        # other files, is as good as absent.
+        os.makedirs(os.path.join(self.instances_root, "singleColors"))
+        readme = os.path.join(self.instances_root, "licenses", "README.md")
+        os.makedirs(os.path.dirname(readme))
+        with open(readme, "w", encoding="utf-8") as readme_file:
+            readme_file.write("no instances here")
+
+        self.assertEqual(self.loader.get_types_with_instances(VERSION), frozenset())
+
     def test_a_version_without_instances_has_no_types(self):
         self.write_instance(
             "licenses", "a.jsonld", type_iri="https://openminds.om-i.org/types/License"
