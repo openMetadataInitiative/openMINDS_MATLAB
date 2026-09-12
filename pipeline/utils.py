@@ -129,11 +129,12 @@ def _find_instance_types(instances_sources: str, version: str) -> frozenset:
     """The type names declared by the instances of a model version, as a frozenset.
 
     All instances in a folder share one type, so one document per folder is
-    read. The type name is the last segment of the type IRI, which holds for
-    both the v3 and the v4 IRI forms.
+    read: the first in path order, since the walk lists files in filesystem
+    order, which differs between platforms. The type name is the last segment
+    of the type IRI, which holds for both the v3 and the v4 IRI forms.
     """
     first_document_by_folder = {}
-    for instance_path in _find_all_instances(instances_sources, version):
+    for instance_path in sorted(_find_all_instances(instances_sources, version)):
         first_document_by_folder.setdefault(os.path.dirname(instance_path), instance_path)
 
     type_names = set()
