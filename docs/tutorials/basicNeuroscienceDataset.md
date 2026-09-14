@@ -659,27 +659,6 @@ disp(jsonContent);
   },
   "@graph": [
     {
-      "@id": "_:1",
-      "@type": "https://openminds.om-i.org/types/Accessibility",
-      "channel": {
-        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
-      },
-      "eligibility": {
-        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
-      },
-      "form": {
-        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
-      },
-      "paymentModel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
-        }
-      ],
-      "process": {
-        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
-      }
-    },
-    {
       "@id": "_:brain-research-center",
       "@type": "https://openminds.om-i.org/types/Organization",
       "acronym": "BRC",
@@ -936,6 +915,27 @@ disp(jsonContent);
       "versionSpecification": "This is the first version of this dataset."
     },
     {
+      "@id": "_:1",
+      "@type": "https://openminds.om-i.org/types/Accessibility",
+      "channel": {
+        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
+      },
+      "eligibility": {
+        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
+      },
+      "form": {
+        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
+      },
+      "paymentModel": [
+        {
+          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
+        }
+      ],
+      "process": {
+        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
+      }
+    },
+    {
       "@id": "_:jane-doe",
       "@type": "https://openminds.om-i.org/types/Person",
       "contactInformation": {
@@ -1090,7 +1090,7 @@ disp(jsonContent);
     {
       "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent",
       "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "'Adolescent' categorizes a transitional life cycle stage of growth and development between childhood and adulthood, often described as 'puberty'.",
+      "definition": "Life cycle stage of a subject loosely defined by the transitional growth and development between childhood and adulthood, often described as 'puberty'.",
       "name": "adolescent",
       "synonym": [
         "puberty"
@@ -1099,7 +1099,7 @@ disp(jsonContent);
     {
       "@id": "https://openminds.om-i.org/instances/ageCategory/adult",
       "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "'Adult' categorizes the life cycle stage of an animal or human that reached sexual maturity.",
+      "definition": "Life cycle stage of a subject that starts with sexual maturity and ends with death.",
       "name": "adult",
       "otherOntologyIdentifier": [
         "http://uri.interlex.org/base/ilx_0729043"
