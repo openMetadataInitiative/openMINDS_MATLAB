@@ -23,9 +23,6 @@ function codeMetaInfo = updateCodeMetaFile(versionString)
         'runtimePlatform assumes no maximum MATLAB release. Update this task if one is set.')
     minimumMatlabRelease = string(toolboxInfo.ToolboxOptions.MinimumMatlabRelease);
 
-    % This task runs on the day a version is released, so both dates are today.
-    releaseDate = string(datetime('today', 'Format', 'yyyy-MM-dd'));
-
     codeMetaInfo.version = versionStringNumeric;
     codeMetaInfo.downloadUrl = sprintf("https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/download/%s/openMINDS_MATLAB_%s.mltbx", ...
         versionString, strrep(versionString, '.', '_'));
@@ -34,8 +31,8 @@ function codeMetaInfo = updateCodeMetaFile(versionString)
     releasesPageUrl = "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases";
     codeMetaInfo.releaseNotes = releasesPageUrl + "#release-" + versionString;
     codeMetaInfo.runtimePlatform = "MATLAB " + minimumMatlabRelease + " or later";
-    codeMetaInfo.datePublished = releaseDate;
-    codeMetaInfo.dateModified = releaseDate;
+    % datePublished is the first release date, so it is left untouched here.
+    codeMetaInfo.dateModified = string(datetime('today', 'Format', 'yyyy-MM-dd'));
 
     if isscalar(codeMetaInfo.author)
         % Ensure author is encoded as an array
