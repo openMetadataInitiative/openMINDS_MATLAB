@@ -4,12 +4,21 @@
   "license": "https://spdx.org/licenses/MIT",
   "isPartOf": "https://github.com/openMetadataInitiative",
   "codeRepository": "https://github.com/openMetadataInitiative/openMINDS_MATLAB",
+  "url": "https://openminds-documentation.readthedocs.io",
+  "readme": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/main/README.md",
+  "installUrl": "https://www.mathworks.com/matlabcentral/fileexchange/134212-openminds-metadata-models-for-matlab",
   "contIntegration": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions",
   "issueTracker": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/issues",
   "name": "openMINDS MATLAB",
   "description": "openMINDS MATLAB is a toolbox to support the creation and use of openMINDS metadata models and schemas in MATLAB, with import and export in JSON-LD format. The package contains all openMINDS schemas as MATLAB classes in addition to schema base classes and utility methods.",
   "applicationCategory": "neuroscience",
-  "releaseNotes": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases",
+  "keywords": [
+    "openMINDS",
+    "metadata",
+    "linked-data",
+    "neuroscience"
+  ],
+  "releaseNotes": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases#release-v0.12.0",
   "funding": "https://cordis.europa.eu/project/id/945539",
   "developmentStatus": "active",
   "funder": {
@@ -24,9 +33,7 @@
     "Windows",
     "macOS"
   ],
-  "softwareRequirements": [
-    "MATLAB R2022b or later"
-  ],
+  "runtimePlatform": "MATLAB R2022a or later",
   "relatedLink": [
     "https://openminds-documentation.readthedocs.io"
   ],
@@ -38,7 +45,15 @@
       "familyName": "Hennestad"
     }
   ],
+  "maintainer": {
+    "@type": "Person",
+    "@id": "https://orcid.org/0000-0002-8297-1753",
+    "givenName": "Eivind",
+    "familyName": "Hennestad"
+  },
   "version": "0.12.0",
   "downloadUrl": "https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/download/v0.12.0/openMINDS_MATLAB_v0_12_0.mltbx",
+  "dateCreated": "2023-08-22",
+  "datePublished": "2023-09-26",
   "dateModified": "2026-09-11"
 }
