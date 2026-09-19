@@ -1,6 +1,10 @@
 classdef CollectionTest < matlab.unittest.TestCase
 % CollectionTest - Unit tests for the openminds metadata collection class
-    
+
+    properties (Constant, Access = private)
+        HomoSapiensIRI = "https://openminds.om-i.org/instances/species/homoSapiens"
+    end
+
     methods (TestMethodSetup)
         function createTempDir(testCase)
             import matlab.unittest.fixtures.WorkingFolderFixture
@@ -553,6 +557,76 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyFalse(contains(document, "MixedTypeReference"));
         end
 
+        function testTypedControlledReferenceBecomesLibraryInstance(testCase)
+            % With controlled instances added to collections, a typed
+            % reference to one is replaced by the instance from the
+            % library, so the saved node has the instance's properties.
+            testCase.setControlledInstancePreference(true)
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.controlledterms.Species( ...
+                "id", testCase.HomoSapiensIRI, "IsReference", true);
+
+            document = testCase.saveCollection(openminds.Collection(subject), "typed-reference.jsonld");
+
+            testCase.verifyTrue(contains(document, """name"": ""Homo sapiens"""));
+        end
+
+        function testUntypedControlledReferenceBecomesLibraryInstance(testCase)
+            testCase.setControlledInstancePreference(true)
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.internal.MixedTypeReference(testCase.HomoSapiensIRI);
+
+            collection = openminds.Collection(subject);
+            document = testCase.saveCollection(collection, "untyped-reference.jsonld");
+
+            testCase.verifyEqual(length(collection), 2);
+            testCase.verifyTrue(contains(document, """name"": ""Homo sapiens"""));
+        end
+
+        function testTypedControlledReferenceNotInLibraryStaysLink(testCase)
+            testCase.setControlledInstancePreference(true)
+            referenceIRI = "https://openminds.om-i.org/instances/species/notInTheLibrary";
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.controlledterms.Species( ...
+                "id", referenceIRI, "IsReference", true);
+
+            collection = openminds.Collection(subject);
+            document = testCase.saveCollection(collection, "typed-reference-not-in-library.jsonld");
+
+            testCase.verifyEqual(length(collection), 1);
+            testCase.verifyTrue(contains(document, referenceIRI));
+        end
+
+        function testControlledReferenceStaysLinkWhenPreferenceIsOff(testCase)
+            testCase.setControlledInstancePreference(false)
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.controlledterms.Species( ...
+                "id", testCase.HomoSapiensIRI, "IsReference", true);
+
+            collection = openminds.Collection(subject);
+            document = testCase.saveCollection(collection, "reference-preference-off.jsonld");
+
+            testCase.verifyEqual(length(collection), 1);
+            testCase.verifyTrue(contains(document, testCase.HomoSapiensIRI));
+            testCase.verifyFalse(contains(document, "Homo sapiens"));
+        end
+
+        function testControlledReferenceRoundTripIsStable(testCase)
+            % Saving writes the library instance; loading that file and
+            % saving again writes the same document.
+            testCase.setControlledInstancePreference(true)
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.controlledterms.Species( ...
+                "id", testCase.HomoSapiensIRI, "IsReference", true);
+
+            firstDocument = testCase.saveCollection(openminds.Collection(subject), "first.jsonld");
+            reloaded = openminds.Collection("first.jsonld");
+            secondDocument = testCase.saveCollection(reloaded, "second.jsonld");
+
+            testCase.verifyEqual(sort(splitlines(string(secondDocument))), ...
+                sort(splitlines(string(firstDocument))));
+        end
+
         function testTypedReferenceSurvivesRoundTrip(testCase)
             % A reference whose type is known is still a reference, not a
             % node with no properties. It gets no file of its own, so
@@ -720,7 +794,22 @@ classdef CollectionTest < matlab.unittest.TestCase
         % %     testCase.verifyTrue(startsWith(char(identifier), '_:'));
         % % end
     end
-    
+
+    methods (Access = private)
+        function setControlledInstancePreference(testCase, value)
+            % Sets AddControlledInstanceToCollection for one test
+            original = openminds.getpref('AddControlledInstanceToCollection');
+            testCase.addTeardown(@() openminds.setpref( ...
+                'AddControlledInstanceToCollection', original));
+            openminds.setpref('AddControlledInstanceToCollection', value);
+        end
+
+        function document = saveCollection(~, collection, filePath)
+            collection.save(filePath);
+            document = fileread(filePath);
+        end
+    end
+
     methods (Static, Access = private)
         function [dataset, affiliation] = datasetWithOneContributorAffiliation()
             [person, affiliation] = personWithOneAffiliation();
