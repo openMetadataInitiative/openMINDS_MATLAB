@@ -528,6 +528,31 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyFalse(contains(document, "MixedTypeReference"));
         end
 
+        function testUnresolvedControlledInstanceLinkIsNotANode(testCase)
+            % A link to a controlled instance that could not be taken from
+            % the instance library stays a reference. With controlled
+            % instances added to collections, it is still not a node, so
+            % saving writes it as a reference instead of failing on it.
+            original = openminds.getpref('AddControlledInstanceToCollection');
+            testCase.addTeardown(@() openminds.setpref( ...
+                'AddControlledInstanceToCollection', original));
+            openminds.setpref('AddControlledInstanceToCollection', true);
+
+            referenceIRI = "https://openminds.om-i.org/instances/species/notInTheLibrary";
+            subject = openminds.core.Subject("lookupLabel", "S");
+            subject.species = openminds.internal.MixedTypeReference(referenceIRI);
+
+            collection = openminds.Collection(subject);
+            testCase.verifyEqual(length(collection), 1);
+
+            filePath = "unresolved-controlled-instance-collection.jsonld";
+            collection.save(filePath);
+
+            document = fileread(filePath);
+            testCase.verifyTrue(contains(document, referenceIRI));
+            testCase.verifyFalse(contains(document, "MixedTypeReference"));
+        end
+
         function testTypedReferenceSurvivesRoundTrip(testCase)
             % A reference whose type is known is still a reference, not a
             % node with no properties. It gets no file of its own, so

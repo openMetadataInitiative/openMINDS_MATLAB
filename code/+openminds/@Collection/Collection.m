@@ -521,7 +521,12 @@ classdef Collection < handle
                 startsWith(instance.id, "https://openminds.ebrains.eu/instances/") ...
                 || startsWith(instance.id, "https://openminds.om-i.org/instances/");
 
-            if isControlledInstance
+            % A link to a controlled instance that could not be taken from
+            % the instance library is an untyped reference. Without a type
+            % it cannot be a node, so it is handled as any other reference.
+            isUntypedReference = isa(instance, 'openminds.internal.MixedTypeReference');
+
+            if isControlledInstance && ~isUntypedReference
                 % A controlled instance is a reference into the instance
                 % library, which every reader has, so it can be a node of
                 % the collection. Whether it is one is a preference.
