@@ -1155,7 +1155,10 @@ disp(jsonContent);
       "otherOntologyIdentifier": [
         "http://uri.interlex.org/tgbugs/uris/readable/modality/Electrophysiology"
       ],
-      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202"
+      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202",
+      "synonym": [
+        "ephys"
+      ]
     },
     {
       "@id": "https://openminds.om-i.org/instances/organizationType/legalEntity",
@@ -1225,7 +1228,10 @@ disp(jsonContent);
       "@id": "https://openminds.om-i.org/instances/technique/extracellularElectrophysiology",
       "@type": "https://openminds.om-i.org/types/Technique",
       "definition": "In 'extracellular electrophysiology' electrodes are inserted into living tissue, but remain outside the cells in the extracellular environment to measure or stimulate electrical activity coming from adjacent cells, usually neurons.",
-      "name": "extracellular electrophysiology"
+      "name": "extracellular electrophysiology",
+      "synonym": [
+        "ecephys"
+      ]
     }
   ]
 }
