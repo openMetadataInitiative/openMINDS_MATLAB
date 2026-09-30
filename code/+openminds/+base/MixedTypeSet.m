@@ -279,16 +279,12 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
             end
 
             if isfield(structure, 'at_id') % Linked instance
-                % Support initializing an Instance from a struct with
-                % an @id. This will act as a placeholder for an
-                % unresolved linked instance, and the link needs to be
-                % resolved externally in order to put a real instance in place.
-                instance = openminds.internal.MixedTypeReference(structure.at_id);
-        
+                instance = obj.initializeFromIdentifier(structure.at_id);
+
             elseif isfield(structure, 'x_id') % Linked instance
-                % Variation of above
-                instance = openminds.internal.MixedTypeReference(structure.x_id);
-        
+                % Variation of above, from a raw jsondecode
+                instance = obj.initializeFromIdentifier(structure.x_id);
+
             elseif isfield(structure, 'at_type') % Embedded instance
                 instance = openminds.fromTypeName(structure.at_type);
                 instance = instance.fromStruct(structure);
@@ -299,6 +295,36 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
                     'instance needs an "at_type" field naming one of: %s.'], ...
                     strjoin(fieldnames(structure), ', '), strjoin(obj(1).ALLOWED_TYPES, ', '))
             end
+        end
+
+        function instance = initializeFromIdentifier(obj, identifier)
+        % initializeFromIdentifier - Initialize a linked instance from an identifier alone
+        %
+        %   A link that carries only an identifier names a node that is not
+        %   here. When the identifier is a controlled instance IRI, the node
+        %   is in the instance library, which every reader has, so it is
+        %   taken from there, as a controlled term built from a bare
+        %   identifier is. Any other link is held as a reference until it is
+        %   resolved externally. So is a controlled instance the library
+        %   turns out not to hold, as happens when an IRI and the library
+        %   file it points to spell the name differently; the lookup can
+        %   fail in several ways, and all of them mean the same thing here,
+        %   so the cause is reported rather than matched.
+
+            if openminds.utility.isInstanceIRI(identifier)
+                try
+                    instance = openminds.instanceFromIRI(identifier);
+                    mustBeOneOf(instance, obj(1).ALLOWED_TYPES)
+                    return
+                catch cause
+                    warning('openMINDS:MixedTypeSet:ControlledInstanceNotFound', ...
+                        ['The controlled instance "%s" could not be taken from ', ...
+                        'the instance library, so the link is kept as a ', ...
+                        'reference. %s'], identifier, cause.message)
+                end
+            end
+
+            instance = openminds.internal.MixedTypeReference(identifier);
         end
     end
     

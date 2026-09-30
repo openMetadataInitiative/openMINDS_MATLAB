@@ -62,6 +62,43 @@ classdef ControlledInstanceTest < matlab.unittest.TestCase
             testCase.verifyNotEqual(string(instance.name), "")
         end
 
+        function testIdentifierOnlyLinkToControlledInstanceIsLookedUp(testCase)
+        % A document that links a property holding several types to a
+        % controlled instance by identifier alone describes nothing about
+        % it, so the instance is taken from the library, as a controlled
+        % term built from a bare identifier is. Held as a reference of
+        % unknown type instead, it could not be saved.
+
+            licenseIRI = "https://openminds.om-i.org/instances/licenses/CC-BY-4.0";
+
+            atlasVersion = openminds.sands.atlas.AnatomicalAtlasVersion();
+            atlasVersion.usageCondition = struct('at_id', licenseIRI);
+
+            license = atlasVersion.usageCondition(1);
+            testCase.verifyClass(license, 'openminds.core.data.License')
+            testCase.verifyFalse(license.isReference())
+            testCase.verifyEqual(string(license.id), licenseIRI)
+            testCase.verifyNotEqual(string(license.fullName), "")
+        end
+
+        function testIdentifierOnlyLinkToUnknownControlledInstanceStaysReference(testCase)
+        % The library may not hold the instance an identifier points to,
+        % as when the two spell a name differently. The link is then kept
+        % as a reference and the reader is told, rather than the read
+        % failing.
+
+            missingIRI = "https://openminds.om-i.org/instances/licenses/no-such-license";
+
+            atlasVersion = openminds.sands.atlas.AnatomicalAtlasVersion();
+            testCase.verifyWarning( ...
+                @() atlasVersion.set("usageCondition", struct('at_id', missingIRI)), ...
+                'openMINDS:MixedTypeSet:ControlledInstanceNotFound')
+
+            link = atlasVersion.usageCondition(1);
+            testCase.verifyClass(link, 'openminds.internal.MixedTypeReference')
+            testCase.verifyEqual(string(link.id), missingIRI)
+        end
+
         function testGetControlledInstanceRemote(testCase, instanceSpecification, versionNumber)
             jsonStr = openminds.internal.getControlledInstance(...
                 instanceSpecification{:}, versionNumber, "FileSource", "github");
