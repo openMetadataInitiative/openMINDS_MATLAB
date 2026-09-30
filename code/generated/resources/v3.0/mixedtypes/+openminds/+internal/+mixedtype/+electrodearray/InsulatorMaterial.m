@@ -7,4 +7,10 @@ classdef InsulatorMaterial < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrodearray.InsulatorMaterial();
+        end
+    end
 end

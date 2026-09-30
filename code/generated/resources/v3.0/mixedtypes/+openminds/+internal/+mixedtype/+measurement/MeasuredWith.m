@@ -8,4 +8,10 @@ classdef MeasuredWith < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.measurement.MeasuredWith();
+        end
+    end
 end

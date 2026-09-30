@@ -133,8 +133,8 @@ classdef (Abstract) TraversalCore < handle
         function children = getChildren(~, node, propertyName)
         % getChildren - Property value as a cell array of instances
         %
-        %   Mixed type values are containers rather than instances, so the
-        %   instance is taken out of each element.
+        %   A mixed type value is a set holding the instances, so they are
+        %   taken out of it.
 
             children = {};
             value = node.(propertyName);
@@ -144,8 +144,7 @@ classdef (Abstract) TraversalCore < handle
             end
 
             if openminds.utility.isMixedInstance(value)
-                children = arrayfun(@(element) element.Instance, value, ...
-                    'UniformOutput', false);
+                children = value.Instances;
             elseif openminds.utility.isInstance(value)
                 children = num2cell(value);
             end

@@ -6,4 +6,10 @@ classdef Funder < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.funding.Funder();
+        end
+    end
 end

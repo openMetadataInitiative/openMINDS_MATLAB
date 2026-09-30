@@ -37,7 +37,7 @@ classdef TermSuggestion < openminds.controlledterms.ControlledTerm
         )
     end
 
-    properties
+    properties (SetObservable)
         % Add the terminology in which the suggested term should be integrated in.
         terminology (1,:) openminds.controlledterms.Terminology ...
             {mustBeScalarOrEmpty(terminology)}

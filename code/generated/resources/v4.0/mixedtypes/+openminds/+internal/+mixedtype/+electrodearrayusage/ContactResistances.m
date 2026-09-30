@@ -6,4 +6,10 @@ classdef ContactResistances < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.electrodearrayusage.ContactResistances();
+        end
+    end
 end

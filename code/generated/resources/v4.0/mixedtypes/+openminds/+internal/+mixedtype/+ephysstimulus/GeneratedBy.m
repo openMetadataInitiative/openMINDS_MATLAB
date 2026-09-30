@@ -8,4 +8,10 @@ classdef GeneratedBy < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.ephysstimulus.GeneratedBy();
+        end
+    end
 end

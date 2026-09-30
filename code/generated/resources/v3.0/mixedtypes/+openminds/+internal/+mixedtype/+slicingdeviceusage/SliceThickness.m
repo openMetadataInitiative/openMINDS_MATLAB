@@ -6,4 +6,10 @@ classdef SliceThickness < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.slicingdeviceusage.SliceThickness();
+        end
+    end
 end

@@ -6,4 +6,10 @@ classdef PerformedBy < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.cellpatching.PerformedBy();
+        end
+    end
 end

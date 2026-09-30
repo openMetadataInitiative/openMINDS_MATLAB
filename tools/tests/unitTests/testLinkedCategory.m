@@ -67,7 +67,9 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             author = testLinkedCategory.getAuthors(ds);
             expectedAuthorType = 'openminds.core.actors.Person';
             
-            testCase.assertClass(author, expectedAuthorType)
+            % The property holds a mixed type set; indexing it hands out
+            % the instances, as one array when they share a type.
+            testCase.assertClass(author(:), expectedAuthorType)
         end
 
         function testRetrieveNestedScalarHomogeneousType(testCase)
@@ -115,7 +117,7 @@ classdef testLinkedCategory < matlab.unittest.TestCase
             % Check type of author property
             author = testLinkedCategory.getAuthors(ds);
             expectedAuthorType = 'openminds.core.actors.Person';
-            testCase.assertClass(author, expectedAuthorType)
+            testCase.assertClass(author(:), expectedAuthorType)
         end
 
         function testRetrieveNonScalarHomogeneousTypeParenOne(testCase)

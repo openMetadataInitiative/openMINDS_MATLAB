@@ -12,4 +12,10 @@ classdef RelatedPublication < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.dataset.RelatedPublication();
+        end
+    end
 end

@@ -6,4 +6,10 @@ classdef MemberOf < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.affiliation.MemberOf();
+        end
+    end
 end

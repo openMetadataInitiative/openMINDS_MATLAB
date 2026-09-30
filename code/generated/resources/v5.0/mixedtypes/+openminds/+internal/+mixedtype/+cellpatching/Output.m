@@ -6,4 +6,10 @@ classdef Output < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.cellpatching.Output();
+        end
+    end
 end

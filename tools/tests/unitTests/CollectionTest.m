@@ -659,7 +659,9 @@ classdef CollectionTest < matlab.unittest.TestCase
             reloadedPerson = reloaded{isPerson};
             testCase.verifyEqual(reloadedPerson.contactInformation.email, contact.email, ...
                 'The saved link was not followed on load.');
-            testCase.verifyClass(reloadedPerson.digitalIdentifier, 'openminds.core.ORCID', ...
+            % The property holds a mixed type set; indexing it hands out the
+            % instance the link was followed to.
+            testCase.verifyClass(reloadedPerson.digitalIdentifier(1), 'openminds.core.ORCID', ...
                 'The saved mixed-type link was not followed on load.');
         end
 

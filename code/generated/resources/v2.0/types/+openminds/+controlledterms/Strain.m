@@ -36,7 +36,7 @@ classdef Strain < openminds.controlledterms.ControlledTerm
         )
     end
 
-    properties
+    properties (SetObservable)
         % Enter other database identifiers for the given strain that are supported by the members of the Alliance of Genome Resources (https://www.alliancegenome.org/).
         identifier (1,:) string ...
             {mustBeMinLength(identifier, 1), mustBeListOfUniqueItems(identifier)}
