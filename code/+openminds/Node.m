@@ -120,6 +120,14 @@ classdef (Abstract) Node < handle & matlab.mixin.SetGet & ...
             else
                 if ~isscalar(instance) % Preallocate object array
                     obj(1, numel(instance)) = feval( class(obj) );
+                    % Growing the array fills the elements in between with
+                    % copies of one default object, so those copies share
+                    % the id that object generated. Every element gets its
+                    % own blank node id here; fromStruct replaces it when
+                    % the struct carries an identifier.
+                    for i = 1:numel(obj)
+                        obj(i).id = obj(i).generateInstanceId();
+                    end
                 end
                 for i = 1:numel( instance )
                     % Todo: Separate method to handle reference structure.
