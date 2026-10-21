@@ -14,7 +14,7 @@ function mustBeListOfUniqueItems(value)
     if isempty(value); return; end
 
     if openminds.utility.isMixedInstance(value)
-        value = arrayfun(@(v) v.Instance, value, 'uni', 0);
+        value = value.Instances;
         instanceTypes = cellfun(@(v) class(v), value, 'UniformOutput', 0);
         uniqueInstanceTypes = unique(instanceTypes);
         

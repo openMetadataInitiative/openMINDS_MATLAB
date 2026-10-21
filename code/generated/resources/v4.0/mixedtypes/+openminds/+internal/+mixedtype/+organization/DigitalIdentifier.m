@@ -7,4 +7,10 @@ classdef DigitalIdentifier < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.organization.DigitalIdentifier();
+        end
+    end
 end
