@@ -284,7 +284,9 @@ classdef (Abstract) Serializer < openminds.base.Transformer
             values = cell(1, numel(children));
             for i = 1:numel(children)
                 values{i} = obj.transform(children{i});
-                if isfield(values{i}, 'at_id')
+                % A reference of unknown type in an embedded position has
+                % nothing but its identifier, which therefore stays.
+                if isfield(values{i}, 'at_id') && ~isUntypedReference(children{i})
                     values{i} = rmfield(values{i}, 'at_id');
                 end
             end
@@ -339,6 +341,12 @@ classdef (Abstract) Serializer < openminds.base.Transformer
         function enqueueDocument(obj, instance)
         % Queue a referenced instance for emission as its own document.
 
+            % A reference of unknown type has no content to emit as a
+            % document, and no type to write one under.
+            if isUntypedReference(instance)
+                return
+            end
+
             childDepth = obj.CurrentDepth + 1;
             if childDepth > obj.SerializationConfiguration.RecursionDepth
                 return
@@ -381,4 +389,9 @@ classdef (Abstract) Serializer < openminds.base.Transformer
             assert(endsWith(iri, '/'), 'Vocabulary IRI should end with "/"')
         end
     end
+end
+
+function tf = isUntypedReference(node)
+% A reference whose type is not known: an identifier and nothing else.
+    tf = node.isReference() && ~openminds.interface.LinkResolver.isTypeKnown(node);
 end

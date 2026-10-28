@@ -46,6 +46,23 @@ classdef CollectionTest < matlab.unittest.TestCase
         end
     end
 
+    methods (Test) % References
+        function testReferenceWithControlledInstanceIriIsNotANode(testCase)
+        % A reference is not a node, whatever its identifier looks like.
+        % One that carries a controlled-instance IRI must not be admitted
+        % through the controlled-instance path either.
+
+            datasetVersion = openminds.core.DatasetVersion("shortName", "with-reference");
+            datasetVersion.keyword = openminds.internal.MixedTypeReference( ...
+                "https://openminds.om-i.org/instances/singleColor/#98D6F9");
+
+            collection = openminds.Collection(datasetVersion);
+
+            testCase.verifyEqual(length(collection), 1)
+            testCase.verifyWarningFree(@() collection.save(fullfile(pwd, "with_reference.jsonld")))
+        end
+    end
+
     methods (Test)
         function testCreateEmptyCollection(testCase)
             % Test creating an empty collection
