@@ -105,6 +105,26 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
                     end
                 end
 
+                % A list of embedded values whose elements do not share
+                % the same properties decodes to a cell of structs, which
+                % no property accepts. Each such element is built into an
+                % instance of the property's class, and the array is
+                % assigned on its own, because set does not take an object
+                % array inside its value cell.
+                isStructCell = cellfun(@(c) iscell(c) && ~isempty(c) && all(cellfun(@isstruct, c)), propertyValues);
+                % Iterate a row: a for loop over an empty column would run once.
+                for iProp = reshape(find(isStructCell), 1, [])
+                    instances = obj(i).instancesFromStructs(propertyNames{iProp}, propertyValues{iProp});
+                    if ~isempty(instances)
+                        obj(i).(propertyNames{iProp}) = instances;
+                        isStructCell(iProp) = true;
+                    else
+                        isStructCell(iProp) = false;
+                    end
+                end
+                propertyNames = propertyNames(~isStructCell);
+                propertyValues = propertyValues(~isStructCell);
+
                 set(obj(i), propertyNames', propertyValues');
                 
                 identifier = []; % Todo: Should be handled by serializer
@@ -135,6 +155,39 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
         end
     end
     
+    methods (Access = protected)
+        function instances = instancesFromStructs(obj, propertyName, structs)
+        % instancesFromStructs - Build a cell of structs into instances of a property's class
+        %
+        %   Returns an array of instances of the class the property is
+        %   declared with, or empty when the property has no declared
+        %   class or the class is not an openMINDS type. A property that
+        %   accepts several types is declared with a mixed-type class and
+        %   is left to its own conversion.
+
+            arguments
+                obj (1,1) openminds.internal.mixin.StructAdapter
+                propertyName (1,1) string
+                structs (1,:) cell
+            end
+
+            instances = [];
+            metaProperty = findprop(obj, propertyName);
+            if isempty(metaProperty) || isempty(metaProperty.Validation) ...
+                    || isempty(metaProperty.Validation.Class)
+                return
+            end
+
+            className = metaProperty.Validation.Class.Name;
+            if ~ismember('openminds.Node', superclasses(className))
+                return
+            end
+
+            built = cellfun(@(s) feval(className, s), structs, 'UniformOutput', false);
+            instances = [built{:}];
+        end
+    end
+
     % Set/get methods
     methods
         
