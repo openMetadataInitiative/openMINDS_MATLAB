@@ -7,4 +7,10 @@ classdef DescribedIn < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.behavioralprotocol.DescribedIn();
+        end
+    end
 end

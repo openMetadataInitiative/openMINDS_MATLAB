@@ -7,4 +7,10 @@ classdef Contributor < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.contribution.Contributor();
+        end
+    end
 end

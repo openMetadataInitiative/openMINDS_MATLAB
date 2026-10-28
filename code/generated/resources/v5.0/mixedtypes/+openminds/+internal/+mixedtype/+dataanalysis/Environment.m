@@ -6,4 +6,10 @@ classdef Environment < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.dataanalysis.Environment();
+        end
+    end
 end

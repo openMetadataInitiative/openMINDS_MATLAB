@@ -6,4 +6,10 @@ classdef EthicsJurisdiction < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = true
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.datasetversion.EthicsJurisdiction();
+        end
+    end
 end

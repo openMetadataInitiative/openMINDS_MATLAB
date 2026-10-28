@@ -11,4 +11,10 @@ classdef Uses < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.servicedeployment.Uses();
+        end
+    end
 end

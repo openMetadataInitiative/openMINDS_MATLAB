@@ -24,4 +24,10 @@ classdef About < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.learningresource.About();
+        end
+    end
 end

@@ -7,4 +7,10 @@ classdef Custodian < openminds.base.MixedTypeSet
         ]
         IS_SCALAR = false
     end
+
+    methods (Static)
+        function obj = empty(varargin)
+            obj = openminds.internal.mixedtype.softwareversion.Custodian();
+        end
+    end
 end
