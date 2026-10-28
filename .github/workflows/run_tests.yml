@@ -44,10 +44,17 @@ jobs:
         with:
           ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
       
+      # Cache the MATLAB install. A cache is restorable only from the branch
+      # that created it or from main, so this workflow's push, schedule and
+      # dispatch runs on main are what make the cache available to every pull
+      # request; a cache first created on a pull request is scoped to that
+      # pull request's merge ref and helps nobody else. The weekly schedule
+      # keeps it inside the seven-day eviction window in quiet weeks.
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v3
         with:
           release: ${{ matrix.MATLABVersion }}
+          cache: true
 
       # Check for MATLAB code issues in the project.
       - name: Check for MATLAB code issues
