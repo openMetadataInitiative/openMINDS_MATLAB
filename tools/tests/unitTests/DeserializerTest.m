@@ -157,6 +157,30 @@ classdef DeserializerTest < matlab.unittest.TestCase
         end
     end
 
+    methods (Test) % Embedded lists
+
+        function testEmbeddedListWithUnlikeElementsIsRead(testCase)
+        % A list of embedded values whose elements carry different
+        % properties decodes to a cell of structs. The node must still be
+        % read, with every element.
+
+            typeIRI = "https://openminds.om-i.org/instances/contributionType/acquisition";
+            document = DeserializerTest.collectionDocument(sprintf( ...
+                ['{"@id": "_:dataset-1", "@type": "%sDatasetVersion", "shortName": "unlike", ', ...
+                 '"contribution": [', ...
+                 '{"@type": "%sContribution", "type": [{"@id": "%s"}]}, ', ...
+                 '{"@type": "%sContribution"}]}'], ...
+                DeserializerTest.TypeIRI, DeserializerTest.TypeIRI, typeIRI, DeserializerTest.TypeIRI));
+
+            instances = testCase.verifyWarningFree(@() testCase.deserialize(document));
+
+            testCase.assertNumElements(instances, 1)
+            testCase.assertNumElements(instances{1}.contribution, 2)
+            testCase.verifyNotEmpty(instances{1}.contribution(1).type)
+            testCase.verifyEmpty(instances{1}.contribution(2).type)
+        end
+    end
+
     methods (Test) % Properties the schema names differently
 
         function testRenamedPropertyIsReadBack(testCase)
