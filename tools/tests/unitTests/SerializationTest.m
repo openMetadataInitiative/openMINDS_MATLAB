@@ -261,6 +261,43 @@ classdef SerializationTest < matlab.unittest.TestCase
                 'An embedded scalar should not be written as a list.')
         end
 
+        function testReferenceInMixedTypePropertyIsWrittenAsLink(testCase)
+        % A reference to a node that is not here, of a type that is not
+        % known, is written as its identifier wherever it is linked, and
+        % is never emitted as a document of its own.
+
+            identifier = "https://kg.ebrains.eu/api/instances/00000000-0000-0000-0000-000000000001";
+            datasetVersion = openminds.core.DatasetVersion("shortName", "with-reference");
+            datasetVersion.digitalIdentifier = openminds.internal.MixedTypeReference(identifier);
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                'RecursionDepth', 3, 'PrettyPrint', false);
+            documents = serializer.serialize(datasetVersion);
+
+            testCase.verifyClass(documents, 'char', ...
+                'The reference must not become a document of its own.')
+            testCase.verifySubstring(documents, sprintf('"digitalIdentifier":{"@id":"%s"}', identifier))
+        end
+
+        function testTypedReferenceIsStillWrittenAsStubDocument(testCase)
+        % A reference whose type is known keeps its representation: its
+        % link is written as the identifier, and a stub document with the
+        % identifier and type is emitted for it, as before.
+
+            identifier = "https://kg.ebrains.eu/api/instances/00000000-0000-0000-0000-000000000002";
+            person = openminds.core.Person("givenName", "Ada");
+            person.contactInformation = openminds.core.ContactInformation( ...
+                "id", identifier, "IsReference", true);
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                'RecursionDepth', 3, 'PrettyPrint', false);
+            documents = serializer.serialize(person);
+
+            testCase.assertNumElements(documents, 2)
+            testCase.verifySubstring(documents{2}, sprintf('"@id":"%s"', identifier))
+            testCase.verifySubstring(documents{2}, 'ContactInformation')
+        end
+
         function testRenamedPropertyIsWrittenUnderItsSchemaName(testCase)
         % A schema may spell a property name in a way MATLAB cannot, and
         % the type then declares it under another name. The document must

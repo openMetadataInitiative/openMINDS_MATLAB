@@ -57,8 +57,9 @@ classdef (Abstract) Transformer < openminds.internal.graph.TraversalCore
 %
 %   OVERRIDABLE DEFAULTS:
 %   ---------------------
-%       endNode           finish a node once its children are composed
-%       representRevisit  represent a node met again inside its own subtree
+%       endNode             finish a node once its children are composed
+%       representRevisit    represent a node met again inside its own subtree
+%       representReference  represent a reference whose type is not known
 %       setPropertyValue  place a property's values into the result
 %
 %   See also openminds.base.Visitor, openminds.Node
@@ -77,6 +78,16 @@ classdef (Abstract) Transformer < openminds.internal.graph.TraversalCore
                 result = obj.representRevisit(node);
                 return
             end
+            if node.isReference() && ~openminds.interface.LinkResolver.isTypeKnown(node)
+                % A reference whose type is not known stands for a node
+                % that is not here and has nothing but its identifier: no
+                % properties to walk, and no type to ask about. A
+                % reference of a known type is transformed like any node
+                % of that type, so its type is written with it.
+                result = obj.representReference(node);
+                return
+            end
+
             obj.markVisited(node);
             visitCleanup = onCleanup(@() obj.unmarkVisited(node));
 
@@ -109,6 +120,11 @@ classdef (Abstract) Transformer < openminds.internal.graph.TraversalCore
 
         function result = representRevisit(~, node)
         % representRevisit - Representation of a node already on the path
+            result = struct('at_id', node.id);
+        end
+
+        function result = representReference(~, node)
+        % representReference - Representation of a reference of unknown type
             result = struct('at_id', node.id);
         end
 

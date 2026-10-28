@@ -525,6 +525,15 @@ classdef Collection < handle
                 instance.id = obj.getBlankNodeIdentifier();
             end
 
+            if instance.isReference() ...
+                    && ~openminds.interface.LinkResolver.isTypeKnown(instance)
+                % A reference whose type is not known has nothing but its
+                % identifier, whatever that identifier looks like. It
+                % cannot be a node, and must not be admitted as one through
+                % the controlled-instance path below.
+                return
+            end
+
             isControlledInstance = ...
                 startsWith(instance.id, "https://openminds.ebrains.eu/instances/") ...
                 || startsWith(instance.id, "https://openminds.om-i.org/instances/");
