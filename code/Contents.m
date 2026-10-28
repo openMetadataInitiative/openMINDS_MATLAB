@@ -1,5 +1,5 @@
 % openMINDS Metadata Toolbox
-% Version 0.10.0 (R2022a+) 04-Sep-2026
+% Version 0.12.0 (R2022a+) 11-Sep-2026
 %
 % Copyright (c) 2026, openMetadataInitiative
 % ------------------------------------------

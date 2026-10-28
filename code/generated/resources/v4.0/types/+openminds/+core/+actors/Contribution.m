@@ -52,7 +52,7 @@ classdef Contribution < openminds.Node
 
     methods (Access = protected)
         function str = getDisplayLabel(obj)
-            str = sprintf('%s (%s)', obj.contributor, obj.type);
+            str = sprintf('%s (%s)', strjoin(string(arrayfun(@(x) string(x), obj.contributor)), '; '), obj.type);
         end
     end
 end

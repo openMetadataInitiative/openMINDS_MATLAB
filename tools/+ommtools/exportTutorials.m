@@ -36,17 +36,30 @@ function exportTutorials()
             if exportFormat(j) == ".html"
                 postProcessLivescriptHtml(exportedPath)
             end
-            normalizeIdsInFile(exportedPath)
+            finalizeExportedFile(exportedPath)
         end
     end
 end
 
-function normalizeIdsInFile(filePath)
+function finalizeExportedFile(filePath)
+% Normalise generated ids, then refuse output that captured a warning.
+%
+%   export runs the script and records whatever it printed, warnings
+%   included, and returns normally. A warning in documentation is always a
+%   defect in the documentation, so treat it as a failure of the export
+%   rather than something to ship.
     text = string(fileread(filePath));
     normalized = ommtools.normalizeBlankNodeIds(text);
     if ~strcmp(normalized, text)
         fileId = fopen(filePath, "w");
         cleanup = onCleanup(@() fclose(fileId));
         fwrite(fileId, normalized, "char");
+    end
+
+    warningLines = regexp(normalized, "^\s*Warning:[^\n]*", "match", "lineanchors");
+    if ~isempty(warningLines)
+        error("openMINDS:Export:WarningInOutput", ...
+            "%s captured %d warning(s) from the live script; the first is:\n  %s", ...
+            filePath, numel(warningLines), strtrim(warningLines(1)))
     end
 end

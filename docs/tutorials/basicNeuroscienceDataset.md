@@ -227,7 +227,7 @@ disp(pi)
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: pi@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
+     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
             familyName: "Doe"
              givenName: "Jane"
          preferredName: "Jane Doe"
@@ -247,7 +247,7 @@ disp(postdoc)
          alternateName: [1x0 string]
      associatedAccount: [None] (AccountInformation)
     contactInformation: postdoc@neuroscience.edu (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
+     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
             familyName: "Smith"
              givenName: "John"
          preferredName: "John Smith"
@@ -641,7 +641,7 @@ disp(['Saved metadata to: ', savePath]);
 ```
 
 ```matlabTextOutput
-Saved metadata to: /Users/eivind/Code/MATLAB/Neuroscience/Repositories/openMetadataInitiative/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
+Saved metadata to: /home/runner/work/openMINDS_MATLAB/openMINDS_MATLAB/code/livescripts/example_metadata.jsonld
 ```
 
 <a id="H_0727"></a>
@@ -1090,7 +1090,7 @@ disp(jsonContent);
     {
       "@id": "https://openminds.om-i.org/instances/ageCategory/adolescent",
       "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "'Adolescent' categorizes a transitional life cycle stage of growth and development between childhood and adulthood, often described as 'puberty'.",
+      "definition": "Life cycle stage of a subject loosely defined by the transitional growth and development between childhood and adulthood, often described as 'puberty'.",
       "name": "adolescent",
       "synonym": [
         "puberty"
@@ -1099,7 +1099,7 @@ disp(jsonContent);
     {
       "@id": "https://openminds.om-i.org/instances/ageCategory/adult",
       "@type": "https://openminds.om-i.org/types/AgeCategory",
-      "definition": "'Adult' categorizes the life cycle stage of an animal or human that reached sexual maturity.",
+      "definition": "Life cycle stage of a subject that starts with sexual maturity and ends with death.",
       "name": "adult",
       "otherOntologyIdentifier": [
         "http://uri.interlex.org/base/ilx_0729043"
@@ -1155,7 +1155,10 @@ disp(jsonContent);
       "otherOntologyIdentifier": [
         "http://uri.interlex.org/tgbugs/uris/readable/modality/Electrophysiology"
       ],
-      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202"
+      "preferredOntologyIdentifier": "http://uri.interlex.org/base/ilx_0741202",
+      "synonym": [
+        "ephys"
+      ]
     },
     {
       "@id": "https://openminds.om-i.org/instances/organizationType/legalEntity",
@@ -1225,7 +1228,10 @@ disp(jsonContent);
       "@id": "https://openminds.om-i.org/instances/technique/extracellularElectrophysiology",
       "@type": "https://openminds.om-i.org/types/Technique",
       "definition": "In 'extracellular electrophysiology' electrodes are inserted into living tissue, but remain outside the cells in the extracellular environment to measure or stimulate electrical activity coming from adjacent cells, usually neurons.",
-      "name": "extracellular electrophysiology"
+      "name": "extracellular electrophysiology",
+      "synonym": [
+        "ecephys"
+      ]
     }
   ]
 }

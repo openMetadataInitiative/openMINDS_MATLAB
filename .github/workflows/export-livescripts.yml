@@ -12,6 +12,11 @@ name: Export live scripts
 #
 # Runs on push to main only, so the commit it makes lands on main and never
 # on a pull request head, where it would rewrite the branch under a stack.
+#
+# The runner has no MATLAB user folder, and the toolbox resolves its instance
+# library under userpath, so without one every controlled-term lookup warns
+# and the export captures the warning into the documentation. Each MATLAB
+# step therefore gives MATLAB a user folder first.
 
 on:
   push:
@@ -25,8 +30,13 @@ on:
       - '.github/workflows/export-livescripts.yml'
   workflow_dispatch:
 
+# The push goes over SSH with the deploy key, as in prepare-release.yml, so
+# the workflow token needs only read access. A push made with a deploy key
+# does trigger other workflows, unlike one made with the workflow token; the
+# path filter above stops this workflow retriggering itself, and the
+# [skip actions] marker on the commit stops the rest.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -39,6 +49,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v3
@@ -52,6 +64,7 @@ jobs:
         with:
           command: |
             addpath(genpath("tools"));
+            ensureUserpath();
             run(fullfile("code", "startup.m"));
             results = runtests("TutorialTest");
             assertSuccess(results);
@@ -61,6 +74,7 @@ jobs:
         with:
           command: |
             addpath(genpath("tools"));
+            ensureUserpath();
             run(fullfile("code", "startup.m"));
             ommtools.exportTutorials();
             ommtools.updateReadmeLiveSection("README.md", ...

@@ -1,7 +1,7 @@
 classdef ControlledInstanceTest < matlab.unittest.TestCase
 
     properties (TestParameter)
-        instanceSpecification = { {'adult', "AgeCategory", "controlledTerms"} }
+        instanceSpecification = { {'adult', "AgeCategory"} }
         versionNumber = {3, "latest"}
     end
 

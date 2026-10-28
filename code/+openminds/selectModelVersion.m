@@ -73,8 +73,21 @@ function selectModelVersion(versionNumber)
     % enumerations and the controlled term base class generated for it.
     addpath(genpath( fullfile(generatedFolder, versionAsString) ))
 
+    % MATLAB reads the classes of the selected version only once nothing
+    % holds those of the previous one. The type registry holds enumeration
+    % values of the version it was built for, so it is released here: before
+    % the pause that lets the reload happen, and before the instance library
+    % resolves types against the reloaded classes. Its next use rebuilds it.
+    openminds.introspection.internal.MetaTypeRegistry.notifyModelVersionChanged()
+
     % Add a second pause for changes to take effect.
     pause(1) % Ad hoc value. Usually at least 0.3 - 0.4 seconds is necessary
+
+    % An instance library already in memory was typed against the previous
+    % model version, so it is rebuilt for the version selected here. This
+    % runs after the pause above so that the types resolve against the
+    % classes just added to the path.
+    openminds.internal.InstanceLibrary.notifyModelVersionChanged(versionAsString)
 end
 
 function versionFolders = listModelVersionFolders(generatedFolder)

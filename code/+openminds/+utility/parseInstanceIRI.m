@@ -36,21 +36,64 @@ function varargout = parseInstanceIRI(instanceIRI)
 
     URI = matlab.net.URI(instanceIRI);
     
-    URIPath = URI.Path;
+    % Path is an empty double, not a string, for an IRI with a host and
+    % nothing else, so it is converted before being compared or indexed,
+    % as isInstanceIRI does. The error carries an identifier because a
+    % caller holding an arbitrary IRI has to be able to tell this apart
+    % from a genuine failure.
+    URIPath = string(URI.Path);
     URIPath(URIPath=="")=[];
 
-    assert( URIPath(1) == "instances", ...
-        'Provided value "%s" is not a valid @id', instanceIRI)
+    if isempty(URIPath) || URIPath(1) ~= "instances"
+        error('openMINDS:ParseInstanceIRI:NotAnInstanceIRI', ...
+            'Provided value "%s" is not an openMINDS instance IRI.', instanceIRI)
+    end
+
     
     splitIRI = split(instanceIRI, "/");
 
     name = splitIRI(end);
-    typeName = splitIRI(end-1);
-    type = openminds.enum.Types(typeName);
+    type = resolveTypeSegment(splitIRI(end-1), instanceIRI);
 
     if nargout <= 1
         varargout = {struct('Type', type, 'Name', name)};
     else
         varargout = {type, name};
+    end
+end
+
+function type = resolveTypeSegment(typeSegment, instanceIRI)
+% resolveTypeSegment - Resolve the type named by the segment of an instance IRI
+%
+%   Nearly every instance IRI names its type in the singular, e.g.
+%   .../instances/biologicalSex/male, which the Types enumeration resolves
+%   directly, ignoring case. A few name it in the plural, e.g.
+%   .../instances/licenses/MIT, and openMINDS publishes no
+%   plural-to-singular mapping. Those are resolved through the instance
+%   library, which reads the type each instance document declares. A
+%   plural segment always belongs to a library instance, so the library
+%   lookup covers every case the direct match does not.
+
+    % try/catch on construction is the membership test. The enumeration
+    % matches names case-insensitively and offers no cheaper way to check
+    % whether a name is a member.
+    try
+        type = openminds.enum.Types(typeSegment);
+        return
+    catch
+        % Not a type name. Fall through to the instance library.
+    end
+
+    try
+        instanceLibrary = openminds.internal.InstanceLibrary.getSingleton();
+        type = instanceLibrary.getTypeFromIRISegment(typeSegment);
+    catch cause
+        ME = MException('openMINDS:ParseInstanceIRI:UnresolvedType', ...
+            ['Could not resolve an openMINDS type from the IRI "%s". The ', ...
+            'segment "%s" does not name a type in version "%s" of the ', ...
+            'openMINDS model, and does not name one in the instance library ', ...
+            'either.'], instanceIRI, typeSegment, openminds.version());
+        ME = addCause(ME, cause);
+        throw(ME)
     end
 end

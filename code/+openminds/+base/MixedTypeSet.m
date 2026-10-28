@@ -271,10 +271,10 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
             end
         end
     
-        function instance = initializeFromStructure(~, structure)
+        function instance = initializeFromStructure(obj, structure)
         % initializeFromStructure - Initialize an instance from a structure
             arguments
-                ~
+                obj
                 structure (1,1) struct
             end
 
@@ -293,8 +293,11 @@ classdef (Abstract) MixedTypeSet < openminds.internal.mixin.CustomInstanceDispla
                 instance = openminds.fromTypeName(structure.at_type);
                 instance = instance.fromStruct(structure);
             else
-                % Todo: warning or error? From preference...
-                error('Unsupported structure') % TODO: more detailed error
+                error('openminds:MixedTypeSet:UnsupportedStructure', ...
+                    ['Cannot create an instance from a structure with the fields [%s]. ', ...
+                    'A linked instance needs an "at_id" (or "x_id") field, and an embedded ', ...
+                    'instance needs an "at_type" field naming one of: %s.'], ...
+                    strjoin(fieldnames(structure), ', '), strjoin(obj(1).ALLOWED_TYPES, ', '))
             end
         end
     end

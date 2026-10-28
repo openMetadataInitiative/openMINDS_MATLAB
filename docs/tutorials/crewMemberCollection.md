@@ -253,7 +253,7 @@ personRow =
          alternateName: <missing>
      associatedAccount: [None] (AccountInformation)
     contactInformation: arthur-dent@hitchhikers-guide.galaxy (ContactInformation)
-     digitalIdentifier: [1x0 DigitalIdentifier]
+     digitalIdentifier: [None] (Any of: GenericIdentifier, ORCID)
             familyName: "Dent"
              givenName: "Arthur"
          preferredName: "Arthur Dent"

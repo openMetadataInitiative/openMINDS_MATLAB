@@ -47,6 +47,29 @@ classdef MetaTypeRegistry < handle & matlab.mixin.SetGet & matlab.mixin.Scalar
         % getSingleton - Method for retrieving singleton object
         % Defined in separate file in class folder
         singletonObject = getSingleton(options)
+
+        function notifyModelVersionChanged()
+        % notifyModelVersionChanged - Release the registry for a change of model version
+        %
+        %   Syntax:
+        %       openminds.introspection.internal.MetaTypeRegistry.notifyModelVersionChanged()
+        %
+        %   The registry holds enumeration values (openminds.enum.Types)
+        %   of the model version it was built for, and a registry left in
+        %   place across a version switch keeps the previous version's
+        %   types in memory. This method deletes the registry; it is
+        %   rebuilt on its next use. It is called from
+        %   openminds.selectModelVersion.
+        %
+        %   See also openminds.selectModelVersion
+
+            singletonObject = getappdata(0, ...
+                openminds.introspection.internal.MetaTypeRegistry.SINGLETON_NAME);
+
+            if ~isempty(singletonObject) && isvalid(singletonObject)
+                delete(singletonObject)
+            end
+        end
     end
 
     methods (Access = private)

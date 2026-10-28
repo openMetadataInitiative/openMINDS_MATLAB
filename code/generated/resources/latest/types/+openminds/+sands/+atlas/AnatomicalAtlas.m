@@ -1,4 +1,4 @@
-classdef AnatomicalAtlas < openminds.Node
+classdef AnatomicalAtlas < openminds.Node & openminds.internal.mixin.HasControlledInstance
 %AnatomicalAtlas - No description available.
 %
 %   PROPERTIES:
@@ -150,6 +150,17 @@ classdef AnatomicalAtlas < openminds.Node
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.fullName;
+        end
+    end
+
+    methods (Static)
+        function instance = fromName(name)
+            typeName = mfilename('classname');
+            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
+        end
+        function instanceNames = listInstances()
+            typeName = mfilename('classname');
+            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end

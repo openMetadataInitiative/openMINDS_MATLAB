@@ -1,4 +1,4 @@
-classdef ContentType < openminds.Node & openminds.internal.mixin.HasControlledInstance
+classdef ContentType < openminds.Node
 %ContentType - Structured information on the content type of a file instance, bundle or repository.
 %
 %   PROPERTIES:
@@ -75,17 +75,6 @@ classdef ContentType < openminds.Node & openminds.internal.mixin.HasControlledIn
     methods (Access = protected)
         function str = getDisplayLabel(obj)
             str = obj.name;
-        end
-    end
-
-    methods (Static)
-        function instance = fromName(name)
-            typeName = mfilename('classname');
-            instance = openminds.internal.mixin.HasControlledInstance.fromName(name, typeName);
-        end
-        function instanceNames = listInstances()
-            typeName = mfilename('classname');
-            instanceNames = openminds.internal.mixin.HasControlledInstance.listInstances(typeName);
         end
     end
 end

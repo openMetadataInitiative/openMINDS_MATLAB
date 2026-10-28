@@ -7,7 +7,7 @@ disp( openminds.toolboxversion )
 ```
 
 ```matlabTextOutput
-Version 0.10.0
+Version 0.12.0
 ```
 
 # Choose a version of the metadata model
@@ -84,7 +84,7 @@ disp(recordingState)
         internalIdentifier: ""
                lookupLabel: "mouse_01_recording"
                  pathology: [None] (Any of: Disease, DiseaseModel)
-    relativeTimeIndication: [1x0 RelativeTimeIndication]
+    relativeTimeIndication: [None] (One of: QuantitativeValue, QuantitativeValueRange)
                     weight: 24 grams (body weight) (SpecimenWeight)
 
 

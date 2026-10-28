@@ -4,6 +4,11 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
 % This class handles saving and loading openMINDS Collections to/from
 % a single metadata file using a configurable serializer.
 %
+% Saving an instance also saves every instance reachable from it through
+% links and embeddings, as nodes of the same file, because a reference to
+% a node that is not in the file could not be followed when it is loaded
+% again.
+%
 % USAGE:
 %   store = FileMetadataStore("metadata.jsonld");  % Extension depends on serializer
 %   store.save(instances);
@@ -18,7 +23,6 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
             arguments
                 filePath (1,1) string
                 options.Serializer = []
-                options.RecursionDepth (1,1) {mustBeInteger, mustBeNonnegative} = 0
                 options.PrettyPrint (1,1) logical = true
                 options.PropertyNameSyntax (1,1) string {mustBeMember(options.PropertyNameSyntax, ["compact","expanded"])} = "compact"
                 options.IncludeEmptyProperties (1,1) logical = false
@@ -31,10 +35,12 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
             % Set immutable location
             obj.Location = filePath;
             
-            % Create JsonLdSerializer if not provided
+            % Create JsonLdSerializer if not provided. The store flattens
+            % the graph itself, so the serializer does not need to recurse
+            % into links, and recursion depth is not configurable here.
             if isempty(options.Serializer)
                 obj.Serializer = openminds.internal.serializer.JsonLdSerializer(...
-                    'RecursionDepth', options.RecursionDepth, ...
+                    'RecursionDepth', 0, ...
                     'PrettyPrint', options.PrettyPrint, ...
                     'PropertyNameSyntax', options.PropertyNameSyntax, ...
                     'IncludeEmptyProperties', options.IncludeEmptyProperties, ...
@@ -65,22 +71,23 @@ classdef FileMetadataStore < openminds.interface.MetadataStore
         %   filePath : string
         %       Path to the created file
 
-        % Todo: What about recursion.
-
             arguments
                 obj (1,1) openminds.internal.FileMetadataStore
                 instances % openminds.Node, cell array, or openminds.Collection
                 options struct = struct() %#ok<INUSA>
             end
-            
-            % Handle Collection objects
+
+            % Every node reachable from the given instances is written,
+            % not only the instances themselves. The collection does the
+            % flattening; a new one is built so a collection passed in is
+            % left as it was.
             if isa(instances, 'openminds.Collection')
                 instances = instances.getAll();
-                if iscell(instances)
-                    instances = [instances{:}];
-                end
+            elseif ~iscell(instances)
+                instances = num2cell(instances);
             end
-            
+            instances = openminds.Collection(instances{:}).getAll();
+
             % Serialize instances
             serializedContent = obj.Serializer.serialize(instances);
             
