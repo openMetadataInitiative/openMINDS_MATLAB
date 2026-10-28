@@ -107,6 +107,40 @@ classdef MetaTypeTest < matlab.unittest.TestCase
                 'OPENMINDS_MATLAB:MetaType:NotAMixedType')
         end
 
+        function testSchemaNameOfRenamedProperty(testCase)
+        % A property whose schema name is not a valid identifier is
+        % declared under another name. The meta type translates between
+        % the two, and leaves every other name alone.
+
+            metaType = openminds.introspection.MetaType( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyTrue( metaType.hasRenamedProperties() )
+            testCase.verifyEqual( metaType.RenamedPropertyNames, "renamedBySchema" )
+
+            testCase.verifyEqual( ...
+                metaType.getSchemaPropertyName("renamedBySchema"), "renamed-by-schema" )
+            testCase.verifyEqual( ...
+                metaType.getPropertyNameFromSchemaName("renamed-by-schema"), "renamedBySchema" )
+
+            testCase.verifyEqual( ...
+                metaType.getSchemaPropertyName("scalarBySize"), "scalarBySize" )
+            testCase.verifyEqual( ...
+                metaType.getPropertyNameFromSchemaName("scalarBySize"), "scalarBySize" )
+        end
+
+        function testTypeWithoutRenamedPropertiesHasNone(testCase)
+        % Most generated types carry no name map. Asking is not an error,
+        % and every name translates to itself.
+
+            metaType = openminds.introspection.fromClassName( ...
+                'openminds.core.actors.Person');
+
+            testCase.verifyFalse( metaType.hasRenamedProperties() )
+            testCase.verifyEmpty( metaType.RenamedPropertyNames )
+            testCase.verifyEqual( metaType.getSchemaPropertyName("givenName"), "givenName" )
+        end
+
         function testMetaType(testCase)
             testCase.applyFixture(ommtest.helper.ModelVersionFixture(5))
             

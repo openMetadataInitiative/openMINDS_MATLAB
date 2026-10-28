@@ -58,6 +58,13 @@ classdef JsonLdSerializer < openminds.base.Serializer
             % field names are still plain property names.
             allStructs = obj.applyPropertyFilter(allStructs);
 
+            % A property the schema names differently is written under
+            % the schema name, carried as a placeholder until the text is
+            % produced.
+            for i = 1:numel(allStructs)
+                allStructs{i} = obj.applySchemaPropertyNames(allStructs{i});
+            end
+
             % Normalize empty values to ensure they get encoded to null
             if obj.SerializationConfiguration.IncludeEmptyProperties
                 for i = 1:numel(allStructs)
@@ -189,11 +196,78 @@ classdef JsonLdSerializer < openminds.base.Serializer
                 %   "VOCAB_URI_<word>"   (optional spaces) :
                 % Capturing <word> for reinsertion after the vocabulary IRI.
                 % We restrict <word> to MATLAB identifier pattern [A-Za-z0-9_]+
-                % because applySemanticPropertyNames only ever generates that.
+                % because applySemanticPropertyNames only ever generates
+                % that, and a schema name placeholder is one as well.
                 propertyKeyPattern = '"VOCAB_URI_([A-Za-z0-9_]+)"\s*:';
                 replacement = ['"' char(vocabIRI) '$1":'];
                 jsonStr = regexprep(jsonStr, propertyKeyPattern, replacement);
             end
+
+            % Write a renamed property under its schema name. After the
+            % vocabulary IRI, so an expanded key ends with the schema name.
+            jsonStr = char(openminds.internal.serializer.jsonld.SchemaPropertyName ...
+                .restoreInJson(jsonStr));
+        end
+
+        function S = applySchemaPropertyNames(obj, S)
+        % applySchemaPropertyNames - Rename properties the schema names differently
+        %
+        %   A property whose schema name is not a valid MATLAB identifier
+        %   is held under the name its type declares. The document must
+        %   use the schema name, which cannot be a field name, so the
+        %   field is renamed to a placeholder that convertStructToJsonLd
+        %   restores in the text. Embedded values are renamed for their
+        %   own types.
+
+            arguments
+                obj (1,1) openminds.internal.serializer.JsonLdSerializer
+                S (1,1) struct
+            end
+
+            metaType = obj.metaTypeOfDocument(S);
+            if ~isempty(metaType) && metaType.hasRenamedProperties()
+                for propertyName = metaType.RenamedPropertyNames
+                    if ~isfield(S, propertyName)
+                        continue
+                    end
+                    placeholder = openminds.internal.serializer.jsonld.SchemaPropertyName ...
+                        .toPlaceholder(metaType.getSchemaPropertyName(propertyName));
+                    S.(placeholder) = S.(propertyName);
+                    S = rmfield(S, propertyName);
+                end
+            end
+
+            % An embedded value is a scalar struct; a list of them is a
+            % cell, because their types may differ.
+            for fieldName = string(fieldnames(S))'
+                value = S.(fieldName);
+                if isstruct(value) && isscalar(value)
+                    S.(fieldName) = obj.applySchemaPropertyNames(value);
+                elseif iscell(value)
+                    for j = 1:numel(value)
+                        if isstruct(value{j}) && isscalar(value{j})
+                            value{j} = obj.applySchemaPropertyNames(value{j});
+                        end
+                    end
+                    S.(fieldName) = value;
+                end
+            end
+        end
+
+        function metaType = metaTypeOfDocument(obj, S)
+        % metaTypeOfDocument - Describe the type a document was built from
+        %
+        %   Returns empty when the document carries no type of the active
+        %   model. A reference has no type, and a node that stands for an
+        %   unknown type carries a marker rather than a type IRI.
+
+            metaType = [];
+            if ~isfield(S, 'at_type') || ~startsWith(S.at_type, obj.NamespaceIRI)
+                return
+            end
+
+            typeEnum = openminds.enum.Types.fromAtType(S.at_type);
+            metaType = openminds.introspection.fromClassName(typeEnum.ClassName);
         end
 
         function structInstance = applySemanticPropertyNames(obj, structInstance)
@@ -333,17 +407,30 @@ classdef JsonLdSerializer < openminds.base.Serializer
                 allStructs (1,:) cell {mustBeCellOfStructs}
             end
 
+            import openminds.internal.serializer.jsonld.SchemaPropertyName
+
             jsonLdKeywords = ["at_context", "at_id", "at_type", "at_graph"];
             for i = 1:numel(allStructs)
                 allFieldNames = string( fieldnames(allStructs{i}) );
                 allFieldNames = reshape(allFieldNames, 1, []); % Ensure row
-                
+
                 jsonLdKeywordFields = intersect(allFieldNames, jsonLdKeywords);
                 propertyFields = setdiff(allFieldNames, jsonLdKeywords);
 
+                % A renamed property is ordered by the schema name it will
+                % be written under, not by its placeholder. In expanded
+                % syntax the placeholder sits behind the vocabulary
+                % placeholder that applySemanticPropertyNames prepends.
+                sortNames = regexprep(propertyFields, '^VOCAB_URI_', '');
+                isPlaceholder = SchemaPropertyName.isPlaceholder(sortNames);
+                for j = find(isPlaceholder)
+                    sortNames(j) = SchemaPropertyName.fromPlaceholder(sortNames(j));
+                end
+                [~, propertyOrder] = sort(sortNames);
+
                 fieldOrder = [ ...
                     intersect(jsonLdKeywords, jsonLdKeywordFields, "stable"), ...
-                    sort(propertyFields) ];
+                    propertyFields(propertyOrder) ];
 
                 fieldOrder = cellstr(fieldOrder);
                 

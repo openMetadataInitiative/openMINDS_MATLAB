@@ -101,6 +101,13 @@ classdef (Abstract) Deserializer < handle
 
                 typeEnum = openminds.enum.Types.fromAtType(node.at_type);
 
+                % A property the schema names differently arrives under a
+                % decoded spelling of the schema name, which the type
+                % does not declare. Move it to the property it belongs to
+                % before the unknown fields are reported.
+                node = openminds.internal.serializer.renameDecodedSchemaProperties( ...
+                    node, typeEnum.ClassName);
+
                 try
                     instances{i} = feval(typeEnum.ClassName, node);
                     seenIdentifiers(end+1) = identifier; %#ok<AGROW>

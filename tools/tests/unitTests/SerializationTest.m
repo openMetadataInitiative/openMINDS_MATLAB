@@ -260,5 +260,28 @@ classdef SerializationTest < matlab.unittest.TestCase
             testCase.verifyEmpty(strfind(jsonText, '"age":['), ...
                 'An embedded scalar should not be written as a list.')
         end
+
+        function testRenamedPropertyIsWrittenUnderItsSchemaName(testCase)
+        % A schema may spell a property name in a way MATLAB cannot, and
+        % the type then declares it under another name. The document must
+        % carry the schema name, in both property name syntaxes, or the
+        % property is not one the schema has.
+
+            [instance, propertyName, schemaName] = instanceWithRenamedProperty();
+            testCase.assumeNotEmpty(instance, ...
+                'This model version has no property the schema names differently.')
+
+            compact = string(instance.serialize());
+            testCase.verifySubstring(compact, sprintf('"%s":', schemaName))
+            testCase.verifyEmpty(strfind(compact, sprintf('"%s"', propertyName)), ...
+                'The name the type declares must not appear in the document.')
+
+            serializer = openminds.internal.serializer.JsonLdSerializer( ...
+                "PropertyNameSyntax", "expanded");
+            expanded = string(serializer.serialize(instance));
+            expandedKeyPattern = sprintf('"https?://[^"]+/%s":', ...
+                regexptranslate('escape', schemaName));
+            testCase.verifyMatches(expanded, expandedKeyPattern)
+        end
     end
 end
