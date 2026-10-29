@@ -34,6 +34,8 @@ classdef MetaType < handle
 %   the property under a valid name and records the schema name. Use
 %   getSchemaPropertyName and getPropertyNameFromSchemaName to translate
 %   between the two; for every other property they return the name given.
+%   getPropertyNamesFromFieldNames maps the fields of a struct decoded by
+%   jsondecode, which rewrites such a schema name, to property names.
 %
 %   Example:
 %       metaType = openminds.introspection.MetaType("openminds.core.Subject");
@@ -244,6 +246,32 @@ classdef MetaType < handle
                 if obj.getSchemaPropertyName(renamedProperty) == schemaName
                     propertyName = renamedProperty;
                     return
+                end
+            end
+        end
+
+        function propertyNames = getPropertyNamesFromFieldNames(obj, fieldNames)
+        % getPropertyNamesFromFieldNames - The properties the fields of a decoded struct hold
+        %
+        %   jsondecode turns a schema name that is not a valid MATLAB
+        %   identifier into one with matlab.lang.makeValidName, so
+        %   "z-stepSize" arrives as the field "z_stepSize". Such a field is
+        %   returned as the name of the property it belongs to. Every other
+        %   field name is returned as it is, as is a decoded name when the
+        %   struct also has a field named as the property, because the
+        %   declared name takes precedence.
+
+            arguments
+                obj (1,1) openminds.introspection.MetaType
+                fieldNames (1,:) string
+            end
+
+            propertyNames = fieldNames;
+            for renamedProperty = obj.RenamedPropertyNames
+                decodedName = matlab.lang.makeValidName(obj.getSchemaPropertyName(renamedProperty));
+                isDecodedName = fieldNames == decodedName;
+                if any(isDecodedName) && ~any(fieldNames == renamedProperty)
+                    propertyNames(isDecodedName) = renamedProperty;
                 end
             end
         end

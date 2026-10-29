@@ -192,6 +192,27 @@ classdef DeserializerTest < matlab.unittest.TestCase
                     "writes the same document as the original.")
             end
         end
+
+        function testRenamedPropertyIsReadFromDecodedStruct(testCase)
+        % Code that decodes a document itself builds the instance from
+        % the decoded struct, without the deserializer. The renamed
+        % property arrives under the spelling jsondecode gives the schema
+        % name and must still land in the property the type declares.
+
+            [instance, propertyName, schemaName] = instanceWithRenamedProperty();
+            testCase.assumeNotEmpty(instance, ...
+                'This model version has no property the schema names differently.')
+            expectedDocument = string(instance.serialize());
+
+            decoded = openminds.internal.utility.json.decode(expectedDocument);
+            testCase.assertTrue(isfield(decoded, matlab.lang.makeValidName(schemaName)), ...
+                "The decoded struct must carry the decoded schema name for this test to mean anything.")
+
+            copy = feval(class(instance), decoded);
+
+            testCase.verifyNotEmpty(copy.(propertyName))
+            testCase.verifyEqual(string(copy.serialize()), expectedDocument)
+        end
     end
 
     methods (Test) % Malformed documents

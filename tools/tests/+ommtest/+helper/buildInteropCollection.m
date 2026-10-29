@@ -44,15 +44,15 @@ function collection = buildInteropCollection(specPath)
         typeEnum = openminds.enum.Types.fromAtType(typeIRIBase + typeName);
 
         % A schema name that is not a valid identifier was rewritten by
-        % jsondecode; move it to the property the type declares for it.
-        properties = openminds.internal.serializer.renameDecodedSchemaProperties( ...
-            properties, typeEnum.ClassName);
+        % jsondecode; pass it as the property the type declares for it.
+        fieldNames = string(fieldnames(properties))';
+        propertyNames = openminds.introspection.fromClassName(typeEnum.ClassName) ...
+            .getPropertyNamesFromFieldNames(fieldNames);
 
-        propertyNames = string(fieldnames(properties))';
         nameValuePairs = cell(1, 2*numel(propertyNames));
         for j = 1:numel(propertyNames)
             nameValuePairs{2*j-1} = propertyNames(j);
-            nameValuePairs{2*j} = resolve(properties.(propertyNames(j)));
+            nameValuePairs{2*j} = resolve(properties.(fieldNames(j)));
         end
 
         instance = feval(typeEnum.ClassName, nameValuePairs{:});

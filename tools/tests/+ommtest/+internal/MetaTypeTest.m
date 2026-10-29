@@ -129,6 +129,26 @@ classdef MetaTypeTest < matlab.unittest.TestCase
                 metaType.getPropertyNameFromSchemaName("scalarBySize"), "scalarBySize" )
         end
 
+        function testFieldNamesOfDecodedStruct(testCase)
+        % jsondecode rewrites a schema name that is not a valid identifier
+        % with makeValidName. That field maps to the property it belongs
+        % to, unless the struct also has a field named as the property.
+
+            metaType = openminds.introspection.MetaType( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyEqual( ...
+                metaType.getPropertyNamesFromFieldNames(["renamed_by_schema", "scalarBySize"]), ...
+                ["renamedBySchema", "scalarBySize"] )
+
+            testCase.verifyEqual( ...
+                metaType.getPropertyNamesFromFieldNames(["renamed_by_schema", "renamedBySchema"]), ...
+                ["renamed_by_schema", "renamedBySchema"], ...
+                'The declared name takes precedence over the decoded schema name.' )
+
+            testCase.verifyEmpty( metaType.getPropertyNamesFromFieldNames(strings(1, 0)) )
+        end
+
         function testTypeWithoutRenamedPropertiesHasNone(testCase)
         % Most generated types carry no name map. Asking is not an error,
         % and every name translates to itself.
