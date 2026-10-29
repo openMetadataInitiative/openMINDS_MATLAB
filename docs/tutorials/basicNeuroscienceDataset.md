@@ -377,6 +377,7 @@ ethicsJurisdiction = openminds.controlledterms.SovereignState("Germany");
 
 
 accessibility = openminds.core.miscellaneous.Accessibility(...
+    "id", createId("dataset-accessibility"), ...
     "channel", openminds.controlledterms.AccessChannel("virtualAccess"), ...
     "eligibility", openminds.controlledterms.AccessEligibilityType("openAccess"), ...
     "form", openminds.controlledterms.AccessForm("directAccess"), ...
@@ -659,27 +660,6 @@ disp(jsonContent);
   },
   "@graph": [
     {
-      "@id": "_:1",
-      "@type": "https://openminds.om-i.org/types/Accessibility",
-      "channel": {
-        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
-      },
-      "eligibility": {
-        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
-      },
-      "form": {
-        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
-      },
-      "paymentModel": [
-        {
-          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
-        }
-      ],
-      "process": {
-        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
-      }
-    },
-    {
       "@id": "_:brain-research-center",
       "@type": "https://openminds.om-i.org/types/Organization",
       "acronym": "BRC",
@@ -732,6 +712,27 @@ disp(jsonContent);
       "@id": "_:custom-brain-region",
       "@type": "https://openminds.om-i.org/types/TermSuggestion",
       "name": "visual cortex"
+    },
+    {
+      "@id": "_:dataset-accessibility",
+      "@type": "https://openminds.om-i.org/types/Accessibility",
+      "channel": {
+        "@id": "https://openminds.om-i.org/instances/accessChannel/virtualAccess"
+      },
+      "eligibility": {
+        "@id": "https://openminds.om-i.org/instances/accessEligibilityType/openAccess"
+      },
+      "form": {
+        "@id": "https://openminds.om-i.org/instances/accessForm/directAccess"
+      },
+      "paymentModel": [
+        {
+          "@id": "https://openminds.om-i.org/instances/paymentModelType/zero-costPaymentModel"
+        }
+      ],
+      "process": {
+        "@id": "https://openminds.om-i.org/instances/accessProcessType/immediateAccess"
+      }
     },
     {
       "@id": "_:dataset-documentation",
@@ -814,7 +815,7 @@ disp(jsonContent);
       "@id": "_:example-dataset-v1",
       "@type": "https://openminds.om-i.org/types/DatasetVersion",
       "accessibility": {
-        "@id": "_:1"
+        "@id": "_:dataset-accessibility"
       },
       "contribution": [
         {
