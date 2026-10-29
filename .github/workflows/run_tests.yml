@@ -79,8 +79,8 @@ jobs:
       #
       # The package goes into a virtual environment made from the runner's
       # own Python, and the test calls that interpreter as a subprocess.
-      # PATH is left alone on purpose: MATLAB resolves its in-process
-      # Python (pyenv) from PATH, and the badge step depends on it.
+      # PATH is left alone, so MATLAB's in-process Python (pyenv), which it
+      # resolves from PATH, stays the runner's own.
       - name: Check out openMINDS_Python
         uses: actions/checkout@v6
         with:
@@ -109,10 +109,9 @@ jobs:
         with:
           command: |
             addpath(genpath("tools"));
-            doCreateBadge = "${{ matrix.MATLABVersion }}" == "${{ env.LatestMATLABVersion }}";
-            testToolbox("CreateBadge", doCreateBadge)
+            testToolbox()
 
-      # Commit updated SVG badges for the issues and tests (if changed).
+      # Commit the updated code issues badge (if changed).
       # Push events only, so badge commits land on main and nowhere else:
       # committing them on a pull_request event rewrites the PR head branch
       # and breaks any stack built on top of it.
@@ -126,7 +125,7 @@ jobs:
 
           if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
             git add .github/badges/*
-            git commit -m "Update code issues and tests badges"
+            git commit -m "Update code issues badge"
             git push -f
           else
             echo "Nothing to commit"
