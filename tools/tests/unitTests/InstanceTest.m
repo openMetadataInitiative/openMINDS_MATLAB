@@ -98,5 +98,26 @@ classdef InstanceTest < matlab.unittest.TestCase
             testCase.verifyEqual(S.itemPreSave, itemPreSave, ...
                 sprintf('Loaded object does not match the original for %s', metadataType.ClassName));
         end
+
+        function testStructArrayWithoutIdsGetsDistinctIds(testCase)
+        % A multi-valued embedded property is read as a struct array with
+        % no identifiers, and each element must become a node of its own.
+        % Four elements, so that the array holds more than one element
+        % between the first and the last.
+
+            structs = struct( ...
+                'algorithm', {"SHA-1", "SHA-1", "SHA-1", "SHA-1"}, ...
+                'digest', {"1", "2", "3", "4"});
+
+            hashes = openminds.core.data.Hash(structs);
+
+            testCase.assertNumElements(hashes, 4)
+            identifiers = arrayfun(@(h) string(h.id), hashes);
+            testCase.verifyEqual(numel(unique(identifiers)), 4, ...
+                'Elements built from one struct array share an identifier.')
+            testCase.verifyTrue(all(startsWith(identifiers, "_:")), ...
+                'An element whose struct carries no identifier gets a blank node id.')
+            testCase.verifyEqual([hashes.digest], ["1", "2", "3", "4"])
+        end
     end
 end
