@@ -19,6 +19,12 @@ classdef JsonLdSerializer < openminds.base.Serializer
         DefaultFileExtension = ".jsonld"
     end
 
+    properties (Access = private)
+        % Schema name of each renamed property, keyed by the placeholder
+        % field that holds it until the JSON text is produced.
+        SchemaNameOfPlaceholder struct = struct()
+    end
+
     methods
         function obj = JsonLdSerializer(config)
 
@@ -61,6 +67,7 @@ classdef JsonLdSerializer < openminds.base.Serializer
             % A property the schema names differently is written under
             % the schema name, carried as a placeholder until the text is
             % produced.
+            obj.SchemaNameOfPlaceholder = struct();
             for i = 1:numel(allStructs)
                 allStructs{i} = obj.applySchemaPropertyNames(allStructs{i});
             end
@@ -89,7 +96,7 @@ classdef JsonLdSerializer < openminds.base.Serializer
                 end
             end
             
-            allStructs = obj.sortKeys(allStructs);
+            allStructs = obj.sortKeys(allStructs, obj.SchemaNameOfPlaceholder);
         
             if obj.SerializationConfiguration.OutputMode == "single"
                 allStructs = obj.createCollectionDocument(allStructs);
@@ -205,8 +212,17 @@ classdef JsonLdSerializer < openminds.base.Serializer
 
             % Write a renamed property under its schema name. After the
             % vocabulary IRI, so an expanded key ends with the schema name.
-            jsonStr = char(openminds.internal.serializer.jsonld.SchemaPropertyName ...
-                .restoreInJson(jsonStr));
+            % Only a key is rewritten: it is preceded by its opening quote
+            % or the vocabulary IRI and followed by the closing quote and a
+            % colon, a position a string value never takes.
+            for placeholder = string(fieldnames(obj.SchemaNameOfPlaceholder))'
+                keyPattern = sprintf('(?<=["/])%s(?="\\s*:)', placeholder);
+                % In a replacement a dollar sign starts a token and a
+                % backslash an escape.
+                schemaName = replace(obj.SchemaNameOfPlaceholder.(placeholder), ...
+                    ["\", "$"], ["\\", "\$"]);
+                jsonStr = regexprep(jsonStr, keyPattern, char(schemaName));
+            end
         end
 
         function S = applySchemaPropertyNames(obj, S)
@@ -215,9 +231,9 @@ classdef JsonLdSerializer < openminds.base.Serializer
         %   A property whose schema name is not a valid MATLAB identifier
         %   is held under the name its type declares. The document must
         %   use the schema name, which cannot be a field name, so the
-        %   field is renamed to a placeholder that convertStructToJsonLd
-        %   restores in the text. Embedded values are renamed for their
-        %   own types.
+        %   field is renamed to a placeholder and the schema name is
+        %   recorded for convertStructToJsonLd to write in its place.
+        %   Embedded values are renamed for their own types.
 
             arguments
                 obj (1,1) openminds.internal.serializer.JsonLdSerializer
@@ -225,13 +241,14 @@ classdef JsonLdSerializer < openminds.base.Serializer
             end
 
             metaType = obj.metaTypeOfDocument(S);
-            if ~isempty(metaType) && metaType.hasRenamedProperties()
+            if ~isempty(metaType)
                 for propertyName = metaType.RenamedPropertyNames
                     if ~isfield(S, propertyName)
                         continue
                     end
-                    placeholder = openminds.internal.serializer.jsonld.SchemaPropertyName ...
-                        .toPlaceholder(metaType.getSchemaPropertyName(propertyName));
+                    placeholder = "SCHEMA_NAME_" + propertyName;
+                    obj.SchemaNameOfPlaceholder.(placeholder) = ...
+                        metaType.getSchemaPropertyName(propertyName);
                     S.(placeholder) = S.(propertyName);
                     S = rmfield(S, propertyName);
                 end
@@ -387,27 +404,27 @@ classdef JsonLdSerializer < openminds.base.Serializer
             documentList = documentList(sortOrder);
         end
 
-        function allStructs = sortKeys(allStructs)
+        function allStructs = sortKeys(allStructs, schemaNameOfPlaceholder)
         % sortKeys - Sorts the keys of the given structs based on a predefined order.
         %
         % Sort by placing json-ld keywords first, then property names in
         % alphabetical order
         %
         % Syntax:
-        %   allStructs = sortKeys(obj, allStructs)
+        %   allStructs = sortKeys(allStructs, schemaNameOfPlaceholder)
         %
         % Input Arguments:
-        %   obj          - An object which may contain relevant properties for sorting.
-        %   allStructs   - An array of structures to be sorted by key order.
+        %   allStructs              - An array of structures to be sorted by key order.
+        %   schemaNameOfPlaceholder - Schema name of each renamed property,
+        %                             keyed by its placeholder field name.
         %
         % Output Arguments:
         %   allStructs   - The input structures sorted with keys in a specific order.
-        
+
             arguments
                 allStructs (1,:) cell {mustBeCellOfStructs}
+                schemaNameOfPlaceholder (1,1) struct
             end
-
-            import openminds.internal.serializer.jsonld.SchemaPropertyName
 
             jsonLdKeywords = ["at_context", "at_id", "at_type", "at_graph"];
             for i = 1:numel(allStructs)
@@ -422,9 +439,8 @@ classdef JsonLdSerializer < openminds.base.Serializer
                 % syntax the placeholder sits behind the vocabulary
                 % placeholder that applySemanticPropertyNames prepends.
                 sortNames = regexprep(propertyFields, '^VOCAB_URI_', '');
-                isPlaceholder = SchemaPropertyName.isPlaceholder(sortNames);
-                for j = find(isPlaceholder)
-                    sortNames(j) = SchemaPropertyName.fromPlaceholder(sortNames(j));
+                for j = find(isfield(schemaNameOfPlaceholder, cellstr(sortNames)))
+                    sortNames(j) = schemaNameOfPlaceholder.(sortNames(j));
                 end
                 [~, propertyOrder] = sort(sortNames);
 

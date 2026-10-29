@@ -109,24 +109,18 @@ classdef MetaTypeTest < matlab.unittest.TestCase
 
         function testSchemaNameOfRenamedProperty(testCase)
         % A property whose schema name is not a valid identifier is
-        % declared under another name. The meta type translates between
-        % the two, and leaves every other name alone.
+        % declared under another name. The meta type gives its schema
+        % name, and leaves every other name alone.
 
             metaType = openminds.introspection.MetaType( ...
                 'ommtest.helper.PropertyDeclarationFixture');
 
-            testCase.verifyTrue( metaType.hasRenamedProperties() )
             testCase.verifyEqual( metaType.RenamedPropertyNames, "renamedBySchema" )
 
             testCase.verifyEqual( ...
                 metaType.getSchemaPropertyName("renamedBySchema"), "renamed-by-schema" )
             testCase.verifyEqual( ...
-                metaType.getPropertyNameFromSchemaName("renamed-by-schema"), "renamedBySchema" )
-
-            testCase.verifyEqual( ...
                 metaType.getSchemaPropertyName("scalarBySize"), "scalarBySize" )
-            testCase.verifyEqual( ...
-                metaType.getPropertyNameFromSchemaName("scalarBySize"), "scalarBySize" )
         end
 
         function testFieldNamesOfDecodedStruct(testCase)
@@ -156,7 +150,6 @@ classdef MetaTypeTest < matlab.unittest.TestCase
             metaType = openminds.introspection.fromClassName( ...
                 'openminds.core.actors.Person');
 
-            testCase.verifyFalse( metaType.hasRenamedProperties() )
             testCase.verifyEmpty( metaType.RenamedPropertyNames )
             testCase.verifyEqual( metaType.getSchemaPropertyName("givenName"), "givenName" )
         end

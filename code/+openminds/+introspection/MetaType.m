@@ -31,9 +31,9 @@ classdef MetaType < handle
 %
 %   A schema may spell a property name in a way that is not a valid MATLAB
 %   identifier, such as "z-stepSize". The generated class then declares
-%   the property under a valid name and records the schema name. Use
-%   getSchemaPropertyName and getPropertyNameFromSchemaName to translate
-%   between the two; for every other property they return the name given.
+%   the property under a valid name and records the schema name.
+%   getSchemaPropertyName returns the schema name of a property, and the
+%   property name itself for every other property.
 %   getPropertyNamesFromFieldNames maps the fields of a struct decoded by
 %   jsondecode, which rewrites such a schema name, to property names.
 %
@@ -206,11 +206,6 @@ classdef MetaType < handle
 
     methods (Access = public)
 
-        function tf = hasRenamedProperties(obj)
-        % hasRenamedProperties - Whether any property has a different schema name
-            tf = ~isempty(obj.RenamedPropertyNames);
-        end
-
         function schemaName = getSchemaPropertyName(obj, propertyName)
         % getSchemaPropertyName - The name the schema uses for a property
         %
@@ -226,27 +221,6 @@ classdef MetaType < handle
                 schemaName = string(obj.SchemaNameOfProperty.(propertyName));
             else
                 schemaName = propertyName;
-            end
-        end
-
-        function propertyName = getPropertyNameFromSchemaName(obj, schemaName)
-        % getPropertyNameFromSchemaName - The property the schema name belongs to
-        %
-        %   The inverse of getSchemaPropertyName. A schema name that no
-        %   property was renamed from is returned as it is, whether or not
-        %   the type has a property of that name.
-
-            arguments
-                obj (1,1) openminds.introspection.MetaType
-                schemaName (1,1) string
-            end
-
-            propertyName = schemaName;
-            for renamedProperty = obj.RenamedPropertyNames
-                if obj.getSchemaPropertyName(renamedProperty) == schemaName
-                    propertyName = renamedProperty;
-                    return
-                end
             end
         end
 
