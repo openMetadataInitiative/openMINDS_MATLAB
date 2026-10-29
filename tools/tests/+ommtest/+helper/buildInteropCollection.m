@@ -43,19 +43,25 @@ function collection = buildInteropCollection(specPath)
     function instance = instantiate(typeName, properties)
         typeEnum = openminds.enum.Types.fromAtType(typeIRIBase + typeName);
 
-        propertyNames = string(fieldnames(properties))';
+        % A schema name that is not a valid identifier was rewritten by
+        % jsondecode; pass it as the property the type declares for it.
+        fieldNames = string(fieldnames(properties))';
+        propertyNames = openminds.introspection.fromClassName(typeEnum.ClassName) ...
+            .getPropertyNamesFromFieldNames(fieldNames);
+
         nameValuePairs = cell(1, 2*numel(propertyNames));
         for j = 1:numel(propertyNames)
             nameValuePairs{2*j-1} = propertyNames(j);
-            nameValuePairs{2*j} = resolve(properties.(propertyNames(j)));
+            nameValuePairs{2*j} = resolve(properties.(fieldNames(j)));
         end
 
         instance = feval(typeEnum.ClassName, nameValuePairs{:});
     end
 
     function value = resolve(value)
-        % jsondecode gives a cell for a list of unlike items and a struct
-        % array for a list of like objects
+        % jsondecode gives a cell for a list of unlike items, a struct
+        % array for a list of like objects, and a column for a list of
+        % numbers, where the type classes hold a row
         if iscell(value)
             value = cellfun(@resolve, value, 'UniformOutput', false);
             value = concatenateIfAlike(value);
@@ -64,6 +70,8 @@ function collection = buildInteropCollection(specPath)
             value = concatenateIfAlike(value);
         elseif isstruct(value)
             value = resolveValueObject(value);
+        elseif isnumeric(value) && iscolumn(value) && ~isscalar(value)
+            value = reshape(value, 1, []);
         end
     end
 

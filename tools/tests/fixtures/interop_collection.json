@@ -82,6 +82,48 @@
           "$datetime": "2023-02-07T16:00:00+00:00"
         }
       }
+    },
+    {
+      "key": "file",
+      "type": "File",
+      "properties": {
+        "IRI": "https://example.org/data/stack.tif",
+        "name": "stack.tif"
+      }
+    },
+    {
+      "key": "stack",
+      "type": "GridImageStack",
+      "properties": {
+        "name": "stack",
+        "dataLocation": {
+          "$ref": "file"
+        },
+        "dimension": [
+          512,
+          512
+        ],
+        "pixelSize": [
+          {
+            "$embedded": "QuantitativeValue",
+            "properties": {
+              "value": 0.5
+            }
+          },
+          {
+            "$embedded": "QuantitativeValue",
+            "properties": {
+              "value": 0.6
+            }
+          }
+        ],
+        "z-stepSize": {
+          "$embedded": "QuantitativeValue",
+          "properties": {
+            "value": 2.5
+          }
+        }
+      }
     }
   ]
 }
