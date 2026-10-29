@@ -10,7 +10,7 @@
 [![Version Number](https://img.shields.io/github/v/release/openMetadataInitiative/openMINDS_MATLAB?label=version)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/releases/latest)
 [![Open in MATLAB Online](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/fileexchange/v1?id=134212)
 [![View openMINDS_MATLAB on File Exchange](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
-[![MATLAB Tests](.github/badges/tests.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml)
+[![Run tests](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml/badge.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml)
 [![codecov](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB/graph/badge.svg?token=FTD5FHZSFA)](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
 [![MATLAB Code Issues](.github/badges/code_issues.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/security/code-scanning)
 
