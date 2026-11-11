@@ -1,13 +1,13 @@
-name: Analyse code (latest MATLAB)
+name: Code analysis (latest MATLAB)
 
-# Runs the same code analysis as analyse-code.yml on the latest MATLAB
-# release. analyse-code.yml uses a fixed release so that its result, and
+# Runs the same check as code-analysis.yml on the latest MATLAB
+# release. code-analysis.yml uses a fixed release so that its result, and
 # the README badge, change only when the code changes. A failure here means
 # a newer release reports issues that the fixed release does not: resolve
-# them, then raise matlab_release in analyse-code.yml.
+# them, then raise matlab_release in code-analysis.yml.
 #
 # The analysis is skipped while the latest release is the one pinned in
-# analyse-code.yml, because that workflow already covers it.
+# code-analysis.yml, because that workflow already covers it.
 
 on:
   # Weekly, Monday 04:00 UTC
@@ -28,10 +28,10 @@ jobs:
       latest_release: ${{ steps.compare.outputs.latest_release }}
       run_analysis: ${{ steps.compare.outputs.run_analysis }}
     steps:
-      - name: Check out analyse-code.yml
+      - name: Check out code-analysis.yml
         uses: actions/checkout@v6
         with:
-          sparse-checkout: .github/workflows/analyse-code.yml
+          sparse-checkout: .github/workflows/code-analysis.yml
           sparse-checkout-cone-mode: false
 
       # setup-matlab resolves "latest" from the same MathWorks URL, which
@@ -43,10 +43,10 @@ jobs:
         run: |
           latest=$(curl -fsS --retry 3 https://ssd.mathworks.com/supportfiles/ci/matlab-release/v0/latest \
             | tr '[:upper:]' '[:lower:]')
-          pinned=$(grep -oE '^[[:space:]]*matlab_release:[[:space:]]*R[0-9]{4}[ab]' .github/workflows/analyse-code.yml \
+          pinned=$(grep -oE '^[[:space:]]*matlab_release:[[:space:]]*R[0-9]{4}[ab]' .github/workflows/code-analysis.yml \
             | grep -oE 'R[0-9]{4}[ab]' || true)
           if [[ -z "$pinned" ]]; then
-            echo "::error::No matlab_release of the form R2026b found in analyse-code.yml"
+            echo "::error::No matlab_release of the form R2026b found in code-analysis.yml"
             exit 1
           fi
           pinned=$(echo "$pinned" | tr '[:upper:]' '[:lower:]')
@@ -62,8 +62,8 @@ jobs:
           echo "Latest release: $latest, pinned release: $pinned, run analysis: $runAnalysis" \
             | tee -a "$GITHUB_STEP_SUMMARY"
 
-  analyse-code:
-    name: Analyse code (latest MATLAB)
+  code-analysis:
+    name: Code analysis (latest MATLAB)
     needs: compare-releases
     if: needs.compare-releases.outputs.run_analysis == 'true'
     uses: ehennestad/matbox-actions/.github/workflows/check-code-workflow.yml@v1

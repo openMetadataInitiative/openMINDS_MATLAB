@@ -1,4 +1,4 @@
-name: Analyse code
+name: Code analysis
 
 # Runs MATLAB Code Analyzer on every .m file in the repository. The job
 # fails when an issue of severity warning or error remains (see
@@ -17,8 +17,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  analyse-code:
-    name: Analyse code
+  code-analysis:
+    name: Code analysis
     uses: ehennestad/matbox-actions/.github/workflows/check-code-workflow.yml@v1
     with:
       # Check the whole repository, including the tools folder

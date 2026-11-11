@@ -25,7 +25,7 @@ function issues = codecheckToolbox(options)
     end
 
     % ShowIssues prints the table of remaining issues, so a failed CI run
-    % shows which files to fix. The status of the Analyse code workflow is
+    % shows which files to fix. The status of the Code analysis workflow is
     % the README badge, so no badge file is created.
     issues = matbox.tasks.codecheckToolbox(projectRootDirectory, ...
         FoldersToCheck=foldersToCheck, ...

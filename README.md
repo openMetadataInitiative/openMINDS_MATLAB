@@ -12,7 +12,7 @@
 [![View openMINDS_MATLAB on File Exchange](https://github.com/openMetadataInitiative/openMINDS_MATLAB/blob/gh-badges/.github/badges/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/134212-openminds_matlab)
 [![Run tests](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml/badge.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/run_tests.yml)
 [![codecov](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB/graph/badge.svg?token=FTD5FHZSFA)](https://codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
-[![Analyse code](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/analyse-code.yml/badge.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/analyse-code.yml)
+[![Code analysis](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/code-analysis.yml/badge.svg)](https://github.com/openMetadataInitiative/openMINDS_MATLAB/actions/workflows/code-analysis.yml)
 
 <p align="center">
   <a href="#installation">Installation</a> •
