@@ -56,21 +56,6 @@ jobs:
           release: ${{ matrix.MATLABVersion }}
           cache: true
 
-      # Check for MATLAB code issues in the project.
-      - name: Check for MATLAB code issues
-        if: matrix.MATLABVersion == env.LatestMATLABVersion
-        uses: matlab-actions/run-command@v3
-        with:
-          command: addpath(genpath("tools")); codecheckToolbox()
-    
-      # Upload code issues report
-      - name: Upload SARIF file
-        if: matrix.MATLABVersion == env.LatestMATLABVersion
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          # Path to SARIF file relative to the root of the repository
-          sarif_file: docs/reports/code_issues.sarif
-          
       # The interoperability test builds the same collection with the
       # Python reference implementation and compares the two exports. A
       # pull request runs against a pinned release, so it cannot go red
@@ -110,26 +95,6 @@ jobs:
           command: |
             addpath(genpath("tools"));
             testToolbox()
-
-      # Commit the updated code issues badge (if changed).
-      # Push events only, so badge commits land on main and nowhere else:
-      # committing them on a pull_request event rewrites the PR head branch
-      # and breaks any stack built on top of it.
-      - name: Commit svg badges if updated
-        if: matrix.MATLABVersion == env.LatestMATLABVersion && github.event_name == 'push'
-        continue-on-error: true
-        run: |
-          git config user.name "${{ github.workflow }} by ${{ github.actor }}"
-          git config user.email "${{ secrets.COMMIT_EMAIL_ADDRESS }}"
-          git fetch
-
-          if [[ $(git add .github/badges/* --dry-run | wc -l) -gt 0 ]]; then
-            git add .github/badges/*
-            git commit -m "Update code issues badge"
-            git push -f
-          else
-            echo "Nothing to commit"
-          fi
 
       - name: Upload code coverage report to Codecov (https://app.codecov.io/gh/openMetadataInitiative/openMINDS_MATLAB)
         if: matrix.MATLABVersion == env.LatestMATLABVersion

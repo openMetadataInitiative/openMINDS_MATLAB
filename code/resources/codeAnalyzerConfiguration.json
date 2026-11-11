@@ -1,0 +1,8 @@
+{
+    "name": "openMINDS_MATLAB",
+    "description": "Excludes generated classes where the openMINDS type and one of its properties share a name, which Code Analyzer reports as REDEF.",
+    "ignoredFiles": [
+        "generated/resources/v1.0/types/+openminds/+core/+miscellaneous/URL.m",
+        "generated/resources/v2.0/types/+openminds/+core/+miscellaneous/URL.m"
+    ]
+}
