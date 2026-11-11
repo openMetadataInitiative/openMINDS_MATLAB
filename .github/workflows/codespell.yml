@@ -1,4 +1,4 @@
-name: Run Codespell
+name: Codespell
 
 # NB: Will only process "skip" and "ignore-words-list" from the codespell 
 # config file if provided
@@ -15,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  reuse-workflow-run-codespell:
-    name: Run Codespell
+  codespell:
+    name: Codespell
     uses: ehennestad/matbox-actions/.github/workflows/codespell-workflow.yml@v1
     with:
       # Specify the path of a codespell config file relative to the repository 

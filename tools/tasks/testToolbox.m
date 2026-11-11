@@ -28,7 +28,7 @@ function testToolbox(varargin)
         verbosity = "Concise";
     end
 
-    % The README shows the Run tests workflow status badge, so no tests
+    % The README shows the Tests workflow status badge, so no tests
     % badge is generated from the test results
     matbox.tasks.testToolbox(...
         projectRootDirectory, ...

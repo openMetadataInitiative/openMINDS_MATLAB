@@ -1,4 +1,4 @@
-name: Run tests
+name: Tests
 
 on:
   # Triggers the workflow on push to any branch other than main or PR to main
