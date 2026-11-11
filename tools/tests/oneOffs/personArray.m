@@ -23,8 +23,8 @@ function persons = personArray()
             "contactInformation", contacts(person.email) };
 
         if ommtest.oneoffs.currentSchemaMajorVersion() >= 5
-            personArguments = [personArguments, { ...
-                "preferredName", join([person.givenName, person.familyName], " ")}];
+            preferredName = join([person.givenName, person.familyName], " ");
+            personArguments = [personArguments, {"preferredName", preferredName}]; %#ok<AGROW>
         end
 
         persons(end+1) = openminds.core.Person(personArguments{:});     %#ok<AGROW>
