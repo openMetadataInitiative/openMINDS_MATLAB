@@ -1,0 +1,22 @@
+name: Analyse code (latest MATLAB)
+
+# Runs the same code analysis as analyse-code.yml on the latest MATLAB
+# release. analyse-code.yml uses a fixed release so that its result, and
+# the README badge, change only when the code changes. A failure here means
+# a newer release reports issues that the fixed release does not: resolve
+# them, then raise matlab_release in analyse-code.yml.
+
+on:
+  # Weekly, Monday 04:00 UTC
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  analyse-code:
+    name: Analyse code (latest MATLAB)
+    uses: ehennestad/matbox-actions/.github/workflows/check-code-workflow.yml@v1
+    with:
+      source_directory: "."
+      matlab_release: latest
+      update_badges: false
