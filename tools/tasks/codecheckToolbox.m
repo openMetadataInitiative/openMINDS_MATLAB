@@ -24,9 +24,9 @@ function issues = codecheckToolbox(options)
         foldersToCheck = fullfile(projectRootDirectory, options.FoldersToCheck);
     end
 
-    % matbox.tasks.codecheckToolbox applies RequireIssuesResolved only when
-    % ShowIssues is true. The status of the Analyse code workflow is the
-    % README badge, so no badge file is created.
+    % ShowIssues prints the table of remaining issues, so a failed CI run
+    % shows which files to fix. The status of the Analyse code workflow is
+    % the README badge, so no badge file is created.
     issues = matbox.tasks.codecheckToolbox(projectRootDirectory, ...
         FoldersToCheck=foldersToCheck, ...
         CreateBadge=false, ...
