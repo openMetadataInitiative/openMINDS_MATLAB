@@ -5,18 +5,69 @@ name: Analyse code (latest MATLAB)
 # the README badge, change only when the code changes. A failure here means
 # a newer release reports issues that the fixed release does not: resolve
 # them, then raise matlab_release in analyse-code.yml.
+#
+# The analysis is skipped while the latest release is the one pinned in
+# analyse-code.yml, because that workflow already covers it.
 
 on:
   # Weekly, Monday 04:00 UTC
   schedule:
     - cron: '0 4 * * 1'
   workflow_dispatch:
+    inputs:
+      force:
+        description: Run the analysis even if the latest release is the pinned release
+        type: boolean
+        default: false
 
 jobs:
+  compare-releases:
+    name: Compare latest and pinned MATLAB release
+    runs-on: ubuntu-latest
+    outputs:
+      latest_release: ${{ steps.compare.outputs.latest_release }}
+      run_analysis: ${{ steps.compare.outputs.run_analysis }}
+    steps:
+      - name: Check out analyse-code.yml
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/workflows/analyse-code.yml
+          sparse-checkout-cone-mode: false
+
+      # setup-matlab resolves "latest" from the same MathWorks URL, which
+      # returns a lowercase release name such as r2026b
+      - name: Compare releases
+        id: compare
+        env:
+          FORCE: ${{ inputs.force || false }}
+        run: |
+          latest=$(curl -fsS --retry 3 https://ssd.mathworks.com/supportfiles/ci/matlab-release/v0/latest \
+            | tr '[:upper:]' '[:lower:]')
+          pinned=$(grep -oE '^[[:space:]]*matlab_release:[[:space:]]*R[0-9]{4}[ab]' .github/workflows/analyse-code.yml \
+            | grep -oE 'R[0-9]{4}[ab]' || true)
+          if [[ -z "$pinned" ]]; then
+            echo "::error::No matlab_release of the form R2026b found in analyse-code.yml"
+            exit 1
+          fi
+          pinned=$(echo "$pinned" | tr '[:upper:]' '[:lower:]')
+
+          if [[ "$latest" != "$pinned" || "$FORCE" == "true" ]]; then
+            runAnalysis=true
+          else
+            runAnalysis=false
+          fi
+
+          echo "latest_release=$latest" >> "$GITHUB_OUTPUT"
+          echo "run_analysis=$runAnalysis" >> "$GITHUB_OUTPUT"
+          echo "Latest release: $latest, pinned release: $pinned, run analysis: $runAnalysis" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+
   analyse-code:
     name: Analyse code (latest MATLAB)
+    needs: compare-releases
+    if: needs.compare-releases.outputs.run_analysis == 'true'
     uses: ehennestad/matbox-actions/.github/workflows/check-code-workflow.yml@v1
     with:
       source_directory: "."
-      matlab_release: latest
+      matlab_release: ${{ needs.compare-releases.outputs.latest_release }}
       update_badges: false
