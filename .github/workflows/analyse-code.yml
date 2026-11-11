@@ -1,0 +1,35 @@
+name: Analyse code
+
+# Runs MATLAB Code Analyzer on every .m file in the repository. The job
+# fails when an issue of severity warning or error remains (see
+# tools/tasks/codecheckToolbox.m). The README shows this workflow's status
+# as the code analysis badge.
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyse-code:
+    name: Analyse code
+    uses: ehennestad/matbox-actions/.github/workflows/check-code-workflow.yml@v1
+    with:
+      # Check the whole repository, including the tools folder
+      source_directory: "."
+
+      # A fixed release, so the result changes only when the code changes.
+      # The ignoredFiles setting in code/resources/codeAnalyzerConfiguration.json
+      # needs R2026b or later.
+      matlab_release: R2026b
+      matlab_use_cache: true
+
+      # The README shows this workflow's status, so no badge file is
+      # generated or committed
+      update_badges: false
