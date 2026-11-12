@@ -8,6 +8,44 @@ classdef CollectionTest < matlab.unittest.TestCase
         end
     end
     
+    methods (Test) % Cycles between nodes
+        function testCycleBetweenTwoNodesIsAddedOnce(testCase)
+        % Two nodes that link each other must both become nodes of the
+        % collection, each once. A node is registered after its linked
+        % nodes, so the link back to the first node arrives while it is
+        % still being added.
+
+            first = openminds.core.ContentType("name", "first/type");
+            second = openminds.core.ContentType("name", "second/type");
+            first.isBasedOn = second;
+            second.isBasedOn = first;
+
+            collection = openminds.Collection(first);
+
+            testCase.verifyEqual(length(collection), 2)
+            testCase.verifyTrue(collection.contains(first))
+            testCase.verifyTrue(collection.contains(second))
+        end
+
+        function testCycleLoadsFromDocument(testCase)
+        % The same cycle read from a document, which is how a graph
+        % written by another tool arrives.
+
+            document = sprintf(['{"@context": {"@vocab": "https://openminds.om-i.org/props/"}, ', ...
+                '"@graph": [', ...
+                '{"@id": "_:type-a", "@type": "https://openminds.om-i.org/types/ContentType", ', ...
+                '"name": "a/type", "isBasedOn": [{"@id": "_:type-b"}]}, ', ...
+                '{"@id": "_:type-b", "@type": "https://openminds.om-i.org/types/ContentType", ', ...
+                '"name": "b/type", "isBasedOn": [{"@id": "_:type-a"}]}]}']);
+            filePath = fullfile(pwd, "cycle.jsonld");
+            fid = fopen(filePath, "w"); fwrite(fid, document, "char"); fclose(fid);
+
+            collection = openminds.Collection(filePath);
+
+            testCase.verifyEqual(length(collection), 2)
+        end
+    end
+
     methods (Test)
         function testCreateEmptyCollection(testCase)
             % Test creating an empty collection

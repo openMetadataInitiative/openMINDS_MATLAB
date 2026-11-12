@@ -65,6 +65,14 @@ classdef Collection < handle
         TypeMap {mustBeA(TypeMap, ["dictionary", "containers.Map"])} = containers.Map %#ok<MCHDP> Constructor will overwrite
     end
 
+    properties (Access = private)
+        % Identifiers of the nodes being added, from the outermost call
+        % down. A node is registered in Nodes only after its linked nodes,
+        % so this is what tells a cycle back to one of them from a node
+        % that is new.
+        AddingIdentifiers (1,:) string = string.empty
+    end
+
     properties (SetAccess = protected)
         % MetadataStore - Optional metadata store for saving/loading
         MetadataStore openminds.interface.MetadataStore = openminds.internal.FileMetadataStore.empty
@@ -547,6 +555,14 @@ classdef Collection < handle
                 end
             end
 
+            % A link back to a node that is still being added is a cycle.
+            % That node is not in Nodes yet, so it is recognised here.
+            if ismember(string(instance.id), obj.AddingIdentifiers)
+                return
+            end
+            obj.AddingIdentifiers(end+1) = string(instance.id);
+            addingCleanup = onCleanup(@() obj.finishAdding(instance.id));
+
             % Add subnodes first
             obj.addSubNodes(instance)
 
@@ -588,6 +604,11 @@ classdef Collection < handle
             for i = 1:numel(embeddedInstances)
                 obj.addNode(embeddedInstances{i}, 'AddSubNodesOnly', true);
             end
+        end
+
+        function finishAdding(obj, identifier)
+        % Forget a node once its linked nodes have been added.
+            obj.AddingIdentifiers(obj.AddingIdentifiers == string(identifier)) = [];
         end
 
         function identifier = getBlankNodeIdentifier(obj)
