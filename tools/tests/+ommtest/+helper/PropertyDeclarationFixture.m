@@ -21,5 +21,14 @@ classdef PropertyDeclarationFixture
         % Declared without a class. The generated type classes contain
         % such properties where the model does not resolve to a type.
         withoutDeclaredClass (1,:)
+
+        % Declared under a name of MATLAB's choosing, because the schema
+        % name is not a valid identifier. The schema name is recorded in
+        % PROPERTY_NAME_MAP, as the generated type classes do.
+        renamedBySchema (1,1) string
+    end
+
+    properties (Constant, Hidden)
+        PROPERTY_NAME_MAP = struct('renamedBySchema', 'renamed-by-schema')
     end
 end

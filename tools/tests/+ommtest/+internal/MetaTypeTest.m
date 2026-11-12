@@ -107,6 +107,53 @@ classdef MetaTypeTest < matlab.unittest.TestCase
                 'OPENMINDS_MATLAB:MetaType:NotAMixedType')
         end
 
+        function testSchemaNameOfRenamedProperty(testCase)
+        % A property whose schema name is not a valid identifier is
+        % declared under another name. The meta type gives its schema
+        % name, and leaves every other name alone.
+
+            metaType = openminds.introspection.MetaType( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyEqual( metaType.RenamedPropertyNames, "renamedBySchema" )
+
+            testCase.verifyEqual( ...
+                metaType.getSchemaPropertyName("renamedBySchema"), "renamed-by-schema" )
+            testCase.verifyEqual( ...
+                metaType.getSchemaPropertyName("scalarBySize"), "scalarBySize" )
+        end
+
+        function testFieldNamesOfDecodedStruct(testCase)
+        % jsondecode rewrites a schema name that is not a valid identifier
+        % with makeValidName. That field maps to the property it belongs
+        % to, unless the struct also has a field named as the property.
+
+            metaType = openminds.introspection.MetaType( ...
+                'ommtest.helper.PropertyDeclarationFixture');
+
+            testCase.verifyEqual( ...
+                metaType.getPropertyNamesFromFieldNames(["renamed_by_schema", "scalarBySize"]), ...
+                ["renamedBySchema", "scalarBySize"] )
+
+            testCase.verifyEqual( ...
+                metaType.getPropertyNamesFromFieldNames(["renamed_by_schema", "renamedBySchema"]), ...
+                ["renamed_by_schema", "renamedBySchema"], ...
+                'The declared name takes precedence over the decoded schema name.' )
+
+            testCase.verifyEmpty( metaType.getPropertyNamesFromFieldNames(strings(1, 0)) )
+        end
+
+        function testTypeWithoutRenamedPropertiesHasNone(testCase)
+        % Most generated types carry no name map. Asking is not an error,
+        % and every name translates to itself.
+
+            metaType = openminds.introspection.fromClassName( ...
+                'openminds.core.actors.Person');
+
+            testCase.verifyEmpty( metaType.RenamedPropertyNames )
+            testCase.verifyEqual( metaType.getSchemaPropertyName("givenName"), "givenName" )
+        end
+
         function testMetaType(testCase)
             testCase.applyFixture(ommtest.helper.ModelVersionFixture(5))
             

@@ -179,7 +179,8 @@ function names = droppedPropertyNames(node, instance)
 %   deserializer can say what was lost. Only the node itself is checked;
 %   fields dropped inside embedded values are not detected.
 
-    fields = string(fieldnames(node))';
+    metaType = openminds.introspection.fromInstance(instance);
+    fields = metaType.getPropertyNamesFromFieldNames(string(fieldnames(node))');
     known = [string(instance.PropertyNames), ...
         openminds.internal.utility.jsonLdKeywordFields()];
     names = setdiff(fields, known, 'stable');
