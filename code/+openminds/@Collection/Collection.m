@@ -522,11 +522,23 @@ classdef Collection < handle
                 || startsWith(instance.id, "https://openminds.om-i.org/instances/");
 
             if isControlledInstance
-                % A controlled instance is a reference into the instance
-                % library, which every reader has, so it can be a node of
-                % the collection. Whether it is one is a preference.
+                % A controlled instance is in the instance library, which
+                % every reader has, so it can be a node of the collection.
+                % Whether it is one is a preference.
                 if ~openminds.getpref('AddControlledInstanceToCollection')
                     return
+                end
+
+                if instance.isReference()
+                    % A reference, typed or not, is replaced by the instance
+                    % from the library, so that the node has the properties
+                    % of the controlled instance and not only its
+                    % identifier. A reference to an instance the library
+                    % does not have stays a link.
+                    instance = getLibraryInstance(instance.id);
+                    if isempty(instance)
+                        return
+                    end
                 end
             elseif instance.isReference()
                 % Any other reference stands for a node that is not here,
@@ -678,4 +690,28 @@ classdef Collection < handle
             obj.TypeMap(instanceType.ClassName) = {allIds};
         end
     end
+end
+
+function instance = getLibraryInstance(identifier)
+%getLibraryInstance - The controlled instance with an identifier, taken from the instance library
+%   Returns [] when the library does not have the instance. The lookup
+%   can fail in several ways, for example when the name is not in the
+%   library or the type has no library instances, and all of them mean
+%   that the link stays a link. A controlled term whose name the library
+%   does not have is created with the warning
+%   openMINDS:ControlledTerm:UnknownInstanceName rather than an error,
+%   because a user may define a term of their own, so that warning is
+%   raised as an error here.
+
+    unknownNameId = 'openMINDS:ControlledTerm:UnknownInstanceName';
+    warningState = warning('error', unknownNameId);
+    restoreWarning = onCleanup(@() warning(warningState));
+
+    try
+        instance = openminds.instanceFromIRI(identifier);
+    catch
+        % The instance is not in the library; the caller keeps the link
+        instance = [];
+    end
+    clear restoreWarning
 end
