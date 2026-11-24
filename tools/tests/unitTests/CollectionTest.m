@@ -269,6 +269,36 @@ classdef CollectionTest < matlab.unittest.TestCase
             testCase.verifyTrue(newCollection.isKey(org.id));
         end
         
+        function testEmbeddedArrayOfFourSurvivesRoundTrip(testCase)
+        % A multi-valued embedded property is saved without identifiers
+        % and read back as a struct array. Each value must come back as a
+        % node of its own, or the owning node fails the uniqueness check
+        % on that property and is dropped from the loaded collection. Four
+        % values, so that the array holds more than one element between
+        % the first and the last.
+
+            hashes = openminds.core.data.Hash.empty;
+            for digest = ["1", "2", "3", "4"]
+                hashes(end+1) = openminds.core.data.Hash( ...
+                    "algorithm", "SHA-1", "digest", digest); %#ok<AGROW>
+            end
+            file = openminds.core.data.File("name", "data.bin", ...
+                "IRI", "https://example.org/data.bin", "hash", hashes);
+
+            filePath = 'embedded-array.jsonld';
+            openminds.Collection(file).save(filePath);
+            reloaded = openminds.Collection(filePath);
+
+            testCase.assertTrue(reloaded.isKey(file.id), ...
+                'The node holding the embedded values was dropped on load.')
+            reloadedFile = reloaded.get(file.id);
+            testCase.assertNumElements(reloadedFile.hash, 4)
+            identifiers = arrayfun(@(h) string(h.id), reloadedFile.hash);
+            testCase.verifyEqual(numel(unique(identifiers)), 4, ...
+                'The embedded values share an identifier after loading.')
+            testCase.verifyEqual([reloadedFile.hash.digest], ["1", "2", "3", "4"])
+        end
+
         function testSaveWithMetadataStoreOption(testCase)
         % A store passed to save by name-value must be the store used.
         % This went through obj.MetadataStore instead, which is empty
