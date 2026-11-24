@@ -77,12 +77,18 @@ classdef StructAdapter < handle & matlab.mixin.SetGet
 
             numInstances = numel(S);
             allowedPropertyNames = [obj(1).PropertyNames];
+            metaType = openminds.introspection.fromClassName(class(obj));
 
             for i = 1:numInstances
                 C = struct2cell(S(i));
-                fieldNames = fieldnames(S(i));
 
-                [fieldNames, iA] = intersect(fieldNames', allowedPropertyNames, 'stable');
+                % A property whose schema name is not a valid MATLAB
+                % identifier arrives under the spelling jsondecode gives
+                % that name, not under the property name.
+                fieldNames = cellstr(metaType.getPropertyNamesFromFieldNames( ...
+                    reshape(string(fieldnames(S(i))), 1, [])));
+
+                [fieldNames, iA] = intersect(fieldNames, allowedPropertyNames, 'stable');
 
                 propertyValues = C(iA);
     

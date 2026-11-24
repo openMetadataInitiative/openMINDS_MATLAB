@@ -22,10 +22,20 @@ classdef MetaType < handle
 %       className - Fully qualified class name, char or string.
 %
 %   Properties:
-%       Name          - Short name of the type, such as "Subject"
-%       ClassName     - Fully qualified MATLAB class name
-%       PropertyNames - Public property names of the type
-%       NumProperties - How many properties the type has
+%       Name                 - Short name of the type, such as "Subject"
+%       ClassName            - Fully qualified MATLAB class name
+%       PropertyNames        - Public property names of the type
+%       NumProperties        - How many properties the type has
+%       RenamedPropertyNames - Properties whose schema name is not their
+%                              MATLAB name
+%
+%   A schema may spell a property name in a way that is not a valid MATLAB
+%   identifier, such as "z-stepSize". The generated class then declares
+%   the property under a valid name and records the schema name.
+%   getSchemaPropertyName returns the schema name of a property, and the
+%   property name itself for every other property.
+%   getPropertyNamesFromFieldNames maps the fields of a struct decoded by
+%   jsondecode, which rewrites such a schema name, to property names.
 %
 %   Example:
 %       metaType = openminds.introspection.MetaType("openminds.core.Subject");
@@ -42,6 +52,7 @@ classdef MetaType < handle
         Name char                   % (Short) Name of openMINDS metadata type
         ClassName char              % Full MATLAB class name of of openMINDS metadata type
         PropertyNames (1,:) string  % List of property names for a metadata type
+        RenamedPropertyNames (1,:) string  % Properties the schema names differently
     end
 
     properties (Dependent)
@@ -52,6 +63,15 @@ classdef MetaType < handle
     properties (Access = private)
         PropertyNamesAll (1,:) string
         CachedMetaClassHandle meta.class
+
+        % Schema name of each renamed property, keyed by MATLAB name. Read
+        % from the PROPERTY_NAME_MAP constant the generated class carries
+        % when it has such a property.
+        SchemaNameOfProperty struct = struct()
+    end
+
+    properties (Constant, Access = private)
+        PROPERTY_NAME_MAP_CONSTANT = "PROPERTY_NAME_MAP"
     end
 
     methods % Constructor
@@ -71,7 +91,10 @@ classdef MetaType < handle
             % obj.countProperties()
             obj.PropertyNames = obj.getPublicProperties();
             obj.PropertyNamesAll = string( {obj.MetaClassHandle.PropertyList.Name} );
-            
+            obj.SchemaNameOfProperty = obj.readPropertyNameMap();
+            obj.RenamedPropertyNames = reshape( ...
+                string(fieldnames(obj.SchemaNameOfProperty)), 1, []);
+
             if ~nargout
                 clear obj
             end
@@ -157,7 +180,20 @@ classdef MetaType < handle
             propertyIndex = obj.PropertyNamesAll == string(propertyName);
             metaProperty = obj.MetaClassHandle.PropertyList(propertyIndex);
         end
-        
+
+        function nameMap = readPropertyNameMap(obj)
+        % readPropertyNameMap - The PROPERTY_NAME_MAP constant, or an empty struct
+        %
+        %   A generated class carries the constant only when a property of
+        %   its schema has a name that is not a valid MATLAB identifier.
+
+            nameMap = struct();
+            metaProperty = obj.getMetaProperty(obj.PROPERTY_NAME_MAP_CONSTANT);
+            if ~isempty(metaProperty) && metaProperty.HasDefault
+                nameMap = metaProperty.DefaultValue;
+            end
+        end
+
         function propertyNames = getPublicProperties(obj)
             propertyNames = {obj.MetaClassHandle.PropertyList.Name};
             propSetAccess = {obj.MetaClassHandle.PropertyList.SetAccess};
@@ -169,6 +205,50 @@ classdef MetaType < handle
     end
 
     methods (Access = public)
+
+        function schemaName = getSchemaPropertyName(obj, propertyName)
+        % getSchemaPropertyName - The name the schema uses for a property
+        %
+        %   For most properties this is the property name itself. It
+        %   differs when the schema name is not a valid MATLAB identifier.
+
+            arguments
+                obj (1,1) openminds.introspection.MetaType
+                propertyName (1,1) string
+            end
+
+            if isfield(obj.SchemaNameOfProperty, propertyName)
+                schemaName = string(obj.SchemaNameOfProperty.(propertyName));
+            else
+                schemaName = propertyName;
+            end
+        end
+
+        function propertyNames = getPropertyNamesFromFieldNames(obj, fieldNames)
+        % getPropertyNamesFromFieldNames - The properties the fields of a decoded struct hold
+        %
+        %   jsondecode turns a schema name that is not a valid MATLAB
+        %   identifier into one with matlab.lang.makeValidName, so
+        %   "z-stepSize" arrives as the field "z_stepSize". Such a field is
+        %   returned as the name of the property it belongs to. Every other
+        %   field name is returned as it is, as is a decoded name when the
+        %   struct also has a field named as the property, because the
+        %   declared name takes precedence.
+
+            arguments
+                obj (1,1) openminds.introspection.MetaType
+                fieldNames (1,:) string
+            end
+
+            propertyNames = fieldNames;
+            for renamedProperty = obj.RenamedPropertyNames
+                decodedName = matlab.lang.makeValidName(obj.getSchemaPropertyName(renamedProperty));
+                isDecodedName = fieldNames == decodedName;
+                if any(isDecodedName) && ~any(fieldNames == renamedProperty)
+                    propertyNames(isDecodedName) = renamedProperty;
+                end
+            end
+        end
 
         function tf = isPropertyValueScalar(obj, propertyName)
         % isPropertyValueScalar - Check if property value must be scalar
